@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './configureStore';
 import Routes from './routes';
-// import Root from './root';
 import '../assets/sass/index.scss';
 
 const store = configureStore();
