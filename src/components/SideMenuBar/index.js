@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
 
-import './sideMenuBar.css';
+// import './sideMenuBar.css';
 
 const SideMenuBar = () => {
   const sideMenuBtns = BUTTONLIST.map(({ id, label, icon }) => (
