@@ -1,5 +1,6 @@
 const RouteConstants = {
   CONTACTS: '/contacts',
+  HOMEPAGE: '/',
   DASHBOARD: '/Dashboard',
   USERS: '/Users',
   COMPANIES: '/Companies',

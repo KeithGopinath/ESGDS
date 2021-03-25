@@ -28,7 +28,24 @@
     display: flex;
     align-items: center;
     margin: 10px 0 10px 0 ;
-    /* border: 1px solid whitesmoke; */
+    outline: none;
+    text-decoration: none !important;
+}
+
+.sideMenu-btn-label{
+    font-size: 15px;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    color: ghostwhite;
+    margin: 0 0 0 30px;
+}
+
+.sideMenu-btn-icon{
+    font-size: 24px;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    color: ghostwhite;
+    margin: 0 0 0 20px;
 }
 
 .sideMenu-btn:hover{
@@ -49,21 +66,4 @@
 .sideMenu-btn-highlight:hover{
     cursor: pointer;
     background-color: #e1fdf7;
-}
-
-
-.sideMenu-btn-label{
-    font-size: 15px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
-    margin: 0 0 0 30px;
-}
-
-.sideMenu-btn-icon{
-    font-size: 24px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
-    margin: 0 0 0 20px;
 }
