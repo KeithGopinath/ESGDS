@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
+
 import { history } from '../../routes';
 
 
@@ -10,17 +12,19 @@ const SideMenuBar = () => {
     onRenderButtonHighter();
   },);
 
+  const { url } = useRouteMatch();
+
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
     BUTTONLIST.forEach((Button, index) => {
-      if (history.location.pathname === `/${Button.label}`) {
+      if (history.location.pathname === `${url}/${Button.label}`) {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
   };
   // FUNCTION that Handles the button clicks
   const buttonClickHandler = (event, label) => {
-    history.push(`/${label}`);
+    history.push(`${url}/${label}`);
     buttonHighlighter(event);
   };
   // FUNCTION that Highlights the button based on clicks
