@@ -1,5 +1,5 @@
 import Companies from './Companies';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/index';
 import Groups from './Groups';
 import Users from './Users';
 import ManageUsers from './ManageUsers';
