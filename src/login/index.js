@@ -1,7 +1,12 @@
+/*eslint-disable*/
 import React, { useState } from 'react';
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../assets/images/login_image.png';
 import Logo from '../../assets/images/logo.png';
+import { history } from './../routes';
+
+const emailRe = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
+const passwordRe = /^(?=.*?[A-Z]{1})(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W_]){1})(?!.*\s).{8,}$/;
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,18 +23,18 @@ const Login = () => {
   };
 
   const onLogin = () => {
-    if (email === '' && password === '') {
-      setValidate('text-empty');
-      setAlert('Please fill all the fields');
-    } else if (email === '') {
-      setValidate('text-empty');
-      setAlert('Please fill all the fields');
-    } else if (password === '') {
-      setValidate('text-empty');
-      setAlert('Please fill all the fields');
+   
+    if (!emailRe.test(email) && !passwordRe.test(password)) {
+    setValidate('border-danger');
+    setAlert('Please enter vaild email or password');
+    } else if (!emailRe.test(email)) {
+    setValidate('border-danger');
+    setAlert('Please enter vaild email');
+    }else if (!passwordRe.test(password)) {
+    setValidate('border-danger');
+    setAlert('Please enter vaild password');
     } else {
-      setValidate('');
-      setAlert('');
+      history.push("/Home");
     }
   };
 
@@ -47,9 +52,10 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Email address</Form.Label>
               <Form.Control
-                className={!email && validate}
+                className={!email ? `${!email && validate}`:`${!emailRe.test(email) && validate}`}
                 type="email"
                 name="email"
+                id="email"
                 value={email}
                 placeholder="name@example.com"
                 onChange={onEmailChage}
@@ -58,9 +64,10 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control
-                className={!password && validate}
+                className={!password ? `${!password && validate}`:`${!passwordRe.test(password) && validate}`}
                 type="password"
                 name="password"
+                id="password"
                 value={password}
                 placeholder="password"
                 onChange={onPasswordChage}

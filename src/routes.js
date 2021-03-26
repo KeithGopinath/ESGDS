@@ -14,7 +14,7 @@ const Routes = () => (
     <React.Fragment>
       {/* <Header /> */}
       <Switch>
-        <Route exact path="/" component={Login} />
+        <Route exact path={RouteConstants.LOGIN} component={Login} />
         <Route path={RouteConstants.CONTACTS} component={ContactsContainer} />
       </Switch>
       {/* <Footer /> */}
