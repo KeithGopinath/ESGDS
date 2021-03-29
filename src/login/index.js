@@ -5,34 +5,41 @@ import Banner from '../../assets/images/login_image.png';
 import Logo from '../../assets/images/logo.png';
 import { history } from './../routes';
 
-const emailRe = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
-const passwordRe = /^(?=.*?[A-Z]{1})(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W_]){1})(?!.*\s).{8,}$/;
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alert, setAlert] = useState('');
   const [validate, setValidate] = useState('');
 
-  const onEmailChage = (e) => {
-    setEmail(e.target.value);
+  // Condition for Email Validation
+  const validateEmail = (emailmsg) => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(emailmsg);
   };
 
-  const onPasswordChage = (e) => {
-    setPassword(e.target.value);
+  const onEmailChange = (e) => {
+    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+      setEmail(e.target.value);
+    }
+  };
+
+  const onPasswordChange = (e) => {
+    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+      setPassword(e.target.value)
+    }
   };
 
   const onLogin = () => {
-   
-    if (!emailRe.test(email) && !passwordRe.test(password)) {
-    setValidate('border-danger');
-    setAlert('Please enter vaild email or password');
-    } else if (!emailRe.test(email)) {
-    setValidate('border-danger');
-    setAlert('Please enter vaild email');
-    }else if (!passwordRe.test(password)) {
-    setValidate('border-danger');
-    setAlert('Please enter vaild password');
+    const valid = validateEmail(email);
+    if (!email && !password && valid === false) {
+      setValidate('border-danger');
+      setAlert('Please enter the valid credentials');
+    } else if (valid === false) {
+      setValidate('border-danger');
+      setAlert('Please enter the vaild email');
+    } else if (!password) {
+      setValidate('border-danger');
+      setAlert('Please enter the vaild password');
     } else {
       history.push("/Home");
     }
@@ -52,25 +59,25 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Email address</Form.Label>
               <Form.Control
-                className={!email ? `${!email && validate}`:`${!emailRe.test(email) && validate}`}
-                type="email"
+                className={(email === '' || validateEmail(email) === false) && validate}
+                type="text"
                 name="email"
                 id="email"
                 value={email}
                 placeholder="name@example.com"
-                onChange={onEmailChage}
+                onChange={onEmailChange}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control
-                className={!password ? `${!password && validate}`:`${!passwordRe.test(password) && validate}`}
+                className={password === '' && validate}
                 type="password"
                 name="password"
                 id="password"
                 value={password}
                 placeholder="password"
-                onChange={onPasswordChage}
+                onChange={onPasswordChange}
               />
               <div className="forget-password text-right">
                 <a href="/">Forget password?</a>
