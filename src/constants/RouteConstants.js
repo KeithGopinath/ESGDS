@@ -1,12 +1,10 @@
 const RouteConstants = {
   LOGIN: '/',
-  CONTACTS: '/contacts',
-  HOMEPAGE: '/Home',
-  DASHBOARD: '/Home/Dashboard',
-  USERS: '/Home/Users',
-  COMPANIES: '/Home/Companies',
-  GROUPS: '/Home/Groups',
-  MANAGEUSERS: '/Home/Manage Users',
+  DASHBOARD: '/dashboard',
+  USERS: '/users',
+  COMPANIES: '/companies',
+  GROUPS: '/groups',
+  MANAGEUSERS: '/manageusers',
 };
 
 export default RouteConstants;

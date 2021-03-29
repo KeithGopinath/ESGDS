@@ -41,7 +41,7 @@ const Login = () => {
       setValidate('border-danger');
       setAlert('Please enter the vaild password');
     } else {
-      history.push("/Home");
+      history.push("/dashboard");
     }
   };
 

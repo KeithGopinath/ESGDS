@@ -1,32 +1,29 @@
 import React, { useEffect, useRef } from 'react';
-import { useRouteMatch } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
-
 import { history } from '../../routes';
-
 
 const SideMenuBar = () => {
   const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
   useEffect(() => {
     onRenderButtonHighter();
-  },);
-
-  const { url } = useRouteMatch();
+  });
 
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
     BUTTONLIST.forEach((Button, index) => {
-      if (history.location.pathname === `${url}/${Button.label}`) {
+      if (history.location.pathname === `/${Button.address}`) {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
   };
+
   // FUNCTION that Handles the button clicks
-  const buttonClickHandler = (event, label) => {
-    history.push(`${url}/${label}`);
+  const buttonClickHandler = (event, address) => {
+    history.push(`/${address}`);
     buttonHighlighter(event);
   };
+
   // FUNCTION that Highlights the button based on clicks
   const buttonHighlighter = (event) => {
     sideMenuBtnRefs.current.forEach((element) => {
@@ -37,8 +34,10 @@ const SideMenuBar = () => {
     currentTarget.classList.add('sideMenu-btn-highlight');
   };
 
-  const sideMenuBtns = BUTTONLIST.map(({ id, label, icon }, index) => (
-    <div ref={sideMenuBtnRefs.current[index]} key={id} tabIndex={id} role="button" onMouseDown={(event) => buttonClickHandler(event, label)} className="sideMenu-btn">
+  const sideMenuBtns = BUTTONLIST.map(({
+    id, label, icon, address,
+  }, index) => (
+    <div ref={sideMenuBtnRefs.current[index]} key={id} tabIndex={id} role="button" onMouseDown={(event) => buttonClickHandler(event, address)} className="sideMenu-btn">
       <FontAwesomeIcon className="sideMenu-btn-icon" icon={icon} />
       <div className="sideMenu-btn-label">{label}</div>
     </div>
@@ -50,4 +49,5 @@ const SideMenuBar = () => {
     </div>
   );
 };
+
 export default SideMenuBar;

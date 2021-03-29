@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.header-container{
+    height: 50px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    box-shadow: 0px 3px 6px #7e7e7e29;
+    
+}
+.header-content-zero{
+    margin-right: 65px;
+}
+.header-content-one{
+    margin-right: 30px;
+}
+.header-content-two{
+    margin-right: 15px;
+}
+.header-content-three{
+    margin-right: 55px;
+}
+
+.drop-down-element{
+    width: 160px !important;
+    border-radius: 7px !important;
+    padding: 4px 50px 8px 11px !important;
+    cursor: pointer;
+}
+.drop-down-menu{
+    max-height: 250px !important;
+}
+.head-link-element{
+    
+    color: #2199c8;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer,
+}
