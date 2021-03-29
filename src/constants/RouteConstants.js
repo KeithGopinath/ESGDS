@@ -1,4 +1,5 @@
 const RouteConstants = {
+  LOGIN: '/',
   CONTACTS: '/contacts',
 };
 

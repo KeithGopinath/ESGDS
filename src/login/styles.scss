@@ -1,0 +1,24 @@
+.login-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+.banner {
+    position: relative;
+}
+
+.banner-image {
+    background-color: #4BBBA1;
+    width: 100%;
+    border-radius: .5em;
+}
+
+.card-styles {
+    padding: 5%;
+}
+
+.form-details {
+    margin-top: 25%;
+    right: 2%;
+}
