@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import './header.scss';
+import './styles.scss';
 
 const Header = () => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
