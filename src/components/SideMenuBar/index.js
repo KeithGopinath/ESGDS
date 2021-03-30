@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
 
-const SideMenuBar = () => {
+const SideMenuBar = React.forwardRef((props, ref) => {
   const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
   useEffect(() => {
     onRenderButtonHighter();
@@ -43,11 +43,11 @@ const SideMenuBar = () => {
     </div>
   ));
   return (
-    <div className="sideMenu-main">
+    <div ref={ref} className="sideMenu-main">
       <div className="sideMenu-logo">ESG</div>
       {sideMenuBtns}
     </div>
   );
-};
+});
 
 export default SideMenuBar;
