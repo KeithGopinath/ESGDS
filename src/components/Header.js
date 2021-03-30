@@ -1,11 +1,12 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './header.scss';
+
 
 const Header = ({ sideBarRef }) => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
@@ -41,6 +42,13 @@ const Header = ({ sideBarRef }) => {
     }
   };
 
+  const sideBarMenuIconPressHandler = (event) => {
+    if (event.which === 13) {
+      console.log(event);
+      sideBarMenuIconClickHandler();
+    }
+  };
+
   return (
     <div
       className="header-container"
@@ -62,13 +70,18 @@ const Header = ({ sideBarRef }) => {
       <div
         className="hamburger-bars-icon"
         role="button"
-        tabIndex={0}
-        onMouseDown={sideBarMenuIconClickHandler}
+        tabIndex={-1}
+        onClick={sideBarMenuIconClickHandler}
+        onKeyPress={sideBarMenuIconPressHandler}
       >
         <FontAwesomeIcon icon={sideBarMenuIcon} />
       </div>
     </div>
   );
+};
+
+Header.propTypes = {
+  sideBarRef: PropTypes.object,
 };
 
 export default Header;
