@@ -1,17 +1,33 @@
 .login-container {
     width: 100%;
-    height: 100vh;
     display: flex;
-}
+    // margin: 0 auto !important;
+    // padding:0 auto !important;
 
-.banner {
-    position: relative;
+    // padding-left: auto !important;
+    // padding-right: auto !important;
+    // margin-left: auto !important;
+    // margin-right: auto !important;
+    // overflow-y:hidden;
 }
 
 .banner-image {
     background-color: #4BBBA1;
     width: 100%;
     border-radius: .5em;
+}
+
+.banner{
+    // padding-left: auto !important;
+    // padding-right: auto !important;
+    // margin-left: auto !important;
+    // margin-right: auto !important;
+    // margin:0 auto !important;
+    // padding:0 auto !important;
+}
+
+.card-container{
+    padding: 40px 40px;
 }
 
 .card-styles {
