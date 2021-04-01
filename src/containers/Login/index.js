@@ -1,9 +1,9 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
 import { Col, Row, Button, Card, Form, Container } from 'react-bootstrap';
-import Banner from '../../assets/images/login_image.png';
-import Logo from '../../assets/images/logo.png';
-import { history } from './../routes';
+import Banner from '../../../assets/images/login_image.png';
+import Logo from '../../../assets/images/logo.png';
+import { history } from '../../routes';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -47,7 +47,7 @@ const Login = () => {
 
   return (
     <Row className="login-container overflow-hidden">
-      <Col className="banner" lg={8} sm={6} md={6}>
+      <Col className="banner banner-container" lg={8} sm={6} md={6}>
         <img className="banner-image jumbotran h-100" src={Banner} alt="banner" />
       </Col>
       <Col className="card-container" lg={4} sm={6} md={6}>
@@ -63,7 +63,6 @@ const Login = () => {
                 type="text"
                 name="email"
                 id="email"
-                autoComplete="off"
                 value={email}
                 placeholder="name@example.com"
                 onChange={onEmailChange}
@@ -76,7 +75,6 @@ const Login = () => {
                 type="password"
                 name="password"
                 id="password"
-                autoComplete="off"
                 value={password}
                 placeholder="password"
                 onChange={onPasswordChange}

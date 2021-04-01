@@ -5,6 +5,7 @@ const RouteConstants = {
   COMPANIES: '/companies',
   GROUPS: '/groups',
   MANAGEUSERS: '/manageusers',
+  ONBOARD: '/onboard',
 };
 
 export default RouteConstants;
