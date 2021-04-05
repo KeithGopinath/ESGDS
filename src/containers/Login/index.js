@@ -1,9 +1,9 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { Col, Row, Button, Card, Form } from 'react-bootstrap';
-import Banner from '../../assets/images/login_image.png';
-import Logo from '../../assets/images/logo.png';
-import { history } from './../routes';
+import { Col, Row, Button, Card, Form, Container } from 'react-bootstrap';
+import Banner from '../../../assets/images/login_image.png';
+import Logo from '../../../assets/images/logo.png';
+import { history } from '../../routes';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,16 +46,16 @@ const Login = () => {
   };
 
   return (
-    <Row className="login-container">
-      <Col className="banner w-100" lg={8} sm={6} md={6}>
-        <img className="banner-image jumbotran d-flex flex-column h-100" src={Banner} alt="banner" />
+    <Row className="login-container overflow-hidden">
+      <Col className="banner banner-container" lg={8} sm={6} md={6}>
+        <img className="banner-image jumbotran h-100" src={Banner} alt="banner" />
       </Col>
-      <Col className="h-auto" lg={4} sm={6} md={6}>
-        <img className="" src={Logo} alt="logo" />
+      <Col className="card-container" lg={4} sm={6} md={6}>
+        <img src={Logo} alt="logo" />
         <div className="form-details">
           <h4 className="login-text">Login</h4>
           <p className="text-secondary">Enter your email and password to login</p>
-          <Card className="card-styles shadow m-auto">
+          <Card className="card-styles shadow">
             <Form.Group>
               <Form.Label>Email address</Form.Label>
               <Form.Control
