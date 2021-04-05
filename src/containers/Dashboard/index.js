@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import Avatar from 'react-avatar';
 const Dashboard = () => {
   const CARDS_LIST = [
@@ -22,27 +22,31 @@ const Dashboard = () => {
   ];
   return (
     <div className="dashboard-main">
-      <div className="dashboard-label">STATISTICAL DASHBOARD</div>
-      {CARDS_LIST.map(({ Clabel, cards }) => (
-        <React.Fragment>
-          <div className="dashboard-container">
+      {/* bootstrap */}
+      <React.Fragment>
+        <div className="dashboard-label">STATISTICAL DASHBOARD</div>
+        {CARDS_LIST.map(({ Clabel, cards }) => (
+          <div key={Clabel} className="dashboard-container">
             <div className="dashboard-container-label">{Clabel}</div>
-            <div className="dashboard-cardstack">
+            <Row className="dashboard-cardstack">
               {cards.map(({ label, value }) => (
-                <Card className="dashboard-card" >
-                  <div className="dashboard-card-avatar">
-                    <Avatar size="50" color="#f0f0f0" round name={label} />
-                  </div>
-                  <div className="dashboard-card-labelset" >
-                    <div className="dashboard-card-labelvalue">{value}</div>
-                    <div className="dashboard-card-labeltext">{label}</div>
-                  </div>
-                </Card>
+                <Col key={label} className="dashboard-card-wrapper" xs={12} sm={12} md={6} lg={4} xl={3}>
+                  <Card className="dashboard-card" >
+                    <div className="dashboard-card-avatar">
+                      <Avatar size="50" color="#f0f0f0" round name={label} />
+                    </div>
+                    <div className="dashboard-card-labelset" >
+                      <div className="dashboard-card-labelvalue">{value}</div>
+                      <div className="dashboard-card-labeltext">{label}</div>
+                    </div>
+                  </Card>
+                </Col>
               ))}
-            </div>
+            </Row>
           </div>
-        </React.Fragment>
-      ))}
+        ))}
+      </React.Fragment>
+      {/* bootstrap */}
     </div>
   );
 };

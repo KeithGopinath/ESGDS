@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 .sideMenu-main{
-    min-width: 245px;
+    width: 245px;
     min-height: 100vh;
     background-color: #2199c8;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
+    flex-shrink: 0;
+    transition: 0.4s;
+    overflow-x: hidden;
 }
 
 .sideMenu-logo{
@@ -69,3 +72,13 @@
     cursor: pointer;
     background-color: #e1fdf7;
 }
+
+@media only screen and (max-width: 541px) {
+    .sideMenu-main{
+        width: 0px;
+    }
+
+    .sideMenu-main-responsive{
+        width: 245px;
+    }
+  }
