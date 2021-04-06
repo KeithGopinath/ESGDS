@@ -1,7 +1,9 @@
 @import "~bootstrap/dist/css/bootstrap.css";
+@import '~react-step-progress//dist/index.css';
+@import './custom.scss';
 @import "../../src/components/SideMenuBar/styles.scss";
-@import "../../src/containers/HomePage/styles.scss";
 @import "../../src/containers/Dashboard/styles.scss";
-@import '../../src/containers/login/styles.scss';
+@import '../../src/containers/Login/styles.scss';
 @import '../../src/containers/Onboard/style.scss';
-@import '~react-step-progress//dist/index.css'
+
+
