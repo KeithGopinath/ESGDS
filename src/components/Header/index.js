@@ -4,9 +4,7 @@ import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-import './header.scss';
-
+// import 'react-dropdown/style.css';
 
 const Header = ({ sideBarRef }) => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
@@ -44,7 +42,6 @@ const Header = ({ sideBarRef }) => {
 
   const sideBarMenuIconPressHandler = (event) => {
     if (event.which === 13) {
-      console.log(event);
       sideBarMenuIconClickHandler();
     }
   };
