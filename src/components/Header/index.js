@@ -1,10 +1,10 @@
+/*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-dropdown';
-// import 'react-dropdown/style.css';
 
 const Header = ({ sideBarRef }) => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
@@ -22,7 +22,7 @@ const Header = ({ sideBarRef }) => {
 
   // Function that remove class & change hamburger icon if width >= 541px
   const sideMenuResponsive = () => {
-    if (window.innerWidth >= 541) {
+    if (window.innerWidth >= 768) {
       sideBarRef.current.classList.remove('sideMenu-main-responsive');
       setSideBarMenuIcon(faBars);
     }
@@ -37,12 +37,6 @@ const Header = ({ sideBarRef }) => {
     } else {
       target.classList.add('sideMenu-main-responsive');
       setSideBarMenuIcon(faTimes);
-    }
-  };
-
-  const sideBarMenuIconPressHandler = (event) => {
-    if (event.which === 13) {
-      sideBarMenuIconClickHandler();
     }
   };
 
@@ -66,10 +60,7 @@ const Header = ({ sideBarRef }) => {
       </div>
       <div
         className="hamburger-bars-icon"
-        role="button"
-        tabIndex={-1}
         onClick={sideBarMenuIconClickHandler}
-        onKeyPress={sideBarMenuIconPressHandler}
       >
         <FontAwesomeIcon icon={sideBarMenuIcon} />
       </div>
