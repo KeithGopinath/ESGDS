@@ -1,0 +1,55 @@
+.onboarding-form{
+    margin: .7rem 0;
+    padding-left: 4%;
+}
+
+.personal-content,
+.proof-content,
+.login-content{
+    margin-top: 5%;
+    .personal-details,
+    .proof-details,
+    .logincred-details{
+        width: 100%;
+        margin: .7rem 0;
+        padding: 4%;
+    }
+}
+
+.personal-text,
+.proof-text,
+.logincred-text{
+    color: #155F9B;
+    margin-bottom: 5%;
+}
+
+.back,
+.save-continue {
+    background-color: #155F9B !important;
+    border-color:#155F9B !important;
+    color: #ffffff !important;
+    &.hover,
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+.btn-back{
+    outline: #03365f !important;
+}
+
+.display-hidden{
+    display: none;
+}
+
+// // progressbar
+
+.step-content {
+    margin-top: 5%;
+}
+
+
+// another way
+
+.personal-content {
+}
