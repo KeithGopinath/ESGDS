@@ -8,6 +8,7 @@ import Companies from './containers/Companies';
 import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
+import Task from './containers/Task';
 
 export const history = createBrowserHistory();
 
@@ -22,6 +23,7 @@ const Routes = () => (
         <Route path="/groups" component={Groups} />
         <Route path="/manageusers" component={ManageUsers} />
         <Route path="/onboard" component={Onboard} />
+        <Route path="/task" component={Task} />
       </Switch>
     </React.Fragment>
   </Router >

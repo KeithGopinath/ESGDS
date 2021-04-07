@@ -6,8 +6,7 @@
     align-items: center;
     flex-direction: row-reverse;
     justify-content: space-between;
-    box-shadow: 0px 3px 6px #7e7e7e29;
-    
+    box-shadow: 0px 3px 6px #7e7e7e29;  
 }
 .header-content-zero{
     margin-right: 65px;
@@ -43,6 +42,7 @@
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
+    overflow: hidden;
 }
 
 .hamburger-bars-icon{
@@ -57,7 +57,7 @@
     border-radius: 3px;
 }
 
-@media only screen and (min-width: 541px) {
+@media only screen and (min-width: 768px) {
     .hamburger-bars-icon{
         visibility: hidden;
     }

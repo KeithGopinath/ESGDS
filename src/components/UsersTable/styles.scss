@@ -1,0 +1,104 @@
+.users-table-paper{
+    box-shadow: none !important;
+    padding: 10px !important;
+}
+.users-table-label{
+    padding: 20px;
+    font-weight: 600;
+}
+.users-table-row-cell{
+    font-weight:500 !important;
+    color: #444c59 !important;
+    font-size: 13px !important;
+    padding-top: 13px !important;
+    padding-bottom: 13px !important;
+    /* border: none !important; */
+}
+.users-table-column-cell{
+    color: #8190a9 !important;
+    font-size: 13px !important;
+    /* padding-top: 13px !important;
+    padding-bottom: 13px !important; */
+}
+.personal-details-action-wrap{
+    display: flex;
+}
+.personal-details-action-details{
+    color:#165f9b;
+    margin: 3px 6px;
+}
+.personal-details-action-reject{
+    color:#8291a9;
+    margin: 3px 6px;
+}
+.super-admin-approval-action-wrap{
+    display: flex;
+}
+.super-admin-approval-action-approve{
+    color:#165f9b;
+    margin: 3px 6px;
+}
+.super-admin-approval-action-reject{
+    color:#8291a9;
+    margin: 3px 6px;
+}
+.approved-users-groupassigned{
+    width: 120px;
+    margin: auto;
+}
+.groupassigned-dropdown{
+    border-radius: 10px;
+}
+.groupassigned-dropdown-control{
+    background-color: #ebebeb;
+    border-radius: 5px;
+    border: none;
+}
+.groupassigned-dropdown-menu{
+    border-radius: 3px;
+}
+.groupassigned-dropdown-placeholder{
+    color: #50bfa5;
+}
+.label-assigned{
+    color:#50bfa5;
+    background-color: #ebebeb;
+}
+.label-assigned:hover{
+    color: #ebebeb;
+    background-color:#50bfa5;
+}
+.label-assigned.is-selected{
+    color:#d3d3d3;
+    background-color: #fff;
+}
+.label-unassigned{
+    color:#c8b721;
+    background-color: #ebebeb;
+}
+.label-unassigned:hover{
+    color: #ebebeb;
+    background-color:#c8b721;
+}
+.label-unassigned.is-selected{
+    color:#d3d3d3;
+    background-color: #fff;
+}
+.pending-users-status{
+    color:#8190a9;
+}
+.pending-users-more-popover{
+    padding: 10px 15px;
+}
+.pending-users-more-approve{
+    font-size: 13px;
+    color: #50bfa5;
+    font-weight: 600;
+    margin: 3px;
+}
+.pending-users-more-delete{
+    font-size: 13px;
+    color: #bf5050;
+    font-weight: 600;
+    margin: 3px;
+}
