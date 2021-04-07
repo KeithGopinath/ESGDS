@@ -1,0 +1,39 @@
+.login-container {
+    width: 100%;
+    display: flex;
+    padding-left: auto !important;
+    padding-right: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    overflow-y:hidden;
+}
+
+.banner-image {
+    background-color: #4BBBA1;
+    width: 100%;
+    border-radius: .5em;
+}
+
+.banner-container{
+    padding-left: auto !important;
+    padding-right: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.card-container{
+    padding: 40px 40px;
+}
+
+.card-styles {
+    padding: 5%;
+}
+
+.form-details {
+    margin-top: 25%;
+    right: 2%;
+}
+
+.border-danger:focus {
+    border-color: #80bdff !important;
+}
