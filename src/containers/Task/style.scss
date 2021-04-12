@@ -1,0 +1,17 @@
+.task-tabs{
+    padding: 5px;
+    width: 160px;
+    background-color:rgb(255, 255, 255);
+    color: rgb(33, 153, 200);;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+    margin: 1px;
+    cursor: pointer;
+}
+.active{
+    background-color: rgb(33, 153, 200);
+    color: rgb(255, 255, 255);
+} 

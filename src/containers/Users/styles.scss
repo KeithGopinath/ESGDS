@@ -1,0 +1,103 @@
+.users-main{
+    background-color: #f0f0f0;
+    height: 100%;
+    padding: 40px 4%;
+    font-family: 'Roboto';
+}
+.users-back-label-onboardlink-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.back-label-wrap{
+    padding: 7px;
+    min-width: 80px;
+    font-family: 'Roboto';
+    margin: 10px 10px 10px 0;
+}
+
+.back-lefticon-wrap{
+    display: flex;
+    color:#8190a9;
+    align-items: center;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    font-size: 13px;
+}
+.lefticon{
+    margin: 0 10px 0 0;
+    font-size: 20px;
+}
+.users-label{
+    color: #444c59;
+    font-size: 15px;
+    font-weight: 600;
+}
+.onboardlink-btn{
+      padding: 7px;
+      min-width: 158px;
+      border: 2px solid #3474a7;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: 'Roboto';
+      color: #155f9b;
+      background-color: #ffffff;
+      font-weight: 600;
+      margin: 10px 0 10px 10px;
+}
+
+.users-tabs-stack{
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 20px 0;
+}
+.tabs-label-count-wrap{
+    display: flex;
+    min-width: 260px;
+    width: 20%;
+    align-items: center;
+    padding: 0 15px;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 2px solid white;
+}
+.tabs-label{
+    margin: 0 10px;
+    color: #8190a9;
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tabs-count-wrap{
+    background-color: #ebebeb;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    display: flex;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #8190a9;
+    font-weight: 400;
+    padding: 5px;
+    margin: 10px 5px;
+}
+.tabs-count{
+    max-width: 35px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.tabs-label-count-wrap-active{
+    border-bottom: 2px solid #50bfa5;
+}
+
+.tabs-label-count-wrap-active > .tabs-label{
+    color: #444c59;
+}
+.tabs-label-count-wrap-active > .tabs-count-wrap{
+    background-color: #155f9b;
+    color: #ffffff;
+}
