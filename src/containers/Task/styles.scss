@@ -1,3 +1,17 @@
+.task-main{
+    display:'flex';
+    padding: 40px 5%;
+    background-color: #f0f0f0;
+    flex-direction: column;
+
+}
+
+.task-tabs-wrap{
+    display: flex;
+    flex: wrap;
+    margin: 30px 0;
+}
+
 .task-tabs{
     padding: 5px;
     width: 160px;
@@ -15,3 +29,9 @@
     background-color: rgb(33, 153, 200);
     color: rgb(255, 255, 255);
 } 
+
+.task-form-group{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
