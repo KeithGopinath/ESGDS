@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import { dodgerBlue } from '@material-ui/core/colors';
 // import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,8 +15,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import 'antd/dist/antd.css';
+import { DatePicker, Space } from 'antd';
 
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
@@ -75,6 +79,7 @@ const UsersTable = ({ tableData }) => {
   const DEFAULT_ORDER_BY = null;
   const DEFAULT_PAGE = 0;
   const DEFAULT_ROWS_PER_PAGE = 5;
+  const { RangePicker } = DatePicker;
 
   // STATES
   const [sortDataType, setSortDataType] = useState('string');
@@ -83,6 +88,16 @@ const UsersTable = ({ tableData }) => {
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState(null);
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#66cafb',
+        main: '#2199c8',
+        dark: '#006b97',
+      },
+    },
+  });
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsData.length - (page * rowsPerPage));
   console.log(emptyRows, 'empty Rows');
@@ -149,11 +164,11 @@ const UsersTable = ({ tableData }) => {
   };
 
   const searcher = (rowdata, coldata, searchedQuery) => {
-    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
+    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'date') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
     return (
       rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (eachRowData[columnsList[i]].includes(searchedQuery)) {
+          if ((eachRowData[columnsList[i]].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
@@ -168,31 +183,36 @@ const UsersTable = ({ tableData }) => {
         <TableContainer>
           <div
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: '600px',
             }}
           >
             <div className="users-table-label">
               {tableLabel}
             </div>
-            <TextField
-              // className={classes.margin}
-              id="input-with-icon-textfield"
-              placeholder="search"
-              style={{ padding: '20px' }}
-              onChange={handlesSearch}
-              autoComplete="off"
-              color="primary"
-              value={searchQuery}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FontAwesomeIcon icon={faSearch} />
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <Space direction="vertical" size={12}>
+              <RangePicker
+                showTime={{ format: 'HH:mm' }}
+                format="YYYY-MM-DD HH:mm"
+              />
+            </Space>
+            <ThemeProvider theme={theme}>
+              <TextField
+                placeholder="search"
+                style={{ padding: '20px' }}
+                onChange={handlesSearch}
+                autoComplete="off"
+                value={searchQuery}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FontAwesomeIcon icon={faSearch} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </ThemeProvider>
           </div>
-          <Table>
+          <Table className="users-table">
             <ColumnsHead
               sortOrder={sortOrder}
               orderBy={orderBy}
