@@ -34,22 +34,21 @@
     }
 }
 
+.company-drop-down{
+    min-width: 100% !important;
+    border-radius: 7px !important;
+    padding: 4px 50px 8px 11px !important;
+    cursor: pointer;
+}
+
+.drop-down-company-menu{
+    max-height: 300px !important;
+}
+
 .btn-back{
     outline: #03365f !important;
 }
 
 .display-hidden{
     display: none;
-}
-
-// // progressbar
-
-.step-content {
-    margin-top: 5%;
-}
-
-
-// another way
-
-.personal-content {
 }
