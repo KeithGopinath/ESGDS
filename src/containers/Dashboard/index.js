@@ -32,27 +32,29 @@ const Dashboard = () => {
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
           <Header sideBarRef={sideBarRef} />
-          <div className="dashboard-label">STATISTICAL DASHBOARD</div>
-          {CARDS_LIST.map(({ Clabel, cards }) => (
-            <div key={Clabel} className="dashboard-container">
-              <div className="dashboard-container-label">{Clabel}</div>
-              <Row className="dashboard-cardstack">
-                {cards.map(({ label, value }) => (
-                  <Col key={label} className="dashboard-card-wrapper" xs={12} sm={12} md={6} lg={4} xl={3}>
-                    <Card className="dashboard-card" >
-                      <div className="dashboard-card-avatar">
-                        <Avatar size="50" color="#f0f0f0" round name={label} />
-                      </div>
-                      <div className="dashboard-card-labelset" >
-                        <div className="dashboard-card-labelvalue">{value}</div>
-                        <div className="dashboard-card-labeltext">{label}</div>
-                      </div>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          ))}
+          <div className="dashboard-main">
+            <div className="dashboard-label">STATISTICAL DASHBOARD</div>
+            {CARDS_LIST.map(({ Clabel, cards }) => (
+              <div key={Clabel} className="dashboard-container">
+                <div className="dashboard-container-label">{Clabel}</div>
+                <Row className="dashboard-cardstack">
+                  {cards.map(({ label, value }) => (
+                    <Col key={label} className="dashboard-card-wrapper" xs={12} sm={12} md={6} lg={4} xl={3}>
+                      <Card className="dashboard-card" >
+                        <div className="dashboard-card-avatar">
+                          <Avatar size="50" color="#f0f0f0" round name={label} />
+                        </div>
+                        <div className="dashboard-card-labelset" >
+                          <div className="dashboard-card-labelvalue">{value}</div>
+                          <div className="dashboard-card-labeltext">{label}</div>
+                        </div>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -1,6 +1,8 @@
+/* eslint-disable object-curly-newline */
 import React, { useRef } from 'react';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import RoleAssignment from '../../components/RoleAssign';
 
 const Groups = () => {
   const sideBarRef = useRef();
@@ -10,7 +12,7 @@ const Groups = () => {
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
           <Header sideBarRef={sideBarRef} />
-          <div>Groups</div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', padding: '10px' }}><RoleAssignment /></div>
         </div>
       </div>
     </React.Fragment>
