@@ -278,6 +278,7 @@ const PersonalDetails = ({ role }) => {
                             </React.Fragment>
                         }
                     </Row>
+                    <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
                 </Card>
             </Row>
         </Container>
