@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
+
 const ManageUsers = () => {
   const sideBarRef = useRef();
   return (
