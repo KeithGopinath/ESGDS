@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-mixed-operators */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable*/
 import React, { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +6,8 @@ import UsersTable from '../../components/UsersTable';
 import { PENDING_USERS_DATA, APPROVED_USERS_DATA, SUPER_ADMIN_APPROVAL_DATA, PERSONAL_DETAILS_UPDATE_DATA } from '../../../src/constants/TableConstants';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import { Button } from 'react-bootstrap';
+import { history } from './../../routes';
 
 const Users = () => {
   const sideBarRef = useRef();
@@ -39,6 +38,10 @@ const Users = () => {
     setTableData(data);
   };
 
+  const sendOnboard = () => {
+    history.push('/onboard');
+  };
+  
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -54,8 +57,8 @@ const Users = () => {
               </div>
               <div className="users-label">Manage Users</div>
             </div>
-            <div className="onboardlink-btn">Send onboarding link
-            </div>
+            <Button className="onboardlink-btn" onClick= {sendOnboard}>Send onboarding link
+            </Button>
           </div>
           <div className="users-tabs-stack">
             {LABEL_SETS.map(({ label, value, data }, index) => (
