@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
+import RoleAssignment from '../../containers/RoleAssign';
 
 const SideMenuBar = React.forwardRef((props, ref) => {
   const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
@@ -52,6 +53,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     <div ref={ref} className="sideMenu-main">
       <div className="sideMenu-logo">ESG</div>
       {sideMenuBtns}
+      <div className="sideMenu-btn"><RoleAssignment /></div>
     </div>
   );
 });
