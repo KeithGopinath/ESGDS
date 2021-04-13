@@ -46,6 +46,7 @@ const LoginCredentials = ({ role }) => {
                         </Form.Group>
                     </Col>
                 </Row>
+                <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
             </Card>
         </Row>
     );
