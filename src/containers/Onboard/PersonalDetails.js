@@ -182,7 +182,7 @@ const PersonalDetails = ({ role }) => {
                         {(role === 'client' || role === 'company') &&
                             <Col lg={6} sm={6} md={6}>
                                 <Form.Group>
-                                    <Form.Label>Repreentative ID <sup className="text-danger">*</sup></Form.Label>
+                                    <Form.Label>Representative ID <sup className="text-danger">*</sup></Form.Label>
                                     <Form.Control
                                         className=""
                                         type="text"
