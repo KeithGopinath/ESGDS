@@ -27,7 +27,8 @@ const ProofUpload = ({ role }) => {
                     <Row className="d-flex ml-2 mr-2">
                         <Col sm={6} md={6} lg={6} >
                             <Form.Group>
-                                {(role === 'client' || role === 'company') && <Form.Label>Upload your letter fo Authentication(for company representative) <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'company' && <Form.Label>Upload your letter of Authentication(for company representative) <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication(for client representative) <sup className="text-danger">*</sup></Form.Label>}
                                 {role === 'employee' && <Form.Label>Upload your Pancard <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.File
                                     type="file"
@@ -41,7 +42,8 @@ const ProofUpload = ({ role }) => {
                         </Col>
                         <Col sm={6} md={6} lg={6}>
                             <Form.Group>
-                                {(role === 'client' || role === 'company') && <Form.Label>Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'company' && <Form.Label>Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof(for client  representative) <sup className="text-danger">*</sup></Form.Label>}
                                 {role === 'employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.File
                                     type="file"
