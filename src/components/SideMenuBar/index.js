@@ -18,7 +18,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       btn.classList.remove('sideMenu-btn-highlight');
     });
     BUTTONLIST.forEach((Button, index) => {
-      if (history.location.pathname === `/${Button.address}`) {
+      if ((history.location.pathname).includes(`/${Button.address}`)) {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
