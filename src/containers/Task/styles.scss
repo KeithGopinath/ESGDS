@@ -1,5 +1,5 @@
 .task-main{
-    display:'flex';
+    display: flex;
     padding: 40px 5%;
     background-color: #f0f0f0;
     flex-direction: column;
@@ -30,8 +30,53 @@
     color: rgb(255, 255, 255);
 } 
 
-.task-form-group{
+.task-info-group{
+    padding: 20px 2%;
+    background-color: #fff;
+}
+
+.task-id-year-wrap{
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4%;
+}
+
+.task-year{
+    width: 130px;
+}
+.task-table-col{
+    z-index: 0;
+}
+
+.task-button-wrap{
+    justify-content: center;
+    display: flex;
+    margin-top: 3%;
+}
+
+// DATAPAGE STYLES
+.datapage-main{
+    display: flex;
+    padding: 40px 5%;
+    background-color: #f0f0f0;
+    flex-direction: column;
+    height: 100%;
+}
+.datapage-info-group{
+    padding: 20px 2%;
+    background-color: #fff;
+}
+.datapage-horizontalLine{
+    border-bottom: 2px solid #e6e9ee;
+    margin: 1% 0 2% 0;
+}
+.datapage-datepicker{
+    width: 100%;
+}
+
+.datapage-button-wrap{
+    justify-content: center;
+    display: flex;
+    margin-top: 3%;
 }
