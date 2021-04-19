@@ -4,7 +4,7 @@ import { Card, Form, Row, Col } from 'react-bootstrap';
 
 const LoginCredentials = ({ role }) => {
     const [password, setPassword] = useState('');
-    const [confirmpassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handlePassword = (e) => {
         setPassword(e.target.value);
@@ -40,7 +40,7 @@ const LoginCredentials = ({ role }) => {
                                 type="password"
                                 name="confirmpassword"
                                 id="confirmpassword"
-                                defaultValue={confirmpassword}
+                                defaultValue={confirmPassword}
                                 onChange={handleConfirmPassword}
                             />
                         </Form.Group>
