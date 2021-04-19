@@ -44,7 +44,7 @@ const BatchCreation = () => {
     }
   };
   const batchlist = details.map(({ batchName, Count }) => (
-    <Card className="batch-card card-view">
+    <Card className="batch-card card-view batchbox">
       <div className="batch-card-content">
         <div className="batch-card-content-name" >Batch name:</div>
         <div className="batch-card-content-value" data-toggle="tooltip" data-placement="top" title={batchName}>{batchName}</div>
