@@ -8,7 +8,7 @@ import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';
 
 const Onboard = () => {
-const [role, setRole] = useState('client');
+const [role, setRole] = useState('employee');
 const onFormSubmit = () => {
     history.push('/');
 };

@@ -11,6 +11,7 @@ const ProofUpload = ({ role }) => {
     const onChangeCompRep = (e) => {
         setFileName(e.target.files[0].name);
     };
+    
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
     };
