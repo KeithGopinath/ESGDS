@@ -9,6 +9,8 @@ import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
 import Task from './containers/Task';
+import Createbatch from './containers/BatchCreate';
+import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';
 import DataPage from './containers/Task/DataPage';
 
@@ -25,6 +27,9 @@ const Routes = () => (
         <Route path="/groups" component={Groups} />
         <Route path="/manageusers" component={ManageUsers} />
         <Route path="/onboard" component={Onboard} />
+        <Route path="/task" component={Task} />
+        <Route path="/createbatch" component={Createbatch} />
+        <Route path="/creategroup" component={CreateGroup} />
         <Route exact path="/pendingtasks" component={PendingTasks} />
         <Route exact path="/pendingtasks/:taskId" component={Task} />
         <Route exact path="/pendingtasks/:taskId/:dpcode" component={DataPage} />

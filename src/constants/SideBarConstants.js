@@ -1,4 +1,4 @@
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 
 const BUTTONLIST = [
   {
@@ -18,6 +18,12 @@ const BUTTONLIST = [
   },
   {
     id: 5, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
+  },
+  {
+    id: 6, label: 'Create Batch', icon: faFolderPlus, address: 'createbatch',
+  },
+  {
+    id: 7, label: 'Create Group', icon: faFolderPlus, address: 'creategroup',
   },
 ];
 

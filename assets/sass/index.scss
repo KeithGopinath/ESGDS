@@ -1,4 +1,4 @@
-@import "~bootstrap/dist/css/bootstrap.css";
+@import "~bootstrap/dist/css/bootstrap.css";  
 @import '~react-step-progress//dist/index.css';
 @import '~react-dropdown/style.css';
 @import './custom.scss';
@@ -11,6 +11,8 @@
 @import '../../src/containers/Users/styles.scss';
 @import '../../src/containers/Task/styles.scss';
 @import '../../src/containers/RoleAssign/styles.scss';
+@import '../../src/containers/BatchCreate/styles.scss';
+@import '../../src/containers/GroupCreate/styles.scss';
 @import '../../src/containers/PendingTasks/styles.scss';
 
 

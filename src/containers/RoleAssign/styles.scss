@@ -7,7 +7,7 @@
     border: none;
 }
 .min-height-dropdown{
-    min-height: 180px;
+    min-height: 100px;
 }
 .head-dp{
     font-size: 13px;
@@ -33,4 +33,48 @@
 }
 .close{
     padding:0.9rem 1rem 0.4rem  !important;
+}
+.status-rolepillar{
+    
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+}
+.status-minheight{
+    min-height: 80px;
+}
+.modal-head{
+   padding: 1rem 1.5rem 0.5rem;
+}
+.sideMenu-rolebtn{
+    min-width: 220px;
+    min-height: 50px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin: 10px 0 10px 0 ;
+    outline: none;
+    text-decoration: none !important;
+}
+.sideMenu-btn-rolelabel {
+    font-size: 15px;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    color: ghostwhite;
+    margin: 0 0 0 30px;
+}
+.sideMenu-rolebtn:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.055);
+}
+.role-icon{
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    color: ghostwhite;
+    margin: 0 0 0 20px;
 }

@@ -5,6 +5,7 @@ import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faBars, faTimes, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-dropdown';
+import { history } from '../../routes';
 
 const Header = ({ sideBarRef }) => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
@@ -12,6 +13,7 @@ const Header = ({ sideBarRef }) => {
   const [sideBarMenuIcon, setSideBarMenuIcon] = useState(faBars);
 
   const buttonClicklogout = () => {
+    alert("logout");
     history.push('/');
     sessionStorage.clear();
   };
