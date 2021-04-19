@@ -9,6 +9,8 @@ import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
 import Task from './containers/Task';
+import Createbatch from './containers/batchCreate';
+import CreateGroup from './containers/GroupCreate';
 
 export const history = createBrowserHistory();
 
@@ -24,6 +26,8 @@ const Routes = () => (
         <Route path="/manageusers" component={ManageUsers} />
         <Route path="/onboard" component={Onboard} />
         <Route path="/task" component={Task} />
+        <Route path="/createbatch" component={Createbatch} />
+        <Route path="/creategroup" component={CreateGroup} />
       </Switch>
     </React.Fragment>
   </Router >

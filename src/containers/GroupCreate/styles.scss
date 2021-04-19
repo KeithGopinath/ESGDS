@@ -1,0 +1,68 @@
+.wrapper{
+    padding: 15px 5%;
+}
+.group-heading-wrapper{
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:30px;
+border-bottom:1.5px solid #ced4da;
+
+}
+.group-heading-name{
+    font-size:30px;
+    font-weight:600;
+    color:#2199c8;
+}
+.group-detail{
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    margin-bottom:30px;
+    font-size:25px;
+    color:#155f9b;
+    font-weight:600;
+}
+.group-detail-wrapper{
+   min-height:300px;
+}
+.group-name{
+    font-size:15px;
+    color:gray;
+}
+.group-input-width{
+   max-width:90%;
+   min-width:40%;
+}
+.group-dropdown-width{
+    min-width:40%;
+    max-width:90%;
+    margin-bottom:20px;
+}
+.group-dropdown-name{
+    font-size:15px;
+    color:gray;
+}
+.side-border{
+    border-left:1px solid #ced4da;
+}
+.groups-btn{
+    font-size:15px;
+    line-height:2px;
+    margin-bottom:15px;
+    margin-right: 22px;
+}
+.groups-badge{
+    padding:5px 8px 6px 8px;
+}
+.groups-batch-btn{
+   font-size:15px;
+   line-height:20px;
+   margin-bottom:15px;
+}
+.group-submit-btn{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:20px;
+}

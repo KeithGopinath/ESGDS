@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { Col, Row, Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faUserTag } from '@fortawesome/free-solid-svg-icons';
 
 
 const RoleAssignment = () => {
-  let multiselectRef = React.createRef();
-  let multiselectpillarRef = React.createRef();
+  const [role, setrole] = useState('');
+  const [pillar, setpillar] = useState('');
+  const [status, setstatus] = useState(0);
+
   const RoleOption = [
     { value: 'QA', label: 'QA' },
     { value: 'Analyst', label: 'Analyst' },
@@ -22,26 +24,35 @@ const RoleAssignment = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const onHandlerole = (roles) => {
+    setrole(roles);
+  };
+  const onHandlepillar = (pillars) => {
+    setpillar(pillars);
+  };
   const handlestatus = () => {
-    const role = multiselectRef.current.value;
-    const pillar = multiselectpillarRef.current.value;
-    console.log(role, 'role');
-    console.log(pillar, 'pillar');
-    return (
-      <div>
-        balaji
-      </div>
-    );
+    if (role.length && pillar.length > 0) {
+      setTimeout(() => {
+        setstatus(0);
+      }, 3000);
+      setstatus(1);
+    } else {
+      setTimeout(() => {
+        setstatus(0);
+      }, 3000);
+      setstatus(2);
+    }
   };
   return (
     <div>
-      <Button variant="primary" className="" onClick={handleShow}>
-        Role Assignment
-      </Button>
+      <div role="button" tabIndex={0} className="sideMenu-rolebtn" onClick={handleShow} onKeyDown={handleShow} >
+        <FontAwesomeIcon className="role-icon" icon={faUserTag} />
+        <div className="sideMenu-btn-rolelabel">Role Assignment</div>
+      </div>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} animation={false} centered>
-        <Modal.Header closeButton style={{ padding: '1rem 1.5rem 0.5rem' }}>
+        <Modal.Header closeButton className="modal-head">
           <FontAwesomeIcon className="setting-icon" icon={faCog} />
-          <Modal.Title className="modal-title" >Assign role for the user</Modal.Title>
+          <Modal.Title className="modal-title">Assign role for the user</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ padding: '0.5rem 1.5rem' }}>
           <Row>
@@ -60,7 +71,7 @@ const RoleAssignment = () => {
                   isMulti
                   name="Roles"
                   options={RoleOption}
-                  ref={multiselectRef}
+                  onChange={onHandlerole}
                 />
               </div>
             </Col>
@@ -71,11 +82,23 @@ const RoleAssignment = () => {
                   isMulti
                   name="Piller"
                   options={PillerOption}
-                  ref={multiselectpillarRef}
+                  onChange={onHandlepillar}
                 />
               </div>
             </Col>
           </Row>
+          <div className="status-minheight">
+            {status === 1 &&
+              <div className="status-rolepillar">
+                <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+              </div>
+            }
+            {status === 2 &&
+              <div className="status-rolepillar">
+                <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+              </div>
+            }
+          </div>
         </Modal.Body>
         <Modal.Footer style={{ border: 'none' }}>
           <Button variant="btn btn-outline-primary" onClick={handleClose}>
