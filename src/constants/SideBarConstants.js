@@ -17,7 +17,7 @@ const BUTTONLIST = [
     id: 4, label: 'Manage Users', icon: faCog, address: 'manageusers',
   },
   {
-    id: 5, label: 'Pending Tasks', icon: faTasks, address: 'task',
+    id: 5, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
 ];
 
