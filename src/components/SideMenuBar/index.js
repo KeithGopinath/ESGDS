@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
@@ -8,6 +7,7 @@ import RoleAssignment from '../../containers/RoleAssign';
 
 const SideMenuBar = React.forwardRef((props, ref) => {
   const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
+
   useEffect(() => {
     onRenderButtonHighter();
   });
@@ -49,6 +49,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       <div className="sideMenu-btn-label">{label}</div>
     </div>
   ));
+  
   return (
     <div ref={ref} className="sideMenu-main">
       <div className="sideMenu-logo">ESG</div>

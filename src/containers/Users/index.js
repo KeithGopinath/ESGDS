@@ -11,12 +11,14 @@ import { history } from './../../routes';
 
 const Users = () => {
   const sideBarRef = useRef();
+
   const LABEL_SETS = [
     { label: 'Pending Users', value: PENDING_USERS_DATA.rowsData.length, data: PENDING_USERS_DATA },
     { label: 'Approved Users', value: APPROVED_USERS_DATA.rowsData.length, data: APPROVED_USERS_DATA },
     { label: 'Super Admin Approval', value: SUPER_ADMIN_APPROVAL_DATA.rowsData.length, data: SUPER_ADMIN_APPROVAL_DATA },
     { label: 'Personal details update', value: PERSONAL_DETAILS_UPDATE_DATA.rowsData.length, data: PERSONAL_DETAILS_UPDATE_DATA },
   ];
+
   const [tableData, setTableData] = useState(PENDING_USERS_DATA);
 
   useEffect(() => {
@@ -24,10 +26,12 @@ const Users = () => {
   }, []);
 
   const tabsRefs = useRef(LABEL_SETS.map(() => React.createRef()));
+
   const defaultTab = () => {
     setTableData(PENDING_USERS_DATA);
     tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
   };
+
   const tabsClickHandler = (event, data) => {
     tabsRefs.current.forEach((element) => {
       const target = element.current;
@@ -48,7 +52,6 @@ const Users = () => {
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} />
         <div className="users-main">
-
           <div className="users-back-label-onboardlink-container">
             <div className="back-label-wrap">
               <div className="back-lefticon-wrap" >

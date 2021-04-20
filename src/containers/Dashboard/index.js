@@ -4,7 +4,7 @@ import { Card, Row, Col } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
-const CARDS_LIST = [
+const cardsList = [
   {
     Clabel: 'Companies',
     cards: [{ label: 'Companies WIP', value: 67 }, { label: 'Companies Submitted', value: 140 }, { label: 'Pendin Companies with QA/Analysts', value: 71 }, { label: "SLA's Due", value: 30 }],
@@ -34,7 +34,7 @@ const Dashboard = () => {
           <Header sideBarRef={sideBarRef} />
           <div className="dashboard-main">
             <div className="dashboard-label">STATISTICAL DASHBOARD</div>
-            {CARDS_LIST.map(({ Clabel, cards }) => (
+            {cardsList.map(({ Clabel, cards }) => (
               <div key={Clabel} className="dashboard-container">
                 <div className="dashboard-container-label">{Clabel}</div>
                 <Row className="dashboard-cardstack">
