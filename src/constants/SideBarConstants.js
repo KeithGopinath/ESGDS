@@ -26,7 +26,7 @@ const BUTTONLIST = [
     id: 7, label: 'Create Group', icon: faFolderPlus, address: 'creategroup',
   },
   {
-    id: 7, label: 'Role Assignment', icon: faUserTag, address: 'roleassign',
+    id: 8, label: 'Role Assignment', icon: faUserTag, address: '',
   },
 ];
 
