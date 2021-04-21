@@ -1,4 +1,4 @@
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag } from '@fortawesome/free-solid-svg-icons';
 
 const BUTTONLIST = [
   {
@@ -24,6 +24,9 @@ const BUTTONLIST = [
   },
   {
     id: 7, label: 'Create Group', icon: faFolderPlus, address: 'creategroup',
+  },
+  {
+    id: 7, label: 'Role Assignment', icon: faUserTag, address: 'roleassign',
   },
 ];
 

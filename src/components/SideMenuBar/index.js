@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BUTTONLIST } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
@@ -10,8 +10,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
   useEffect(() => {
     onRenderButtonHighter();
-  });
-
+  },);
+  const [show, setShow] = useState(false);
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
     sideMenuBtnRefs.current.forEach((element) => {
@@ -19,7 +19,9 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       btn.classList.remove('sideMenu-btn-highlight');
     });
     BUTTONLIST.forEach((Button, index) => {
-      if ((history.location.pathname).includes(`/${Button.address}`)) {
+      if (show && Button.address === 'roleassign') {
+        sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
+      } else if (!show && (history.location.pathname).includes(`/${Button.address}`)) {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
@@ -27,7 +29,12 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   // FUNCTION that Handles the button clicks
   const buttonClickHandler = (event, address) => {
-    history.push(`/${address}`);
+    if (address !== 'roleassign') {
+      history.push(`/${address}`);
+      setShow(false);
+    } else {
+      setShow(true);
+    }
     buttonHighlighter(event);
   };
 
@@ -53,7 +60,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     <div ref={ref} className="sideMenu-main">
       <div className="sideMenu-logo">ESG</div>
       {sideMenuBtns}
-      <div><RoleAssignment /></div>
+      <RoleAssignment show={show} setShow={setShow} />
+      {/* <div><RoleAssignment /></div> */}
     </div>
   );
 });

@@ -13,7 +13,6 @@ const Header = ({ sideBarRef }) => {
   const [sideBarMenuIcon, setSideBarMenuIcon] = useState(faBars);
 
   const buttonClicklogout = () => {
-    alert("logout");
     history.push('/');
     sessionStorage.clear();
   };

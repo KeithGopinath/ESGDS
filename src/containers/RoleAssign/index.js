@@ -1,54 +1,53 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Col, Row, Button, Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 
-const RoleAssignment = () => {
-  const [role, setrole] = useState('');
-  const [pillar, setpillar] = useState('');
-  const [status, setstatus] = useState(0);
+const RoleAssignment = ({ show, setShow }) => {
+  const [role, setRole] = useState('');
+  const [pillar, setPillar] = useState('');
+  const [status, setStatus] = useState(0);
 
-  const RoleOption = [
+  const roleOption = [
     { value: 'QA', label: 'QA' },
     { value: 'Analyst', label: 'Analyst' },
     { value: 'Super Admin', label: 'Super Admin' },
     { value: 'Group Admin', label: 'Group Admin' }];
-  const PillerOption = [
+  const pillerOption = [
     { value: 'Environment', label: 'Environment' },
     { value: 'Social', label: 'Social' },
     { value: 'Governance', label: 'Governance' }];
-  const [show, setShow] = useState(false);
+
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const onHandlerole = (roles) => {
-    setrole(roles);
+
+  const onHandleRole = (roles) => {
+    setRole(roles);
   };
-  const onHandlepillar = (pillars) => {
-    setpillar(pillars);
+
+  const onHandlePillar = (pillars) => {
+    setPillar(pillars);
   };
-  const handlestatus = () => {
+
+  const handleStatus = () => {
     if (role.length && pillar.length > 0) {
       setTimeout(() => {
-        setstatus(0);
+        setStatus(0);
       }, 3000);
-      setstatus(1);
+      setStatus(1);
     } else {
       setTimeout(() => {
-        setstatus(0);
+        setStatus(0);
       }, 3000);
-      setstatus(2);
+      setStatus(2);
     }
   };
   return (
     <div>
-      <div role="button" tabIndex={0} className="sideMenu-rolebtn" onClick={handleShow} onKeyDown={handleShow} >
-        <FontAwesomeIcon className="role-icon" icon={faUserTag} />
-        <div className="sideMenu-btn-rolelabel">Role Assignment</div>
-      </div>
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} animation={false} centered>
         <Modal.Header closeButton className="modal-head">
           <FontAwesomeIcon className="setting-icon" icon={faCog} />
@@ -70,8 +69,8 @@ const RoleAssignment = () => {
                 <Select
                   isMulti
                   name="Roles"
-                  options={RoleOption}
-                  onChange={onHandlerole}
+                  options={roleOption}
+                  onChange={onHandleRole}
                 />
               </div>
             </Col>
@@ -81,8 +80,8 @@ const RoleAssignment = () => {
                 <Select
                   isMulti
                   name="Piller"
-                  options={PillerOption}
-                  onChange={onHandlepillar}
+                  options={pillerOption}
+                  onChange={onHandlePillar}
                 />
               </div>
             </Col>
@@ -104,7 +103,7 @@ const RoleAssignment = () => {
           <Button variant="btn btn-outline-primary" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="success" onClick={handlestatus}>
+          <Button variant="success" onClick={handleStatus}>
             Save & Continue
           </Button>
         </Modal.Footer>
