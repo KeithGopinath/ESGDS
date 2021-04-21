@@ -39,6 +39,7 @@ const ProofUpload = ({ role }) => {
                                     onChange={onChangeCompRep}
                                     custom
                                 />
+                                <p className="text-danger">File size not exceed 3 MB</p>
                             </Form.Group>
                         </Col>
                         <Col sm={6} md={6} lg={6}>
@@ -54,6 +55,7 @@ const ProofUpload = ({ role }) => {
                                     onChange={onChangeEmpId}
                                     custom
                                 />
+                                <p className="text-danger">File size not exceed 3 MB</p>
                             </Form.Group>
                         </Col>
                         {role === 'employee' && <Col sm={6} md={6} lg={6}>
@@ -67,6 +69,7 @@ const ProofUpload = ({ role }) => {
                                     onChange={onCancelledCheque}
                                     custom
                                 />
+                                <p className="text-danger">File size not exceed 3 MB</p>
                             </Form.Group>
                         </Col>}
                     </Row>
