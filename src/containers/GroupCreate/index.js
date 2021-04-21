@@ -15,6 +15,7 @@ const GroupCreation = () => {
   const [Analystrole, setAnalystRole] = useState('');
   const [grplist, setGrpList] = useState([]);
   const [grpCount, setGrpCount] = useState(0);
+  const [groupStatus, setGroupStatus] = useState(0);
   const groupAdminOptions = [
     { value: 'Praveen', label: 'Praveen' },
     { value: 'Vaijanthi', label: 'Vaijanthi' },
@@ -65,8 +66,15 @@ const GroupCreation = () => {
       const updatedgrplist = [grpDetails, ...grplist];
       setGrpList(updatedgrplist);
       setGrpCount(grplist.length + 1);
+      setTimeout(() => {
+        setGroupStatus(0);
+      }, 3000);
+      setGroupStatus(1);
     } else {
-      alert('fill all the above fields');
+      setTimeout(() => {
+        setGroupStatus(0);
+      }, 3000);
+      setGroupStatus(2);
     }
   };
   return (
@@ -137,6 +145,18 @@ const GroupCreation = () => {
               </div>
             </Col>
             <Col lg={10} sm={12}>
+              <div className="group-status-minheight">
+                {groupStatus === 1 &&
+                <div className="group-status-creation">
+                  <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                </div>
+                }
+                {groupStatus === 2 &&
+                  <div className="group-status-creation">
+                    <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+                  </div>
+                }
+              </div>
               <div className="group-submit-btn">
                 <button type="button" className="btn btn-outline-primary" onClick={createGroup}>Create Group</button>
               </div>
