@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,6 +22,7 @@ const TaskTable = () => {
       maxHeight: 'none',
     },
   });
+
   const columns = [
     { id: 'dpCode', label: 'DP Code', minWidth: 170 },
     { id: 'fiscalYear', label: 'Fiscal Year', minWidth: 100 },
@@ -66,6 +66,7 @@ const TaskTable = () => {
       dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
     },
   ];
+  
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
