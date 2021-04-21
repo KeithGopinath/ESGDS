@@ -27,6 +27,7 @@ const PendingTaskTable = () => {
       maxHeight: 'none',
     },
   });
+
   const columns = [
     { id: 'taskId', label: 'Task Id', minWidth: 170 },
     { id: 'pillar', label: 'Pillar', minWidth: 100 },
@@ -72,6 +73,7 @@ const PendingTaskTable = () => {
       taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
     },
   ];
+
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -130,6 +132,7 @@ const PendingTaskTable = () => {
     </Paper>
   );
 };
+
 // FUNCTION THAT RETURNS THE PENDING TASK PAGE
 const PendingTasks = () => {
   const sideBarRef = useRef();

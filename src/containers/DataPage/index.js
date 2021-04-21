@@ -1,12 +1,9 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable */
 import React, { useState, useRef } from 'react';
 import { Form, Row, Col, Button, Modal, Accordion, Card } from 'react-bootstrap';
 import { DatePicker } from 'antd';
 import Select from 'react-select';
 import 'antd/dist/antd.css';
-
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
@@ -62,6 +59,7 @@ const DataPage = () => {
         </Form.Group>
       </Col>
     ));
+    
     return (
       <Col lg={12}>
         <Accordion>

@@ -12,7 +12,7 @@ import Task from './containers/Task';
 import Createbatch from './containers/BatchCreate';
 import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';
-import DataPage from './containers/Task/DataPage';
+import DataPage from './containers/DataPage';
 
 export const history = createBrowserHistory();
 

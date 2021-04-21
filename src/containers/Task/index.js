@@ -1,6 +1,4 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable */
 import React, { useRef, useEffect } from 'react';
 import Select from 'react-select';
 import 'antd/dist/antd.css';
