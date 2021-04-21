@@ -13,8 +13,6 @@ const PageLoader = () => (
       type="ThreeDots"
       color="#00BFFF"
       secondaryColor="#00BFFF"
-      // height={100}
-      // width={100}
       // eslint-disable-next-line react/jsx-boolean-value
       visible={true}
     >

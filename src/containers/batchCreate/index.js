@@ -6,11 +6,12 @@ import SideMenuBar from '../../components/SideMenuBar';
 
 
 const BatchCreation = () => {
-  const [batch, setbatch] = useState('');
-  const [company, setcompany] = useState('');
-  const [details, setdetail] = useState([]);
+  const [batch, setBatch] = useState('');
+  const [company, setCompany] = useState('');
+  const [details, setDetail] = useState([]);
+  const [status, setStatus] = useState(0);
 
-  const Options = [
+  const companyOptions = [
     { value: 'Indian oil', label: 'Indian oil' },
     { value: 'hindustan', label: 'hindustan' },
     { value: 'pertol', label: 'pertol' },
@@ -23,24 +24,29 @@ const BatchCreation = () => {
     { value: 'Mangalore', label: 'Mangalore' },
     { value: 'Relaince', label: 'Relaince' },
   ];
-  const onHandlebatch = (companylist) => {
-    setcompany(companylist);
+  const onHandleBatch = (companylist) => {
+    setCompany(companylist);
   };
 
   const onHandleInput = (batchname) => {
-    setbatch(batchname.target.value);
+    setBatch(batchname.target.value);
   };
 
-  const onCreatebatch = () => {
+  const onCreatebBatch = () => {
     const companyCount = company.length;
     if (batch.length && companyCount > 0) {
-      alert('batch created successfully');
       const allDetails = { batchName: batch, company_list: company, Count: companyCount };
       const updatedDetails = [allDetails, ...details];
-      setdetail(updatedDetails);
-      console.log(details, 'batchdetails');
+      setDetail(updatedDetails);
+      setTimeout(() => {
+        setStatus(0);
+      }, 3000);
+      setStatus(1);
     } else {
-      alert('Fill all fields');
+      setTimeout(() => {
+        setStatus(0);
+      }, 3000);
+      setStatus(2);
     }
   };
   const batchlist = details.map(({ batchName, Count }) => (
@@ -75,13 +81,25 @@ const BatchCreation = () => {
                 <div>
                   <Select
                     isMulti
-                    options={Options}
-                    onChange={onHandlebatch}
+                    options={companyOptions}
+                    onChange={onHandleBatch}
                     name="name"
                   />
                 </div>
+                <div className="batch-status-minheight">
+                  {status === 1 &&
+                  <div className="batch-status-creation">
+                    <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                  </div>
+                  }
+                  {status === 2 &&
+                    <div className="batch-status-creation">
+                      <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+                    </div>
+                  }
+                </div>
                 <div className="batch-submit-btn">
-                  <button type="button" className="btn btn-outline-primary" onClick={onCreatebatch}>Create batch</button>
+                  <button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button>
                 </div>
               </div>
             </Col>

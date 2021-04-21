@@ -34,7 +34,6 @@
     min-width:40%;
 }
 .batch-submit-btn{
-    margin-top:80px;
     margin-bottom: 80px;
 }
 .batch-display-outer {
@@ -81,6 +80,17 @@
     transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
     cursor: pointer;
     width: 85%;
+}
+.batch-status-minheight{
+    margin-top:30px;
+    min-height: 70px;
+    margin-bottom:30px;
+}
+.batch-status-creation{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .batchbox:hover{
