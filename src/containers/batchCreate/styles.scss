@@ -34,7 +34,6 @@
     min-width:40%;
 }
 .batch-submit-btn{
-    margin-top:80px;
     margin-bottom: 80px;
 }
 .batch-display-outer {
@@ -73,7 +72,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
  }
- .card{
+ .batchbox{
     border-radius: 4px;
     padding:15px;
     background: #fff;
@@ -82,8 +81,19 @@
     cursor: pointer;
     width: 85%;
 }
+.batch-status-minheight{
+    margin-top:30px;
+    min-height: 70px;
+    margin-bottom:30px;
+}
+.batch-status-creation{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
 
-.card:hover{
+.batchbox:hover{
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
 }

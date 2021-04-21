@@ -4,7 +4,7 @@ import { Card, Form, Row, Col } from 'react-bootstrap';
 
 const LoginCredentials = ({ role }) => {
     const [password, setPassword] = useState('');
-    const [confirmpassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handlePassword = (e) => {
         setPassword(e.target.value);
@@ -21,30 +21,33 @@ const LoginCredentials = ({ role }) => {
                 <Row className="d-flex justify-content-around">
                     <Col lg={5} md={6} sm={6}>
                         <Form.Group>
-                            <Form.Label>Create pssword <sup className="text-danger">*</sup></Form.Label>
+                            <Form.Label>Create password <sup className="text-danger">*</sup></Form.Label>
                             <Form.Control
                                 className=""
                                 type="password"
                                 name="createpassword"
                                 id="createpassword"
                                 defaultValue={password}
+                                placeholder= "password"
                                 onChange={handlePassword}
                             />
                         </Form.Group>
                     </Col>
                     <Col lg={5} md={6} sm={6}>
                         <Form.Group>
-                            <Form.Label>Confirm pssword <sup className="text-danger">*</sup></Form.Label>
+                            <Form.Label>Confirm password <sup className="text-danger">*</sup></Form.Label>
                             <Form.Control
                                 className=""
                                 type="password"
                                 name="confirmpassword"
                                 id="confirmpassword"
-                                defaultValue={confirmpassword}
+                                defaultValue={confirmPassword}
+                                placeholder= "confirm password"
                                 onChange={handleConfirmPassword}
                             />
                         </Form.Group>
                     </Col>
+                <p className="text-danger ml-1 mr-1">Use 8 or more characters with first letter must Upper case, Lower case letters, Numbers & Special character</p>
                 </Row>
                 <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
             </Card>

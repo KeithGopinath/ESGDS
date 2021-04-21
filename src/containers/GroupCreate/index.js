@@ -8,13 +8,14 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
 const GroupCreation = () => {
-  const [grpName, setgrpName] = useState('');
-  const [grpAdmin, setrgrpAdmin] = useState('');
+  const [grpName, setGrpName] = useState('');
+  const [grpAdmin, setrGrpAdmin] = useState('');
   const [batch, setBatch] = useState('');
   const [QArole, setQArole] = useState('');
-  const [Analystrole, setAnalystrole] = useState('');
-  const [grplist, setgrplist] = useState([]);
-  const [grpCount, setgrpCount] = useState(0);
+  const [Analystrole, setAnalystRole] = useState('');
+  const [grplist, setGrpList] = useState([]);
+  const [grpCount, setGrpCount] = useState(0);
+  const [groupStatus, setGroupStatus] = useState(0);
   const groupAdminOptions = [
     { value: 'Praveen', label: 'Praveen' },
     { value: 'Vaijanthi', label: 'Vaijanthi' },
@@ -45,10 +46,10 @@ const GroupCreation = () => {
   ];
   const sideBarRef = useRef();
   const onhandelgrpName = (e) => {
-    setgrpName(e.target.value);
+    setGrpName(e.target.value);
   };
   const onhandlegrpAdmin = (groupAdmin) => {
-    setrgrpAdmin(groupAdmin);
+    setrGrpAdmin(groupAdmin);
   };
   const onhandleassignBatch = (Assignedbatch) => {
     setBatch(Assignedbatch);
@@ -57,19 +58,23 @@ const GroupCreation = () => {
     setQArole(QA);
   };
   const onhandleAnalyst = (assignedAnalyst) => {
-    setAnalystrole(assignedAnalyst);
+    setAnalystRole(assignedAnalyst);
   };
   const createGroup = () => {
-    console.log(grpName.length, grpAdmin.value.length, batch.value.length, QArole.length, Analystrole.length);
     if ((grpName.length && grpAdmin.value.length && batch.value.length && QArole.length && Analystrole.length) > 0) {
-      alert('Group created successfully !');
       const grpDetails = { groupName: grpName, groupAdmin: grpAdmin.value, Assignedbatch: batch.value, AssignedQA: QArole, AssignedAnalyst: Analystrole };
       const updatedgrplist = [grpDetails, ...grplist];
-      setgrplist(updatedgrplist);
-      setgrpCount(grplist.length + 1);
-      console.log(grplist.length, 'all group details');
+      setGrpList(updatedgrplist);
+      setGrpCount(grplist.length + 1);
+      setTimeout(() => {
+        setGroupStatus(0);
+      }, 3000);
+      setGroupStatus(1);
     } else {
-      alert('fill all the above fields');
+      setTimeout(() => {
+        setGroupStatus(0);
+      }, 3000);
+      setGroupStatus(2);
     }
   };
   return (
@@ -140,6 +145,18 @@ const GroupCreation = () => {
               </div>
             </Col>
             <Col lg={10} sm={12}>
+              <div className="group-status-minheight">
+                {groupStatus === 1 &&
+                <div className="group-status-creation">
+                  <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                </div>
+                }
+                {groupStatus === 2 &&
+                  <div className="group-status-creation">
+                    <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+                  </div>
+                }
+              </div>
               <div className="group-submit-btn">
                 <button type="button" className="btn btn-outline-primary" onClick={createGroup}>Create Group</button>
               </div>
