@@ -25,10 +25,10 @@ const LoginCredentials = ({ role }) => {
                             <Form.Control
                                 className=""
                                 type="password"
-                                name="createpassword"
-                                id="createpassword"
+                                name="createPassword"
+                                id="createPassword"
                                 defaultValue={password}
-                                placeholder= "password"
+                                placeholder= "Password"
                                 onChange={handlePassword}
                             />
                         </Form.Group>
@@ -39,17 +39,17 @@ const LoginCredentials = ({ role }) => {
                             <Form.Control
                                 className=""
                                 type="password"
-                                name="confirmpassword"
-                                id="confirmpassword"
+                                name="confirmPassword"
+                                id="confirmPassword"
                                 defaultValue={confirmPassword}
-                                placeholder= "confirm password"
+                                placeholder= "Confirm password"
                                 onChange={handleConfirmPassword}
                             />
                         </Form.Group>
                     </Col>
-                <p className="text-danger ml-1 mr-1">Use 8 or more characters with first letter must Upper case, Lower case letters, Numbers & Special character</p>
                 </Row>
                 <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
+                <p className="ml-3 mr-3 mt-2"> <sup className="text-danger">*</sup> Use 8 or more characters with first letter must Upper case, Lower case letters, Numbers & Special character</p>
             </Card>
         </Row>
     );
