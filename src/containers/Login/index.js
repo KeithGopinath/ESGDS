@@ -33,6 +33,7 @@ const Login = () => {
 
   const onLogin = () => {
     const valid = validateEmail(email);
+    console.log(valid,email, 'valid');
     if (!email && !password && valid === false) {
       setValidate('border-danger');
       setAlert('Please enter the valid credentials');

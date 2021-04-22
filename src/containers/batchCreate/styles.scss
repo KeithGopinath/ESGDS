@@ -29,6 +29,14 @@
     font-size:15px;
     color:gray;
 }
+.batch-id{
+    font-size:15px;
+    color:gray;
+}
+.batch-year{
+    font-size:15px;
+    color:gray;
+}
 .batch-input-width{
     max-width:60%;
     min-width:40%;
@@ -92,6 +100,15 @@
     justify-content: center;
     align-items: center;
 }
+.mar-bottom{
+    margin-bottom:20px;
+    
+}
+
+.border-danger:focus {
+    border-color: #80bdff !important;
+}
+
 
 .batchbox:hover{
   transform: scale(1.05);
