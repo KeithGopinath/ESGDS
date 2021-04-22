@@ -4,7 +4,7 @@ import { Card, Form, Row, Col, Container } from 'react-bootstrap';
 import Dropdown from 'react-dropdown';
 
 const PersonalDetails = ({ role }) => {
-    const [userName, setUserName] = useState('');
+    const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [mobile, setMobile] = useState('');
@@ -18,8 +18,8 @@ const PersonalDetails = ({ role }) => {
     const [personalId, setPersonalId] = useState('254543');
 
     // personal details
-    const onNameChange = (e) => {
-        setUserName(e.target.value);
+    const onFirstNameChange = (e) => {
+        setFirstName(e.target.value);
     };
 
     const onLastNameChange = (e) => {
@@ -62,11 +62,11 @@ const PersonalDetails = ({ role }) => {
         setBankIsfc(e.target.value);
     };
 
-    const onPersonalIdChnage = (e) => {
+    const onPersonalIdChanage = (e) => {
         setPersonalId(e.target.value);
     };
 
-    const Company_List = ['Relience', 'Indian Oils'];
+    const companyList = ['Relience', 'Indian Oils'];
 
     return (
         <Container>
@@ -81,11 +81,11 @@ const PersonalDetails = ({ role }) => {
                                 <Form.Control
                                     className=""
                                     type="text"
-                                    name="name"
-                                    id="name"
-                                    value={userName}
+                                    name="firstName"
+                                    id="firstName"
+                                    value={firstName}
                                     placeholder={`${role==='employee' ? "Enter your first name": "Enter your name"}`}
-                                    onChange={onNameChange}
+                                    onChange={onFirstNameChange}
                                 />
                             </Form.Group>
                         </Col>
@@ -97,8 +97,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type="text"
-                                            name="name"
-                                            id="name"
+                                            name="lastName"
+                                            id="lastName"
                                             value={lastName}
                                             placeholder="Enter your last name"
                                             onChange={onLastNameChange}
@@ -111,9 +111,9 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type="text"
-                                            name="name"
-                                            id="name"
-                                            placeholder="optional"
+                                            name="middleName"
+                                            id="middleName"
+                                            placeholder="Optional"
                                             value={middleName}
                                             onChange={onMiddleNameChange}
                                         />
@@ -156,7 +156,7 @@ const PersonalDetails = ({ role }) => {
                                     <Form.Control
                                         className=""
                                         type="text"
-                                        name="repid"
+                                        name="companyName"
                                         id="companyName"
                                         value={companyName}
                                         placeholder = "Enter your company name"
@@ -171,10 +171,11 @@ const PersonalDetails = ({ role }) => {
                                     <Dropdown
                                         controlClassName="company-drop-down"
                                         menuClassName="drop-down-company-menu"
-                                        options={Company_List}
+                                        name="companyName"
+                                        id="companyName"
+                                        options={companyList}
                                         value={companyName}
                                         tabIndex="0"
-                                        placeholder="Select an option"
                                         onchange={onCompanyNameChange}
                                     />
                                 </Form.Group>
@@ -187,8 +188,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="pancardnumner"
-                                            id="pancardnumber"
+                                            name="pancardNumner"
+                                            id="pancardNumner"
                                             value={pancardNumber}
                                             placeholder="Enter your pancard number"
                                             onChange={onPancardNoChange}
@@ -201,8 +202,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="aadharnumber"
-                                            id="aadharnumber"
+                                            name="aadharNumber"
+                                            id="aadharNumber"
                                             value={aadharNo}
                                             placeholder="Enter your Aadhar number"
                                             onChange={onAadharNoChange}
@@ -215,10 +216,10 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="accholdername"
-                                            id="accholdername"
+                                            name="accHolderName"
+                                            id="accHolderName"
                                             value={accountHoldrName}
-                                            placeholder="same as your name"
+                                            placeholder="Same as your name"
                                             onChange={onAccountHolderNameChange}
                                         />
                                     </Form.Group>
@@ -229,8 +230,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="accountnumber"
-                                            id="accountnumber"
+                                            name="accountNumber"
+                                            id="accountNumber"
                                             value={accountNumber}
                                             placeholder="Enter your Account number"
                                             onChange={onAccountNumberChange}
@@ -243,8 +244,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="bankifsc"
-                                            id="bankifsc"
+                                            name="bankIFSC"
+                                            id="bankIFSC"
                                             value={bankIfsc}
                                             placeholder="Enter your IFSC code"
                                             onChange={onBankIfscChange}
@@ -257,11 +258,11 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type="text"
-                                            name="personalid"
-                                            id="personalid"
+                                            name="personalId"
+                                            id="personalId"
                                             value={personalId}
                                             readOnly
-                                            onChange={onPersonalIdChnage}
+                                            onChange={onPersonalIdChanage}
                                         />
                                     </Form.Group>
                                 </Col>
