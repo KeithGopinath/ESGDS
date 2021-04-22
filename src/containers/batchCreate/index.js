@@ -10,6 +10,9 @@ const BatchCreation = () => {
   const [company, setCompany] = useState('');
   const [details, setDetail] = useState([]);
   const [status, setStatus] = useState(0);
+  const [year, setYear] = useState('');
+  const [id, setId] = useState('');
+  const [validBorder, setValidBorder] = useState('');
 
   const companyOptions = [
     { value: 'Indian oil', label: 'Indian oil' },
@@ -24,17 +27,47 @@ const BatchCreation = () => {
     { value: 'Mangalore', label: 'Mangalore' },
     { value: 'Relaince', label: 'Relaince' },
   ];
+  const yearOptions = [
+    { value: '2016 - 2017', label: '2016 - 2017' },
+    { value: '2017 - 2018', label: '2017 - 2018' },
+    { value: '2018 - 2019', label: '2018 - 2019' },
+    { value: '2019 - 2020', label: '2019 - 2020' },
+  ];
+
   const onHandleBatch = (companylist) => {
     setCompany(companylist);
   };
 
   const onHandleInput = (batchname) => {
-    setBatch(batchname.target.value);
+    if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+      setBatch(batchname.target.value);
+    }
+  };
+
+  const onHandleYear = (selectedyear) => {
+    setYear(selectedyear);
+  };
+
+  const onHandleInputid = (batchid) => {
+    if (batchid.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+      setId(batchid.target.value);
+    }
   };
 
   const onCreatebBatch = () => {
+    // Conditions for validating input fields with red border
+    if (!batch) {
+      setValidBorder('border-danger');
+    } else if (!id) {
+      setValidBorder('border-danger');
+    } else if (!company) {
+      setValidBorder('border-danger');
+    } else if (!year) {
+      setValidBorder('border-danger');
+    }
+    // funtion to add batches and show message
     const companyCount = company.length;
-    if (batch.length && companyCount > 0) {
+    if ((batch.length && companyCount && id.length && year.length) > 0) {
       const allDetails = { batchName: batch, company_list: company, Count: companyCount };
       const updatedDetails = [allDetails, ...details];
       setDetail(updatedDetails);
@@ -75,18 +108,33 @@ const BatchCreation = () => {
                 <div >Batch Details</div>
               </div>
               <div className="batch-name">Batch name* :</div>
-              <div className="form-group batch-input-width" ><input type="text" className="form-control" onChange={onHandleInput} autoComplete="off" required></input></div>
-              <div className="batch-input-width">
+              <div className="form-group batch-input-width" >
+                <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
+              </div>
+              <div className="batch-id">Batch ID* :</div>
+              <div className="form-group batch-input-width" >
+                <input type="text" className={`form-control ${id === '' && validBorder}`} onChange={onHandleInputid} autoComplete="off" value={id} required></input>
+              </div>
+              <div>
                 <div className="batch-name">Select Companies*</div>
-                <div>
+                <div className="batch-input-width mar-bottom">
                   <Select
                     isMulti
+                    className={company === '' && validBorder}
                     options={companyOptions}
                     onChange={onHandleBatch}
-                    name="name"
                   />
                 </div>
-                <div className="batch-status-minheight">
+                <div className="batch-year">Select Year*</div>
+                <div className="batch-input-width mar-bottom">
+                  <Select
+                    isMulti
+                    options={yearOptions}
+                    onChange={onHandleYear}
+                    className={year === '' && validBorder}
+                  />
+                </div>
+                <div className="batch-input-width batch-status-minheight">
                   {status === 1 &&
                   <div className="batch-status-creation">
                     <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
@@ -94,7 +142,7 @@ const BatchCreation = () => {
                   }
                   {status === 2 &&
                     <div className="batch-status-creation">
-                      <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+                      <div className="alert-danger" >Fill all the required fields !</div>
                     </div>
                   }
                 </div>
