@@ -10,6 +10,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     onRenderButtonHighter();
+    console.log(show, 'state');
   },);
   const [show, setShow] = useState(false);
   // FUNCTION that Highlights the button based on url
@@ -19,17 +20,17 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       btn.classList.remove('sideMenu-btn-highlight');
     });
     BUTTONLIST.forEach((Button, index) => {
-      if (show && Button.address === 'roleassign') {
+      if (show && Button.label === 'Role Assignment') {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
-      } else if (!show && (history.location.pathname).includes(`/${Button.address}`)) {
+      } else if (!show && (history.location.pathname).includes(`/${Button.address}`) && Button.address.length !== 0) {
         sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
   };
 
   // FUNCTION that Handles the button clicks
-  const buttonClickHandler = (event, address) => {
-    if (address !== 'roleassign') {
+  const buttonClickHandler = (event, address, label) => {
+    if (label !== 'Role Assignment') {
       history.push(`/${address}`);
       setShow(false);
     } else {
@@ -51,7 +52,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const sideMenuBtns = BUTTONLIST.map(({
     id, label, icon, address,
   }, index) => (
-    <div ref={sideMenuBtnRefs.current[index]} key={id} onClick={(event) => buttonClickHandler(event, address)} className="sideMenu-btn">
+    <div ref={sideMenuBtnRefs.current[index]} key={id} onClick={(event) => buttonClickHandler(event, address, label)} className="sideMenu-btn">
       <FontAwesomeIcon className="sideMenu-btn-icon" icon={icon} />
       <div className="sideMenu-btn-label">{label}</div>
     </div>
