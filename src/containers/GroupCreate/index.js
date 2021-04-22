@@ -16,6 +16,7 @@ const GroupCreation = () => {
   const [grplist, setGrpList] = useState([]);
   const [grpCount, setGrpCount] = useState(0);
   const [groupStatus, setGroupStatus] = useState(0);
+  const [inputValidate, setInputValidate] = useState(false);
   const groupAdminOptions = [
     { value: 'Praveen', label: 'Praveen' },
     { value: 'Vaijanthi', label: 'Vaijanthi' },
@@ -46,7 +47,9 @@ const GroupCreation = () => {
   ];
   const sideBarRef = useRef();
   const onhandelgrpName = (e) => {
-    setGrpName(e.target.value);
+    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+      setGrpName(e.target.value);
+    }
   };
   const onhandlegrpAdmin = (groupAdmin) => {
     setrGrpAdmin(groupAdmin);
@@ -61,7 +64,22 @@ const GroupCreation = () => {
     setAnalystRole(assignedAnalyst);
   };
   const createGroup = () => {
-    if ((grpName.length && grpAdmin.value.length && batch.value.length && QArole.length && Analystrole.length) > 0) {
+    if (!grpName) {
+      setInputValidate('border-danger');
+      setGroupStatus(2);
+    } else if (!grpAdmin) {
+      setInputValidate(true);
+      setGroupStatus(2);
+    } else if (!batch) {
+      setInputValidate(true);
+      setGroupStatus(2);
+    } else if (!QArole) {
+      setInputValidate(true);
+      setGroupStatus(2);
+    } else if (!Analystrole) {
+      setInputValidate(true);
+      setGroupStatus(2);
+    } else {
       const grpDetails = { groupName: grpName, groupAdmin: grpAdmin.value, Assignedbatch: batch.value, AssignedQA: QArole, AssignedAnalyst: Analystrole };
       const updatedgrplist = [grpDetails, ...grplist];
       setGrpList(updatedgrplist);
@@ -70,11 +88,6 @@ const GroupCreation = () => {
         setGroupStatus(0);
       }, 3000);
       setGroupStatus(1);
-    } else {
-      setTimeout(() => {
-        setGroupStatus(0);
-      }, 3000);
-      setGroupStatus(2);
     }
   };
   return (
@@ -92,10 +105,10 @@ const GroupCreation = () => {
             </Col>
             <Col lg={5} sm={12} className="group-detail-wrapper">
               <div className="group-name">Group name* :</div>
-              <div className="form-group group-input-width" ><input type="text" className="form-control" onChange={onhandelgrpName} autoComplete="off" required></input></div>
+              <div className="form-group group-input-width" ><input type="text" value={grpName} className={`form-control ${grpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required></input></div>
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name" >Select Group Admin*</div>
-                <div>
+                <div className={grpAdmin === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     options={groupAdminOptions}
                     name="name"
@@ -105,7 +118,7 @@ const GroupCreation = () => {
               </div>
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign Batches*</div>
-                <div>
+                <div className={batch === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     options={BatchOptions}
                     name="name"
@@ -117,7 +130,7 @@ const GroupCreation = () => {
             <Col lg={5} sm={12} className="group-detail-wrapper">
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign QA*</div>
-                <div>
+                <div className={QArole === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     isMulti
                     options={QAOptions}
@@ -128,7 +141,7 @@ const GroupCreation = () => {
               </div>
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign Analyst*</div>
-                <div>
+                <div className={Analystrole === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     isMulti
                     options={AnalystOptions}
@@ -148,12 +161,12 @@ const GroupCreation = () => {
               <div className="group-status-minheight">
                 {groupStatus === 1 &&
                 <div className="group-status-creation">
-                  <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                  <div className="alert alert-success" role="alert" >Group Created successfully !!</div>
                 </div>
                 }
                 {groupStatus === 2 &&
                   <div className="group-status-creation">
-                    <div className="alert alert-danger" role="alert" >Fill all the required fields !</div>
+                    <div className="group-tot-alert" >Fill all the required fields !</div>
                   </div>
                 }
               </div>
