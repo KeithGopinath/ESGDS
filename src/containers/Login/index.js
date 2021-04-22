@@ -1,15 +1,17 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { Col, Row, Button, Card, Form, Container } from 'react-bootstrap';
+import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
+import OtpScreen from '../OtpScreen';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alert, setAlert] = useState('');
   const [validate, setValidate] = useState('');
+  const [show, setShow] = useState(false);
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -41,9 +43,20 @@ const Login = () => {
       setValidate('border-danger');
       setAlert('Please enter the vaild password');
     } else {
-      history.push("/dashboard");
+      setShow(true)
     }
   };
+
+  // Otp screen
+  const handleClose = () => setShow(false);
+
+  const onSubmitOtp = () => {
+    history.push("/dashboard");
+  }
+
+  const resendOtp = () => {
+    window.alert("OTP resent to your mail ID");
+  }
 
   return (
     <Row className="login-container overflow-hidden">
@@ -86,6 +99,12 @@ const Login = () => {
             <span className="w-100 text-center text-danger"><p>{alert}</p></span>
             <Button className="w-100" type="submit" onClick={onLogin}>Login</Button>
           </Card>
+          <OtpScreen
+            show={show}
+            handleClose={handleClose}
+            onSubmitOtp={onSubmitOtp}
+            resendOtp={resendOtp}
+          />
         </div>
       </Col>
     </Row>
