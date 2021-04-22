@@ -62,7 +62,7 @@ const PersonalDetails = ({ role }) => {
         setBankIsfc(e.target.value);
     };
 
-    const onPersonalIdChanage = (e) => {
+    const onPersonalIdChange = (e) => {
         setPersonalId(e.target.value);
     };
 
@@ -84,7 +84,7 @@ const PersonalDetails = ({ role }) => {
                                     name="firstName"
                                     id="firstName"
                                     value={firstName}
-                                    placeholder={`${role==='employee' ? "Enter your first name": "Enter your name"}`}
+                                    placeholder={`${role === 'employee' ? "Enter your first name" : "Enter your name"}`}
                                     onChange={onFirstNameChange}
                                 />
                             </Form.Group>
@@ -123,7 +123,7 @@ const PersonalDetails = ({ role }) => {
                         }
                         <Col lg={6} sm={6} md={6}>
                             <Form.Group>
-                             <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
+                                <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
                                 <Form.Control
                                     className=""
                                     type="email"
@@ -159,7 +159,7 @@ const PersonalDetails = ({ role }) => {
                                         name="companyName"
                                         id="companyName"
                                         value={companyName}
-                                        placeholder = "Enter your company name"
+                                        placeholder="Enter your company name"
                                         onChange={onCompanyNameChange}
                                     />
                                 </Form.Group>
@@ -188,8 +188,8 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Control
                                             className=""
                                             type=""
-                                            name="pancardNumner"
-                                            id="pancardNumner"
+                                            name="pancardNumber"
+                                            id="pancardNumber"
                                             value={pancardNumber}
                                             placeholder="Enter your pancard number"
                                             onChange={onPancardNoChange}
@@ -262,7 +262,7 @@ const PersonalDetails = ({ role }) => {
                                             id="personalId"
                                             value={personalId}
                                             readOnly
-                                            onChange={onPersonalIdChanage}
+                                            onChange={onPersonalIdChange}
                                         />
                                     </Form.Group>
                                 </Col>
