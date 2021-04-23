@@ -18,10 +18,13 @@ const RoleAssignment = ({ show, setShow }) => {
     { value: 'Analyst', label: 'Analyst' },
     { value: 'Super Admin', label: 'Super Admin' },
     { value: 'Group Admin', label: 'Group Admin' }];
+  const defaultRole = roleOption[0];
   const pillerOption = [
     { value: 'Environment', label: 'Environment' },
     { value: 'Social', label: 'Social' },
     { value: 'Governance', label: 'Governance' }];
+
+  const defaultPillar = pillerOption[0];
 
   const handleClose = () => setShow(false);
 
@@ -67,6 +70,7 @@ const RoleAssignment = ({ show, setShow }) => {
               <div className="head-dp">Assign Role</div>
               <div>
                 <Select
+                  defaultValue={defaultRole}
                   isMulti
                   name="Roles"
                   options={roleOption}
@@ -79,6 +83,7 @@ const RoleAssignment = ({ show, setShow }) => {
               <div className="min-height-dropdown">
                 <Select
                   isMulti
+                  defaultValue={defaultPillar}
                   name="Piller"
                   options={pillerOption}
                   onChange={onHandlePillar}

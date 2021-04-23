@@ -66,6 +66,10 @@ border-bottom:1.5px solid #ced4da;
   align-items:center;
 
 }
+.group-tot-alert{
+    font-size:16px;
+    color:#dc3545;
+}
 .group-status-minheight{
     min-height: 70px;
 }
@@ -74,4 +78,9 @@ border-bottom:1.5px solid #ced4da;
     width: 100%;
     justify-content: center;
     align-items: center;
+}
+.group-dropdown-alert{
+    .css-yk16xz-control {
+        border-color: #dc3545 !important;
+      }
 }

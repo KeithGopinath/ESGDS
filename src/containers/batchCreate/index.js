@@ -12,7 +12,7 @@ const BatchCreation = () => {
   const [status, setStatus] = useState(0);
   const [year, setYear] = useState('');
   const [id, setId] = useState('');
-  const [validBorder, setValidBorder] = useState('');
+  const [validBorder, setValidBorder] = useState(false);
 
   const companyOptions = [
     { value: 'Indian oil', label: 'Indian oil' },
@@ -58,16 +58,18 @@ const BatchCreation = () => {
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
+      setStatus(2);
     } else if (!id) {
       setValidBorder('border-danger');
+      setStatus(2);
     } else if (!company) {
-      setValidBorder('border-danger');
+      setValidBorder(true);
+      setStatus(2);
     } else if (!year) {
-      setValidBorder('border-danger');
-    }
-    // funtion to add batches and show message
-    const companyCount = company.length;
-    if ((batch.length && companyCount && id.length && year.length) > 0) {
+      setValidBorder(true);
+      setStatus(2);
+    } else {
+      const companyCount = company.length;
       const allDetails = { batchName: batch, company_list: company, Count: companyCount };
       const updatedDetails = [allDetails, ...details];
       setDetail(updatedDetails);
@@ -75,12 +77,8 @@ const BatchCreation = () => {
         setStatus(0);
       }, 3000);
       setStatus(1);
-    } else {
-      setTimeout(() => {
-        setStatus(0);
-      }, 3000);
-      setStatus(2);
     }
+    // funtion to add batches and show message
   };
   const batchlist = details.map(({ batchName, Count }) => (
     <Card className="batch-card card-view batchbox">
@@ -117,7 +115,7 @@ const BatchCreation = () => {
               </div>
               <div>
                 <div className="batch-name">Select Companies*</div>
-                <div className="batch-input-width mar-bottom">
+                <div className={`batch-input-width mar-bottom ${company === '' && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     className={company === '' && validBorder}
@@ -126,7 +124,7 @@ const BatchCreation = () => {
                   />
                 </div>
                 <div className="batch-year">Select Year*</div>
-                <div className="batch-input-width mar-bottom">
+                <div className={`batch-input-width mar-bottom ${year === '' && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     options={yearOptions}
@@ -137,12 +135,12 @@ const BatchCreation = () => {
                 <div className="batch-input-width batch-status-minheight">
                   {status === 1 &&
                   <div className="batch-status-creation">
-                    <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                    <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
                   </div>
                   }
                   {status === 2 &&
                     <div className="batch-status-creation">
-                      <div className="alert-danger" >Fill all the required fields !</div>
+                      <div className="fill-alert" >Fill all the required fields !</div>
                     </div>
                   }
                 </div>
