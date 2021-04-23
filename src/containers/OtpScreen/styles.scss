@@ -30,18 +30,3 @@
 .otp-focus {
     border-color: #037f88;
 }
-
-.otp-close {
-    float: right;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #000;
-    opacity: .5;
-    background: none;
-    border: none;
-    margin: 1%;
-
-    :hover {
-        color: #e40d0d;
-    }
-}
