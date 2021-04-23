@@ -44,7 +44,7 @@ const Login = () => {
       setValidate('border-danger');
       setAlert('Please enter the vaild password');
     } else {
-      setShow(true)
+      setShow(true);
     }
   };
 

@@ -22,4 +22,11 @@
     height: 2.2em !important;
     font-weight: bold;
     font-size: 1.2em;
+    border: none;
+    border-bottom: 2px solid #d0d6d6;
+    outline: 0;
+}
+
+.otp-focus {
+    border-color: #037f88;
 }

@@ -1,6 +1,6 @@
 /* eslint-disable*/
 import React, { useState } from 'react';
-import { Modal, Button} from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import OtpInput from 'react-otp-input';
 
 const OtpScreen = ({ show, handleClose, onSubmitOtp, resendOtp }) => {
@@ -31,6 +31,8 @@ const OtpScreen = ({ show, handleClose, onSubmitOtp, resendOtp }) => {
           className="otp-input"
           inputStyle="otp-input-style"
           containerStyle="otp-input-container"
+          focusStyle="otp-focus"
+          shouldAutoFocus
         />
         <h6 className="mt-3 mb-3 text-secondary">Didn't receive the OTP?
           <span className="text-primary btn otp-resend" onClick={resendOtp}>RESEND</span>
