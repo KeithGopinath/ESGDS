@@ -11,12 +11,13 @@ const GroupCreation = () => {
   const [grpName, setGrpName] = useState('');
   const [grpAdmin, setrGrpAdmin] = useState('');
   const [batch, setBatch] = useState('');
-  const [QArole, setQArole] = useState('');
-  const [Analystrole, setAnalystRole] = useState('');
+  const [qaRole, setQArole] = useState('');
+  const [analystRole, setAnalystRole] = useState('');
   const [grplist, setGrpList] = useState([]);
   const [grpCount, setGrpCount] = useState(0);
   const [groupStatus, setGroupStatus] = useState(0);
   const [inputValidate, setInputValidate] = useState(false);
+
   const groupAdminOptions = [
     { value: 'Praveen', label: 'Praveen' },
     { value: 'Vaijanthi', label: 'Vaijanthi' },
@@ -24,27 +25,31 @@ const GroupCreation = () => {
     { value: 'Rajesh', label: 'Rajesh' },
     { value: 'Balaji', label: 'Balaji' },
   ];
-  const BatchOptions = [
+
+  const batchOptions = [
     { value: 'batch 1', label: 'batch 1' },
     { value: 'batch 2', label: 'batch 2' },
     { value: 'batch 3', label: 'batch 3' },
     { value: 'batch 4', label: 'batch 4' },
     { value: 'batch 5', label: 'batch 5' },
   ];
-  const QAOptions = [
+
+  const qaOptions = [
     { value: 'Sam', label: 'Sam' },
     { value: 'Tom', label: 'Tom' },
     { value: 'Bolt', label: 'Bolt' },
     { value: 'Rohit', label: 'Rohit' },
     { value: 'Mohit', label: 'Mohit' },
   ];
-  const AnalystOptions = [
+
+  const analystOptions = [
     { value: 'Ram', label: 'Ram' },
     { value: 'Sundar', label: 'Sundar' },
     { value: 'Zampa', label: 'Zampa' },
     { value: 'Dhoni', label: 'Dhoni' },
     { value: 'Virat', label: 'Virat' },
   ];
+
   const sideBarRef = useRef();
   const onhandelgrpName = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
@@ -67,20 +72,11 @@ const GroupCreation = () => {
     if (!grpName) {
       setInputValidate('border-danger');
       setGroupStatus(2);
-    } else if (!grpAdmin) {
-      setInputValidate(true);
-      setGroupStatus(2);
-    } else if (!batch) {
-      setInputValidate(true);
-      setGroupStatus(2);
-    } else if (!QArole) {
-      setInputValidate(true);
-      setGroupStatus(2);
-    } else if (!Analystrole) {
+    } else if (!grpAdmin || !batch || !qaRole || !analystRole) {
       setInputValidate(true);
       setGroupStatus(2);
     } else {
-      const grpDetails = { groupName: grpName, groupAdmin: grpAdmin.value, Assignedbatch: batch.value, AssignedQA: QArole, AssignedAnalyst: Analystrole };
+      const grpDetails = { groupName: grpName, groupAdmin: grpAdmin.value, Assignedbatch: batch.value, AssignedQA: qaRole, AssignedAnalyst: analystRole };
       const updatedgrplist = [grpDetails, ...grplist];
       setGrpList(updatedgrplist);
       setGrpCount(grplist.length + 1);
@@ -120,7 +116,7 @@ const GroupCreation = () => {
                 <div className="group-dropdown-name">Assign Batches*</div>
                 <div className={batch === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
-                    options={BatchOptions}
+                    options={batchOptions}
                     name="name"
                     onChange={onhandleassignBatch}
                   />
@@ -130,10 +126,10 @@ const GroupCreation = () => {
             <Col lg={5} sm={12} className="group-detail-wrapper">
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign QA*</div>
-                <div className={QArole === '' && inputValidate && 'group-dropdown-alert'}>
+                <div className={qaRole === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     isMulti
-                    options={QAOptions}
+                    options={qaOptions}
                     name="name"
                     onChange={onhandleQA}
                   />
@@ -141,10 +137,10 @@ const GroupCreation = () => {
               </div>
               <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign Analyst*</div>
-                <div className={Analystrole === '' && inputValidate && 'group-dropdown-alert'}>
+                <div className={analystRole === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
                     isMulti
-                    options={AnalystOptions}
+                    options={analystOptions}
                     name="name"
                     onChange={onhandleAnalyst}
                   />
