@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import 'antd/dist/antd.css';
+import { Checkbox } from 'antd';
 
 
 const PopoverPopupState = () => (
@@ -158,6 +160,16 @@ const APPROVED_USERS_DATA = {
     email: 'balaji@gmail.com',
     role: 'Analyst',
     registeredDate: new Date('5-13-2020').toDateString(),
+    pillar:
+  <Checkbox.Group
+    style={{ textAlign: 'start' }}
+    options={[
+      { value: 'Environment', label: 'E' },
+      { value: 'Social', label: 'S' },
+      { value: 'Governance', label: 'G' }]}
+    defaultValue={['Environment']}
+    onChange={null}
+  />,
     groupAssigned:
   <div className="approved-users-groupassigned">
     <Dropdown
@@ -200,6 +212,12 @@ const APPROVED_USERS_DATA = {
     align: 'left',
     label: 'Registered Date',
     dataType: 'date',
+  },
+  {
+    id: 'pillar',
+    align: 'center',
+    label: 'Pillar',
+    dataType: 'element',
   },
   {
     id: 'groupAssigned',
