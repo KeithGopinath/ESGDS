@@ -20,7 +20,11 @@ const OtpScreen = ({ show, handleClose, onSubmitOtp, resendOtp }) => {
       animation={false}
       centered
     >
-      <Modal.Header closeButton />
+      <div>
+        <button type="button" className="otp-close" onClick={handleClose}>
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
       <Modal.Body className="justify-content-center">
         <h4 className="enter-otp-text">Please Enter OTP</h4>
         <p>We have sent you one time password to your mail & registered mobile number</p>
