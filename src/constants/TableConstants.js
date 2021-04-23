@@ -38,6 +38,7 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 0,
     name: 'Balaji',
     email: 'balaji@gmail.com',
+    phoneNo: '91XXXXXX80',
     role: 'Analyst',
     requestedAt: new Date('5-13-2020').toDateString(),
     action: <div className="personal-details-action-wrap" > <div className="personal-details-action-details" > View updated details </div><div className="personal-details-action-reject">Reject</div > </div>,
@@ -46,6 +47,7 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 1,
     name: 'Praveen Kumar',
     email: 'Pk@gmail.com',
+    phoneNo: '91XXXXXX80',
     role: 'QA',
     requestedAt: new Date('5-18-2020').toDateString(),
     action: <div className="personal-details-action-wrap" > <div className="personal-details-action-details" > View updated details </div><div className="personal-details-action-reject">Reject</div > </div>,
@@ -61,6 +63,12 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 'email',
     align: 'left',
     label: 'Email',
+    dataType: 'string',
+  },
+  {
+    id: 'phoneNo',
+    align: 'left',
+    label: 'Phone No',
     dataType: 'string',
   },
   {

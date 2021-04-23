@@ -12,7 +12,7 @@ import { history } from './../../routes';
 const Users = () => {
   const sideBarRef = useRef();
 
-  const LABEL_SETS = [
+  const tabLabelSets = [
     { label: 'Pending Users', value: PENDING_USERS_DATA.rowsData.length, data: PENDING_USERS_DATA },
     { label: 'Approved Users', value: APPROVED_USERS_DATA.rowsData.length, data: APPROVED_USERS_DATA },
     { label: 'Super Admin Approval', value: SUPER_ADMIN_APPROVAL_DATA.rowsData.length, data: SUPER_ADMIN_APPROVAL_DATA },
@@ -25,7 +25,7 @@ const Users = () => {
     defaultTab();
   }, []);
 
-  const tabsRefs = useRef(LABEL_SETS.map(() => React.createRef()));
+  const tabsRefs = useRef(tabLabelSets.map(() => React.createRef()));
 
   const defaultTab = () => {
     setTableData(PENDING_USERS_DATA);
@@ -64,7 +64,7 @@ const Users = () => {
             </Button>
           </div>
           <div className="users-tabs-stack">
-            {LABEL_SETS.map(({ label, value, data }, index) => (
+            {tabLabelSets.map(({ label, value, data }, index) => (
               <div key={label} ref={tabsRefs.current[index]} onClick={(event) => (tabsClickHandler(event, data))} className="tabs-label-count-wrap">
                 <div className="tabs-label">
                   {label}

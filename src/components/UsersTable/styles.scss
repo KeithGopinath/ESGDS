@@ -5,6 +5,12 @@
 .users-table-label{
     padding: 20px;
     font-weight: 600;
+} 
+.users-table-label-datepicker-search-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 600px;
 }
 .users-table-row-cell{
     font-weight:500 !important;
