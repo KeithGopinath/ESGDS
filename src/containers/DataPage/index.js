@@ -78,6 +78,18 @@ const DataPage = () => {
     );
   };
 
+  const pillarOption = [
+    { value: 'Annual Report', label: 'Annual Report' },
+    { value: 'Integrated Report', label: 'Integrated Report' },
+    { value: 'Sustainability Report', label: 'Sustainability Report' },
+    { value: 'Policy documents', label: 'Policy documents' },
+    { value: 'Webpages', label: 'Webpages' },
+    { value: 'News', label: 'News' },
+    { value: 'Press release', label: 'Press release' },
+    { value: 'Meeting Notice & Vote results', label: 'Meeting Notice & Vote results' },
+    { value: 'Others', label: 'Others' },
+  ];
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -100,14 +112,14 @@ const DataPage = () => {
               <Col lg={6}>
                 <Form.Group as={Row} >
                   <Form.Label column sm={5}>
-                    Year*
+                    Report*
                   </Form.Label>
                   <Col sm={7}>
                     <Select
                       name="userRole"
                       // value={""}
                       // onChange={}
-                      // options={}
+                      options={pillarOption}
                       // isSearchable={}
                       // className={}
                       maxLength={30}
