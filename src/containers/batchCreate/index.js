@@ -27,6 +27,7 @@ const BatchCreation = () => {
     { value: 'Mangalore', label: 'Mangalore' },
     { value: 'Relaince', label: 'Relaince' },
   ];
+
   const yearOptions = [
     { value: '2016 - 2017', label: '2016 - 2017' },
     { value: '2017 - 2018', label: '2017 - 2018' },
@@ -56,16 +57,10 @@ const BatchCreation = () => {
 
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
-    if (!batch) {
+    if (!batch || !id) {
       setValidBorder('border-danger');
       setStatus(2);
-    } else if (!id) {
-      setValidBorder('border-danger');
-      setStatus(2);
-    } else if (!company) {
-      setValidBorder(true);
-      setStatus(2);
-    } else if (!year) {
+    } else if (!company || !year) {
       setValidBorder(true);
       setStatus(2);
     } else {

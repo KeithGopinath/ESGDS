@@ -70,7 +70,7 @@ const RoleAssignment = ({ show, setShow }) => {
               <div className="head-dp">Assign Role</div>
               <div>
                 <Select
-                  defaultValue={defaultRole}
+                  value={defaultRole}
                   isMulti
                   name="Roles"
                   options={roleOption}
@@ -83,7 +83,7 @@ const RoleAssignment = ({ show, setShow }) => {
               <div className="min-height-dropdown">
                 <Select
                   isMulti
-                  defaultValue={defaultPillar}
+                  value={defaultPillar}
                   name="Piller"
                   options={pillerOption}
                   onChange={onHandlePillar}
