@@ -1,7 +1,6 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,6 +9,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const TaskTable = () => {
   const useStyles = makeStyles({
@@ -45,7 +49,7 @@ const TaskTable = () => {
       dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
     },
     {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
+      dpCode: 'AUDP002', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
     },
     {
       dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
@@ -66,10 +70,21 @@ const TaskTable = () => {
       dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
     },
   ];
-  
+
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [searchQuery, setSearchQuery] = useState(null);
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#66cafb',
+        main: '#2199c8',
+        dark: '#006b97',
+      },
+    },
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,8 +95,48 @@ const TaskTable = () => {
     setPage(0);
   };
 
+  const handlesSearch = (event) => {
+    const searchedQuery = event.currentTarget.value;
+    setSearchQuery(searchedQuery);
+  };
+
+  const searcher = (rowdata, coldata, searchedQuery) => {
+    const columnsList = (coldata.map((eachColData) => ((eachColData.id === 'dpCode') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
+    return (
+      rowdata.filter((eachRowData) => {
+        for (let i = 0; i < columnsList.length; i += 1) {
+          if ((eachRowData[columnsList[i]].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+            return true;
+          }
+        }
+        return false;
+      })
+    );
+  };
+
   return (
     <Paper className={classes.root}>
+      <div className="task-table-label-search-wrap">
+        <div className="task-table-label">
+          Pending Dp Codes
+        </div>
+        <ThemeProvider theme={theme}>
+          <TextField
+            placeholder="search"
+            style={{ padding: '20px' }}
+            onChange={handlesSearch}
+            autoComplete="off"
+            value={searchQuery}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FontAwesomeIcon icon={faSearch} />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </ThemeProvider>
+      </div>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -90,7 +145,7 @@ const TaskTable = () => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, borderTop: '1px solid rgba(224, 224, 224, 1)' }}
                 >
                   {column.label}
                 </TableCell>
@@ -98,7 +153,7 @@ const TaskTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).map((row) => (
+            {((searchQuery) ? (searcher(rows, columns, searchQuery)) : (rows)).slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).map((row) => (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                 {columns.map((column) => {
                   const value = row[column.id];

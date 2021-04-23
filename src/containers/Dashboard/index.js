@@ -21,6 +21,14 @@ const cardsList = [
     Clabel: 'Empoyees - By Pillar',
     cards: [{ label: 'Environmental', value: 67 }, { label: 'Social', value: 140 }, { label: 'Governance', value: 71 }],
   },
+  {
+    Clabel: 'Misc',
+    cards: [{ label: 'Idle Employees', value: 67 }, { label: 'Fill Rate', value: 140 }, { label: 'Aging Analysis', value: 71 },
+      { label: 'Serviceablity', value: 71 }, { label: 'SLA Breaches By Analysts', value: 71 }, { label: 'SLA Change Requests By Analysts And QAs', value: 71 },
+      { label: 'SLA Extensions For Batches', value: 71 }, { label: 'SLA Breaches For Batches', value: 71 }, { label: 'Reassignments Requests By Analysts and QAs', value: 71 }, { label: 'SLA Breahes For Controversies', value: 71 }, { label: 'Average Quality', value: 71 },
+      { label: 'New Errors By Company Rep', value: 71 }, { label: 'New Errors By Clients', value: 71 },
+    ],
+  },
 ];
 
 const Dashboard = () => {
