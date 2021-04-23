@@ -45,6 +45,7 @@ const Login = () => {
       setAlert('Please enter the vaild password');
     } else {
       setShow(true);
+      setAlert('');
     }
   };
 
@@ -56,7 +57,7 @@ const Login = () => {
   }
 
   const resendOtp = () => {
-    window.alert("OTP resent to your mail ID");
+    window.alert("OTP resend to your mail ID & mobile number");
   }
 
   return (
