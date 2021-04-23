@@ -11,6 +11,7 @@ const BatchCreation = () => {
   const [details, setDetail] = useState([]);
   const [status, setStatus] = useState(0);
   const [year, setYear] = useState('');
+  const [group, setGroup] = useState('');
   const [id, setId] = useState('');
   const [validBorder, setValidBorder] = useState(false);
 
@@ -35,6 +36,13 @@ const BatchCreation = () => {
     { value: '2019 - 2020', label: '2019 - 2020' },
   ];
 
+  const groupOptions = [
+    { value: 'Group1', label: 'Group1' },
+    { value: 'Group2', label: 'Group2' },
+    { value: 'Group3', label: 'Group3' },
+    { value: 'Group4', label: 'Group4' },
+  ];
+
   const onHandleBatch = (companylist) => {
     setCompany(companylist);
   };
@@ -54,16 +62,20 @@ const BatchCreation = () => {
       setId(batchid.target.value);
     }
   };
-
+  const onHandleGroup = (groupname) => {
+    setGroup(groupname);
+  };
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
     if (!batch || !id) {
       setValidBorder('border-danger');
       setStatus(2);
-    } else if (!company || !year) {
+    } else if (!company || !year || !group) {
       setValidBorder(true);
       setStatus(2);
-    } else {
+    }
+    console.log(batch.length, id.length, company.length, year.length, group.length, 'name,id,company,year,group');
+    if ((batch.length && id.length && company.length && year.length && group.length) > 0) {
       const companyCount = company.length;
       const allDetails = { batchName: batch, company_list: company, Count: companyCount };
       const updatedDetails = [allDetails, ...details];
@@ -72,6 +84,8 @@ const BatchCreation = () => {
         setStatus(0);
       }, 3000);
       setStatus(1);
+    } else {
+      setStatus(2);
     }
     // funtion to add batches and show message
   };
@@ -110,7 +124,7 @@ const BatchCreation = () => {
               </div>
               <div>
                 <div className="batch-name">Select Companies*</div>
-                <div className={`batch-input-width mar-bottom ${company === '' && validBorder && 'dropdown-alert' }`}>
+                <div className={`batch-input-width mar-bottom ${company.length === 0 && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     className={company === '' && validBorder}
@@ -119,12 +133,19 @@ const BatchCreation = () => {
                   />
                 </div>
                 <div className="batch-year">Select Year*</div>
-                <div className={`batch-input-width mar-bottom ${year === '' && validBorder && 'dropdown-alert' }`}>
+                <div className={`batch-input-width mar-bottom ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     options={yearOptions}
                     onChange={onHandleYear}
-                    className={year === '' && validBorder}
+                  />
+                </div>
+                <div className="batch-group">Select Group*</div>
+                <div className={`batch-input-width mar-bottom ${group.length === 0 && validBorder && 'dropdown-alert' }`}>
+                  <Select
+                    isMulti
+                    options={groupOptions}
+                    onChange={onHandleGroup}
                   />
                 </div>
                 <div className="batch-input-width batch-status-minheight">
