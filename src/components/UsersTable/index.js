@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-// import { dodgerBlue } from '@material-ui/core/colors';
-// import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,8 +12,6 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
-
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import 'antd/dist/antd.css';
@@ -73,7 +69,7 @@ ColumnsHead.propTypes = {
 
 const UsersTable = ({ tableData }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
-  console.log(tableData);
+
   // CONSTANTS
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
@@ -100,7 +96,6 @@ const UsersTable = ({ tableData }) => {
   });
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsData.length - (page * rowsPerPage));
-  console.log(emptyRows, 'empty Rows');
 
   // HELPER FUNCTIONS
   const dataSorter = (array, camparator) => {
@@ -112,7 +107,6 @@ const UsersTable = ({ tableData }) => {
       }
       return a[1] - b[1];
     });
-    console.log(sortData);
     return sortData.map((list) => list[0]);
   };
 
@@ -181,11 +175,7 @@ const UsersTable = ({ tableData }) => {
     <div>
       <Paper className="users-table-paper">
         <TableContainer>
-          <div
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: '600px',
-            }}
-          >
+          <div className="users-table-label-datepicker-search-wrap">
             <div className="users-table-label">
               {tableLabel}
             </div>
@@ -224,18 +214,15 @@ const UsersTable = ({ tableData }) => {
               {dataSorter((searchQuery) ? (searcher(rowsData, columnsHeadData, searchQuery)) : (rowsData), getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
-                  console.log(eachRow);
                   const cellArray = Object.keys(eachRow).map((key) => {
                     let cellColumnData;
                     if (key !== 'id') {
                       [cellColumnData] = columnsHeadData.filter((column) => (key === column.id));
-                      console.log(cellColumnData);
                     }
                     return (
                       <TableCell key={key} className="users-table-row-cell" hidden={key === 'id'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[key]}</TableCell>
                     );
                   });
-                  console.log(cellArray);
                   return (
                     <TableRow
                       hover={false}

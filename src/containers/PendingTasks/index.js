@@ -1,11 +1,8 @@
-/* eslint-disable import/first */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef } from 'react';
+/* eslint-disable */
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -136,6 +133,25 @@ const PendingTaskTable = () => {
 // FUNCTION THAT RETURNS THE PENDING TASK PAGE
 const PendingTasks = () => {
   const sideBarRef = useRef();
+  const tabs = ['Data Correction', 'Data Verification'];
+  const tabsRef = useRef(tabs.map(() => React.createRef()));
+
+  useEffect(() => {
+    const defaultTab = tabsRef.current[0].current;
+    if (defaultTab) {
+      defaultTab.classList.add('active');
+    }
+  }, []);
+
+  const onClickTabChanger = (event) => {
+    tabsRef.current.forEach((element) => {
+      const btn = element.current;
+      btn.classList.remove('active');
+    });
+    const { currentTarget } = event;
+    currentTarget.classList.add('active');
+  };
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -143,6 +159,9 @@ const PendingTasks = () => {
         <Header sideBarRef={sideBarRef} />
         <div className="pendingtasks-main" >
           <div className="pendingtasks-label">Pending Tasks</div>
+          <div className="task-tabs-wrap">
+            {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
+          </div>
           <PendingTaskTable />
         </div>
       </div>

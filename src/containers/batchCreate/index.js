@@ -11,8 +11,9 @@ const BatchCreation = () => {
   const [details, setDetail] = useState([]);
   const [status, setStatus] = useState(0);
   const [year, setYear] = useState('');
+  const [group, setGroup] = useState('');
   const [id, setId] = useState('');
-  const [validBorder, setValidBorder] = useState('');
+  const [validBorder, setValidBorder] = useState(false);
 
   const companyOptions = [
     { value: 'Indian oil', label: 'Indian oil' },
@@ -27,11 +28,19 @@ const BatchCreation = () => {
     { value: 'Mangalore', label: 'Mangalore' },
     { value: 'Relaince', label: 'Relaince' },
   ];
+
   const yearOptions = [
     { value: '2016 - 2017', label: '2016 - 2017' },
     { value: '2017 - 2018', label: '2017 - 2018' },
     { value: '2018 - 2019', label: '2018 - 2019' },
     { value: '2019 - 2020', label: '2019 - 2020' },
+  ];
+
+  const groupOptions = [
+    { value: 'Group1', label: 'Group1' },
+    { value: 'Group2', label: 'Group2' },
+    { value: 'Group3', label: 'Group3' },
+    { value: 'Group4', label: 'Group4' },
   ];
 
   const onHandleBatch = (companylist) => {
@@ -53,21 +62,21 @@ const BatchCreation = () => {
       setId(batchid.target.value);
     }
   };
-
+  const onHandleGroup = (groupname) => {
+    setGroup(groupname);
+  };
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
-    if (!batch) {
+    if (!batch || !id) {
       setValidBorder('border-danger');
-    } else if (!id) {
-      setValidBorder('border-danger');
-    } else if (!company) {
-      setValidBorder('border-danger');
-    } else if (!year) {
-      setValidBorder('border-danger');
+      setStatus(2);
+    } else if (!company || !year || !group) {
+      setValidBorder(true);
+      setStatus(2);
     }
-    // funtion to add batches and show message
-    const companyCount = company.length;
-    if ((batch.length && companyCount && id.length && year.length) > 0) {
+    console.log(batch.length, id.length, company.length, year.length, group.length, 'name,id,company,year,group');
+    if ((batch.length && id.length && company.length && year.length && group.length) > 0) {
+      const companyCount = company.length;
       const allDetails = { batchName: batch, company_list: company, Count: companyCount };
       const updatedDetails = [allDetails, ...details];
       setDetail(updatedDetails);
@@ -76,11 +85,9 @@ const BatchCreation = () => {
       }, 3000);
       setStatus(1);
     } else {
-      setTimeout(() => {
-        setStatus(0);
-      }, 3000);
       setStatus(2);
     }
+    // funtion to add batches and show message
   };
   const batchlist = details.map(({ batchName, Count }) => (
     <Card className="batch-card card-view batchbox">
@@ -117,7 +124,7 @@ const BatchCreation = () => {
               </div>
               <div>
                 <div className="batch-name">Select Companies*</div>
-                <div className="batch-input-width mar-bottom">
+                <div className={`batch-input-width mar-bottom ${company.length === 0 && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     className={company === '' && validBorder}
@@ -126,23 +133,30 @@ const BatchCreation = () => {
                   />
                 </div>
                 <div className="batch-year">Select Year*</div>
-                <div className="batch-input-width mar-bottom">
+                <div className={`batch-input-width mar-bottom ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
                   <Select
                     isMulti
                     options={yearOptions}
                     onChange={onHandleYear}
-                    className={year === '' && validBorder}
+                  />
+                </div>
+                <div className="batch-group">Select Group*</div>
+                <div className={`batch-input-width mar-bottom ${group.length === 0 && validBorder && 'dropdown-alert' }`}>
+                  <Select
+                    isMulti
+                    options={groupOptions}
+                    onChange={onHandleGroup}
                   />
                 </div>
                 <div className="batch-input-width batch-status-minheight">
                   {status === 1 &&
                   <div className="batch-status-creation">
-                    <div className="alert alert-success" role="alert" >Assigned successfully !!</div>
+                    <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
                   </div>
                   }
                   {status === 2 &&
                     <div className="batch-status-creation">
-                      <div className="alert-danger" >Fill all the required fields !</div>
+                      <div className="fill-alert" >Fill all the required fields !</div>
                     </div>
                   }
                 </div>

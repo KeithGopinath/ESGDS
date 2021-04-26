@@ -54,3 +54,14 @@
     display: flex;
     margin-top: 3%;
 }
+// TASK TABLE STYLES
+.task-table-label{
+    padding: 20px;
+    font-weight: 600;
+}
+.task-table-label-search-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 600px;
+}

@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import 'antd/dist/antd.css';
+import { Checkbox } from 'antd';
 
 
 const PopoverPopupState = () => (
@@ -38,6 +40,7 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 0,
     name: 'Balaji',
     email: 'balaji@gmail.com',
+    phoneNo: '91XXXXXX80',
     role: 'Analyst',
     requestedAt: new Date('5-13-2020').toDateString(),
     action: <div className="personal-details-action-wrap" > <div className="personal-details-action-details" > View updated details </div><div className="personal-details-action-reject">Reject</div > </div>,
@@ -46,6 +49,7 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 1,
     name: 'Praveen Kumar',
     email: 'Pk@gmail.com',
+    phoneNo: '91XXXXXX80',
     role: 'QA',
     requestedAt: new Date('5-18-2020').toDateString(),
     action: <div className="personal-details-action-wrap" > <div className="personal-details-action-details" > View updated details </div><div className="personal-details-action-reject">Reject</div > </div>,
@@ -61,6 +65,12 @@ const PERSONAL_DETAILS_UPDATE_DATA = {
     id: 'email',
     align: 'left',
     label: 'Email',
+    dataType: 'string',
+  },
+  {
+    id: 'phoneNo',
+    align: 'left',
+    label: 'Phone No',
     dataType: 'string',
   },
   {
@@ -150,6 +160,16 @@ const APPROVED_USERS_DATA = {
     email: 'balaji@gmail.com',
     role: 'Analyst',
     registeredDate: new Date('5-13-2020').toDateString(),
+    pillar:
+  <Checkbox.Group
+    style={{ textAlign: 'start' }}
+    options={[
+      { value: 'Environment', label: 'E' },
+      { value: 'Social', label: 'S' },
+      { value: 'Governance', label: 'G' }]}
+    defaultValue={['Environment']}
+    onChange={null}
+  />,
     groupAssigned:
   <div className="approved-users-groupassigned">
     <Dropdown
@@ -192,6 +212,12 @@ const APPROVED_USERS_DATA = {
     align: 'left',
     label: 'Registered Date',
     dataType: 'date',
+  },
+  {
+    id: 'pillar',
+    align: 'center',
+    label: 'Pillar',
+    dataType: 'element',
   },
   {
     id: 'groupAssigned',
