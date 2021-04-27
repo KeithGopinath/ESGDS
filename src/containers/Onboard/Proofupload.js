@@ -11,7 +11,7 @@ const ProofUpload = ({ role }) => {
     const onChangeCompRep = (e) => {
         setFileName(e.target.files[0].name);
     };
-    
+
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
     };
@@ -71,7 +71,7 @@ const ProofUpload = ({ role }) => {
                         </Col>}
                     </Row>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                    <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Each file size not exceed 3 MB </p>
+                    <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Each file size should not exceed 3 MB </p>
                 </Card>
             </Row>
         </Container>

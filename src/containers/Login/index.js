@@ -1,5 +1,7 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import jwt_decode from "jwt-decode";
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
@@ -12,6 +14,14 @@ const Login = () => {
   const [alert, setAlert] = useState('');
   const [validate, setValidate] = useState('');
   const [show, setShow] = useState(false);
+
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.loginState.login);
+
+  const token = login && `${login.token}`;
+  if (token) {
+    const decoded = jwt_decode(token);
+  }
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -33,7 +43,6 @@ const Login = () => {
 
   const onLogin = () => {
     const valid = validateEmail(email);
-    console.log(valid,email, 'valid');
     if (!email && !password && valid === false) {
       setValidate('border-danger');
       setAlert('Please enter the valid credentials');
@@ -46,6 +55,15 @@ const Login = () => {
     } else {
       setShow(true);
       setAlert('');
+      const loginDetails = {
+        email,
+        password
+      }
+      dispatch(
+        {
+          type: 'LOGIN_REQUEST',
+          loginDetails
+        });
     }
   };
 
@@ -94,12 +112,12 @@ const Login = () => {
                 placeholder="password"
                 onChange={onPasswordChange}
               />
-              <div className="forget-password text-right">
-                <a href="/">Forget password?</a>
+              <div className="text-right">
+                <a href="/" className="forget-password">Forget password</a>
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{alert}</p></span>
-            <Button className="w-100" type="submit" onClick={onLogin}>Login</Button>
+            <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>
           </Card>
           <OtpScreen
             show={show}

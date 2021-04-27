@@ -5,23 +5,22 @@
     padding-right: auto !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    overflow-y:hidden;
+    overflow-y: hidden;
 }
 
 .banner-image {
-    background-color: #4BBBA1;
+    background-color: #50bfa5;
     width: 100%;
     border-radius: .5em;
 }
 
-.banner-container{
-    padding-left: auto !important;
-    padding-right: auto !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+.banner-container {
+    background-color: #50bfa5 !important;
+    height: 39rem;
+    border-radius: .5em;
 }
 
-.card-container{
+.card-container {
     padding: 40px 40px;
 }
 
@@ -36,4 +35,13 @@
 
 .border-danger:focus {
     border-color: #80bdff !important;
+}
+
+.login-button {
+    background-color: #2199c8 !important;
+    border: #2199c8 !important;
+}
+
+.forget-password {
+    color: #2199c8 !important;
 }

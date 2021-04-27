@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-.dashboard-main{
+
+.dashboard-main {
     display: flex;
     padding: 30px 5%;
     flex-direction: column;
     flex-grow: 1;
 }
-.dashboard-label{
+
+.dashboard-label {
     font-family: 'Roboto', sans-serif;
     color: #2da68a;
     font-size: 17px;
@@ -14,11 +16,11 @@
     margin: 30px 0px;
 }
 
-.dashboard-container{
+.dashboard-container {
     margin: 20px 0;
 }
 
-.dashboard-container-label{
+.dashboard-container-label {
     // text-align: left;
     color: #666666;
     font-family: 'Roboto', sans-serif;
@@ -27,17 +29,17 @@
     display: flex;
 }
 
-.dashboard-cardstack{
+.dashboard-cardstack {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
 }
 
-.dashboard-card-wrapper{
+.dashboard-card-wrapper {
     margin: 20px 0;
 }
 
-.dashboard-card{
+.dashboard-card {
     height: 105px;
     width: 100%;
     max-width: 250px;
@@ -47,25 +49,29 @@
     padding: 0 15px;
     flex-direction: row;
 }
-.dashboard-card-avatar{
+
+.dashboard-card-avatar {
     width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.dashboard-card-labelset{
+
+.dashboard-card-labelset {
     width: 70%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: flex-end;
 }
-.dashboard-card-labelvalue{
-    color: #155f9b;
+
+.dashboard-card-labelvalue {
+    color: #2199c8;
     font-family: 'Roboto', sans-serif;
     font-size: 30px;
 }
-.dashboard-card-labeltext{
+
+.dashboard-card-labeltext {
     color: #666666;
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
