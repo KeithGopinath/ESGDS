@@ -28,7 +28,7 @@ const LoginCredentials = ({ role }) => {
                                 name="createPassword"
                                 id="createPassword"
                                 defaultValue={password}
-                                placeholder= "Password"
+                                placeholder="Password"
                                 onChange={handlePassword}
                             />
                         </Form.Group>
@@ -42,14 +42,14 @@ const LoginCredentials = ({ role }) => {
                                 name="confirmPassword"
                                 id="confirmPassword"
                                 defaultValue={confirmPassword}
-                                placeholder= "Confirm password"
+                                placeholder="Confirm password"
                                 onChange={handleConfirmPassword}
                             />
                         </Form.Group>
                     </Col>
                 </Row>
                 <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                <p className="ml-3 mr-3 mt-2"> <sup className="text-danger">*</sup> Use 8 or more characters with first letter must Upper case, Lower case letters, Numbers & Special character</p>
+                <p className="ml-3 mr-3 mt-2"> <sup className="text-danger">*</sup> Use 8 or more characters at least one Uppercase, Lowercase letter, Number & special character</p>
             </Card>
         </Row>
     );
