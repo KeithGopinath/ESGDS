@@ -8,6 +8,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        login: false,
+        error: false,
       };
     case ESGDS.LOGIN_SUCCESS:
       return {
