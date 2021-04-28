@@ -209,7 +209,7 @@ const PersonalDetails = ({ role }) => {
                                             type=""
                                             name="accHolderName"
                                             id="accHolderName"
-                                            value={`${middleName === '' ? (firstName + " " + lastName) : (firstName + " " + middleName + " " + lastName)}`}
+                                            value={`${firstName} ${middleName && `${middleName} `}${lastName}`}
                                             readOnly
                                             placeholder="Same as your name"
                                         />

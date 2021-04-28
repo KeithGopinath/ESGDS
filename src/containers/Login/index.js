@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import jwt_decode from "jwt-decode";
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
@@ -13,15 +13,28 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [alert, setAlert] = useState('');
   const [validate, setValidate] = useState('');
-  const [show, setShow] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  const [loginRole, setLoginRole] = useState(false);
 
   const dispatch = useDispatch();
   const login = useSelector((state) => state.loginState.login);
-
+  const invalidLogin = useSelector((state) => state.loginState.error);
   const token = login && `${login.token}`;
-  if (token) {
-    const decoded = jwt_decode(token);
-  }
+  console.log('INvalid Login : ',invalidLogin);
+
+  useEffect(() => {
+    const decoded = token && jwt_decode(token);
+    if (decoded && decoded.role === 'SuperAdmin' && loginRole) {
+      setShowOtp(true);
+      setLoginRole(false);
+    } else if (decoded && decoded.role && loginRole) {
+      setLoginRole(false);
+      history.push("/dashboard");
+    } else if (invalidLogin) {
+      setValidate('border-danger');
+       setAlert('Please enter the valid credentials');
+    }
+  });
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -46,15 +59,15 @@ const Login = () => {
     if (!email && !password && valid === false) {
       setValidate('border-danger');
       setAlert('Please enter the valid credentials');
-    } else if (valid === false) {
+    } else if (valid === false || invalidLogin) {
       setValidate('border-danger');
       setAlert('Please enter the vaild email');
-    } else if (!password) {
+    } else if (!password || invalidLogin) {
       setValidate('border-danger');
       setAlert('Please enter the vaild password');
     } else {
-      setShow(true);
       setAlert('');
+      setLoginRole(true);
       const loginDetails = {
         email,
         password
@@ -65,17 +78,18 @@ const Login = () => {
           loginDetails
         });
     }
+
   };
 
   // Otp screen
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShowOtp(false);
 
   const onSubmitOtp = () => {
     history.push("/dashboard");
   }
 
   const resendOtp = () => {
-    window.alert("OTP resend to your mail ID & mobile number");
+    window.alert("OTP resend to your mail ID");
   }
 
   return (
@@ -92,7 +106,7 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Email address</Form.Label>
               <Form.Control
-                className={(email === '' || validateEmail(email) === false) && validate}
+                className={(email === '' || validateEmail(email) === false || invalidLogin ) && validate}
                 type="text"
                 name="email"
                 id="email"
@@ -104,7 +118,7 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control
-                className={password === '' && validate}
+                className={password === '' || invalidLogin && validate}
                 type="password"
                 name="password"
                 id="password"
@@ -113,14 +127,14 @@ const Login = () => {
                 onChange={onPasswordChange}
               />
               <div className="text-right">
-                <a href="/" className="forget-password">Forget password</a>
+                <a href="/forgetpassword" className="forget-password">Forget password</a>
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{alert}</p></span>
             <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>
           </Card>
           <OtpScreen
-            show={show}
+            show={showOtp}
             handleClose={handleClose}
             onSubmitOtp={onSubmitOtp}
             resendOtp={resendOtp}
