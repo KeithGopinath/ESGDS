@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
 import { Card, Form, Row, Col, Container } from 'react-bootstrap';
-import Dropdown from 'react-dropdown';
+import Select from 'react-select';
 
 const PersonalDetails = ({ role }) => {
     const [firstName, setFirstName] = useState('');
@@ -12,10 +12,8 @@ const PersonalDetails = ({ role }) => {
     const [middleName, setMiddleName] = useState('');
     const [pancardNumber, setPancardNumber] = useState('');
     const [aadharNo, setAadharNo] = useState('');
-    const [accountHoldrName, setAccountHolderName] = useState('');
     const [accountNumber, setAccountNumber] = useState('');
     const [bankIfsc, setBankIsfc] = useState('');
-    const [personalId, setPersonalId] = useState('254543');
 
     // personal details
     const onFirstNameChange = (e) => {
@@ -46,12 +44,8 @@ const PersonalDetails = ({ role }) => {
         setAadharNo(e.target.value);
     };
 
-    const onAccountHolderNameChange = (e) => {
-        setAccountHolderName(e.target.value);
-    };
-
     const onCompanyNameChange = (e) => {
-        setCompanyName(e.target.value);
+        setCompanyName(e);
     };
 
     const onAccountNumberChange = (e) => {
@@ -62,11 +56,12 @@ const PersonalDetails = ({ role }) => {
         setBankIsfc(e.target.value);
     };
 
-    const onPersonalIdChange = (e) => {
-        setPersonalId(e.target.value);
-    };
-
-    const companyList = ['Relience', 'Indian Oils'];
+    const companyList = [
+        { value: 'Reliance', label: 'Reliance' },
+        { value: 'Indian Oils', label: 'Indian Oils' },
+        { value: 'Hindustan', label: 'Hindustan' },
+        { value: 'Bharat', label: 'Bharat' }
+    ];
 
     return (
         <Container>
@@ -93,20 +88,6 @@ const PersonalDetails = ({ role }) => {
                             <React.Fragment>
                                 <Col lg={6} sm={6} md={6}>
                                     <Form.Group>
-                                        <Form.Label>Last Name <sup className="text-danger">*</sup></Form.Label>
-                                        <Form.Control
-                                            className=""
-                                            type="text"
-                                            name="lastName"
-                                            id="lastName"
-                                            value={lastName}
-                                            placeholder="Enter your last name"
-                                            onChange={onLastNameChange}
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Col lg={6} sm={6} md={6}>
-                                    <Form.Group>
                                         <Form.Label>Middle Name</Form.Label>
                                         <Form.Control
                                             className=""
@@ -116,6 +97,20 @@ const PersonalDetails = ({ role }) => {
                                             placeholder="Optional"
                                             value={middleName}
                                             onChange={onMiddleNameChange}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col lg={6} sm={6} md={6}>
+                                    <Form.Group>
+                                        <Form.Label>Last Name <sup className="text-danger">*</sup></Form.Label>
+                                        <Form.Control
+                                            className=""
+                                            type="text"
+                                            name="lastName"
+                                            id="lastName"
+                                            value={lastName}
+                                            placeholder="Enter your last name"
+                                            onChange={onLastNameChange}
                                         />
                                     </Form.Group>
                                 </Col>
@@ -130,7 +125,7 @@ const PersonalDetails = ({ role }) => {
                                     name="email"
                                     id="email"
                                     value={email}
-                                    placeholder="Enter your user ID"
+                                    placeholder="This will be your user ID"
                                     onChange={onEmailChange}
                                 />
                             </Form.Group>
@@ -168,15 +163,11 @@ const PersonalDetails = ({ role }) => {
                             <Col lg={6} sm={6} md={6}>
                                 <Form.Group>
                                     <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                                    <Dropdown
-                                        controlClassName="company-drop-down"
-                                        menuClassName="drop-down-company-menu"
-                                        name="companyName"
-                                        id="companyName"
+                                    <Select
+                                        isMulti
                                         options={companyList}
-                                        value={companyName}
-                                        tabIndex="0"
-                                        onchange={onCompanyNameChange}
+                                        name="companyName"
+                                        onChange={onCompanyNameChange}
                                     />
                                 </Form.Group>
                             </Col>}
@@ -205,7 +196,7 @@ const PersonalDetails = ({ role }) => {
                                             name="aadharNumber"
                                             id="aadharNumber"
                                             value={aadharNo}
-                                            placeholder="Enter your Aadhar number"
+                                            placeholder="Enter your aadhar number"
                                             onChange={onAadharNoChange}
                                         />
                                     </Form.Group>
@@ -218,9 +209,9 @@ const PersonalDetails = ({ role }) => {
                                             type=""
                                             name="accHolderName"
                                             id="accHolderName"
-                                            value={accountHoldrName}
+                                            value={`${middleName === '' ? (firstName + " " + lastName) : (firstName + " " + middleName + " " + lastName)}`}
+                                            readOnly
                                             placeholder="Same as your name"
-                                            onChange={onAccountHolderNameChange}
                                         />
                                     </Form.Group>
                                 </Col>
@@ -233,7 +224,7 @@ const PersonalDetails = ({ role }) => {
                                             name="accountNumber"
                                             id="accountNumber"
                                             value={accountNumber}
-                                            placeholder="Enter your Account number"
+                                            placeholder="Enter your account number"
                                             onChange={onAccountNumberChange}
                                         />
                                     </Form.Group>
@@ -252,24 +243,11 @@ const PersonalDetails = ({ role }) => {
                                         />
                                     </Form.Group>
                                 </Col>
-                                <Col lg={6} sm={6} md={6}>
-                                    <Form.Group>
-                                        <Form.Label>Personal ID <sup className="text-danger">*</sup></Form.Label>
-                                        <Form.Control
-                                            className=""
-                                            type="text"
-                                            name="personalId"
-                                            id="personalId"
-                                            value={personalId}
-                                            readOnly
-                                            onChange={onPersonalIdChange}
-                                        />
-                                    </Form.Group>
-                                </Col>
                             </React.Fragment>
                         }
                     </Row>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
+                    {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
                 </Card>
             </Row>
         </Container>

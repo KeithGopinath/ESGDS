@@ -17,13 +17,13 @@ const OtpScreen = ({ show, handleClose, onSubmitOtp, resendOtp }) => {
       onHide={handleClose}
       backdrop="static"
       keyboard={false}
-      animation={false}
+      animation={true}
       centered
     >
-      <Modal.Header closeButton />
+      <Modal.Header className="otp-close" closeButton />
       <Modal.Body className="justify-content-center">
         <h4 className="enter-otp-text">Please Enter OTP</h4>
-        <p>We have sent you one time password to your mail & registered mobile number</p>
+        <p>We have sent you one time password to your mail</p>
         <OtpInput
           value={Otp}
           onChange={handleChange}
@@ -31,13 +31,13 @@ const OtpScreen = ({ show, handleClose, onSubmitOtp, resendOtp }) => {
           className="otp-input"
           inputStyle="otp-input-style"
           containerStyle="otp-input-container"
-          focusStyle="otp-focus"
           shouldAutoFocus
+          focusStyle="otp-focus"
         />
         <h6 className="mt-3 mb-3 text-secondary">Didn't receive the OTP?
           <span className="text-primary btn otp-resend" onClick={resendOtp}>RESEND</span>
         </h6>
-        <Button className="mb-4" variant="primary" onClick={onSubmitOtp}>Verify</Button>
+        <Button className="mb-4 login-button" variant="primary" onClick={onSubmitOtp}>Verify</Button>
       </Modal.Body>
     </Modal>
   );

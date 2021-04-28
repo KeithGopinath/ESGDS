@@ -1,16 +1,17 @@
 .enter-otp-text {
-    color: #3aaa9b;
+    color: #6ab649;
 }
 
 .otp-input {
     margin: 2%;
-    color: #3aaa9b;
+    color: #6ab649;
 }
 
 .otp-resend {
     vertical-align: 0% !important;
     font-weight: 600 !important;
     margin-left: 0% !important;
+    color: #2199c8 !important;
 }
 
 .otp-input-container {
@@ -28,5 +29,9 @@
 }
 
 .otp-focus {
-    border-color: #037f88;
+    border-color: #2199c8;
+}
+
+.otp-close {
+    border-bottom: none !important;
 }

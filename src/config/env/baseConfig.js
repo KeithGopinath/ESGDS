@@ -1,9 +1,9 @@
 export default {
   apiEndPoints: {
-    getContacts: '/contacts',
+    getLogin: '/login',
   },
   apiBaseUrl: {
-    dev: 'http://localhost:8000',
+    dev: 'http://65.1.140.116:3019',
     prod: '',
   },
 };

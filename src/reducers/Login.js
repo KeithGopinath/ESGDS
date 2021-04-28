@@ -1,26 +1,24 @@
-import * as CONTACTS from '../actionTypes/Contacts';
+import * as ESGDS from './../actionTypes/Login';
 
-const initialState = {
-  contacts: [],
-};
+const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case CONTACTS.GET_CONTACTS:
+    case ESGDS.LOGIN_REQUEST:
       return {
         ...state,
         isLoading: true,
       };
-    case CONTACTS.GET_CONTACTS_SUCCESS:
+    case ESGDS.LOGIN_SUCCESS:
       return {
         ...state,
-        isLoading: false,
-        contacts: action.contacts,
+        isLoading: true,
+        login: action.login,
       };
-    case CONTACTS.GET_CONTACTS_FAILURE:
+    case ESGDS.LOGIN_FAILURE:
       return {
         ...state,
-        isLoading: false,
+        isLoading: true,
         error: action.error,
       };
     default:

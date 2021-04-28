@@ -45,7 +45,7 @@ const Users = () => {
   const sendOnboard = () => {
     history.push('/onboard');
   };
-  
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -60,7 +60,7 @@ const Users = () => {
               </div>
               <div className="users-label">Manage Users</div>
             </div>
-            <Button className="onboardlink-btn" onClick= {sendOnboard}>Send onboarding link
+            <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
             </Button>
           </div>
           <div className="users-tabs-stack">
