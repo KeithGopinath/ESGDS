@@ -5,16 +5,19 @@
 }
 .batch-heading-wrapper{
     display:flex;
-    justify-content:center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     align-items:center;
     margin-bottom:30px;
     border-bottom:1.5px solid #ced4da;
     
 }
 .batch-heading-name{
-    font-size:30px;
-    font-weight:600;
-    color:#2199c8;
+    font-size:20px;
+    font-family: 'Roboto', sans-serif;
+    color: #2da68a;
+    font-weight: bolder;
 }
 .batch-detail{
     display:flex;
@@ -22,7 +25,7 @@
     align-items:center;
     margin-bottom:30px;
     font-size:25px;
-    color:#155f9b;
+    color:#2199c8;
     font-weight:600;
 }
 .batch-name{
@@ -37,8 +40,12 @@
     font-size:15px;
     color:gray;
 }
+.batch-group{
+    font-size:15px;
+    color:gray;
+}
 .batch-input-width{
-    max-width:60%;
+    max-width:90%;
     min-width:40%;
 }
 .batch-submit-btn{
@@ -55,7 +62,7 @@
     }
  .batch-card{
   min-width:30%;
-  max-width:40%;
+  max-width:70%;
   margin:10px;
  }   
  .batch-card-content{
@@ -117,7 +124,13 @@
 .border-danger:focus {
     border-color: #80bdff !important;
 }
-
+.MuiIconButton-colorPrimary{
+    color:#2da68a !important;
+}
+.MuiDataGrid-root .MuiDataGrid-cell:focus-within{
+    outline: solid #2da68a 1px !important;
+    outline-offset: -1px;
+}
 
 .batchbox:hover{
   transform: scale(1.05);

@@ -1,0 +1,44 @@
+.import-icon{
+    font-size: 30px;
+    color: #2199c8;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.import-title{
+    font-size: 15px;
+    color: #2199c8;
+    font-weight: 600;
+    padding: 10px;
+}
+.import-head{
+    padding: 1rem 1.5rem 0.5rem;
+ }
+.import-head .close{
+    padding:1.5rem 1rem 0.4em  !important
+}
+.imp-btn{
+    display: flex;
+    align-items: center;
+}
+.imp-btn-name{
+    margin-left:7%;
+}
+.import-file{
+    display: flex;
+    min-height: 5rem;
+    justify-content: center;
+    align-items: center;
+}
+.imp-btn{
+    background-color: #2da68a !important;
+    border-color:#2da68a !important;
+    box-shadow: 2px 2px 3px -2px #2da68a;
+}
+.imp-btn:focus{
+    border-color:#2da68a !important;
+    box-shadow:none !important;
+}
+.imp-popup-content{
+    background: #f9f8f8;
+    border: 1px dotted #dedcdc;
+}
