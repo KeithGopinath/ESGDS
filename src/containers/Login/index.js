@@ -20,7 +20,6 @@ const Login = () => {
   const login = useSelector((state) => state.loginState.login);
   const invalidLogin = useSelector((state) => state.loginState.error);
   const token = login && `${login.token}`;
-  console.log('INvalid Login : ',invalidLogin);
 
   useEffect(() => {
     const decoded = token && jwt_decode(token);
@@ -32,7 +31,7 @@ const Login = () => {
       history.push("/dashboard");
     } else if (invalidLogin) {
       setValidate('border-danger');
-       setAlert('Please enter the valid credentials');
+      setAlert('Please enter the valid credentials');
     }
   });
 
@@ -59,10 +58,10 @@ const Login = () => {
     if (!email && !password && valid === false) {
       setValidate('border-danger');
       setAlert('Please enter the valid credentials');
-    } else if (valid === false || invalidLogin) {
+    } else if (valid === false) {
       setValidate('border-danger');
       setAlert('Please enter the vaild email');
-    } else if (!password || invalidLogin) {
+    } else if (!password) {
       setValidate('border-danger');
       setAlert('Please enter the vaild password');
     } else {
@@ -106,7 +105,7 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Email address</Form.Label>
               <Form.Control
-                className={(email === '' || validateEmail(email) === false || invalidLogin ) && validate}
+                className={(email === '' || validateEmail(email) === false || invalidLogin) && validate}
                 type="text"
                 name="email"
                 id="email"
