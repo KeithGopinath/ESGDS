@@ -13,7 +13,7 @@ const DataPage = () => {
   const currentDpCode = {
     dpCode: 'AUDP002',
     boardMembers: ['Shri Shashi Shanker', 'Shri M. Venkatesh', 'Shri Subhash Kumar'],
-    isMatrix: false,
+    isMatrix: true,
   };
 
   const sideBarRef = useRef();
@@ -78,17 +78,17 @@ const DataPage = () => {
     );
   };
 
-  const pillarOption = [
-    { value: 'Annual Report', label: 'Annual Report' },
-    { value: 'Integrated Report', label: 'Integrated Report' },
-    { value: 'Sustainability Report', label: 'Sustainability Report' },
-    { value: 'Policy documents', label: 'Policy documents' },
-    { value: 'Webpages', label: 'Webpages' },
-    { value: 'News', label: 'News' },
-    { value: 'Press release', label: 'Press release' },
-    { value: 'Meeting Notice & Vote results', label: 'Meeting Notice & Vote results' },
-    { value: 'Others', label: 'Others' },
-  ];
+  // const pillarOption = [
+  //   { value: 'Annual Report', label: 'Annual Report' },
+  //   { value: 'Integrated Report', label: 'Integrated Report' },
+  //   { value: 'Sustainability Report', label: 'Sustainability Report' },
+  //   { value: 'Policy documents', label: 'Policy documents' },
+  //   { value: 'Webpages', label: 'Webpages' },
+  //   { value: 'News', label: 'News' },
+  //   { value: 'Press release', label: 'Press release' },
+  //   { value: 'Meeting Notice & Vote results', label: 'Meeting Notice & Vote results' },
+  //   { value: 'Others', label: 'Others' },
+  // ];
 
   return (
     <div className="main">
@@ -112,14 +112,14 @@ const DataPage = () => {
               <Col lg={6}>
                 <Form.Group as={Row} >
                   <Form.Label column sm={5}>
-                    Report*
+                    Year*
                   </Form.Label>
                   <Col sm={7}>
                     <Select
                       name="userRole"
                       // value={""}
                       // onChange={}
-                      options={pillarOption}
+                      // options={pillarOption}
                       // isSearchable={}
                       // className={}
                       maxLength={30}

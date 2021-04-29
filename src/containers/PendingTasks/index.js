@@ -133,23 +133,23 @@ const PendingTaskTable = () => {
 // FUNCTION THAT RETURNS THE PENDING TASK PAGE
 const PendingTasks = () => {
   const sideBarRef = useRef();
-  const tabs = ['Data Correction', 'Data Verification'];
+  const tabs = ['Data Correction', 'Data Verification', 'Data Collection'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
 
   useEffect(() => {
     const defaultTab = tabsRef.current[0].current;
     if (defaultTab) {
-      defaultTab.classList.add('active');
+      defaultTab.classList.add('pendingtasks-tab-active');
     }
   }, []);
 
   const onClickTabChanger = (event) => {
     tabsRef.current.forEach((element) => {
       const btn = element.current;
-      btn.classList.remove('active');
+      btn.classList.remove('pendingtasks-tab-active');
     });
     const { currentTarget } = event;
-    currentTarget.classList.add('active');
+    currentTarget.classList.add('pendingtasks-tab-active');
   };
 
   return (
@@ -159,8 +159,8 @@ const PendingTasks = () => {
         <Header sideBarRef={sideBarRef} />
         <div className="pendingtasks-main" >
           <div className="pendingtasks-label">Pending Tasks</div>
-          <div className="task-tabs-wrap">
-            {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
+          <div className="pendingtasks-tabs-wrap">
+            {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="pendingtasks-tabs">{tab}</div>))}
           </div>
           <PendingTaskTable />
         </div>
