@@ -38,7 +38,12 @@
     border-color:#2da68a !important;
     box-shadow:none !important;
 }
-.imp-popup-content{
-    background: #f9f8f8;
-    border: 1px dotted #dedcdc;
+
+.modal-width{
+   .modal-dialog{
+     max-width: 54rem !important;
+   }
+}
+.modal-batch-body{
+    padding: 0.5rem 1.5rem;
 }
