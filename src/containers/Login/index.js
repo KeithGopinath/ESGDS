@@ -7,19 +7,27 @@ import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
+// model
+import Modals from '../Modals';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [alert, setAlert] = useState('');
+  const [loginAlert, setLoginAlert] = useState('');
   const [validate, setValidate] = useState('');
   const [showOtp, setShowOtp] = useState(false);
   const [loginRole, setLoginRole] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpLogin, setOtpLogin] = useState(false);
+  const [otpAlert, setOtpAlert] = useState('');
 
   const dispatch = useDispatch();
   const login = useSelector((state) => state.loginState.login);
   const invalidLogin = useSelector((state) => state.loginState.error);
   const token = login && `${login.token}`;
+  // otpScreen
+  const validOtp = useSelector((state) => state.otpState.otp);
+  const invalidOtp = useSelector((state) => state.otpState.error);
 
   useEffect(() => {
     const decoded = token && jwt_decode(token);
@@ -31,9 +39,18 @@ const Login = () => {
       history.push("/dashboard");
     } else if (invalidLogin) {
       setValidate('border-danger');
-      setAlert('Please enter the valid credentials');
+      setLoginAlert('Please enter the valid credentials');
     }
   });
+
+  useEffect(() => {
+    if (validOtp && otpLogin) {
+      setOtpLogin(false);
+      history.push("/dashboard");
+    } else if (invalidOtp) {
+      setOtpAlert('Please enter valid otp');
+    }
+  }, [invalidOtp, validOtp]);
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -57,15 +74,15 @@ const Login = () => {
     const valid = validateEmail(email);
     if (!email && !password && valid === false) {
       setValidate('border-danger');
-      setAlert('Please enter the valid credentials');
+      setLoginAlert('Please enter the valid credentials');
     } else if (valid === false) {
       setValidate('border-danger');
-      setAlert('Please enter the vaild email');
+      setLoginAlert('Please enter the vaild email');
     } else if (!password) {
       setValidate('border-danger');
-      setAlert('Please enter the vaild password');
+      setLoginAlert('Please enter the vaild password');
     } else {
-      setAlert('');
+      setLoginAlert('');
       setLoginRole(true);
       const loginDetails = {
         email,
@@ -77,18 +94,39 @@ const Login = () => {
           loginDetails
         });
     }
-
   };
 
   // Otp screen
-  const handleClose = () => setShowOtp(false);
+  const handleClose = () => {
+    setShowOtp(false);
+    setOtpAlert('');
+    setOtp('');
+  };
 
   const onSubmitOtp = () => {
-    history.push("/dashboard");
+    if (!otp) {
+      setOtpAlert('Please enter valid otp');
+    } else {
+      setOtpAlert('');
+      setOtpLogin(true);
+      const otpDetails = {
+        email,
+        otp
+      }
+      dispatch(
+        {
+          type: 'OTP_REQUEST',
+          otpDetails
+        });
+    }
   }
 
   const resendOtp = () => {
     window.alert("OTP resend to your mail ID");
+  }
+
+  const otpHandleChange = (value) => {
+    setOtp(value);
   }
 
   return (
@@ -117,7 +155,7 @@ const Login = () => {
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control
-                className={password === '' || invalidLogin && validate}
+                className={(password === '' || invalidLogin) && validate}
                 type="password"
                 name="password"
                 id="password"
@@ -129,7 +167,7 @@ const Login = () => {
                 <a href="/forgetpassword" className="forget-password">Forget password</a>
               </div>
             </Form.Group>
-            <span className="w-100 text-center text-danger"><p>{alert}</p></span>
+            <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
             <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>
           </Card>
           <OtpScreen
@@ -137,11 +175,16 @@ const Login = () => {
             handleClose={handleClose}
             onSubmitOtp={onSubmitOtp}
             resendOtp={resendOtp}
+            inputOpt={otp}
+            otpHandleChange={otpHandleChange}
+            validateOtp={validate}
+            alert={otpAlert}
           />
         </div>
       </Col>
     </Row>
   );
 };
+
 
 export default Login;
