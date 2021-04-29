@@ -7,8 +7,6 @@ import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
-// model
-import Modals from '../Modals';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -185,6 +183,5 @@ const Login = () => {
     </Row>
   );
 };
-
 
 export default Login;
