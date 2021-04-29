@@ -52,13 +52,14 @@ const Users = () => {
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} />
         <div className="users-main">
+        <div className="users-label">USERS</div>
           <div className="users-back-label-onboardlink-container">
             <div className="back-label-wrap">
               <div className="back-lefticon-wrap" >
                 <FontAwesomeIcon className="lefticon" icon={faAngleLeft} />
                 Back
               </div>
-              <div className="users-label">Manage Users</div>
+              {/* <div className="users-label">Manage Users</div> */}
             </div>
             <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
             </Button>
