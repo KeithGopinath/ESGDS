@@ -162,7 +162,7 @@ const Login = () => {
                 onChange={onPasswordChange}
               />
               <div className="text-right">
-                <a href="/forgetpassword" className="forget-password">Forget password</a>
+                <span className="forgot-password">Forgot password</span>
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
@@ -173,10 +173,11 @@ const Login = () => {
             handleClose={handleClose}
             onSubmitOtp={onSubmitOtp}
             resendOtp={resendOtp}
-            inputOpt={otp}
+            inputOtp={otp}
             otpHandleChange={otpHandleChange}
             validateOtp={validate}
             alert={otpAlert}
+            email={email}
           />
         </div>
       </Col>
