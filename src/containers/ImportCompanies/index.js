@@ -6,8 +6,9 @@ import { Col, Row, Button, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileImport, faFileCsv } from '@fortawesome/free-solid-svg-icons';
 // import * as XLSX from 'xlsx';
-import { DataGrid } from '@material-ui/data-grid';
+// import { DataGrid } from '@material-ui/data-grid';
 import Select from 'react-select';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 
 const ImportCompanies = ({ details, setDetail }) => {
@@ -18,14 +19,40 @@ const ImportCompanies = ({ details, setDetail }) => {
   const [status, setStatus] = useState(0);
   const [year, setYear] = useState('');
   const [validBorder, setValidBorder] = useState(false);
-  //   const handleStatus = () => {
-  //     alert('imported');
-  //   };
-  const columns = [
-    {
-      field: 'companydata', headerName: 'Company', width: 130,
-    },
-  ];
+  const [rowDetail, setRowDetails] = useState('');
+
+  // const options = {
+  //   paginationPosition: 'down',
+  // };
+  const onRowSelect = (row, isSelected) => {
+    if (isSelected) {
+      const rowDetails = { id: row.id, selectedCompany: row.companydata };
+      const selectedRow = [rowDetails, ...rowDetail];
+      setRowDetails(selectedRow);
+      console.log(rowDetail);
+    } else if (!isSelected) {
+      console.log(isSelected, row);
+      // eslint-disable-next-line no-restricted-syntax
+      // rowDetail.forEach((element) => {
+      //   console.log(element, 'del rows');
+      // });
+    }
+  };
+
+  const onRowSelectAll = (isSelected, rows) => {
+    if (isSelected) {
+      console.log(isSelected, rows, 'totalRows');
+    } else {
+      console.log(isSelected);
+    }
+  };
+  const selectRowProp = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    bgColor: '#3f51b514',
+    onSelect: onRowSelect,
+    onSelectAll: onRowSelectAll,
+  };
   const rows = [
     { id: 0, companydata: 'Oil' },
     { id: 1, companydata: 'hindustan' },
@@ -45,9 +72,6 @@ const ImportCompanies = ({ details, setDetail }) => {
     { id: 15, companydata: 'MRF' },
   ];
 
-  const riceFilterModel = {
-    items: [{ columnField: 'companydata', operatorValue: 'contains', value: 'a' }],
-  };
   const yearOptions = [
     { value: '2016 - 2017', label: '2016 - 2017' },
     { value: '2017 - 2018', label: '2017 - 2018' },
@@ -61,6 +85,9 @@ const ImportCompanies = ({ details, setDetail }) => {
     if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
       setBatch(batchname.target.value);
     }
+  };
+  const handleSelect = (e) => {
+    console.log(e, '***');
   };
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
@@ -84,9 +111,9 @@ const ImportCompanies = ({ details, setDetail }) => {
     }
     // funtion to add batches and show message
   };
-  const onHandlecheck = (e) => {
-    console.log(e, '?');
-  };
+  // const onHandlecheck = (e) => {
+  //   console.log(e, '?');
+  // };
 
   // const getCompanyData = (e) => {
   //   const file = e.target.files[0];
@@ -113,7 +140,7 @@ const ImportCompanies = ({ details, setDetail }) => {
     <div>
       <Button variant="primary" className="imp-btn" onClick={handleShow}>
         <FontAwesomeIcon icon={faFileCsv}></FontAwesomeIcon>
-        <div className="imp-btn-name">Import</div>
+        <div className="imp-btn-name">Batch</div>
       </Button>
       <Modal show={show} onHide={handleClose} className="modal-width" backdrop="static" keyboard={false} animation >
         <Modal.Header closeButton className="import-head">
@@ -152,24 +179,31 @@ const ImportCompanies = ({ details, setDetail }) => {
                   }
                 </div>
                 <div className="batch-submit-btn">
-                  <button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button>
+                  <div><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
+                  <div className="imp-btn-company">
+                    <input type="file" id="actual-btn" hidden />
+                    <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
+                  </div>
                 </div>
+                {/* <Button variant="success" onClick={handleClose}>Done</Button> */}
               </div>
             </Col>
             <Col lg={6} sm={12}>
-              <div className="batch-detail">
+              {/* <div className="batch-detail">
                 <div >Company Data</div>
-              </div>
-              <div style={{ height: 400, width: '90%' }}>
+              </div> */}
+
+              <BootstrapTable data={rows} version="4" hover pagination selectRow={selectRowProp} onChange={handleSelect} >
+                <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+                <TableHeaderColumn dataField="companydata" dataSort filter={{ type: 'TextFilter', delay: 100, placeholder: 'search here' }} className="table-header-name">Select Companies </TableHeaderColumn>
+              </BootstrapTable>
+              {/* <div style={{ height: 400, width: '90%' }}>
                 <DataGrid rows={rows} columns={columns} pageSize={7} checkboxSelection onRowSelected={onHandlecheck} onSelectionModelChange={onHandlecheck} loading={false} filterModel={riceFilterModel} disableColumnSelector />
-              </div>
+              </div> */}
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer style={{ border: 'none' }}>
-          <Button variant="success" onClick={handleClose}>
-            Done
-          </Button>
         </Modal.Footer>
       </Modal>
     </div>
