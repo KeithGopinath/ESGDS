@@ -37,12 +37,13 @@
 
 .dashboard-card-wrapper {
     margin: 20px 0;
+    min-width: 215px;
 }
 
 .dashboard-card {
     height: 105px;
     width: 100%;
-    max-width: 250px;
+    // max-width: 250px;
     min-width: 205px;
     background-color: #ffffff;
     display: flex;
@@ -78,4 +79,28 @@
     height: 38px;
     overflow: hidden;
     text-align: end;
+}
+
+.dashboard-tabs-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 0;
+}
+
+.dashboard-tabs{
+    padding: 5px;
+    min-width: 170px;
+    background-color:rgb(255, 255, 255);
+    color: rgb(33, 153, 200);;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
+    margin: 3px;
+    cursor: pointer;
+}
+.dashboard-tab-active{
+    background-color: rgb(33, 153, 200);
+    color: rgb(255, 255, 255);
 }

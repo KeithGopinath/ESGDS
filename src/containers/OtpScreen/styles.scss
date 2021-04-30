@@ -1,7 +1,3 @@
-.enter-otp-text {
-    color: #6ab649;
-}
-
 .otp-input {
     margin: 2%;
     color: #6ab649;
@@ -34,4 +30,10 @@
 
 .otp-close {
     border-bottom: none !important;
+}
+
+.modal-body {
+    span {
+        color: #2199c8 
+    }
 }
