@@ -9,7 +9,7 @@ const ForgotPassword = ({
 
     const passwordBody = () => (
         <div>
-            <p className="forgotPassword-message">Enter your email to receive instructions on how to reset your password.</p>
+            <p className="forgot-password-message">Enter your email to receive instructions on how to reset your password.</p>
             <Form.Group>
                 <Form.Control
                     className={validate}

@@ -186,8 +186,7 @@ const Login = () => {
   }
 
   // condition for Forgot password alert message class name
-  const forgot = InvalidPasswordChange ? "danger" : "success";
-  const forgotPasswordClass = forgotPasswordvalidate ? "danger" : forgot;
+  const forgotPasswordClass = forgotPasswordvalidate || InvalidPasswordChange ? "danger" : "success";
 
   return (
     <Row className="login-container overflow-hidden">
