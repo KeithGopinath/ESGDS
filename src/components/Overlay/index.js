@@ -19,7 +19,7 @@ const Overlay = ({
     </Modal.Header>
     <Modal.Body className="justify-content-center">{body}</Modal.Body>
     <Modal.Footer className="no-border">
-      <span className="w-100 text-center text-danger"><p>{alert}</p></span>
+      {alert && <span className="w-100 text-center text-danger"><p>{alert}</p></span>}
       <div className="mx-auto">
         {secondary && <Button variant="primary secondary-button" onClick={onSubmitSecondary}>{secondary}</Button>}
         {primary && <Button variant="primary primary-button" onClick={onSubmitPrimary} >{primary}</Button>}
