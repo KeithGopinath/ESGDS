@@ -29,13 +29,14 @@ const Login = () => {
 
   useEffect(() => {
     const decoded = token && jwt_decode(token);
-    sessionStorage.role = decoded && decoded.role
-    if (decoded && decoded.role === 'SuperAdmin' && loginRole) {
-      setShowOtp(true);
+    if (loginRole && decoded) {
+      sessionStorage.role = decoded && decoded.role
       setLoginRole(false);
-    } else if (decoded && decoded.role && loginRole) {
-      setLoginRole(false);
-      history.push("/dashboard");
+      if (decoded && decoded.role === 'SuperAdmin') {
+        setShowOtp(true);
+      } else if (decoded && decoded.role) {
+        history.push("/dashboard");
+      }
     } else if (invalidLogin) {
       setValidate('border-danger');
       setLoginAlert('Please enter the valid credentials');
