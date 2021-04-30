@@ -29,7 +29,7 @@ const Login = () => {
 
   useEffect(() => {
     const decoded = token && jwt_decode(token);
-    sessionStorage.role = decoded
+    sessionStorage.role = decoded && decoded.role
     if (decoded && decoded.role === 'SuperAdmin' && loginRole) {
       setShowOtp(true);
       setLoginRole(false);
