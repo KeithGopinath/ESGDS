@@ -48,9 +48,6 @@
     max-width:90%;
     min-width:40%;
 }
-.batch-submit-btn{
-    margin-bottom: 80px;
-}
 .batch-display-outer {
     max-height: 430px;
     overflow: overlay;
@@ -62,7 +59,7 @@
     }
  .batch-card{
   min-width:30%;
-  max-width:70%;
+  max-width:30%;
   margin:10px;
  }   
  .batch-card-content{
@@ -82,7 +79,8 @@
     color:#0096fb;
     font-weight:600;
     letter-spacing:1px;
-    max-width: 75px;
+    max-width: 110px;
+    min-width:100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -123,13 +121,6 @@
 
 .border-danger:focus {
     border-color: #80bdff !important;
-}
-.MuiIconButton-colorPrimary{
-    color:#2da68a !important;
-}
-.MuiDataGrid-root .MuiDataGrid-cell:focus-within{
-    outline: solid #2da68a 1px !important;
-    outline-offset: -1px;
 }
 
 .batchbox:hover{

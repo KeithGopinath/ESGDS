@@ -2,48 +2,83 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
-import { Col, Row, Button, Modal } from 'react-bootstrap';
+import { Col, Row, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileImport, faFileCsv } from '@fortawesome/free-solid-svg-icons';
-// import * as XLSX from 'xlsx';
-// import { DataGrid } from '@material-ui/data-grid';
+import { faFileImport } from '@fortawesome/free-solid-svg-icons';
+import * as XLSX from 'xlsx';
 import Select from 'react-select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+// import Overlay from '../../components/Overlay';
 
 
-const ImportCompanies = ({ details, setDetail }) => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+const ImportCompanies = ({ show, setShow }) => {
   const [batch, setBatch] = useState('');
-  const [status, setStatus] = useState(0);
   const [year, setYear] = useState('');
+  const [details, setDetail] = useState([]);
+  const [rowDetail, setRowDetails] = useState([]);
+  const [alert, setAlert] = useState(0);
+  const handleClose = () => {
+    setBatch('');
+    setYear('');
+    setRowDetails([]);
+    setAlert(0);
+    setValidBorder(false);
+    setShow(false);
+  };
   const [validBorder, setValidBorder] = useState(false);
-  const [rowDetail, setRowDetails] = useState('');
 
-  // const options = {
-  //   paginationPosition: 'down',
-  // };
+
+  const optionsForPagination = {
+    sizePerPage: 11,
+  };
+  // eslint-disable-next-line consistent-return
   const onRowSelect = (row, isSelected) => {
-    if (isSelected) {
+    if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { id: row.id, selectedCompany: row.companydata };
       const selectedRow = [rowDetails, ...rowDetail];
       setRowDetails(selectedRow);
-      console.log(rowDetail);
-    } else if (!isSelected) {
-      console.log(isSelected, row);
-      // eslint-disable-next-line no-restricted-syntax
-      // rowDetail.forEach((element) => {
-      //   console.log(element, 'del rows');
-      // });
+    } else if (isSelected === true && rowDetail.length > 0) {
+      // console.log('non empty arry');
+      rowDetail.map((array) => {
+        if (array.id !== row.id) {
+          const rowDetails = { id: row.id, selectedCompany: row.companydata };
+          const selectedRow = [rowDetails, ...rowDetail];
+          setRowDetails(selectedRow);
+          console.log(rowDetail, 'add');
+        }
+        return [];
+      });
+    }
+    // removing rows from an array
+    if (isSelected === false) {
+      rowDetail.map((arr, index) => {
+        let arrayDel = [...rowDetail];
+        if (arr.id === row.id && index !== -1) {
+          arrayDel.splice(index, 1);
+          setRowDetails(arrayDel);
+        }
+        return [];
+      });
+      console.log(rowDetail, 'remove');
     }
   };
-
-  const onRowSelectAll = (isSelected, rows) => {
+  // eslint-disable-next-line consistent-return
+  const onRowSelectAll = (isSelected) => {
     if (isSelected) {
-      console.log(isSelected, rows, 'totalRows');
-    } else {
-      console.log(isSelected);
+      const dummy = [...rowDetail];
+      rowDetail.splice(0, rowDetail.length);
+      const finalAll = rows.map((args) => {
+        const rowDetails = { id: args.id, selectedCompany: args.companydata };
+        dummy.push(rowDetails);
+        return dummy;
+      });
+      console.log(finalAll[0], 'finalAll');
+      setRowDetails(finalAll[0]);
+      console.log(rowDetail, 'last');
+      return rows.map((e) => e.id);
+    }
+    if (!isSelected) {
+      setRowDetails([]);
     }
   };
   const selectRowProp = {
@@ -52,7 +87,9 @@ const ImportCompanies = ({ details, setDetail }) => {
     bgColor: '#3f51b514',
     onSelect: onRowSelect,
     onSelectAll: onRowSelectAll,
+    showOnlySelected: true,
   };
+
   const rows = [
     { id: 0, companydata: 'Oil' },
     { id: 1, companydata: 'hindustan' },
@@ -86,127 +123,165 @@ const ImportCompanies = ({ details, setDetail }) => {
       setBatch(batchname.target.value);
     }
   };
-  const handleSelect = (e) => {
-    console.log(e, '***');
-  };
+  // const handleSelect = (e) => {
+  //   console.log(e, '***');
+  // };
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
-      setStatus(2);
     } else if (!year) {
       setValidBorder(true);
-      setStatus(2);
     }
-    if ((batch.length && year.length) > 0) {
+    if ((batch.length && year.length && rowDetail.length) > 0) {
+      setAlert(1);
       const allDetails = { batchName: batch };
       const updatedDetails = [allDetails, ...details];
       setDetail(updatedDetails);
-      setTimeout(() => {
-        setStatus(0);
-      }, 3000);
-      setStatus(1);
+      console.log(details, 'batchdetails updates');
     } else {
-      setStatus(2);
+      setAlert(2);
     }
     // funtion to add batches and show message
   };
-  // const onHandlecheck = (e) => {
-  //   console.log(e, '?');
-  // };
+  // const BatchBody = () => (
+  //   <div className="modal-batch-body">
+  //     <Row>
+  //       <Col lg={6} sm={12}>
+  //         <div className="batch-detail">
+  //           <div >Batch Details</div>
+  //         </div>
+  //         <div className="batch-name">Batch name* :</div>
+  //         <div className="form-group batch-input-width" >
+  //           <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" required ></input>
+  //         </div>
+  //         <div>
+  //           <div className="batch-year">Select Year*</div>
+  //           <div className={`batch-input-width  ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
+  //             <Select
+  //               isMulti
+  //               options={yearOptions}
+  //               onChange={onHandleYear}
+  //             />
+  //           </div>
+  //         </div>
+  //       </Col>
+  //       <Col lg={6} sm={12}>
+  //         <BootstrapTable data={rows} version="4" hover pagination selectRow={selectRowProp} options={optionsForPagination}>
+  //           <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+  //           <TableHeaderColumn dataField="companydata" dataSort filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search companies' }} className="table-header-name"></TableHeaderColumn>
+  //         </BootstrapTable>
+  //       </Col>
+  //     </Row>
+  //   </div>
+  // );
 
-  // const getCompanyData = (e) => {
-  //   const file = e.target.files[0];
-  //   const promise = new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.readAsArrayBuffer(file);
-  //     fileReader.onload = (args) => {
-  //       const bufferArray = args.target.result;
-  //       const wb = XLSX.read(bufferArray, { type: 'buffer' });
-  //       const wsname = wb.SheetNames[0];
-  //       const ws = wb.Sheets[wsname];
-  //       const data = XLSX.utils.sheet_to_json(ws);
-  //       resolve(data);
-  //     };
-  //     fileReader.onerror = (error) => {
-  //       reject(error);
-  //     };
-  //   });
-  //   promise.then((data) => {
-  //     console.log(data);
-  //   });
-  // };
+  // const BatchFooter = () => (
+  //   <div className="batch-submit-btn">
+  //     <div><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
+  //     <div className="imp-btn-company">
+  //       <input type="file" id="actual-btn" hidden onChange={getCompanyData} />
+  //       <FontAwesomeIcon className="import-icon" icon={faFileImport} />
+  //       <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
+  //     </div>
+  //   </div>
+  // );
+
+  const getCompanyData = (e) => {
+    const file = e.target.files[0];
+    const promise = new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+      fileReader.onload = (args) => {
+        const bufferArray = args.target.result;
+        const wb = XLSX.read(bufferArray, { type: 'buffer' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+        resolve(data);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+    promise.then((data) => {
+      console.log(data);
+    });
+  };
   return (
-    <div>
-      <Button variant="primary" className="imp-btn" onClick={handleShow}>
-        <FontAwesomeIcon icon={faFileCsv}></FontAwesomeIcon>
-        <div className="imp-btn-name">Batch</div>
-      </Button>
-      <Modal show={show} onHide={handleClose} className="modal-width" backdrop="static" keyboard={false} animation >
-        <Modal.Header closeButton className="import-head">
-          <FontAwesomeIcon className="import-icon" icon={faFileImport} />
-          <Modal.Title className="import-title">Import Companies</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="modal-batch-body" >
-          <Row>
-            <Col lg={6} sm={12}>
-              <div className="batch-detail">
-                <div >Batch Details</div>
-              </div>
-              <div className="batch-name">Batch name* :</div>
-              <div className="form-group batch-input-width" >
-                <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
-              </div>
-              <div>
-                <div className="batch-year">Select Year*</div>
-                <div className={`batch-input-width mar-bottom ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
-                  <Select
-                    isMulti
-                    options={yearOptions}
-                    onChange={onHandleYear}
-                  />
-                </div>
-                <div className="batch-input-width batch-status-minheight">
-                  {status === 1 &&
-                  <div className="batch-status-creation">
-                    <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
-                  </div>
-                  }
-                  {status === 2 &&
-                    <div className="batch-status-creation">
-                      <div className="fill-alert" >Fill all the required fields !</div>
-                    </div>
-                  }
-                </div>
-                <div className="batch-submit-btn">
-                  <div><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
-                  <div className="imp-btn-company">
-                    <input type="file" id="actual-btn" hidden />
-                    <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
-                  </div>
-                </div>
-                {/* <Button variant="success" onClick={handleClose}>Done</Button> */}
-              </div>
-            </Col>
-            <Col lg={6} sm={12}>
-              {/* <div className="batch-detail">
-                <div >Company Data</div>
-              </div> */}
+  // <Overlay
+  //   className="Batch-modal"
+  //   show={show}
+  //   onHide={handleClose}
+  //   backdrop="static"
+  //   keyboard={false}
+  //   animation
+  //   centered
+  //   size="lg"
+  //   title="Batch"
+  //   body={<BatchBody />}
+  //   alert={alert}
+  //   onSubmitPrimary={onCreatebBatch}
+  //   footer={<BatchFooter />}
+  // />
 
-              <BootstrapTable data={rows} version="4" hover pagination selectRow={selectRowProp} onChange={handleSelect} >
-                <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-                <TableHeaderColumn dataField="companydata" dataSort filter={{ type: 'TextFilter', delay: 100, placeholder: 'search here' }} className="table-header-name">Select Companies </TableHeaderColumn>
-              </BootstrapTable>
-              {/* <div style={{ height: 400, width: '90%' }}>
-                <DataGrid rows={rows} columns={columns} pageSize={7} checkboxSelection onRowSelected={onHandlecheck} onSelectionModelChange={onHandlecheck} loading={false} filterModel={riceFilterModel} disableColumnSelector />
-              </div> */}
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer style={{ border: 'none' }}>
-        </Modal.Footer>
-      </Modal>
-    </div>
+
+    <Modal show={show} onHide={handleClose} className="modal-width" backdrop="static" keyboard={false} animation >
+      <Modal.Header closeButton className="import-head">
+        <Modal.Title className="import-title">Batch Creation</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="modal-batch-body" >
+        <Row>
+          <Col lg={6} sm={12}>
+            <div className="batch-detail">
+              <div >Batch Details</div>
+            </div>
+            <div className="batch-name">Batch name* :</div>
+            <div className="form-group batch-input-width" >
+              <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
+            </div>
+            <div>
+              <div className="batch-year">Select Year*</div>
+              <div className={`batch-input-width mar-bottom ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
+                <Select
+                  isMulti
+                  options={yearOptions}
+                  onChange={onHandleYear}
+                />
+              </div>
+              <div className="batch-input-width batch-status-minheight">
+                {alert === 1 &&
+                <div className="batch-status-creation">
+                  <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
+                </div>
+                }
+                {alert === 2 &&
+                  <div className="batch-status-creation">
+                    <div className="fill-alert" >Fill all the required fields !</div>
+                  </div>
+                }
+              </div>
+              <div className="batch-submit-btn">
+                <div><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
+                <div className="imp-btn-company">
+                  <input type="file" id="actual-btn" hidden onChange={getCompanyData} />
+                  <FontAwesomeIcon className="import-icon" icon={faFileImport} />
+                  <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
+                </div>
+              </div>
+            </div>
+          </Col>
+          <Col lg={6} sm={12}>
+            <BootstrapTable data={rows} version="4" hover pagination selectRow={selectRowProp} options={optionsForPagination}>
+              <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+              <TableHeaderColumn dataField="companydata" dataSort filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search companies' }} className="table-header-name"></TableHeaderColumn>
+            </BootstrapTable>
+          </Col>
+        </Row>
+      </Modal.Body>
+      <Modal.Footer style={{ border: 'none' }}>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
