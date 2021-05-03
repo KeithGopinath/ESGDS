@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Row, Button, Card, Form, Col, Jumbotron } from 'react-bootstrap';
 import Logo from '../../../assets/images/logo.png';
-import Banner from '../../../assets/images/login_image.png';
 
 
 const UpdatePassword = () => {
@@ -34,23 +33,16 @@ const UpdatePassword = () => {
         else {
             const updatePassDetails = {
                 password: password,
-                confirmPassword: confirmPassword,
             }
             setValidate('');
         }
     };
 
-    const customStyle ={
-        backgroundImage: `url(${Banner})`,
-        height: '100vh', 
-        backgroundColor: '#50bfa5'
-    }
-
     return (
-        <Jumbotron style={customStyle}>
+        <Jumbotron className="update-password-jumbotron">
             <div className="card-container-update">
                 <Row>
-                    <Col lg={12} sm={8} md={10}>
+                    <Col lg={12}>
                         <Card className="card-styles shadow">
                             <div className="update-password-logo">
                             <img  src={Logo} alt="logo" height="70vh" width="180vh"/>
