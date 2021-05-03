@@ -1,4 +1,8 @@
-/* eslint-disable */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable import/first */
+
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -15,6 +19,56 @@ import TableRow from '@material-ui/core/TableRow';
 
 // FUNCTION THAT RETURNS THE PENDING TASK TABLE
 const PendingTaskTable = () => {
+  const apiData = [
+    {
+      taskId: '0001',
+      pillar: 'Environmental',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+      ],
+    },
+    {
+      taskId: '0002',
+      pillar: 'Social',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+      ],
+    },
+    {
+      taskId: '0003',
+      pillar: 'Governance',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+      ],
+    },
+  ];
+
+  // TABLE DATA
+
   const useStyles = makeStyles({
     root: {
       width: '100%',
@@ -24,7 +78,9 @@ const PendingTaskTable = () => {
       maxHeight: 'none',
     },
   });
-
+  const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const columns = [
     { id: 'taskId', label: 'Task Id', minWidth: 170 },
     { id: 'pillar', label: 'Pillar', minWidth: 100 },
@@ -38,42 +94,11 @@ const PendingTaskTable = () => {
     },
   ];
 
-  const rows = [
-    {
-      taskId: '0001', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0001', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0001', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0001', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0001', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-    {
-      taskId: '0002', pillar: 'Environmental', company: 'Reliance Ltd', year: '2018-2019', action: <Link to="/pendingtasks/0001">Enter</Link>,
-    },
-  ];
-
-  const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const tablePopulate = (data) => data.map(({
+    taskId, pillar, company, year,
+  }) => ({
+    taskId, pillar, company, year, action: <Link to={`/pendingtasks/${taskId}`}>Enter</Link>,
+  }));
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -83,6 +108,8 @@ const PendingTaskTable = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const rows = tablePopulate(apiData);
 
   return (
     <Paper className={classes.root}>
@@ -133,7 +160,8 @@ const PendingTaskTable = () => {
 // FUNCTION THAT RETURNS THE PENDING TASK PAGE
 const PendingTasks = () => {
   const sideBarRef = useRef();
-  const tabs = ['Data Correction', 'Data Verification', 'Data Collection'];
+  const currentRole = sessionStorage.role;
+  const tabs = (currentRole === 'QA') ? ['Data Verification', 'Data Correction'] : ['Data Collection', 'Data Correction'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
 
   useEffect(() => {

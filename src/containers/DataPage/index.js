@@ -6,6 +6,7 @@ import Select from 'react-select';
 import 'antd/dist/antd.css';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import { history } from '../../routes';
 
 
 const DataPage = () => {
@@ -13,7 +14,7 @@ const DataPage = () => {
   const currentDpCode = {
     dpCode: 'AUDP002',
     boardMembers: ['Shri Shashi Shanker', 'Shri M. Venkatesh', 'Shri Subhash Kumar'],
-    isMatrix: true,
+    isMatrix: false,
   };
 
   const sideBarRef = useRef();
@@ -25,7 +26,12 @@ const DataPage = () => {
   const [imagePreview, setImagePreview] = useState(false);
 
   const analystShowSaveModal = () => setShowAnalystSaveModal(true);
-  const analystCloseSaveModal = () => setShowAnalystSaveModal(false);
+  const analystCloseSaveModal = (event) => {
+    // setShowAnalystSaveModal(false);
+    if(event.currentTarget.innerHTML === 'Yes'){
+      history.goBack();
+    }
+  }
   const analystShowCloseModal = () => setShowAnalystCloseModal(true);
   const analystCloseCloseModal = () => setShowAnalystCloseModal(false);
 

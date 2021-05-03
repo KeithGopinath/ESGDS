@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-const TaskTable = () => {
+const TaskTable = (props) => {
   const useStyles = makeStyles({
     root: {
       width: '100%',
@@ -30,6 +30,7 @@ const TaskTable = () => {
   const columns = [
     { id: 'dpCode', label: 'DP Code', minWidth: 170 },
     { id: 'fiscalYear', label: 'Fiscal Year', minWidth: 100 },
+    { id: 'status', label: 'Status', align: 'center', minWidth: 100 },
     {
       id: 'action',
       label: 'Action',
@@ -38,38 +39,16 @@ const TaskTable = () => {
     },
   ];
 
-  const rows = [
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP002', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-    {
-      dpCode: 'AUDP001', fiscalYear: '2018-2019', action: <Link to="/pendingtasks/0001/AUDP001">Enter Data</Link>,
-    },
-  ];
+  console.log(props.data,"jjj");
+  // const tablePopulate = (tableData) => tableData.map(({ taskId, data }) => data.map(( x ) => ({
+  //   dpCode: x.dpCode, fiscalYear: x.fiscalYear, status: x.status, action: <Link to={`/pendingtasks/${taskId}/${x.dpCode}`}>Enter Data</Link>,
+  // })));
+
+  const tablePopulate = ({ taskId, data }) => data.map(( x ) => ({
+    dpCode: x.dpCode, fiscalYear: x.fiscalYear, status: x.status, action: <Link to={`/pendingtasks/${taskId}/${x.dpCode}`}>Enter Data</Link>,
+  }));
+
+  const rows = tablePopulate(props.data);
 
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
