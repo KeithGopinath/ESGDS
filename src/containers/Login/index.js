@@ -23,19 +23,20 @@ const Login = () => {
   const login = useSelector((state) => state.loginState.login);
   const invalidLogin = useSelector((state) => state.loginState.error);
   const token = login && `${login.token}`;
+  const decoded = token && jwt_decode(token);
+
   // otpScreen
   const validOtp = useSelector((state) => state.otpState.otp);
   const invalidOtp = useSelector((state) => state.otpState.error);
 
   useEffect(() => {
-    const decoded = token && jwt_decode(token);
     if (loginRole && decoded) {
-      sessionStorage.role = decoded && decoded.role
       setLoginRole(false);
-      if (decoded && decoded.role === 'SuperAdmin') {
-        setShowOtp(true);
-      } else if (decoded && decoded.role) {
+      if (decoded && decoded.role !== 'SuperAdmin') {
         history.push("/dashboard");
+        sessionStorage.role = decoded && decoded.role
+      } else {
+        setShowOtp(true);
       }
     } else if (invalidLogin) {
       setValidate('border-danger');
@@ -47,6 +48,7 @@ const Login = () => {
     if (validOtp && otpLogin) {
       setOtpLogin(false);
       history.push("/dashboard");
+      sessionStorage.role = decoded && decoded.role
     } else if (invalidOtp) {
       setOtpAlert('Please enter valid OTP');
     }
@@ -88,11 +90,7 @@ const Login = () => {
         email,
         password
       }
-      dispatch(
-        {
-          type: 'LOGIN_REQUEST',
-          loginDetails
-        });
+      dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
   };
 
@@ -113,11 +111,7 @@ const Login = () => {
         email,
         otp
       }
-      dispatch(
-        {
-          type: 'OTP_REQUEST',
-          otpDetails
-        });
+      dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
 
