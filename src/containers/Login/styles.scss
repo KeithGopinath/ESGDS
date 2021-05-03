@@ -16,7 +16,7 @@
 
 .banner-container {
     background-color: #50bfa5 !important;
-    height: 39rem;
+    height: 100vh;
     border-radius: .5em;
 }
 
@@ -29,8 +29,10 @@
 }
 
 .form-details {
-    margin-top: 19%;
-    right: 2%;
+    position: relative;
+    top: 10vh;
+    vertical-align: middle;
+    margin: auto 0 11vh 0;
 }
 
 .border-danger:focus {

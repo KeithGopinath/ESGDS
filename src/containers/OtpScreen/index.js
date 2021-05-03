@@ -39,7 +39,7 @@ const OtpScreen = ({
       centered
       size="md"
       title="Authentication Required"
-      body={<OtpBody />}
+      body={OtpBody()}
       alert={alert}
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
