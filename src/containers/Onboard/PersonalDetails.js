@@ -1,23 +1,30 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Form, Row, Col, Container } from 'react-bootstrap';
 import Select from 'react-select';
 
-const PersonalDetails = ({ role }) => {
+const PersonalDetails = ({ role, onFirstName }) => {
+  
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
-    const [mobile, setMobile] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [lastName, setLastName] = useState('');
     const [middleName, setMiddleName] = useState('');
     const [pancardNumber, setPancardNumber] = useState('');
-    const [aadharNo, setAadharNo] = useState('');
-    const [accountNumber, setAccountNumber] = useState('');
-    const [bankIfsc, setBankIsfc] = useState('');
+    const [adharCard, setAdharCard] = useState('');
+    const [bankAccountNumber, setBankAccountNumber] = useState('');
+    const [bankIFSCCode, setBankIFSCCode] = useState('');
+
+    const dispatch = useDispatch();
+    const employee = useSelector((state) => state.employeeState.Employee);
+    const invalidEmployee = useSelector((state) => state.employeeState.error);
 
     // personal details
     const onFirstNameChange = (e) => {
         setFirstName(e.target.value);
+        onFirstName(e.target.value);
     };
 
     const onLastNameChange = (e) => {
@@ -33,7 +40,7 @@ const PersonalDetails = ({ role }) => {
     };
 
     const onPhoneChange = (e) => {
-        setMobile(e.target.value);
+        setPhoneNumber(e.target.value);
     };
 
     const onPancardNoChange = (e) => {
@@ -41,7 +48,7 @@ const PersonalDetails = ({ role }) => {
     };
 
     const onAadharNoChange = (e) => {
-        setAadharNo(e.target.value);
+        setAdharCard(e.target.value);
     };
 
     const onCompanyNameChange = (e) => {
@@ -49,11 +56,11 @@ const PersonalDetails = ({ role }) => {
     };
 
     const onAccountNumberChange = (e) => {
-        setAccountNumber(e.target.value);
+        setBankAccountNumber(e.target.value);
     };
 
     const onBankIfscChange = (e) => {
-        setBankIsfc(e.target.value);
+        setBankIFSCCode(e.target.value);
     };
 
     const companyList = [
@@ -72,19 +79,19 @@ const PersonalDetails = ({ role }) => {
                         <Col lg={6} sm={6} md={6}>
                             <Form.Group>
                                 {(role === 'client' || role === 'company') && <Form.Label>Name <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'Employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.Control
                                     className=""
                                     type="text"
                                     name="firstName"
                                     id="firstName"
                                     value={firstName}
-                                    placeholder={`${role === 'employee' ? "Enter your first name" : "Enter your name"}`}
+                                    placeholder={`${role === 'Employee' ? "Enter your first name" : "Enter your name"}`}
                                     onChange={onFirstNameChange}
                                 />
                             </Form.Group>
                         </Col>
-                        {role === 'employee' &&
+                        {role === 'Employee' &&
                             <React.Fragment>
                                 <Col lg={6} sm={6} md={6}>
                                     <Form.Group>
@@ -138,8 +145,8 @@ const PersonalDetails = ({ role }) => {
                                     type="tel"
                                     name="phone"
                                     id="phone"
-                                    value={mobile}
-                                    placeholder="Enter your valid mobile number"
+                                    value={phoneNumber}
+                                    placeholder="Enter your valid phone number"
                                     onChange={onPhoneChange}
                                 />
                             </Form.Group>
@@ -171,14 +178,15 @@ const PersonalDetails = ({ role }) => {
                                     />
                                 </Form.Group>
                             </Col>}
-                        {role === 'employee' &&
+                        {role === 'Employee' &&
                             <React.Fragment>
                                 <Col lg={6} sm={6} md={6}>
                                     <Form.Group>
-                                        <Form.Label>Pancard Number <sup className="text-danger">*</sup></Form.Label>
+                                        <Form.Label>Pan Card Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
                                             className=""
-                                            type=""
+                                            type="text"
+                                            maxLength={10}
                                             name="pancardNumber"
                                             id="pancardNumber"
                                             value={pancardNumber}
@@ -192,10 +200,11 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Label>Aadhar Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
                                             className=""
-                                            type=""
+                                            type="tel"
+                                            maxLength={12}
                                             name="aadharNumber"
                                             id="aadharNumber"
-                                            value={aadharNo}
+                                            value={adharCard}
                                             placeholder="Enter your aadhar number"
                                             onChange={onAadharNoChange}
                                         />
@@ -206,7 +215,7 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Label>Account Holder Name <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
                                             className=""
-                                            type=""
+                                            type="text"
                                             name="accHolderName"
                                             id="accHolderName"
                                             value={`${firstName} ${middleName && `${middleName} `}${lastName}`}
@@ -220,10 +229,12 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Label>Account Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
                                             className=""
-                                            type=""
-                                            name="accountNumber"
-                                            id="accountNumber"
-                                            value={accountNumber}
+                                            type="number"
+                                            minLength={11}
+                                            maxLength={16}
+                                            name="bankAccountNumber"
+                                            id="bankAccountNumber"
+                                            value={bankAccountNumber}
                                             placeholder="Enter your account number"
                                             onChange={onAccountNumberChange}
                                         />
@@ -234,10 +245,10 @@ const PersonalDetails = ({ role }) => {
                                         <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
                                             className=""
-                                            type=""
+                                            type="text"
                                             name="bankIFSC"
                                             id="bankIFSC"
-                                            value={bankIfsc}
+                                            value={bankIFSCCode}
                                             placeholder="Enter your IFSC code"
                                             onChange={onBankIfscChange}
                                         />
@@ -247,7 +258,7 @@ const PersonalDetails = ({ role }) => {
                         }
                     </Row>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                    {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
+                    {role === 'Employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
                 </Card>
             </Row>
         </Container>
