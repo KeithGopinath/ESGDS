@@ -10,7 +10,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const BatchCreation = () => {
   const [show, setShow] = useState(false);
-
   const dispatch = useDispatch();
 
   const handleShow = () => {

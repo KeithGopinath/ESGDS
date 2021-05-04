@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
@@ -17,6 +19,7 @@ const ImportCompanies = ({ show, setShow }) => {
   const [details, setDetail] = useState([]);
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
+  // const [companies, setCompanies] = useState([]);
   const handleClose = () => {
     setBatch('');
     setYear('');
@@ -26,6 +29,12 @@ const ImportCompanies = ({ show, setShow }) => {
     setShow(false);
   };
   const [validBorder, setValidBorder] = useState(false);
+  const companyData = useSelector((companylist) => companylist.companylist.companydata);
+  const fullList = companyData && companyData.companyList;
+  const rowArray = fullList && fullList.map((args) => ({
+    id: args._id, companydata: args.companyName,
+  }));
+
 
   const optionsForPagination = {
     sizePerPage: 10,
@@ -64,7 +73,7 @@ const ImportCompanies = ({ show, setShow }) => {
     if (isSelected) {
       const dummy = [...rowDetail];
       rowDetail.splice(0, rowDetail.length);
-      const finalAll = rows.map((args) => {
+      const finalAll = rowArray.map((args) => {
         const rowDetails = { id: args.id, selectedCompany: args.companydata };
         dummy.push(rowDetails);
         return dummy;
@@ -72,7 +81,7 @@ const ImportCompanies = ({ show, setShow }) => {
       console.log(finalAll[0], 'finalAll');
       setRowDetails(finalAll[0]);
       console.log(rowDetail, 'last');
-      return rows.map((e) => e.id);
+      return rowArray.map((e) => e.id);
     }
     if (!isSelected) {
       setRowDetails([]);
@@ -86,24 +95,6 @@ const ImportCompanies = ({ show, setShow }) => {
     onSelectAll: onRowSelectAll,
   };
 
-  const rows = [
-    { id: 0, companydata: 'Oil' },
-    { id: 1, companydata: 'hindustan' },
-    { id: 2, companydata: 'pertol' },
-    { id: 3, companydata: 'Bharat' },
-    { id: 4, companydata: 'Tatamotors' },
-    { id: 5, companydata: 'ICICI' },
-    { id: 6, companydata: 'HDFC' },
-    { id: 7, companydata: 'Mangalore' },
-    { id: 8, companydata: 'Relaince' },
-    { id: 9, companydata: 'Ambuja' },
-    { id: 10, companydata: 'ABFRL' },
-    { id: 11, companydata: 'CUB' },
-    { id: 12, companydata: 'RELCAPITAL' },
-    { id: 13, companydata: 'Trends' },
-    { id: 14, companydata: 'INDBank' },
-    { id: 15, companydata: 'MRF' },
-  ];
 
   const yearOptions = [
     { value: '2016 - 2017', label: '2016 - 2017' },
@@ -176,7 +167,7 @@ const ImportCompanies = ({ show, setShow }) => {
           </div>
         </Col>
         <Col lg={6} sm={12}>
-          <BootstrapTable data={rows} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+          <BootstrapTable data={rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
             <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
             <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
           </BootstrapTable>

@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
-import { history } from '../../routes';
+import { history } from '../../routes'; 
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
 
