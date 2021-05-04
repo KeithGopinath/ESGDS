@@ -1,7 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/GetCompanies';
-import * as COMPANY from '../actionTypes/GetCompanies';
 import { doGet } from '../utils/fetchWrapper';
 
 export function* getCompanyRequest() {
@@ -15,6 +14,6 @@ export function* getCompanyRequest() {
 
 export function* getCompaniesWatchers() {
   yield [
-    takeLatest(COMPANY.COMPANY_REQUEST, getCompanyRequest),
+    takeLatest('COMPANY_REQUEST', getCompanyRequest),
   ];
 }
