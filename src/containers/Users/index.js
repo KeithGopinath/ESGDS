@@ -7,7 +7,7 @@ import { PENDING_USERS_DATA, APPROVED_USERS_DATA, SUPER_ADMIN_APPROVAL_DATA, PER
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { Button } from 'react-bootstrap';
-import { history } from './../../routes';
+import RoleOnboard from '../RoleOnboard';
 
 const Users = () => {
   const sideBarRef = useRef();
@@ -41,9 +41,15 @@ const Users = () => {
     target.classList.add('tabs-label-count-wrap-active');
     setTableData(data);
   };
+  // related onboarding
+  const [showOnboard, setShowOnboard] = useState(false);
 
   const sendOnboard = () => {
-    history.push('/onboard');
+    setShowOnboard(true);
+  };
+
+  const handleClose = () => {
+    setShowOnboard(false);
   };
 
   return (
@@ -52,7 +58,7 @@ const Users = () => {
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} />
         <div className="users-main">
-        <div className="users-label">USERS</div>
+          <div className="users-label">USERS</div>
           <div className="users-back-label-onboardlink-container">
             <div className="back-label-wrap">
               <div className="back-lefticon-wrap" >
@@ -82,6 +88,10 @@ const Users = () => {
           </div>
         </div>
       </div>
+      <RoleOnboard
+        showOnboardRoles={showOnboard}
+        handleClose={handleClose}
+      />
     </div>
   );
 };
