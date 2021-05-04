@@ -1,4 +1,4 @@
-import * as COMPANY from './../actionTypes/GetCompanies';
+import * as COMPANY from './../actionTypes/CompaniesList';
 
 const initialState = {};
 

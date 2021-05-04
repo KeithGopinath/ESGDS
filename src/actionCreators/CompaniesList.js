@@ -1,4 +1,4 @@
-import * as COMPANY from './../actionTypes/GetCompanies';
+import * as COMPANY from './../actionTypes/CompaniesList';
 
 export const getCompanyRequest = () => ({
   type: COMPANY.COMPANY_REQUEST,
