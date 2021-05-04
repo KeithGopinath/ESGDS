@@ -1,33 +1,33 @@
 /* eslint-disable import/first */
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Col, Row, Container, Button } from 'react-bootstrap';
+import { Col, Row, Container, Button, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import ImportCompanies from '../BatchCreation';
+import BatchCreation from '../BatchCreation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const BatchCreation = () => {
+const BatchView = () => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
-
+  const [details, setDetail] = useState([]);
   const handleShow = () => {
     dispatch({ type: 'COMPANY_REQUEST' });
     setShow(true);
   };
-  // const batchlist = details.map(({ batchName }) => (
-  //   <Card className="batch-card card-view batchbox">
-  //     <div className="batch-card-content">
-  //       <div className="batch-card-content-name" >Batch name:</div>
-  //       <div className="batch-card-content-value" data-toggle="tooltip" data-placement="top" title={batchName}>{batchName}</div>
-  //     </div>
-  //     <div className="batch-card-content" >
-  //       <div className="batch-card-content-name">Batch ID</div >
-  //       {/* <div className="batch-card-content-value">{Id}</div> */}
-  //     </div>
-  //   </Card>
-  // ));
+  const batchlist = details.map(({ batchName }) => (
+    <Card className="batch-card card-view batchbox">
+      <div className="batch-card-content">
+        <div className="batch-card-content-name" >Batch name:</div>
+        <div className="batch-card-content-value" data-toggle="tooltip" data-placement="top" title={batchName}>{batchName}</div>
+      </div>
+      {/* <div className="batch-card-content" >
+        <div className="batch-card-content-name">Batch ID</div >
+        <div className="batch-card-content-value">{Id}</div>
+      </div> */}
+    </Card>
+  ));
 
   const sideBarRef = useRef();
   return (
@@ -53,16 +53,16 @@ const BatchCreation = () => {
               </div>
               <Row className="batch-display-outer ">
                 <div className="batch-display-inner" >
-                  {/* {batchlist} */}
+                  {batchlist}
                 </div>
               </Row>
             </Col>
           </Row>
-          <ImportCompanies show={show} setShow={setShow} />
+          <BatchCreation show={show} setShow={setShow} details={details} setDetail={setDetail} />
         </Container>
       </div>
     </div>
   );
 };
 
-export default BatchCreation;
+export default BatchView;
