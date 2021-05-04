@@ -28,26 +28,7 @@
     color:#2199c8;
     font-weight:600;
 }
-.batch-name{
-    font-size:15px;
-    color:gray;
-}
-.batch-id{
-    font-size:15px;
-    color:gray;
-}
-.batch-year{
-    font-size:15px;
-    color:gray;
-}
-.batch-group{
-    font-size:15px;
-    color:gray;
-}
-.batch-input-width{
-    max-width:90%;
-    min-width:40%;
-}
+
 .batch-display-outer {
     max-height: 430px;
     overflow: overlay;
@@ -94,30 +75,12 @@
     cursor: pointer;
     width: 85%;
 }
-.batch-status-minheight{
-    margin-top:30px;
-    min-height: 70px;
-    margin-bottom:30px;
-}
-.batch-status-creation{
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
-.mar-bottom{
-    margin-bottom:20px;
-}
-.dropdown-alert{
-    .css-yk16xz-control {
-        border-color: #dc3545 !important;
-      }
-}
-.fill-alert{
-    font-size:16px;
-    color:#dc3545;
-}
 
+
+.icon-plus{
+    font-size:15px;
+    color:whitesmoke;
+}
 
 .border-danger:focus {
     border-color: #80bdff !important;

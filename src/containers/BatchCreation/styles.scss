@@ -1,3 +1,5 @@
+
+
 .import-icon {
     font-size: 20px;
     color: whitesmoke;
@@ -62,20 +64,16 @@
     }
 }
 
-.modal-batch-body {
-    padding: 0.5rem 1.5rem;
-}
-
-.react-bs-container-body {
-    height: 100%;
-    max-height: 21.5rem;
-    min-height: 20.5rem;
-    overflow: overlay;
-    overflow-x: hidden;
-}
+// .modal-batch-body {
+//     padding: 0.5rem 1.5rem;
+// }
 
 .dropdown-toggle {
     visibility: hidden !important;
+}
+.table-header-name{
+    color: #2da68a !important;
+    font-size: 16px !important;
 }
 
 .react-bs-container-body {
@@ -110,10 +108,10 @@
     }
 }
 
-.modal-body span {
-    margin: 0px !important;
-    color: white !important;
-}
+// .modal-body span {
+//     margin: 0px !important;
+//     color: white !important;
+// }
 
 .filter {
     max-width: 90% !important;
@@ -130,7 +128,7 @@
     display: flex;
     min-width: 27%;
     color: white;
-    padding: 7px 12px;
+    padding: 8px 12px;
     font-family: sans-serif;
     border-radius: 0.3rem;
     cursor: pointer;
@@ -138,7 +136,42 @@
     border-color: #2da68a;
 
 }
+// .min-height-btn{
+//     min-height: 13.5rem;
+// }
+.batch-name{
+    font-size:15px;
+    color:gray;
+}
+.batch-year{
+    font-size:15px;
+    color:gray;
+}
 
+.batch-input-width{
+    max-width:90%;
+    min-width:40%;
+}
+.react-bs-container-body{
+    min-height:19.375rem;
+}
+.batch-status-minheight{
+    margin-top: 30px;
+    min-height: 5.4rem;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dropdown-alert{
+    .css-yk16xz-control {
+        border-color: #dc3545 !important;
+      }
+}
+.fill-alert{
+    font-size:16px;
+    color:#dc3545;
+}
 .imp-btn-company {
     .label-imp {
         margin: 0px !important;
@@ -150,11 +183,41 @@
 
 .batch-submit-btn {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     width: 90%;
+    margin-bottom: 40px;
 }
-
+.footer-pad{
+    padding: 0px !important;
+}
 .text-filter:focus {
     box-shadow: none !important;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    margin:17px 5px !important;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid \9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    }
+    
+    .dropup, .dropdown {
+    position: relative;
+    }
+    
+    .dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+    border-top: 0;
+    border-bottom: 4px dashed;
+    border-bottom: 4px solid \9;
+    content: "";
+    }
+.sort-column  div{
+float: right !important;
 }

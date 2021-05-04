@@ -58,7 +58,6 @@ const RoleAssignment = ({ show, setShow }) => {
             <Select
               isMulti
               name="Roles"
-              value={role}
               options={roleOption}
               onChange={onHandleRole}
             />
@@ -69,7 +68,6 @@ const RoleAssignment = ({ show, setShow }) => {
           <div>
             <Select
               isMulti
-              value={pillar}
               name="Piller"
               options={pillerOption}
               onChange={onHandlePillar}
