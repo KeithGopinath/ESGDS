@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Col, Row, Container, Button } from 'react-bootstrap';
 import Header from '../../components/Header';
@@ -12,9 +12,7 @@ const BatchCreation = () => {
   const [show, setShow] = useState(false);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch({ type: 'COMPANY_REQUEST' });
-  }, []);
+
   const handleShow = () => {
     dispatch({ type: 'COMPANY_REQUEST' });
     setShow(true);
@@ -67,6 +65,5 @@ const BatchCreation = () => {
     </div>
   );
 };
-
 
 export default BatchCreation;

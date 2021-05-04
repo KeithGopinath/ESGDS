@@ -26,17 +26,17 @@ const Login = () => {
 
   const dispatch = useDispatch();
   // login
-  const login = useSelector((state) => state.loginState.login);
-  const invalidLogin = useSelector((state) => state.loginState.error);
+  const login = useSelector((state) => state.login.login);
+  const invalidLogin = useSelector((state) => state.login.error);
   const token = login && `${login.token}`;
   const decoded = token && jwt_decode(token);
 
   // otpScreen
-  const validOtp = useSelector((state) => state.otpState.otp);
-  const invalidOtp = useSelector((state) => state.otpState.error);
+  const validOtp = useSelector((state) => state.otp.otp);
+  const invalidOtp = useSelector((state) => state.otp.error);
   // forgot password screen
-  const validPasswordChange = useSelector((state) => state.forgotPasswordState.forgotPassword);
-  const InvalidPasswordChange = useSelector((state) => state.forgotPasswordState.error);
+  const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
+  const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
 
   useEffect(() => {

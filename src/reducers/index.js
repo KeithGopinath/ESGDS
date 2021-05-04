@@ -5,10 +5,10 @@ import forgotPassword from './ForgotPassword';
 import companylist from './GetCompanies';
 
 const rootReducer = combineReducers({
-  loginState: login,
-  otpState: otp,
-  forgotPasswordState: forgotPassword,
-  getCompanyState: companylist,
+  login,
+  otp,
+  forgotPassword,
+  companylist,
 });
 
 export default rootReducer;

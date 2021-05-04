@@ -49,10 +49,11 @@ export const fetchURL = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
 export const doGet = (url, urlPrefix = baseUrl) => {
   const fetchData = fetchURL(url, urlPrefix).then((res) => {
     let response = null;
+    response = res.json();
     if (res.ok) {
-      response = res.json();
+      return response;
     }
-    return response;
+    return response.then((error) => { throw error; });
   });
   return fetchData;
 };
