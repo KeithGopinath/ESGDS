@@ -1,6 +1,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";  
 @import '~react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 @import '~react-step-progress//dist/index.css';
+@import '~react-table-6/react-table.css';
 @import '~react-dropdown/style.css';
 @import './custom.scss';
 @import "../../src/components/Header/styles.scss";
@@ -12,12 +13,12 @@
 @import '../../src/containers/Users/styles.scss';
 @import '../../src/containers/Task/styles.scss';
 @import '../../src/containers/RoleAssign/styles.scss';
-@import '../../src/containers/BatchCreate/styles.scss';
+@import '../../src/containers/BatchView/styles.scss';
 @import '../../src/containers/GroupCreate/styles.scss';
 @import '../../src/containers/PendingTasks/styles.scss';
 @import '../../src/containers/DataPage/styles.scss';
 @import '../../src/containers/OtpScreen/styles.scss';
-@import '../../src/containers/ImportCompanies/styles.scss';
+@import '../../src/containers/BatchCreation/styles.scss';
 @import '../../src/components/PageLoader/styles.scss';
 @import '../../src/components/Overlay/style.scss';
 @import '../../src/containers/ForgotPassword/style.scss';

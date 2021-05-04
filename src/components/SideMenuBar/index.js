@@ -63,7 +63,6 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       <div className="sideMenu-logo">ESG</div>
       {sideMenuBtns}
       <RoleAssignment show={show} setShow={setShow} />
-      {/* <div><RoleAssignment /></div> */}
     </div>
   );
 });

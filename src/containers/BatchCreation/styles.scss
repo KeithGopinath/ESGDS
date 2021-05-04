@@ -1,0 +1,223 @@
+
+
+.import-icon {
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+.import-title {
+    font-size: 20px;
+    color: #2199c8;
+    font-weight: 600;
+}
+
+.import-head {
+    padding: 1rem 1.5rem 0.5rem;
+}
+
+.import-head .close {
+    padding: 1.5rem 1rem 0.4em !important
+}
+
+.imp-btn-name {
+    margin-left: 7%;
+}
+
+.imp-btn {
+    display: flex;
+    align-items: center;
+    background-color: #2199c8 !important;
+    border-color: #2199c8 !important;
+    padding: 4px 9px 4px 6px !important;
+}
+
+.imp-btn:focus {
+    border-color: none !important;
+    box-shadow: none !important;
+}
+
+.MuiIconButton-colorPrimary {
+    color: #2da68a !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+    outline: solid #2da68a 1px !important;
+    outline-offset: -1px;
+}
+
+.MuiDataGrid-cell {
+    min-height: 32px !important;
+    max-height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.MuiDataGrid-row {
+    min-height: 32px !important;
+    max-height: 32px !important;
+
+}
+
+.modal-width {
+    .modal-dialog {
+        max-width: 54rem !important;
+    }
+}
+
+// .modal-batch-body {
+//     padding: 0.5rem 1.5rem;
+// }
+
+.dropdown-toggle {
+    visibility: hidden !important;
+}
+.table-header-name{
+    color: #2da68a !important;
+    font-size: 16px !important;
+}
+
+.react-bs-container-body {
+    .table td {
+        padding: 0.2rem !important;
+    }
+
+    .table-bordered td {
+        border: none !important;
+        border-bottom: 1px solid #dee2e6 !important;
+    }
+}
+
+.table-header-wrapper {
+    .table th {
+        padding: 0.2rem !important;
+    }
+
+    .table-bordered th {
+        border: none !important;
+        border-bottom: 2px solid #dee2e6 !important;
+    }
+}
+
+.react-bs-table-pagination {
+    margin-top: 10px !important;
+}
+
+.react-bs-table-pagination {
+    .row {
+        margin-top: 0px !important;
+    }
+}
+
+// .modal-body span {
+//     margin: 0px !important;
+//     color: white !important;
+// }
+
+.filter {
+    max-width: 90% !important;
+}
+
+.table-header-name {
+    font-size: 15px;
+    color: gray;
+    font-weight: 400 !important;
+}
+
+.imp-btn-company {
+    background-color: #2da68a !important;
+    display: flex;
+    min-width: 27%;
+    color: white;
+    padding: 8px 12px;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin: 0px !important;
+    border-color: #2da68a;
+
+}
+// .min-height-btn{
+//     min-height: 13.5rem;
+// }
+.batch-name{
+    font-size:15px;
+    color:gray;
+}
+.batch-year{
+    font-size:15px;
+    color:gray;
+}
+
+.batch-input-width{
+    max-width:90%;
+    min-width:40%;
+}
+.react-bs-container-body{
+    min-height:19.375rem;
+}
+.batch-status-minheight{
+    margin-top: 30px;
+    min-height: 5.4rem;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dropdown-alert{
+    .css-yk16xz-control {
+        border-color: #dc3545 !important;
+      }
+}
+.fill-alert{
+    font-size:16px;
+    color:#dc3545;
+}
+.imp-btn-company {
+    .label-imp {
+        margin: 0px !important;
+        margin-left: 5% !important;
+        cursor: pointer;
+        min-width: 9rem;
+    }
+}
+
+.batch-submit-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-bottom: 40px;
+}
+.footer-pad{
+    padding: 0px !important;
+}
+.text-filter:focus {
+    box-shadow: none !important;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    margin:17px 5px !important;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid \9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    }
+    
+    .dropup, .dropdown {
+    position: relative;
+    }
+    
+    .dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+    border-top: 0;
+    border-bottom: 4px dashed;
+    border-bottom: 4px solid \9;
+    content: "";
+    }
+.sort-column  div{
+float: right !important;
+}
