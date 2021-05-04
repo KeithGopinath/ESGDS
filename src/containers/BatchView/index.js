@@ -38,7 +38,7 @@ const BatchView = () => {
         <Container className="wrapper">
           <div className="batch-heading-wrapper">
             <div></div>
-            <div className="batch-heading-name">Batch Creation</div>
+            <div className="batch-heading-name">Batch View</div>
             <div>
               <Button variant="primary" className="imp-btn" onClick={handleShow}>
                 <FontAwesomeIcon icon={faPlus} className="icon-plus"></FontAwesomeIcon>
@@ -49,7 +49,6 @@ const BatchView = () => {
           <Row>
             <Col lg={12} sm={12}>
               <div className="batch-detail">
-                <div>Batch List</div>
               </div>
               <Row className="batch-display-outer ">
                 <div className="batch-display-inner" >
