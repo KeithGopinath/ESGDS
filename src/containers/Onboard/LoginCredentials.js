@@ -2,16 +2,18 @@
 import React, { useState } from 'react';
 import { Card, Form, Row, Col } from 'react-bootstrap';
 
-const LoginCredentials = ({ role }) => {
+const LoginCredentials = ({ onPassword, onConfirmPassword, validate }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handlePassword = (e) => {
         setPassword(e.target.value);
+        onPassword(e.target.value);
     };
 
     const handleConfirmPassword = (e) => {
         setConfirmPassword(e.target.value);
+        onConfirmPassword(e.target.value);
     };
 
     return (
@@ -23,7 +25,7 @@ const LoginCredentials = ({ role }) => {
                         <Form.Group>
                             <Form.Label>Create password <sup className="text-danger">*</sup></Form.Label>
                             <Form.Control
-                                className=""
+                                className={password}
                                 type="password"
                                 name="createPassword"
                                 id="createPassword"
@@ -37,7 +39,7 @@ const LoginCredentials = ({ role }) => {
                         <Form.Group>
                             <Form.Label>Confirm password <sup className="text-danger">*</sup></Form.Label>
                             <Form.Control
-                                className=""
+                                className={confirmPassword}
                                 type="password"
                                 name="confirmPassword"
                                 id="confirmPassword"

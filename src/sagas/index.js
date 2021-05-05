@@ -2,6 +2,9 @@ import { loginWatchers } from './Login';
 import { otpWatchers } from './Otp';
 import { forgotPasswordWatchers } from './ForgotPassword';
 import { getCompaniesWatchers } from './CompaniesList';
+import { employeeWatchers } from './Employee';
+import { clientWatchers } from './Client';
+import { companyWatchers } from './Company';
 
 export default function* rootWatchers() {
   yield [
@@ -9,5 +12,8 @@ export default function* rootWatchers() {
     otpWatchers(),
     forgotPasswordWatchers(),
     getCompaniesWatchers(),
+    employeeWatchers(),
+    clientWatchers(),
+    companyWatchers(),
   ];
 }

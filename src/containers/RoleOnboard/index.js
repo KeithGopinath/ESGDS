@@ -15,7 +15,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
 
   const onSubmitOnboard = () => {
     if (!selectOption) {
-      setOnboardAlert("Please selet the option");
+      setOnboardAlert("Please select the option");
     } else {
       history.push({
         pathname: '/onboard',
@@ -65,6 +65,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       title="Select role:"
       body={RoleBody()}
       alert={onboardAlert}
+      alertClass='danger'
       primary="Next"
       onSubmitPrimary={onSubmitOnboard}
     />

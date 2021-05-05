@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Form, Row, Col, Container } from 'react-bootstrap';
 import Select from 'react-select';
+import { history } from './../../routes';
 
-const PersonalDetails = ({ role, onFirstName }) => {
-  
+const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone, onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, validate, location }) => {
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -16,51 +16,66 @@ const PersonalDetails = ({ role, onFirstName }) => {
     const [adharCard, setAdharCard] = useState('');
     const [bankAccountNumber, setBankAccountNumber] = useState('');
     const [bankIFSCCode, setBankIFSCCode] = useState('');
+    const [validation, setValidation] = useState('');
 
-    const dispatch = useDispatch();
-    const employee = useSelector((state) => state.employeeState.Employee);
-    const invalidEmployee = useSelector((state) => state.employeeState.error);
-
-    // personal details
+    // history.push({state:firstName});
     const onFirstNameChange = (e) => {
-        setFirstName(e.target.value);
-        onFirstName(e.target.value);
-    };
-
-    const onLastNameChange = (e) => {
-        setLastName(e.target.value);
+        if (e.target.value.match('^[a-zA-Z_@./#&+-]*$')) {
+            setFirstName(e.target.value);
+            onFirstName(e.target.value);
+        }
     };
 
     const onMiddleNameChange = (e) => {
         setMiddleName(e.target.value);
+        onMiddleName(e.target.value)
+    };
+
+    const onLastNameChange = (e) => {
+        setLastName(e.target.value);
+        onLastName(e.target.value);
     };
 
     const onEmailChange = (e) => {
-        setEmail(e.target.value);
+        if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+            setEmail(e.target.value);
+            onEmail(e.target.value);
+        }
     };
 
     const onPhoneChange = (e) => {
         setPhoneNumber(e.target.value);
+        onPhone(e.target.value);
     };
 
     const onPancardNoChange = (e) => {
         setPancardNumber(e.target.value);
+        onPancard(e.target.value);
     };
 
     const onAadharNoChange = (e) => {
         setAdharCard(e.target.value);
+        onAadhar(e.target.value);
     };
 
     const onCompanyNameChange = (e) => {
-        setCompanyName(e);
+        setCompanyName(e.target.value);
+        onCompanyName(e.target.value);
+    };
+
+    const onCompanyNameSelect = (companySelect) => {
+        setCompanyName(companySelect);
+        onCompanyName(companySelect);
     };
 
     const onAccountNumberChange = (e) => {
         setBankAccountNumber(e.target.value);
+        onBankAccount(e.target.value);
     };
 
     const onBankIfscChange = (e) => {
         setBankIFSCCode(e.target.value);
+        onBankIfsc(e.target.value);
     };
 
     const companyList = [
@@ -81,13 +96,14 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                 {(role === 'client' || role === 'company') && <Form.Label>Name <sup className="text-danger">*</sup></Form.Label>}
                                 {role === 'Employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.Control
-                                    className=""
+                                    className={!firstName && validate}
                                     type="text"
                                     name="firstName"
                                     id="firstName"
                                     value={firstName}
                                     placeholder={`${role === 'Employee' ? "Enter your first name" : "Enter your name"}`}
                                     onChange={onFirstNameChange}
+                                    name={firstName}
                                 />
                             </Form.Group>
                         </Col>
@@ -111,7 +127,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                     <Form.Group>
                                         <Form.Label>Last Name <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className=""
+                                            className={!lastName}
                                             type="text"
                                             name="lastName"
                                             id="lastName"
@@ -127,7 +143,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                             <Form.Group>
                                 <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
                                 <Form.Control
-                                    className=""
+                                    className={!email}
                                     type="email"
                                     name="email"
                                     id="email"
@@ -141,10 +157,11 @@ const PersonalDetails = ({ role, onFirstName }) => {
                             <Form.Group>
                                 <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
                                 <Form.Control
-                                    className=""
+                                    className={!phoneNumber}
                                     type="tel"
                                     name="phone"
                                     id="phone"
+                                    maxLength={10}
                                     value={phoneNumber}
                                     placeholder="Enter your valid phone number"
                                     onChange={onPhoneChange}
@@ -156,7 +173,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                 <Form.Group>
                                     <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
                                     <Form.Control
-                                        className=""
+                                        className={!companyName}
                                         type="text"
                                         name="companyName"
                                         id="companyName"
@@ -171,10 +188,11 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                 <Form.Group>
                                     <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
                                     <Select
+                                        className={!companyList}
                                         isMulti
                                         options={companyList}
                                         name="companyName"
-                                        onChange={onCompanyNameChange}
+                                        onChange={onCompanyNameSelect}
                                     />
                                 </Form.Group>
                             </Col>}
@@ -184,7 +202,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                     <Form.Group>
                                         <Form.Label>Pan Card Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className=""
+                                            className={!pancardNumber}
                                             type="text"
                                             maxLength={10}
                                             name="pancardNumber"
@@ -199,7 +217,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                     <Form.Group>
                                         <Form.Label>Aadhar Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className=""
+                                            className={!adharCard}
                                             type="tel"
                                             maxLength={12}
                                             name="aadharNumber"
@@ -228,8 +246,8 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                     <Form.Group>
                                         <Form.Label>Account Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className=""
-                                            type="number"
+                                            className={!bankAccountNumber}
+                                            type="tel"
                                             minLength={11}
                                             maxLength={16}
                                             name="bankAccountNumber"
@@ -244,7 +262,7 @@ const PersonalDetails = ({ role, onFirstName }) => {
                                     <Form.Group>
                                         <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className=""
+                                            className={!bankIFSCCode}
                                             type="text"
                                             name="bankIFSC"
                                             id="bankIFSC"
