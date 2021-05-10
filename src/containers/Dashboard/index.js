@@ -129,15 +129,13 @@ const Dashboard = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} />
-          <div className="dashboard-main">
-            <div className="dashboard-label">STATISTICAL DASHBOARD</div>
+          <Header sideBarRef={sideBarRef} title="Dashboard" />
+          <div className="container-main">
             <Row className="dashboard-tabs-wrap">
               {cardsList.map((card, index) => (<Col key={card.Clabel} id={card.Clabel} xs={12} sm={5} md={2} ref={dashboardTabsRef.current[index]} onClick={onClickTabChanger} className="dashboard-tabs">{card.Clabel}</Col>))}
             </Row>
             {activeTab.map(({ Clabel, cards }) => (
               <div key={Clabel} className="dashboard-container">
-                {/* <div className="dashboard-container-label">{Clabel}</div> */}
                 <Row className="dashboard-cardstack">
                   {cards.map(({ label, value }) => (
                     <Col key={label} className="dashboard-card-wrapper" xs={12} sm={6} md={6} lg={4} xl={3}>

@@ -7,7 +7,7 @@ import { faBars, faTimes, faSignOutAlt } from '@fortawesome/free-solid-svg-icons
 import { history } from '../../routes';
 import NotificationPanel from '../../containers/NotificationPanel';
 
-const Header = ({ sideBarRef }) => {
+const Header = ({ sideBarRef, title }) => {
   const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
   // const defaultOption = options[0];
   const [sideBarMenuIcon, setSideBarMenuIcon] = useState(faBars);
@@ -46,9 +46,7 @@ const Header = ({ sideBarRef }) => {
     }
   };
   return (
-    <div
-      className="header-container"
-    >
+    <div className="header-container">
       <div className="header-content-zero content-head">
         <button className="btn btn-light button-logout" onClick={buttonClicklogout}>
           <FontAwesomeIcon className="signouticon" icon={faSignOutAlt} /><div className="logout-name">Logout</div>
@@ -66,6 +64,9 @@ const Header = ({ sideBarRef }) => {
       <div className="header-content-four content-head">
         <div className="head-link-element">Quick Links</div>
       </div>
+      <div className="header-content-five content-head">
+        <h4 className="header-title">{title}</h4>
+      </div>
       <div className="hamburger-start">
         <div className="hamburger-bars-icon" onClick={sideBarMenuIconClickHandler} >
           <FontAwesomeIcon icon={sideBarMenuIcon} />
@@ -76,4 +77,3 @@ const Header = ({ sideBarRef }) => {
 };
 
 export default Header;
-

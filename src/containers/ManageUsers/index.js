@@ -10,8 +10,10 @@ const ManageUsers = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} />
-          <div>ManageUsers</div>
+          <Header sideBarRef={sideBarRef} title="Manage Users" />
+          <div className="container-main">
+            <div>ManageUsers</div>
+          </div>
         </div>
       </div>
     </React.Fragment>
