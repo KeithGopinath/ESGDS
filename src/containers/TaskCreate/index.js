@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
 import { DatePicker } from 'antd';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import Select from 'react-select';
 import TextField from '@material-ui/core/TextField';
@@ -239,14 +240,15 @@ const TaskCreate = () => {
   const grpDetail = groupDetails.map((element) => (
     <Col lg={3} md={6} sm={12}>
       <Card className="card-view groupbox" key={element.groupID} onClick={() => onselectGroup(element.groupID)} >
-        <div className="group-card-content">
+        {/* <div className="group-card-content">
           <div className="group-card-content-name" >Group name:</div>
           <div className="group-card-content-value" data-toggle="tooltip" data-placement="top" title={element.groupName}>{element.groupName}</div>
         </div>
         <div className="group-card-content" >
           <div className="group-card-content-name">Group ID</div >
           <div className="group-card-content-value">{element.groupID}</div>
-        </div>
+        </div> */}
+        <ListItemText primary={element.groupName} secondary={element.groupID} />
       </Card>
     </Col>
   ));
@@ -269,6 +271,7 @@ const TaskCreate = () => {
               {/* <ListItemText primary={batchInfo.Batchname} ></ListItemText> */}
             </div>
             <div className="align-chip">
+              <div className="batch-year-head">Year :</div>
               {batchInfo.Batchyear.map(({ label }) => (
                 <Chip label={label} className="chip-space-bwt" />
               ))}
@@ -363,14 +366,15 @@ const TaskCreate = () => {
             (
               <Col lg={3} md={6} sm={12}>
                 <Card className="card-view groupbox" key={batchID} onClick={() => onselectBatch(batchID)} >
-                  <div className="group-card-content">
+                  {/* <div className="group-card-content">
                     <div className="group-card-content-name" >Batch name:</div>
                     <div className="group-card-content-value" data-toggle="tooltip" data-placement="top" title={batchName}>{batchName}</div>
                   </div>
                   <div className="group-card-content" >
                     <div className="group-card-content-name">Batch ID</div >
                     <div className="group-card-content-value">{batchID}</div>
-                  </div>
+                  </div> */}
+                  <ListItemText primary={batchName} secondary={batchID} />
                 </Card>
               </Col>
             ))
@@ -392,7 +396,7 @@ const TaskCreate = () => {
                 <Card style={{ minHeight: '30rem' }}>
                   <div
                     style={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.5rem', padding: '1%', color: '#007bff', borderBottom: '2px solid #e9ecef', minHeight: '4.5rem',
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.5rem', padding: '1%', color: '#2199c8', borderBottom: '2px solid #e9ecef', minHeight: '4.5rem',
                     }}
                   >
                     {taskFlow > 0 &&

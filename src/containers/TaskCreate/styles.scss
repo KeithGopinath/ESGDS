@@ -123,3 +123,17 @@ padding: 6px 11px 6px !important;
 .MuiButton-root{
     background-color: #2199c8 !important;
 }
+.batch-year-head{
+    min-width: 50px;
+    color: gray;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+.MuiListItemText-multiline{
+display: flex;
+flex-direction: column;
+align-items: center;
+margin:0px !important;
+}

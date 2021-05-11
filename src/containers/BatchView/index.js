@@ -3,8 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Col, Row, Card, Button } from 'react-bootstrap';
 import Header from '../../components/Header';
-// import Fab from '@material-ui/core/Fab';
-// import AddIcon from '@material-ui/icons/Add';
+import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
 import BatchCreation from '../BatchCreation';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -37,30 +36,30 @@ const BatchView = () => {
     },
   });
   const cardData = [
-    { name: 'Batch1', id: 1 },
-    { name: 'Batch2', id: 1 },
-    { name: 'Batch3', id: 1 },
-    { name: 'Batch4', id: 1 },
-    { name: 'Batch5', id: 1 },
-    { name: 'Batch6', id: 1 },
-    { name: 'Batch7', id: 1 },
-    { name: 'Batch8', id: 1 },
-    { name: 'Batch9', id: 1 },
-    { name: 'Batch10', id: 1 },
-    { name: 'Batch11', id: 1 },
-    { name: 'Batch12', id: 1 },
-    { name: 'Batch13', id: 1 },
-    { name: 'Batch14', id: 1 },
-    { name: 'Batch15', id: 1 },
-    { name: 'Batch16', id: 1 },
-    { name: 'Batch15', id: 1 },
-    { name: 'Batch18', id: 1 },
-    { name: 'Batch19', id: 1 },
-    { name: 'Batch20', id: 1 },
-    { name: 'Batch21', id: 1 },
-    { name: 'Batch22', id: 1 },
-    { name: 'Batch23', id: 1 },
-    { name: 'Batch24', id: 1 },
+    { name: 'Batch1', id: 'ID001' },
+    { name: 'Batch2', id: 'ID002' },
+    { name: 'Batch3', id: 'ID003' },
+    { name: 'Batch4', id: 'ID004' },
+    { name: 'Batch5', id: 'ID005' },
+    { name: 'Batch6', id: 'ID006' },
+    { name: 'Batch7', id: 'ID007' },
+    { name: 'Batch8', id: 'ID008' },
+    { name: 'Batch9', id: 'ID009' },
+    { name: 'Batch10', id: 'ID010' },
+    { name: 'Batch11', id: 'ID011' },
+    { name: 'Batch12', id: 'ID012' },
+    { name: 'Batch13', id: 'ID013' },
+    { name: 'Batch14', id: 'ID014' },
+    { name: 'Batch15', id: 'ID015' },
+    { name: 'Batch16', id: 'ID0016' },
+    { name: 'Batch15', id: 'ID017' },
+    { name: 'Batch18', id: 'ID0018' },
+    { name: 'Batch19', id: 'ID019' },
+    { name: 'Batch20', id: 'ID020' },
+    { name: 'Batch21', id: 'ID021' },
+    { name: 'Batch22', id: 'ID022' },
+    { name: 'Batch23', id: 'ID023' },
+    { name: 'Batch24', id: 'ID024' },
   ];
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
@@ -81,9 +80,9 @@ const BatchView = () => {
       if ((e.name.toLowerCase()).includes(search.toLowerCase())) {
         return true;
       }
-      // if ((e.id).includes(search)) {
-      //   return true;
-      // }
+      if ((e.id.toLowerCase()).includes(search.toLowerCase())) {
+        return true;
+      }
       return false;
     });
     return filteredData;
@@ -93,14 +92,15 @@ const BatchView = () => {
   const batchlist = (searchQuery ? searchfilter(searchQuery, cardData) : cardData).slice(min, max).map(({ name, id }) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox" key={name} >
-        <div className="batch-card-content">
+        {/* <div className="batch-card-content">
           <div className="batch-card-content-name" >Name:</div>
           <div className="batch-card-content-value" data-toggle="tooltip" data-placement="top" title={name}>{name}</div>
         </div>
         <div className="batch-card-content" >
           <div className="batch-card-content-name"> ID</div >
           <div className="batch-card-content-value">{id}</div>
-        </div>
+        </div> */}
+        <ListItemText primary={name} secondary={id} />
       </Card>
     </Col>
   ));
