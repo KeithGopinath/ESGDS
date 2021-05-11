@@ -20,13 +20,16 @@ const BUTTONLIST = [
     id: 5, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
   {
-    id: 6, label: 'Create Batch', icon: faFolderPlus, address: 'createbatch',
+    id: 6, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 7, label: 'Create Group', icon: faFolderPlus, address: 'creategroup',
+    id: 7, label: 'Group', icon: faFolderPlus, address: 'creategroup',
   },
   {
     id: 8, label: 'Role Assignment', icon: faUserTag, address: '',
+  },
+  {
+    id: 9, label: 'Task', icon: faUserTag, address: 'createtask',
   },
 ];
 

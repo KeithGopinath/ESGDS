@@ -14,7 +14,7 @@ import Overlay from '../../components/Overlay';
 
 
 // eslint-disable-next-line object-curly-newline
-const ImportCompanies = ({ show, setShow, details, setDetail }) => {
+const BatchCreation = ({ show, setShow }) => {
   const [batch, setBatch] = useState('');
   const [year, setYear] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
@@ -109,6 +109,7 @@ const ImportCompanies = ({ show, setShow, details, setDetail }) => {
     }
   };
   const onCreatebBatch = () => {
+    console.log(rowDetail, year, 'batches,year');
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
@@ -120,10 +121,6 @@ const ImportCompanies = ({ show, setShow, details, setDetail }) => {
         setAlert(0);
       }, 2000);
       setAlert(1);
-      const allDetails = { batchName: batch };
-      const updatedDetails = [allDetails, ...details];
-      setDetail(updatedDetails);
-      console.log(details, 'batchdetails updates');
     } else {
       setAlert(2);
     }
@@ -136,7 +133,7 @@ const ImportCompanies = ({ show, setShow, details, setDetail }) => {
           <div className="batch-detail">
             <div >Batch Details</div>
           </div>
-          <div className="batch-name">Batch name* :</div>
+          <div className="batch-name">Batch name*</div>
           <div className="form-group batch-input-width " >
             <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
@@ -215,4 +212,4 @@ const ImportCompanies = ({ show, setShow, details, setDetail }) => {
   );
 };
 
-export default ImportCompanies;
+export default BatchCreation;
