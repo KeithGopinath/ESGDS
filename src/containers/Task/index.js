@@ -21,13 +21,123 @@ const Task = (props) => {
       company: 'Reliance Ltd',
       year: '2018-2019',
       data: [
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP001', fiscalYear: '2018-2019', status: 'Completed' },
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
       ],
     },
     {
@@ -36,13 +146,123 @@ const Task = (props) => {
       company: 'Reliance Ltd',
       year: '2018-2019',
       data: [
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
       ],
     },
     {
@@ -51,13 +271,123 @@ const Task = (props) => {
       company: 'Reliance Ltd',
       year: '2018-2019',
       data: [
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
-        { dpCode: 'AUDP002', fiscalYear: '2018-2019', status: 'Completed' },
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
       ],
     },
   ];
@@ -188,8 +518,16 @@ const Task = (props) => {
                         name="userRole"
                         // value={""}
                         // onChange={}
-                        // options={}
-                        // isSearchable={}
+                        options={[
+                          { value: 'Audit committee functioning', label: 'Audit committee functioning' },
+                          { value: 'Board compensation', label: 'Board compensation' },
+                          { value: 'Board diversity', label: 'Board diversity' },
+                          { value: 'Board independence', label: 'Board independence' },
+                          { value: 'Board structure and functioning', label: 'Board structure and functioning' },
+                          { value: 'Committee Functioning', label: 'Committee Functioning' },
+                        ]}
+                        isSearchable
+                        isClearable
                         // className={}
                         maxLength={30}
                       />
@@ -207,8 +545,16 @@ const Task = (props) => {
                           name="userRole"
                           // value={""}
                           // onChange={}
-                          // options={}
-                          // isSearchable={}
+                          options={[
+                            { value: 'Shri Mukesh Kumar Surana', label: 'Shri Mukesh Kumar Surana' },
+                            { value: 'Shri Pushp Kumar Joshi', label: 'Shri Pushp Kumar Joshi' },
+                            { value: 'Shri Vinod S Shenoy', label: 'Shri Vinod S Shenoy' },
+                            { value: 'Shri R Kesavan', label: 'Shri R Kesavan' },
+                            { value: 'Shri Sunil Kumar', label: 'Shri Sunil Kumar' },
+                            { value: 'Shri Subhash Kumar', label: 'Shri Subhash Kumar' },
+                          ]}
+                          isSearchable
+                          isClearable
                           // className={}
                           maxLength={30}
                         />
@@ -216,6 +562,36 @@ const Task = (props) => {
                       <Col sm={2}>
                         <Button onClick={() => { setShow(!show); }}>+</Button>
                       </Col>
+                    </Form.Group>
+                  </Col> : null}
+                {currentPillar === 'Governance' && dpCodeType === 'matrix' ?
+                  <Col lg={6}>
+                    <Form.Group as={Row} controlId="formHorizontalEmail">
+                      <Form.Label column sm={4}>
+                        KMP*
+                      </Form.Label>
+                      <Col sm={6}>
+                        <Select
+                          name="userRole"
+                          // value={""}
+                          // onChange={}
+                          options={[
+                            { value: 'Shri Mukesh Kumar Surana', label: 'Shri Mukesh Kumar Surana' },
+                            { value: 'Shri Pushp Kumar Joshi', label: 'Shri Pushp Kumar Joshi' },
+                            { value: 'Shri Vinod S Shenoy', label: 'Shri Vinod S Shenoy' },
+                            { value: 'Shri R Kesavan', label: 'Shri R Kesavan' },
+                            { value: 'Shri Sunil Kumar', label: 'Shri Sunil Kumar' },
+                            { value: 'Shri Subhash Kumar', label: 'Shri Subhash Kumar' },
+                          ]}
+                          isSearchable
+                          isClearable
+                          // className={}
+                          maxLength={30}
+                        />
+                      </Col>
+                      {/* <Col sm={2}>
+                        <Button onClick={() => { setShow(!show); }}>+</Button>
+                      </Col> */}
                     </Form.Group>
                   </Col> : null}
                 <Col className="task-table-col" sm={12}>
@@ -244,7 +620,7 @@ const Task = (props) => {
             keyboard={false}
             animation
             centered
-            size="xl"
+            size="lg"
             title="Add New Board Member"
             body={addNewBoardMember()}
             alert={alert}
