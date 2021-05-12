@@ -13,10 +13,10 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Overlay from '../../components/Overlay';
 
 
-const ImportCompanies = ({ show, setShow }) => {
+// eslint-disable-next-line object-curly-newline
+const BatchCreation = ({ show, setShow }) => {
   const [batch, setBatch] = useState('');
   const [year, setYear] = useState('');
-  const [details, setDetail] = useState([]);
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
   // const [companies, setCompanies] = useState([]);
@@ -50,7 +50,6 @@ const ImportCompanies = ({ show, setShow }) => {
           const rowDetails = { id: row.id, selectedCompany: row.companydata };
           const selectedRow = [rowDetails, ...rowDetail];
           setRowDetails(selectedRow);
-          console.log(rowDetail, 'add');
         }
         return [];
       });
@@ -65,7 +64,6 @@ const ImportCompanies = ({ show, setShow }) => {
         }
         return [];
       });
-      console.log(rowDetail, 'remove');
     }
   };
   // eslint-disable-next-line consistent-return
@@ -118,11 +116,10 @@ const ImportCompanies = ({ show, setShow }) => {
       setValidBorder(true);
     }
     if ((batch.length && year.length && rowDetail.length) > 0) {
+      setTimeout(() => {
+        setAlert(0);
+      }, 2000);
       setAlert(1);
-      const allDetails = { batchName: batch };
-      const updatedDetails = [allDetails, ...details];
-      setDetail(updatedDetails);
-      console.log(details, 'batchdetails updates');
     } else {
       setAlert(2);
     }
@@ -135,13 +132,13 @@ const ImportCompanies = ({ show, setShow }) => {
           <div className="batch-detail">
             <div >Batch Details</div>
           </div>
-          <div className="batch-name">Batch name* :</div>
-          <div className="form-group batch-input-width" >
+          <div className="batch-name">Batch name*</div>
+          <div className="form-group batch-input-width " >
             <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
           <div>
             <div className="batch-year">Select Year*</div>
-            <div className={`batch-input-width  ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
+            <div className={`batch-input-width dp-min-height ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
               <Select
                 isMulti
                 options={yearOptions}
@@ -214,4 +211,4 @@ const ImportCompanies = ({ show, setShow }) => {
   );
 };
 
-export default ImportCompanies;
+export default BatchCreation;
