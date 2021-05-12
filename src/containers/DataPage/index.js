@@ -16,7 +16,8 @@ import DataSheet from './DataSheet';
 
 const DataPage = (props) => {
   const sideBarRef = useRef();
-  const [arrow, setArrow] = useState(false);
+  const [historyToggleArrow, setHistoryToggleArrow] = useState(false);
+  const [currentToggleArrow, setCurrentToggleArrow] = useState(true);
   // const { Panel } = Collapse;
 
   const apiData = [
@@ -435,7 +436,7 @@ const DataPage = (props) => {
                         border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
                       }}
                       eventKey="0"
-                      onClick={(e) => { setArrow(!arrow); }}
+                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
                     >History
                     </Accordion.Toggle>
                     <Accordion.Toggle
@@ -443,8 +444,8 @@ const DataPage = (props) => {
                         border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
                       }}
                       eventKey="0"
-                      onClick={(e) => { setArrow(!arrow); }}
-                    ><FontAwesomeIcon icon={arrow ? faAngleDown : faAngleUp} />
+                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
+                    ><FontAwesomeIcon icon={historyToggleArrow ? faAngleDown : faAngleUp} />
                     </Accordion.Toggle>
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">
@@ -458,13 +459,23 @@ const DataPage = (props) => {
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <Accordion defaultActiveKey="0">
                 <Card>
-                  <Card.Header style={{ backgroundColor: '#2199c8' }}>
-                    <div
+                  <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
+                    <Accordion.Toggle
                       style={{
                         border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
                       }}
+                      eventKey="0"
+                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
                     >Current
-                    </div>
+                    </Accordion.Toggle>
+                    <Accordion.Toggle
+                      style={{
+                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+                      }}
+                      eventKey="0"
+                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
+                    ><FontAwesomeIcon icon={currentToggleArrow ? faAngleDown : faAngleUp} />
+                    </Accordion.Toggle>
                   </Card.Header>
                   <Accordion.Collapse eventKey="0">
                     <Card.Body>
