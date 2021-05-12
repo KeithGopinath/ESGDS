@@ -11,8 +11,10 @@ const Groups = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} />
-          <div>Groups</div>
+          <Header sideBarRef={sideBarRef} title="Groups" />
+          <div className="container-main">
+            <div>Groups</div>
+          </div>
         </div>
       </div>
     </React.Fragment>

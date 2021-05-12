@@ -93,29 +93,29 @@ const GroupCreation = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
-        <Container className="wrapper">
-          <div className="group-heading-wrapper" ><div className="group-heading-name">Group Creation</div></div>
-          <Row>
-            <Col lg={12} sm={12}>
-              <div className="group-detail">
-                <div>Group Details</div>
-              </div>
-            </Col>
-            <Col lg={5} sm={12} className="group-detail-wrapper">
-              <div className="group-name">Group name* :</div>
-              <div className="form-group group-input-width" ><input type="text" value={grpName} className={`form-control ${grpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required></input></div>
-              <div className="group-dropdown-width">
-                <div className="group-dropdown-name" >Select Group Admin*</div>
-                <div className={grpAdmin.length === 0 && inputValidate && 'group-dropdown-alert'}>
-                  <Select
-                    options={groupAdminOptions}
-                    name="name"
-                    onChange={onhandlegrpAdmin}
-                  />
+        <Header sideBarRef={sideBarRef} title="Create Group" />
+        <div className="container-main">
+          <Container className="wrapper">
+            <Row>
+              <Col lg={12} sm={12}>
+                <div className="group-detail">
+                  <div>Group Details</div>
                 </div>
-              </div>
-              {/* <div className="group-dropdown-width">
+              </Col>
+              <Col lg={5} sm={12} className="group-detail-wrapper">
+                <div className="group-name">Group name* :</div>
+                <div className="form-group group-input-width" ><input type="text" value={grpName} className={`form-control ${grpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required></input></div>
+                <div className="group-dropdown-width">
+                  <div className="group-dropdown-name" >Select Group Admin*</div>
+                  <div className={grpAdmin.length === 0 && inputValidate && 'group-dropdown-alert'}>
+                    <Select
+                      options={groupAdminOptions}
+                      name="name"
+                      onChange={onhandlegrpAdmin}
+                    />
+                  </div>
+                </div>
+                {/* <div className="group-dropdown-width">
                 <div className="group-dropdown-name">Assign Batches*</div>
                 <div className={batch === '' && inputValidate && 'group-dropdown-alert'}>
                   <Select
@@ -125,56 +125,57 @@ const GroupCreation = () => {
                   />
                 </div>
               </div> */}
-            </Col>
-            <Col lg={5} sm={12} className="group-detail-wrapper">
-              <div className="group-dropdown-width">
-                <div className="group-dropdown-name">Assign QA*</div>
-                <div className={qaRole.length === 0 && inputValidate && 'group-dropdown-alert'}>
-                  <Select
-                    isMulti
-                    options={qaOptions}
-                    name="name"
-                    onChange={onhandleQA}
-                  />
-                </div>
-              </div>
-              <div className="group-dropdown-width">
-                <div className="group-dropdown-name">Assign Analyst*</div>
-                <div className={analystRole.length === 0 && inputValidate && 'group-dropdown-alert'}>
-                  <Select
-                    isMulti
-                    options={analystOptions}
-                    name="name"
-                    onChange={onhandleAnalyst}
-                  />
-                </div>
-              </div>
-            </Col>
-            <Col lg={2} sm={12} className="side-border" >
-              <div >
-                <button type="button" className="btn btn-primary groups-btn" >Groups <span className="badge bg-secondary groups-badge" >{grpCount}</span></button >
-                <button type="button" className="btn btn-secondary  groups-batch-btn" >Create batch </button>
-              </div>
-            </Col>
-            <Col lg={10} sm={12}>
-              <div className="group-status-minheight">
-                {groupStatus === 1 &&
-                <div className="group-status-creation">
-                  <div className="alert alert-success" role="alert" >Group Created successfully !!</div>
-                </div>
-                }
-                {groupStatus === 2 &&
-                  <div className="group-status-creation">
-                    <div className="group-tot-alert" >Fill all the required fields !</div>
+              </Col>
+              <Col lg={5} sm={12} className="group-detail-wrapper">
+                <div className="group-dropdown-width">
+                  <div className="group-dropdown-name">Assign QA*</div>
+                  <div className={qaRole.length === 0 && inputValidate && 'group-dropdown-alert'}>
+                    <Select
+                      isMulti
+                      options={qaOptions}
+                      name="name"
+                      onChange={onhandleQA}
+                    />
                   </div>
-                }
-              </div>
-              <div className="group-submit-btn">
-                <button type="button" className="btn btn-outline-primary" onClick={createGroup}>Create Group</button>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+                </div>
+                <div className="group-dropdown-width">
+                  <div className="group-dropdown-name">Assign Analyst*</div>
+                  <div className={analystRole.length === 0 && inputValidate && 'group-dropdown-alert'}>
+                    <Select
+                      isMulti
+                      options={analystOptions}
+                      name="name"
+                      onChange={onhandleAnalyst}
+                    />
+                  </div>
+                </div>
+              </Col>
+              <Col lg={2} sm={12} className="side-border" >
+                <div >
+                  <button type="button" className="btn btn-primary groups-btn" >Groups <span className="badge bg-secondary groups-badge" >{grpCount}</span></button >
+                  <button type="button" className="btn btn-secondary  groups-batch-btn" >Create batch </button>
+                </div>
+              </Col>
+              <Col lg={10} sm={12}>
+                <div className="group-status-minheight">
+                  {groupStatus === 1 &&
+                    <div className="group-status-creation">
+                      <div className="alert alert-success" role="alert" >Group Created successfully !!</div>
+                    </div>
+                  }
+                  {groupStatus === 2 &&
+                    <div className="group-status-creation">
+                      <div className="group-tot-alert" >Fill all the required fields !</div>
+                    </div>
+                  }
+                </div>
+                <div className="group-submit-btn">
+                  <button type="button" className="btn btn-outline-primary" onClick={createGroup}>Create Group</button>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     </div>
   );

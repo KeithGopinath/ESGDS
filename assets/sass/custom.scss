@@ -1,12 +1,21 @@
-.main{
+.main {
     display: flex;
     overflow: hidden;
 }
 
-.rightsidepane{
+.rightsidepane {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     flex-grow: 1;
     background-color: #fcfcfe;
     min-width: 280px;
+}
+
+.container-main {
+    display: flex;
+    padding: 20px 3%;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: #f5f5f5;
+    height: 100%;
 }
