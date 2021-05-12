@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -16,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import 'antd/dist/antd.css';
 import { DatePicker, Space } from 'antd';
-
+import Moment from 'moment';
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
   const {
@@ -67,7 +68,7 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const UsersTable = ({ tableData }) => {
+const UsersTable = ({ tableData, showDatePicker }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
   // CONSTANTS
@@ -83,7 +84,8 @@ const UsersTable = ({ tableData }) => {
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
-  const [searchQuery, setSearchQuery] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchDate, setSearchDate] = useState(null);
 
   const theme = createMuiTheme({
     palette: {
@@ -157,18 +159,47 @@ const UsersTable = ({ tableData }) => {
     setSearchQuery(searchedQuery);
   };
 
-  const searcher = (rowdata, coldata, searchedQuery) => {
-    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'date') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
-    return (
-      rowdata.filter((eachRowData) => {
+  const searcher = (rowdata, coldata, searchedQuery, searchedDate) => {
+    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'date') ? ({ id: eachColData.id, dataType: eachColData.dataType }) : (null)))).filter((eachColData) => (eachColData !== null));
+    // const dateOnlyColumnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'date') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
+    let rowDataToBeReturned;
+    if (searchedQuery && searchedDate) {
+      const filteredData = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if ((eachRowData[columnsList[i]].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if ((eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
         return false;
-      })
-    );
+      });
+      rowDataToBeReturned = filteredData.filter((eachRowData) => {
+        for (let i = 0; i < columnsList.length; i += 1) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+            return true;
+          }
+        }
+        return false;
+      });
+    } else if (searchedDate) {
+      rowDataToBeReturned = rowdata.filter((eachRowData) => {
+        for (let i = 0; i < columnsList.length; i += 1) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+            return true;
+          }
+        }
+        return false;
+      });
+    } else if (searchedQuery) {
+      rowDataToBeReturned = rowdata.filter((eachRowData) => {
+        for (let i = 0; i < columnsList.length; i += 1) {
+          if ((eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+            return true;
+          }
+        }
+        return false;
+      });
+    }
+    return rowDataToBeReturned;
   };
 
   return (
@@ -179,10 +210,17 @@ const UsersTable = ({ tableData }) => {
             <div className="users-table-label">
               {tableLabel}
             </div>
-            <Space direction="vertical" size={12}>
+            <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
               <RangePicker
                 showTime={{ format: 'HH:mm' }}
                 format="YYYY-MM-DD HH:mm"
+                onChange={(x) => {
+                  if (x) {
+                    setSearchDate({ startDate: x[0], endDate: x[1] });
+                  } else {
+                    setSearchDate(null);
+                  }
+                }}
               />
             </Space>
             <ThemeProvider theme={theme}>
@@ -211,7 +249,7 @@ const UsersTable = ({ tableData }) => {
             >
             </ColumnsHead>
             <TableBody>
-              {dataSorter((searchQuery) ? (searcher(rowsData, columnsHeadData, searchQuery)) : (rowsData), getComparator(sortOrder, orderBy))
+              {dataSorter((searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData), getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
                   const cellArray = Object.keys(eachRow).map((key) => {
@@ -257,6 +295,7 @@ const UsersTable = ({ tableData }) => {
 
 UsersTable.propTypes = {
   tableData: PropTypes.object.isRequired,
+  showDatePicker: PropTypes.bool,
 };
 
 export default UsersTable;
