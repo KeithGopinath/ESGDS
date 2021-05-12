@@ -1,50 +1,22 @@
 /*eslint-disable*/
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Avatar from 'react-avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-// import Dropdown from 'react-dropdown';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { history } from '../../routes';
 import NotificationPanel from '../../containers/NotificationPanel';
+// import Dropdown from 'react-dropdown';
 
-const Header = ({ sideBarRef, title }) => {
-  const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
+
+const Header = ({ title }) => {
+  // const options = ['Super Admin', 'Employee', 'Analyst', 'Client', 'QA'];
   // const defaultOption = options[0];
-  const [sideBarMenuIcon, setSideBarMenuIcon] = useState(faBars);
 
   const buttonClicklogout = () => {
     sessionStorage.clear();
     history.push('/');
   };
 
-  useEffect(() => {
-    window.addEventListener('resize', sideMenuResponsive);
-
-    // Clean-up Function
-    return () => {
-      window.removeEventListener('resize', sideMenuResponsive);
-    };
-  });
-
-  // Function that remove class & change hamburger icon if width >= 541px
-  const sideMenuResponsive = () => {
-    if (window.innerWidth >= 768) {
-      sideBarRef.current.classList.remove('sideMenu-main-responsive');
-      setSideBarMenuIcon(faBars);
-    }
-  };
-
-  // Function that handles Clicks from SideBarMenuIcon
-  const sideBarMenuIconClickHandler = () => {
-    const target = sideBarRef.current;
-    if (target.classList.contains('sideMenu-main-responsive')) {
-      target.classList.remove('sideMenu-main-responsive');
-      setSideBarMenuIcon(faBars);
-    } else {
-      target.classList.add('sideMenu-main-responsive');
-      setSideBarMenuIcon(faTimes);
-    }
-  };
   return (
     <div className="header-container">
       <div className="header-content-zero content-head">
@@ -67,11 +39,6 @@ const Header = ({ sideBarRef, title }) => {
       <div className="header-content-five content-head">
         <h4 className="header-title">{title}</h4>
       </div>
-      {/* <div className="hamburger-start">
-        <div className="hamburger-bars-icon" onClick={sideBarMenuIconClickHandler} >
-          <FontAwesomeIcon icon={sideBarMenuIcon} />
-        </div>
-      </div> */}
     </div>
   );
 };

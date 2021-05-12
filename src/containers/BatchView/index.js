@@ -34,7 +34,7 @@ const BatchCreation = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title="Create Batch" />
+        <Header title="Create Batch" />
         <div className="container-main">
           <Container className="wrapper">
             <div className="batch-heading-wrapper">

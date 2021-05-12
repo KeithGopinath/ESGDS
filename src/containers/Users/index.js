@@ -56,7 +56,7 @@ const Users = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title="Users" />
+        <Header title="Users" />
         <div className="container-main">
           <div className="users-back-label-onboardlink-container">
             <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
