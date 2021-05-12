@@ -56,17 +56,9 @@ const Users = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
-        <div className="users-main">
-          <div className="users-label">USERS</div>
+        <Header sideBarRef={sideBarRef} title="Users" />
+        <div className="container-main">
           <div className="users-back-label-onboardlink-container">
-            <div className="back-label-wrap">
-              <div className="back-lefticon-wrap" >
-                <FontAwesomeIcon className="lefticon" icon={faAngleLeft} />
-                Back
-              </div>
-              {/* <div className="users-label">Manage Users</div> */}
-            </div>
             <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
             </Button>
           </div>
@@ -84,7 +76,7 @@ const Users = () => {
             ))}
           </div>
           <div>
-            <UsersTable tableData={tableData} />
+            <UsersTable tableData={tableData} showDatePicker />
           </div>
         </div>
       </div>

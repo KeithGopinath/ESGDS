@@ -1,7 +1,7 @@
-/* eslint-disable import/first */
+/* eslint-disable */
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Col, Row, Card, Button } from 'react-bootstrap';
+import { Col, Row, Card, Button, Container } from 'react-bootstrap';
 import Header from '../../components/Header';
 import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -92,14 +92,6 @@ const BatchView = () => {
   const batchlist = (searchQuery ? searchfilter(searchQuery, cardData) : cardData).slice(min, max).map(({ name, id }) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox" key={name} >
-        {/* <div className="batch-card-content">
-          <div className="batch-card-content-name" >Name:</div>
-          <div className="batch-card-content-value" data-toggle="tooltip" data-placement="top" title={name}>{name}</div>
-        </div>
-        <div className="batch-card-content" >
-          <div className="batch-card-content-name"> ID</div >
-          <div className="batch-card-content-value">{id}</div>
-        </div> */}
         <ListItemText primary={name} secondary={id} />
       </Card>
     </Col>
@@ -110,51 +102,47 @@ const BatchView = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
-        <div className="batch-wrapper background-batch-view">
-          <div className="batch-heading-wrapper">
-            <div className="batch-heading-name">Batch View</div>
-          </div>
-          <div className="head-tab">
-            <div>
-              <ThemeProvider theme={searchtheme}>
-                <TextField
-                  placeholder="search"
-                  style={{ padding: '20px' }}
-                  autoComplete="off"
-                  onChange={onSearchBatch}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <FontAwesomeIcon icon={faSearch} />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </ThemeProvider>
-            </div>
-            <div>
-              <Button variant="primary" className="imp-btn" onClick={handleShow}>
-                <div>Create batch</div>
-              </Button>
-              {/* <Fab size="small" color="secondary" aria-label="add" onClick={handleShow}>
-                <AddIcon />
-              </Fab> */}
-            </div>
-          </div>
-          <div className="view-min-height">
-            <Row >
-              {batchlist}
-            </Row>
-          </div>
-          <Row>
-            <Col lg={12} sm={12}>
-              <div className="batch-footer">
-                <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+        <Header sideBarRef={sideBarRef} title="Batch" />
+        <div className="container-main">
+          <Container className="wrapper">
+            <div className="head-tab">
+              <div>
+                <ThemeProvider theme={searchtheme}>
+                  <TextField
+                    placeholder="search"
+                    style={{ padding: '20px' }}
+                    autoComplete="off"
+                    onChange={onSearchBatch}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FontAwesomeIcon icon={faSearch} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </ThemeProvider>
               </div>
-            </Col>
-          </Row>
-          <BatchCreation show={show} setShow={setShow} />
+              <div>
+                <Button variant="primary" className="imp-btn" onClick={handleShow}>
+                  <div>Create batch</div>
+                </Button>
+              </div>
+            </div>
+            <div className="view-min-height">
+              <Row >
+                {batchlist}
+              </Row>
+            </div>
+            <Row>
+              <Col lg={12} sm={12}>
+                <div className="batch-footer">
+                  <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+                </div>
+              </Col>
+            </Row>
+            <BatchCreation show={show} setShow={setShow} />
+          </Container>
         </div>
       </div>
     </div>

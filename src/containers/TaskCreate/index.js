@@ -231,7 +231,6 @@ const TaskCreate = () => {
       }
       return [];
     });
-    console.log(batchInfo, 'state batchinfo');
   };
   const handleChangePillar = (val) => {
     setPillar(val.target.value);
@@ -240,14 +239,6 @@ const TaskCreate = () => {
   const grpDetail = groupDetails.map((element) => (
     <Col lg={3} md={6} sm={12}>
       <Card className="card-view groupbox" key={element.groupID} onClick={() => onselectGroup(element.groupID)} >
-        {/* <div className="group-card-content">
-          <div className="group-card-content-name" >Group name:</div>
-          <div className="group-card-content-value" data-toggle="tooltip" data-placement="top" title={element.groupName}>{element.groupName}</div>
-        </div>
-        <div className="group-card-content" >
-          <div className="group-card-content-name">Group ID</div >
-          <div className="group-card-content-value">{element.groupID}</div>
-        </div> */}
         <ListItemText primary={element.groupName} secondary={element.groupID} />
       </Card>
     </Col>
@@ -314,7 +305,6 @@ const TaskCreate = () => {
             <DatePicker
               className="date-picker"
               size="middle"
-              // showTime={{ format: 'HH:mm' }}
               format="YYYY-MM-DD"
             />
           </div>
@@ -366,14 +356,6 @@ const TaskCreate = () => {
             (
               <Col lg={3} md={6} sm={12}>
                 <Card className="card-view groupbox" key={batchID} onClick={() => onselectBatch(batchID)} >
-                  {/* <div className="group-card-content">
-                    <div className="group-card-content-name" >Batch name:</div>
-                    <div className="group-card-content-value" data-toggle="tooltip" data-placement="top" title={batchName}>{batchName}</div>
-                  </div>
-                  <div className="group-card-content" >
-                    <div className="group-card-content-name">Batch ID</div >
-                    <div className="group-card-content-value">{batchID}</div>
-                  </div> */}
                   <ListItemText primary={batchName} secondary={batchID} />
                 </Card>
               </Col>
@@ -388,9 +370,8 @@ const TaskCreate = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} />
+          <Header sideBarRef={sideBarRef} title="Task" />
           <div className="task-wrapper background-task-view">
-            <div className="taskcreate-head">Task Creation</div>
             <Row>
               <Col lg={12} sm={12}>
                 <Card style={{ minHeight: '30rem' }}>

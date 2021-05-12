@@ -1,94 +1,424 @@
-/* eslint-disable */
-import React, { useState, useRef } from 'react';
-import { Form, Row, Col, Button, Modal, Accordion, Card } from 'react-bootstrap';
-import { DatePicker } from 'antd';
-import Select from 'react-select';
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-plusplus */
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+
+import React, { useRef, useState } from 'react';
+import { Col, Card, Accordion } from 'react-bootstrap';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'antd/dist/antd.css';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import DataSheet from './DataSheet';
 
 
-const DataPage = () => {
-  const currentUser = 'analyst';
-  const currentDpCode = {
-    dpCode: 'AUDP002',
-    boardMembers: ['Shri Shashi Shanker', 'Shri M. Venkatesh', 'Shri Subhash Kumar'],
-    isMatrix: true,
-  };
-
+const DataPage = (props) => {
   const sideBarRef = useRef();
+  const [historyToggleArrow, setHistoryToggleArrow] = useState(false);
+  const [currentToggleArrow, setCurrentToggleArrow] = useState(true);
+  // const { Panel } = Collapse;
 
-  const [showAnalystSaveModal, setShowAnalystSaveModal] = useState(false);
-  const [showAnalystCloseModal, setShowAnalystCloseModal] = useState(false);
-  const [showQASaveModal, setShowQASaveModal] = useState(false);
-  const [showQACloseModal, setShowQACloseModal] = useState(false);
-  const [imagePreview, setImagePreview] = useState(false);
+  const apiData = [
+    {
+      taskId: '0001',
+      pillar: 'Environmental',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      taskId: '0002',
+      pillar: 'Social',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      taskId: '0003',
+      pillar: 'Governance',
+      company: 'Reliance Ltd',
+      year: '2018-2019',
+      data: [
+        {
+          dpCode: 'AUDP001',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'text',
+          historyDpData: [
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Yes',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'AUDP001',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'text',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'No',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOCR013',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: "Board member's fixed cash based compensation",
+          dataType: 'number',
+          historyDpData: [
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: '21321',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOCR013',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: "Board member's fixed cash based compensation",
+              dataType: 'number',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: '213123',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+        {
+          dpCode: 'BOIR017',
+          fiscalYear: '2018-2019',
+          status: 'Uncompleted',
+          description: 'Does the board member hold a seat in the audit committee ?',
+          dataType: 'date',
+          historyDpData: [
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2017-2018',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '58',
+              filePath: '',
+              publicationDate: 'Tue May 11 2017',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet One',
+              url: 'www.ac.com',
+            },
+            {
+              dpCode: 'BOIR017',
+              fiscalYear: '2016-2017',
+              status: 'Completed',
+              description: 'Does the board member hold a seat in the audit committee ?',
+              dataType: 'date',
+              pageNo: '42',
+              filePath: '',
+              publicationDate: 'Tue May 01 2016',
+              response: 'Tue May 01 2016',
+              screen: 'Na',
+              source: { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2021' },
+              textSnippet: 'Snippet Two',
+              url: 'www.ab.com',
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
-  const analystShowSaveModal = () => setShowAnalystSaveModal(true);
-  const analystCloseSaveModal = () => setShowAnalystSaveModal(false);
-  const analystShowCloseModal = () => setShowAnalystCloseModal(true);
-  const analystCloseCloseModal = () => setShowAnalystCloseModal(false);
-
-  const qAShowSaveModal = () => setShowQASaveModal(true);
-  const qACloseSaveModal = () => setShowQASaveModal(false);
-  const qAShowCloseModal = () => setShowQACloseModal(true);
-  const qACloseCloseModal = () => setShowQACloseModal(false);
-
-  const imageBrowser = (event) => {
-    setImagePreview(URL.createObjectURL(event.target.files[0]));
+  const getDataForTable = (data) => {
+    const { taskId, dpcode } = props.match.params;
+    console.log(taskId, dpcode, data);
+    const [currentTask] = data.filter((task) => (task.taskId === taskId));
+    const max = currentTask.data.length - 1;
+    const min = 0;
+    return (currentTask.data.map((dpData, index) => {
+      if (dpData.dpCode === dpcode) {
+        return ({
+          maxIndex: max, minIndex: min, currentIndex: index, currentDpCode: dpData, currentTask,
+        });
+      }
+      return null;
+    })).filter((e) => (e !== null));
   };
 
-  const BoardMembers = () => {
-    const boardMembers = currentDpCode.boardMembers.map((e) => (
-      <Col lg={6}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={5}>
-            {e}*
-          </Form.Label>
-          <Col sm={7}>
-            <Select
-              name="userRole"
-              // value={""}
-              // onChange={}
-              options={[{ value: 'Yes', label: 'Yes' }, { value: 'No', label: 'No' }]}
-              // isSearchable={}
-              // className={}
-              maxLength={30}
-            />
-          </Col>
-        </Form.Group>
-      </Col>
-    ));
-    
-    return (
-      <Col lg={12}>
-        <Accordion>
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle style={{ border: 'none', background: 'none' }} eventKey="0">Board Members</Accordion.Toggle>
-            </Card.Header>
-            <Accordion.Collapse eventKey="0">
-              <Card.Body>
-                <Row>{boardMembers}</Row>
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-      </Col>
-    );
-  };
+  const [{
+    maxIndex, minIndex, currentIndex, currentDpCode, currentTask,
+  }] = getDataForTable(apiData);
+  console.log(getDataForTable(apiData));
 
-  // const pillarOption = [
-  //   { value: 'Annual Report', label: 'Annual Report' },
-  //   { value: 'Integrated Report', label: 'Integrated Report' },
-  //   { value: 'Sustainability Report', label: 'Sustainability Report' },
-  //   { value: 'Policy documents', label: 'Policy documents' },
-  //   { value: 'Webpages', label: 'Webpages' },
-  //   { value: 'News', label: 'News' },
-  //   { value: 'Press release', label: 'Press release' },
-  //   { value: 'Meeting Notice & Vote results', label: 'Meeting Notice & Vote results' },
-  //   { value: 'Others', label: 'Others' },
-  // ];
 
   return (
     <div className="main">
@@ -97,293 +427,75 @@ const DataPage = () => {
         <Header sideBarRef={sideBarRef} />
         <div className="datapage-main" >
           <div className="datapage-info-group">
-            <Row>
-              {/* --------------------------------------------------------------------------------------------- DPCODE */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    DP Code*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" readOnly value="AUDP001" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Year*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Select
-                      name="userRole"
-                      // value={""}
-                      // onChange={}
-                      // options={pillarOption}
-                      // isSearchable={}
-                      // className={}
-                      maxLength={30}
-                    />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- LINE */}
-              <Col lg={12} className="datapage-horizontalLine"></Col>
-              {/* --------------------------------------------------------------------------------------------- PAGE NO */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Page No*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" placeholder="Page No" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- URL */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    URL*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" placeholder="Url" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- PUBLICATION DATE */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Publication Date*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <DatePicker className="datapage-datepicker" size="large" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- DESCRIPTION */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Description*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" placeholder="Description" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- TEXT SNIPPET */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Text Snippet*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" placeholder="Snippet" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- SCREEN */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Screen*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.Control type="text" placeholder="Screen" />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- SOURCE */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    Source*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Select
-                      name="userRole"
-                      // value={""}
-                      // onChange={}
-                      // options={}
-                      // isSearchable={}
-                      // className={}
-                      maxLength={30}
-                    />
-                  </Col>
-                </Form.Group>
-              </Col>
-              {/* --------------------------------------------------------------------------------------------- FILE PATH */}
-              <Col lg={6}>
-                <Form.Group as={Row} >
-                  <Form.Label column sm={5}>
-                    File Path*
-                  </Form.Label>
-                  <Col sm={7}>
-                    <Form.File
-                      id="custom-file"
-                      label="Browse"
-                      custom
-                      onChange={imageBrowser}
-                    />
-                  </Col>
-                </Form.Group>
-                {/* --------------------------------------------------------------------------------------------- IMAGE PREVIEW */}
-                {imagePreview ? <img width="50%" onClick={() => { window.open(imagePreview); }} src={imagePreview} alt="Not Found" ></img> : null}
-              </Col>
-              {currentDpCode.isMatrix ? BoardMembers() :
-                (
-              /* --------------------------------------------------------------------------------------------- Response */
-                  <Col lg={6}>
-                    <Form.Group as={Row} >
-                      <Form.Label column sm={5}>
-                        Response*
-                      </Form.Label>
-                      <Col sm={7}>
-                        <Form.Control type="text" placeholder="Response" />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                )
-              }
-              {/* --------------------------------------------------------------------------------------------- LINE */}
-              <Col lg={12} className="datapage-horizontalLine"></Col>
-              {(currentUser === 'QA') ?
-                <React.Fragment>
-                  {/* --------------------------------------------------------------------------------------------- CHECK ERROR FLAG */}
-                  <Col lg={12}>
-                    <Form.Group as={Row} >
-                      <Col sm={7}>
-                        <Form.Check type="checkbox" onChange={(e) => { console.log(e); }} label="Error Found" />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                  {/* --------------------------------------------------------------------------------------------- ERROR TYPE */}
-                  <Col lg={6}>
-                    <Form.Group as={Row} >
-                      <Form.Label column sm={5}>
-                        Error Type*
-                      </Form.Label>
-                      <Col sm={7}>
-                        <Select
-                          name="userRole"
-                          // value={""}
-                          // onChange={}
-                          // options={}
-                          // isSearchable={}
-                          // className={}
-                          maxLength={30}
-                        />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                  {/* --------------------------------------------------------------------------------------------- COMMENTS */}
-                  <Col lg={6}>
-                    <Form.Group as={Row} >
-                      <Form.Label column sm={5}>
-                        Comments*
-                      </Form.Label>
-                      <Col sm={7}>
-                        <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                  <Col lg={12} className="datapage-button-wrap">
-                    <Button style={{ marginRight: '1.5%' }} onClick={qAShowCloseModal} variant="danger" type="submit">Close</Button>
-                    <Button variant="success" onClick={qAShowSaveModal} type="submit">Save</Button>
-                  </Col>
-                </React.Fragment> :
-                (
-                  <Col lg={12} className="datapage-button-wrap">
-                    <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={analystShowCloseModal} type="submit">Close</Button>
-                    <Button variant="success" onClick={analystShowSaveModal} type="submit">Save</Button>
-                  </Col>
-                ) }
-              {/* ----------------------------------------------ANALYST MODALS-------------------------------------------------- */}
-              <Modal
-                show={showAnalystSaveModal}
-                onHide={analystCloseSaveModal}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Do you want to save ?</Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={analystCloseSaveModal}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={analystCloseSaveModal}>
-                    Yes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-              <Modal
-                show={showAnalystCloseModal}
-                onHide={analystCloseCloseModal}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Do you want to Close ?</Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={analystCloseCloseModal}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={analystCloseCloseModal}>
-                    Yes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-              {/* ----------------------------------------------QA MODALS-------------------------------------------------- */}
-              <Modal
-                show={showQASaveModal}
-                onHide={qACloseSaveModal}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Do you want to save ?</Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={qACloseSaveModal}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={qACloseSaveModal}>
-                    Yes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-              <Modal
-                show={showQACloseModal}
-                onHide={qACloseCloseModal}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Do you want to Close ?</Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={qACloseCloseModal}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={qACloseCloseModal}>
-                    Yes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </Row>
+            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+              <Accordion>
+                <Card>
+                  <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
+                    <Accordion.Toggle
+                      style={{
+                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+                      }}
+                      eventKey="0"
+                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
+                    >History
+                    </Accordion.Toggle>
+                    <Accordion.Toggle
+                      style={{
+                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+                      }}
+                      eventKey="0"
+                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
+                    ><FontAwesomeIcon icon={historyToggleArrow ? faAngleDown : faAngleUp} />
+                    </Accordion.Toggle>
+                  </Card.Header>
+                  <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                      <DataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              </Accordion>
+            </Col>
+            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+              <Accordion defaultActiveKey="0">
+                <Card>
+                  <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
+                    <Accordion.Toggle
+                      style={{
+                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+                      }}
+                      eventKey="0"
+                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
+                    >Current
+                    </Accordion.Toggle>
+                    <Accordion.Toggle
+                      style={{
+                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+                      }}
+                      eventKey="0"
+                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
+                    ><FontAwesomeIcon icon={currentToggleArrow ? faAngleDown : faAngleUp} />
+                    </Accordion.Toggle>
+                  </Card.Header>
+                  <Accordion.Collapse eventKey="0">
+                    <Card.Body>
+                      <DataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} />
+                    </Card.Body>
+                  </Accordion.Collapse>
+                </Card>
+              </Accordion>
+            </Col>
+            {/* <Collapse accordion>
+              <Panel header="This is panel header 1" key="1">
+                <DataX maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} />
+              </Panel>
+            </Collapse> */}
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default DataPage;

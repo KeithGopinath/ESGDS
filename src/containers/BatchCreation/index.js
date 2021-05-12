@@ -109,7 +109,6 @@ const BatchCreation = ({ show, setShow }) => {
     }
   };
   const onCreatebBatch = () => {
-    console.log(rowDetail, year, 'batches,year');
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
