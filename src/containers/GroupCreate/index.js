@@ -93,7 +93,7 @@ const GroupCreation = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title="Create Group" />
+        <Header title="Create Group" />
         <div className="container-main">
           <Container className="wrapper">
             <Row>

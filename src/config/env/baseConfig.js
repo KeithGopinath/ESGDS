@@ -4,6 +4,7 @@ export default {
     getOtp: '/OTPcheck',
     getForgotPassword: '/forgotpassword',
     getCompanylist: '/getCompanies',
+    getBatchlist: '/getBatchList',
     getEmployee: '/onBoardEmployee',
     getClient: '/onBoardClient',
     getCompany: '/onBoardCompany',

@@ -20,44 +20,17 @@ const BUTTONLIST = [
     id: 5, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
   {
-    id: 6, label: 'Create Batch', icon: faFolderPlus, address: 'createbatch',
+    id: 6, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 7, label: 'Create Group', icon: faFolderPlus, address: 'creategroup',
+    id: 7, label: 'Group', icon: faFolderPlus, address: 'creategroup',
   },
   {
     id: 8, label: 'Role Assignment', icon: faUserTag, address: '',
   },
-];
-
-const BUTTONMINILIST = [
   {
-    id: 0, icon: faHome, address: 'dashboard',
-  },
-  {
-    id: 1, icon: faUser, address: 'Users',
-  },
-  {
-    id: 2, icon: faBuilding, address: 'companies',
-  },
-  {
-    id: 3, icon: faUsers, address: 'groups',
-  },
-  {
-    id: 4, icon: faCog, address: 'manageusers',
-  },
-  {
-    id: 5, icon: faTasks, address: 'pendingtasks',
-  },
-  {
-    id: 6, icon: faFolderPlus, address: 'createbatch',
-  },
-  {
-    id: 7, icon: faFolderPlus, address: 'creategroup',
-  },
-  {
-    id: 8, icon: faUserTag, address: '',
+    id: 9, label: 'Task', icon: faUserTag, address: 'createtask',
   },
 ];
 
-export { BUTTONLIST, BUTTONMINILIST };
+export { BUTTONLIST };

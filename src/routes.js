@@ -14,6 +14,7 @@ import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';
 import DataPage from './containers/DataPage';
 import UpdatePassword from './containers/UpdatePassword';
+import TaskCreate from './containers/TaskCreate/index';
 
 export const history = createBrowserHistory();
 
@@ -35,6 +36,7 @@ const Routes = () => (
         <Route exact path="/pendingtasks" component={PendingTasks} />
         <Route exact path="/pendingtasks/:taskId" component={Task} />
         <Route exact path="/pendingtasks/:taskId/:dpcode" component={DataPage} />
+        <Route exact path="/createtask" component={TaskCreate} />
       </Switch>
     </React.Fragment>
   </Router >

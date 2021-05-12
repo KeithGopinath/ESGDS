@@ -9,7 +9,7 @@ const Companies = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title="Companies" />
+          <Header title="Companies" />
           <div className="container-main">
             <div>Companies</div>
           </div>
