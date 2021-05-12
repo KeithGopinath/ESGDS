@@ -3,6 +3,8 @@ export default {
     getLogin: '/login',
     getOtp: '/OTPcheck',
     getForgotPassword: '/forgotpassword',
+    getCompanylist: '/getCompanies',
+    getUpdatePassword: '/updatepassword',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:3019',

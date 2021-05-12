@@ -28,29 +28,7 @@
     color:#2199c8;
     font-weight:600;
 }
-.batch-name{
-    font-size:15px;
-    color:gray;
-}
-.batch-id{
-    font-size:15px;
-    color:gray;
-}
-.batch-year{
-    font-size:15px;
-    color:gray;
-}
-.batch-group{
-    font-size:15px;
-    color:gray;
-}
-.batch-input-width{
-    max-width:90%;
-    min-width:40%;
-}
-.batch-submit-btn{
-    margin-bottom: 80px;
-}
+
 .batch-display-outer {
     max-height: 430px;
     overflow: overlay;
@@ -62,7 +40,7 @@
     }
  .batch-card{
   min-width:30%;
-  max-width:70%;
+  max-width:30%;
   margin:10px;
  }   
  .batch-card-content{
@@ -82,7 +60,8 @@
     color:#0096fb;
     font-weight:600;
     letter-spacing:1px;
-    max-width: 75px;
+    max-width: 110px;
+    min-width:100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -96,40 +75,15 @@
     cursor: pointer;
     width: 85%;
 }
-.batch-status-minheight{
-    margin-top:30px;
-    min-height: 70px;
-    margin-bottom:30px;
-}
-.batch-status-creation{
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
-.mar-bottom{
-    margin-bottom:20px;
-}
-.dropdown-alert{
-    .css-yk16xz-control {
-        border-color: #dc3545 !important;
-      }
-}
-.fill-alert{
-    font-size:16px;
-    color:#dc3545;
-}
 
+
+.icon-plus{
+    font-size:15px;
+    color:whitesmoke;
+}
 
 .border-danger:focus {
     border-color: #80bdff !important;
-}
-.MuiIconButton-colorPrimary{
-    color:#2da68a !important;
-}
-.MuiDataGrid-root .MuiDataGrid-cell:focus-within{
-    outline: solid #2da68a 1px !important;
-    outline-offset: -1px;
 }
 
 .batchbox:hover{

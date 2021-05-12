@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import OtpInput from 'react-otp-input';
 import Overlay from '../../components/Overlay';
 
-const OtpScreen = ({
+const OtpScreen = ({ 
   show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email,
 }) => {
 

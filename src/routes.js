@@ -9,10 +9,11 @@ import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
 import Task from './containers/Task';
-import Createbatch from './containers/BatchCreate';
+import Createbatch from './containers/BatchView';
 import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';
 import DataPage from './containers/DataPage';
+import UpdatePassword from './containers/UpdatePassword';
 
 export const history = createBrowserHistory();
 
@@ -21,6 +22,7 @@ const Routes = () => (
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={Login} />
+        <Route path="/update-password" component={UpdatePassword} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/users" component={Users} />
         <Route path="/companies" component={Companies} />
