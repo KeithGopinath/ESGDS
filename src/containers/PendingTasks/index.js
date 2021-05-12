@@ -156,9 +156,8 @@ const PendingTasks = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
-        <div className="pendingtasks-main" >
-          <div className="pendingtasks-label">Pending Tasks</div>
+        <Header sideBarRef={sideBarRef} title="Pending Tasks" />
+        <div className="container-main" >
           <div className="pendingtasks-tabs-wrap">
             {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="pendingtasks-tabs">{tab}</div>))}
           </div>

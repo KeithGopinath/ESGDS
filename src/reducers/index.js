@@ -6,6 +6,7 @@ import companylist from './CompaniesList';
 import employee from './Employee';
 import client from './Client';
 import company from './Company';
+import updatePassword from './UpdatePassword';
 
 const rootReducer = combineReducers({
   login,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   employee,
   client,
   company,
+  updatePassword,
 });
 
 export default rootReducer;

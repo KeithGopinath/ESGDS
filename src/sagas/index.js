@@ -5,6 +5,7 @@ import { getCompaniesWatchers } from './CompaniesList';
 import { employeeWatchers } from './Employee';
 import { clientWatchers } from './Client';
 import { companyWatchers } from './Company';
+import { updatePasswordWatchers } from './UpdatePassword';
 
 export default function* rootWatchers() {
   yield [
@@ -15,5 +16,6 @@ export default function* rootWatchers() {
     employeeWatchers(),
     clientWatchers(),
     companyWatchers(),
+    updatePasswordWatchers(),
   ];
 }
