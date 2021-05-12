@@ -5,6 +5,9 @@ export default {
     getForgotPassword: '/forgotpassword',
     getCompanylist: '/getCompanies',
     getBatchlist: '/getBatchList',
+    getEmployee: '/onBoardEmployee',
+    getClient: '/onBoardClient',
+    getCompany: '/onBoardCompany',
     getUpdatePassword: '/updatepassword',
   },
   apiBaseUrl: {

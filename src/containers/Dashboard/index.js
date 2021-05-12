@@ -129,7 +129,7 @@ const Dashboard = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title="Dashboard" />
+          <Header title="Dashboard" />
           <div className="container-main">
             <Row className="dashboard-tabs-wrap">
               {cardsList.map((card, index) => (<Col key={card.Clabel} id={card.Clabel} xs={12} sm={5} md={2} ref={dashboardTabsRef.current[index]} onClick={onClickTabChanger} className="dashboard-tabs">{card.Clabel}</Col>))}

@@ -41,6 +41,7 @@ const OtpScreen = ({
       title="Authentication Required"
       body={OtpBody()}
       alert={alert}
+      alertClass='danger'
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
       footer={<Resend />}
