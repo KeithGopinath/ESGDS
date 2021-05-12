@@ -36,6 +36,17 @@
     margin-right: 15px;
 }
 
+.header-content-five {
+    min-width: 25px;
+    margin-right: auto;
+}
+
+.header-title {
+    color: #2da68a;
+    font-size: x-large;
+    padding-top: 10px;
+}
+
 .drop-down-element {
     width: 160px !important;
     border-radius: 7px !important;
@@ -101,11 +112,5 @@
 @media only screen and (min-width: 768px) {
     .hamburger-bars-icon {
         display: none;
-    }
-}
-
-@media screen and (max-width: 774px) {
-    .header-container {
-        flex-direction: column-reverse;
     }
 }

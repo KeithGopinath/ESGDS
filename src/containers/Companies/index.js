@@ -9,8 +9,10 @@ const Companies = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} />
-          <div>Companies</div>
+          <Header sideBarRef={sideBarRef} title="Companies" />
+          <div className="container-main">
+            <div>Companies</div>
+          </div>
         </div>
       </div>
     </React.Fragment>
