@@ -67,11 +67,11 @@ const Header = ({ sideBarRef, title }) => {
       <div className="header-content-five content-head">
         <h4 className="header-title">{title}</h4>
       </div>
-      <div className="hamburger-start">
+      {/* <div className="hamburger-start">
         <div className="hamburger-bars-icon" onClick={sideBarMenuIconClickHandler} >
           <FontAwesomeIcon icon={sideBarMenuIcon} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
