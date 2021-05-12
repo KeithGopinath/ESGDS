@@ -3,21 +3,26 @@ import React, { useState } from 'react';
 import { Card, Form, Row, Col, Container } from 'react-bootstrap';
 
 // proof details
-const ProofUpload = ({ role }) => {
+const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
     const [fileName, setFileName] = useState('');
     const [empID, setEmpID] = useState('');
     const [cancelledCheque, setCancelledCheque] = useState('');
+    const formData = new FormData();
 
     const onChangeCompRep = (e) => {
         setFileName(e.target.files[0].name);
+        onCompany(e.target.files[0].name);
+        formData.append('file', file[0]);
     };
 
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
+        onEmployeeId(e.target.files[0].name);
     };
 
-    const onCancelledCheque = (e) => {
+    const onChangeCancelledCheque = (e) => {
         setCancelledCheque(e.target.files[0].name);
+        onCancelledCheque(e.target.files[0].name);
     };
 
     return (
@@ -64,7 +69,7 @@ const ProofUpload = ({ role }) => {
                                     className=""
                                     id=""
                                     label={cancelledCheque}
-                                    onChange={onCancelledCheque}
+                                    onChange={onChangeCancelledCheque}
                                     custom
                                 />
                             </Form.Group>

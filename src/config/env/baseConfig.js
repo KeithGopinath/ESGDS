@@ -4,6 +4,9 @@ export default {
     getOtp: '/OTPcheck',
     getForgotPassword: '/forgotpassword',
     getCompanylist: '/getCompanies',
+    getEmployee: '/onBoardEmployee',
+    getClient: '/onBoardClient',
+    getCompany: '/onBoardCompany',
     getUpdatePassword: '/updatepassword',
   },
   apiBaseUrl: {
