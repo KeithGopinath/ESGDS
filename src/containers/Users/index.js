@@ -76,7 +76,7 @@ const Users = () => {
             ))}
           </div>
           <div>
-            <UsersTable tableData={tableData} />
+            <UsersTable tableData={tableData} showDatePicker />
           </div>
         </div>
       </div>
