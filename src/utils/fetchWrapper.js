@@ -72,7 +72,7 @@ export const doPost = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
-      Authorization: `Basic ${sessionStorage.user}`,
+      Authorization: `Basic ${sessionStorage.auth}`,
     },
     body: JSON.stringify(body),
   }),

@@ -28,7 +28,12 @@ const Login = () => {
   // login
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
-  const token = login && `${login.token}`;
+  // const token = login && `${login.token}`;
+  
+  // Temp fix have to use in useEffect 
+  const token = login && login.token;
+  sessionStorage.access = token
+  
   const decoded = token && jwt_decode(token);
 
   // otpScreen
@@ -109,7 +114,7 @@ const Login = () => {
       // To send the login details in base 64 format through header 
       const login = { email, password }
       const user = btoa(`${login.email}:${login.password}`)
-      sessionStorage.user = user
+      sessionStorage.auth = user
 
       const loginDetails = {
         access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
