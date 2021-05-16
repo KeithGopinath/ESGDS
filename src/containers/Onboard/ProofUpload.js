@@ -1,28 +1,69 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { Card, Form, Row, Col, Container } from 'react-bootstrap';
+import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
 
 // proof details
-const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
+const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previousStep, nextStep, setActiveStep, activeStep }) => {
     const [fileName, setFileName] = useState('');
     const [empID, setEmpID] = useState('');
     const [cancelledCheque, setCancelledCheque] = useState('');
-    const formData = new FormData();
+    const [proofUploadAlert, setProofUploadAlert] = useState('');
+    const [validate, setValidate] = useState(false);
 
     const onChangeCompRep = (e) => {
         setFileName(e.target.files[0].name);
-        onCompany(e.target.files[0].name);
-        formData.append('file', file[0]);
+        let letterOfAuthentication = new FormData();
+        letterOfAuthentication.append('file', e.target.files[0]);
+        for (let value of letterOfAuthentication) {
+            onCompany(value);
+        }
     };
 
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
-        onEmployeeId(e.target.files[0].name);
+        const idProof = new FormData();
+        idProof.append('file', e.target.files[0]);
+        for (let value of idProof) {
+            onEmployeeId(value);
+        }
     };
 
     const onChangeCancelledCheque = (e) => {
         setCancelledCheque(e.target.files[0].name);
-        onCancelledCheque(e.target.files[0].name);
+        let formData = new FormData();
+        formData.append('file', e.target.files[0]);
+        for (let value of formData) {
+            onCancelledCheque(value);
+        }
+    };
+
+    const goToLoginCredentials = () => {
+        if (role === 'client' || role === 'company') {
+            if (!fileName || !empID) {
+                setProofUploadAlert('Should upload all files');
+                setValidate(true);
+            } else {
+                nextStep();
+                setValidate(false);
+                setProofUploadAlert('');
+                setActiveStep(activeStep + 1);
+            }
+        } else if (role === 'Employee') {
+            if (!fileName || !empID || !cancelledCheque) {
+                setProofUploadAlert('Should upload all files');
+                setValidate(true);
+            } else {
+                nextStep();
+                setValidate(false);
+                setProofUploadAlert('');
+                setActiveStep(activeStep + 1);
+            }
+        }
+    };
+
+    const goToPersonalDetails = () => {
+        previousStep();
+        setActiveStep(activeStep - 1);
     };
 
     return (
@@ -38,7 +79,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
                                 {role === 'Employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.File
                                     type="file"
-                                    className=""
+                                    className={!fileName && validate && 'file-not-upload'}
                                     id=""
                                     label={fileName}
                                     onChange={onChangeCompRep}
@@ -53,7 +94,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
                                 {role === 'Employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.File
                                     type="file"
-                                    className=""
+                                    className={!empID && validate && 'file-not-upload'}
                                     id=""
                                     label={empID}
                                     onChange={onChangeEmpId}
@@ -66,7 +107,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
                                 <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup></Form.Label>
                                 <Form.File
                                     type="file"
-                                    className=""
+                                    className={!cancelledCheque && validate && 'file-not-upload'}
                                     id=""
                                     label={cancelledCheque}
                                     onChange={onChangeCancelledCheque}
@@ -75,9 +116,14 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque }) => {
                             </Form.Group>
                         </Col>}
                     </Row>
+                    <span className="w-100 text-center text-danger">{proofUploadAlert}</span>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
                     <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Each file size should not exceed 3 MB </p>
                 </Card>
+                <div className="d-flex justify-content-between w-100">
+                    <span><Button className="back" onClick={goToPersonalDetails}>Back</Button></span>
+                    <span><Button className="save-continue" onClick={goToLoginCredentials}>Save & Continue</Button></span>
+                </div>
             </Row>
         </Container>
     );

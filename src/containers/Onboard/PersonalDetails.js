@@ -1,11 +1,10 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Card, Form, Row, Col, Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Select from 'react-select';
-import { history } from './../../routes';
 
-const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone, onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, validate, location }) => {
+const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone, onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep, activeStep, validatingSpaces }) => {
+
     const [firstName, setFirstName] = useState('');
     const [email, setEmail] = useState('');
     const [companyName, setCompanyName] = useState('');
@@ -16,24 +15,28 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     const [adharCard, setAdharCard] = useState('');
     const [bankAccountNumber, setBankAccountNumber] = useState('');
     const [bankIFSCCode, setBankIFSCCode] = useState('');
-    const [validation, setValidation] = useState('');
+    const [validate, setValidate] = useState(false);
+    const [personalDetailsAlert, setPersonalDetailsAlert] = useState('');
 
-    // history.push({state:firstName});
     const onFirstNameChange = (e) => {
-        if (e.target.value.match('^[a-zA-Z_@./#&+-]*$')) {
+        if (e.target.value.match('^[a-zA-Z ]*$')) {
             setFirstName(e.target.value);
             onFirstName(e.target.value);
         }
     };
 
     const onMiddleNameChange = (e) => {
-        setMiddleName(e.target.value);
-        onMiddleName(e.target.value)
+        if (e.target.value.match('^[a-zA-Z ]*$')) {
+            setMiddleName(e.target.value);
+            onMiddleName(e.target.value);
+        }
     };
 
     const onLastNameChange = (e) => {
-        setLastName(e.target.value);
-        onLastName(e.target.value);
+        if (e.target.value.match('^[a-zA-Z ]*$')) {
+            setLastName(e.target.value);
+            onLastName(e.target.value);
+        }
     };
 
     const onEmailChange = (e) => {
@@ -44,18 +47,24 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     };
 
     const onPhoneChange = (e) => {
-        setPhoneNumber(e.target.value);
-        onPhone(e.target.value);
+        if (e.target.value.match('^[0-9]*$')) {
+            setPhoneNumber(e.target.value);
+            onPhone(e.target.value);
+        }
     };
 
     const onPancardNoChange = (e) => {
-        setPancardNumber(e.target.value);
-        onPancard(e.target.value);
+        if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+            setPancardNumber(e.target.value);
+            onPancard(e.target.value);
+        }
     };
 
     const onAadharNoChange = (e) => {
-        setAdharCard(e.target.value);
-        onAadhar(e.target.value);
+        if (e.target.value.match('^[0-9]*$')) {
+            setAdharCard(e.target.value);
+            onAadhar(e.target.value);
+        }
     };
 
     const onCompanyNameChange = (e) => {
@@ -65,17 +74,21 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
     const onCompanyNameSelect = (companySelect) => {
         setCompanyName(companySelect);
-        onCompanyName(companySelect);
+        onCompanyName(companySelect.value);
     };
 
     const onAccountNumberChange = (e) => {
-        setBankAccountNumber(e.target.value);
-        onBankAccount(e.target.value);
+        if (e.target.value.match('^[0-9]*$')) {
+            setBankAccountNumber(e.target.value);
+            onBankAccount(e.target.value);
+        }
     };
 
     const onBankIfscChange = (e) => {
-        setBankIFSCCode(e.target.value);
-        onBankIfsc(e.target.value);
+        if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+            setBankIFSCCode(e.target.value);
+            onBankIfsc(e.target.value);
+        }
     };
 
     const companyList = [
@@ -84,6 +97,61 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
         { value: 'Hindustan', label: 'Hindustan' },
         { value: 'Bharat', label: 'Bharat' }
     ];
+
+    const gotoProofUpload = () => {
+        const valid = validatingSpaces(email);
+        if (role === 'client' || role === 'company') {
+            if (!email && !phoneNumber && valid === false) {
+                setPersonalDetailsAlert('Please fill all required fields');
+                setValidate('border-danger');
+            } else if (!firstName) {
+                setPersonalDetailsAlert('Please enter your name');
+                setValidate('border-danger');
+            } else if (!email) {
+                setPersonalDetailsAlert('Please enter email id');
+                setValidate('border-danger');
+            } else if (!phoneNumber) {
+                setPersonalDetailsAlert('Please enter phone number');
+                setValidate('border-danger');
+            } else if (!companyName) {
+                if (role === 'client') {
+                    setPersonalDetailsAlert('Please enter company name');
+                    setValidate('border-danger');
+                } else {
+                    setValidate(true);
+                    setPersonalDetailsAlert('Please choose company name');
+                }
+            } else if (valid == false) {
+                setValidate('border-danger');
+                setPersonalDetailsAlert('Please enter valid email');
+            } else if (!firstName || !email || !phoneNumber || !companyName) {
+                setPersonalDetailsAlert('Please fill all required fields');
+                setValidate('border-danger');
+            }
+            if ((firstName.length && email.length && phoneNumber.length && companyName.length) > 0) {
+                nextStep();
+                setActiveStep(activeStep + 1);
+                setPersonalDetailsAlert('');
+            }
+        }
+        else if (role === 'Employee') {
+            if (!pancardNumber && !bankAccountNumber && !bankIFSCCode && !adharCard && valid === false) {
+                setPersonalDetailsAlert('Please fill all required fields');
+                setValidate('border-danger');
+            } else if (!firstName || !lastName || !email || !phoneNumber || !pancardNumber || !bankAccountNumber || !bankIFSCCode || !adharCard) {
+                setPersonalDetailsAlert('Please fill all required fields');
+                setValidate('border-danger');
+            } else if (valid == false) {
+                setValidate('border-danger');
+                setPersonalDetailsAlert('Please enter valid mail id');
+            } else {
+                nextStep();
+                setValidate('');
+                setPersonalDetailsAlert('');
+                setActiveStep(activeStep + 1);
+            }
+        }
+    };
 
     return (
         <Container>
@@ -127,7 +195,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     <Form.Group>
                                         <Form.Label>Last Name <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className={!lastName}
+                                            className={!lastName && validate}
                                             type="text"
                                             name="lastName"
                                             id="lastName"
@@ -143,8 +211,8 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                             <Form.Group>
                                 <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
                                 <Form.Control
-                                    className={!email}
-                                    type="email"
+                                    className={(email === '' || validatingSpaces(email) === false) && validate}
+                                    type="text"
                                     name="email"
                                     id="email"
                                     value={email}
@@ -157,11 +225,10 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                             <Form.Group>
                                 <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
                                 <Form.Control
-                                    className={!phoneNumber}
+                                    className={!phoneNumber && validate}
                                     type="tel"
                                     name="phone"
                                     id="phone"
-                                    maxLength={10}
                                     value={phoneNumber}
                                     placeholder="Enter your valid phone number"
                                     onChange={onPhoneChange}
@@ -173,7 +240,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                 <Form.Group>
                                     <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
                                     <Form.Control
-                                        className={!companyName}
+                                        className={!companyName && validate}
                                         type="text"
                                         name="companyName"
                                         id="companyName"
@@ -187,13 +254,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                             <Col lg={6} sm={6} md={6}>
                                 <Form.Group>
                                     <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                                    <Select
-                                        className={!companyList}
-                                        isMulti
-                                        options={companyList}
-                                        name="companyName"
-                                        onChange={onCompanyNameSelect}
-                                    />
+                                    <div className={companyName.length === 0 && validate && 'dropdown-alert'}>
+                                        <Select
+                                            isMulti
+                                            options={companyList}
+                                            name="companyName"
+                                            onChange={onCompanyNameSelect}
+                                        />
+                                    </div>
                                 </Form.Group>
                             </Col>}
                         {role === 'Employee' &&
@@ -202,7 +270,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     <Form.Group>
                                         <Form.Label>Pan Card Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className={!pancardNumber}
+                                            className={!pancardNumber && validate}
                                             type="text"
                                             maxLength={10}
                                             name="pancardNumber"
@@ -217,7 +285,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     <Form.Group>
                                         <Form.Label>Aadhar Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className={!adharCard}
+                                            className={!adharCard && validate}
                                             type="tel"
                                             maxLength={12}
                                             name="aadharNumber"
@@ -246,7 +314,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     <Form.Group>
                                         <Form.Label>Account Number <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className={!bankAccountNumber}
+                                            className={!bankAccountNumber && validate}
                                             type="tel"
                                             minLength={11}
                                             maxLength={16}
@@ -262,7 +330,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     <Form.Group>
                                         <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
                                         <Form.Control
-                                            className={!bankIFSCCode}
+                                            className={!bankIFSCCode && validate}
                                             type="text"
                                             name="bankIFSC"
                                             id="bankIFSC"
@@ -275,9 +343,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                             </React.Fragment>
                         }
                     </Row>
+                    <span className="w-100 text-center text-danger">{personalDetailsAlert}</span>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
                     {role === 'Employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
                 </Card>
+                <div className="d-flex justify-content-between w-100 mb-2">
+                    <span><Button className="back" disabled >Back</Button></span>
+                    <span><Button className="save-continue" onClick={gotoProofUpload}>Save & Continue</Button></span>
+                </div>
             </Row>
         </Container>
     );
