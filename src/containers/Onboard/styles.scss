@@ -6,22 +6,25 @@
 .personal-content,
 .proof-content,
 .login-content {
-    margin-top: 5%;
+    margin-top: 1%;
 
     .personal-details,
     .proof-details,
     .logincred-details {
         width: 100%;
-        margin: .7rem 0;
-        padding: 4%;
+        padding: 3%;
     }
+}
+
+.login-content {
+    margin: 0% 3%;
 }
 
 .personal-text,
 .proof-text,
 .logincred-text {
     color: #6ab649;
-    margin-bottom: 5%;
+    margin-bottom: 3%;
 }
 
 .back,
@@ -47,19 +50,52 @@
     max-height: 300px !important;
 }
 
-.display-hidden {
-    display: none;
-}
-
 .client-proof-upload {
     min-height: 4.2em;
 }
 
-.steps-content {
-    background-color: #2199c8 !important;
+.MuiStepIcon-root {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+
+    &.MuiStepper-horizontal {
+        margin: auto !important;
+    }
+
+    &.MuiStepIcon-active {
+        color: #2199c8 !important;
+    }
+
+    &.MuiStepIcon-completed {
+        color: #2199c8 !important;
+    }
 }
 
-._2Jtxm._35Ago ._2kL0S {
-    background-color: #2199c8 !important;
-    color: #fff !important;
+.MuiStepConnector-lineHorizontal {
+    margin-top: 3%;
+
+    &::after {
+        color: #2199c8 !important;
+    }
+}
+
+.file-not-upload>.custom-file-label {
+    border-color: #dc3545;
+}
+
+.tooltip-inner {
+    max-width: 50% !important;
+    padding: 3px 8px !important;
+    text-align: start !important;
+    color: #000 !important;
+    background-color: #fff !important;
+    box-shadow: 0 0.1rem 0.1rem #000;
+}
+
+.info-icon {
+    cursor: pointer;
+
+    &:hover {
+        color: #2199c8 !important;
+    }
 }

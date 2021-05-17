@@ -1,29 +1,21 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import jwt_decode from "jwt-decode";
-import StepProgressBar from 'react-step-progress';
+import StepWizard from 'react-step-wizard';
 import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';
+import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 const Onboard = (props) => {
   const selectedOption = props.location && props.location.state;
 
   const dispatch = useDispatch();
   const employee = useSelector((state) => state.employee.employee);
-  const invalidEmployee = useSelector((state) => state.employee.error);
-  const employeeToken = employee && `${employee.employeeToken}`;
-
   const client = useSelector((state) => state.client.client);
-  const invalidClient = useSelector((state) => state.client.error);
-  const clientToken = client && `${client.clientToken}`;
-
   const company = useSelector((state) => state.company.company);
-  const invalidCompany = useSelector((state) => state.company.error);
-  const companyToken = company && `${company.companyToken}`;
 
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
@@ -39,8 +31,7 @@ const Onboard = (props) => {
   const [empID, setEmpID] = useState('');
   const [cancelledCheque, setCancelledCheque] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [formValidate, setFormValidate] = useState('validate-form');
+  const [activeStep, setActiveStep] = useState(0);
 
   const onFirstNameChange = (firstName) => {
     setFirstName(firstName);
@@ -98,40 +89,37 @@ const Onboard = (props) => {
     setPassword(passwordValue);
   };
 
-  const onChangeConfirmPassword = (confirmPwd) => {
-    setConfirmPassword(confirmPwd);
+  //validating spaces:
+  const validatingSpaces = (spacing) => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(spacing);
   };
 
   const onFormSubmit = () => {
     if (selectedOption === 'Employee') {
-      if (!firstName && stepValidation) {
-        setFormValidate('border-danger')
-        window.alert("enter the first name")
-      } else {
-        const employeeDetails = {
-          firstName,
-          middleName,
-          lastName,
-          email,
-          phoneNumber,
-          PANCard: pancardNumber,
-          adharCard,
-          bankAccountNumber,
-          bankIFSCCode,
-          nameOfTheAccountHolder: `${firstName} ${middleName && `${middleName} `}${lastName}`,
-          password,
-          uploadPanCard: fileName,
-          uploadAdhar: empID,
-          uploadCancelled: cancelledCheque,
-          onBoardedStatus: 'Not Approved'
-        };
-        dispatch(
-          {
-            type: 'EMPLOYEE_REQUEST',
-            employeeDetails
-          });
-      }
-      // history.push('/');
+      const employeeDetails = {
+        firstName,
+        middleName,
+        lastName,
+        email,
+        phoneNumber,
+        PANCard: pancardNumber,
+        adharCard,
+        bankAccountNumber,
+        bankIFSCCode,
+        nameOfTheAccountHolder: `${firstName} ${middleName && `${middleName} `}${lastName}`,
+        password,
+        uploadPanCard: fileName,
+        uploadAdhar: empID,
+        uploadCancelled: cancelledCheque,
+        onBoardedStatus: 'Not Approved'
+      };
+      dispatch(
+        {
+          type: 'EMPLOYEE_REQUEST',
+          employeeDetails
+        });
+      history.push('/users');
     } else if (selectedOption === 'client') {
       const clientDetails = {
         name: firstName,
@@ -147,7 +135,7 @@ const Onboard = (props) => {
           type: 'CLIENT_REQUEST',
           clientDetails
         });
-      // history.push('/');
+      history.push('/users');
     } else if (selectedOption === 'company') {
       const companyDetails = {
         name: firstName,
@@ -163,75 +151,61 @@ const Onboard = (props) => {
           type: 'COMPANY_REQUEST',
           companyDetails
         });
-      // history.push('/');
+      history.push('/users');
     }
   };
-  const stepValidator = firstName;
-  const PersonalValidator = () => {
-    const isStateValid = stepValidator;
-    console.log("state valid : ", isStateValid);
-    console.log("getting name: ", name);
 
-    if (!firstName) {
-      return true;
-    } else {
-      return true;
-    }
-  }
+  // stepper 
+  const getSteps = () => {
+    return ['Personal Details', 'Proof Upload', 'Login Credentials'];
+  };
+
+  const steps = getSteps();
 
   return (
     <Container>
-      <StepProgressBar
-        startingStep={0}
-        onSubmit={onFormSubmit}
-        contentClass="step-content"
-        nextBtnName="Save & Continue"
-        previousBtnName="Back"
-        primaryBtnClass="save-continue"
-        secondaryBtnClass="back"
-        steps={[
-          {
-            label: 'Personal Details',
-            name: 'step 1',
-            content: <PersonalDetails
-              role={selectedOption}
-              onFirstName={onFirstNameChange}
-              onMiddleName={onMiddleNameChange}
-              onLastName={onLastNameChange}
-              onEmail={onEmailChange}
-              onPhone={onPhoneNumberChange}
-              onPancard={onPancardChange}
-              onAadhar={onAadharChange}
-              onBankAccount={onBankAccountNumberChange}
-              onBankIfsc={onBankIfscChange}
-              onCompanyName={onCompanyNameChange}
-              name={name}
-            />,
-            validator: PersonalValidator,
-          },
-          {
-            label: 'Proof Upload',
-            name: 'step 2',
-            content: <ProofUpload
-              role={selectedOption}
-              onCompany={onChangeCompanyRep}
-              onEmployeeId={onChangeEmployeeId}
-              onCancelledCheque={onChangeCancelledCheque}
-              validate={formValidate}
-            />,
-          },
-          {
-            label: 'Login Credentials',
-            name: 'step 3',
-            content: <LoginCredentials
-              role={selectedOption}
-              onPassword={onChangePassword}
-              onConfirmPassword={onChangeConfirmPassword}
-              validate={formValidate}
-            />,
-          },
-        ]}
-      />
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <StepWizard>
+        <PersonalDetails
+          role={selectedOption}
+          firstName={firstName}
+          onFirstName={onFirstNameChange}
+          onMiddleName={onMiddleNameChange}
+          onLastName={onLastNameChange}
+          onEmail={onEmailChange}
+          onPhone={onPhoneNumberChange}
+          onPancard={onPancardChange}
+          onAadhar={onAadharChange}
+          onBankAccount={onBankAccountNumberChange}
+          onBankIfsc={onBankIfscChange}
+          onCompanyName={onCompanyNameChange}
+          setActiveStep={setActiveStep}
+          activeStep={activeStep}
+          validatingSpaces={validatingSpaces}
+        />
+        <ProofUpload
+          role={selectedOption}
+          onCompany={onChangeCompanyRep}
+          onEmployeeId={onChangeEmployeeId}
+          onCancelledCheque={onChangeCancelledCheque}
+          setActiveStep={setActiveStep}
+          activeStep={activeStep}
+        />
+        <LoginCredentials
+          role={selectedOption}
+          onPassword={onChangePassword}
+          onSubmit={onFormSubmit}
+          setActiveStep={setActiveStep}
+          activeStep={activeStep}
+          validatingSpaces={validatingSpaces}
+        />
+      </StepWizard>
     </Container>
   );
 };
