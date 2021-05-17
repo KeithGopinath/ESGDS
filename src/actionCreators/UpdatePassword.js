@@ -1,20 +1,20 @@
-import * as UPDATE from './../actionTypes/UpdatePassword';
+import * as ESGDS from './../actionTypes/UpdatePassword';
 
 export const getUpdatePasswordRequest = (payload) => ({
-  type: UPDATE.UPDATE_PASSWORD_REQUEST,
+  type: ESGDS.UPDATE_PASSWORD_REQUEST,
   payload,
 });
 
 export function getUpdatePasswordSuccess(updatePassword) {
   return {
-    type: UPDATE.UPDATE_PASSWORD_SUCCESS,
+    type: ESGDS.UPDATE_PASSWORD_SUCCESS,
     updatePassword,
   };
 }
 
 export function getUpdatePasswordFailure(error) {
   return {
-    type: UPDATE.UPDATE_PASSWORD_FAILURE,
+    type: ESGDS.UPDATE_PASSWORD_FAILURE,
     error,
   };
 }

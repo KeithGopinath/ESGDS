@@ -4,6 +4,7 @@ import * as actionCreators from '../actionCreators/Batch';
 import { doGet } from '../utils/fetchWrapper';
 
 export function* getBatchRequest() {
+  // const currentRole = sessionStorage.role;
   try {
     const response = yield doGet(envConfig.apiEndPoints.getBatchlist);
     yield put(actionCreators.getBatchSuccess(response));

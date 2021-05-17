@@ -11,7 +11,7 @@ const BUTTONLIST = [
     id: 2, label: 'Companies', icon: faBuilding, address: 'companies',
   },
   {
-    id: 3, label: 'Groups', icon: faUsers, address: 'groups',
+    id: 3, label: 'Groups', icon: faUsers, address: 'creategroup',
   },
   {
     id: 4, label: 'Manage Users', icon: faCog, address: 'manageusers',
@@ -23,13 +23,10 @@ const BUTTONLIST = [
     id: 6, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 7, label: 'Group', icon: faFolderPlus, address: 'creategroup',
+    id: 7, label: 'Role Assignment', icon: faUserTag, address: '',
   },
   {
-    id: 8, label: 'Role Assignment', icon: faUserTag, address: '',
-  },
-  {
-    id: 9, label: 'Task', icon: faUserTag, address: 'createtask',
+    id: 8, label: 'Task', icon: faUserTag, address: 'createtask',
   },
 ];
 

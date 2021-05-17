@@ -1,40 +1,49 @@
-.card-view{
+.card-view {
     margin: 0px auto;
     width: 88% !important;
     margin-bottom: 6%;
     min-width: 140px;
 }
-.view-header{
+
+.view-header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 3% 0% 3% 1%;
 }
-.batch-view-header{
+
+.batch-view-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 3% 0% 3% 1%;
 }
-.row-pad{
-    padding:2% 2% 0% 0%;
+
+.row-pad {
+    padding: 2% 2% 0% 0%;
 }
-.radio-select{
-    margin-top:2%;
+
+.radio-select {
+    margin: 0px auto;
+    width: 98%;
 }
-.task-foo{
-    display:flex;
+
+.task-foo {
+    display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
 }
-.radio-bottom{
+
+.radio-bottom {
     margin-bottom: 0px !important;
 }
-.row-pillar{
+
+.row-pillar {
     display: flex;
     flex-direction: row !important;
 }
-.task-role{
+
+.task-role {
     color: rgba(0, 0, 0, 0.54);
     padding: 0;
     font-size: 1rem;
@@ -42,88 +51,102 @@
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0.00938em;
-    margin: 5% 0% 3% 0%;
+    margin: 5% 0% 5% 0%;
 }
-.taskcreate-head{
+.taskcreate-head {
     display: flex;
     justify-content: center;
-    font-size:20px;
+    font-size: 20px;
     font-family: 'Roboto', sans-serif;
     color: #2da68a;
     font-weight: bolder;
-    padding:5% 0% 6% 0%;
+    padding: 5% 0% 6% 0%;
 }
-.groupbox:hover{
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
-}
-.group-card-content{
-    display:flex;
-    justify-content:flex-start;
-    align-items:center;
- }
 
-.groupbox{
+.groupbox:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+}
+
+.group-card-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.groupbox {
     border-radius: 4px;
-    padding:8px;
+    padding: 8px;
     background: #fff;
-    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+    transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
     cursor: pointer;
     width: 85%;
 }
-.group-card-content-name{
-    font-size:15px;
-    color:gray;
-    margin-right:2%;
-    font-weight:700;
+
+.group-card-content-name {
+    font-size: 15px;
+    color: gray;
+    margin-right: 2%;
+    font-weight: 700;
     // min-width: 87px;
- }
- .group-card-content-value{
-    font-size:18px;
-    color:#0096fb;
-    font-weight:600;
-    letter-spacing:1px;
+}
+
+.group-card-content-value {
+    font-size: 18px;
+    color: #0096fb;
+    font-weight: 600;
+    letter-spacing: 1px;
     // min-width:100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
- }
- .date-picker{
-width:100%;
-padding: 6px 11px 6px !important;
- }
- .mar-right{
-     margin-right: 2%;
- }
- .MuiChip-root{
-     border-radius:0px !important;
- }
- .chip-space-bwt{
-     margin-right:2.5%;
- }
- .align-chip{
-    display: flex;
- }
- .task-wrapper{
-    margin-top: 5px;
-    padding: 0% 4% 4% 4%;
-    height: 100%;
-}
-.background-task-view{
-    background: #f0f0f0;
-}
-.grp-mar-top{
-    margin-top:2%;
 }
 
-.MuiInputBase-input{
-    color:#2da68a !important;
+.date-picker {
+    width: 100%;
+    padding: 7px 11px 7px !important;
+    border-radius: 4px !important;
 }
-.MuiButton-root{
+
+.mar-right {
+    margin-right: 2%;
+}
+
+.MuiChip-root {
+    border-radius: 0px !important;
+}
+
+.chip-space-bwt {
+    margin-right: 2.5%;
+}
+
+.align-chip {
+    display: flex;
+}
+
+.task-wrapper {
+    padding: 6% 4% 6% 4%;
+    height: 100%;
+}
+
+.background-task-view {
+    background: #f0f0f0;
+}
+
+.grp-mar-top {
+    margin-top: 2%;
+}
+
+.MuiInputBase-input {
+    color: #2da68a !important;
+}
+
+.MuiButton-root {
     background-color: #2199c8 !important;
 }
-.batch-year-head{
+
+.batch-year-head {
     min-width: 50px;
     color: gray;
     display: flex;
@@ -131,9 +154,45 @@ padding: 6px 11px 6px !important;
     font-weight: 600;
     font-family: sans-serif;
 }
-.MuiListItemText-multiline{
-display: flex;
-flex-direction: column;
-align-items: center;
-margin:0px !important;
+
+.MuiListItemText-multiline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px !important;
+}
+
+.date-picker-outer {
+    display: flex;
+    margin-top: 7%;
+}
+
+.date-picker-inner {
+    margin: 0px auto;
+    width: 48%;
+}
+
+.ant-checkbox-group{
+    display: flex !important;
+    justify-content: space-around;
+}
+.ant-checkbox-group-item{
+    font-size: 1.1rem !important;
+    color: #2199c8 !important;
+    font-weight: 600 !important;
+}
+.card-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    padding: 1%;
+    color: #2199c8;
+    // border-bottom: 2px solid #e9ecef;
+    // min-height: 4.5rem;    
+}
+.MuiListItemText-root{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }

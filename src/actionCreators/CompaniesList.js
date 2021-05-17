@@ -1,19 +1,19 @@
-import * as COMPANY from './../actionTypes/CompaniesList';
+import * as ESGDS from './../actionTypes/CompaniesList';
 
-export const getCompanyRequest = () => ({
-  type: COMPANY.COMPANY_REQUEST,
+export const getCompanyListRequest = () => ({
+  type: ESGDS.COMPANY_LIST_REQUEST,
 });
 
-export function getCompanySuccess(companylist) {
+export function getCompanyListSuccess(companylist) {
   return {
-    type: COMPANY.COMPANY_SUCCESS,
+    type: ESGDS.COMPANY_LIST_SUCCESS,
     companylist,
   };
 }
 
-export function getCompanyFailure(error) {
+export function getCompanyListFailure(error) {
   return {
-    type: COMPANY.COMPANY_FAILURE,
+    type: ESGDS.COMPANY_LIST_FAILURE,
     error,
   };
 }

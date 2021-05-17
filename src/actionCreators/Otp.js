@@ -1,20 +1,20 @@
-import * as OTP from './../actionTypes/Otp';
+import * as ESGDS from './../actionTypes/Otp';
 
 export const getOtp = (otpDetails) => ({
-  type: OTP.OTP_REQUEST,
+  type: ESGDS.OTP_REQUEST,
   otpDetails,
 });
 
 export function getOtpSuccess(otp) {
   return {
-    type: OTP.OTP_SUCCESS,
+    type: ESGDS.OTP_SUCCESS,
     otp,
   };
 }
 
 export function getOtpFailure(error) {
   return {
-    type: OTP.OTP_FAILURE,
+    type: ESGDS.OTP_FAILURE,
     error,
   };
 }
