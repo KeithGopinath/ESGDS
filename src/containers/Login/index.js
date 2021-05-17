@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
-import { history } from '../../routes'; 
+import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
 
@@ -28,7 +28,12 @@ const Login = () => {
   // login
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
-  const token = login && `${login.token}`;
+  // const token = login && `${login.token}`;
+  
+  // Temp fix have to use in useEffect 
+  const token = login && login.token;
+  sessionStorage.access = token
+  
   const decoded = token && jwt_decode(token);
 
   // otpScreen
@@ -105,10 +110,16 @@ const Login = () => {
     } else {
       setLoginAlert('');
       setLoginRole(true);
+
+      // To send the login details in base 64 format through header 
+      const login = { email, password }
+      const user = btoa(`${login.email}:${login.password}`)
+      sessionStorage.auth = user
+
       const loginDetails = {
-        email,
-        password
+        access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
       }
+
       dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
   };
@@ -143,11 +154,11 @@ const Login = () => {
   }
 
   // Forgot password screen
-  const forgotPassword = () =>{
+  const forgotPassword = () => {
     setshowForgotPassword(true);
   }
 
-  const forgotPasswordClose = () =>{
+  const forgotPasswordClose = () => {
     setshowForgotPassword(false);
     setforgotPasswordvalidate('');
     setforgotPasswordAlert('');
@@ -160,22 +171,22 @@ const Login = () => {
     }
   };
 
-  const onSubmitForgotPassword =() =>{
+  const onSubmitForgotPassword = () => {
     const valid = validateEmail(forgotemail);
-    if(!forgotemail || valid == false){
+    if (!forgotemail || valid == false) {
       setforgotPasswordAlert('Please enter the valid credential')
       setforgotPasswordvalidate('border-danger')
     }
-    else{
+    else {
       const payload = {
-        email:forgotemail
+        email: forgotemail
       }
       dispatch(
         {
           type: 'FORGOT_PASSWORD_REQUEST',
           payload
         });
-        setforgotPasswordvalidate('');
+      setforgotPasswordvalidate('');
     }
   }
 
@@ -234,7 +245,7 @@ const Login = () => {
             alert={otpAlert}
             email={email}
           />
-           <ForgotPassword
+          <ForgotPassword
             show={showForgotPassword}
             handleClose={forgotPasswordClose}
             onSubmitForgotPassword={onSubmitForgotPassword}

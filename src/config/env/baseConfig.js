@@ -1,6 +1,6 @@
 export default {
   apiEndPoints: {
-    getLogin: '/login',
+    getLogin: 'auth',
     getOtp: '/OTPcheck',
     getForgotPassword: '/forgotpassword',
     getCompanylist: '/getCompanies',
@@ -11,7 +11,7 @@ export default {
     getUpdatePassword: '/updatepassword',
   },
   apiBaseUrl: {
-    dev: 'http://65.1.140.116:3019',
+    dev: 'http://65.1.140.116:9010/',
     prod: '',
   },
 };
