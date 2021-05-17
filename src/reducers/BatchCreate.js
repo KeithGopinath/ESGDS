@@ -1,23 +1,23 @@
-import * as ESGDS from './../actionTypes/Company';
+import * as ESGDS from '../actionTypes/BatchCreate';
 
-const initialState = { };
+const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ESGDS.COMPANY_REQUEST:
+    case ESGDS.BATCH_CREATE_REQUEST:
       return {
         ...state,
         isLoading: true,
-        company: false,
         error: false,
+        batchdata: false,
       };
-    case ESGDS.COMPANY_SUCCESS:
+    case ESGDS.BATCH_CREATE_SUCCESS:
       return {
         ...state,
         isLoading: true,
-        company: action.company,
+        batchpost: action.createbatch,
       };
-    case ESGDS.COMPANY_FAILURE:
+    case ESGDS.BATCH_CREATE_FAILURE:
       return {
         ...state,
         isLoading: true,

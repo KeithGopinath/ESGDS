@@ -1,23 +1,23 @@
-import * as CLIENT from './../actionTypes/Client';
+import * as ESGDS from './../actionTypes/Client';
 
 const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case CLIENT.CLIENT_REQUEST:
+    case ESGDS.CLIENT_REQUEST:
       return {
         ...state,
         isLoading: true,
         client: false,
         error: false,
       };
-    case CLIENT.CLIENT_SUCCESS:
+    case ESGDS.CLIENT_SUCCESS:
       return {
         ...state,
         isLoading: true,
         client: action.client,
       };
-    case CLIENT.CLIENT_FAILURE:
+    case ESGDS.CLIENT_FAILURE:
       return {
         ...state,
         isLoading: true,

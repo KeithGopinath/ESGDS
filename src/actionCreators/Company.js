@@ -1,22 +1,22 @@
-import * as COMPANY from './../actionTypes/Company';
+import * as ESGDS from './../actionTypes/Company';
 
 export function getCompanyRequest(companyDetails) {
   return {
-    type: COMPANY.COMPANY_REQUEST,
+    type: ESGDS.COMPANY_REQUEST,
     companyDetails,
   };
 }
 
 export function getCompanySuccess(client) {
   return {
-    type: COMPANY.COMPANY_SUCCESS,
+    type: ESGDS.COMPANY_SUCCESS,
     client,
   };
 }
 
 export function getCompanyFailure(error) {
   return {
-    type: COMPANY.COMPANY_FAILURE,
+    type: ESGDS.COMPANY_FAILURE,
     error,
   };
 }

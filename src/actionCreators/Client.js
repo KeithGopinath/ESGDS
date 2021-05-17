@@ -1,22 +1,22 @@
-import * as CLIENT from './../actionTypes/Client';
+import * as ESGDS from './../actionTypes/Client';
 
 export function getcClient(clientDetails) {
   return {
-    type: CLIENT.CLIENT_REQUEST,
+    type: ESGDS.CLIENT_REQUEST,
     clientDetails,
   };
 }
 
 export function getClientSuccess(client) {
   return {
-    type: CLIENT.CLIENT_SUCCESS,
+    type: ESGDS.CLIENT_SUCCESS,
     client,
   };
 }
 
 export function getClientFailure(error) {
   return {
-    type: CLIENT.CLIENT_FAILURE,
+    type: ESGDS.CLIENT_FAILURE,
     error,
   };
 }

@@ -1,20 +1,13 @@
 /* eslint-disable react/void-dom-elements-no-children */
 import React, { useState, useRef } from 'react';
-import { Col, Row, Container, Card } from 'react-bootstrap';
+import { Col, Row, Container, Card, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
-import { DatePicker } from 'antd';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { DatePicker, Checkbox } from 'antd';
+import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
 import Select from 'react-select';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import Button from '@material-ui/core/Button';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -22,16 +15,66 @@ const TaskCreate = () => {
   const [taskFlow, settaskFlow] = useState(0);
   const [companyInfo, setcompanyInfo] = useState([]);
   const [batchInfo, setbatchInfo] = useState([]);
+  const [companyinfo, setcompanyinfo] = useState([]);
   const [pillar, setPillar] = useState('');
+  const [rowDetail, setRowDetails] = useState([]);
   const optionsForPagination = {
     sizePerPage: 10,
   };
+  const onSelectRow = (row, isSelected) => {
+    if (isSelected === true && rowDetail.length === 0) {
+      const rowDetails = { id: row.id, selectedCompany: row.companyName };
+      const selectedRow = [rowDetails, ...rowDetail];
+      setRowDetails(selectedRow);
+    } else if (isSelected === true && rowDetail.length > 0) {
+      rowDetail.map((array) => {
+        if (array.id !== row.id) {
+          const rowDetails = { id: row.id, selectedCompany: row.companyName };
+          const selectedRow = [rowDetails, ...rowDetail];
+          setRowDetails(selectedRow);
+        }
+        return [];
+      });
+      console.log(rowDetail, 'onSelectRow');
+    }
+    // removing rows from an array
+    if (isSelected === false) {
+      rowDetail.map((arr, index) => {
+        const arrayDel = [...rowDetail];
+        if (arr.id === row.id && index !== -1) {
+          arrayDel.splice(index, 1);
+          setRowDetails(arrayDel);
+        }
+        return [];
+      });
+    }
+  };
+  // eslint-disable-next-line consistent-return
+  const onSelectAllRow = (isSelected) => {
+    if (isSelected) {
+      const dummy = [...rowDetail];
+      rowDetail.splice(0, rowDetail.length);
+      const finalAll = companyinfo.map((args) => {
+        const rowDetails = { id: args.id, selectedCompany: args.companyName };
+        dummy.push(rowDetails);
+        return dummy;
+      });
+      console.log(finalAll[0], 'finalAll');
+      setRowDetails(finalAll[0]);
+      console.log(rowDetail, 'last');
+      return companyinfo.map((e) => e.id);
+    }
+    if (!isSelected) {
+      setRowDetails([]);
+    }
+  };
+  const pillarOptions = ['Environment', 'Social', 'Governance'];
   const selectRowProp = {
-    mode: 'radio',
+    mode: 'checkbox',
     clickToSelect: true,
     bgColor: '#3f51b514',
-    // onSelect: onRowSelect,
-    // onSelectAll: onRowSelectAll,
+    onSelect: onSelectRow,
+    onSelectAll: onSelectAllRow,
   };
   const groupDetails = [
     {
@@ -186,11 +229,19 @@ const TaskCreate = () => {
       ],
     },
   ];
+  const yourDate = new Date();
+  const date = moment(yourDate, 'YYY-MM-DD').format();
 
   const onCreateTask = () => {
     alert('Task Created Successfully');
   };
-  const taskTitle = ['Select Groups', 'Select Batches', 'Batch Info'];
+  function disabledDate(current) {
+    const customDate = date;
+    return current && current < moment(customDate, 'YYYY-MM-DD');
+  }
+
+  const taskTitle = ['Groups', 'Batches', 'Assign Task'];
+
   const onselectGroup = (matchgrp) => {
     groupDetails.map((args) => {
       if (args.groupID === matchgrp) {
@@ -227,13 +278,14 @@ const TaskCreate = () => {
           Batchname: batchdetails.batchName, Batchid: batchdetails.batchID, Batchyear: modifiedYear, companies: batchdetails.companies,
         };
         setbatchInfo(currentBatchinfo);
+        setcompanyinfo(batchdetails.companies);
         settaskFlow(2);
       }
       return [];
     });
   };
-  const handleChangePillar = (val) => {
-    setPillar(val.target.value);
+  const handleChangePillar = (checkedValues) => {
+    setPillar(checkedValues);
     console.log(pillar, 'pillar');
   };
   const grpDetail = groupDetails.map((element) => (
@@ -259,7 +311,6 @@ const TaskCreate = () => {
                 variant="outlined"
                 size="small"
               />
-              {/* <ListItemText primary={batchInfo.Batchname} ></ListItemText> */}
             </div>
             <div className="align-chip">
               <div className="batch-year-head">Year :</div>
@@ -279,41 +330,57 @@ const TaskCreate = () => {
         </Col>
         <Col lg={6} sm={12}>
           <div className="radio-select">
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Assigned to</FormLabel>
-              <RadioGroup aria-label="gender" onChange={handleChangePillar} className="row-pillar">
-                <FormControlLabel value="Environment" control={<Radio />} label="Environment" className="radio-bottom" />
-                <FormControlLabel value="Social" control={<Radio />} label="Social" className="radio-bottom" />
-                <FormControlLabel value="Governance" control={<Radio />} label="Governance" className="radio-bottom" />
-              </RadioGroup>
-            </FormControl>
+            <div className="task-role">Assigned To</div>
+            <Checkbox.Group options={pillarOptions} onChange={handleChangePillar} />
           </div>
-          <div className="task-role">Assigned QA</div>
-          <div>
-            <Select
-              options={companyInfo.Qa}
-            />
+          <div className="date-picker-outer">
+            <div className="date-picker-inner">
+              <div className="task-role">Assigned Analyst</div>
+              <div>
+                <Select
+                  options={companyInfo.analyst}
+                />
+              </div>
+            </div>
+            <div className="date-picker-inner">
+              <div className="task-role" >Analyst End Date</div>
+              <div >
+                <DatePicker
+                  className="date-picker"
+                  size="middle"
+                  format="YYYY-MM-DD"
+                  disabledDate={disabledDate}
+                />
+              </div>
+            </div>
           </div>
-          <div className="task-role">Assigned Analyst</div>
-          <div>
-            <Select
-              options={companyInfo.analyst}
-            />
-          </div>
-          <div className="task-role" >End Date</div>
-          <div>
-            <DatePicker
-              className="date-picker"
-              size="middle"
-              format="YYYY-MM-DD"
-            />
+          <div className="date-picker-outer">
+            <div className="date-picker-inner">
+              <div className="task-role">Assigned QA</div>
+              <div>
+                <Select
+                  options={companyInfo.Qa}
+                />
+              </div>
+            </div>
+            <div className="date-picker-inner">
+              <div className="task-role" >QA End Date</div>
+              <div>
+                <DatePicker
+                  className="date-picker"
+                  size="middle"
+                  format="YYYY-MM-DD"
+                  disabledDate={disabledDate}
+                />
+              </div>
+            </div>
           </div>
         </Col>
       </Row>
       <Row style={{ padding: '5%' }}>
         <Col>
           <div className="task-foo">
-            <Button variant="contained" color="primary" onClick={onCreateTask}>
+            <Button variant="success" onClick={onCreateTask}>
               Create Task
             </Button>
           </div>
@@ -370,28 +437,24 @@ const TaskCreate = () => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title="Task" />
+          <Header sideBarRef={sideBarRef} title={taskTitle[taskFlow]} />
           <div className="task-wrapper background-task-view">
             <Row>
               <Col lg={12} sm={12}>
                 <Card style={{ minHeight: '30rem' }}>
-                  <div
-                    style={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.5rem', padding: '1%', color: '#2199c8', borderBottom: '2px solid #e9ecef', minHeight: '4.5rem',
-                    }}
-                  >
+                  <div className="card-head">
                     {taskFlow > 0 &&
-                    <div>
-                      <IconButton aria-label="delete" size="medium" onClick={onhandleBack}>
-                        <ArrowBackIcon fontSize="small" />
-                      </IconButton>
-                    </div>
+                      <div>
+                        <Button variant="primary" className="imp-btn" onClick={onhandleBack}>
+                          <div>Back</div>
+                        </Button>
+                      </div>
                     }
                     {taskFlow === 0 &&
                     <div>
                     </div>
                     }
-                    <div>{taskTitle[taskFlow]}</div>
+                    <div></div>
                     <div></div>
                   </div>
                   {taskFlow === 0 && groupSelectTab()}

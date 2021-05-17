@@ -23,7 +23,7 @@ const BatchView = () => {
     dispatch({ type: 'BATCH_REQUEST' });
   });
   const handleShow = () => {
-    dispatch({ type: 'COMPANY_REQUEST' });
+    dispatch({ type: 'COMPANY_LIST_REQUEST' });
     setShow(true);
   };
   const searchtheme = createMuiTheme({
@@ -80,19 +80,16 @@ const BatchView = () => {
       if ((e.name.toLowerCase()).includes(search.toLowerCase())) {
         return true;
       }
-      if ((e.id.toLowerCase()).includes(search.toLowerCase())) {
-        return true;
-      }
       return false;
     });
     return filteredData;
   };
   const calculateCount = (searchQuery ? searchfilter(searchQuery, cardData).length : cardData.length) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
-  const batchlist = (searchQuery ? searchfilter(searchQuery, cardData) : cardData).slice(min, max).map(({ name, id }) => (
+  const batchlist = (searchQuery ? searchfilter(searchQuery, cardData) : cardData).slice(min, max).map(({ name }) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox" key={name} >
-        <ListItemText primary={name} secondary={id} />
+        <ListItemText primary={name} />
       </Card>
     </Col>
   ));

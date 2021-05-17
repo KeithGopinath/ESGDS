@@ -24,9 +24,6 @@ border-bottom:1.5px solid #ced4da;
     color:#155f9b;
     font-weight:600;
 }
-.group-detail-wrapper{
-   min-height:300px;
-}
 .group-name{
     font-size:15px;
     color:gray;
@@ -73,10 +70,7 @@ border-bottom:1.5px solid #ced4da;
 }
 .group-status-minheight{
     min-height: 70px;
-}
-.group-status-creation{
     display: flex;
-    width: 100%;
     justify-content: center;
     align-items: center;
 }
@@ -84,4 +78,9 @@ border-bottom:1.5px solid #ced4da;
     .css-yk16xz-control {
         border-color: #dc3545 !important;
       }
+}
+.grp-pad{
+padding: 1% 0% 3% 0%;
+margin: 0px auto;
+width: 90%;
 }
