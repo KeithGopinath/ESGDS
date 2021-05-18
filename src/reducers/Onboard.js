@@ -1,4 +1,4 @@
-import * as ESGDS from '../actionTypes/Client';
+import * as ESGDS from '../actionTypes/Onboard';
 
 const initialState = {};
 
