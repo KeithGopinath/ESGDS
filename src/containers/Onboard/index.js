@@ -97,7 +97,7 @@ const Onboard = (props) => {
 
   const onFormSubmit = () => {
     const formData = new FormData();
-      formData.append('file', fileName);
+    formData.append('file', fileName);
     if (selectedOption === 'Employee') {
       const employeeDetails = {
         firstName,
@@ -116,6 +116,9 @@ const Onboard = (props) => {
         uploadCancelled: cancelledCheque,
         onBoardedStatus: 'Not Approved'
       };
+
+      formData.append('company', JSON.stringify(employeeDetails));
+
       dispatch(
         {
           type: 'EMPLOYEE_REQUEST',
@@ -132,17 +135,20 @@ const Onboard = (props) => {
         uploadAuthendicationLetterClient: fileName,
         uploadCompanyIdClient: empID,
       };
+
+      formData.append('company', JSON.stringify(clientDetails));
+
       dispatch(
         {
           type: 'CLIENT_REQUEST',
-          clientDetails
+          formData
         });
       history.push('/users');
     } else if (selectedOption === 'company') {
       // const formData = new FormData();
       // formData.append('file', fileName);
       // const plainFormData = Object.fromEntries(formData.entries());
-	// const formDataJsonString = JSON.stringify(plainFormData);
+      // const formDataJsonString = JSON.stringify(plainFormData);
       const companyDetails = {
         name: firstName,
         email,
@@ -152,7 +158,9 @@ const Onboard = (props) => {
         uploadAuthendicationLetterCompany: fileName,
         uploadCompanyIdCompany: empID,
       };
+
       formData.append('company', JSON.stringify(companyDetails));
+
       dispatch(
         {
           type: 'COMPANY_REQUEST',
