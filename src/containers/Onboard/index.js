@@ -13,9 +13,6 @@ const Onboard = (props) => {
   const selectedOption = props.location && props.location.state;
 
   const dispatch = useDispatch();
-  const employee = useSelector((state) => state.employee.employee);
-  const client = useSelector((state) => state.client.client);
-  const company = useSelector((state) => state.company.company);
 
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
@@ -97,7 +94,6 @@ const Onboard = (props) => {
 
   const onFormSubmit = () => {
     const formData = new FormData();
-    formData.append('file', fileName);
     if (selectedOption === 'Employee') {
       const employeeDetails = {
         firstName,
@@ -111,20 +107,13 @@ const Onboard = (props) => {
         bankIFSCCode,
         nameOfTheAccountHolder: `${firstName} ${middleName && `${middleName} `}${lastName}`,
         password,
-        uploadPanCard: fileName,
-        uploadAdhar: empID,
-        uploadCancelled: cancelledCheque,
-        onBoardedStatus: 'Not Approved'
       };
 
-      formData.append('company', JSON.stringify(employeeDetails));
+      formData.append('onboardingdetails', JSON.stringify(employeeDetails));
+      formData.append('pancard', fileName);
+      formData.append('aadhar', empID);
+      formData.append('cancelledcheque', cancelledCheque);
 
-      dispatch(
-        {
-          type: 'EMPLOYEE_REQUEST',
-          employeeDetails
-        });
-      history.push('/users');
     } else if (selectedOption === 'client') {
       const clientDetails = {
         name: firstName,
@@ -132,42 +121,29 @@ const Onboard = (props) => {
         phoneNumber,
         companyName,
         password,
-        uploadAuthendicationLetterClient: fileName,
-        uploadCompanyIdClient: empID,
       };
 
-      formData.append('company', JSON.stringify(clientDetails));
+      formData.append('onboardingdetails', JSON.stringify(clientDetails));
+      formData.append('authenticationletterforclient', fileName);
+      formData.append('companyidforclient', empID);
 
-      dispatch(
-        {
-          type: 'CLIENT_REQUEST',
-          formData
-        });
-      history.push('/users');
     } else if (selectedOption === 'company') {
-      // const formData = new FormData();
-      // formData.append('file', fileName);
-      // const plainFormData = Object.fromEntries(formData.entries());
-      // const formDataJsonString = JSON.stringify(plainFormData);
       const companyDetails = {
         name: firstName,
         email,
         phoneNumber,
         companyName,
         password,
-        uploadAuthendicationLetterCompany: fileName,
-        uploadCompanyIdCompany: empID,
       };
 
-      formData.append('company', JSON.stringify(companyDetails));
+      formData.append('onboardingdetails', JSON.stringify(companyDetails));
+      formData.append('authenticationletterforcompany', fileName);
+      formData.append('companyidforcompany', empID);
 
-      dispatch(
-        {
-          type: 'COMPANY_REQUEST',
-          formData
-        });
-      history.push('/users');
     }
+
+    dispatch({ type: 'ONBOARD_REQUEST', formData });
+    // history.push('/users');
   };
 
   // stepper 
