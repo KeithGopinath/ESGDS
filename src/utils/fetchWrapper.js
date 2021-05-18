@@ -138,3 +138,26 @@ export const doDelete = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch
     }
     return response;
   });
+
+/** @description Sending a POST FILE request* */
+export const doPostFile = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
+  urlPrefix.concat(url),
+  Object.assign({}, {
+    method: 'post',
+    headers: {
+      // 'Content-Type': 'application/json; charset=UTF-8',
+      // Authorization: `Bearer ${sessionStorage.token}`,
+    },
+    body,
+  }),
+), TIMEOUT, 504)
+  .then((res) => {
+    let response = null;
+    response = res.json();
+    if (res.ok) {
+      response = res.json();
+    } else {
+      throw new Error(res.statusText);
+    }
+    return response;
+  });

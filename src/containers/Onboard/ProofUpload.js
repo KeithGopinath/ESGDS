@@ -11,12 +11,8 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     const [validate, setValidate] = useState(false);
 
     const onChangeCompRep = (e) => {
-        setFileName(e.target.files[0].name);
-        let letterOfAuthentication = new FormData();
-        letterOfAuthentication.append('file', e.target.files[0]);
-        for (let value of letterOfAuthentication) {
-            onCompany(value);
-        }
+        setFileName(e.target.files[0]);
+        onCompany(e.target.files[0]);
     };
 
     const onChangeEmpId = (e) => {
@@ -81,7 +77,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                     type="file"
                                     className={!fileName && validate && 'file-not-upload'}
                                     id=""
-                                    label={fileName}
+                                    label='abcd'
                                     onChange={onChangeCompRep}
                                     custom
                                 />

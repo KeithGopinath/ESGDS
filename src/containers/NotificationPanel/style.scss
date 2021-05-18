@@ -14,8 +14,8 @@
     box-shadow: none;
 }
 
-.pt-0 {
-    transform: translate(-218px, 51px) !important;
+.pt-body {
+    transform: translate(-215px, 55px) !important;
     background-image: linear-gradient(to right, #2199c8, #2da68a);
 }
 
@@ -29,12 +29,15 @@
 }
 
 .bg-danger {
-    background-color: #2199c8 !important
+    position: relative;
+    border-radius: 7px;
+    bottom: 8px;
+    background-image: linear-gradient(to left, #2199c8, #2da68a);
 }
 
 .dropdown-item {
     color: white;
-    width: 98% !important;
+    // width: 98% !important;
 }
 
 .dropdown-item:hover {

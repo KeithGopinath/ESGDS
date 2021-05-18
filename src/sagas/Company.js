@@ -1,11 +1,11 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as companyActionCreators from '../actionCreators/Company';
-import { doPost } from '../utils/fetchWrapper';
+import { doPostFile } from '../utils/fetchWrapper';
 
 export function* getCompany(data) {
   try {
-    const response = yield doPost(envConfig.apiEndPoints.getCompany, data.companyDetails);
+    const response = yield doPostFile(envConfig.apiEndPoints.getCompany, data.formData);
     yield put(companyActionCreators.getCompanySuccess(response));
   } catch (error) {
     yield put(companyActionCreators.getCompanyFailure(error));

@@ -94,7 +94,7 @@ const NotificationPanel = () => {
                     <FontAwesomeIcon className="bellicon" icon={faBell} onClick={handler} />
                 </Badge>
             </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
+            <CDropdownMenu className="pt-body" placement="bottom-end">
                 <CDropdownItem header tag="div" color="danger">
                     <strong className="panel-header">You have {notificationData.length} messages to read</strong>
                 </CDropdownItem>

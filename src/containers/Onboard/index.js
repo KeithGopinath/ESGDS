@@ -96,6 +96,8 @@ const Onboard = (props) => {
   };
 
   const onFormSubmit = () => {
+    const formData = new FormData();
+      formData.append('file', fileName);
     if (selectedOption === 'Employee') {
       const employeeDetails = {
         firstName,
@@ -137,6 +139,10 @@ const Onboard = (props) => {
         });
       history.push('/users');
     } else if (selectedOption === 'company') {
+      // const formData = new FormData();
+      // formData.append('file', fileName);
+      // const plainFormData = Object.fromEntries(formData.entries());
+	// const formDataJsonString = JSON.stringify(plainFormData);
       const companyDetails = {
         name: firstName,
         email,
@@ -146,10 +152,11 @@ const Onboard = (props) => {
         uploadAuthendicationLetterCompany: fileName,
         uploadCompanyIdCompany: empID,
       };
+      formData.append('company', JSON.stringify(companyDetails));
       dispatch(
         {
           type: 'COMPANY_REQUEST',
-          companyDetails
+          formData
         });
       history.push('/users');
     }
