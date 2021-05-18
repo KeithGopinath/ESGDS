@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Col, Row, Card, Button, Container } from 'react-bootstrap';
 import Header from '../../components/Header';
+import { useSelector } from 'react-redux';
 import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
 import BatchCreation from '../BatchCreation';
@@ -21,7 +22,7 @@ const BatchView = () => {
   const [max, setmax] = useState(20);
   useEffect(() => {
     dispatch({ type: 'BATCH_REQUEST' });
-  });
+  },[]);
   const handleShow = () => {
     dispatch({ type: 'COMPANY_LIST_REQUEST' });
     setShow(true);
@@ -35,35 +36,14 @@ const BatchView = () => {
       },
     },
   });
-  const cardData = [
-    { name: 'Batch1', id: 'ID001' },
-    { name: 'Batch2', id: 'ID002' },
-    { name: 'Batch3', id: 'ID003' },
-    { name: 'Batch4', id: 'ID004' },
-    { name: 'Batch5', id: 'ID005' },
-    { name: 'Batch6', id: 'ID006' },
-    { name: 'Batch7', id: 'ID007' },
-    { name: 'Batch8', id: 'ID008' },
-    { name: 'Batch9', id: 'ID009' },
-    { name: 'Batch10', id: 'ID010' },
-    { name: 'Batch11', id: 'ID011' },
-    { name: 'Batch12', id: 'ID012' },
-    { name: 'Batch13', id: 'ID013' },
-    { name: 'Batch14', id: 'ID014' },
-    { name: 'Batch15', id: 'ID015' },
-    { name: 'Batch16', id: 'ID0016' },
-    { name: 'Batch15', id: 'ID017' },
-    { name: 'Batch18', id: 'ID0018' },
-    { name: 'Batch19', id: 'ID019' },
-    { name: 'Batch20', id: 'ID020' },
-    { name: 'Batch21', id: 'ID021' },
-    { name: 'Batch22', id: 'ID022' },
-    { name: 'Batch23', id: 'ID023' },
-    { name: 'Batch24', id: 'ID024' },
-  ];
+
+  const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
+  const batchCount = batchData && batchData.count;
+  const batches = batchData && batchData.rows;
+  console.log(batches, 'batches');
+
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
-    console.log(totalCount, '***');
     const minValue = (page - 1) * cardPerPage;
     const maxValue = page * cardPerPage;
     console.log(minValue, maxValue, 'min max cal val');
@@ -73,23 +53,23 @@ const BatchView = () => {
   const onSearchBatch = (data) => {
     const searchData = data.target.value;
     setSearchQuery(searchData);
-    console.log(searchData);
+
   };
   const searchfilter = (search, card) => {
     const filteredData = card.filter((e) => {
-      if ((e.name.toLowerCase()).includes(search.toLowerCase())) {
+      if ((e.batchName.toLowerCase()).includes(search.toLowerCase())) {
         return true;
       }
       return false;
     });
     return filteredData;
   };
-  const calculateCount = (searchQuery ? searchfilter(searchQuery, cardData).length : cardData.length) / cardPerPage;
+  const calculateCount = batches && (searchQuery ? searchfilter(searchQuery, batches).length : batchCount) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
-  const batchlist = (searchQuery ? searchfilter(searchQuery, cardData) : cardData).slice(min, max).map(({ name }) => (
+  const batchlist = batches && (searchQuery ? searchfilter(searchQuery, batches) : batches).slice(min, max).map(({ batchName }) => (
     <Col lg={3} md={6}>
-      <Card className="batch-card batchbox" key={name} >
-        <ListItemText primary={name} />
+      <Card className="batch-card batchbox" key={batchName} >
+        <ListItemText primary={batchName} />
       </Card>
     </Col>
   ));

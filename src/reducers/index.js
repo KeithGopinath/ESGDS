@@ -7,7 +7,8 @@ import employee from './Employee';
 import client from './Client';
 import company from './Company';
 import updatePassword from './UpdatePassword';
-import createbatch from './BatchCreate';
+import createBatch from './BatchCreate';
+import batchList from './Batch';
 
 const rootReducer = combineReducers({
   login,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   client,
   company,
   updatePassword,
-  createbatch,
+  createBatch,
+  batchList,
 });
 
 export default rootReducer;

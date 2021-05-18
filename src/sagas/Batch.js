@@ -6,7 +6,7 @@ import { doGet } from '../utils/fetchWrapper';
 export function* getBatchRequest() {
   // const currentRole = sessionStorage.role;
   try {
-    const response = yield doGet(envConfig.apiEndPoints.getBatchlist);
+    const response = yield doGet(`${envConfig.apiEndPoints.getBatchlist}?access_token=${sessionStorage.access}`);
     yield put(actionCreators.getBatchSuccess(response));
   } catch (error) {
     yield put(actionCreators.getBatchFailure(error));

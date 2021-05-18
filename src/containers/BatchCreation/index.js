@@ -30,7 +30,8 @@ const BatchCreation = ({ show, setShow }) => {
   };
   const [validBorder, setValidBorder] = useState(false);
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
-  const fullList = companyData && companyData.companyList;
+  const fullList = companyData && companyData.rows;
+
   const rowArray = fullList && fullList.map((args) => ({
     id: args._id, companydata: args.companyName,
   }));
