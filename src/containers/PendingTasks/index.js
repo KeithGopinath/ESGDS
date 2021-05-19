@@ -24,6 +24,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -63,6 +64,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -100,14 +102,15 @@ const PendingTaskTable = () => {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
           status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -122,7 +125,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -149,6 +152,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -188,6 +192,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -225,14 +230,15 @@ const PendingTaskTable = () => {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
           status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -247,7 +253,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -274,6 +280,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -313,6 +320,7 @@ const PendingTaskTable = () => {
           status: 'Uncompleted',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -350,14 +358,15 @@ const PendingTaskTable = () => {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
           status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -372,7 +381,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-plusplus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -7,6 +8,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Select from 'react-select';
 import 'antd/dist/antd.css';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import TaskTable from './TaskTable';
@@ -24,9 +26,10 @@ const Task = (props) => {
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet To Start',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -63,9 +66,10 @@ const Task = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -102,15 +106,16 @@ const Task = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'In Progress',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -125,7 +130,7 @@ const Task = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -152,6 +157,7 @@ const Task = (props) => {
           status: 'Uncompleted',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -191,6 +197,7 @@ const Task = (props) => {
           status: 'Uncompleted',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -228,14 +235,15 @@ const Task = (props) => {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
           status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -250,7 +258,7 @@ const Task = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -277,6 +285,7 @@ const Task = (props) => {
           status: 'Uncompleted',
           description: 'Does the board member hold a seat in the audit committee ?',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -316,6 +325,7 @@ const Task = (props) => {
           status: 'Uncompleted',
           description: "Board member's fixed cash based compensation",
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -353,14 +363,15 @@ const Task = (props) => {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
           status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          description: 'Board member date of appointment',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -375,7 +386,7 @@ const Task = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -399,39 +410,37 @@ const Task = (props) => {
   const [show, setShow] = useState(false);
   const [dpCodeType, setdpCodeType] = useState('standalone');
   // =============================================
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: 'KEYISSUES_REQUEST' });
+  }, []);
   useEffect(() => {
     defaultActiveTab();
   }, []);
+  const keyIssueList = useSelector((state) => ((state.keyIssues.keyIssuesList) ? (state.keyIssues.keyIssuesList.rows) : ([])));
 
   const getDataForTable = (data) => {
     const { taskId } = props.match.params;
-    console.log(taskId, 'kkk', data);
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].taskId === taskId) {
-        return data[i];
-      }
-    }
-    return null;
+    const [filteredTask] = data.filter((e) => (e.taskId === taskId));
+    return filteredTask;
   };
   const currentData = getDataForTable(apiData);
-  const tableData = { taskId: currentData.taskId, data: currentData.data };
-  const currentRole = sessionStorage.role;
+  const [tableData, setTableData] = useState({ taskId: currentData.taskId, data: currentData.data });
+  const currentRole = 'Analyst';
   const currentPillar = currentData.pillar;
   const currentTaskId = currentData.taskId;
-
+  const onChangeKeyIssue = (event) => {
+    if (event) {
+      const selectedKeyIssue = event.value;
+      const filteredData = currentData.data.filter((e) => (e.keyIssue === selectedKeyIssue));
+      setTableData({ taskId: currentData.taskId, data: filteredData });
+    } else {
+      setTableData({ taskId: currentData.taskId, data: currentData.data });
+    }
+  };
   const addNewBoardMember = () => (
     <Row>
       {/* --------------------------------------------------------------------------------------------- DPCODE */}
-      <Col lg={6}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={5}>
-            Company Id*
-          </Form.Label>
-          <Col sm={7}>
-            <Form.Control type="text" placeholder="Enter company id" />
-          </Col>
-        </Form.Group>
-      </Col>
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
@@ -452,6 +461,86 @@ const Task = (props) => {
           </Col>
         </Form.Group>
       </Col>
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={3}>
+            BODP001
+          </Form.Label>
+          <Form.Label column sm={5}>
+            Board member ethnicity/culture/nationality
+          </Form.Label>
+          <Col sm={4}>
+            <Select
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+              maxLength={30}
+            />
+          </Col>
+        </Form.Group>
+      </Col>
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={3}>
+            BODR005
+          </Form.Label>
+          <Form.Label column sm={5}>
+            Board member's declared gender
+          </Form.Label>
+          <Col sm={4}>
+            <Select
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+              maxLength={30}
+            />
+          </Col>
+        </Form.Group>
+      </Col>
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={3}>
+            BOSP004
+          </Form.Label>
+          <Form.Label column sm={5}>
+            Board member name
+          </Form.Label>
+          <Col sm={4}>
+            <Select
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+              maxLength={30}
+            />
+          </Col>
+        </Form.Group>
+      </Col>
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={3}>
+            BOSP005
+          </Form.Label>
+          <Form.Label column sm={5}>
+            Does the board member have industry experience?
+          </Form.Label>
+          <Col sm={4}>
+            <Select
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+              maxLength={30}
+            />
+          </Col>
+        </Form.Group>
+      </Col>
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={3}>
+            BOSP006
+          </Form.Label>
+          <Form.Label column sm={5}>
+            Does the board member have financial expertise?
+          </Form.Label>
+          <Col sm={4}>
+            <Select
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+              maxLength={30}
+            />
+          </Col>
+        </Form.Group>
+      </Col>
     </Row>
   );
 
@@ -459,6 +548,11 @@ const Task = (props) => {
     const defaultTab = tabsRef.current[0].current;
     if (defaultTab) {
       defaultTab.classList.add('active');
+      if (defaultTab.id === 'Standalone') {
+        console.log('Standalone');
+      } else if (defaultTab.id === 'Matrix') {
+        console.log('Matrix');
+      }
     }
   };
 
@@ -505,7 +599,7 @@ const Task = (props) => {
                 {currentPillar === 'Governance' ?
                   <Col xs={12}>
                     <div className="task-tabs-wrap">
-                      {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
+                      {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
                     </div>
                   </Col> : null }
                 <Col lg={6}>
@@ -517,15 +611,8 @@ const Task = (props) => {
                       <Select
                         name="userRole"
                         // value={""}
-                        // onChange={}
-                        options={[
-                          { value: 'Audit committee functioning', label: 'Audit committee functioning' },
-                          { value: 'Board compensation', label: 'Board compensation' },
-                          { value: 'Board diversity', label: 'Board diversity' },
-                          { value: 'Board independence', label: 'Board independence' },
-                          { value: 'Board structure and functioning', label: 'Board structure and functioning' },
-                          { value: 'Committee Functioning', label: 'Committee Functioning' },
-                        ]}
+                        onChange={onChangeKeyIssue}
+                        options={keyIssueList.map((keyIssue) => ({ label: keyIssue.keyIssueName, value: keyIssue }))}
                         isSearchable
                         isClearable
                         // className={}
@@ -620,7 +707,7 @@ const Task = (props) => {
             keyboard={false}
             animation
             centered
-            size="lg"
+            size="xl"
             title="Add New Board Member"
             body={addNewBoardMember()}
             alert={alert}

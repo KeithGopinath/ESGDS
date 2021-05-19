@@ -6,7 +6,17 @@ import UsersTable from '../../components/UsersTable/index';
 
 const TaskTable = (props) => {
   const tablePopulate = ({ taskId, data }) => data.map((x) => ({
-    dpCode: x.dpCode, fiscalYear: x.fiscalYear, status: x.status, action: <Link to={`/pendingtasks/${taskId}/${x.dpCode}`}>Enter Data</Link>,
+    dpCode: x.dpCode,
+    fiscalYear: x.fiscalYear,
+    status: x.status,
+    action:
+  <Link
+    to={{
+      pathname: `/pendingtasks/${taskId}/${x.dpCode}`,
+      myCustomProps: props.data,
+    }}
+  >Enter Data
+  </Link>,
   }));
 
   const TASK_DATA = {

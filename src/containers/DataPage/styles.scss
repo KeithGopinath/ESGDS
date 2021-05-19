@@ -33,12 +33,22 @@
     font-size: 16px;
     color: black;
 }
-
-.accordion-toggle:after {
-    font-family: 'FontAwesome';
-    content: "\f078";    
-    float: right;
+.ant-upload {
+    width: 100%;
 }
-.accordion-opened .accordion-toggle:after {    
-    content: "\f054";    
+.ant-message-custom-content{
+    display: flex;
+    align-items: center;
+}
+.ant-drawer-title{
+    color: white;
+}
+
+.css-4ljt47-MenuList{
+    z-index: 8000 !important;
+    max-height: 150px !important;
+}
+
+.my-custom-react-select{
+    z-index: 8000;
 }

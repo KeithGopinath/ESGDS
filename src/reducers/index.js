@@ -8,6 +8,7 @@ import client from './Client';
 import company from './Company';
 import updatePassword from './UpdatePassword';
 import createbatch from './BatchCreate';
+import keyIssues from './KeyIssues';
 
 const rootReducer = combineReducers({
   login,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   company,
   updatePassword,
   createbatch,
+  keyIssues,
 });
 
 export default rootReducer;
