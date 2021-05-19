@@ -5,7 +5,8 @@ import forgotPassword from './ForgotPassword';
 import companylist from './CompaniesList';
 import onboard from './Onboard';
 import updatePassword from './UpdatePassword';
-import createbatch from './BatchCreate';
+import createBatch from './BatchCreate';
+import batchList from './Batch';
 import keyIssues from './KeyIssues';
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   companylist,
   onboard,
   updatePassword,
-  createbatch,
+  createBatch,
+  batchList,
   keyIssues,
 });
 
