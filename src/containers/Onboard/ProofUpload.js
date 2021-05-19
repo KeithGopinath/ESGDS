@@ -1,6 +1,10 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
 import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 // proof details
 const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previousStep, nextStep, setActiveStep, activeStep }) => {
@@ -16,21 +20,13 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     };
 
     const onChangeEmpId = (e) => {
-        setEmpID(e.target.files[0].name);
-        const idProof = new FormData();
-        idProof.append('file', e.target.files[0]);
-        for (let value of idProof) {
-            onEmployeeId(value);
-        }
+        setEmpID(e.target.files[0]);
+        onEmployeeId(e.target.files[0]);
     };
 
     const onChangeCancelledCheque = (e) => {
-        setCancelledCheque(e.target.files[0].name);
-        let formData = new FormData();
-        formData.append('file', e.target.files[0]);
-        for (let value of formData) {
-            onCancelledCheque(value);
-        }
+        setCancelledCheque(e.target.files[0]);
+        onCancelledCheque(e.target.files[0]);
     };
 
     const goToLoginCredentials = () => {
@@ -62,6 +58,13 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setActiveStep(activeStep - 1);
     };
 
+    const renderTooltip = (props) => (
+        <Tooltip {...props} className="proofUpload-tooltip">
+            {/* <strong>File must:</strong> */}
+            <p>File size should not exceed 3 MB</p>
+        </Tooltip>
+    );
+
     return (
         <Container>
             <Row className="proof-content">
@@ -70,14 +73,32 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                     <Row className="d-flex ml-2 mr-2">
                         <Col sm={6} md={6} lg={6} >
                             <Form.Group>
-                                {role === 'company' && <Form.Label>Upload your letter of Authentication(for company representative) <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication(for client representative) <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'Employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'company' && <Form.Label>Upload your letter of Authentication(for company representative) <sup className="text-danger">*</sup>
+                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication(for client representative) <sup className="text-danger">*</sup>
+                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
+                                {role === 'Employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
+                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
                                 <Form.File
                                     type="file"
                                     className={!fileName && validate && 'file-not-upload'}
                                     id=""
-                                    label='abcd'
+                                    label="abcd"
                                     onChange={onChangeCompRep}
                                     custom
                                 />
@@ -85,14 +106,32 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                         </Col>
                         <Col sm={6} md={6} lg={6}>
                             <Form.Group>
-                                {role === 'company' && <Form.Label>Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof(for client  representative) <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'Employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'company' && <Form.Label>Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup>
+                                                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof(for client  representative) <sup className="text-danger">*</sup>
+                                                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
+                                {role === 'Employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup>
+                                                                <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>}
                                 <Form.File
                                     type="file"
                                     className={!empID && validate && 'file-not-upload'}
                                     id=""
-                                    label={empID}
+                                    label="abcd"
                                     onChange={onChangeEmpId}
                                     custom
                                 />
@@ -100,12 +139,17 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                         </Col>
                         {role === 'Employee' && <Col sm={6} md={6} lg={6}>
                             <Form.Group>
-                                <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup></Form.Label>
+                                <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
+                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                                    </OverlayTrigger>
+                                </span>
+                                </Form.Label>
                                 <Form.File
                                     type="file"
                                     className={!cancelledCheque && validate && 'file-not-upload'}
                                     id=""
-                                    label={cancelledCheque}
+                                    label='abcd'
                                     onChange={onChangeCancelledCheque}
                                     custom
                                 />
@@ -114,7 +158,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                     </Row>
                     <span className="w-100 text-center text-danger">{proofUploadAlert}</span>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                    <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Each file size should not exceed 3 MB </p>
+                    {/* <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Each file size should not exceed 3 MB </p> */}
                 </Card>
                 <div className="d-flex justify-content-between w-100">
                     <span><Button className="back" onClick={goToPersonalDetails}>Back</Button></span>

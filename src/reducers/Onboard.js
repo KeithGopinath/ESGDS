@@ -1,23 +1,23 @@
-import * as ESGDS from './../actionTypes/Company';
+import * as ESGDS from '../actionTypes/Onboard';
 
-const initialState = { };
+const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ESGDS.COMPANY_REQUEST:
+    case ESGDS.ONBOARD_REQUEST:
       return {
         ...state,
         isLoading: true,
-        company: false,
+        onboard: false,
         error: false,
       };
-    case ESGDS.COMPANY_SUCCESS:
+    case ESGDS.ONBOARD_SUCCESS:
       return {
         ...state,
         isLoading: true,
-        company: action.company,
+        onboard: action.onboard,
       };
-    case ESGDS.COMPANY_FAILURE:
+    case ESGDS.ONBOARD_FAILURE:
       return {
         ...state,
         isLoading: true,

@@ -35,6 +35,7 @@ const Login = () => {
   sessionStorage.access = token
   
   const decoded = token && jwt_decode(token);
+  console.log("deocded role:",decoded);
 
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
@@ -43,13 +44,15 @@ const Login = () => {
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
+  const role=login && login.user.role;
+  console.log("login :",role);
 
   useEffect(() => {
-    if (loginRole && decoded) {
+    if (loginRole && role) {
       setLoginRole(false);
-      if (decoded && decoded.role !== 'SuperAdmin') {
+      if (role !== 'admin') {
         history.push("/dashboard");
-        sessionStorage.role = decoded && decoded.role
+        // sessionStorage.role = decoded && decoded.role
       } else {
         setShowOtp(true);
       }

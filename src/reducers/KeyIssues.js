@@ -1,26 +1,26 @@
-import * as ESGDS from './../actionTypes/Client';
+import { KEYISSUES_REQUEST, KEYISSUES_SUCCESS, KEYISSUES_FAILURE } from './../actionTypes/KeyIssues';
 
 const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ESGDS.CLIENT_REQUEST:
+    case KEYISSUES_REQUEST:
       return {
         ...state,
         isLoading: true,
-        client: false,
         error: false,
+        keyIssuesList: false,
       };
-    case ESGDS.CLIENT_SUCCESS:
+    case KEYISSUES_SUCCESS:
       return {
         ...state,
-        isLoading: true,
-        client: action.client,
+        isLoading: false,
+        keyIssuesList: action.keyIssueList,
       };
-    case ESGDS.CLIENT_FAILURE:
+    case KEYISSUES_FAILURE:
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

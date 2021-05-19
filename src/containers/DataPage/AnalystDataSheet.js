@@ -3,21 +3,22 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import { DatePicker, Image } from 'antd';
+import { DatePicker, Image, Upload, Button as AntButton, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import Select from 'react-select';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import { history } from '../../routes';
 
-const DataSheet = ({
-  maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData,
+const AnalystDataSheet = ({
+  maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData, openDrawer,
 }) => {
-  const currentUser = 'analyst';
-  const [historyEdit, setHistoryEdit] = useState(false);
-  //   DEFAULT DATA
+  const isFieldDisabled = historyDpCodeData;
+  // # historicalData # A Variable Is Just A List Of Historical Data Of currentDpCode
   const historicalData = currentDpCode.historyDpData;
-  const defaultHistoricalData = historicalData[0];
 
+  const defaultHistoricalData = historicalData[0];
+  // # defaultData # A Variable Is Used For Initializing The formData State Based On The Data That Comes From Props
   const defaultData = (!historyDpCodeData) ?
     {
       dpCode: currentDpCode.dpCode,
@@ -47,25 +48,18 @@ const DataSheet = ({
       filePath: defaultHistoricalData.filePath || '',
       response: defaultHistoricalData.response || '',
     };
-
+  // # formData # A State Intialized With Set Of Variables As Object/Json
   const [formData, setFormData] = useState(defaultData);
-  //   const [imagePreview, setImagePreview] = useState(false);
 
+  // Below useEffect Is Defined To Change (Empty Out/Clear Out) The Current formData State With Respect To Location Prop Attribute
   useEffect(() => {
     setFormData(defaultData);
-    // setImagePreview(null);
   }, [location]);
 
-  console.log(formData, 'sss');
-
-  //   const imageBrowser = (event) => {
-  //     console.log(URL.createObjectURL(event.target.files[0]));
-  //     setImagePreview(URL.createObjectURL(event.target.files[0]));
-  //   };
-
+  // onChangeFormData Function Gets Called When Every Form Fields Changes And Updates The formData State
   const onChangeFormData = (event) => {
-    console.log(event);
-    const key = event.currentTarget.id;
+    console.log(event.target && event.target.files, event);
+    const key = event.currentTarget.name;
     switch (key) {
       case 'dpCode':
         setFormData({
@@ -113,9 +107,15 @@ const DataSheet = ({
         });
         break;
       case 'uploadScreenshot':
-        setFormData({
-          ...formData, filePath: URL.createObjectURL(event.target.files[0]),
-        });
+        if (event.currentTarget.value.fileList[0]) {
+          setFormData({
+            ...formData, filePath: URL.createObjectURL(event.currentTarget.value.fileList[0].originFileObj),
+          });
+        } else {
+          setFormData({
+            ...formData, filePath: '',
+          });
+        }
         break;
       case 'response':
         if (formData.dataType === 'text') {
@@ -137,17 +137,27 @@ const DataSheet = ({
         break;
     }
   };
-
+  console.log(formData);
+  // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Forth To The Next DpCode Page
   const saveAndNextClickHandler = () => {
     console.log(formData);
     const nextDpCode = currentTask.data[currentIndex + 1];
     history.push(`/pendingtasks/${currentTask.taskId}/${nextDpCode.dpCode}`);
   };
+
+  // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Back To The Previous DpCode Page
   const editAndPreviousClickHandler = () => {
     const nextDpCode = currentTask.data[currentIndex - 1];
     history.push(`/pendingtasks/${currentTask.taskId}/${nextDpCode.dpCode}`);
   };
-
+  const uploadScreenshotCheck = (file) => {
+    console.log(file.type);
+    if (!(file.type).includes('image')) {
+      message.error(`${file.name} is not a image file`);
+    }
+    // return (file.type).includes('image') ? false : Upload.LIST_IGNORE;
+  };
+  // inChangeHistoryYear Function Change The fromData Values With Respect To The Selected Year
   const onChangeHistoryYear = (event) => {
     setFormData({
       dpCode: event.value.dpCode,
@@ -169,18 +179,24 @@ const DataSheet = ({
   ];
   return (
     <Row>
-      {/* --------------------------------------------------------------------------------------------- DPCODE */}
+      {/* ################################################################################################ DPCODE */}
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
-            DP Code*
+            Dp Code*
           </Form.Label>
           <Col sm={7}>
-            <Form.Control type="text" readOnly id="dpCode" value={formData.dpCode} />
+            <Form.Control
+              name="dpCode"
+              type="text"
+              readOnly
+              value={formData.dpCode}
+            />
           </Col>
         </Form.Group>
       </Col>
-      { !historyDpCodeData ?
+
+      { !historyDpCodeData &&
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
@@ -188,20 +204,16 @@ const DataSheet = ({
             </Form.Label>
             <Col sm={7}>
               <Select
-                id="year"
-                name="userRole"
+                name="year"
                 isDisabled
-                onChange={(e) => onChangeFormData({ currentTarget: { id: 'year', value: e } })}
                 value={{ label: formData.year, value: formData.year }}
-                // onChange={}
                 options={[{ label: formData.year, value: formData.year }]}
-                // isSearchable={}
-                // className={}
                 maxLength={30}
               />
             </Col>
           </Form.Group>
-        </Col> :
+        </Col> }
+      { historyDpCodeData &&
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
@@ -209,8 +221,7 @@ const DataSheet = ({
             </Form.Label>
             <Col sm={7}>
               <Select
-                id="year"
-                name="userRole"
+                name="year"
                 // onChange={(e) => onChangeFormData({ currentTarget: { id: 'year', value: e } })}
                 value={{ label: formData.year, value: formData.year }}
                 onChange={onChangeHistoryYear}
@@ -222,7 +233,7 @@ const DataSheet = ({
             </Col>
           </Form.Group>
         </Col> }
-      {/* --------------------------------------------------------------------------------------------- SOURCE */}
+      {/* ################################################################################################ SOURCE */}
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
@@ -230,10 +241,9 @@ const DataSheet = ({
           </Form.Label>
           <Col sm={7}>
             <Select
-              name="userRole"
-              id="source"
-              isDisabled={historyDpCodeData && !historyEdit}
-              onChange={(e) => onChangeFormData({ currentTarget: { id: 'source', value: e } })}
+              name="source"
+              isDisabled={isFieldDisabled}
+              onChange={(e) => onChangeFormData({ currentTarget: { name: 'source', id: 'source', value: e } })}
               value={formData.source && { label: formData.source.sourceName, value: formData.source }}
               // onChange={}
               options={sourceApiData.map((source) => ({ label: source.sourceName, value: source }))}
@@ -245,9 +255,13 @@ const DataSheet = ({
           </Col>
         </Form.Group>
       </Col>
-      {/* --------------------------------------------------------------------------------------------- LINE */}
+      {!historyDpCodeData &&
+      <Col lg={6}>
+        <Button onClick={openDrawer} >Add Source</Button>
+      </Col> }
+      {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-      {/* --------------------------------------------------------------------------------------------- DESCRIPTION */}
+      {/* ################################################################################################ DESCRIPTION */}
       <Col lg={8}>
         <Form.Group as={Row} >
           <Form.Label column sm={4}>
@@ -262,20 +276,20 @@ const DataSheet = ({
           </Col> */}
         </Form.Group>
       </Col>
-      {/* --------------------------------------------------------------------------------------------- Response */}
+      {/* ################################################################################################ Response */}
       <Col lg={4}>
         <Form.Group as={Row} >
           {/* <Form.Label column sm={5}>
             Response*
           </Form.Label> */}
           <Col sm={12}>
-            {formData.dataType === 'number' && <Form.Control type="text" id="response" readOnly={historyDpCodeData && !historyEdit} onChange={onChangeFormData} value={formData.response} placeholder="Response" />}
-            {formData.dataType === 'date' && <DatePicker className="datapage-datepicker" id="publicationDate" disabled={historyDpCodeData && !historyEdit} onChange={(e) => onChangeFormData({ currentTarget: { id: 'response', value: e } })} value={formData.response && moment(formData.response)} size="large" />}
+            {formData.dataType === 'number' && <Form.Control type="text" name="response" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.response} placeholder="Response" />}
+            {formData.dataType === 'date' && <DatePicker className="datapage-datepicker" name="response" disabled={isFieldDisabled} onChange={(e) => onChangeFormData({ currentTarget: { name: 'response', id: 'response', value: e } })} value={formData.response && moment(formData.response)} size="large" />}
             {formData.dataType === 'text' &&
             <Select
-              name="userRole"
-              isDisabled={historyDpCodeData && !historyEdit}
-              onChange={(e) => onChangeFormData({ currentTarget: { id: 'response', value: e } })}
+              name="response"
+              isDisabled={isFieldDisabled}
+              onChange={(e) => onChangeFormData({ currentTarget: { name: 'response', id: 'response', value: e } })}
               value={formData.response && { label: formData.response, value: formData.response }}
               options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
               // isSearchable={}
@@ -285,51 +299,54 @@ const DataSheet = ({
           </Col>
         </Form.Group>
       </Col>
-      {/* --------------------------------------------------------------------------------------------- PAGE NO */}
+      {/* ################################################################################################ TEXT SNIPPET */}
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
-            Page No*
+            TextSnippet*
           </Form.Label>
           <Col sm={7}>
-            <Form.Control type="text" id="pageNo" readOnly={historyDpCodeData && !historyEdit} onChange={onChangeFormData} value={formData.pageNo} placeholder="Page No" />
+            <Form.Control type="text" name="textSnippet" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.textSnippet} placeholder="Snippet" />
           </Col>
         </Form.Group>
       </Col>
-      {/* --------------------------------------------------------------------------------------------- TEXT SNIPPET */}
+      {/* ################################################################################################ PAGE NO */}
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
-            Text Snippet*
+            PageNo*
           </Form.Label>
           <Col sm={7}>
-            <Form.Control type="text" id="textSnippet" readOnly={historyDpCodeData && !historyEdit} onChange={onChangeFormData} value={formData.textSnippet} placeholder="Snippet" />
+            <Form.Control type="text" name="pageNo" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.pageNo} placeholder="Page No" />
           </Col>
         </Form.Group>
       </Col>
-      {/* --------------------------------------------------------------------------------------------- URL */}
-      <Col lg={6}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={5}>
-            URL*
-          </Form.Label>
-          <Col sm={7}>
-            <Form.Control type="text" id="url" readOnly={historyDpCodeData && !historyEdit} onChange={onChangeFormData} value={formData.url} placeholder="Url" />
+      { historyDpCodeData &&
+        <React.Fragment>
+          {/* ################################################################################################ URL */}
+          <Col lg={6}>
+            <Form.Group as={Row} >
+              <Form.Label column sm={5}>
+                Url*
+              </Form.Label>
+              <Col sm={7}>
+                <Form.Control type="text" name="url" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.url} placeholder="Url" />
+              </Col>
+            </Form.Group>
           </Col>
-        </Form.Group>
-      </Col>
-      {/* --------------------------------------------------------------------------------------------- PUBLICATION DATE */}
-      <Col lg={6}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={5}>
-            Publication Date*
-          </Form.Label>
-          <Col sm={7}>
-            <DatePicker className="datapage-datepicker" id="publicationDate" disabled={historyDpCodeData && !historyEdit} onChange={(e) => onChangeFormData({ currentTarget: { id: 'publicationDate', value: e } })} value={formData.publicationDate && moment(formData.publicationDate)} size="large" />
+          {/* ################################################################################################ PUBLICATION DATE */}
+          <Col lg={6}>
+            <Form.Group as={Row} >
+              <Form.Label column sm={5}>
+                PublicationDate*
+              </Form.Label>
+              <Col sm={7}>
+                <DatePicker className="datapage-datepicker" name="publicationDate" disabled={isFieldDisabled} onChange={(e) => onChangeFormData({ currentTarget: { name: 'publicationDate', id: 'publicationDate', value: e } })} value={formData.publicationDate && moment(formData.publicationDate)} size="large" />
+              </Col>
+            </Form.Group>
           </Col>
-        </Form.Group>
-      </Col>
-      {/* --------------------------------------------------------------------------------------------- SCREEN */}
+        </React.Fragment> }
+      {/* ################################################################################################ SCREEN */}
       {/* <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
@@ -340,102 +357,47 @@ const DataSheet = ({
           </Col>
         </Form.Group>
       </Col> */}
-      {/* --------------------------------------------------------------------------------------------- FILE PATH */}
+      {/* ################################################################################################ FILE PATH */}
       <Col lg={6}>
         <Form.Group as={Row} >
           <Form.Label column sm={5}>
             Upload Screenshot*
           </Form.Label>
           <Col sm={7}>
-            <Form.File
-              disabled={historyDpCodeData && !historyEdit}
-              id="uploadScreenshot"
-              label="Browse"
-              custom
-              onChange={onChangeFormData}
-            />
+            <Upload style={{ width: '100%' }} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
+              <AntButton
+                disabled={isFieldDisabled}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38px',
+                }}
+                icon={<UploadOutlined />}
+              >Click to Upload
+              </AntButton>
+            </Upload>
           </Col>
         </Form.Group>
       </Col>
       <Col lg={6}>
-        {/* --------------------------------------------------------------------------------------------- IMAGE PREVIEW */}
-        {formData.filePath ? <Image
-          width="50%"
-          src={formData.filePath}
-        /> : null}
+        {/* ################################################################################################ IMAGE PREVIEW */}
+        {formData.filePath && <Image width="50%" src={formData.filePath} /> }
       </Col>
-      {/* {currentDpCode.isMatrix ? BoardMembers() :
-                ( */}
-      {/* )
-              } */}
-      {/* --------------------------------------------------------------------------------------------- LINE */}
+      {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-      {(currentUser === 'QA') ?
-        <React.Fragment>
-          {/* --------------------------------------------------------------------------------------------- CHECK ERROR FLAG */}
-          <Col lg={12}>
-            <Form.Group as={Row} >
-              <Col sm={7}>
-                <Form.Check type="checkbox" onChange={(e) => { console.log(e); }} label="Error Found" />
-              </Col>
-            </Form.Group>
-          </Col>
-          {/* --------------------------------------------------------------------------------------------- ERROR TYPE */}
-          <Col lg={6}>
-            <Form.Group as={Row} >
-              <Form.Label column sm={5}>
-                Error Type*
-              </Form.Label>
-              <Col sm={7}>
-                <Select
-                  name="userRole"
-                  // value={""}
-                  // onChange={}
-                  // options={}
-                  // isSearchable={}
-                  // className={}
-                  maxLength={30}
-                />
-              </Col>
-            </Form.Group>
-          </Col>
-          {/* --------------------------------------------------------------------------------------------- COMMENTS */}
-          <Col lg={6}>
-            <Form.Group as={Row} >
-              <Form.Label column sm={5}>
-                Comments*
-              </Form.Label>
-              <Col sm={7}>
-                <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
-              </Col>
-            </Form.Group>
-          </Col>
-          <Col lg={12} className="datapage-button-wrap">
-            {/* <Button style={{ marginRight: '1.5%' }} onClick={qAShowCloseModal} variant="danger" type="submit">Close</Button>
-                    <Button variant="success" onClick={qAShowSaveModal} type="submit">Save</Button> */}
-            <Button style={{ marginRight: '1.5%' }} onClick={null} variant="danger" type="submit">Close</Button>
-            <Button variant="success" onClick={null} type="submit">Save</Button>
-          </Col>
-        </React.Fragment> :
-        (
-          <Col lg={12} className="datapage-button-wrap">
-            {/* <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={analystShowCloseModal} type="submit">Close</Button>
-              <Button variant="success" onClick={analystShowSaveModal} type="submit">Save</Button> */}
-            { !historyDpCodeData ?
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
-                <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
-                {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
-                {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
-              </React.Fragment> :
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={() => setHistoryEdit(true)} type="submit">Edit</Button>
-                {/* {historyEdit && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => setHistoryEdit(!historyEdit)} type="submit">Revert</Button>} */}
-              </React.Fragment> }
-          </Col>
-        ) }
+      <Col lg={12} className="datapage-button-wrap">
+        { !historyDpCodeData ?
+          <React.Fragment>
+            <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
+            <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
+            {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
+            {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
+          </React.Fragment> :
+          <React.Fragment>
+            <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">UnFreeze</Button>
+          </React.Fragment> }
+      </Col>
+
     </Row>
   );
 };
 
-export default DataSheet;
+export default AnalystDataSheet;

@@ -5,19 +5,22 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
 import React, { useRef, useState } from 'react';
-import { Col, Card, Accordion } from 'react-bootstrap';
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
+import { Drawer } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import DataSheet from './DataSheet';
+import AnalystDataSheet from './AnalystDataSheet';
+import DataAccordian from './DataAccordian';
+import AddSource from './AddSource';
+import QADataSheet from './QADataSheet';
 
 
 const DataPage = (props) => {
+  console.log(props, '#######################');
   const sideBarRef = useRef();
-  const [historyToggleArrow, setHistoryToggleArrow] = useState(false);
-  const [currentToggleArrow, setCurrentToggleArrow] = useState(true);
+  const [isDrawerOpened, setIsDrawerOpened] = useState(false);
+  const currentRole = 'Analyst';
   // const { Panel } = Collapse;
 
   const apiData = [
@@ -26,13 +29,16 @@ const DataPage = (props) => {
       pillar: 'Environmental',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Yet to start',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -69,9 +75,11 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -108,15 +116,17 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -131,7 +141,7 @@ const DataPage = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -151,13 +161,16 @@ const DataPage = (props) => {
       pillar: 'Social',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'In progress',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -194,9 +207,11 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -233,15 +248,17 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -256,7 +273,7 @@ const DataPage = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -276,13 +293,16 @@ const DataPage = (props) => {
       pillar: 'Governance',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Submitted',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -319,9 +339,11 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -358,15 +380,17 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -381,7 +405,7 @@ const DataPage = (props) => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -398,9 +422,9 @@ const DataPage = (props) => {
     },
   ];
 
-  const getDataForTable = (data) => {
+  const getDataForDataSheet = (data) => {
+    console.log(props);
     const { taskId, dpcode } = props.match.params;
-    console.log(taskId, dpcode, data);
     const [currentTask] = data.filter((task) => (task.taskId === taskId));
     const max = currentTask.data.length - 1;
     const min = 0;
@@ -414,10 +438,15 @@ const DataPage = (props) => {
     })).filter((e) => (e !== null));
   };
 
+  const openDrawer = () => {
+    setIsDrawerOpened(true);
+  };
+
   const [{
     maxIndex, minIndex, currentIndex, currentDpCode, currentTask,
-  }] = getDataForTable(apiData);
-  console.log(getDataForTable(apiData));
+  }] = getDataForDataSheet(apiData);
+
+  console.log(getDataForDataSheet(apiData));
 
 
   return (
@@ -427,63 +456,29 @@ const DataPage = (props) => {
         <Header sideBarRef={sideBarRef} />
         <div className="datapage-main" >
           <div className="datapage-info-group">
+            <Drawer
+              title="Add Source"
+              placement="right"
+              closable={false}
+              onClose={() => setIsDrawerOpened(false)}
+              visible={isDrawerOpened}
+              key="right"
+              width={300}
+              headerStyle={{ backgroundColor: '#2199c8' }}
+            >
+              <AddSource></AddSource>
+            </Drawer>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-              <Accordion>
-                <Card>
-                  <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
-                    <Accordion.Toggle
-                      style={{
-                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
-                      }}
-                      eventKey="0"
-                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
-                    >History
-                    </Accordion.Toggle>
-                    <Accordion.Toggle
-                      style={{
-                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
-                      }}
-                      eventKey="0"
-                      onClick={(e) => { setHistoryToggleArrow(!historyToggleArrow); }}
-                    ><FontAwesomeIcon icon={historyToggleArrow ? faAngleDown : faAngleUp} />
-                    </Accordion.Toggle>
-                  </Card.Header>
-                  <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                      <DataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              </Accordion>
+              <DataAccordian header="History">
+                {currentRole === 'Analyst' && <AnalystDataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} /> }
+                {currentRole === 'QA' && <QADataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />}
+              </DataAccordian>
             </Col>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-              <Accordion defaultActiveKey="0">
-                <Card>
-                  <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
-                    <Accordion.Toggle
-                      style={{
-                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
-                      }}
-                      eventKey="0"
-                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
-                    >Current
-                    </Accordion.Toggle>
-                    <Accordion.Toggle
-                      style={{
-                        border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
-                      }}
-                      eventKey="0"
-                      onClick={(e) => { setCurrentToggleArrow(!currentToggleArrow); }}
-                    ><FontAwesomeIcon icon={currentToggleArrow ? faAngleDown : faAngleUp} />
-                    </Accordion.Toggle>
-                  </Card.Header>
-                  <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                      <DataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} />
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              </Accordion>
+              <DataAccordian header="Current" isActive >
+                {currentRole === 'Analyst' && <AnalystDataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
+                {currentRole === 'QA' && <QADataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
+              </DataAccordian>
             </Col>
             {/* <Collapse accordion>
               <Panel header="This is panel header 1" key="1">

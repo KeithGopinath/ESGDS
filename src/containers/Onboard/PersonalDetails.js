@@ -74,7 +74,8 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
     const onCompanyNameSelect = (companySelect) => {
         setCompanyName(companySelect);
-        onCompanyName(companySelect.value);
+        onCompanyName(companySelect);
+        // console.log("company select: ",companySelect);
     };
 
     const onAccountNumberChange = (e) => {
@@ -259,6 +260,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                             isMulti
                                             options={companyList}
                                             name="companyName"
+                                            value={companyName}
                                             onChange={onCompanyNameSelect}
                                         />
                                     </div>
