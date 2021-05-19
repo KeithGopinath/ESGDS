@@ -10,9 +10,10 @@ import 'antd/dist/antd.css';
 import { Drawer } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import DataSheet from './DataSheet';
+import AnalystDataSheet from './AnalystDataSheet';
 import DataAccordian from './DataAccordian';
 import AddSource from './AddSource';
+import QADataSheet from './QADataSheet';
 
 
 const DataPage = (props) => {
@@ -28,12 +29,14 @@ const DataPage = (props) => {
       pillar: 'Environmental',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Yet to start',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -72,8 +75,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -112,8 +116,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -156,12 +161,14 @@ const DataPage = (props) => {
       pillar: 'Social',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'In progress',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -200,8 +207,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -240,8 +248,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -284,12 +293,14 @@ const DataPage = (props) => {
       pillar: 'Governance',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Submitted',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -328,8 +339,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -368,8 +380,9 @@ const DataPage = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -410,6 +423,7 @@ const DataPage = (props) => {
   ];
 
   const getDataForDataSheet = (data) => {
+    console.log(props);
     const { taskId, dpcode } = props.match.params;
     const [currentTask] = data.filter((task) => (task.taskId === taskId));
     const max = currentTask.data.length - 1;
@@ -423,12 +437,15 @@ const DataPage = (props) => {
       return null;
     })).filter((e) => (e !== null));
   };
+
   const openDrawer = () => {
     setIsDrawerOpened(true);
   };
+
   const [{
     maxIndex, minIndex, currentIndex, currentDpCode, currentTask,
   }] = getDataForDataSheet(apiData);
+
   console.log(getDataForDataSheet(apiData));
 
 
@@ -451,15 +468,16 @@ const DataPage = (props) => {
             >
               <AddSource></AddSource>
             </Drawer>
-            {currentRole === 'Analyst' &&
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="History">
-                <DataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />
+                {currentRole === 'Analyst' && <AnalystDataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} /> }
+                {currentRole === 'QA' && <QADataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />}
               </DataAccordian>
-            </Col>}
+            </Col>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Current" isActive >
-                <DataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />
+                {currentRole === 'Analyst' && <AnalystDataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
+                {currentRole === 'QA' && <QADataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
               </DataAccordian>
             </Col>
             {/* <Collapse accordion>

@@ -10,13 +10,10 @@ import moment from 'moment';
 import 'antd/dist/antd.css';
 import { history } from '../../routes';
 
-const DataSheet = ({
+const QADataSheet = ({
   maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData, openDrawer,
 }) => {
-  const currentUser = 'QA';
-  const isFieldDisabled = currentUser === 'QA' ? true : (historyDpCodeData && !historyEdit);
-  // Boolean State That Adds Editable/UnEditable Functionality In Historical Panel
-  const [historyEdit, setHistoryEdit] = useState(false);
+  const isFieldDisabled = true;
 
   // # historicalData # A Variable Is Just A List Of Historical Data Of currentDpCode
   const historicalData = currentDpCode.historyDpData;
@@ -269,7 +266,7 @@ const DataSheet = ({
           </Col>
         </Form.Group>
       </Col>
-      {!historyDpCodeData && !(currentUser === 'QA') &&
+      {!historyDpCodeData &&
       <Col lg={6}>
         <Button onClick={openDrawer} >Add Source</Button>
       </Col> }
@@ -397,73 +394,58 @@ const DataSheet = ({
       </Col>
       {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-      {(currentUser === 'QA') &&
-        <React.Fragment>
-          {/* ################################################################################################ ERROR TYPE */}
-          <Col lg={6}>
-            <Form.Group as={Row} >
-              <Form.Label column sm={5}>
-                Error Type*
-              </Form.Label>
-              <Col sm={7}>
-                <Select
-                  name="userRole"
-                  // value={""}
-                  styles={{
-                    // Fixes the overlapping problem of the component
-                    menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
-                    menu: (provided) => ({ ...provided, zIndex: 9999 }),
-                  }}
-                  options={errorList.map((e) => ({ label: e, value: e }))}
-                  // isSearchable={}
-                  // className={}
-                  maxLength={30}
-                />
-              </Col>
-            </Form.Group>
-          </Col>
-          {/* ################################################################################################ COMMENTS */}
-          <Col lg={6}>
-            <Form.Group as={Row} >
-              <Form.Label column sm={5}>
-                Comments*
-              </Form.Label>
-              <Col sm={7}>
-                <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
-              </Col>
-            </Form.Group>
-          </Col>
-          <Col lg={12} className="datapage-button-wrap">
-            { !historyDpCodeData ?
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">Edit</Button>
-                <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
-                <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
-                {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
-                {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
-              </React.Fragment> :
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={() => setHistoryEdit(true)} type="submit">UnFreeze</Button>
-              </React.Fragment> }
-          </Col>
-        </React.Fragment> }
-      {(currentUser === 'Analyst') &&
-        (
-          <Col lg={12} className="datapage-button-wrap">
-            { !historyDpCodeData ?
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
-                <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
-                {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
-                {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
-              </React.Fragment> :
-              <React.Fragment>
-                <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={() => setHistoryEdit(true)} type="submit">Edit</Button>
-              </React.Fragment> }
-          </Col>
-        ) }
+      { !historyDpCodeData &&
+      <React.Fragment>
+        {/* ################################################################################################ ERROR TYPE */}
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Error Type*
+            </Form.Label>
+            <Col sm={7}>
+              <Select
+                name="userRole"
+                // value={""}
+                styles={{
+                  // Fixes the overlapping problem of the component
+                  menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
+                  menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                }}
+                options={errorList.map((e) => ({ label: e, value: e }))}
+                // isSearchable={}
+                // className={}
+                maxLength={30}
+              />
+            </Col>
+          </Form.Group>
+        </Col>
+        {/* ################################################################################################ COMMENTS */}
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Comments*
+            </Form.Label>
+            <Col sm={7}>
+              <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
+            </Col>
+          </Form.Group>
+        </Col>
+      </React.Fragment> }
+      <Col lg={12} className="datapage-button-wrap">
+        { !historyDpCodeData ?
+          <React.Fragment>
+            <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">Edit</Button>
+            <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
+            <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
+            {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
+            {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
+          </React.Fragment> :
+          <React.Fragment>
+            <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">UnFreeze</Button>
+          </React.Fragment> }
+      </Col>
     </Row>
   );
 };
 
-export default DataSheet;
+export default QADataSheet;

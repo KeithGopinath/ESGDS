@@ -22,12 +22,14 @@ const Task = (props) => {
       pillar: 'Environmental',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Yet to start',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Yet To Start',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -68,6 +70,7 @@ const Task = (props) => {
           fiscalYear: '2018-2019',
           status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -106,8 +109,9 @@ const Task = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'In Progress',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -150,12 +154,14 @@ const Task = (props) => {
       pillar: 'Social',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'In progress',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -194,8 +200,9 @@ const Task = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -234,8 +241,9 @@ const Task = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -278,12 +286,14 @@ const Task = (props) => {
       pillar: 'Governance',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Submitted',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -322,8 +332,9 @@ const Task = (props) => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
@@ -362,8 +373,9 @@ const Task = (props) => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Yet to start',
           description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
           keyIssue: 'Audit committee functioning',
           historyDpData: [
