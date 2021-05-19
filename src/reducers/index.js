@@ -6,6 +6,7 @@ import companylist from './CompaniesList';
 import onboard from './Onboard';
 import updatePassword from './UpdatePassword';
 import createbatch from './BatchCreate';
+import keyIssues from './KeyIssues';
 
 const rootReducer = combineReducers({
   login,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   onboard,
   updatePassword,
   createbatch,
+  keyIssues,
 });
 
 export default rootReducer;

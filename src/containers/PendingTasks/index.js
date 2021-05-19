@@ -17,13 +17,16 @@ const PendingTaskTable = () => {
       pillar: 'Environmental',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Yet to start',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -60,9 +63,11 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -99,15 +104,17 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -122,7 +129,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -142,13 +149,16 @@ const PendingTaskTable = () => {
       pillar: 'Social',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'In progress',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -185,9 +195,11 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -224,15 +236,17 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -247,7 +261,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -267,13 +281,16 @@ const PendingTaskTable = () => {
       pillar: 'Governance',
       company: 'Reliance Ltd',
       year: '2018-2019',
+      status: 'Submitted',
       data: [
         {
           dpCode: 'AUDP001',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: 'Does the board member hold a seat in the audit committee ?',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -310,9 +327,11 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOCR013',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
+          status: 'Completed',
           description: "Board member's fixed cash based compensation",
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'number',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOCR013',
@@ -349,15 +368,17 @@ const PendingTaskTable = () => {
         {
           dpCode: 'BOIR017',
           fiscalYear: '2018-2019',
-          status: 'Uncompleted',
-          description: 'Does the board member hold a seat in the audit committee ?',
+          status: 'Yet to start',
+          description: 'Board member date of appointment',
+          isStandAloneOrMatrix: 'Standalone',
           dataType: 'date',
+          keyIssue: 'Audit committee functioning',
           historyDpData: [
             {
               dpCode: 'BOIR017',
               fiscalYear: '2017-2018',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '58',
               filePath: '',
@@ -372,7 +393,7 @@ const PendingTaskTable = () => {
               dpCode: 'BOIR017',
               fiscalYear: '2016-2017',
               status: 'Completed',
-              description: 'Does the board member hold a seat in the audit committee ?',
+              description: 'Board member date of appointment',
               dataType: 'date',
               pageNo: '42',
               filePath: '',
@@ -392,9 +413,9 @@ const PendingTaskTable = () => {
   // TABLE DATA
 
   const tablePopulate = (data) => data.map(({
-    taskId, pillar, company, year,
+    taskId, pillar, company, year, status,
   }) => ({
-    taskId, pillar, company, year, action: <Link to={`/pendingtasks/${taskId}`}>Enter</Link>,
+    taskId, pillar, company, year, status, action: <Link to={`/pendingtasks/${taskId}`}>Enter</Link>,
   }));
 
   const PENDING_TASK_DATA = {
@@ -411,6 +432,9 @@ const PendingTaskTable = () => {
       },
       {
         id: 'year', label: 'Year', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'status', label: 'Status', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',

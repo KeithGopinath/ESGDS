@@ -6,6 +6,7 @@ import { onboardWatchers } from './Onboard';
 import { updatePasswordWatchers } from './UpdatePassword';
 import { getBatchWatchers } from './Batch';
 import { getCreateBatchWatchers } from './BatchCreate';
+import { getKeyIssuesWatchers } from './KeyIssues';
 
 export default function* rootWatchers() {
   yield [
@@ -17,5 +18,6 @@ export default function* rootWatchers() {
     updatePasswordWatchers(),
     getBatchWatchers(),
     getCreateBatchWatchers(),
+    getKeyIssuesWatchers(),
   ];
 }
