@@ -15,6 +15,7 @@ import PendingTasks from './containers/PendingTasks';
 import DataPage from './containers/DataPage';
 import UpdatePassword from './containers/UpdatePassword';
 import TaskCreate from './containers/TaskCreate/index';
+import Taxonomy from './containers/Taxonomy';
 
 export const history = createBrowserHistory();
 
@@ -23,8 +24,9 @@ const Routes = () => (
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/update-password" component={UpdatePassword} />
+        <Route path="/password-resets" component={UpdatePassword} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/taxonomy" component={Taxonomy} />
         <Route path="/users" component={Users} />
         <Route path="/companies" component={Companies} />
         <Route path="/groups" component={Groups} />
