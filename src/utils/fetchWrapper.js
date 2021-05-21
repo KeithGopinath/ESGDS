@@ -101,16 +101,16 @@ export const doPut = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
     },
-    credentials: 'include',
     body: JSON.stringify(body),
   }),
 ), TIMEOUT, 504)
   .then((res) => {
     let response = null;
+    response = res.json();
     if (res.ok) {
-      response = res.json();
+      return response;
     }
-    return response;
+    return response.then((error) => { throw error; });
   });
 
 /** @description Sending a DELETE request.
