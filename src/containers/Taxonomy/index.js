@@ -11,13 +11,15 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
 import ImportTaxonomy from '../../containers/ImportTaxonomy';
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 
 const Taxonomy = () => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
-  const [max, setmax] = useState(16);
+  const [max, setmax] = useState(20);
   const [newTaxonomy, setNewTaxonomy] = useState('');
   const [taxonomyData, setTaxonomyData] = useState()
 
@@ -26,36 +28,46 @@ const Taxonomy = () => {
   }, []);
 
   const cardData = [
-    { name: 'Batch1', id: 'ID001' },
-    { name: 'Batch2', id: 'ID002' },
-    { name: 'Batch3', id: 'ID003' },
-    { name: 'Batch4', id: 'ID004' },
-    { name: 'Batch5', id: 'ID005' },
-    { name: 'Batch6', id: 'ID006' },
-    { name: 'Batch7', id: 'ID007' },
-    { name: 'Batch8', id: 'ID008' },
-    { name: 'Batch9', id: 'ID009' },
-    { name: 'Batch10', id: 'ID010' },
-    { name: 'Batch11', id: 'ID011' },
-    { name: 'Batch12', id: 'ID012' },
-    { name: 'Batch13', id: 'ID013' },
-    { name: 'Batch14', id: 'ID014' },
-    { name: 'Batch15', id: 'ID015' },
-    { name: 'Batch16', id: 'ID0016' },
-    { name: 'Batch15', id: 'ID017' },
-    { name: 'Batch18', id: 'ID0018' },
-    { name: 'Batch19', id: 'ID019' },
-    { name: 'Batch20', id: 'ID020' },
-    { name: 'Batch21', id: 'ID021' },
-    { name: 'Batch22', id: 'ID022' },
-    { name: 'Batch23', id: 'ID023' },
-    { name: 'Batch24', id: 'ID024' },
+    { name: 'Category Code' },
+    { name: 'Category' },
+    { name: 'Theme Code' },
+    { name: 'Theme' },
+    { name: 'Key Issues' },
+    { name: 'Function' },
+    { name: 'DP Code' },
+    { name: 'DP Name' },
+    { name: 'Description' },
+    { name: 'Polarity' },
+    { name: 'Data Collection' },
+    { name: 'Guide' },
+    { name: 'Unit' },
+    { name: 'Signal' },
+    { name: 'Aid DP/Logic' },
+    { name: 'Normalized by' },
+    { name: 'Weighted' },
+    { name: 'Relevant for India' },
+    { name: 'Percentile' },
+    { name: 'Final Unit' },
+    { name: 'Standalone/ Matrix' },
+    { name: 'Industry Relevancy' },
+    { name: 'Mining of coal and lignite' },
+    { name: 'Extraction of crude petroleum and natural gas' },
   ];
 
+  const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileExtension = ".xlsx";
+  const sideBarRef = useRef();
+
   const onTaxonomyChange = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+    if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
       setNewTaxonomy(e.target.value)
     }
+  }
+
+  const addNewTaxonomy = () => {
+    const temp = [...taxonomyData];
+    temp.push({ name: '' })
+    setTaxonomyData(temp)
   }
 
   const deleteTaxonomy = (item) => {
@@ -92,6 +104,21 @@ const Taxonomy = () => {
     ];
     setTaxonomyData(temp);
     setNewTaxonomy('')
+  }
+
+  const exportTaxonomy = (Data, fileName) => {
+    let modifiedDta = [];
+    let obj = {};
+    for (let key in Data) {
+      const x = Data[key].name;
+      obj[x] = '';
+    }
+    modifiedDta.push(obj);
+    const ws = XLSX.utils.json_to_sheet(modifiedDta);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
   }
 
   const searchtheme = createMuiTheme({
@@ -158,8 +185,6 @@ const Taxonomy = () => {
     </Col>
   ));
 
-  const sideBarRef = useRef();
-
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -185,8 +210,14 @@ const Taxonomy = () => {
                   />
                 </ThemeProvider>
               </div>
-              <div>
-                <Button variant="primary" className="imp-btn" onClick={handleShow}>
+              <div className="taxonomy-button-container">
+                <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>
+                  <div>Add New</div>
+                </Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>
+                  <div>Export Taxonomy</div>
+                </Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>
                   <div>Import File</div>
                 </Button>
               </div>
@@ -195,9 +226,6 @@ const Taxonomy = () => {
               <Row >
                 {batchlist}
               </Row>
-              <Button variant="primary" className="submit-taxonomy-btn">
-                <div>Submit</div>
-              </Button>
             </div>
             <Row>
               <Col lg={12} sm={12}>
