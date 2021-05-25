@@ -6,12 +6,13 @@ import Overlay from '../../components/Overlay';
 const NewTaxonomySubset = ({ show, handleClose }) => {
     const subsetBody = () => (
         <div>
-            <Form.Label>Enter subest name</Form.Label>
+            {/* <Form.Label>Enter subest name</Form.Label> */}
             <Form.Group>
                 <Form.Control
                     // className={validate}
                     type="text"
                     name="subsetName"
+                    placeholder="Enter name"
                 // value={email}
                 // onChange={onEmailChange}
                 />
@@ -29,7 +30,7 @@ const NewTaxonomySubset = ({ show, handleClose }) => {
             animation
             centered
             size="md"
-            title="Create Subset"
+            title="Create Subset Taxonomy"
             body={subsetBody()}
             // alert={forgotPasswordAlert}
             primary="submit"
