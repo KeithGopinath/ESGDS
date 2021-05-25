@@ -10,18 +10,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
-import ImportTaxonomy from '../../containers/ImportTaxonomy';
+import UploadTaxonomy from '../../containers/UploadTaxonomy';
+import NewTaxonomySubset from '../../containers/NewTaxonomySubset';
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
 
 const Taxonomy = () => {
   const [show, setShow] = useState(false);
+  const [showSubset, setShowSubset] = useState(false);
+  const [showCheckbox, setShowCheckbox] = useState(false);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(20);
   const [newTaxonomy, setNewTaxonomy] = useState('');
   const [taxonomyData, setTaxonomyData] = useState()
+  const [subsetData, setSubsetData] = useState([])
 
   useEffect(() => {
     setTaxonomyData(cardData)
@@ -121,6 +125,50 @@ const Taxonomy = () => {
     FileSaver.saveAs(data, fileName + fileExtension);
   }
 
+  const newSubset = () => {
+    setShowCheckbox(true);
+    const temp = [...taxonomyData];
+    var result = temp.map((el, index) => {
+      var o = Object.assign({}, el);
+      o.checked = false;
+      return o;
+    })
+    setTaxonomyData(result)
+  }
+
+  const createSubset = (item, e) => {
+    const temp = [...subsetData];
+    const updated = [...taxonomyData];
+    const indexUpdated = updated.indexOf(item);
+    if (e.target.checked == true) {
+      const updatedObj = { ...updated[indexUpdated], checked: true };
+      const tempOne = [
+        ...updated.slice(0, indexUpdated),
+        updatedObj,
+        ...updated.slice(indexUpdated + 1),
+      ];
+      setTaxonomyData(tempOne);
+      temp.push({ name: item.name })
+      setSubsetData(temp)
+    }
+    else {
+      const updatedObj = { ...updated[indexUpdated], checked: false };
+      const tempOne = [
+        ...updated.slice(0, indexUpdated),
+        updatedObj,
+        ...updated.slice(indexUpdated + 1),
+      ];
+      setTaxonomyData(tempOne);
+      const index = temp.indexOf(item)
+      temp.splice(index, 1);
+      setSubsetData(temp)
+    }
+  }
+
+  const onSubmitSubset = () => {
+    setShowSubset(true);
+  }
+
   const searchtheme = createMuiTheme({
     palette: {
       primary: {
@@ -162,11 +210,25 @@ const Taxonomy = () => {
     setShow(false)
   }
 
+  const subsetHandleClose = () => {
+    setShowSubset(false);
+    setShowCheckbox(false);
+  }
+
   const calculateCount = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData).length : taxonomyData.length) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData) : taxonomyData).slice(min, max).map((item, index) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox">
+        {showCheckbox ?
+          <div className="taxonomy-checkbox-container">
+            <Form.Control
+              type="checkbox"
+              className="taxonomy-checkbox"
+              onChange={(e) => { createSubset(item, e) }}
+              checked={item.checked}
+            />
+          </div> : null}
         <Form.Control
           className="input-taxonomy"
           type="text"
@@ -175,15 +237,20 @@ const Taxonomy = () => {
           disabled={item.isActive ? false : true}
           onChange={onTaxonomyChange}
         />
-        <Row className="taxonomy-icons-container">
-          {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
-            : null}
-          <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-          <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
-        </Row>
+        {showCheckbox ? null :
+          <Row className="taxonomy-icons-container">
+            {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
+              : null}
+            <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+            <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
+          </Row>
+        }
       </Card>
     </Col>
   ));
+
+  console.log(taxonomyData);
+  console.log(subsetData);
 
   return (
     <div className="main">
@@ -211,14 +278,21 @@ const Taxonomy = () => {
                 </ThemeProvider>
               </div>
               <div className="taxonomy-button-container">
-                <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>
-                  <div>Add New</div>
-                </Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>
-                  <div>Export Taxonomy</div>
-                </Button>
+                {showCheckbox ? null :
+                  <div className="taxonomy-button-container">
+                    <Button variant="primary" className="taxonomy-btn" onClick={newSubset}>
+                      <div>New Subset</div>
+                    </Button>
+                    <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>
+                      <div>Add New</div>
+                    </Button>
+                    <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>
+                      <div>Export Taxonomy</div>
+                    </Button>
+                  </div>
+                }
                 <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>
-                  <div>Import File</div>
+                  <div>Upload Taxonomy</div>
                 </Button>
               </div>
             </div>
@@ -229,12 +303,18 @@ const Taxonomy = () => {
             </div>
             <Row>
               <Col lg={12} sm={12}>
-                <div className="batch-footer">
+                <div className="taxonomy-footer">
+                  {showCheckbox ?
+                    <div className="taxonomy-submit">
+                      <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Submit</Button>
+                    </div>
+                    : null}
                   <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
                 </div>
               </Col>
             </Row>
-            <ImportTaxonomy show={show} handleClose={handleClose} />
+            <UploadTaxonomy show={show} handleClose={handleClose} />
+            <NewTaxonomySubset show={showSubset} handleClose={subsetHandleClose} />
           </Container>
         </div>
       </div>
