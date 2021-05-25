@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
 
-const ImportTaxonomy = ({ show, handleClose }) => {
+const UploadTaxonomy = ({ show, handleClose }) => {
     const [file, setFile] = useState('');
     const [alert, setAlert] = useState('');
 
@@ -23,7 +23,7 @@ const ImportTaxonomy = ({ show, handleClose }) => {
             // dispatch({});
             setAlert('');
         } else {
-            setAlert('Please choose the file to import');
+            setAlert('Please choose the file to upload');
         }
     };
 
@@ -32,7 +32,7 @@ const ImportTaxonomy = ({ show, handleClose }) => {
             <Form.Group>
                 <Form.Control
                     type="file"
-                    name="importTaxonomy"
+                    name="uploadTaxonomy"
                     id="email"
                     onChange={fileHandler}
                 />
@@ -52,14 +52,14 @@ const ImportTaxonomy = ({ show, handleClose }) => {
             animation
             centered
             size="md"
-            title="Import File"
+            title="Upload File"
             body={taxonomyBody()}
             alert={alert}
-            primary="Submit"
+            primary="Upload"
             onSubmitPrimary={onSubmit}
             alertClass={alertClassName}
         />
     );
 };
 
-export default ImportTaxonomy;
+export default UploadTaxonomy;
