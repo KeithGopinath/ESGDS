@@ -75,7 +75,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     const onCompanyNameSelect = (companySelect) => {
         setCompanyName(companySelect);
         onCompanyName(companySelect);
-        // console.log("company select: ",companySelect);
     };
 
     const onAccountNumberChange = (e) => {

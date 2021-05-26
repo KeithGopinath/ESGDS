@@ -1,14 +1,11 @@
 export default {
   apiEndPoints: {
     getLogin: 'auth',
-    getOtp: 'OTPcheck',
+    getOtp: 'auth-otp',
     getForgotPassword: 'forgotpassword',
     getCompanylist: 'companies',
     getBatchlist: 'batches',
-    getEmployee: 'onBoardEmployee',
-    getClient: 'onBoardClient',
-    getCompany: 'onBoardCompany',
-    getOnboard: 'onBoardCompany',
+    getOnboard: 'onboardingdetails',
     getUpdatePassword: 'updatepassword',
     createBatch: '/batches',
     getKeyIssues: 'key_issues',

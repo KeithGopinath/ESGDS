@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
@@ -108,12 +108,13 @@ const Onboard = (props) => {
         nameOfTheAccountHolder: `${firstName} ${middleName && `${middleName} `}${lastName}`,
         password,
       };
-
-      formData.append('onboardingdetails', JSON.stringify(employeeDetails));
+      const jsonString = JSON.stringify(employeeDetails);
+      const employeeData = btoa(jsonString);
+      formData.append('onboardingdetails', employeeData);
       formData.append('pancard', fileName);
       formData.append('aadhar', empID);
       formData.append('cancelledcheque', cancelledCheque);
-
+      formData.append('access_token', `${sessionStorage.auth}`);
     } else if (selectedOption === 'client') {
       const clientDetails = {
         name: firstName,
@@ -122,10 +123,12 @@ const Onboard = (props) => {
         companyName,
         password,
       };
-
-      formData.append('onboardingdetails', JSON.stringify(clientDetails));
+      const jsonString = JSON.stringify(clientDetails);
+      const clientData = btoa(jsonString);
+      formData.append('onboardingdetails', clientData);
       formData.append('authenticationletterforclient', fileName);
       formData.append('companyidforclient', empID);
+      formData.append('access_token', `${sessionStorage.auth}`);
 
     } else if (selectedOption === 'company') {
       const companyDetails = {
@@ -135,15 +138,16 @@ const Onboard = (props) => {
         companyName,
         password,
       };
-
-      formData.append('onboardingdetails', JSON.stringify(companyDetails));
+      const jsonString = JSON.stringify(companyDetails);
+      const companyData = btoa(jsonString);
+      formData.append('onboardingdetails', companyData);
       formData.append('authenticationletterforcompany', fileName);
       formData.append('companyidforcompany', empID);
-
+      formData.append('access_token', `${sessionStorage.auth}`);
     }
 
     dispatch({ type: 'ONBOARD_REQUEST', formData });
-    // history.push('/users');
+    history.push('/users');
   };
 
   // stepper 

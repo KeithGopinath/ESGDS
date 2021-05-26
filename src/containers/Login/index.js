@@ -35,7 +35,6 @@ const Login = () => {
   sessionStorage.access = token
   
   const decoded = token && jwt_decode(token);
-  console.log("deocded role:",decoded);
 
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
@@ -45,7 +44,6 @@ const Login = () => {
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
   const role=login && login.user.role;
-  console.log("login :",role);
 
   useEffect(() => {
     if (loginRole && role) {
@@ -142,9 +140,12 @@ const Login = () => {
       setOtpLogin(true);
       const otpDetails = {
         email,
-        otp
+        otp,
+        access_token:sessionStorage.auth
       }
-      dispatch({ type: 'OTP_REQUEST', otpDetails });
+      const jsonString=JSON.stringify(otpDetails);
+      const otpData = btoa(jsonString);
+      dispatch({ type: 'OTP_REQUEST', otpData });
     }
   }
 
