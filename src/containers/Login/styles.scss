@@ -49,7 +49,7 @@
     cursor: pointer;
 }
 
-@media (max-device-width: 576px) {
+@media only screen and (max-width: 576px) {
     .banner-container {
         height: auto;
     }
