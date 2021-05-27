@@ -19,6 +19,7 @@ const BatchCreation = ({ show, setShow }) => {
   const [year, setYear] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
+  const [subsetTax, setsubsetTax] = useState('');
   // const [companies, setCompanies] = useState([]);
   const handleClose = () => {
     setBatch('');
@@ -101,8 +102,17 @@ const BatchCreation = ({ show, setShow }) => {
     { value: '2018 - 2019', label: '2018 - 2019' },
     { value: '2019 - 2020', label: '2019 - 2020' },
   ];
+  const taxOptions = [
+    { value: 'TAX001', label: 'TAX001' },
+    { value: 'TAX002', label: 'TAX002' },
+    { value: 'TAX03', label: 'TAX03' },
+  ];
   const onHandleYear = (selectedyear) => {
     setYear(selectedyear);
+  };
+  const onHandleTax = (selectedtax) => {
+    setsubsetTax(selectedtax.value);
+    console.log(subsetTax, 'subsetTax');
   };
   const onHandleInput = (batchname) => {
     if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
@@ -113,7 +123,7 @@ const BatchCreation = ({ show, setShow }) => {
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
-    } else if (!year) {
+    } else if (!year || !subsetTax) {
       setValidBorder(true);
     }
     if ((batch.length && year.length && rowDetail.length) > 0) {
@@ -132,6 +142,13 @@ const BatchCreation = ({ show, setShow }) => {
         <Col lg={6} sm={12}>
           <div className="batch-detail">
             <div >Batch Details</div>
+          </div>
+          <div className="batch-year">Select Taxonomy*</div>
+          <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert' }`}>
+            <Select
+              options={taxOptions}
+              onChange={onHandleTax}
+            />
           </div>
           <div className="batch-name">Batch name*</div>
           <div className="form-group batch-input-width " >
@@ -162,6 +179,7 @@ const BatchCreation = ({ show, setShow }) => {
                 <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
               </div>
             </div>
+
           </div>
         </Col>
         <Col lg={6} sm={12}>

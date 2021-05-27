@@ -142,13 +142,15 @@
 .dp-min-height{
     min-height: 4.3rem;
 }
+   
 .batch-status-minheight{
-    margin-top: 30px;
-    min-height: 3.4rem;
-    margin-bottom: 30px;
+   // margin-top: 30px;
+   // min-height: 3.4rem;
+    //margin-bottom: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 1rem;
 }
 .dropdown-alert{
     .css-yk16xz-control {
@@ -173,7 +175,7 @@
     justify-content: space-between;
     align-items: center;
     width: 90%;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
 }
 .footer-pad{
     padding: 0px !important;
@@ -207,4 +209,7 @@
     }
 .sort-column  div{
 float: right !important;
+}
+.mar-tax-bot{
+    margin-bottom: 1rem;
 }

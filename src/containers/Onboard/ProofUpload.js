@@ -22,6 +22,17 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setFileSize({ ...fileSize, authentication: e.target.files[0].size });
     };
 
+        // if(e.target.files[0].size > 3145728) {
+        //     setProofUploadAlert('File size should not be more than 3 MB');
+        //     setValidate(true);
+        //   } else {
+        //     onCompany(e.target.files[0]);
+        //     setProofUploadAlert('');
+        //     setValidate(false); 
+        //   }
+    //     setFileSize({...fileSize,authentication:e.target.files[0].size});
+    // };
+// console.log("file size & file  auth, id:",fileSize.authentication, fileSize.idProof);
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
         onEmployeeId(e.target.files[0]);
@@ -38,6 +49,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
 
     const goToLoginCredentials = () => {
         if (role === 'client' || role === 'company') {
+            // setValidate(false);
             if (!fileName || !empID) {
                 setProofUploadAlert('Should upload all files');
                 setAuthValidate(true);
