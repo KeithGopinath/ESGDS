@@ -1,10 +1,8 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { Card, Form, Row, Col, Container, Button, Tooltip, OverlayTrigger  } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 
 // proof details
 const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previousStep, nextStep, setActiveStep, activeStep }) => {
@@ -13,28 +11,85 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     const [cancelledCheque, setCancelledCheque] = useState('');
     const [proofUploadAlert, setProofUploadAlert] = useState('');
     const [validate, setValidate] = useState(false);
+    // const [fileSize, setFileSize] = useState('');
+    const [fileSize, setFileSize] = useState({authentication:'',idProof:'',cancelCheque:''});
+    const [sizeValidate, setSizeValidate] =useState(false);
+
+    // Drag and drop a file or click
 
     const onChangeCompRep = (e) => {
-        setFileName(e.target.files[0]);
+        setFileName(e.target.files[0].name);
         onCompany(e.target.files[0]);
-    };
 
+        // if(e.target.files[0].size > 3145728) {
+        //     setProofUploadAlert('File size should not be more than 3 MB');
+        //     setValidate(true);
+        //   } else {
+        //     onCompany(e.target.files[0]);
+        //     setProofUploadAlert('');
+        //     setValidate(false); 
+        //   }
+        setFileSize({...fileSize,authentication:e.target.files[0].size});
+    };
+// console.log("file size & file  auth, id:",fileSize.authentication, fileSize.idProof);
     const onChangeEmpId = (e) => {
-        setEmpID(e.target.files[0]);
+        setEmpID(e.target.files[0].name);
         onEmployeeId(e.target.files[0]);
+
+        // if(e.target.files[0].size > 3145728) {
+        //     setProofUploadAlert('File size should not be more than 3 MB');
+        //     setValidate(true);
+        //   } else {
+        //     onEmployeeId(e.target.files[0]);
+        //       setProofUploadAlert('');
+        //       setValidate(false); 
+        //   }
+        setFileSize({...fileSize,idProof:e.target.files[0].size});
     };
 
     const onChangeCancelledCheque = (e) => {
-        setCancelledCheque(e.target.files[0]);
-        onCancelledCheque(e.target.files[0]);
+        setCancelledCheque(e.target.files[0].name);
+        if(e.target.files[0].size > 3145728) {
+            setProofUploadAlert('File size should not be more than 3 MB');
+            setValidate(true);
+          } else {
+              onCancelledCheque(e.target.files[0]);
+              setProofUploadAlert('');
+              setValidate(false); 
+          }
+        // setFileSize({...fileSize,cancelCheque:e.target.files[0].size});
     };
 
     const goToLoginCredentials = () => {
         if (role === 'client' || role === 'company') {
+            // setValidate(false);
             if (!fileName || !empID) {
                 setProofUploadAlert('Should upload all files');
                 setValidate(true);
-            } else {
+            } else if(fileName && fileSize.authentication>3145728) {
+                setSizeValidate(true);
+                 setProofUploadAlert('File size should not be more than 3 MB');
+                 setValidate(true);
+            } else if(empID && fileSize.idProof>3145728) {
+                // setSizeValidate(true);
+                setProofUploadAlert('File size should not be more than 3 MB');
+                setValidate(true);
+           }
+            //  else if(fileName || empID){
+            //     if(fileSize.authentication>3145728) {
+            //     setProofUploadAlert('File size should not be more than 3 MB');
+            //     setValidate(true);
+            //     } else if(fileSize.idProof>3145728) {
+            //        setProofUploadAlert('File size should not be more than 3 MB');
+            //        setValidate(true);
+            //     } else {
+            //         nextStep();
+            //         setValidate(false);
+            //         setProofUploadAlert('');
+            //         setActiveStep(activeStep + 1);
+            //     }
+            //     console.log("fileSize.authentication: ",fileSize.authentication);
+              else {
                 nextStep();
                 setValidate(false);
                 setProofUploadAlert('');
@@ -59,9 +114,8 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     };
 
     const renderTooltip = (props) => (
-        <Tooltip {...props} className="proofUpload-tooltip">
-            {/* <strong>File must:</strong> */}
-            <p>File size should not exceed 3 MB</p>
+        <Tooltip className="proofUpload-tooltip" {...props}>
+          File size should not exceed 3MB
         </Tooltip>
     );
 
@@ -75,30 +129,31 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                             <Form.Group>
                                 {role === 'company' && <Form.Label>Upload your letter of Authentication(for company representative) <sup className="text-danger">*</sup>
                                 <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                    <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication(for client representative) <sup className="text-danger">*</sup>
                                 <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                    <OverlayTrigger placement="top-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 {role === 'Employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
                                 <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                    <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 <Form.File
                                     type="file"
-                                    className={!fileName && validate && 'file-not-upload'}
-                                    id=""
-                                    label="abcd"
+                                    className={validate && (validate && 'file-not-upload') || (sizeValidate && 'file-not-upload')}
+                                    // className={validate?'file-not-upload':(fileName.length === '')?'file-not-upload':null}
+                                    id="choose-file"
+                                    label={fileName}
                                     onChange={onChangeCompRep}
                                     custom
                                 />
@@ -108,30 +163,30 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                             <Form.Group>
                                 {role === 'company' && <Form.Label>Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup>
                                                                 <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                    <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof(for client  representative) <sup className="text-danger">*</sup>
-                                                                <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                <span>
+                                    <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 {role === 'Employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup>
-                                                                <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                <span>
+                                    <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
                                 </Form.Label>}
                                 <Form.File
                                     type="file"
-                                    className={!empID && validate && 'file-not-upload'}
+                                    className={(!empID || (empID && sizeValidate)) && validate && 'file-not-upload'}
                                     id=""
-                                    label="abcd"
+                                    label={empID}
                                     onChange={onChangeEmpId}
                                     custom
                                 />
@@ -140,7 +195,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                         {role === 'Employee' && <Col sm={6} md={6} lg={6}>
                             <Form.Group>
                                 <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="proof-upload-tooltip">
+                                    <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
@@ -149,7 +204,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                     type="file"
                                     className={!cancelledCheque && validate && 'file-not-upload'}
                                     id=""
-                                    label='abcd'
+                                    label={cancelledCheque}
                                     onChange={onChangeCancelledCheque}
                                     custom
                                 />
