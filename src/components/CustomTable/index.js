@@ -68,7 +68,7 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const UsersTable = ({ tableData, showDatePicker }) => {
+const CustomTable = ({ tableData, showDatePicker }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
   // CONSTANTS
@@ -293,9 +293,9 @@ const UsersTable = ({ tableData, showDatePicker }) => {
   );
 };
 
-UsersTable.propTypes = {
+CustomTable.propTypes = {
   tableData: PropTypes.object.isRequired,
   showDatePicker: PropTypes.bool,
 };
 
-export default UsersTable;
+export default CustomTable;

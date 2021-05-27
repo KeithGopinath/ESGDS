@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import UsersTable from '../../components/UsersTable/index';
+import CustomTable from '../../components/CustomTable/index';
 
 const TaskTable = (props) => {
   const tablePopulate = ({ taskId, data }) => data.map((x) => ({
@@ -12,8 +12,8 @@ const TaskTable = (props) => {
     action:
   <Link
     to={{
-      pathname: `/pendingtasks/${taskId}/${x.dpCode}`,
-      myCustomProps: props.data,
+      pathname: `/dpcode/${x.dpCode}`,
+      state: { taskId, dpCode: x.dpCode, data },
     }}
   >Enter Data
   </Link>,
@@ -39,7 +39,7 @@ const TaskTable = (props) => {
   };
 
   return (
-    <UsersTable tableData={TASK_DATA} />
+    <CustomTable tableData={TASK_DATA} />
   );
 };
 

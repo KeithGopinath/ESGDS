@@ -11,7 +11,7 @@ import 'antd/dist/antd.css';
 import { history } from '../../routes';
 
 const QADataSheet = ({
-  maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData, openDrawer,
+  maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData, sourceApiData, openDrawer,
 }) => {
   const isFieldDisabled = true;
 
@@ -153,13 +153,19 @@ const QADataSheet = ({
   const saveAndNextClickHandler = () => {
     console.log(formData);
     const nextDpCode = currentTask.data[currentIndex + 1];
-    history.push(`/pendingtasks/${currentTask.taskId}/${nextDpCode.dpCode}`);
+    history.push({
+      pathname: `/dpcode/${nextDpCode.dpCode}`,
+      state: { taskId: currentTask.taskId, dpCode: nextDpCode.dpCode },
+    });
   };
 
   // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Back To The Previous DpCode Page
   const editAndPreviousClickHandler = () => {
     const nextDpCode = currentTask.data[currentIndex - 1];
-    history.push(`/pendingtasks/${currentTask.taskId}/${nextDpCode.dpCode}`);
+    history.push({
+      pathname: `/dpcode/${nextDpCode.dpCode}`,
+      state: { taskId: currentTask.taskId, dpCode: nextDpCode.dpCode },
+    });
   };
   const uploadScreenshotCheck = (file) => {
     console.log(file.type);
@@ -185,9 +191,6 @@ const QADataSheet = ({
       response: event.value.response,
     });
   };
-  const sourceApiData = [
-    { sourceName: 'Annual Report_2019-2018', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
-  ];
   return (
     <Row>
       {/* ################################################################################################ DPCODE */}
@@ -435,10 +438,33 @@ const QADataSheet = ({
         { !historyDpCodeData ?
           <React.Fragment>
             <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">Edit</Button>
-            <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Back</Button>
+            <Button
+              style={{ marginRight: '1.5%' }}
+              variant="danger"
+              onClick={() => {
+                history.push({
+                  pathname: `/task/${currentTask.taskId}`,
+                  state: { taskId: currentTask.taskId },
+                });
+              }}
+              type="submit"
+            >Back
+            </Button>
             <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={() => { editAndPreviousClickHandler(); }} type="submit">Previous</Button>
             {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={() => { saveAndNextClickHandler(); }} type="submit">Save And Next</Button>}
-            {maxIndex === currentIndex && <Button style={{ marginRight: '1.5%' }} variant="danger" onClick={() => { history.push(`/pendingtasks/${currentTask.taskId}`); }} type="submit">Save And Close</Button> }
+            {maxIndex === currentIndex &&
+            <Button
+              style={{ marginRight: '1.5%' }}
+              variant="danger"
+              onClick={() => {
+                history.push({
+                  pathname: `/task/${currentTask.taskId}`,
+                  state: { taskId: currentTask.taskId },
+                });
+              }}
+              type="submit"
+            >Save And Close
+            </Button> }
           </React.Fragment> :
           <React.Fragment>
             <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={null} type="submit">UnFreeze</Button>
