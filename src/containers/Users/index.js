@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import UsersTable from '../../components/UsersTable';
+import CustomTable from '../../components/CustomTable';
 import { PENDING_USERS_DATA, APPROVED_USERS_DATA, SUPER_ADMIN_APPROVAL_DATA, PERSONAL_DETAILS_UPDATE_DATA } from '../../../src/constants/TableConstants';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -76,7 +76,7 @@ const Users = () => {
             ))}
           </div>
           <div>
-            <UsersTable tableData={tableData} showDatePicker />
+            <CustomTable tableData={tableData} showDatePicker />
           </div>
         </div>
       </div>

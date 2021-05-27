@@ -6,6 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Col, Button } from 'react-bootstrap';
+import moment from 'moment';
 import 'antd/dist/antd.css';
 import { Drawer } from 'antd';
 import Header from '../../components/Header';
@@ -38,7 +39,7 @@ const DataPage = (props) => {
           description: 'Does the board member hold a seat in the audit committee ?',
           isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
-          keyIssue: 'Audit committee functioning',
+          keyIssue: 'Shareholders rights',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -422,14 +423,27 @@ const DataPage = (props) => {
     },
   ];
 
+  const sourceApiDataList = [
+    { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
+  ];
+
+  const [sourceApiData, setSourceApiData] = useState(sourceApiDataList);
+
+  const onUploadAddSource = (value) => {
+    const filteredData = sourceApiData.filter((src) => (value.sourceName !== src.sourceName));
+    setSourceApiData([...filteredData, { ...value }]);
+  };
+
+  console.log(sourceApiData);
+
   const getDataForDataSheet = (data) => {
     console.log(props);
-    const { taskId, dpcode } = props.match.params;
+    const { taskId, dpCode } = props.location.state;
     const [currentTask] = data.filter((task) => (task.taskId === taskId));
     const max = currentTask.data.length - 1;
     const min = 0;
     return (currentTask.data.map((dpData, index) => {
-      if (dpData.dpCode === dpcode) {
+      if (dpData.dpCode === dpCode) {
         return ({
           maxIndex: max, minIndex: min, currentIndex: index, currentDpCode: dpData, currentTask,
         });
@@ -438,8 +452,12 @@ const DataPage = (props) => {
     })).filter((e) => (e !== null));
   };
 
-  const openDrawer = () => {
+  const onClickOpenAddSource = () => {
     setIsDrawerOpened(true);
+  };
+
+  const onClickCloseAddSource = () => {
+    setIsDrawerOpened(false);
   };
 
   const [{
@@ -453,31 +471,31 @@ const DataPage = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
+        <Header title="DP Code" sideBarRef={sideBarRef} />
         <div className="datapage-main" >
           <div className="datapage-info-group">
             <Drawer
               title="Add Source"
               placement="right"
               closable={false}
-              onClose={() => setIsDrawerOpened(false)}
+              onClose={onClickCloseAddSource}
               visible={isDrawerOpened}
               key="right"
               width={300}
               headerStyle={{ backgroundColor: '#2199c8' }}
             >
-              <AddSource></AddSource>
+              {isDrawerOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
             </Drawer>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="History">
-                {currentRole === 'Analyst' && <AnalystDataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} /> }
-                {currentRole === 'QA' && <QADataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} />}
+                {currentRole === 'Analyst' && <AnalystDataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} sourceApiData={sourceApiData} /> }
+                {currentRole === 'QA' && <QADataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} sourceApiData={sourceApiData} />}
               </DataAccordian>
             </Col>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Current" isActive >
-                {currentRole === 'Analyst' && <AnalystDataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
-                {currentRole === 'QA' && <QADataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} openDrawer={openDrawer} />}
+                {currentRole === 'Analyst' && <AnalystDataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} sourceApiData={sourceApiData} openDrawer={onClickOpenAddSource} />}
+                {currentRole === 'QA' && <QADataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} sourceApiData={sourceApiData} openDrawer={onClickOpenAddSource} />}
               </DataAccordian>
             </Col>
             {/* <Collapse accordion>

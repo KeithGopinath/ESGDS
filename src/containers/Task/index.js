@@ -31,7 +31,7 @@ const Task = (props) => {
           description: 'Does the board member hold a seat in the audit committee ?',
           isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
-          keyIssue: 'Audit committee functioning',
+          keyIssue: 'Shareholders rights',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -432,7 +432,7 @@ const Task = (props) => {
   const keyIssueList = useSelector((state) => ((state.keyIssues.keyIssuesList) ? (state.keyIssues.keyIssuesList.rows) : ([])));
 
   const getDataForTable = (data) => {
-    const { taskId } = props.match.params;
+    const { taskId } = props.location.state;
     const [filteredTask] = data.filter((e) => (e.taskId === taskId));
     return filteredTask;
   };
@@ -444,7 +444,7 @@ const Task = (props) => {
   const onChangeKeyIssue = (event) => {
     if (event) {
       const selectedKeyIssue = event.value;
-      const filteredData = currentData.data.filter((e) => (e.keyIssue === selectedKeyIssue));
+      const filteredData = currentData.data.filter((e) => (e.keyIssue === selectedKeyIssue.keyIssueName));
       setTableData({ taskId: currentData.taskId, data: filteredData });
     } else {
       setTableData({ taskId: currentData.taskId, data: currentData.data });
@@ -587,7 +587,7 @@ const Task = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} />
+        <Header title="Task" sideBarRef={sideBarRef} />
         <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">

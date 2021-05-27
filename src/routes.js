@@ -35,9 +35,9 @@ const Routes = () => (
         <Route path="/task" component={Task} />
         <Route path="/createbatch" component={Createbatch} />
         <Route path="/creategroup" component={CreateGroup} />
-        <Route exact path="/pendingtasks" component={PendingTasks} />
-        <Route exact path="/pendingtasks/:taskId" component={Task} />
-        <Route exact path="/pendingtasks/:taskId/:dpcode" component={DataPage} />
+        <Route path="/pendingtasks" component={PendingTasks} />
+        <Route path="/task" component={Task} />
+        <Route path="/dpcode" component={DataPage} />
         <Route exact path="/createtask" component={TaskCreate} />
       </Switch>
     </React.Fragment>

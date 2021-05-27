@@ -7,7 +7,7 @@ import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import UsersTable from '../../components/UsersTable/index';
+import CustomTable from '../../components/CustomTable/index';
 
 // FUNCTION THAT RETURNS THE PENDING TASK TABLE
 const PendingTaskTable = () => {
@@ -26,7 +26,7 @@ const PendingTaskTable = () => {
           description: 'Does the board member hold a seat in the audit committee ?',
           isStandAloneOrMatrix: 'Standalone',
           dataType: 'text',
-          keyIssue: 'Audit committee functioning',
+          keyIssue: 'Shareholders rights',
           historyDpData: [
             {
               dpCode: 'AUDP001',
@@ -415,7 +415,19 @@ const PendingTaskTable = () => {
   const tablePopulate = (data) => data.map(({
     taskId, pillar, company, year, status,
   }) => ({
-    taskId, pillar, company, year, status, action: <Link to={`/pendingtasks/${taskId}`}>Enter</Link>,
+    taskId,
+    pillar,
+    company,
+    year,
+    status,
+    action:
+  <Link
+    to={{
+      pathname: `/task/${taskId}`,
+      state: { taskId },
+    }}
+  >Enter
+  </Link>,
   }));
 
   const PENDING_TASK_DATA = {
@@ -444,7 +456,7 @@ const PendingTaskTable = () => {
   };
 
   return (
-    <UsersTable tableData={PENDING_TASK_DATA} />
+    <CustomTable tableData={PENDING_TASK_DATA} />
   );
 };
 
