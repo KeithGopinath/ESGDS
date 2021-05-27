@@ -44,7 +44,7 @@ const Login = () => {
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
   const role = login && login.user.role;
-  
+
   useEffect(() => {
     if (loginRole && role) {
       setLoginRole(false);
@@ -140,9 +140,12 @@ const Login = () => {
       setOtpLogin(true);
       const otpDetails = {
         email,
-        otp
+        otp,
+        access_token:sessionStorage.auth
       }
-      dispatch({ type: 'OTP_REQUEST', otpDetails });
+      const jsonString=JSON.stringify(otpDetails);
+      const otpData = btoa(jsonString);
+      dispatch({ type: 'OTP_REQUEST', otpData });
     }
   }
 
