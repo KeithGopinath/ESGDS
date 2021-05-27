@@ -29,11 +29,11 @@ const Login = () => {
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
   // const token = login && `${login.token}`;
-  
+
   // Temp fix have to use in useEffect 
   const token = login && login.token;
   sessionStorage.access = token
-  
+
   const decoded = token && jwt_decode(token);
 
   // otpScreen
@@ -43,7 +43,7 @@ const Login = () => {
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
-  const role=login && login.user.role;
+  const role = login && login.user.role;
 
   useEffect(() => {
     if (loginRole && role) {
@@ -183,7 +183,9 @@ const Login = () => {
     }
     else {
       const payload = {
-        email: forgotemail
+        email: forgotemail,
+        access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
+        link: "http://localhost:3000/password-resets",
       }
       dispatch(
         {
@@ -191,6 +193,7 @@ const Login = () => {
           payload
         });
       setforgotPasswordvalidate('');
+      setforgotPasswordAlert('')
     }
   }
 

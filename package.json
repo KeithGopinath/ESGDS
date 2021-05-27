@@ -27,6 +27,7 @@
     "classnames": "^2.2.5",
     "devextreme": "20.2.5",
     "devextreme-react": "20.2.5",
+    "file-saver": "^2.0.5",
     "history": "^4.7.2",
     "jwt-decode": "^3.1.2",
     "material-ui-popup-state": "^1.8.0",
