@@ -72,7 +72,7 @@
 }
 
 .MuiStepConnector-lineHorizontal {
-    margin-top: 3%;
+    margin-top: 1vh;
 
     &::after {
         color: #2199c8 !important;
@@ -83,13 +83,14 @@
     border-color: #dc3545;
 }
 
-.tooltip-inner {
-    max-width: 50% !important;
-    padding: 3px 8px !important;
+.password-tooltip>.tooltip-inner,
+.proofUpload-tooltip>.tooltip-inner {
+    max-width: 50vw !important;
     text-align: start !important;
-    color: #000 !important;
-    background-color: #fff !important;
+    color: #fff !important;
+    background-color: #2199c8 !important;
     box-shadow: 0 0.1rem 0.1rem #000;
+    padding: 3px 8px !important;
 }
 
 .info-icon {
@@ -98,8 +99,4 @@
     &:hover {
         color: #2199c8 !important;
     }
-}
-
-.proofUpload-tooltip {
-    width: max-content;
 }

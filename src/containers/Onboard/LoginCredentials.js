@@ -1,10 +1,8 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
-import { Card, Form, Row, Col, Button } from 'react-bootstrap';
+import { Card, Form, Row, Col, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 
 const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, activeStep }) => {
     const [password, setPassword] = useState('');
@@ -16,14 +14,14 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
         if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
             setPassword(e.target.value);
             onPassword(e.target.value);
-            setValidPassword(true)
+            setValidPassword(true);
         }
     };
 
     const handleConfirmPassword = (e) => {
         if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
             setConfirmPassword(e.target.value);
-            setValidPassword(true)
+            setValidPassword(true);
         }
     };
 
@@ -41,7 +39,6 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                 setLoginCredentialsAlert("Should match confirm password")
                 setValidPassword(false);
             }
-
         } else {
             setLoginCredentialsAlert('Password should match below criteria');
             setValidPassword(false);
@@ -54,7 +51,7 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
     };
 
     const renderTooltip = (props) => (
-        <Tooltip {...props}>
+        <Tooltip className="password-tooltip" {...props}>
             <strong>Password must:</strong>
             <li>Should minium of eight (8) characters</li>
             <li>Should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*)</li>
@@ -70,7 +67,7 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                         <Form.Group>
                             <Form.Label>Create password <sup className="text-danger">* </sup>
                                 <span>
-                                    <OverlayTrigger placement="right" overlay={renderTooltip} className="password-tooltip">
+                                    <OverlayTrigger placement="auto-end" overlay={renderTooltip} className="password-tooltip">
                                         <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                     </OverlayTrigger>
                                 </span>
@@ -88,7 +85,7 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                     </Col>
                     <Col lg={5} md={6} sm={6}>
                         <Form.Group>
-                            <Form.Label>Confirm password <sup className="text-danger">*</sup><i class="fas fa-info-circle"></i></Form.Label>
+                            <Form.Label>Confirm password <sup className="text-danger">*</sup></Form.Label>
                             <Form.Control
                                 className={!validPassword && 'border-danger'}
                                 type="password"
