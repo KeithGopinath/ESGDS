@@ -18,7 +18,6 @@ import XLSX from "xlsx";
 const Taxonomy = () => {
   const [show, setShow] = useState(false);
   const [showSubset, setShowSubset] = useState(false);
-  const [showCheckbox, setShowCheckbox] = useState(false);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
@@ -61,6 +60,7 @@ const Taxonomy = () => {
   const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
   const sideBarRef = useRef();
+  const flag = subsetData.length > 0 ? true : false;
 
   const onTaxonomyChange = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
@@ -123,17 +123,6 @@ const Taxonomy = () => {
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
-  }
-
-  const newSubset = () => {
-    setShowCheckbox(true);
-    const temp = [...taxonomyData];
-    var result = temp.map((el, index) => {
-      var o = Object.assign({}, el);
-      o.checked = false;
-      return o;
-    })
-    setTaxonomyData(result)
   }
 
   const createSubset = (item, e) => {
@@ -211,8 +200,15 @@ const Taxonomy = () => {
   }
 
   const subsetHandleClose = () => {
+    const temp = [...taxonomyData];
+    var result = temp.map((el, index) => {
+      var o = Object.assign({}, el);
+      o.checked = false;
+      return o;
+    })
+    setTaxonomyData(result)
     setShowSubset(false);
-    setShowCheckbox(false);
+    setSubsetData([]);
   }
 
   const calculateCount = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData).length : taxonomyData.length) / cardPerPage;
@@ -220,15 +216,14 @@ const Taxonomy = () => {
   const batchlist = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData) : taxonomyData).slice(min, max).map((item, index) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox">
-        {showCheckbox ?
-          <div className="taxonomy-checkbox-container">
-            <Form.Control
-              type="checkbox"
-              className="taxonomy-checkbox"
-              onChange={(e) => { createSubset(item, e) }}
-              checked={item.checked}
-            />
-          </div> : null}
+        <div className="taxonomy-checkbox-container">
+          <Form.Control
+            type="checkbox"
+            className="taxonomy-checkbox"
+            onChange={(e) => { createSubset(item, e) }}
+            checked={item.checked}
+          />
+        </div>
         <Form.Control
           className="input-taxonomy"
           type="text"
@@ -237,14 +232,12 @@ const Taxonomy = () => {
           disabled={item.isActive ? false : true}
           onChange={onTaxonomyChange}
         />
-        {showCheckbox ? null :
-          <Row className="taxonomy-icons-container">
-            {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
-              : null}
-            <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-            <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
-          </Row>
-        }
+        <Row className="taxonomy-icons-container">
+          {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
+            : null}
+          <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+          <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
+        </Row>
       </Card>
     </Col>
   ));
@@ -278,22 +271,9 @@ const Taxonomy = () => {
                 </ThemeProvider>
               </div>
               <div className="taxonomy-button-container">
-                {showCheckbox ? null :
-                  <div className="taxonomy-button-container">
-                    <Button variant="primary" className="taxonomy-btn" onClick={newSubset}>
-                      <div>New Subset</div>
-                    </Button>
-                    <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>
-                      <div>Add New</div>
-                    </Button>
-                    <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>
-                      <div>Export Taxonomy</div>
-                    </Button>
-                  </div>
-                }
-                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>
-                  <div>Upload Taxonomy</div>
-                </Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Export Taxonomy</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Taxonomy</Button>
               </div>
             </div>
             <div className="view-min-height">
@@ -304,17 +284,17 @@ const Taxonomy = () => {
             <Row>
               <Col lg={12} sm={12}>
                 <div className="taxonomy-footer">
-                  {showCheckbox ?
-                    <div className="taxonomy-submit">
-                      <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Submit</Button>
-                    </div>
-                    : null}
+                  <div className="taxonomy-submit">
+                    {flag ?
+                      <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Create New Subset</Button>
+                      : null}
+                  </div>
                   <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
                 </div>
               </Col>
             </Row>
             <UploadTaxonomy show={show} handleClose={handleClose} />
-            <NewTaxonomySubset show={showSubset} handleClose={subsetHandleClose} />
+            <NewTaxonomySubset show={showSubset} handleClose={subsetHandleClose} subsetData={subsetData} />
           </Container>
         </div>
       </div>
