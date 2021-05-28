@@ -118,14 +118,14 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                     <Row className="d-flex ml-2 mr-2">
                         <Col sm={6} md={6} lg={6} >
                             <Form.Group>
-                                {role === 'company' && <Form.Label className="company-proof-upload">Upload your letter of Authentication(for company representative) <sup className="text-danger">*</sup>
+                                {role === 'company' && <Form.Label className="company-proof-upload">Upload your letter of Authentication<sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
-                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication(for client representative) <sup className="text-danger">*</sup>
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication<sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="top-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
@@ -151,14 +151,14 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                         </Col>
                         <Col sm={6} md={6} lg={6}>
                             <Form.Group>
-                                {role === 'company' && <Form.Label className="company-proof-upload">Upload your employee ID proof(for company representative) <sup className="text-danger">*</sup>
+                                {role === 'company' && <Form.Label className="company-proof-upload">Upload your employee ID proof <sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
-                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof(for client  representative) <sup className="text-danger">*</sup>
+                                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof <sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
