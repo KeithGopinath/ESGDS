@@ -96,7 +96,7 @@ const Onboard = (props) => {
     const formData = new FormData();
     if (selectedOption === 'employee') {
       const employeeDetails = {
-        user: "employee",
+        roleName: "Employee",
         firstName,
         middleName,
         lastName,
@@ -118,7 +118,7 @@ const Onboard = (props) => {
       formData.append('access_token', `${sessionStorage.access}`);
     } else if (selectedOption === 'client') {
       const clientDetails = {
-        user: "client",
+        roleName: "ClientRep",
         name: firstName,
         email,
         phoneNumber,
@@ -134,7 +134,7 @@ const Onboard = (props) => {
 
     } else if (selectedOption === 'company') {
       const companyDetails = {
-        user: "company",
+        roleName: "CompanyRep",
         name: firstName,
         email,
         phoneNumber,
