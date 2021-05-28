@@ -137,9 +137,9 @@ const Login = () => {
         otp,
         access_token: sessionStorage.access
       }
-      const jsonString = JSON.stringify(otpDetails);
-      const otpData = btoa(jsonString);
-      dispatch({ type: 'OTP_REQUEST', otpData });
+      // const jsonString = JSON.stringify(otpDetails);
+      // const otpData = btoa(jsonString);
+      dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
 
@@ -150,7 +150,7 @@ const Login = () => {
   const otpHandleChange = (value) => {
     setOtp(value);
   }
-
+  
   // Forgot password screen
   const forgotPassword = () => {
     setshowForgotPassword(true);
