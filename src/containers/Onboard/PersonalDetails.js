@@ -134,7 +134,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 setPersonalDetailsAlert('');
             }
         }
-        else if (role === 'Employee') {
+        else if (role === 'employee') {
             if (!pancardNumber && !bankAccountNumber && !bankIFSCCode && !adharCard && valid === false) {
                 setPersonalDetailsAlert('Please fill all required fields');
                 setValidate('border-danger');
@@ -162,20 +162,20 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                         <Col lg={6} sm={6} md={6}>
                             <Form.Group>
                                 {(role === 'client' || role === 'company') && <Form.Label>Name <sup className="text-danger">*</sup></Form.Label>}
-                                {role === 'Employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
+                                {role === 'employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
                                 <Form.Control
                                     className={!firstName && validate}
                                     type="text"
                                     name="firstName"
                                     id="firstName"
                                     value={firstName}
-                                    placeholder={`${role === 'Employee' ? "Enter your first name" : "Enter your name"}`}
+                                    placeholder={`${role === 'employee' ? "Enter your first name" : "Enter your name"}`}
                                     onChange={onFirstNameChange}
                                     name={firstName}
                                 />
                             </Form.Group>
                         </Col>
-                        {role === 'Employee' &&
+                        {role === 'employee' &&
                             <React.Fragment>
                                 <Col lg={6} sm={6} md={6}>
                                     <Form.Group>
@@ -265,7 +265,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                                     </div>
                                 </Form.Group>
                             </Col>}
-                        {role === 'Employee' &&
+                        {role === 'employee' &&
                             <React.Fragment>
                                 <Col lg={6} sm={6} md={6}>
                                     <Form.Group>
@@ -346,7 +346,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                     </Row>
                     <span className="w-100 text-center text-danger">{personalDetailsAlert}</span>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                    {role === 'Employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
+                    {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
                 </Card>
                 <div className="d-flex justify-content-between w-100 mb-2">
                     <span><Button className="back" disabled >Back</Button></span>

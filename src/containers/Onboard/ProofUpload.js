@@ -22,17 +22,6 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setFileSize({ ...fileSize, authentication: e.target.files[0].size });
     };
 
-        // if(e.target.files[0].size > 3145728) {
-        //     setProofUploadAlert('File size should not be more than 3 MB');
-        //     setValidate(true);
-        //   } else {
-        //     onCompany(e.target.files[0]);
-        //     setProofUploadAlert('');
-        //     setValidate(false); 
-        //   }
-    //     setFileSize({...fileSize,authentication:e.target.files[0].size});
-    // };
-// console.log("file size & file  auth, id:",fileSize.authentication, fileSize.idProof);
     const onChangeEmpId = (e) => {
         setEmpID(e.target.files[0].name);
         onEmployeeId(e.target.files[0]);
@@ -73,7 +62,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                 setProofUploadAlert('');
                 setActiveStep(activeStep + 1);
             }
-        } else if (role === 'Employee') {
+        } else if (role === 'employee') {
             if (!fileName || !empID || !cancelledCheque) {
                 setProofUploadAlert('Should upload all files');
                 setAuthValidate(true);
@@ -143,7 +132,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
-                                {role === 'Employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
+                                {role === 'employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
@@ -176,7 +165,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
-                                {role === 'Employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup>
+                                {role === 'employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup>
                                     <span>
                                         <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
@@ -193,7 +182,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                 />
                             </Form.Group>
                         </Col>
-                        {role === 'Employee' && <Col sm={6} md={6} lg={6}>
+                        {role === 'employee' && <Col sm={6} md={6} lg={6}>
                             <Form.Group>
                                 <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
                                     <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
