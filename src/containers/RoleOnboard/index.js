@@ -32,7 +32,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
           type="radio"
           label="Employee"
           name="formHorizontalRadios"
-          id="Employee"
+          id="employee"
           onChange={handleSelect}
         />
         <Form.Check

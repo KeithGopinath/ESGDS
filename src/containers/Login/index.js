@@ -1,7 +1,6 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import jwt_decode from "jwt-decode";
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
@@ -28,13 +27,10 @@ const Login = () => {
   // login
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
-  // const token = login && `${login.token}`;
 
   // Temp fix have to use in useEffect 
   const token = login && login.token;
   sessionStorage.access = token
-
-  const decoded = token && jwt_decode(token);
 
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
@@ -50,7 +46,6 @@ const Login = () => {
       setLoginRole(false);
       if (role !== 'admin') {
         history.push("/dashboard");
-        // sessionStorage.role = decoded && decoded.role
       } else {
         setShowOtp(true);
       }
@@ -64,7 +59,6 @@ const Login = () => {
     if (validOtp && otpLogin) {
       setOtpLogin(false);
       history.push("/dashboard");
-      sessionStorage.role = decoded && decoded.role
     } else if (invalidOtp) {
       setOtpAlert('Please enter valid OTP');
     }
@@ -141,11 +135,11 @@ const Login = () => {
       const otpDetails = {
         email,
         otp,
-        access_token:sessionStorage.auth
+        access_token: sessionStorage.access
       }
-      const jsonString=JSON.stringify(otpDetails);
-      const otpData = btoa(jsonString);
-      dispatch({ type: 'OTP_REQUEST', otpData });
+      // const jsonString = JSON.stringify(otpDetails);
+      // const otpData = btoa(jsonString);
+      dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
 
@@ -156,7 +150,7 @@ const Login = () => {
   const otpHandleChange = (value) => {
     setOtp(value);
   }
-
+  
   // Forgot password screen
   const forgotPassword = () => {
     setshowForgotPassword(true);

@@ -94,8 +94,9 @@ const Onboard = (props) => {
 
   const onFormSubmit = () => {
     const formData = new FormData();
-    if (selectedOption === 'Employee') {
+    if (selectedOption === 'employee') {
       const employeeDetails = {
+        roleName: "Employee",
         firstName,
         middleName,
         lastName,
@@ -114,9 +115,10 @@ const Onboard = (props) => {
       formData.append('pancard', fileName);
       formData.append('aadhar', empID);
       formData.append('cancelledcheque', cancelledCheque);
-      formData.append('access_token', `${sessionStorage.auth}`);
+      formData.append('access_token', `${sessionStorage.access}`);
     } else if (selectedOption === 'client') {
       const clientDetails = {
+        roleName: "ClientRep",
         name: firstName,
         email,
         phoneNumber,
@@ -128,10 +130,11 @@ const Onboard = (props) => {
       formData.append('onboardingdetails', clientData);
       formData.append('authenticationletterforclient', fileName);
       formData.append('companyidforclient', empID);
-      formData.append('access_token', `${sessionStorage.auth}`);
+      formData.append('access_token', `${sessionStorage.access}`);
 
     } else if (selectedOption === 'company') {
       const companyDetails = {
+        roleName: "CompanyRep",
         name: firstName,
         email,
         phoneNumber,
@@ -143,7 +146,7 @@ const Onboard = (props) => {
       formData.append('onboardingdetails', companyData);
       formData.append('authenticationletterforcompany', fileName);
       formData.append('companyidforcompany', empID);
-      formData.append('access_token', `${sessionStorage.auth}`);
+      formData.append('access_token', `${sessionStorage.access}`);
     }
 
     dispatch({ type: 'ONBOARD_REQUEST', formData });

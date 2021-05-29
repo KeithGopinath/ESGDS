@@ -1,7 +1,7 @@
 export default {
   apiEndPoints: {
     getLogin: 'auth',
-    getOtp: 'auth-otp',
+    getOtp: 'auth/auth-otp',
     getForgotPassword: 'forgotpassword',
     getCompanylist: 'companies',
     getBatchlist: 'batches',
