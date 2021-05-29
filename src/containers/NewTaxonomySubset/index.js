@@ -1,9 +1,15 @@
 /* eslint-disable*/
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
 
-const NewTaxonomySubset = ({ show, handleClose }) => {
+const NewTaxonomySubset = ({ show, handleClose, subsetData }) => {
+    const [subsetName, setsubsetName] = useState('');
+
+    const onNameChange = (e) => {
+        setsubsetName(e.target.value)
+    }
+
     const subsetBody = () => (
         <div>
             {/* <Form.Label>Enter subest name</Form.Label> */}
@@ -13,12 +19,20 @@ const NewTaxonomySubset = ({ show, handleClose }) => {
                     type="text"
                     name="subsetName"
                     placeholder="Enter name"
-                // value={email}
-                // onChange={onEmailChange}
+                    // value={email}
+                    onChange={onNameChange}
                 />
             </Form.Group>
         </div>
     )
+
+    const onSubmitSubset = () => {
+        const payload = {
+            name: subsetName,
+            data: subsetData,
+        }
+        console.log(payload);
+    }
 
     return (
         <Overlay
@@ -34,7 +48,7 @@ const NewTaxonomySubset = ({ show, handleClose }) => {
             body={subsetBody()}
             // alert={forgotPasswordAlert}
             primary="submit"
-        // onSubmitPrimary={onSubmitForgotPassword}
+            onSubmitPrimary={onSubmitSubset}
         // alertClass={forgotPasswordClass}
         />
     );
