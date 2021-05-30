@@ -1,3 +1,4 @@
+import { all } from 'redux-saga/effects';
 import { loginWatchers } from './Login';
 import { otpWatchers } from './Otp';
 import { forgotPasswordWatchers } from './ForgotPassword';
@@ -9,7 +10,7 @@ import { getCreateBatchWatchers } from './BatchCreate';
 import { getKeyIssuesWatchers } from './KeyIssues';
 
 export default function* rootWatchers() {
-  yield [
+  yield all([
     loginWatchers(),
     otpWatchers(),
     forgotPasswordWatchers(),
@@ -19,5 +20,5 @@ export default function* rootWatchers() {
     getBatchWatchers(),
     getCreateBatchWatchers(),
     getKeyIssuesWatchers(),
-  ];
+  ]);
 }
