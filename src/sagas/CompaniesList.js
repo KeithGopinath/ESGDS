@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/CompaniesList';
 import { doGet } from '../utils/fetchWrapper';
@@ -13,7 +13,7 @@ export function* getCompanyListRequest() {
 }
 
 export function* companyListWatchers() {
-  yield [
+  yield all([
     takeLatest('COMPANY_LIST_REQUEST', getCompanyListRequest),
-  ];
+  ]);
 }

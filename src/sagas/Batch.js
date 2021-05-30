@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/Batch';
 import { doGet } from '../utils/fetchWrapper';
@@ -14,7 +14,7 @@ export function* getBatchRequest() {
 }
 
 export function* getBatchWatchers() {
-  yield [
+  yield all([
     takeLatest('BATCH_REQUEST', getBatchRequest),
-  ];
+  ]);
 }
