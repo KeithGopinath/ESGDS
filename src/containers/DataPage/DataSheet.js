@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
@@ -10,29 +8,57 @@ import moment from 'moment';
 import 'antd/dist/antd.css';
 import { history } from '../../routes';
 
-const AnalystDataSheet = ({
-  maxIndex, minIndex, currentIndex, currentDpCode, currentTask, location, historyDpCodeData, sourceApiData, openDrawer,
-}) => {
+
+const DataSheet = (props) => {
+  const {
+    isAnalyst, isAnalystHistory, isQA, isQAHistory, indexes, dpCodeData, taskData, sourceData, openSourcePanel, location, errorList,
+  } = props;
+
+  const { minIndex, currentIndex, maxIndex } = indexes || { minIndex: null, currentIndex: null, maxIndex: null };
+
   // # historicalData # A Variable Is Just A List Of Historical Data Of currentDpCode
-  const historicalData = currentDpCode.historyDpData;
-  const [isHistoryEditable, setIsHistoryEditable] = useState(false);
-  const isFieldDisabled = historyDpCodeData && !isHistoryEditable;
+  const historicalData = dpCodeData.historyDpData;
+
+  // # defaultHistoricalData # A variable which stores a 0th index of Historical Data List
   const defaultHistoricalData = historicalData[0];
+
+  // # isHistoryEditable # A Boolean State which makes historicalData editable on OnClick
+  const [isQAHistoryEditable, setIsQAHistoryEditable] = useState(false);
+  const [isAnalystHistoryEditable, setIsAnalystHistoryEditable] = useState(false);
+
+  // # getCondition #  A Function which returns the condition to disable the formData fields based on the certain role types
+  const getCondition = () => {
+    if (isAnalyst) {
+      return false;
+    } else if (isAnalystHistory) {
+      return !isAnalystHistoryEditable;
+    } else if (isQA) {
+      return true;
+    } else if (isQAHistory) {
+      return !isQAHistoryEditable;
+    }
+    return false;
+  };
+
+  const isHistoryType = isAnalystHistory || isQAHistory;
+
+  const isFieldDisabled = getCondition();
+
   // # defaultData # A Variable Is Used For Initializing The formData State Based On The Data That Comes From Props
-  const defaultData = (!historyDpCodeData) ?
+  const defaultData = (!isHistoryType) ?
     {
-      dpCode: currentDpCode.dpCode,
-      dataType: currentDpCode.dataType,
-      year: currentDpCode.fiscalYear,
-      pageNo: currentDpCode.pageNo || '',
-      url: currentDpCode.url || '',
-      publicationDate: currentDpCode.publicationDate || '',
-      description: currentDpCode.description,
-      textSnippet: currentDpCode.textSnippet || '',
-      screen: currentDpCode.screen || '',
-      source: currentDpCode.source || '',
-      filePath: currentDpCode.filePath || '',
-      response: currentDpCode.response || '',
+      dpCode: dpCodeData.dpCode,
+      dataType: dpCodeData.dataType,
+      year: dpCodeData.fiscalYear,
+      pageNo: dpCodeData.pageNo || '',
+      url: dpCodeData.url || '',
+      publicationDate: dpCodeData.publicationDate || '',
+      description: dpCodeData.description,
+      textSnippet: dpCodeData.textSnippet || '',
+      screen: dpCodeData.screen || '',
+      source: dpCodeData.source || '',
+      filePath: dpCodeData.filePath || '',
+      response: dpCodeData.response || '',
     } :
     {
       dpCode: defaultHistoricalData.dpCode,
@@ -48,17 +74,19 @@ const AnalystDataSheet = ({
       filePath: defaultHistoricalData.filePath || '',
       response: defaultHistoricalData.response || '',
     };
-  // # formData # A State Intialized With Set Of Variables As Object/Json
+
+  // # formData # A State Intialized With defaultData
   const [formData, setFormData] = useState(defaultData);
 
   // Below useEffect Is Defined To Change (Empty Out/Clear Out) The Current formData State With Respect To Location Prop Attribute
   useEffect(() => {
     setFormData(defaultData);
+    setIsAnalystHistoryEditable(false);
+    setIsQAHistoryEditable(false);
   }, [location]);
 
   // onChangeFormData Function Gets Called When Every Form Fields Changes And Updates The formData State
   const onChangeFormData = (event) => {
-    console.log(event.target && event.target.files, event);
     const key = event.currentTarget.name;
     switch (key) {
       case 'dpCode':
@@ -109,7 +137,7 @@ const AnalystDataSheet = ({
       case 'uploadScreenshot':
         if (event.currentTarget.value.fileList[0]) {
           setFormData({
-            ...formData, filePath: URL.createObjectURL(event.currentTarget.value.fileList[0].originFileObj),
+            ...formData, filePath: { preview: URL.createObjectURL(event.currentTarget.value.fileList[0].originFileObj), file: event.currentTarget.value },
           });
         } else {
           setFormData({
@@ -137,32 +165,48 @@ const AnalystDataSheet = ({
         break;
     }
   };
-  console.log(formData);
+
   // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Forth To The Next DpCode Page
   const saveAndNextClickHandler = () => {
     console.log(formData);
-    const nextDpCode = currentTask.data[currentIndex + 1];
+    const nextDpCode = taskData.data[currentIndex + 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: currentTask.taskId, dpCode: nextDpCode.dpCode },
+      state: { taskId: taskData.taskId, dpCode: nextDpCode.dpCode },
     });
   };
 
-  // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Back To The Previous DpCode Page
+  // editAndPreviousClickHandler Function Handle A Click Comes From A Button And Traverse Back To The Previous DpCode Page
   const editAndPreviousClickHandler = () => {
-    const nextDpCode = currentTask.data[currentIndex - 1];
+    const nextDpCode = taskData.data[currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: currentTask.taskId, dpCode: nextDpCode.dpCode },
+      state: { taskId: taskData.taskId, dpCode: nextDpCode.dpCode },
     });
   };
+
+  const onClickBack = () => {
+    history.push({
+      pathname: `/task/${taskData.taskId}`,
+      state: { taskId: taskData.taskId },
+    });
+  };
+
+  const onClickSaveAndClose = () => {
+    history.push({
+      pathname: `/task/${taskData.taskId}`,
+      state: { taskId: taskData.taskId },
+    });
+  };
+
   const uploadScreenshotCheck = (file) => {
     console.log(file.type);
     if (!(file.type).includes('image')) {
       message.error(`${file.name} is not a image file`);
     }
-    // return (file.type).includes('image') ? false : Upload.LIST_IGNORE;
+    return (file.type).includes('image') ? false : Upload.LIST_IGNORE;
   };
+
   // inChangeHistoryYear Function Change The fromData Values With Respect To The Selected Year
   const onChangeHistoryYear = (event) => {
     setFormData({
@@ -182,8 +226,10 @@ const AnalystDataSheet = ({
   };
 
   const onClickUnFreeze = () => {
-    setIsHistoryEditable(true);
+    setIsQAHistoryEditable(true);
   };
+
+
   return (
     <Row>
       {/* ################################################################################################ DPCODE */}
@@ -203,7 +249,7 @@ const AnalystDataSheet = ({
         </Form.Group>
       </Col>
 
-      { !historyDpCodeData &&
+      { !isHistoryType &&
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
@@ -220,7 +266,7 @@ const AnalystDataSheet = ({
             </Col>
           </Form.Group>
         </Col> }
-      { historyDpCodeData &&
+      { isHistoryType &&
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
@@ -253,7 +299,7 @@ const AnalystDataSheet = ({
               onChange={(e) => onChangeFormData({ currentTarget: { name: 'source', id: 'source', value: e } })}
               value={formData.source && { label: formData.source.sourceName, value: formData.source }}
               // onChange={}
-              options={sourceApiData.map((source) => ({ label: source.sourceName, value: source }))}
+              options={sourceData.map((source) => ({ label: source.sourceName, value: source }))}
               // isSearchable={}
               // className={}
               placeholder="Choose source"
@@ -262,9 +308,9 @@ const AnalystDataSheet = ({
           </Col>
         </Form.Group>
       </Col>
-      {!historyDpCodeData &&
+      {!isHistoryType &&
       <Col lg={6}>
-        <Button onClick={openDrawer} >Add Source</Button>
+        <Button onClick={openSourcePanel} >Add Source</Button>
       </Col> }
       {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
@@ -313,7 +359,8 @@ const AnalystDataSheet = ({
             TextSnippet*
           </Form.Label>
           <Col sm={7}>
-            <Form.Control type="text" name="textSnippet" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.textSnippet} placeholder="Snippet" />
+            {/* <Form.Control type="text" name="textSnippet" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.textSnippet} placeholder="Snippet" /> */}
+            <Form.Control as="textarea" name="textSnippet" readOnly={isFieldDisabled} onChange={onChangeFormData} value={formData.textSnippet} placeholder="Snippet" />
           </Col>
         </Form.Group>
       </Col>
@@ -328,7 +375,7 @@ const AnalystDataSheet = ({
           </Col>
         </Form.Group>
       </Col>
-      { historyDpCodeData &&
+      { isHistoryType &&
         <React.Fragment>
           {/* ################################################################################################ URL */}
           <Col lg={6}>
@@ -360,7 +407,7 @@ const AnalystDataSheet = ({
             Screen*
           </Form.Label>
           <Col sm={7}>
-            <Form.Control type="text" id="screen" readOnly={historyDpCodeData} onChange={onChangeFormData} value={formData.screen} placeholder="Screen" />
+            <Form.Control type="text" id="screen" readOnly={isHistoryType} onChange={onChangeFormData} value={formData.screen} placeholder="Screen" />
           </Col>
         </Form.Group>
       </Col> */}
@@ -371,12 +418,10 @@ const AnalystDataSheet = ({
             Upload Screenshot*
           </Form.Label>
           <Col sm={7}>
-            <Upload style={{ width: '100%' }} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
+            <Upload className="datapage-ant-upload" fileList={formData.filePath ? formData.filePath.file.fileList : null} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
               <AntButton
                 disabled={isFieldDisabled}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38px',
-                }}
+                className="datapage-ant-button"
                 icon={<UploadOutlined />}
               >Click to Upload
               </AntButton>
@@ -386,49 +431,73 @@ const AnalystDataSheet = ({
       </Col>
       <Col lg={6}>
         {/* ################################################################################################ IMAGE PREVIEW */}
-        {formData.filePath && <Image width="50%" src={formData.filePath} /> }
+        {formData.filePath && <Image width="50%" src={formData.filePath.preview} /> }
       </Col>
+      { isQA &&
+        <React.Fragment>
+          {/* ################################################################################################ ERROR TYPE */}
+          <Col lg={6}>
+            <Form.Group as={Row} >
+              <Form.Label column sm={5}>
+                Error Type*
+              </Form.Label>
+              <Col sm={7}>
+                <Select
+                  name="userRole"
+                  // value={""}
+                  options={errorList.map((e) => ({ label: e, value: e }))}
+                  // isSearchable={}
+                  // className={}
+                  maxLength={30}
+                />
+              </Col>
+            </Form.Group>
+          </Col>
+          {/* ################################################################################################ COMMENTS */}
+          <Col lg={6}>
+            <Form.Group as={Row} >
+              <Form.Label column sm={5}>
+                Comments*
+              </Form.Label>
+              <Col sm={7}>
+                <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
+              </Col>
+            </Form.Group>
+          </Col>
+        </React.Fragment> }
       {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
       <Col lg={12} className="datapage-button-wrap">
-        { !historyDpCodeData ?
+        { isAnalyst &&
           <React.Fragment>
-            <Button
-              style={{ marginRight: '1.5%' }}
-              variant="danger"
-              onClick={() => {
-                history.push({
-                  pathname: `/task/${currentTask.taskId}`,
-                  state: { taskId: currentTask.taskId },
-                });
-              }}
-              type="submit"
-            >Back
-            </Button>
-            <Button style={{ marginRight: '1.5%' }} disabled={minIndex === currentIndex} variant="primary" onClick={editAndPreviousClickHandler} type="submit">Previous</Button>
+            <Button className="datapage-button" variant="danger" onClick={onClickBack} type="submit" >Back</Button>
+            <Button className="datapage-button" disabled={minIndex === currentIndex} variant="primary" onClick={editAndPreviousClickHandler} type="submit">Previous</Button>
             {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={saveAndNextClickHandler} type="submit">Save And Next</Button>}
-            {maxIndex === currentIndex &&
-            <Button
-              style={{ marginRight: '1.5%' }}
-              variant="danger"
-              onClick={() => {
-                history.push({
-                  pathname: `/task/${currentTask.taskId}`,
-                  state: { taskId: currentTask.taskId },
-                });
-              }}
-              type="submit"
-            >Save And Close
-            </Button> }
-          </React.Fragment> :
-          <React.Fragment>
-            <Button style={{ marginRight: '1.5%' }} variant="primary" onClick={onClickUnFreeze} type="submit">UnFreeze</Button>
-            {isHistoryEditable && <Button style={{ marginRight: '1.5%' }} variant="success" onClick={null} type="submit">Save</Button>}
+            {maxIndex === currentIndex && <Button className="datapage-button" variant="danger" onClick={onClickSaveAndClose} type="submit">Save And Close</Button> }
           </React.Fragment> }
+        { isQA &&
+          <React.Fragment>
+            <Button className="datapage-button" variant="primary" onClick={null} type="submit">Edit</Button>
+            <Button className="datapage-button" variant="danger" onClick={onClickBack} type="submit" >Back</Button>
+            <Button className="datapage-button" disabled={minIndex === currentIndex} variant="primary" onClick={editAndPreviousClickHandler} type="submit">Previous</Button>
+            {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={saveAndNextClickHandler} type="submit">Save And Next</Button>}
+            {maxIndex === currentIndex && <Button className="datapage-button" variant="danger" onClick={onClickSaveAndClose} type="submit">Save And Close</Button>}
+          </React.Fragment> }
+        { isAnalystHistory &&
+          <React.Fragment>
+            <Button className="datapage-button" variant="primary" onClick={onClickUnFreeze} type="submit">UnFreeze</Button>
+            {isAnalystHistoryEditable && <Button className="datapage-button" variant="success" onClick={null} type="submit">Save</Button>}
+          </React.Fragment> }
+        { isQAHistory &&
+        <React.Fragment>
+          <Button className="datapage-button" variant="primary" onClick={null} type="submit">UnFreeze</Button>
+        </React.Fragment>
+        }
       </Col>
 
     </Row>
   );
 };
 
-export default AnalystDataSheet;
+
+export default DataSheet;

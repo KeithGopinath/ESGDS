@@ -11,17 +11,16 @@ import 'antd/dist/antd.css';
 import { Drawer } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import AnalystDataSheet from './AnalystDataSheet';
 import DataAccordian from './DataAccordian';
 import AddSource from './AddSource';
-import QADataSheet from './QADataSheet';
+import DataSheet from './DataSheet';
 
 
 const DataPage = (props) => {
   console.log(props, '#######################');
   const sideBarRef = useRef();
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-  const currentRole = 'Analyst';
+  const currentRole = 'QA';
   // const { Panel } = Collapse;
 
   const apiData = [
@@ -423,6 +422,17 @@ const DataPage = (props) => {
     },
   ];
 
+  const errorList = ['T1. Incorrect data input/typo', 'T1. Document missed',
+    'T1. Data/Information missed',
+    'T1. SOP not followed',
+    'T1. Incorrect Evidence',
+    'T1. Missed snippet',
+    'T1. Incorrect Scoring',
+    'T2. Evidence not substantive',
+    'T2. Improvement for next time',
+    'T2. Comments and calculation',
+    'T2. Others/No error'];
+
   const sourceApiDataList = [
     { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
   ];
@@ -488,14 +498,14 @@ const DataPage = (props) => {
             </Drawer>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="History">
-                {currentRole === 'Analyst' && <AnalystDataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} sourceApiData={sourceApiData} /> }
-                {currentRole === 'QA' && <QADataSheet historyDpCodeData currentDpCode={currentDpCode} location={props.location} sourceApiData={sourceApiData} />}
+                {currentRole === 'Analyst' && <DataSheet isAnalystHistory dpCodeData={currentDpCode} location={props.location} sourceData={sourceApiData} /> }
+                {currentRole === 'QA' && <DataSheet isQAHistory dpCodeData={currentDpCode} location={props.location} sourceData={sourceApiData} />}
               </DataAccordian>
             </Col>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Current" isActive >
-                {currentRole === 'Analyst' && <AnalystDataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} sourceApiData={sourceApiData} openDrawer={onClickOpenAddSource} />}
-                {currentRole === 'QA' && <QADataSheet maxIndex={maxIndex} minIndex={minIndex} currentIndex={currentIndex} currentDpCode={currentDpCode} currentTask={currentTask} location={props.location} sourceApiData={sourceApiData} openDrawer={onClickOpenAddSource} />}
+                {currentRole === 'Analyst' && <DataSheet isAnalyst indexes={{ maxIndex, minIndex, currentIndex }} dpCodeData={currentDpCode} taskData={currentTask} location={props.location} sourceData={sourceApiData} openSourcePanel={onClickOpenAddSource} />}
+                {currentRole === 'QA' && <DataSheet isQA indexes={{ maxIndex, minIndex, currentIndex }} dpCodeData={currentDpCode} taskData={currentTask} location={props.location} sourceData={sourceApiData} errorList={errorList} openSourcePanel={onClickOpenAddSource} />}
               </DataAccordian>
             </Col>
             {/* <Collapse accordion>

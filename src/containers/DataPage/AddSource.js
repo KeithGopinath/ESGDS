@@ -55,6 +55,16 @@ const AddSource = (props) => {
   const [publicationDate, setPublicationDate] = useState(null);
   const [sourcePDF, setSourcePDF] = useState(null);
 
+  const [errors, setErrors] = useState({
+    sourceType: null,
+    subSourceType: null,
+    sourceName: null,
+    isMultiyear: null,
+    sourceURL: null,
+    publicationDate: null,
+    sourcePDF: null,
+  });
+
   useEffect(() => {
     resetFields();
   }, [currentSourceType]);
@@ -63,6 +73,8 @@ const AddSource = (props) => {
     setCurrentSubSourceType(null);
     setIsMultiyear(false);
     setSourceURL('');
+    setPublicationDate(null);
+    setSourcePDF(null);
   };
 
   const onChangeSourceType = (event) => {
@@ -100,15 +112,65 @@ const AddSource = (props) => {
   };
 
   const onChangeSourcePDFUpload = (event) => {
-    setSourcePDF(event);
+    setSourcePDF(event.fileList.length > 0 ? event.fileList : null);
   };
 
+  const validate = () => {
+    const sourceTypeCheck = (currentSourceType !== null);
+    const subSourceTypeCheck = (currentSubSourceType !== null);
+    const sourceNameCheck = (sourceName.length > 0);
+    const isMultiyearCheck = (isMultiyear === true || isMultiyear === false);
+    const sourceURLCheck = (sourceURL.length > 0);
+    const publicationDateCheck = (publicationDate !== null);
+    const sourcePDFCheck = (sourcePDF !== null);
+    setErrors({
+      sourceType: !sourceTypeCheck,
+      subSourceType: !subSourceTypeCheck,
+      sourceName: !sourceNameCheck,
+      isMultiyear: !isMultiyearCheck,
+      sourceURL: !sourceURLCheck,
+      publicationDate: !publicationDateCheck,
+      sourcePDF: !sourcePDFCheck,
+    });
+
+    if (currentSourceType) {
+      if (currentSourceType.label === 'Others') {
+        if (sourceTypeCheck && sourceNameCheck && isMultiyearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+          return true;
+        }
+        return false;
+      }
+      if (currentSourceType.value.IsMultisource && currentSubSourceType) {
+        if (currentSubSourceType.label === 'Others') {
+          if (sourceTypeCheck && subSourceTypeCheck && sourceNameCheck && isMultiyearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+            return true;
+          }
+          return false;
+        }
+        if (currentSubSourceType.label !== 'Others') {
+          if (sourceTypeCheck && subSourceTypeCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+            return true;
+          }
+          return false;
+        }
+      }
+      if (!currentSourceType.value.IsMultisource) {
+        if (sourceTypeCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+          return true;
+        }
+        return false;
+      }
+    }
+    return false;
+  };
+  console.log(currentSourceType, currentSubSourceType, sourcePDF, sourceURL, sourceName, isMultiyear, publicationDate, errors);
   const onClickUpload = () => {
-    console.log(sourcePDF);
-    const newSourceName = (currentSourceType.label === 'Others' || (currentSubSourceType && currentSubSourceType.label === 'Others')) && !isMultiyear ? (`${sourceName} 2018-2019`) : sourceName;
-    const uploadSourceData = { sourceName: newSourceName, url: sourceURL, publicationDate };
-    props.onUploadAddSource(uploadSourceData);
-    props.closeAddSourcePanel();
+    if (validate()) {
+      const newSourceName = (currentSourceType.label === 'Others' || (currentSubSourceType && currentSubSourceType.label === 'Others')) && !isMultiyear ? (`${sourceName} 2018-2019`) : sourceName;
+      const uploadSourceData = { sourceName: newSourceName, url: sourceURL, publicationDate };
+      props.onUploadAddSource(uploadSourceData);
+      props.closeAddSourcePanel();
+    }
   };
 
   return (
@@ -131,6 +193,7 @@ const AddSource = (props) => {
               placeholder="Choose source type"
               maxLength={30}
             />
+            {errors.sourceType && <small className="addsource-validate-text">*Required</small>}
           </Col>
         </Form.Group>
       </Col>
@@ -153,6 +216,7 @@ const AddSource = (props) => {
               placeholder="Choose sub-source type"
               maxLength={30}
             />
+            {errors.subSourceType && <small className="addsource-validate-text">*Required</small>}
           </Col>
         </Form.Group>
       </Col> }
@@ -171,6 +235,7 @@ const AddSource = (props) => {
               value={sourceName}
               placeholder="Enter Source Name"
             />
+            {errors.sourceName && <small className="addsource-validate-text">*Should have atleast one character</small>}
           </Col>
         </Form.Group>
       </Col> }
@@ -202,6 +267,7 @@ const AddSource = (props) => {
               value={sourceURL}
               placeholder="Enter Url"
             />
+            {errors.sourceURL && <small className="addsource-validate-text">*Should have atleast one character</small>}
           </Col>
         </Form.Group>
       </Col>
@@ -221,6 +287,7 @@ const AddSource = (props) => {
               >Click to Upload
               </AntButton>
             </Upload>
+            {errors.sourcePDF && <small className="addsource-validate-text">*Required</small>}
           </Col>
         </Form.Group>
       </Col>
@@ -238,6 +305,7 @@ const AddSource = (props) => {
               value={publicationDate && moment(publicationDate)}
               size="large"
             />
+            {errors.publicationDate && <small className="addsource-validate-text">*Required</small>}
           </Col>
         </Form.Group>
       </Col>
