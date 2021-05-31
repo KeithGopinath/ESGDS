@@ -12,6 +12,6 @@ export default {
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
-    prod: '',
+    prod: 'http://65.1.140.116:9010/',
   },
 };
