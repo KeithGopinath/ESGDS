@@ -1,4 +1,4 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as updatePasswordActionCreators from '../actionCreators/UpdatePassword';
 import { doPut } from '../utils/fetchWrapper';
@@ -13,7 +13,7 @@ export function* getUpdatePasswordRequest(data) {
 }
 
 export function* updatePasswordWatchers() {
-  yield all([
+  yield [
     takeLatest('UPDATE_PASSWORD_REQUEST', getUpdatePasswordRequest),
-  ]);
+  ];
 }

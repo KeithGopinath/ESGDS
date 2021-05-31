@@ -1,8 +1,6 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/KeyIssues';
-import { KEYISSUES_REQUEST } from './../actionTypes/KeyIssues';
-
 import { doGet } from '../utils/fetchWrapper';
 
 export function* getKeyIssuesRequest() {
@@ -15,7 +13,7 @@ export function* getKeyIssuesRequest() {
 }
 
 export function* getKeyIssuesWatchers() {
-  yield all([
-    takeLatest(KEYISSUES_REQUEST, getKeyIssuesRequest),
-  ]);
+  yield [
+    takeLatest('KEYISSUES_REQUEST', getKeyIssuesRequest),
+  ];
 }

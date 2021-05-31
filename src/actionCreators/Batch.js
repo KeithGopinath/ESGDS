@@ -1,19 +1,17 @@
-import * as ESGDS from '../actionTypes/Batch';
-
 export const getBatchRequest = () => ({
-  type: ESGDS.BATCH_REQUEST,
+  type: 'BATCH_REQUEST',
 });
 
 export function getBatchSuccess(batchlist) {
   return {
-    type: ESGDS.BATCH_SUCCESS,
+    type: 'BATCH_SUCCESS',
     batchlist,
   };
 }
 
 export function getBatchFailure(error) {
   return {
-    type: ESGDS.BATCH_FAILURE,
+    type: 'BATCH_FAILURE',
     error,
   };
 }

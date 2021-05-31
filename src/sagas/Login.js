@@ -1,4 +1,4 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/Login';
 import { doPost } from '../utils/fetchWrapper';
@@ -13,7 +13,7 @@ export function* getLogin(data) {
 }
 
 export function* loginWatchers() {
-  yield all([
+  yield [
     takeLatest('LOGIN_REQUEST', getLogin),
-  ]);
+  ];
 }

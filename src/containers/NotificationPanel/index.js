@@ -75,6 +75,10 @@ const NotificationPanel = () => {
             title: "Lorem ipsum dolor sit amet",
             message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit ipsum dolor sit amet"
         },
+        {
+            title: "Lorem ipsum dolor sit amet",
+            message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit ipsum dolor sit amet"
+        },
     ]
 
     useEffect(() => {

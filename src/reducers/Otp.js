@@ -1,23 +1,21 @@
-import * as ESGDS from './../actionTypes/Otp';
-
 const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ESGDS.OTP_REQUEST:
+    case 'OTP_REQUEST':
       return {
         ...state,
         isLoading: true,
         otp: false,
         error: false,
       };
-    case ESGDS.OTP_SUCCESS:
+    case 'OTP_SUCCESS':
       return {
         ...state,
         isLoading: true,
         otp: action.otp,
       };
-    case ESGDS.OTP_FAILURE:
+    case 'OTP_FAILURE':
       return {
         ...state,
         isLoading: true,
