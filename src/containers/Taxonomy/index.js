@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Card, Button, Container, Form } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -18,7 +18,6 @@ import XLSX from "xlsx";
 const Taxonomy = () => {
   const [show, setShow] = useState(false);
   const [showSubset, setShowSubset] = useState(false);
-  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(20);
@@ -26,36 +25,17 @@ const Taxonomy = () => {
   const [taxonomyData, setTaxonomyData] = useState()
   const [subsetData, setSubsetData] = useState([])
 
-  useEffect(() => {
-    setTaxonomyData(cardData)
-  }, []);
+  const dispatch = useDispatch();
+  const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
+  const masterTaxonomy = taxonomy && taxonomy.rows;
 
-  const cardData = [
-    { name: 'Category Code' },
-    { name: 'Category' },
-    { name: 'Theme Code' },
-    { name: 'Theme' },
-    { name: 'Key Issues' },
-    { name: 'Function' },
-    { name: 'DP Code' },
-    { name: 'DP Name' },
-    { name: 'Description' },
-    { name: 'Polarity' },
-    { name: 'Data Collection' },
-    { name: 'Guide' },
-    { name: 'Unit' },
-    { name: 'Signal' },
-    { name: 'Aid DP/Logic' },
-    { name: 'Normalized by' },
-    { name: 'Weighted' },
-    { name: 'Relevant for India' },
-    { name: 'Percentile' },
-    { name: 'Final Unit' },
-    { name: 'Standalone/ Matrix' },
-    { name: 'Industry Relevancy' },
-    { name: 'Mining of coal and lignite' },
-    { name: 'Extraction of crude petroleum and natural gas' },
-  ];
+  useEffect(() => {
+    setTaxonomyData(masterTaxonomy)
+  }, [taxonomy]);
+
+  useEffect(() => {
+    dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
+  }, []);
 
   const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
@@ -70,7 +50,7 @@ const Taxonomy = () => {
 
   const addNewTaxonomy = () => {
     const temp = [...taxonomyData];
-    temp.push({ name: '' })
+    temp.push({ fields: '' })
     setTaxonomyData(temp)
   }
 
@@ -100,7 +80,7 @@ const Taxonomy = () => {
   const updateTaxonomy = (item) => {
     const updated = [...taxonomyData];
     const index = updated.indexOf(item)
-    const updatedObj = { ...updated[index], name: newTaxonomy, isActive: false };
+    const updatedObj = { ...updated[index], fields: newTaxonomy, isActive: false };
     const temp = [
       ...updated.slice(0, index),
       updatedObj,
@@ -114,7 +94,7 @@ const Taxonomy = () => {
     let modifiedDta = [];
     let obj = {};
     for (let key in Data) {
-      const x = Data[key].name;
+      const x = Data[key].fields;
       obj[x] = '';
     }
     modifiedDta.push(obj);
@@ -137,7 +117,7 @@ const Taxonomy = () => {
         ...updated.slice(indexUpdated + 1),
       ];
       setTaxonomyData(tempOne);
-      temp.push({ name: item.name })
+      temp.push({ name: item.fields })
       setSubsetData(temp)
     }
     else {
@@ -183,7 +163,7 @@ const Taxonomy = () => {
 
   const searchfilter = (search, card) => {
     const filteredData = card.filter((e) => {
-      if ((e.name.toLowerCase()).includes(search.toLowerCase())) {
+      if ((e.fields.toLowerCase()).includes(search.toLowerCase())) {
         return true;
       }
       return false;
@@ -228,7 +208,7 @@ const Taxonomy = () => {
           className="input-taxonomy"
           type="text"
           name="taxonomy"
-          value={item.isActive ? newTaxonomy : item.name}
+          value={item.isActive ? newTaxonomy : item.fields}
           disabled={item.isActive ? false : true}
           onChange={onTaxonomyChange}
         />

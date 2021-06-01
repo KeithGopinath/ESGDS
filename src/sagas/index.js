@@ -8,6 +8,7 @@ import { updatePasswordWatchers } from './UpdatePassword';
 import { getBatchWatchers } from './Batch';
 import { getCreateBatchWatchers } from './BatchCreate';
 import { getKeyIssuesWatchers } from './KeyIssues';
+import { getMasterTaxonomyWatchers } from './MasterTaxonomy';
 
 export default function* rootWatchers() {
   yield all([
@@ -20,5 +21,6 @@ export default function* rootWatchers() {
     getBatchWatchers(),
     getCreateBatchWatchers(),
     getKeyIssuesWatchers(),
+    getMasterTaxonomyWatchers(),
   ]);
 }
