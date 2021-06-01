@@ -3,16 +3,12 @@ export const getLogin = (loginDetails) => ({
   loginDetails,
 });
 
-export function getLoginSuccess(login) {
-  return {
-    type: 'LOGIN_SUCCESS',
-    login,
-  };
-}
+export const getLoginSuccess = (login) => ({
+  type: 'LOGIN_SUCCESS',
+  login,
+});
 
-export function getLoginFailure(error) {
-  return {
-    type: 'LOGIN_FAILURE',
-    error,
-  };
-}
+export const getLoginFailure = (error) => ({
+  type: 'LOGIN_FAILURE',
+  error,
+});

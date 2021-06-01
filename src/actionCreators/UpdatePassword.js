@@ -3,16 +3,12 @@ export const getUpdatePasswordRequest = (payload) => ({
   payload,
 });
 
-export function getUpdatePasswordSuccess(updatePassword) {
-  return {
-    type: 'UPDATE_PASSWORD_SUCCESS',
-    updatePassword,
-  };
-}
+export const getUpdatePasswordSuccess = (updatePassword) => ({
+  type: 'UPDATE_PASSWORD_SUCCESS',
+  updatePassword,
+});
 
-export function getUpdatePasswordFailure(error) {
-  return {
-    type: 'UPDATE_PASSWORD_FAILURE',
-    error,
-  };
-}
+export const getUpdatePasswordFailure = (error) => ({
+  type: 'UPDATE_PASSWORD_FAILURE',
+  error,
+});
