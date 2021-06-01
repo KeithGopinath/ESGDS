@@ -16,6 +16,7 @@ import DataPage from './containers/DataPage';
 import UpdatePassword from './containers/UpdatePassword';
 import TaskCreate from './containers/TaskCreate/index';
 import Taxonomy from './containers/Taxonomy';
+import Validation from './containers/Validation';
 
 export const history = createBrowserHistory();
 
@@ -26,6 +27,7 @@ const Routes = () => (
         <Route exact path="/" component={Login} />
         <Route path="/password-resets" component={UpdatePassword} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/validation" component={Validation} />
         <Route path="/taxonomy" component={Taxonomy} />
         <Route path="/users" component={Users} />
         <Route path="/companies" component={Companies} />
