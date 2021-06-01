@@ -15,30 +15,45 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     const [idProofValidate, setIdProofValidate] = useState(false);
     const [chequeValidate, setChequeValidate] = useState(false);
 
+    // file upload base64 format
     const onChangeCompRep = (e) => {
-        setFileName(e.target.files[0].name);
-        onCompany(e.target.files[0]);
+        let file = e.target.files[0];
+        setFileName(file.name);
+        let reader = new FileReader();
+        reader.onloadend = function () {
+            onCompany(reader.result);
+        }
+        reader.readAsDataURL(file);
         setAuthValidate(false);
         setFileSize({ ...fileSize, authentication: e.target.files[0].size });
-    };
+    }
 
     const onChangeEmpId = (e) => {
-        setEmpID(e.target.files[0].name);
-        onEmployeeId(e.target.files[0]);
+        let file = e.target.files[0];
+        setEmpID(file.name);
+        let reader = new FileReader();
+        reader.onloadend = function () {
+            onEmployeeId(reader.result);
+        }
+        reader.readAsDataURL(file);
         setIdProofValidate(false);
         setFileSize({ ...fileSize, idProof: e.target.files[0].size });
     };
 
     const onChangeCancelledCheque = (e) => {
-        setCancelledCheque(e.target.files[0].name);
-        onCancelledCheque(e.target.files[0]);
+        let file = e.target.files[0];
+        setCancelledCheque(file.name);
+        let reader = new FileReader();
+        reader.onloadend = function () {
+            onCancelledCheque(reader.result);
+        }
+        reader.readAsDataURL(file);
         setChequeValidate(false);
         setFileSize({ ...fileSize, cancelCheque: e.target.files[0].size });
     };
 
     const goToLoginCredentials = () => {
         if (role === 'client' || role === 'company') {
-            // setValidate(false);
             if (!fileName || !empID) {
                 setProofUploadAlert('Should upload all files');
                 setAuthValidate(true);
