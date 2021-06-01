@@ -3,16 +3,12 @@ export const getOtp = (otpDetails) => ({
   otpDetails,
 });
 
-export function getOtpSuccess(otp) {
-  return {
-    type: 'OTP_SUCCESS',
-    otp,
-  };
-}
+export const getOtpSuccess = (otp) => ({
+  type: 'OTP_SUCCESS',
+  otp,
+});
 
-export function getOtpFailure(error) {
-  return {
-    type: 'OTP_FAILURE',
-    error,
-  };
-}
+export const getOtpFailure = (error) => ({
+  type: 'OTP_FAILURE',
+  error,
+});

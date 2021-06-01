@@ -5,16 +5,12 @@ export function getOnboard(onboardDetails) {
   };
 }
 
-export function getOnboardSuccess(onboard) {
-  return {
-    type: 'ONBOARD_SUCCESS',
-    onboard,
-  };
-}
+export const getOnboardSuccess = (onboard) => ({
+  type: 'ONBOARD_SUCCESS',
+  onboard,
+});
 
-export function getOnboardFailure(error) {
-  return {
-    type: 'ONBOARD_FAILURE',
-    error,
-  };
-}
+export const getOnboardFailure = (error) => ({
+  type: 'ONBOARD_FAILURE',
+  error,
+});
