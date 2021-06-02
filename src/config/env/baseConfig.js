@@ -5,7 +5,7 @@ export default {
     getForgotPassword: 'forgotpassword',
     getCompanylist: 'companies',
     getBatchlist: 'batches',
-    getOnboard: 'onboardingdetails',
+    getOnboard: 'users/new-onboard',
     getUpdatePassword: 'updatepassword',
     createBatch: '/batches',
     getKeyIssues: 'key_issues',

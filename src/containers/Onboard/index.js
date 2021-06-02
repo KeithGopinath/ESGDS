@@ -93,7 +93,6 @@ const Onboard = (props) => {
   };
 
   const onFormSubmit = () => {
-    const formData = new FormData();
     if (selectedOption === 'employee') {
       const employeeDetails = {
         roleName: "Employee",
@@ -102,54 +101,51 @@ const Onboard = (props) => {
         lastName,
         email,
         phoneNumber,
-        PANCard: pancardNumber,
-        adharCard,
+        panNumber: pancardNumber,
+        aadhaarNumber: adharCard,
         bankAccountNumber,
         bankIFSCCode,
-        nameOfTheAccountHolder: `${firstName} ${middleName && `${middleName} `}${lastName}`,
+        accountHolderName: `${firstName} ${middleName && `${middleName} `}${lastName}`,
         password,
+        access_token: sessionStorage.access,
+        pancardUrl: fileName,
+        aadhaarUrl: empID,
+        cancelledChequeUrl: cancelledCheque,
       };
       const jsonString = JSON.stringify(employeeDetails);
-      const employeeData = btoa(jsonString);
-      formData.append('onboardingdetails', employeeData);
-      formData.append('pancard', fileName);
-      formData.append('aadhar', empID);
-      formData.append('cancelledcheque', cancelledCheque);
-      formData.append('access_token', `${sessionStorage.access}`);
+      const onboardingData = btoa(jsonString);
+      dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (selectedOption === 'client') {
       const clientDetails = {
-        roleName: "ClientRep",
+        roleName: "Client Representative",
         name: firstName,
         email,
         phoneNumber,
-        companyName,
+        companyId: companyName,
         password,
+        access_token: sessionStorage.access,
+        authenticationLetterForClientUrl: fileName,
+        companyIdForClient: empID,
       };
       const jsonString = JSON.stringify(clientDetails);
-      const clientData = btoa(jsonString);
-      formData.append('onboardingdetails', clientData);
-      formData.append('authenticationletterforclient', fileName);
-      formData.append('companyidforclient', empID);
-      formData.append('access_token', `${sessionStorage.access}`);
-
+      const onboardingData = btoa(jsonString);
+      dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (selectedOption === 'company') {
       const companyDetails = {
-        roleName: "CompanyRep",
+        roleName: "Company Representative",
         name: firstName,
         email,
         phoneNumber,
-        companyName,
+        companiesList: companyName,
         password,
+        access_token: sessionStorage.access,
+        authenticationLetterForCompanyUrl: fileName,
+        companyIdForCompany: empID,
       };
       const jsonString = JSON.stringify(companyDetails);
-      const companyData = btoa(jsonString);
-      formData.append('onboardingdetails', companyData);
-      formData.append('authenticationletterforcompany', fileName);
-      formData.append('companyidforcompany', empID);
-      formData.append('access_token', `${sessionStorage.access}`);
+      const onboardingData = btoa(jsonString);
+      dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     }
-
-    dispatch({ type: 'ONBOARD_REQUEST', formData });
     history.push('/users');
   };
 
