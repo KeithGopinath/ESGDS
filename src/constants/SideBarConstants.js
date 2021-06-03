@@ -1,14 +1,15 @@
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faNetworkWired, faCheckDouble } from '@fortawesome/free-solid-svg-icons';
+/* eslint-disable */
+import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList } from '@fortawesome/free-solid-svg-icons';
 
-const BUTTONLIST = [
+const ButtonList = [
   {
     id: 0, label: 'Dashboard', icon: faHome, address: 'dashboard',
   },
   {
-    id: 1, label: 'Validation', icon: faCheckDouble, address: 'validation',
+    id: 1, label: 'Validation', icon: faCheckDouble, address: 'validationhead',
   },
   {
-    id: 2, label: 'Taxonomy', icon: faNetworkWired, address: 'taxonomy',
+    id: 2, label: 'Taxonomy', icon: faCodeBranch, address: 'taxonomyhead',
   },
   {
     id: 3, label: 'Users', icon: faUser, address: 'Users',
@@ -17,7 +18,7 @@ const BUTTONLIST = [
     id: 4, label: 'Companies', icon: faBuilding, address: 'companies',
   },
   {
-    id: 5, label: 'Groups', icon: faUsers, address: 'creategroup',
+    id: 5, label: 'Groups', icon: faUsers, address: 'groupshead',
   },
   {
     id: 6, label: 'Manage Users', icon: faCog, address: 'manageusers',
@@ -36,4 +37,31 @@ const BUTTONLIST = [
   },
 ];
 
-export { BUTTONLIST };
+const TaxonomySubMenu = [
+  {
+    id: 0, label: 'Master Taxonomy', icon: faNetworkWired, address: 'taxonomy'
+  },
+  {
+    id: 1, label: 'Subset Taxonomy', icon: faProjectDiagram, address: 'taxonomy/subsets'
+  },
+]
+
+const ValidationSubMenu = [
+  {
+    id: 0, label: 'Add Validation', icon: faFolderPlus, address: 'validation/addvalidation'
+  },
+  {
+    id: 1, label: 'Validation List', icon: faList, address: 'validation'
+  },
+]
+
+const GroupsSubMenu = [
+  {
+    id: 0, label: 'Create Group', icon: faFolderPlus, address: 'groups/creategroup'
+  },
+  {
+    id: 1, label: 'Group List', icon: faList, address: 'groups'
+  },
+]
+
+export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu };

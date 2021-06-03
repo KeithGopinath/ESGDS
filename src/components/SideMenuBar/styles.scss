@@ -3,7 +3,7 @@
 .sideMenu-main {
     width: 245px;
     min-height: 100vh;
-    background-color: #2199c8;
+    background-color: $color-blue;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,7 +18,7 @@
     font-size: large;
     font-weight: 600;
     font-family: 'Roboto', sans-serif;
-    color: floralwhite;
+    color: $color-white;
     display: flex;
     justify-content: center;
 }
@@ -38,7 +38,7 @@
     font-size: 15px;
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
+    color: $color-white;
     margin: 0 0 0 30px;
 }
 
@@ -48,30 +48,31 @@
     font-size: 24px;
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
+    color: $color-white;
     margin: 0 0 0 20px;
 }
 
 .sideMenu-btn:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.055);
+    background-color: rgba(250, 244, 244, 0.055);
+    ;
 }
 
 .sideMenu-btn-highlight {
-    background-color: #e1fdf7;
+    background-color: $color-highlight;
 }
 
 .sideMenu-btn-highlight .sideMenu-btn-label {
-    color: #2da68a;
+    color: $color-green;
 }
 
 .sideMenu-btn-highlight .sideMenu-btn-icon {
-    color: #2da68a;
+    color: $color-green;
 }
 
 .sideMenu-btn-highlight:hover {
     cursor: pointer;
-    background-color: #e1fdf7;
+    background-color: $color-highlight;
 }
 
 @media only screen and (max-width: 768px) {
@@ -87,6 +88,7 @@
 @media only screen and (min-width: 768px) {
     .hamburger-bars-icon {
         display: flex;
+        color: $color-white;
     }
 }
 
@@ -107,12 +109,12 @@
 
 .sideMenuMini-btn:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.055);
+    background-color: rgba(250, 244, 244, 0.055);
 }
 
 .sideMenu-btn-highlight.sideMenuMini-btn:hover {
     cursor: pointer;
-    background-color: #e1fdf7;
+    background-color: $color-highlight;
 }
 
 .sideMenuMini-btn-icon {
@@ -121,9 +123,48 @@
     font-size: 24px;
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
+    color: $color-white;
 }
 
 .sideMenu-btn-highlight .sideMenuMini-btn-icon {
-    color: #2da68a;
+    color: $color-green;
+}
+
+.submenu {
+    min-width: 220px;
+    min-height: 150px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 10px 0;
+    outline: none;
+    text-decoration: none !important;
+    background-color: rgba(83, 182, 240, 0.055);
+    ;
+}
+
+.submenu-button {
+    min-width: 220px;
+    min-height: 50px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin: 10px 0 10px 0;
+    outline: none;
+    text-decoration: none !important;
+    transition: 0.5s;
+}
+
+.submenu-mini-button {
+    min-width: 50px;
+    min-height: 150px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 10px 0;
+    outline: none;
+    justify-content: center;
+    background-color: rgba(83, 182, 240, 0.055);
 }
