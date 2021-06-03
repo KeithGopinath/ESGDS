@@ -1,73 +1,121 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BUTTONLIST } from '../../constants/SideBarConstants';
+import { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
 import RoleAssignment from '../../containers/RoleAssign';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const SideMenuBar = React.forwardRef((props, ref) => {
-  const sideMenuBtnRefs = useRef(BUTTONLIST.map(() => React.createRef()));
+  const sideMenuBtnRefs = useRef(ButtonList.map(() => React.createRef()));
+  const taxonomyBtnRefs = useRef(TaxonomySubMenu.map(() => React.createRef()));
+  const validationBtnRefs = useRef(ValidationSubMenu.map(() => React.createRef()));
+  const groupsBtnRefs = useRef(GroupsSubMenu.map(() => React.createRef()));
+
   const [handler, setHandler] = useState(true);
   const [show, setShow] = useState(false);
+  const [showTaxonomySubMenu, setTaxonomySubMenu] = useState(false);
+  const [showValidationSubMenu, setValidationSubMenu] = useState(false);
+  const [showGroupsSubMenu, setGroupsSubMenu] = useState(false);
 
   useEffect(() => {
     onRenderButtonHighter();
   });
-  
-// Buttonlist mapping
-  const sideMenuBtns = BUTTONLIST.map(({
-    id, label, icon, address,
-  }, index) => (
-    <div ref={sideMenuBtnRefs.current[index]} key={id} onClick={(event) => buttonClickHandler(event, address)}
-      className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
-      <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
-      {handler && <div className="sideMenu-btn-label">{label}</div>}
-    </div>
-  ));
-
-  const buttonClickHandler = (event, address) => {
-    if (address !== '') {
-      history.push(`/${address}`);
-      setShow(false);
-    } else {
-      setShow(true);
-    }
-    buttonHighlighter(event);
-  };
-
-  // FUNCTION that Highlights the button based on url
-  const onRenderButtonHighter = () => {
-    sideMenuBtnRefs.current.forEach((element) => {
-      const btn = element.current;
-      btn.classList.remove('sideMenu-btn-highlight');
-    });
-    BUTTONLIST.forEach((Button, index) => {
-      if (show && Button.label === 'Role Assignment') {
-        sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
-      } else if (!show && (history.location.pathname).includes(`/${Button.address}`) && Button.address.length !== 0) {
-        sideMenuBtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
-      }
-    });
-  };
-
-  // FUNCTION that Highlights the button based on clicks
-  const buttonHighlighter = (event) => {
-    sideMenuBtnRefs.current.forEach((element) => {
-      const btn = element.current;
-      btn.classList.remove('sideMenu-btn-highlight');
-    });
-    const { currentTarget } = event;
-    currentTarget.classList.add('sideMenu-btn-highlight');
-  };
 
   useEffect(() => {
+    const url = new URL(window.location.href)
+    if (url.pathname.includes('taxonomy')) {
+      setTaxonomySubMenu(true);
+    } else if (url.pathname.includes('validation')) {
+      setValidationSubMenu(true);
+    } else if (url.pathname.includes('groups')) {
+      setGroupsSubMenu(true);
+    } else {
+      setTaxonomySubMenu(false);
+      setValidationSubMenu(false);
+      setGroupsSubMenu(false);
+    }
     window.addEventListener('resize', sideMenuResponsive);
     const target = ref.current;
     target.classList.remove('sideMenuMini-main-responsive');
     target.classList.add('sideMenu-main-responsive');
   }, []);
 
+  // Mapping of sideBar Menu and subMenu
+  const sideMenuBtns = ButtonList.map(({ id, label, icon, address, }, index) => {
+    const subMenuShow = label == 'Taxonomy' ? showTaxonomySubMenu : label == 'Validation' ? showValidationSubMenu : label == 'Groups' ? showGroupsSubMenu : false;
+    const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : false;
+    const subMenuRef = label == 'Taxonomy' ? taxonomyBtnRefs : label == 'Validation' ? validationBtnRefs : label == 'Groups' ? groupsBtnRefs : false;
+    return (
+      <div>
+        { id == 1 || id == 2 || id == 5 ?
+          <div ref={sideMenuBtnRefs.current[index]} className={handler ? (subMenuShow ? 'submenu' : 'submenu-button') : (subMenuShow ? 'submenu-mini-button' : 'sideMenuMini-btn')}
+            key={id} onClick={(event) => buttonClickHandler(event, address)}>
+            <div className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
+              <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
+              {handler && <div className="sideMenu-btn-label">{label}</div>}
+              <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={subMenuShow ? faCaretUp : faCaretDown} />
+            </div>
+            {subMenuShow ?
+              <div>
+                {subMenuShow && subMenuList.map(({ label, icon, address }, index) => {
+                  return (
+                    <div onClick={(event) => buttonClickHandler(event, address)} ref={subMenuRef.current[index]}
+                      className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
+                      <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
+                      {handler && <div className="sideMenu-btn-label">{label}</div>}
+                    </div>
+                  )
+                })}
+              </div>
+              : null}
+          </div>
+          :
+          <div ref={sideMenuBtnRefs.current[index]} key={id} onClick={(event) => buttonClickHandler(event, address)}
+            className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
+            <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
+            {handler && <div className="sideMenu-btn-label">{label}</div>}
+          </div>
+        }
+      </div>
+    )
+  });
+
+  const buttonClickHandler = (event, address) => {
+    if (address == 'taxonomyhead') {
+      setTaxonomySubMenu(!showTaxonomySubMenu);
+    } else if (address == 'validationhead') {
+      setValidationSubMenu(!showValidationSubMenu);
+    } else if (address == 'groupshead') {
+      setGroupsSubMenu(!showGroupsSubMenu);
+    } else if (address !== '') {
+      history.push(`/${address}`);
+    } else {
+      setShow(true);
+    }
+  };
+
+  // FUNCTION that Highlights the button based on url
+  const onRenderButtonHighter = () => {
+    const BtnRefs = showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showGroupsSubMenu ? groupsBtnRefs : sideMenuBtnRefs;
+    const MenuButton = showValidationSubMenu ? ValidationSubMenu : showTaxonomySubMenu ? TaxonomySubMenu : showGroupsSubMenu ? GroupsSubMenu : ButtonList;
+
+    BtnRefs.current.forEach((element) => {
+      const btn = element.current;
+      btn.classList.remove('sideMenu-btn-highlight');
+    });
+    sideMenuBtnRefs.current.forEach((element) => {
+      const btn = element.current;
+      btn.classList.remove('sideMenu-btn-highlight');
+    });
+    MenuButton.forEach((Button, index) => {
+      if (show && Button.label === 'Role Assignment') {
+        BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
+      } else if (!show && (history.location.pathname) == (`/${Button.address}`) && Button.address.length !== 0) {
+        BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
+      }
+    });
+  };
 
   // Function that replace class if width <= 768px
   const sideMenuResponsive = () => {

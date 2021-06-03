@@ -17,6 +17,8 @@ import UpdatePassword from './containers/UpdatePassword';
 import TaskCreate from './containers/TaskCreate/index';
 import Taxonomy from './containers/Taxonomy';
 import Validation from './containers/Validation';
+import TaxonomySubset from './containers/TaxonomySubset';
+import ValidationList from './containers/ValidationList';
 
 export const history = createBrowserHistory();
 
@@ -27,11 +29,14 @@ const Routes = () => (
         <Route exact path="/" component={Login} />
         <Route path="/password-resets" component={UpdatePassword} />
         <Route path="/dashboard" component={Dashboard} />
-        <Route path="/validation" component={Validation} />
-        <Route path="/taxonomy" component={Taxonomy} />
+        <Route exact path="/validation" component={ValidationList} />
+        <Route path="/validation/addvalidation" component={Validation} />
+        <Route exact path="/taxonomy" component={Taxonomy} />
+        <Route path="/taxonomy/subsets" component={TaxonomySubset} />
         <Route path="/users" component={Users} />
         <Route path="/companies" component={Companies} />
-        <Route path="/groups" component={Groups} />
+        <Route exact path="/groups" component={Groups} />
+        <Route path="/groups/creategroup" component={CreateGroup} />
         <Route path="/manageusers" component={ManageUsers} />
         <Route path="/onboard" component={Onboard} />
         <Route path="/task" component={Task} />
