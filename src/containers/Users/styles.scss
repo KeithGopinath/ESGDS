@@ -5,7 +5,7 @@
     font-family: 'Roboto';
 }
 
-.users-back-label-onboardlink-container{
+.users-back-label-onboardlink-container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -32,12 +32,7 @@
     font-size: 20px;
 }
 
-// .users-label{
-//     color: #444c59;
-//     font-size: 15px;
-//     font-weight: 600;
-// }
-.users-label{
+.users-label {
     font-family: 'Roboto', sans-serif;
     color: #2da68a;
     font-size: 17px;
@@ -70,18 +65,20 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin: 20px 0;
+    margin-bottom: 2%;
+    justify-content: space-evenly;
 }
 
 .tabs-label-count-wrap {
     display: flex;
-    min-width: 260px;
+    min-width: 220px;
     width: 20%;
     align-items: center;
     padding: 0 15px;
     justify-content: space-between;
     cursor: pointer;
     border-bottom: 2px solid white;
+    text-align: center;
 }
 
 .tabs-label {

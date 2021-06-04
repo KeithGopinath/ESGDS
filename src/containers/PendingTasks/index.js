@@ -1,9 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable import/first */
-
-import React, { useRef, useEffect } from 'react';
+/* eslint-disable*/
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -421,12 +417,12 @@ const PendingTaskTable = () => {
     year,
     status,
     action:
-  <Link
-    to={{
-      pathname: `/task/${taskId}`,
-      state: { taskId },
-    }}
-  >Enter
+      <Link
+        to={{
+          pathname: `/task/${taskId}`,
+          state: { taskId },
+        }}
+      >Enter
   </Link>,
   }));
 
@@ -466,21 +462,23 @@ const PendingTasks = () => {
   const currentRole = sessionStorage.role;
   const tabs = (currentRole === 'QA') ? ['Data Verification', 'Data Correction'] : ['Data Collection', 'Data Correction'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
+  const [activeTab, setActiveTab] = useState([]);
 
   useEffect(() => {
     const defaultTab = tabsRef.current[0].current;
     if (defaultTab) {
-      defaultTab.classList.add('pendingtasks-tab-active');
+      defaultTab.classList.add('tabs-label-count-wrap-active');
     }
   }, []);
 
-  const onClickTabChanger = (event) => {
+  const onClickTabChanger = (event, data) => {
+    setActiveTab(data)
     tabsRef.current.forEach((element) => {
       const btn = element.current;
-      btn.classList.remove('pendingtasks-tab-active');
+      btn.classList.remove('tabs-label-count-wrap-active');
     });
     const { currentTarget } = event;
-    currentTarget.classList.add('pendingtasks-tab-active');
+    currentTarget.classList.add('tabs-label-count-wrap-active');
   };
 
   return (
@@ -489,9 +487,20 @@ const PendingTasks = () => {
       <div className="rightsidepane">
         <Header title="Pending Tasks" />
         <div className="container-main" >
-          <div className="pendingtasks-tabs-wrap">
-            {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} onClick={onClickTabChanger} className="pendingtasks-tabs">{tab}</div>))}
+          <div className="users-tabs-stack">
+            {tabs.map((tab, index) =>
+              <div key={tab} ref={tabsRef.current[index]} onClick={(event) => (onClickTabChanger(event, card))} className="tabs-label-count-wrap">
+                <div className="tabs-label">
+                  {tab}
+                </div>
+                <div title={tab} className="tabs-count-wrap">
+                  <div className="tabs-count">3
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+          <div></div>
           <PendingTaskTable />
         </div>
       </div>

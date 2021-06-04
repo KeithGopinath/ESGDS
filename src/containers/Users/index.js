@@ -1,13 +1,9 @@
 /* eslint-disable*/
 import React, { useRef, useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import CustomTable from '../../components/CustomTable';
 import { PENDING_USERS_DATA, APPROVED_USERS_DATA, SUPER_ADMIN_APPROVAL_DATA, PERSONAL_DETAILS_UPDATE_DATA } from '../../../src/constants/TableConstants';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import { Button } from 'react-bootstrap';
-import RoleOnboard from '../RoleOnboard';
 
 const Users = () => {
   const sideBarRef = useRef();
@@ -41,27 +37,13 @@ const Users = () => {
     target.classList.add('tabs-label-count-wrap-active');
     setTableData(data);
   };
-  // related onboarding
-  const [showOnboard, setShowOnboard] = useState(false);
-
-  const sendOnboard = () => {
-    setShowOnboard(true);
-  };
-
-  const handleClose = () => {
-    setShowOnboard(false);
-  };
 
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Users" />
+        <Header title="Users" show={true} />
         <div className="container-main">
-          <div className="users-back-label-onboardlink-container">
-            <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
-            </Button>
-          </div>
           <div className="users-tabs-stack">
             {tabLabelSets.map(({ label, value, data }, index) => (
               <div key={label} ref={tabsRefs.current[index]} onClick={(event) => (tabsClickHandler(event, data))} className="tabs-label-count-wrap">
@@ -80,10 +62,6 @@ const Users = () => {
           </div>
         </div>
       </div>
-      <RoleOnboard
-        showOnboardRoles={showOnboard}
-        handleClose={handleClose}
-      />
     </div>
   );
 };
