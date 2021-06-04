@@ -1,4 +1,4 @@
-/* eslint-disable react/void-dom-elements-no-children */
+/* eslint-disable*/
 import React, { useState, useRef } from 'react';
 import { Col, Row, Container, Card, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
@@ -438,7 +438,7 @@ const TaskCreate = () => {
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
           <Header sideBarRef={sideBarRef} title={taskTitle[taskFlow]} />
-          <div className="task-wrapper background-task-view">
+          <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
                 <Card style={{ minHeight: '30rem' }}>
