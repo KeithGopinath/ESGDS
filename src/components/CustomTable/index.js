@@ -15,8 +15,9 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { SmileOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space, Result, Button } from 'antd';
 import Moment from 'moment';
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
@@ -96,8 +97,6 @@ const CustomTable = ({ tableData, showDatePicker }) => {
       },
     },
   });
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rowsData.length - (page * rowsPerPage));
 
   // HELPER FUNCTIONS
   const dataSorter = (array, camparator) => {
@@ -202,6 +201,10 @@ const CustomTable = ({ tableData, showDatePicker }) => {
     return rowDataToBeReturned;
   };
 
+  const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
+
   return (
     <div>
       <Paper className="users-table-paper">
@@ -249,7 +252,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
             >
             </ColumnsHead>
             <TableBody>
-              {dataSorter((searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData), getComparator(sortOrder, orderBy))
+              {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
                   const cellArray = Object.keys(eachRow).map((key) => {
@@ -271,11 +274,29 @@ const CustomTable = ({ tableData, showDatePicker }) => {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
+              { !(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
               )}
+              {(mainData.length === 0) && (searchQuery || searchDate) &&
+              <TableRow>
+                <TableCell colSpan={columnsHeadData.length}>
+                  <Result
+                    icon={<SmileOutlined />}
+                    title="No Data Found!"
+                  />
+                </TableCell>
+              </TableRow>}
+              {(mainData.length === 0) && !(searchQuery || searchDate) &&
+              <TableRow>
+                <TableCell colSpan={columnsHeadData.length}>
+                  <Result
+                    icon={<SmileOutlined />}
+                    title="All Done!"
+                  />
+                </TableCell>
+              </TableRow>}
             </TableBody>
           </Table>
         </TableContainer>
