@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
@@ -11,13 +12,13 @@ import { history } from '../../routes';
 
 const DataSheet = (props) => {
   const {
-    isAnalyst, isAnalystHistory, isQA, isQAHistory, indexes, dpCodeData, taskData, sourceData, openSourcePanel, location, errorList,
+    isAnalyst, isAnalystHistory, isQA, isQAHistory, isCompanyRep, isCompanyRepHistory, indexes, dpCodeData, taskData, sourceData, openSourcePanel, location, errorList,
   } = props;
-
+  console.log(props);
   const { minIndex, currentIndex, maxIndex } = indexes || { minIndex: null, currentIndex: null, maxIndex: null };
 
   // # historicalData # A Variable Is Just A List Of Historical Data Of currentDpCode
-  const historicalData = dpCodeData.historyDpData;
+  const { historicalData } = dpCodeData;
 
   // # defaultHistoricalData # A variable which stores a 0th index of Historical Data List
   const defaultHistoricalData = historicalData[0];
@@ -36,11 +37,15 @@ const DataSheet = (props) => {
       return true;
     } else if (isQAHistory) {
       return !isQAHistoryEditable;
+    } else if (isCompanyRep) {
+      return true;
+    } else if (isCompanyRepHistory) {
+      return true;
     }
     return false;
   };
 
-  const isHistoryType = isAnalystHistory || isQAHistory;
+  const isHistoryType = isAnalystHistory || isQAHistory || isCompanyRepHistory;
 
   const isFieldDisabled = getCondition();
 
@@ -48,31 +53,33 @@ const DataSheet = (props) => {
   const defaultData = (!isHistoryType) ?
     {
       dpCode: dpCodeData.dpCode,
-      dataType: dpCodeData.dataType,
       year: dpCodeData.fiscalYear,
-      pageNo: dpCodeData.pageNo || '',
-      url: dpCodeData.url || '',
-      publicationDate: dpCodeData.publicationDate || '',
       description: dpCodeData.description,
+      dataType: dpCodeData.dataType,
       textSnippet: dpCodeData.textSnippet || '',
+      pageNo: dpCodeData.pageNo || '',
+      filePath: dpCodeData.screenShot || '',
+      response: dpCodeData.response || '',
       screen: dpCodeData.screen || '',
       source: dpCodeData.source || '',
-      filePath: dpCodeData.filePath || '',
-      response: dpCodeData.response || '',
+      url: (dpCodeData.source && dpCodeData.source.url) || '',
+      publicationDate: (dpCodeData.source && dpCodeData.source.publicationDate) || '',
+      screenShotFile: null,
     } :
     {
       dpCode: defaultHistoricalData.dpCode,
-      dataType: defaultHistoricalData.dataType,
       year: defaultHistoricalData.fiscalYear,
-      pageNo: defaultHistoricalData.pageNo || '',
-      url: defaultHistoricalData.url || '',
-      publicationDate: defaultHistoricalData.publicationDate || '',
       description: defaultHistoricalData.description,
+      dataType: defaultHistoricalData.dataType,
       textSnippet: defaultHistoricalData.textSnippet || '',
+      pageNo: defaultHistoricalData.pageNo || '',
+      filePath: defaultHistoricalData.screenShot || '',
+      response: defaultHistoricalData.response || '',
       screen: defaultHistoricalData.screen || '',
       source: defaultHistoricalData.source || '',
-      filePath: defaultHistoricalData.filePath || '',
-      response: defaultHistoricalData.response || '',
+      url: (defaultHistoricalData.source && defaultHistoricalData.source.url) || '',
+      publicationDate: (defaultHistoricalData.source && defaultHistoricalData.source.publicationDate) || '',
+      screenShotFile: null,
     };
 
   // # formData # A State Intialized With defaultData
@@ -137,7 +144,7 @@ const DataSheet = (props) => {
       case 'uploadScreenshot':
         if (event.currentTarget.value.fileList[0]) {
           setFormData({
-            ...formData, filePath: { preview: URL.createObjectURL(event.currentTarget.value.fileList[0].originFileObj), file: event.currentTarget.value },
+            ...formData, filePath: URL.createObjectURL(event.currentTarget.value.fileList[0].originFileObj), screenShotFile: event.currentTarget.value,
           });
         } else {
           setFormData({
@@ -169,7 +176,7 @@ const DataSheet = (props) => {
   // saveAndNextClickHandler Function Handle A Click Comes From A Button And Traverse Forth To The Next DpCode Page
   const saveAndNextClickHandler = () => {
     console.log(formData);
-    const nextDpCode = taskData.data[currentIndex + 1];
+    const nextDpCode = taskData.dpCodesData[currentIndex + 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
       state: { taskId: taskData.taskId, dpCode: nextDpCode.dpCode },
@@ -178,7 +185,7 @@ const DataSheet = (props) => {
 
   // editAndPreviousClickHandler Function Handle A Click Comes From A Button And Traverse Back To The Previous DpCode Page
   const editAndPreviousClickHandler = () => {
-    const nextDpCode = taskData.data[currentIndex - 1];
+    const nextDpCode = taskData.dpCodesData[currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
       state: { taskId: taskData.taskId, dpCode: nextDpCode.dpCode },
@@ -209,24 +216,26 @@ const DataSheet = (props) => {
 
   // inChangeHistoryYear Function Change The fromData Values With Respect To The Selected Year
   const onChangeHistoryYear = (event) => {
+    console.log(event);
     setFormData({
       dpCode: event.value.dpCode,
-      dataType: event.value.dataType,
       year: event.value.fiscalYear,
-      pageNo: event.value.pageNo,
-      url: event.value.url,
-      publicationDate: event.value.publicationDate,
       description: event.value.description,
-      textSnippet: event.value.textSnippet,
-      screen: event.value.screen,
-      source: event.value.source,
-      filePath: event.value.filePath,
-      response: event.value.response,
+      dataType: event.value.dataType,
+      textSnippet: event.value.textSnippet || '',
+      pageNo: event.value.pageNo || '',
+      filePath: event.value.screenShot || '',
+      response: event.value.response || '',
+      screen: event.value.screen || '',
+      source: event.value.source || '',
+      url: (event.value.source && event.value.source.url) || '',
+      publicationDate: (event.value.source && event.value.source.publicationDate) || '',
+      screenShotFile: null,
     });
   };
 
   const onClickUnFreeze = () => {
-    setIsQAHistoryEditable(true);
+    setIsAnalystHistoryEditable(true);
   };
 
 
@@ -375,7 +384,7 @@ const DataSheet = (props) => {
           </Col>
         </Form.Group>
       </Col>
-      { isHistoryType &&
+      { (isHistoryType || isCompanyRep) &&
         <React.Fragment>
           {/* ################################################################################################ URL */}
           <Col lg={6}>
@@ -412,26 +421,27 @@ const DataSheet = (props) => {
         </Form.Group>
       </Col> */}
       {/* ################################################################################################ FILE PATH */}
-      <Col lg={6}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={5}>
-            Upload Screenshot*
-          </Form.Label>
-          <Col sm={7}>
-            <Upload className="datapage-ant-upload" fileList={formData.filePath ? formData.filePath.file.fileList : null} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
-              <AntButton
-                disabled={isFieldDisabled}
-                className="datapage-ant-button"
-                icon={<UploadOutlined />}
-              >Click to Upload
-              </AntButton>
-            </Upload>
-          </Col>
-        </Form.Group>
-      </Col>
+      { !isCompanyRep && !isCompanyRepHistory &&
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Upload Screenshot*
+            </Form.Label>
+            <Col sm={7}>
+              <Upload className="datapage-ant-upload" fileList={formData.screenShotFile ? formData.screenShotFile.fileList : null} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
+                <AntButton
+                  disabled={isFieldDisabled}
+                  className="datapage-ant-button"
+                  icon={<UploadOutlined />}
+                >Click to Upload
+                </AntButton>
+              </Upload>
+            </Col>
+          </Form.Group>
+        </Col>}
       <Col lg={6}>
         {/* ################################################################################################ IMAGE PREVIEW */}
-        {formData.filePath && <Image width="50%" src={formData.filePath.preview} /> }
+        {formData.filePath && <Image width="50%" src={formData.filePath} /> }
       </Col>
       { isQA &&
         <React.Fragment>
@@ -465,6 +475,78 @@ const DataSheet = (props) => {
             </Form.Group>
           </Col>
         </React.Fragment> }
+      { isCompanyRep &&
+      <React.Fragment>
+        <Col lg={12} className="datapage-horizontalLine"></Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Source*
+            </Form.Label>
+            <Col sm={7}>
+              <Select
+                name="source"
+                // isDisabled={isFieldDisabled}
+                // onChange={(e) => onChangeFormData({ currentTarget: { name: 'source', id: 'source', value: e } })}
+                // value={formData.source && { label: formData.source.sourceName, value: formData.source }}
+                // // onChange={}
+                options={sourceData.map((source) => ({ label: source.sourceName, value: source }))}
+                // isSearchable={}
+                // className={}
+                placeholder="Choose source"
+                maxLength={30}
+              />
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Page No*
+            </Form.Label>
+            <Col sm={7}>
+              <Form.Control type="text" name="pageNo" placeholder="Page No" />
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Upload Screenshot*
+            </Form.Label>
+            <Col sm={7}>
+              <Upload className="datapage-ant-upload" maxCount={1} beforeUpload={uploadScreenshotCheck}>
+                <AntButton
+                  // disabled={isFieldDisabled}
+                  className="datapage-ant-button"
+                  icon={<UploadOutlined />}
+                >Click to Upload
+                </AntButton>
+              </Upload>
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Text Snippet*
+            </Form.Label>
+            <Col sm={7}>
+              <Form.Control as="textarea" aria-label="With textarea" placeholder="Snippet" />
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Comments*
+            </Form.Label>
+            <Col sm={7}>
+              <Form.Control as="textarea" aria-label="With textarea" placeholder="Comments" />
+            </Col>
+          </Form.Group>
+        </Col>
+      </React.Fragment>}
       {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
       <Col lg={12} className="datapage-button-wrap">
@@ -492,6 +574,9 @@ const DataSheet = (props) => {
         <React.Fragment>
           <Button className="datapage-button" variant="primary" onClick={null} type="submit">UnFreeze</Button>
         </React.Fragment>
+        }
+        { isCompanyRep &&
+          <Button className="datapage-button" variant="danger" onClick={onClickBack} type="submit" >Back</Button>
         }
       </Col>
 
