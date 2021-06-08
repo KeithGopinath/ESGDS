@@ -5,13 +5,14 @@
 
 .personal-content,
 .proof-content,
-.login-content {
+.logincred-content {
     margin-top: 1%;
 
     .personal-details,
     .proof-details,
     .logincred-details {
-        width: 100%;
+        width: 85%;
+        margin: 0% auto 2% auto;
         padding: 3%;
     }
 }

@@ -59,7 +59,7 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
     );
 
     return (
-        <Row className="login-content">
+        <Row className="logincred-content mr-0">
             <Card className="logincred-details shadow mb-5">
                 <h4 className="logincred-text">Login Credentials</h4>
                 <Row className="d-flex justify-content-around">
@@ -101,11 +101,11 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                 <span className='text-center text-danger w-100'>{loginCredentialsAlert}</span>
                 <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
                 <p className="ml-3 mr-3 mt-2"> <sup className="text-danger">*</sup> Use 8 or more characters at least one Uppercase, Lowercase letter, Number & special character</p>
+                <div className="d-flex flex-row justify-content-end mt-1">
+                    <span><Button className="back mr-1" onClick={goToProofUpload}>Back</Button></span>
+                    <span><Button className="save-continue" onClick={passwordValidation}>Save & Continue</Button></span>
+                </div>
             </Card>
-            <div className="d-flex justify-content-between w-100">
-                <span><Button className="back" onClick={goToProofUpload}>Back</Button></span>
-                <span><Button className="save-continue" onClick={passwordValidation}>Submit</Button></span>
-            </div>
         </Row>
     );
 };
