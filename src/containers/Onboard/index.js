@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
+import './styles.scss';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';
@@ -114,6 +115,7 @@ const Onboard = (props) => {
       };
       const jsonString = JSON.stringify(employeeDetails);
       const onboardingData = btoa(jsonString);
+      console.log("employee: ",onboardingData);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (selectedOption === 'client') {
       const clientDetails = {
@@ -144,6 +146,7 @@ const Onboard = (props) => {
       };
       const jsonString = JSON.stringify(companyDetails);
       const onboardingData = btoa(jsonString);
+
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     }
     history.push('/users');

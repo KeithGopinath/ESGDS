@@ -127,7 +127,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
 
     return (
         <Container>
-            <Row className="proof-content">
+            <Row className="proof-content mr-0">
                 <Card className="personal-details shadow mb-5">
                     <h4 className="proof-text">Proof Upload</h4>
                     <Row className="d-flex ml-2 mr-2">
@@ -218,11 +218,11 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                     </Row>
                     <span className="w-100 text-center text-danger">{proofUploadAlert}</span>
                     <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
-                </Card>
-                <div className="d-flex justify-content-between w-100">
-                    <span><Button className="back" onClick={goToPersonalDetails}>Back</Button></span>
+                    <div className="d-flex flex-row justify-content-end mt-1">
+                    <span><Button className="back mr-1" onClick={goToPersonalDetails}>Back</Button></span>
                     <span><Button className="save-continue" onClick={goToLoginCredentials}>Save & Continue</Button></span>
                 </div>
+                </Card>
             </Row>
         </Container>
     );
