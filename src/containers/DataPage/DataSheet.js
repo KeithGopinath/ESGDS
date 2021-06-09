@@ -8,6 +8,7 @@ import Select from 'react-select';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import { history } from '../../routes';
+import DataComment from './DataComment';
 
 
 const DataSheet = (props) => {
@@ -90,6 +91,7 @@ const DataSheet = (props) => {
     setFormData(defaultData);
     setIsAnalystHistoryEditable(false);
     setIsQAHistoryEditable(false);
+    setRequestChanges(false);
   }, [location]);
 
   // onChangeFormData Function Gets Called When Every Form Fields Changes And Updates The formData State
@@ -148,7 +150,7 @@ const DataSheet = (props) => {
           });
         } else {
           setFormData({
-            ...formData, filePath: '',
+            ...formData, filePath: '', screenShotFile: null,
           });
         }
         break;
@@ -238,6 +240,11 @@ const DataSheet = (props) => {
     setIsAnalystHistoryEditable(true);
   };
 
+  const [requestChanges, setRequestChanges] = useState(false);
+  const onClickRequestChanges = (event) => {
+    setRequestChanges(event.target.checked);
+  };
+
 
   return (
     <Row>
@@ -317,7 +324,7 @@ const DataSheet = (props) => {
           </Col>
         </Form.Group>
       </Col>
-      {!isHistoryType &&
+      {!isHistoryType && !isCompanyRep &&
       <Col lg={6}>
         <Button onClick={openSourcePanel} >Add Source</Button>
       </Col> }
@@ -422,29 +429,39 @@ const DataSheet = (props) => {
       </Col> */}
       {/* ################################################################################################ FILE PATH */}
       { !isCompanyRep && !isCompanyRepHistory &&
-        <Col lg={6}>
-          <Form.Group as={Row} >
-            <Form.Label column sm={5}>
-              Upload Screenshot*
-            </Form.Label>
-            <Col sm={7}>
-              <Upload className="datapage-ant-upload" fileList={formData.screenShotFile ? formData.screenShotFile.fileList : null} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
-                <AntButton
-                  disabled={isFieldDisabled}
-                  className="datapage-ant-button"
-                  icon={<UploadOutlined />}
-                >Click to Upload
-                </AntButton>
-              </Upload>
-            </Col>
-          </Form.Group>
-        </Col>}
+        <React.Fragment>
+          <Col lg={6}>
+            <Form.Group as={Row} >
+              <Form.Label column sm={5}>
+                Upload Screenshot*
+              </Form.Label>
+              <Col sm={7}>
+                <Upload className="datapage-ant-upload" fileList={formData.screenShotFile ? formData.screenShotFile.fileList : null} maxCount={1} beforeUpload={uploadScreenshotCheck} onChange={(e) => { onChangeFormData({ currentTarget: { name: 'uploadScreenshot', value: e } }); }}>
+                  <AntButton
+                    disabled={isFieldDisabled}
+                    className="datapage-ant-button"
+                    icon={<UploadOutlined />}
+                  >Click to Upload
+                  </AntButton>
+                </Upload>
+              </Col>
+            </Form.Group>
+          </Col>
+        </React.Fragment>}
+      {formData.filePath &&
       <Col lg={6}>
-        {/* ################################################################################################ IMAGE PREVIEW */}
-        {formData.filePath && <Image width="50%" src={formData.filePath} /> }
-      </Col>
+        <Form.Group as={Row} >
+          <Form.Label column sm={5}>
+            Screenshot*
+          </Form.Label>
+          <Col sm={7}>
+            <Image width="50%" src={formData.filePath} />
+          </Col>
+        </Form.Group>
+      </Col>}
       { isQA &&
         <React.Fragment>
+          <Col lg={12} className="datapage-horizontalLine"></Col>
           {/* ################################################################################################ ERROR TYPE */}
           <Col lg={6}>
             <Form.Group as={Row} >
@@ -477,7 +494,46 @@ const DataSheet = (props) => {
         </React.Fragment> }
       { isCompanyRep &&
       <React.Fragment>
+        <Col style={{ display: 'flex', flexDirection: 'row-reverse' }} lg={6}>
+          <Form.Group controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" checked={requestChanges} onChange={onClickRequestChanges} label="Error" />
+          </Form.Group>
+        </Col>
+      </React.Fragment>}
+      { isCompanyRep && requestChanges &&
+      <React.Fragment>
         <Col lg={12} className="datapage-horizontalLine"></Col>
+        <Col lg={8}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={4}>
+              Description*
+            </Form.Label>
+            <Form.Label column sm={8}>
+              {formData.description}
+            </Form.Label>
+          </Form.Group>
+        </Col>
+        <Col lg={4}>
+          <Form.Group as={Row} >
+            {/* <Form.Label column sm={5}>
+            Response*
+          </Form.Label> */}
+            <Col sm={12}>
+              {formData.dataType === 'number' && <Form.Control type="text" name="response" placeholder="Response" />}
+              {formData.dataType === 'date' && <DatePicker className="datapage-datepicker" name="response" />}
+              {formData.dataType === 'text' &&
+              <Select
+                name="response"
+                // onChange={(e) => onChangeFormData({ currentTarget: { name: 'response', id: 'response', value: e } })}
+                // value={formData.response && { label: formData.response, value: formData.response }}
+                options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }, { label: 'Na', value: 'Na' }, { label: 'M', value: 'M' }, { label: 'F', value: 'F' }]}
+                // isSearchable={}
+                // className={}
+                maxLength={30}
+              />}
+            </Col>
+          </Form.Group>
+        </Col>
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
@@ -496,6 +552,19 @@ const DataSheet = (props) => {
                 placeholder="Choose source"
                 maxLength={30}
               />
+            </Col>
+          </Form.Group>
+        </Col>
+        <Col lg={6}>
+          <Button onClick={openSourcePanel} >Add Source</Button>
+        </Col>
+        <Col lg={6}>
+          <Form.Group as={Row} >
+            <Form.Label column sm={5}>
+              Text Snippet*
+            </Form.Label>
+            <Col sm={7}>
+              <Form.Control as="textarea" aria-label="With textarea" placeholder="Snippet" />
             </Col>
           </Form.Group>
         </Col>
@@ -529,16 +598,6 @@ const DataSheet = (props) => {
         <Col lg={6}>
           <Form.Group as={Row} >
             <Form.Label column sm={5}>
-              Text Snippet*
-            </Form.Label>
-            <Col sm={7}>
-              <Form.Control as="textarea" aria-label="With textarea" placeholder="Snippet" />
-            </Col>
-          </Form.Group>
-        </Col>
-        <Col lg={6}>
-          <Form.Group as={Row} >
-            <Form.Label column sm={5}>
               Comments*
             </Form.Label>
             <Col sm={7}>
@@ -547,6 +606,7 @@ const DataSheet = (props) => {
           </Form.Group>
         </Col>
       </React.Fragment>}
+      {(!isAnalyst && !isHistoryType) && <DataComment />}
       {/* ################################################################################################ LINE */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
       <Col lg={12} className="datapage-button-wrap">
@@ -576,7 +636,11 @@ const DataSheet = (props) => {
         </React.Fragment>
         }
         { isCompanyRep &&
+        <React.Fragment>
           <Button className="datapage-button" variant="danger" onClick={onClickBack} type="submit" >Back</Button>
+          {maxIndex !== currentIndex && <Button variant="success" disabled={maxIndex === currentIndex} onClick={saveAndNextClickHandler} type="submit">Save And Next</Button>}
+          {maxIndex === currentIndex && <Button className="datapage-button" variant="danger" onClick={onClickSaveAndClose} type="submit">Save And Close</Button> }
+        </React.Fragment>
         }
       </Col>
 

@@ -25,7 +25,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -38,7 +38,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 05 2016' },
           },
         ],
@@ -62,7 +62,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -75,7 +75,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -99,7 +99,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -112,7 +112,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -145,7 +145,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -158,7 +158,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -182,7 +182,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -195,7 +195,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -219,7 +219,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -232,7 +232,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -265,7 +265,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -278,7 +278,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -302,7 +302,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -315,7 +315,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -339,7 +339,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -352,7 +352,7 @@ export const ANALYST_DC_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -381,7 +381,7 @@ export const QA_DV_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -394,7 +394,7 @@ export const QA_DV_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -407,7 +407,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 05 2016' },
           },
         ],
@@ -424,7 +424,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -437,7 +437,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -450,7 +450,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -467,7 +467,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -480,7 +480,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -493,7 +493,7 @@ export const QA_DV_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -519,7 +519,7 @@ export const QA_DV_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -532,7 +532,7 @@ export const QA_DV_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -545,7 +545,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -562,7 +562,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -575,7 +575,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -588,7 +588,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -605,7 +605,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -618,7 +618,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -631,7 +631,7 @@ export const QA_DV_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -657,7 +657,7 @@ export const QA_DV_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -670,7 +670,7 @@ export const QA_DV_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -683,7 +683,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -700,7 +700,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -713,7 +713,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -726,7 +726,7 @@ export const QA_DV_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -743,7 +743,7 @@ export const QA_DV_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -756,7 +756,7 @@ export const QA_DV_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -769,7 +769,7 @@ export const QA_DV_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -798,7 +798,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -811,7 +811,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -824,7 +824,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 05 2016' },
           },
         ],
@@ -841,7 +841,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -854,7 +854,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -867,7 +867,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -884,7 +884,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -897,7 +897,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -910,7 +910,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -936,7 +936,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -949,7 +949,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -962,7 +962,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -979,7 +979,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -992,7 +992,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -1005,7 +1005,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -1022,7 +1022,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -1035,7 +1035,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -1048,7 +1048,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -1074,7 +1074,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '59',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Yes',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -1087,7 +1087,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '59',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Yes',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -1100,7 +1100,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'No',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -1117,7 +1117,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: '21321',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -1130,7 +1130,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '21321',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -1143,7 +1143,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '24',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: '213123',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
@@ -1160,7 +1160,7 @@ export const COMPANY_REP_DATA = [
         pageNo: '58',
         screenShot: 'https://esgds.io/images/home/logo.png',
         response: 'Tue May 01 2016',
-        screen: 'Na',
+
         source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
         historicalData: [
           {
@@ -1173,7 +1173,7 @@ export const COMPANY_REP_DATA = [
             pageNo: '58',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
           {
@@ -1186,7 +1186,421 @@ export const COMPANY_REP_DATA = [
             pageNo: '42',
             screenShot: 'https://esgds.io/images/home/logo.png',
             response: 'Tue May 01 2016',
-            screen: 'Na',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    taskId: '0004',
+    pillar: 'Enviromental',
+    company: '3M India Ltd',
+    fiscalYear: '2018-2019',
+    status: 'Yet to start',
+    dpCodesData: [
+      {
+        dpCode: 'AUDP001',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: 'Does the board member hold a seat in the audit committee ?',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'text',
+        keyIssue: 'Shareholders rights',
+        textSnippet: 'Snippet One',
+        pageNo: '59',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Yes',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet One',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'No',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 05 2016' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOCR013',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: "Board member's fixed cash based compensation",
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'number',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: '21321',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '21321',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '213123',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOIR017',
+        fiscalYear: '2018-2019',
+        status: 'Yet to start',
+        description: 'Board member date of appointment',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'date',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Tue May 01 2016',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet Two',
+            pageNo: '42',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    taskId: '0005',
+    pillar: 'Social',
+    company: '3M India Ltd',
+    fiscalYear: '2018-2019',
+    status: 'In progress',
+    dpCodesData: [
+      {
+        dpCode: 'AUDP001',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: 'Does the board member hold a seat in the audit committee ?',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'text',
+        keyIssue: 'Shareholders rights',
+        textSnippet: 'Snippet One',
+        pageNo: '59',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Yes',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet One',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'No',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOCR013',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: "Board member's fixed cash based compensation",
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'number',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: '21321',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '21321',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '213123',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOIR017',
+        fiscalYear: '2018-2019',
+        status: 'Yet to start',
+        description: 'Board member date of appointment',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'date',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Tue May 01 2016',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet Two',
+            pageNo: '42',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    taskId: '0006',
+    pillar: 'Governance',
+    company: '3M India Ltd',
+    fiscalYear: '2018-2019',
+    status: 'Submitted',
+    dpCodesData: [
+      {
+        dpCode: 'AUDP001',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: 'Does the board member hold a seat in the audit committee ?',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'text',
+        keyIssue: 'Shareholders rights',
+        textSnippet: 'Snippet One',
+        pageNo: '59',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Yes',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet One',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'AUDP001',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Does the board member hold a seat in the audit committee ?',
+            dataType: 'text',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'No',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOCR013',
+        fiscalYear: '2018-2019',
+        status: 'Completed',
+        description: "Board member's fixed cash based compensation",
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'number',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: '21321',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '21321',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOCR013',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: "Board member's fixed cash based compensation",
+            dataType: 'number',
+            textSnippet: 'Snippet Two',
+            pageNo: '24',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: '213123',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+        ],
+      },
+      {
+        dpCode: 'BOIR017',
+        fiscalYear: '2018-2019',
+        status: 'Yet to start',
+        description: 'Board member date of appointment',
+        isStandAloneOrMatrix: 'Standalone',
+        dataType: 'date',
+        keyIssue: 'Audit committee functioning',
+        textSnippet: 'Snippet One',
+        pageNo: '58',
+        screenShot: 'https://esgds.io/images/home/logo.png',
+        response: 'Tue May 01 2016',
+
+        source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+        historicalData: [
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet One',
+            pageNo: '58',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
+            source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BOIR017',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Board member date of appointment',
+            dataType: 'date',
+            textSnippet: 'Snippet Two',
+            pageNo: '42',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Tue May 01 2016',
+
             source: { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: 'Tue May 04 2017' },
           },
         ],
