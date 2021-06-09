@@ -10,7 +10,6 @@ export function* getLogin(data) {
     sessionStorage.role = response.user.roleId.roleName;
   } catch (error) {
     yield put(actionCreators.getLoginFailure(error));
-    sessionStorage.role = 'QA';
   }
 }
 

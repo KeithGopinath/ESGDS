@@ -67,6 +67,8 @@ const Task = (props) => {
 
   const currentTaskId = currentData.taskId;
 
+  const currentCompany = currentData.company;
+
   const defaultActiveTab = () => {
     const defaultTab = tabsRef.current[0].current;
     if (defaultTab) {
@@ -217,7 +219,7 @@ const Task = (props) => {
         <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
-              <div className="task-pillar">{currentPillar}</div>
+              <div className="task-pillar">{`${currentCompany} / ${currentPillar}`}</div>
               <div className="task-id">{`Task Id: ${currentTaskId}`}</div>
             </div>
             {currentPillar === 'Governance' &&
