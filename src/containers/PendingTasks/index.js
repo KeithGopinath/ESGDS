@@ -73,7 +73,7 @@ const PendingTasks = () => {
       tabsList = ['Data Verification', 'Data Correction'];
     }
     if (currentRole === 'Company Representative') {
-      tabsList = ['Data Verification', 'Data Correction'];
+      tabsList = ['Data Review', 'Review Changes'];
     }
     if (currentRole === 'Client Representative') {
       tabsList = ['Data Verification', 'Data Correction'];
