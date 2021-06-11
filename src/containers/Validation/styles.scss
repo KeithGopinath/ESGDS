@@ -1,10 +1,20 @@
-.validation-radio {
-    height: 1.2rem;
-    width: 1.2rem;
-    width: 40%;
-    text-align: left;
+.validation-radio,
+.valide-type-na {
+  height: 1rem;
+  width: 1rem;
+  width: 40%;
+  text-align: center;
 }
 
 .radio-value {
-    width: 60%;
+  width: 60%;
+}
+
+.validation-table td {
+  padding: 6px !important;
+}
+
+div[disabled] {
+  pointer-events: none;
+  opacity: 0.7;
 }
