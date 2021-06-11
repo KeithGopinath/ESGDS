@@ -19,6 +19,7 @@ const Validation = () => {
   const [max, setMax] = useState('');
   const [year, setYear] = useState('');
   const [trValidation, setTrValication] = useState(false);
+  const [complete, setComplete] = useState(false);
   //   const [mandatoryDpCode, setMandatoryDpCode] = useState('');
 
   const taxonomyOptions = [
@@ -88,7 +89,6 @@ const Validation = () => {
   const onChangeDpCodeType = (e) => {
     setDpCodeType(e);
     setDpCodeOptions(e.value.dpCodeOptions);
-    console.log("type: ", e.value.dpCodeOptions);
   };
 
   const onChangeDpCode = (e) => {
@@ -111,29 +111,22 @@ const Validation = () => {
     setDescription(e.target.value);
   };
 
-  const onRadioSelect = (e) => {
-    setValidationType(e.target.id);
-  };
-
   const onChangeMandatoryDpCode = () => {
 
   };
 
-  const TransferLists = () => {
-
-  }
-
-  const typeSubmit = (e) => {
-    alert(e);
-  }
-
   const onSubmitData = () => {
     setTrValication(false);
-    if ((validationType === 'Type 2' || validationType === 'na2') || (validationType === 'Type 3' || validationType === 'na3') || (validationType === 'Type 4' || validationType === 'na4') || (validationType === 'Type 5' || validationType === 'na5')) {
-      setTrValication(true);
-    }
+    setComplete(true);
   };
-  console.log("dp code types: ", dpCode.types)
+
+  const onTypeClick = (e) => {
+    setValidationType(e.target.id);
+    const temp = [...dpCodeOptions].map(a => a.types.map((type) => type.type));
+    const index1 = temp.indexOf(`${e.target.id}`);
+    console.log("temp, gettingValue, index1 ", temp, e.target.id, index1);
+  };
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -156,7 +149,6 @@ const Validation = () => {
                   <Form.Group>
                     <Form.Label>DP Code Type <sup className="text-danger">*</sup></Form.Label>
                     <Select
-                      // isMulti
                       options={dpCodeTypeOptions.map(e => ({ label: e.dpcode_type_name, value: e }))}
                       name="dpcodetype"
                       value={dpCodeType}
@@ -178,25 +170,23 @@ const Validation = () => {
                     <Form.Label>Validation <sup className="text-danger">*</sup></Form.Label>
                     <Table responsive="sm" className="validation-table border-right-0 border-left-0" striped bordered >
                       <tbody>
-                        {dpCode === '' ? '' : dpCode.types.map(data => (
+                        {dpCode === '' ? '' : dpCode.types.map((data, index) => (
                           <tr key={data.type}>
                             <td>
-                              <div className="form-check w-100 d-flex justify-content-around">
-                                <span>
-                                  {data.type}
-                                  <FontAwesomeIcon
-                                    className="info-icon text-success"
-                                    icon={faCheckCircle}
-                                    onClick={() => typeSubmit()}
-                                  />
-                                </span>
-                                <span className="">
-                                  <span>NA</span>
-                                  <FontAwesomeIcon
-                                    className="info-icon text-success"
-                                    icon={faCheckCircle}
-                                  />
-                                </span>
+                              <div className="form-check w-100 d-flex justify-content-between">
+                                <span
+                                  className="btn type-btn"
+                                  id={data.type}
+                                  key={index}
+                                  onClick={onTypeClick}>{data.type}</span>
+                                {/* {complete === false ?  */}
+                                <span
+                                  className="mt-auto mb-auto text-primary font-weight-bold"
+                                  id={data.type}>Initiate</span>
+                                {/* :
+                                <span className="mt-auto mb-auto text-success font-weight-bold">Completed</span>
+                                } */}
+                                <span className="mr-4 mt-auto mb-auto">NA</span>
                               </div>
                             </td>
                           </tr>
@@ -277,7 +267,6 @@ const Validation = () => {
               </Card>
             }
           </Container>
-
         </div>
       </div>
     </div>
