@@ -229,13 +229,19 @@ const TaskCreate = () => {
       ],
     },
   ];
-  const yourDate = new Date();
-  const date = moment(yourDate, 'YYY-MM-DD').format();
+  
+ 
+  const getFormatDate=(arg)=>{
+    const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
+    return date
+  }
 
   const onCreateTask = () => {
     alert('Task Created Successfully');
   };
   function disabledDate(current) {
+    const yourDate = new Date();
+    const date= getFormatDate(yourDate);
     const customDate = date;
     return current && current < moment(customDate, 'YYYY-MM-DD');
   }
@@ -295,7 +301,14 @@ const TaskCreate = () => {
       </Card>
     </Col>
   ));
-
+  const analystEndData=(e)=>{
+    //console.log(e._d, 'analyst end date');
+    if(e !== null){
+      const date = getFormatDate(e._d);
+    console.log(date, 'analystDate');
+    }
+    
+  }
 
   const batchInfoTab = () => (
     <Container>
@@ -349,6 +362,7 @@ const TaskCreate = () => {
                   className="date-picker"
                   size="middle"
                   format="YYYY-MM-DD"
+                  onChange={analystEndData}
                   disabledDate={disabledDate}
                 />
               </div>

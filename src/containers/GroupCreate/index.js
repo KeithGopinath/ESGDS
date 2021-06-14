@@ -11,7 +11,7 @@ import SideMenuBar from '../../components/SideMenuBar';
 const GroupCreation = () => {
   const [grpName, setGrpName] = useState('');
   const [grpAdmin, setrGrpAdmin] = useState('');
-  // const [batch, setBatch] = useState('');
+  const [batch, setBatch] = useState('');
   const [qaRole, setQArole] = useState('');
   const [analystRole, setAnalystRole] = useState('');
   const [grplist, setGrpList] = useState([]);
@@ -27,13 +27,13 @@ const GroupCreation = () => {
     { value: 'Balaji', label: 'Balaji' },
   ];
 
-  // const batchOptions = [
-  //   { value: 'batch 1', label: 'batch 1' },
-  //   { value: 'batch 2', label: 'batch 2' },
-  //   { value: 'batch 3', label: 'batch 3' },
-  //   { value: 'batch 4', label: 'batch 4' },
-  //   { value: 'batch 5', label: 'batch 5' },
-  // ];
+  const batchOptions = [
+    { value: 'batch 1', label: 'batch 1' },
+    { value: 'batch 2', label: 'batch 2' },
+    { value: 'batch 3', label: 'batch 3' },
+    { value: 'batch 4', label: 'batch 4' },
+    { value: 'batch 5', label: 'batch 5' },
+  ];
 
   const qaOptions = [
     { value: 'Sam', label: 'Sam' },
@@ -60,9 +60,9 @@ const GroupCreation = () => {
   const onhandlegrpAdmin = (groupAdmin) => {
     setrGrpAdmin(groupAdmin.value);
   };
-  // const onhandleassignBatch = (Assignedbatch) => {
-  //   setBatch(Assignedbatch);
-  // };
+  const onhandleassignBatch = (Assignedbatch) => {
+    setBatch(Assignedbatch);
+  };
   const onhandleQA = (QA) => {
     setQArole(QA);
   };
@@ -73,11 +73,11 @@ const GroupCreation = () => {
     if (!grpName) {
       setInputValidate('border-danger');
       setGroupStatus(2);
-    } else if (!grpAdmin || !qaRole || !analystRole) {
+    } else if (!grpAdmin || !qaRole || !analystRole || !batch) {
       setInputValidate(true);
       setGroupStatus(2);
     }
-    if ((grpName.length && grpAdmin.length && qaRole.length && analystRole.length) > 0) {
+    if ((grpName.length && grpAdmin.length && qaRole.length && analystRole.length && batch.length) > 0) {
       const grpDetails = { groupName: grpName, groupAdmin: grpAdmin.value, AssignedQA: qaRole, AssignedAnalyst: analystRole };
       const updatedgrplist = [grpDetails, ...grplist];
       setGrpList(updatedgrplist);
@@ -109,8 +109,10 @@ const GroupCreation = () => {
                   </Row>
                   <Row>
                     <Col lg={6} sm={12}>
-                      <div className="group-name">Group name* :</div>
+                      <div className="group-name">Group name*</div>
                       <div className="form-group group-input-width" ><input type="text" value={grpName} className={`form-control ${grpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required></input></div>
+                    </Col>
+                    <Col lg={6} sm={12}>
                       <div className="group-dropdown-width">
                         <div className="group-dropdown-name" >Select Group Admin*</div>
                         <div className={grpAdmin.length === 0 && inputValidate && 'group-dropdown-alert'}>
@@ -123,8 +125,9 @@ const GroupCreation = () => {
                       </div>
                       {/* <div className="group-dropdown-width">
                         <div className="group-dropdown-name">Assign Batches*</div>
-                        <div className={batch === '' && inputValidate && 'group-dropdown-alert'}>
+                        <div className={batch.length === 0 && inputValidate && 'group-dropdown-alert'}>
                           <Select
+                            isMulti
                             options={batchOptions}
                             name="name"
                             onChange={onhandleassignBatch}
@@ -132,6 +135,8 @@ const GroupCreation = () => {
                         </div>
                       </div> */}
                     </Col>
+                  </Row>
+                  <Row>
                     <Col lg={6} sm={12} >
                       <div className="group-dropdown-width">
                         <div className="group-dropdown-name">Assign QA*</div>
@@ -144,6 +149,8 @@ const GroupCreation = () => {
                           />
                         </div>
                       </div>
+                    </Col>
+                    <Col lg={6} sm={12} >
                       <div className="group-dropdown-width">
                         <div className="group-dropdown-name">Assign Analyst*</div>
                         <div className={analystRole.length === 0 && inputValidate && 'group-dropdown-alert'}>
@@ -158,7 +165,22 @@ const GroupCreation = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg={12}>
+                    <Col lg={6} sm={12}>
+                      <div className="group-dropdown-width">
+                        <div className="group-dropdown-name">Assign Batches*</div>
+                        <div className={batch.length === 0 && inputValidate && 'group-dropdown-alert'}>
+                          <Select
+                            isMulti
+                            options={batchOptions}
+                            name="name"
+                            onChange={onhandleassignBatch}
+                          />
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg={12} sm={12}>
                       <div className="group-status-minheight">
                         {groupStatus === 1 &&
                         <div>

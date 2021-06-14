@@ -9,7 +9,7 @@ export default {
     getUpdatePassword: 'updatepassword',
     createBatch: '/batches',
     getKeyIssues: 'key_issues',
-    getMasterTaxonomy: 'masterTaxonomies',
+    getMasterTaxonomy: 'taxonomies',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
