@@ -42,7 +42,7 @@ const Task = (props) => {
       return COMPANY_REP_DATA;
     }
     if (currentRole === 'Client Representative') {
-      return QA_DV_DATA;
+      return COMPANY_REP_DATA;
     }
     if (currentRole === 'QA') {
       return QA_DV_DATA;
