@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
 import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Col, Button } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import { Drawer } from 'antd';
@@ -15,7 +13,7 @@ import SideMenuBar from '../../components/SideMenuBar';
 import DataAccordian from './DataAccordian';
 import AddSource from './AddSource';
 import DataSheet from './DataSheet';
-import { ANALYST_DC_DATA, QA_DV_DATA } from '../../containers/DataPage/apiData';
+import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
 
 const DataPage = (props) => {
   console.log(props, '#######################');
@@ -27,10 +25,10 @@ const DataPage = (props) => {
 
   const defaultApiData = () => {
     if (currentRole === 'Company Representative') {
-      return QA_DV_DATA;
+      return COMPANY_REP_DATA;
     }
     if (currentRole === 'Client Representative') {
-      return QA_DV_DATA;
+      return COMPANY_REP_DATA;
     }
     if (currentRole === 'QA') {
       return QA_DV_DATA;
@@ -97,6 +95,10 @@ const DataPage = (props) => {
 
   // console.log(getDataForDataSheet(ANALYST_DC_DATA));
 
+  const reqDpCode = currentDpCode;
+  const reqTask = currentTask;
+  const reqIndexes = { maxIndex, minIndex, currentIndex };
+
 
   return (
     <div className="main">
@@ -119,16 +121,12 @@ const DataPage = (props) => {
             </Drawer>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="History">
-                {currentRole === 'Analyst' && <DataSheet isAnalystHistory dpCodeData={currentDpCode} location={props.location} sourceData={sourceApiData} /> }
-                {currentRole === 'QA' && <DataSheet isQAHistory dpCodeData={currentDpCode} location={props.location} sourceData={sourceApiData} />}
-                {currentRole === 'Company Representative' && <DataSheet isCompanyRepHistory dpCodeData={currentDpCode} location={props.location} sourceData={sourceApiData} />}
+                <DataSheet isHistoryType reqData={reqDpCode} locationData={props.location} reqSourceData={sourceApiData} reqErrorList={errorList} />
               </DataAccordian>
             </Col>
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Current" isActive >
-                {currentRole === 'Analyst' && <DataSheet isAnalyst indexes={{ maxIndex, minIndex, currentIndex }} dpCodeData={currentDpCode} taskData={currentTask} location={props.location} sourceData={sourceApiData} openSourcePanel={onClickOpenAddSource} />}
-                {currentRole === 'QA' && <DataSheet isQA indexes={{ maxIndex, minIndex, currentIndex }} dpCodeData={currentDpCode} taskData={currentTask} location={props.location} sourceData={sourceApiData} errorList={errorList} openSourcePanel={onClickOpenAddSource} />}
-                {currentRole === 'Company Representative' && <DataSheet isCompanyRep indexes={{ maxIndex, minIndex, currentIndex }} dpCodeData={currentDpCode} taskData={currentTask} location={props.location} sourceData={sourceApiData} openSourcePanel={onClickOpenAddSource} />}
+                <DataSheet reqData={reqDpCode} locationData={props.location} reqTask={reqTask} reqIndexes={reqIndexes} reqSourceData={sourceApiData} reqErrorList={errorList} openSourcePanel={onClickOpenAddSource} />
               </DataAccordian>
             </Col>
           </div>

@@ -73,10 +73,10 @@ const PendingTasks = () => {
       tabsList = ['Data Verification', 'Data Correction'];
     }
     if (currentRole === 'Company Representative') {
-      tabsList = ['Data Review', 'Review Changes'];
+      tabsList = ['Data Review'];
     }
     if (currentRole === 'Client Representative') {
-      tabsList = ['Data Verification', 'Data Correction'];
+      tabsList = ['Data Review'];
     }
     return tabsList;
   };
@@ -90,7 +90,7 @@ const PendingTasks = () => {
       return COMPANY_REP_DATA;
     }
     if (currentRole === 'Client Representative') {
-      return [];
+      return COMPANY_REP_DATA;
     }
     if (currentRole === 'QA') {
       return QA_DV_DATA;
