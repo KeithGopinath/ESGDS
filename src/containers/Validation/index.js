@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { Card, Row, Col, Container, Form, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
@@ -15,6 +15,7 @@ const Validation = () => {
   const [dpCodeOptions, setDpCodeOptions] = useState([]);
   const [description, setDescription] = useState('');
   const [validationType, setValidationType] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const [min, setMin] = useState('');
   const [max, setMax] = useState('');
   const [year, setYear] = useState('');
@@ -36,8 +37,8 @@ const Validation = () => {
         {
           dpcode: '0001',
           types: [
-            { type: "Type 2" },
-            { type: "Type 3" }
+            { type: "Type 2", initiate: false },
+            { type: "Type 3", initiate: false }
           ]
         }
       ]
@@ -48,24 +49,24 @@ const Validation = () => {
         {
           dpcode: '0001',
           types: [
-            { type: "Type 2" },
-            { type: "Type 4" },
-            { type: "Type 5" },
+            { type: "Type 2", initiate: false },
+            { type: "Type 4", initiate: false },
+            { type: "Type 5", initiate: false },
           ]
         },
         {
           dpcode: '0002',
           types: [
-            { type: "Type 3" }
+            { type: "Type 3", initiate: false }
           ]
         },
         {
           dpcode: '0003',
           types: [
-            { type: "Type 2" },
-            { type: "Type 3" },
-            { type: "Type 4" },
-            { type: "Type 5" }
+            { type: "Type 2", initiate: false },
+            { type: "Type 3", initiate: false },
+            { type: "Type 4", initiate: false },
+            { type: "Type 5", initiate: false }
           ]
         },
       ]
@@ -116,15 +117,27 @@ const Validation = () => {
   };
 
   const onSubmitData = () => {
-    setTrValication(false);
-    setComplete(true);
+    const dpCodeUpdate = dpCode.types.map(item => {
+      if (item.type === selectedType) {
+        item.initiate = true
+        return item;
+      }
+      return item;
+    })
+    const updatedCode = {
+      ...dpCode,
+      types: dpCodeUpdate
+    }
+    setDpCode(updatedCode)
   };
 
-  const onTypeClick = (e) => {
+  const editType = () => {
+
+  };
+
+  const onTypeClick = (e, type) => {
+    setSelectedType(type)
     setValidationType(e.target.id);
-    const temp = [...dpCodeOptions].map(a => a.types.map((type) => type.type));
-    const index1 = temp.indexOf(`${e.target.id}`);
-    console.log("temp, gettingValue, index1 ", temp, e.target.id, index1);
   };
 
   return (
@@ -172,23 +185,23 @@ const Validation = () => {
                       <tbody>
                         {dpCode === '' ? '' : dpCode.types.map((data, index) => (
                           <tr key={data.type}>
-                            <td>
+                            <td className="d-flex">
                               <div className="form-check w-100 d-flex justify-content-between">
                                 <span
                                   className="btn type-btn"
                                   id={data.type}
                                   key={index}
-                                  onClick={onTypeClick}>{data.type}</span>
+                                  onClick={(e) => onTypeClick(e, data.type)}>{data.type}</span>
                                 {/* {complete === false ?  */}
                                 <span
-                                  className="mt-auto mb-auto text-primary font-weight-bold"
-                                  id={data.type}>Initiate</span>
-                                {/* :
-                                <span className="mt-auto mb-auto text-success font-weight-bold">Completed</span>
-                                } */}
+                                  className={`mt-auto mb-auto font-weight-bold ${data.initiate===true ? ' text-success' : 'text-primary'}`}
+                                  id={data.type}>{data.initiate ? 'Completed': 'Initiate'}</span>
+
                                 <span className="mr-4 mt-auto mb-auto">NA</span>
                               </div>
+                              {data.initiate===true? <FontAwesomeIcon className="text-success mr-4 mt-auto mb-auto" icon={faEdit} onClick={() => { editType(item) }} />: ""}
                             </td>
+                            
                           </tr>
                         ))
                         }
