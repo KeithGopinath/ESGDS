@@ -19,37 +19,56 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     const onChangeCompRep = (e) => {
         let file = e.target.files[0];
         setFileName(file.name);
-        let reader = new FileReader();
-        reader.onloadend = function () {
-            onCompany(reader.result);
+        if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
+          let reader = new FileReader();
+          reader.onloadend = function () {
+              onCompany(reader.result);
+          }
+          reader.readAsDataURL(file);
+          setAuthValidate(false);
+          setProofUploadAlert('');
+          setFileSize({ ...fileSize, authentication: file.size });
+        } else {
+          setAuthValidate(true);
+          setProofUploadAlert("File type should be .png/.jpg/.jpeg");
         }
-        reader.readAsDataURL(file);
-        setAuthValidate(false);
-        setFileSize({ ...fileSize, authentication: e.target.files[0].size });
+        
     }
-
+    
     const onChangeEmpId = (e) => {
         let file = e.target.files[0];
         setEmpID(file.name);
+        if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
         let reader = new FileReader();
         reader.onloadend = function () {
             onEmployeeId(reader.result);
         }
         reader.readAsDataURL(file);
         setIdProofValidate(false);
-        setFileSize({ ...fileSize, idProof: e.target.files[0].size });
+        setProofUploadAlert('');
+        setFileSize({ ...fileSize, idProof: file.size });
+      } else {
+        setAuthValidate(true);
+        setProofUploadAlert("File type should be .png/.jpg/.jpeg");
+      }
     };
 
     const onChangeCancelledCheque = (e) => {
         let file = e.target.files[0];
         setCancelledCheque(file.name);
-        let reader = new FileReader();
+        if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
+          let reader = new FileReader();
         reader.onloadend = function () {
             onCancelledCheque(reader.result);
         }
         reader.readAsDataURL(file);
         setChequeValidate(false);
-        setFileSize({ ...fileSize, cancelCheque: e.target.files[0].size });
+        setProofUploadAlert('');
+        setFileSize({ ...fileSize, cancelCheque: file.size });
+      } else {
+        setAuthValidate(true);
+        setProofUploadAlert("File type should be .png/.jpg/.jpeg");
+      }
     };
 
     const goToLoginCredentials = () => {
@@ -121,7 +140,9 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
 
     const renderTooltip = (props) => (
         <Tooltip className="proofUpload-tooltip" {...props}>
-            File size should not exceed 3MB
+            <strong>File :</strong>
+            <li>type should be in .png/.jpg/.jpeg</li> 
+            <li>size should not exceed 3MB</li>
         </Tooltip>
     );
 
@@ -142,20 +163,21 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                 </Form.Label>}
                                 {role === 'client' && <Form.Label className="client-proof-upload">Upload your letter of Authentication<sup className="text-danger">*</sup>
                                     <span>
-                                        <OverlayTrigger placement="top-start" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
                                 {role === 'employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
                                     <span>
-                                        <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
+                                        <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                                             <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                                         </OverlayTrigger>
                                     </span>
                                 </Form.Label>}
                                 <Form.File
                                     type="file"
+                                    accept="image/*"
                                     className={authValidate && 'file-not-upload'}
                                     id="choose-file"
                                     label={fileName === '' ? 'Drag and drop a file or click' : fileName}
@@ -189,6 +211,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                 </Form.Label>}
                                 <Form.File
                                     type="file"
+                                    accept="image/*"
                                     className={idProofValidate && 'file-not-upload'}
                                     id=""
                                     label={empID === '' ? 'Drag and drop a file or click' : empID}
@@ -207,6 +230,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                                 </Form.Label>
                                 <Form.File
                                     type="file"
+                                    accept="image/*"
                                     className={chequeValidate && 'file-not-upload'}
                                     id=""
                                     label={cancelledCheque === '' ? 'Drag and drop a file or click' : cancelledCheque}
@@ -217,7 +241,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                         </Col>}
                     </Row>
                     <span className="w-100 text-center text-danger">{proofUploadAlert}</span>
-                    <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
+                    <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
                     <div className="d-flex flex-row justify-content-end mt-1">
                     <span><Button className="back mr-1" onClick={goToPersonalDetails}>Back</Button></span>
                     <span><Button className="save-continue" onClick={goToLoginCredentials}>Save & Continue</Button></span>

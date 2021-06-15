@@ -78,7 +78,7 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                                 name="createPassword"
                                 id="createPassword"
                                 value={password}
-                                placeholder="**********"
+                                placeholder="Enter your password"
                                 onChange={handlePassword}
                             />
                         </Form.Group>
@@ -92,14 +92,14 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
                                 name="confirmPassword"
                                 id="confirmPassword"
                                 value={confirmPassword}
-                                placeholder="**********"
+                                placeholder="Confirm your password"
                                 onChange={handleConfirmPassword}
                             />
                         </Form.Group>
                     </Col>
                 </Row>
                 <span className='text-center text-danger w-100'>{loginCredentialsAlert}</span>
-                <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
+                <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
                 <p className="ml-3 mr-3 mt-2"> <sup className="text-danger">*</sup> Use 8 or more characters at least one Uppercase, Lowercase letter, Number & special character</p>
                 <div className="d-flex flex-row justify-content-end mt-1">
                     <span><Button className="back mr-1" onClick={goToProofUpload}>Back</Button></span>

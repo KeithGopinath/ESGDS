@@ -123,7 +123,7 @@ const Onboard = (props) => {
         name: firstName,
         email,
         phoneNumber,
-        companyId: companyName,
+        companyName,
         password,
         access_token: sessionStorage.access,
         authenticationLetterForClientUrl: fileName,
@@ -149,7 +149,7 @@ const Onboard = (props) => {
 
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     }
-    history.push('/users');
+    // history.push('/users');
   };
 
   // stepper 

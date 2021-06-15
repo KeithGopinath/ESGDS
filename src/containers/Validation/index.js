@@ -186,7 +186,7 @@ const Validation = () => {
                         {dpCode === '' ? '' : dpCode.types.map((data, index) => (
                           <tr key={data.type}>
                             <td className="d-flex">
-                              <div className="form-check w-100 d-flex justify-content-between">
+                              <div className="w-100 d-flex justify-content-between">
                                 <span
                                   className="btn type-btn"
                                   id={data.type}
@@ -201,7 +201,6 @@ const Validation = () => {
                               </div>
                               {data.initiate===true? <FontAwesomeIcon className="text-success mr-4 mt-auto mb-auto" icon={faEdit} onClick={() => { editType(item) }} />: ""}
                             </td>
-                            
                           </tr>
                         ))
                         }

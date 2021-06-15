@@ -12,7 +12,9 @@
 
 .validation-table td {
   padding: 0px !important;
-  border:1px solid #ced4da !important;
+  vertical-align: top;
+  // border:1px solid #ced4da !important;
+  border-color: #cccccc;
 }
 
 .type-btn {
