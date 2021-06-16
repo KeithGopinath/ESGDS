@@ -193,7 +193,7 @@ const DataSheet = (props) => {
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode },
+      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
     });
   };
 
@@ -218,7 +218,7 @@ const DataSheet = (props) => {
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode },
+      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
     });
   };
 
@@ -246,7 +246,7 @@ const DataSheet = (props) => {
     });
   };
 
-  const getCondition = () => {
+  const getIsDisableOrNot = () => {
     if (isHistoryType) {
       if (isAnalyst) { return true; }
       if (isQA) { return true; }
@@ -260,7 +260,7 @@ const DataSheet = (props) => {
     return false;
   };
 
-  const disableField = getCondition();
+  const disableField = props.isDataCorrection ? true : getIsDisableOrNot();
 
 
   return (
@@ -542,7 +542,8 @@ const DataSheet = (props) => {
       <ErrorDataSheet reqData={props.reqData} sourceList={sourceList} textResponse={textResponse} locationData={props.locationData} openSourcePanel={props.openSourcePanel} />}
 
       {/* COMMENTS */}
-      <DataComment />
+      {!isHistoryType && !isAnalyst &&
+      <DataComment />}
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
