@@ -23,6 +23,15 @@
   }
 }
 
+.type-edit {
+  cursor: pointer;
+}
+
+.na-button {
+  background: #2da68b !important;
+  border-color: #2da68b !important;
+}
+
 div[disabled] {
   pointer-events: none;
   opacity: 0.7;

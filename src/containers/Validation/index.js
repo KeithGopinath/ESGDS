@@ -1,7 +1,8 @@
 /*eslint-disable*/
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Card, Row, Col, Container, Form, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
@@ -19,7 +20,7 @@ const Validation = () => {
   const [min, setMin] = useState('');
   const [max, setMax] = useState('');
   const [year, setYear] = useState('');
-  const [trValidation, setTrValication] = useState(false);
+  const [disableFileds, setDisableFileds] = useState(false);
   const [complete, setComplete] = useState(false);
   //   const [mandatoryDpCode, setMandatoryDpCode] = useState('');
 
@@ -37,8 +38,8 @@ const Validation = () => {
         {
           dpcode: '0001',
           types: [
-            { type: "Type 2", initiate: false },
-            { type: "Type 3", initiate: false }
+            { type: "Type 2", status: false },
+            { type: "Type 3", status: false }
           ]
         }
       ]
@@ -49,24 +50,24 @@ const Validation = () => {
         {
           dpcode: '0001',
           types: [
-            { type: "Type 2", initiate: false },
-            { type: "Type 4", initiate: false },
-            { type: "Type 5", initiate: false },
+            { type: "Type 2", status: false },
+            { type: "Type 4", status: false },
+            { type: "Type 5", status: false },
           ]
         },
         {
           dpcode: '0002',
           types: [
-            { type: "Type 3", initiate: false }
+            { type: "Type 3", status: false }
           ]
         },
         {
           dpcode: '0003',
           types: [
-            { type: "Type 2", initiate: false },
-            { type: "Type 3", initiate: false },
-            { type: "Type 4", initiate: false },
-            { type: "Type 5", initiate: false }
+            { type: "Type 2", status: false },
+            { type: "Type 3", status: false },
+            { type: "Type 4", status: false },
+            { type: "Type 5", status: false }
           ]
         },
       ]
@@ -119,7 +120,7 @@ const Validation = () => {
   const onSubmitData = () => {
     const dpCodeUpdate = dpCode.types.map(item => {
       if (item.type === selectedType) {
-        item.initiate = true
+        item.status = true
         return item;
       }
       return item;
@@ -128,7 +129,7 @@ const Validation = () => {
       ...dpCode,
       types: dpCodeUpdate
     }
-    setDpCode(updatedCode)
+    setDpCode(updatedCode);
   };
 
   const editType = () => {
@@ -138,6 +139,10 @@ const Validation = () => {
   const onTypeClick = (e, type) => {
     setSelectedType(type)
     setValidationType(e.target.id);
+  };
+
+  const onNaClick = () => {
+    onSubmitData();
   };
 
   return (
@@ -186,20 +191,17 @@ const Validation = () => {
                         {dpCode === '' ? '' : dpCode.types.map((data, index) => (
                           <tr key={data.type}>
                             <td className="d-flex">
-                              <div className="w-100 d-flex justify-content-between">
+                              <div className="w-100 d-flex justify-content-around">
                                 <span
                                   className="btn type-btn"
                                   id={data.type}
                                   key={index}
                                   onClick={(e) => onTypeClick(e, data.type)}>{data.type}</span>
-                                {/* {complete === false ?  */}
                                 <span
-                                  className={`mt-auto mb-auto font-weight-bold ${data.initiate===true ? ' text-success' : 'text-primary'}`}
-                                  id={data.type}>{data.initiate ? 'Completed': 'Initiate'}</span>
-
-                                <span className="mr-4 mt-auto mb-auto">NA</span>
+                                  className={`mt-auto mb-auto font-weight-bold ${data.status===true ? ' text-success' : 'text-primary'}`}
+                                  id={data.type}>{data.status ? 'Completed': 'Initiate'}</span>
+                                    {data.status===true? <FontAwesomeIcon className=" type-edit text-success mt-auto mb-auto" icon={faEdit} onClick={editType} />: null}
                               </div>
-                              {data.initiate===true? <FontAwesomeIcon className="text-success mr-4 mt-auto mb-auto" icon={faEdit} onClick={() => { editType(item) }} />: ""}
                             </td>
                           </tr>
                         ))
@@ -210,7 +212,7 @@ const Validation = () => {
                 </Col>
               </Row>
             </Card>
-            {(validationType === 'Type 2' || validationType === 'Type 3' || validationType === 'Type 4' || validationType === 'Type 5' || validationType === 'na1' || validationType === 'na2' || validationType === 'na3' || validationType === 'na4' || validationType === 'na5') &&
+            {(validationType === 'Type 2' || validationType === 'Type 3' || validationType === 'Type 4' || validationType === 'Type 5') &&
               <Card className="mt-2">
                 <Row className="d-flex m-4">
                   {(validationType === 'Type 2' || validationType === 'Type 3' || validationType === 'Type 4') &&
@@ -274,6 +276,7 @@ const Validation = () => {
                   {validationType === 'Type 5' && <p>Sorry no data available!</p>}
                   <div className="d-flex justify-content-center w-100 ">
                     <Button className="save-continue" onClick={onSubmitData}>Save</Button>
+                    <Button className="ml-1 na-button" onClick={onNaClick}>NA</Button>
                   </div>
                 </Row>
               </Card>
