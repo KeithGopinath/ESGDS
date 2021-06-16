@@ -2,11 +2,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import * as XLSX from 'xlsx';
@@ -22,39 +22,59 @@ const BatchCreation = ({ show, setShow }) => {
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
   const [subsetTax, setsubsetTax] = useState('');
-  const [batchSLA, SetbatchSLA] = useState('');
+  const [batchsla, Setbatchsla] = useState('');
   // const [companies, setCompanies] = useState([]);
   const handleClose = () => {
     setBatch('');
     setYear('');
     setsubsetTax('');
-    SetbatchSLA('');
+    Setbatchsla('');
     setRowDetails([]);
     setAlert(0);
     setValidBorder(false);
     setShow(false);
   };
+  const dispatch = useDispatch();
   const [validBorder, setValidBorder] = useState(false);
+  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
+  console.log(taxonomyData, 'taxonomyData');
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
   const fullList = companyData && companyData.rows;
 
   const rowArray = fullList && fullList.map((args) => ({
     id: args.id, companydata: args.companyName,
   }));
+  const modTax = taxonomyData && taxonomyData.rows;
+  console.log(modTax, 'modTax');
+  const taxOptions = modTax && modTax.map((e) => (
+    { value: e._id, label: e.taxonomyName }
+  ));
 
   const optionsForPagination = {
     sizePerPage: 10,
   };
+  const isbatchCreated = useSelector((createbatch) => createbatch.createBatch.batchpost);
+  console.log(isbatchCreated, 'isbatchCreated');
+  useEffect(() => {
+    if (isbatchCreated) {
+      setTimeout(() => {
+        setAlert(0);
+      }, 2000);
+      dispatch({ type: 'BATCH_REQUEST' });
+    } else {
+      console.log('fail');
+    }
+  }, [isbatchCreated]);
   const onRowSelect = (row, isSelected) => {
     console.log(row, 'row');
     if (isSelected === true && rowDetail.length === 0) {
-      const rowDetails = { id: row.id, selectedCompany: row.companydata };
+      const rowDetails = { value: row.id, selectedCompany: row.companydata };
       const selectedRow = [rowDetails, ...rowDetail];
       setRowDetails(selectedRow);
     } else if (isSelected === true && rowDetail.length > 0) {
       rowDetail.map((array) => {
         if (array.id !== row.id) {
-          const rowDetails = { id: row.id, selectedCompany: row.companydata };
+          const rowDetails = { value: row.id, selectedCompany: row.companydata };
           const selectedRow = [rowDetails, ...rowDetail];
           setRowDetails(selectedRow);
         }
@@ -80,7 +100,7 @@ const BatchCreation = ({ show, setShow }) => {
       const dummy = [...rowDetail];
       rowDetail.splice(0, rowDetail.length);
       const finalAll = rowArray.map((args) => {
-        const rowDetails = { id: args.id, selectedCompany: args.companydata };
+        const rowDetails = { value: args.id, selectedCompany: args.companydata };
         dummy.push(rowDetails);
         return dummy;
       });
@@ -108,11 +128,11 @@ const BatchCreation = ({ show, setShow }) => {
     { value: '2018 - 2019', label: '2018 - 2019' },
     { value: '2019 - 2020', label: '2019 - 2020' },
   ];
-  const taxOptions = [
-    { value: 'TAX001', label: 'TAX001' },
-    { value: 'TAX002', label: 'TAX002' },
-    { value: 'TAX03', label: 'TAX03' },
-  ];
+  // const taxOptions = [
+  //   { value: 'TAX001', label: 'TAX001' },
+  //   { value: 'TAX002', label: 'TAX002' },
+  //   { value: 'TAX03', label: 'TAX03' },
+  // ];
   const onHandleYear = (selectedyear) => {
     console.log(selectedyear, 'selectedyear');
     setYear(selectedyear);
@@ -136,29 +156,29 @@ const BatchCreation = ({ show, setShow }) => {
     if (e !== null) {
       const date = getFormatDate(e._d);
       console.log(date, 'analystDate');
-      SetbatchSLA(date);
+      Setbatchsla(date);
     } else {
-      SetbatchSLA('');
+      Setbatchsla('');
     }
   };
   const onCreatebBatch = () => {
-    console.log(batchSLA, 'batchSLA');
+    console.log(batchsla, 'batchsla');
     console.log(validBorder, 'validBorder');
     console.log(subsetTax, 'subsetTax');
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
-    } else if (!year || !subsetTax || !batchSLA) {
+    } else if (!year || !subsetTax || !batchsla) {
       setValidBorder(true);
     }
     // else if (!batchSLA) {
     //   setValidBorder('sla');
     // }
-    if ((batch.length && year.length && rowDetail.length && subsetTax.value.length && batchSLA.length) > 0) {
-      const payload = {
-        taxonomy: subsetTax, batchName: batch, Year: year, companies: rowDetail,
+    if ((batch.length && year.length && rowDetail.length && subsetTax.value.length && batchsla.length) > 0) {
+      const data = {
+        taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail, batchSLA: batchsla,
       };
-      console.log(payload, 'payload');
+      dispatch({ type: 'BATCH_CREATE_REQUEST', payload: data });
       setTimeout(() => {
         setAlert(0);
       }, 2000);
@@ -168,7 +188,6 @@ const BatchCreation = ({ show, setShow }) => {
     }
     // funtion to add batches and show message
   };
-
   const BatchBody = () => (
     <div className="modal-batch-body">
       <Row>
@@ -196,7 +215,7 @@ const BatchCreation = ({ show, setShow }) => {
             />
           </div>
           <div className="batch-sla">Batch SLA*</div>
-          <div className={`batch-input-width ${batchSLA === '' && validBorder && 'dropdown-alert-sla' }`}>
+          <div className={`batch-input-width ${batchsla === '' && validBorder && 'dropdown-alert-sla' }`}>
             <DatePicker
               className="date-picker"
               size="middle"

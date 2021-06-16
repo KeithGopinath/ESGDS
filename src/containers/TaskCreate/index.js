@@ -87,6 +87,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch1',
           batchID: 'ID001',
+          taxonomy:{value:'08796858979', label:'Acute110'},
+          batchSLA:"2021-06-24",
           batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
           companies: [
             { id: 0, companyName: 'oil and gas' },
@@ -99,6 +101,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch2',
           batchID: 'ID002',
+          taxonomy:{value:'08796858979', label:'Acute111'},
+          batchSLA:"2021-06-24",
           batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
           companies: [
             { id: 0, companyName: 'ABFRL' },
@@ -132,6 +136,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch4',
           batchID: 'ID004',
+          taxonomy:{value:'08796858979', label:'Acute1'},
+          batchSLA:"2021-06-24",
           batchYear: [{ year: '2019-2020' }, { year: '2020-2021' }],
           companies: [
             { id: 0, companyName: 'NTPC Limited' },
@@ -144,6 +150,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch5',
           batchID: 'ID005',
+          taxonomy:{value:'087968534523', label:'Acute2'},
+          batchSLA:"2021-06-25",
           batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
           companies: [
             { id: 0, companyName: 'ABFRL' },
@@ -156,6 +164,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch6',
           batchID: 'ID006',
+          taxonomy:{value:'087getg58979', label:'Acute3'},
+          batchSLA:"2021-06-28",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -168,6 +178,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch7',
           batchID: 'ID007',
+          taxonomy:{value:'345h35j6', label:'Acute4'},
+          batchSLA:"2021-06-27",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -180,6 +192,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch8',
           batchID: 'ID008',
+          taxonomy:{value:'kjh796', label:'Acute5'},
+          batchSLA:"2021-06-17",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -192,6 +206,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch9',
           batchID: 'ID009',
+          taxonomy:{value:'08796858979', label:'Acute6'},
+          batchSLA:"2021-06-27",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -204,6 +220,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch10',
           batchID: 'ID010',
+          taxonomy:{value:'777dgh7', label:'Acute7'},
+          batchSLA:"2021-06-30",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -216,6 +234,8 @@ const TaskCreate = () => {
         {
           batchName: 'batch11',
           batchID: 'ID011',
+          taxonomy:{value:'08796858979', label:'Acute8'},
+          batchSLA:"2021-06-20",
           batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
           companies: [
             { id: 0, companyName: 'UCO Bank' },
@@ -312,7 +332,7 @@ const TaskCreate = () => {
 
   const batchInfoTab = () => (
     <Container>
-      <Row>
+      <Row className="task-row">
         <Col lg={12} sm={12}>
           <div className="batch-view-header">
             <div className="mar-right">
@@ -334,7 +354,7 @@ const TaskCreate = () => {
           </div>
         </Col>
       </Row>
-      <Row className="row-pad">
+      <Row className="row-pad task-row">
         <Col lg={6} sm={12}>
           <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
             <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
@@ -391,7 +411,7 @@ const TaskCreate = () => {
           </div>
         </Col>
       </Row>
-      <Row style={{ padding: '5%' }}>
+      <Row style={{ padding: '5%' }} className="task-row">
         <Col>
           <div className="task-foo">
             <Button variant="success" onClick={onCreateTask}>

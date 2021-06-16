@@ -2,20 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'BATCH_CREATE_REQUEST':
+    case 'ClientTaxonomy_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        batchpost: false,
+        taxonomydata: false,
       };
-    case 'BATCH_CREATE_SUCCESS':
+    case 'ClientTaxonomy_SUCCESS':
       return {
         ...state,
         isLoading: true,
-        batchpost: action.createbatch,
+        taxonomydata: action.ClientTaxonomy,
       };
-    case 'BATCH_CREATE_FAILURE':
+    case 'ClientTaxonomy_FAILURE':
       return {
         ...state,
         isLoading: true,

@@ -9,6 +9,7 @@ import createBatch from './BatchCreate';
 import batchList from './Batch';
 import keyIssues from './KeyIssues';
 import masterTaxonomy from './MasterTaxonomy';
+import clientTaxonomy from './ClientTaxonomy';
 
 const rootReducer = combineReducers({
   login,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   batchList,
   keyIssues,
   masterTaxonomy,
+  clientTaxonomy,
 });
 
 export default rootReducer;
