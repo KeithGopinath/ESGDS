@@ -26,29 +26,32 @@ const FieldWrapper = (props) => {
 
 const ErrorDataSheet = (props) => {
   const defaultData = props.reqData;
-  const { textResponse, sourceList } = props;
+  const { textResponse, sourceList, isErrorCommentType } = props;
 
   const formDescription = defaultData.description;
   const formDataType = defaultData.dataType.toUpperCase();
 
-  const [formTextSnippet, setFormTextSnippet] = useState('');
-  const [formPageNo, setFormPageNo] = useState('');
-  const [formScreenShotPath, setFormScreenShotPath] = useState('');
-  const [formResponse, setFormResponse] = useState('');
-  const [formSource, setFormSource] = useState('');
-  const [formURL, setFormURL] = useState('');
-  const [formPublicDate, setFormPublicDate] = useState('');
+  console.log(defaultData);
+
+  const [formTextSnippet, setFormTextSnippet] = useState((isErrorCommentType ? defaultData.textSnippet : ''));
+  const [formPageNo, setFormPageNo] = useState((isErrorCommentType ? defaultData.pageNo : ''));
+  const [formScreenShotPath, setFormScreenShotPath] = useState((isErrorCommentType ? defaultData.screenShot : ''));
+  const [formResponse, setFormResponse] = useState((isErrorCommentType ? defaultData.response : ''));
+  const [formSource, setFormSource] = useState((isErrorCommentType ? defaultData.source : ''));
+  const [formURL, setFormURL] = useState((isErrorCommentType ? (defaultData.source && defaultData.source.url) : ''));
+  const [formPublicDate, setFormPublicDate] = useState((isErrorCommentType ? (defaultData.source && defaultData.source.publicationDate) : ''));
   const [formScreenShotFile, setFormScreenShotFile] = useState(null);
   const [formComment, setFormComment] = useState('');
 
   useEffect(() => {
-    setFormTextSnippet('');
-    setFormPageNo('');
-    setFormScreenShotPath('');
-    setFormResponse('');
-    setFormSource('');
-    setFormURL('');
-    setFormPublicDate('');
+    setFormTextSnippet((isErrorCommentType ? defaultData.textSnippet : ''));
+    setFormPageNo((isErrorCommentType ? defaultData.pageNo : ''));
+    setFormScreenShotPath((isErrorCommentType ? defaultData.screenShot : ''));
+    setFormResponse((isErrorCommentType ? defaultData.response : ''));
+    setFormSource((isErrorCommentType ? defaultData.response : ''));
+    setFormURL((isErrorCommentType ? (defaultData.source && defaultData.source.url) : ''));
+    setFormPublicDate((isErrorCommentType ? (defaultData.source && defaultData.source.publicationDate) : ''));
+    setFormScreenShotFile(null);
     setFormComment('');
   }, [props.locationData]);
 
@@ -109,7 +112,8 @@ const ErrorDataSheet = (props) => {
     <React.Fragment>
 
       {/* HORIZONTAL Line */}
-      <Col lg={12} className="datapage-horizontalLine"></Col>
+      {!isErrorCommentType &&
+        <Col lg={12} className="datapage-horizontalLine"></Col>}
 
       {/* DESCRIPTION Field */}
       <FieldWrapper
@@ -120,51 +124,54 @@ const ErrorDataSheet = (props) => {
 
       {/* RESPONSE Field */}
       { formDataType === 'NUMBER' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        body={
-          <Form.Control
-            type="text"
-            name="response"
-            placeholder="Response"
-            onChange={onChangeFormResponse}
-            value={formResponse}
-          />
-        }
-      />}
+        <FieldWrapper
+          label="Response*"
+          visible
+          body={
+            <Form.Control
+              type="text"
+              name="response"
+              placeholder="Response"
+              onChange={onChangeFormResponse}
+              disabled={isErrorCommentType}
+              value={formResponse}
+            />
+          }
+        />}
 
       {/* RESPONSE Field */}
       { formDataType === 'DATE' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        body={
-          <DatePicker
-            className="datapage-datepicker"
-            name="response"
-            size="large"
-            onChange={onChangeFormResponse}
-            value={formResponse && moment(formResponse)}
-          />
-        }
-      />}
+        <FieldWrapper
+          label="Response*"
+          visible
+          body={
+            <DatePicker
+              className="datapage-datepicker"
+              name="response"
+              size="large"
+              onChange={onChangeFormResponse}
+              disabled={isErrorCommentType}
+              value={formResponse && moment(formResponse)}
+            />
+          }
+        />}
 
       {/* RESPONSE Field */}
       { formDataType === 'TEXT' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        body={
-          <Select
-            name="response"
-            options={textResponse.map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-          />
-        }
-      />}
+        <FieldWrapper
+          label="Response*"
+          visible
+          body={
+            <Select
+              name="response"
+              options={textResponse && textResponse.map((e) => ({ label: e, value: e }))}
+              onChange={onChangeFormResponse}
+              isDisabled={isErrorCommentType}
+              value={formResponse && { label: formResponse, value: formResponse }}
+              placeholder="Choose Response"
+            />
+          }
+        />}
 
       {/* SOURCE Field */}
       <FieldWrapper
@@ -173,8 +180,9 @@ const ErrorDataSheet = (props) => {
         body={
           <Select
             name="source"
-            options={sourceList.map((e) => ({ label: e.sourceName, value: e }))}
+            options={sourceList && sourceList.map((e) => ({ label: e.sourceName, value: e }))}
             onChange={onChangeFormSource}
+            isDisabled={isErrorCommentType}
             value={formSource && { label: formSource.sourceName, value: formSource }}
             placeholder="Choose Source File"
           />
@@ -182,20 +190,22 @@ const ErrorDataSheet = (props) => {
       />
 
       {/* ADD SOURCE Button */}
-      <Col lg={6}>
-        <Button onClick={props.openSourcePanel}>Add Source</Button>
-      </Col>
+      {!isErrorCommentType &&
+        <Col lg={6}>
+          <Button onClick={props.openSourcePanel}>Add Source</Button>
+        </Col>}
 
       {/* URL Field */}
       <FieldWrapper
         label="URL*"
-        visible={false}
+        visible={isErrorCommentType}
         body={
           <Form.Control
             type="text"
             name="url"
             placeholder="Url"
             onChange={onChangeFormURL}
+            disabled={isErrorCommentType}
             value={formURL}
           />
         }
@@ -204,13 +214,14 @@ const ErrorDataSheet = (props) => {
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label="PublicationDate*"
-        visible={false}
+        visible={isErrorCommentType}
         body={
           <DatePicker
             className="datapage-datepicker"
             name="publicationDate"
             size="large"
             onChange={onChangeFormPublicDate}
+            disabled={isErrorCommentType}
             value={formPublicDate && moment(formPublicDate)}
           />
         }
@@ -226,6 +237,7 @@ const ErrorDataSheet = (props) => {
             name="textSnippet"
             placeholder="Snippet"
             onChange={onChangeFormTextSnippet}
+            disabled={isErrorCommentType}
             value={formTextSnippet}
           />
         }
@@ -240,6 +252,7 @@ const ErrorDataSheet = (props) => {
             type="number"
             placeholder="Page No"
             onChange={onChangeFormPageNo}
+            disabled={isErrorCommentType}
             value={formPageNo}
           />
         }
@@ -248,7 +261,7 @@ const ErrorDataSheet = (props) => {
       {/* UPLOAD Field */}
       <FieldWrapper
         label="Upload Screenshot*"
-        visible
+        visible={!isErrorCommentType}
         body={
           <Upload
             className="datapage-ant-upload"
@@ -281,7 +294,7 @@ const ErrorDataSheet = (props) => {
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
-        visible
+        visible={!isErrorCommentType}
         body={
           <Form.Control
             as="textarea"

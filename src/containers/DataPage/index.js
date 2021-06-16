@@ -1,10 +1,11 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 
 import React, { useRef, useState } from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 import moment from 'moment';
 import 'antd/dist/antd.css';
 import { Drawer } from 'antd';
@@ -13,6 +14,8 @@ import SideMenuBar from '../../components/SideMenuBar';
 import DataAccordian from './DataAccordian';
 import AddSource from './AddSource';
 import DataSheet from './DataSheet';
+import ErrorDataSheet from './ErrorDataSheet';
+import ErrorAndComment from './ErrorAndComment';
 import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
 
 const DataPage = (props) => {
@@ -124,6 +127,33 @@ const DataPage = (props) => {
                 <DataSheet isHistoryType reqData={reqDpCode} locationData={props.location} reqSourceData={sourceApiData} reqErrorList={errorList} />
               </DataAccordian>
             </Col>
+            {currentRole === 'Analyst' &&
+            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+              <DataAccordian header="Error" isActive >
+                { false ?
+                  <ErrorAndComment
+                    action={null}
+                    author="QA"
+                    errorType="Data/information Missed"
+                    errorInfo={null}
+                    comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
+                  /> :
+                  <ErrorAndComment
+                    action={
+                      [
+                        <div>
+                          <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
+                          <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
+                        </div>,
+                      ]
+                    }
+                    author="QA"
+                    errorType="Data/information Missed"
+                    errorInfo={<ErrorDataSheet isErrorCommentType reqData={reqDpCode.historicalData[0]} />}
+                    comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
+                  />}
+              </DataAccordian>
+            </Col>}
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Current" isActive >
                 <DataSheet reqData={reqDpCode} locationData={props.location} reqTask={reqTask} reqIndexes={reqIndexes} reqSourceData={sourceApiData} reqErrorList={errorList} openSourcePanel={onClickOpenAddSource} />
