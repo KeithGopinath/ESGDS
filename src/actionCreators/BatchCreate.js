@@ -1,5 +1,6 @@
-export const BatchCreateRequest = () => ({
+export const BatchCreateRequest = (batchinfo) => ({
   type: 'BATCH_CREATE_REQUEST',
+  batchinfo,
 });
 
 export const BatchCreateSuccess = (createbatch) => ({
