@@ -100,6 +100,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);
+    const re= /^[6-9]{1}[0-9]{9}$/;
     if (role === 'client' || role === 'company') {
       if (!email && !phoneNumber && valid === false) {
         setPersonalDetailsAlert('Please fill all required fields');
@@ -113,6 +114,10 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       } else if (!phoneNumber) {
         setPersonalDetailsAlert('Please enter phone number');
         setValidate('border-danger');
+//         if (re.test(phoneNumber)) {
+// setPersonalDetailsAlert('Please enter valid phone number');
+//         setValidate('border-danger');
+//         }
       } else if (!companyName) {
         if (role === 'client') {
           setPersonalDetailsAlert('Please enter company name');
@@ -345,7 +350,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
             }
           </Row>
           <span className="w-100 text-center text-danger">{personalDetailsAlert}</span>
-          <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required Fields</span>
+          <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
           {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
           <div className="d-flex flex-row justify-content-end mt-1">
             <span><Button className="save-continue" onClick={gotoProofUpload}>Save & Continue</Button></span>
