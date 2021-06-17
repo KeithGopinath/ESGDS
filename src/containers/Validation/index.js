@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import ValidationTypeEdit from '../ValidationTypeEdit';
 
 const Validation = () => {
   const sideBarRef = useRef();
@@ -17,11 +18,13 @@ const Validation = () => {
   const [description, setDescription] = useState('');
   const [validationType, setValidationType] = useState('');
   const [selectedType, setSelectedType] = useState('');
+  const [selectedItem, setSelectedItem] = useState('');
   const [min, setMin] = useState('');
   const [max, setMax] = useState('');
   const [year, setYear] = useState('');
   const [disableFileds, setDisableFileds] = useState(false);
-  const [complete, setComplete] = useState(false);
+  // const [complete, setComplete] = useState(false);
+  const [showEditType, setShowEditType] = useState(false);
   //   const [mandatoryDpCode, setMandatoryDpCode] = useState('');
 
   const taxonomyOptions = [
@@ -120,7 +123,7 @@ const Validation = () => {
   const onSubmitData = () => {
     const dpCodeUpdate = dpCode.types.map(item => {
       if (item.type === selectedType) {
-        item.status = true
+        item.status = true;
         return item;
       }
       return item;
@@ -130,19 +133,48 @@ const Validation = () => {
       types: dpCodeUpdate
     }
     setDpCode(updatedCode);
+    setDisableFileds(true);
   };
 
-  const editType = () => {
-
-  };
-
-  const onTypeClick = (e, type) => {
-    setSelectedType(type)
+  const onTypeClick = (e, data) => {
+    setSelectedType(data.type);
+    setSelectedItem(data);
     setValidationType(e.target.id);
   };
 
   const onNaClick = () => {
     onSubmitData();
+  };
+
+  // edit type model
+  const editType = (data) => {
+    setSelectedType(data);
+    setShowEditType(true);
+  };
+
+  const handleClose = () => {
+    setShowEditType(false)
+  }
+
+  const onEditSubmit = () => {
+    handleClose();
+    const dpCodeUpdate = dpCode.types.map(item => {
+      if (item.type === selectedType) {
+        item.status = false;
+        return item;
+      }
+      return item;
+    })
+    const updatedCode = {
+      ...dpCode,
+      types: dpCodeUpdate
+    }
+    setDpCode(updatedCode);
+    setDisableFileds(false);
+  };
+
+  const onSubmitSecondary = () => {
+    setShowEditType(false);
   };
 
   return (
@@ -188,19 +220,20 @@ const Validation = () => {
                     <Form.Label>Validation <sup className="text-danger">*</sup></Form.Label>
                     <Table responsive="sm" className="validation-table border-right-0 border-left-0" striped bordered >
                       <tbody>
-                        {dpCode === '' ? '' : dpCode.types.map((data, index) => (
+                        {dpCode === '' ? '' : dpCode.types.map((data) => (
                           <tr key={data.type}>
                             <td className="d-flex">
-                              <div className="w-100 d-flex justify-content-around">
+                              <div className="tabledata-container">
                                 <span
                                   className="btn type-btn"
                                   id={data.type}
-                                  key={index}
-                                  onClick={(e) => onTypeClick(e, data.type)}>{data.type}</span>
+                                  onClick={(e) => onTypeClick(e, data)}>{data.type}</span>
                                 <span
-                                  className={`mt-auto mb-auto font-weight-bold ${data.status===true ? ' text-success' : 'text-primary'}`}
-                                  id={data.type}>{data.status ? 'Completed': 'Initiate'}</span>
-                                    {data.status===true? <FontAwesomeIcon className=" type-edit text-success mt-auto mb-auto" icon={faEdit} onClick={editType} />: null}
+                                  className={`validation-status font-weight-bold ${data.status === true ? ' text-success' : 'text-primary'}`}
+                                  id={data.type}>{data.status ? 'Completed' : 'Initiate'}</span>
+                              </div>
+                              <div className="edit-icon-container">
+                                {data.status === true ? <FontAwesomeIcon className=" type-edit text-success" icon={faEdit} onClick={() => editType(data.type)} /> : null}
                               </div>
                             </td>
                           </tr>
@@ -214,12 +247,14 @@ const Validation = () => {
             </Card>
             {(validationType === 'Type 2' || validationType === 'Type 3' || validationType === 'Type 4' || validationType === 'Type 5') &&
               <Card className="mt-2">
+                <h6 className="font-weight-bold text-primary m-3">{validationType}</h6>
                 <Row className="d-flex m-4">
                   {(validationType === 'Type 2' || validationType === 'Type 3' || validationType === 'Type 4') &&
                     <Col lg={6} sm={6} md={6}>
                       <Form.Group>
                         <Form.Label>Description <sup className="text-danger">*</sup></Form.Label>
                         <Form.Control
+                          disabled={validationType && disableFileds && selectedItem.status}
                           as="textarea"
                           rows={4}
                           value={description}
@@ -233,6 +268,7 @@ const Validation = () => {
                       <Form.Group className="w-50 mr-1">
                         <Form.Label>Min </Form.Label><sup className="text-danger">*</sup>
                         <Form.Control
+                          disabled={validationType && disableFileds && selectedItem.status}
                           type="number"
                           name="min"
                           id="min"
@@ -243,6 +279,7 @@ const Validation = () => {
                       <Form.Group className="w-50 mr-1">
                         <Form.Label>Max </Form.Label><sup className="text-danger">*</sup>
                         <Form.Control
+                          disabled={validationType && disableFileds && selectedItem.status}
                           type="number"
                           name="max"
                           id="max"
@@ -253,6 +290,7 @@ const Validation = () => {
                       <Form.Group className="w-50">
                         <Form.Label>Year </Form.Label><sup className="text-danger">*</sup>
                         <Select
+                          isDisabled={validationType && disableFileds && selectedItem.status}
                           options={yearOptions}
                           name="year"
                           value={year}
@@ -266,6 +304,7 @@ const Validation = () => {
                       <Form.Group>
                         <Form.Label>Mandatory DP Code <sup className="text-danger">*</sup></Form.Label>
                         <Select
+                          disabled={validationType && disableFileds && selectedItem.status}
                           options
                           name="mandatorydpcode"
                           onChange={onChangeMandatoryDpCode}
@@ -275,13 +314,26 @@ const Validation = () => {
                   }
                   {validationType === 'Type 5' && <p>Sorry no data available!</p>}
                   <div className="d-flex justify-content-center w-100 ">
-                    <Button className="save-continue" onClick={onSubmitData}>Save</Button>
-                    <Button className="ml-1 na-button" onClick={onNaClick}>NA</Button>
+                    <Button className="save-continue"
+                      onClick={onSubmitData}
+                      disabled={validationType && disableFileds && selectedItem.status}
+                    >Save</Button>
+                    <Button className="ml-1 na-button"
+                      onClick={onNaClick}
+                      disabled={validationType && disableFileds && selectedItem.status}
+                    >NA</Button>
                   </div>
                 </Row>
               </Card>
             }
           </Container>
+          <ValidationTypeEdit
+            show={showEditType}
+            handleClose={handleClose}
+            onEditSubmit={onEditSubmit}
+            onSubmitSecondary={onSubmitSecondary}
+            selectedType={selectedType}
+          />
         </div>
       </div>
     </div>
