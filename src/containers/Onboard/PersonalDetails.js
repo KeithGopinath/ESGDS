@@ -1,7 +1,8 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Select from 'react-select';
+import { useSelector, useDispatch } from 'react-redux';
 
 const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone, onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep, activeStep, validatingSpaces }) => {
 
@@ -17,6 +18,22 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [bankIFSCCode, setBankIFSCCode] = useState('');
   const [validate, setValidate] = useState(false);
   const [personalDetailsAlert, setPersonalDetailsAlert] = useState('');
+
+  const dispatch = useDispatch();
+  
+  useEffect(()=> {
+    if(role === 'company') {
+      dispatch({ type: 'COMPANY_LIST_REQUEST' });
+    }
+  },[]);
+   
+// Getting the list of companies
+  const companyData = useSelector((companylist) => companylist.companylist.companydata);
+  const fullList = companyData && companyData.rows;
+
+  const companyList = fullList && fullList.map((args) => ({
+    value: args.id, label: args.companyName,
+  }));
 
   const onFirstNameChange = (e) => {
     if (e.target.value.match('^[a-zA-Z ]*$')) {
@@ -91,12 +108,12 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
-  const companyList = [
-    { value: 'Reliance', label: 'Reliance' },
-    { value: 'Indian Oils', label: 'Indian Oils' },
-    { value: 'Hindustan', label: 'Hindustan' },
-    { value: 'Bharat', label: 'Bharat' }
-  ];
+  // const companyList = [
+  //   { value: 'Reliance', label: 'Reliance' },
+  //   { value: 'Indian Oils', label: 'Indian Oils' },
+  //   { value: 'Hindustan', label: 'Hindustan' },
+  //   { value: 'Bharat', label: 'Bharat' }
+  // ];
 
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);

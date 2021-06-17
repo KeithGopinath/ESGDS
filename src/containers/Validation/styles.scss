@@ -17,10 +17,38 @@
   border-color: #cccccc;
 }
 
-.type-btn {
-  &:hover {
-    font-weight: bold;
+.tabledata-container {
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+
+  .validation-status {
+    width: 5em;
+    text-align: left;
+    margin-top: auto;
+    margin-bottom: auto;
   }
+
+  .type-btn {
+    &:hover {
+      font-weight: bold;
+    }
+  }
+}
+
+.edit-icon-container {
+  width: 25%;
+  text-align: center;
+  margin: auto;
+
+  .type-edit {
+    cursor: pointer;
+  }
+}
+
+.na-button {
+  background: #2da68b !important;
+  border-color: #2da68b !important;
 }
 
 div[disabled] {
