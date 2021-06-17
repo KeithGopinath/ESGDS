@@ -18,9 +18,9 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     // file upload base64 format
     const onChangeCompRep = (e) => {
         let file = e.target.files[0];
-        setFileName(file.name);
         if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
           let reader = new FileReader();
+          setFileName(file.name);
           reader.onloadend = function () {
               onCompany(reader.result);
           }
@@ -31,14 +31,13 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         } else {
           setAuthValidate(true);
           setProofUploadAlert("File type should be .png/.jpg/.jpeg");
-        }
-        
+        }  
     }
     
     const onChangeEmpId = (e) => {
         let file = e.target.files[0];
-        setEmpID(file.name);
         if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
+        setEmpID(file.name);
         let reader = new FileReader();
         reader.onloadend = function () {
             onEmployeeId(reader.result);
@@ -48,25 +47,25 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setProofUploadAlert('');
         setFileSize({ ...fileSize, idProof: file.size });
       } else {
-        setAuthValidate(true);
+        setIdProofValidate(true);
         setProofUploadAlert("File type should be .png/.jpg/.jpeg");
       }
     };
 
     const onChangeCancelledCheque = (e) => {
         let file = e.target.files[0];
-        setCancelledCheque(file.name);
         if(file.type.match('^([a-zA-Z0-9-_\s_\\.\-:])+(/png|/jpg|/jpeg)$')) {
           let reader = new FileReader();
+        setCancelledCheque(file.name);
         reader.onloadend = function () {
-            onCancelledCheque(reader.result);
+          onCancelledCheque(reader.result);
         }
         reader.readAsDataURL(file);
         setChequeValidate(false);
         setProofUploadAlert('');
         setFileSize({ ...fileSize, cancelCheque: file.size });
       } else {
-        setAuthValidate(true);
+        setChequeValidate(true);
         setProofUploadAlert("File type should be .png/.jpg/.jpeg");
       }
     };
