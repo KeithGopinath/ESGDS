@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
+import { message } from 'antd';
 import './styles.scss';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
@@ -115,8 +116,10 @@ const Onboard = (props) => {
       };
       const jsonString = JSON.stringify(employeeDetails);
       const onboardingData = btoa(jsonString);
-      console.log("employee: ",onboardingData);
+      console.log("employee: ", onboardingData);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
+      message.success('Your details saved successfully');
+
     } else if (selectedOption === 'client') {
       const clientDetails = {
         roleName: "Client Representative",
@@ -132,6 +135,7 @@ const Onboard = (props) => {
       const jsonString = JSON.stringify(clientDetails);
       const onboardingData = btoa(jsonString);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
+      message.success('Your details saved successfully');
     } else if (selectedOption === 'company') {
       const companyDetails = {
         roleName: "Company Representative",
@@ -146,8 +150,8 @@ const Onboard = (props) => {
       };
       const jsonString = JSON.stringify(companyDetails);
       const onboardingData = btoa(jsonString);
-
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
+      message.success('Your details saved successfully');
     }
     // history.push('/users');
   };
