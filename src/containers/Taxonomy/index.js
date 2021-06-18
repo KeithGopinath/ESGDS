@@ -48,19 +48,6 @@ const Taxonomy = () => {
     }
   }
 
-  const addNewTaxonomy = () => {
-    const temp = [...taxonomyData];
-    temp.push({ name: '' })
-    setTaxonomyData(temp)
-  }
-
-  const deleteTaxonomy = (item) => {
-    const temp = [...taxonomyData];
-    const index = temp.indexOf(item)
-    temp.splice(index, 1);
-    setTaxonomyData(temp)
-  };
-
   const editTaxonomy = (item) => {
     const temp = [...taxonomyData];
     const index1 = temp.indexOf(item)
@@ -216,7 +203,6 @@ const Taxonomy = () => {
           {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
             : null}
           <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-          <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
         </Row>
       </Card>
     </Col>
@@ -251,9 +237,8 @@ const Taxonomy = () => {
                 </ThemeProvider>
               </div>
               <div className="taxonomy-button-container">
-                <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Export Taxonomy</Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Taxonomy</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Download Excel</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Excel</Button>
               </div>
             </div>
             <div className="view-min-height">

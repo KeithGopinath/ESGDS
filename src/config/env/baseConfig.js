@@ -11,6 +11,7 @@ export default {
     clientTaxonomy: 'clientTaxonomies',
     getKeyIssues: 'key_issues',
     getMasterTaxonomy: 'taxonomies',
+    getRoles: 'role',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
