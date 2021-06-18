@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { message } from 'antd';
 import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -20,14 +21,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [personalDetailsAlert, setPersonalDetailsAlert] = useState('');
 
   const dispatch = useDispatch();
-  
-  useEffect(()=> {
-    if(role === 'company') {
+
+  useEffect(() => {
+    if (role === 'company') {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
-  },[]);
-   
-// Getting the list of companies
+  }, []);
+
+  // Getting the list of companies
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
   const fullList = companyData && companyData.rows;
 
@@ -117,37 +118,37 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);
-    const re= /^[6-9]{1}[0-9]{9}$/;
+    const re = /^[6-9]{1}[0-9]{9}$/;
     if (role === 'client' || role === 'company') {
       if (!email && !phoneNumber && valid === false) {
-        setPersonalDetailsAlert('Please fill all required fields');
+        message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (!firstName) {
-        setPersonalDetailsAlert('Please enter your name');
+        message.error('Please enter your name');
         setValidate('border-danger');
       } else if (!email) {
-        setPersonalDetailsAlert('Please enter email id');
+        message.error('Please enter email id');
         setValidate('border-danger');
       } else if (!phoneNumber) {
-        setPersonalDetailsAlert('Please enter phone number');
+        message.error('Please enter phone number');
         setValidate('border-danger');
-//         if (re.test(phoneNumber)) {
-// setPersonalDetailsAlert('Please enter valid phone number');
-//         setValidate('border-danger');
-//         }
+        //         if (re.test(phoneNumber)) {
+        // setPersonalDetailsAlert('Please enter valid phone number');
+        //         setValidate('border-danger');
+        //         }
       } else if (!companyName) {
         if (role === 'client') {
-          setPersonalDetailsAlert('Please enter company name');
+          message.error('Please enter company name');
           setValidate('border-danger');
         } else {
           setValidate(true);
-          setPersonalDetailsAlert('Please choose company name');
+          message.error('Please choose company name');
         }
       } else if (valid == false) {
         setValidate('border-danger');
-        setPersonalDetailsAlert('Please enter valid email');
+        message.error('Please enter valid email');
       } else if (!firstName || !email || !phoneNumber || !companyName) {
-        setPersonalDetailsAlert('Please fill all required fields');
+        message.error('Please fill all required fields');
         setValidate('border-danger');
       }
       if ((firstName.length && email.length && phoneNumber.length && companyName.length) > 0) {
@@ -158,14 +159,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
     else if (role === 'employee') {
       if (!pancardNumber && !bankAccountNumber && !bankIFSCCode && !adharCard && valid === false) {
-        setPersonalDetailsAlert('Please fill all required fields');
+        message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (!firstName || !lastName || !email || !phoneNumber || !pancardNumber || !bankAccountNumber || !bankIFSCCode || !adharCard) {
-        setPersonalDetailsAlert('Please fill all required fields');
+        message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (valid == false) {
         setValidate('border-danger');
-        setPersonalDetailsAlert('Please enter valid mail id');
+        message.error('Please enter valid mail id');
       } else {
         nextStep();
         setValidate('');
@@ -366,7 +367,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               </React.Fragment>
             }
           </Row>
-          <span className="w-100 text-center text-danger">{personalDetailsAlert}</span>
           <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
           {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
           <div className="d-flex flex-row justify-content-end mt-1">
