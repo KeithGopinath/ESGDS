@@ -100,7 +100,7 @@ export const doPut = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${sessionStorage.auth}`,
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
     body: JSON.stringify(body),
   }),
