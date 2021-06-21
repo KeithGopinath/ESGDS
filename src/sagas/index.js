@@ -9,6 +9,8 @@ import { getBatchWatchers } from './Batch';
 import { getCreateBatchWatchers } from './BatchCreate';
 import { getKeyIssuesWatchers } from './KeyIssues';
 import { getMasterTaxonomyWatchers } from './MasterTaxonomy';
+import { getClientTaxonomyWatchers } from './ClientTaxonomy';
+import { getRolesWatchers } from './Roles';
 
 export default function* rootWatchers() {
   yield all([
@@ -22,5 +24,7 @@ export default function* rootWatchers() {
     getCreateBatchWatchers(),
     getKeyIssuesWatchers(),
     getMasterTaxonomyWatchers(),
+    getClientTaxonomyWatchers(),
+    getRolesWatchers(),
   ]);
 }

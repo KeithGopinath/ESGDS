@@ -37,7 +37,7 @@
 .group-dropdown-width {
     min-width: 40%;
     max-width: 90%;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .group-dropdown-name {
@@ -94,4 +94,8 @@
 .grp-pad {
     padding: 2%;
     width: 100%;
+}
+.group-dropdown-width-batch{
+    width:95%;
+    margin-bottom: 1rem;
 }

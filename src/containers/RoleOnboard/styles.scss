@@ -1,0 +1,42 @@
+.add-icon-container {
+  text-align: center;
+  margin: auto;
+  cursor: pointer;
+}
+
+
+.role-email-buttons {
+  font-size: 2.3rem;
+  cursor: pointer;
+  margin-top: 0% !important;
+  width: auto;
+
+  .svg-inline--fa {
+    vertical-align: 0.1em !important;
+  }
+
+  .plus-icon {
+    color: #2199c8;
+  }
+
+  .minus-icon {
+    color: #dc3545;
+    margin-right: 5px;
+  }
+}
+
+
+
+.role-email {
+  padding-left: 3.3em;
+
+  .form-control {
+    width: 13em !important;
+  }
+}
+
+.upload-excel-label {
+  padding-right: 16px;
+  padding-left: 11px;
+  margin-top: auto;
+}

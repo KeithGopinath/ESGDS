@@ -78,3 +78,29 @@
     color: ghostwhite;
     margin: 0 0 0 20px;
 }
+
+.select-primary {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.mr-auto, .mx-auto{
+    margin-right: 5px !important;
+}
+
+.ant-btn {
+    height: 37px !important;
+}
+
+.role-button{
+    border-color: #2da68a;
+    background-color: #2da68a;
+    color: white;
+}
+
+.error-alert {
+    border: 1px solid red !important;
+    border-radius: 4px !important;
+}

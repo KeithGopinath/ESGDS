@@ -48,19 +48,6 @@ const Taxonomy = () => {
     }
   }
 
-  const addNewTaxonomy = () => {
-    const temp = [...taxonomyData];
-    temp.push({ fields: '' })
-    setTaxonomyData(temp)
-  }
-
-  const deleteTaxonomy = (item) => {
-    const temp = [...taxonomyData];
-    const index = temp.indexOf(item)
-    temp.splice(index, 1);
-    setTaxonomyData(temp)
-  };
-
   const editTaxonomy = (item) => {
     const temp = [...taxonomyData];
     const index1 = temp.indexOf(item)
@@ -80,7 +67,7 @@ const Taxonomy = () => {
   const updateTaxonomy = (item) => {
     const updated = [...taxonomyData];
     const index = updated.indexOf(item)
-    const updatedObj = { ...updated[index], fields: newTaxonomy, isActive: false };
+    const updatedObj = { ...updated[index], name: newTaxonomy, isActive: false };
     const temp = [
       ...updated.slice(0, index),
       updatedObj,
@@ -94,7 +81,7 @@ const Taxonomy = () => {
     let modifiedDta = [];
     let obj = {};
     for (let key in Data) {
-      const x = Data[key].fields;
+      const x = Data[key].name;
       obj[x] = '';
     }
     modifiedDta.push(obj);
@@ -117,7 +104,7 @@ const Taxonomy = () => {
         ...updated.slice(indexUpdated + 1),
       ];
       setTaxonomyData(tempOne);
-      temp.push({ name: item.fields })
+      temp.push({ name: item.name })
       setSubsetData(temp)
     }
     else {
@@ -163,7 +150,7 @@ const Taxonomy = () => {
 
   const searchfilter = (search, card) => {
     const filteredData = card.filter((e) => {
-      if ((e.fields.toLowerCase()).includes(search.toLowerCase())) {
+      if ((e.name.toLowerCase()).includes(search.toLowerCase())) {
         return true;
       }
       return false;
@@ -208,7 +195,7 @@ const Taxonomy = () => {
           className="input-taxonomy"
           type="text"
           name="taxonomy"
-          value={item.isActive ? newTaxonomy : item.fields}
+          value={item.isActive ? newTaxonomy : item.name}
           disabled={item.isActive ? false : true}
           onChange={onTaxonomyChange}
         />
@@ -216,7 +203,6 @@ const Taxonomy = () => {
           {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
             : null}
           <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-          <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} />
         </Row>
       </Card>
     </Col>
@@ -251,9 +237,8 @@ const Taxonomy = () => {
                 </ThemeProvider>
               </div>
               <div className="taxonomy-button-container">
-                <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Export Taxonomy</Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Taxonomy</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Download Excel</Button>
+                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Excel</Button>
               </div>
             </div>
             <div className="view-min-height">

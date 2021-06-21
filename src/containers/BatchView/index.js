@@ -22,9 +22,11 @@ const BatchView = () => {
   const [max, setmax] = useState(20);
   useEffect(() => {
     dispatch({ type: 'BATCH_REQUEST' });
+    
   },[]);
   const handleShow = () => {
     dispatch({ type: 'COMPANY_LIST_REQUEST' });
+    dispatch({ type: 'ClientTaxonomy_REQUEST' });
     setShow(true);
   };
   const searchtheme = createMuiTheme({
