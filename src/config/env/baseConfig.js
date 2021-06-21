@@ -12,6 +12,8 @@ export default {
     getKeyIssues: 'key_issues',
     getMasterTaxonomy: 'taxonomies',
     getRoles: 'role',
+    getRoleAssignment: 'users/assign-role',
+    roleAssignmentEdit: 'users/assign-role',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
