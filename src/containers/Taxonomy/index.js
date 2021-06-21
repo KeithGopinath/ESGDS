@@ -104,7 +104,7 @@ const Taxonomy = () => {
         ...updated.slice(indexUpdated + 1),
       ];
       setTaxonomyData(tempOne);
-      temp.push({ name: item.name })
+      temp.push({ name: item.name, id: item.id })
       setSubsetData(temp)
     }
     else {

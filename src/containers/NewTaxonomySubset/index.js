@@ -28,7 +28,7 @@ const NewTaxonomySubset = ({ show, handleClose, subsetData }) => {
 
     const onSubmitSubset = () => {
         const payload = {
-            name: subsetName,
+            subsetName: subsetName,
             data: subsetData,
         }
         console.log(payload);

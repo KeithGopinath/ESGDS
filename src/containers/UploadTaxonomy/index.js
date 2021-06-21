@@ -1,42 +1,89 @@
 /* eslint-disable*/
-import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Row, Col } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
+import Select from 'react-select';
 
 const UploadTaxonomy = ({ show, handleClose }) => {
     const [file, setFile] = useState('');
-    const [alert, setAlert] = useState('');
+    const [taxonomyName, setTaxonomyName] = useState('');
+    const [alertMsg, setAlertMsg] = useState('');
+    const [errorAlert, setErrorAlert] = useState('');
+
+    const dispatch = useDispatch();
+    const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+
+    useEffect(() => {
+        if(show){
+          dispatch({ type: 'ClientTaxonomy_REQUEST' });
+        }
+      }, [show]);
+
+    const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data)=>({
+        value: data._id,
+        label: data.taxonomyName
+    }))  
 
     const fileHandler = (e) => {
-        setFile(e.target.files);
+        let file = e.target.files[0];
+        console.log(file);
+            let reader = new FileReader();
+            reader.onloadend = function () {
+                setFile(reader.result);
+            }
+            reader.readAsDataURL(file);
     };
+
+    const onTaxonomyChange = (taxonomy) => {
+        setTaxonomyName(taxonomy)
+    }
 
     const closeButton = () => {
         handleClose();
-        setAlert('')
+        setTaxonomyName('');
+        setAlertMsg('');
+        setErrorAlert('');
     }
 
     const onSubmit = () => {
-        const formData = new FormData();
-        formData.append('file', file[0]);
-        if (file) {
-            // dispatch({});
-            setAlert('');
-        } else {
-            setAlert('Please choose the file to upload');
+        if (!taxonomyName) {
+            setAlertMsg('Please select a taxonomy')
+            setErrorAlert('error-alert')
+        } else if (!file) {
+            setAlertMsg('Please choose a file to upload');
+        }
+        else {
+            const payload = {
+                taxonomy: taxonomyName,
+                file
+            }
+            console.log(payload);
+            setErrorAlert('')
         }
     };
 
     const taxonomyBody = () => (
         <div>
-            <Form.Group>
-                <Form.Control
-                    type="file"
-                    name="uploadTaxonomy"
-                    id="email"
-                    onChange={fileHandler}
-                />
-            </Form.Group>
+            <Row className="upload-taxonomy-container">
+                <Col md={12}>
+                    <div className="head-dp">Taxonomy</div>
+                    <Select
+                        className={!taxonomyName && errorAlert}
+                        value={taxonomyName}
+                        name="taxonomy"
+                        options={taxonomyOptions}
+                        onChange={onTaxonomyChange}
+                    />
+                    <Form.Control
+                        type="file"
+                        name="uploadTaxonomy"
+                        onChange={fileHandler}
+                        className="upload-taxonomy-file"
+                        accept=".xlsx, .xls, .csv"
+                    />
+                </Col>
+            </Row>
         </div>
     )
     // condition for alertClassName
