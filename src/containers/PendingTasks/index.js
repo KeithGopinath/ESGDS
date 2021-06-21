@@ -113,7 +113,7 @@ const PendingTasks = () => {
   };
 
   useEffect(() => {
-    const defaultTab = tabsRef.current[0].current;
+    const defaultTab = tabsRef.current[0] && tabsRef.current[0].current;
     if (defaultTab) {
       defaultTab.classList.add('tabs-label-count-wrap-active');
   // useEffect(() => {

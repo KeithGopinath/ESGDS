@@ -15,7 +15,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { SmileOutlined } from '@ant-design/icons';
+import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { DatePicker, Space, Result, Button } from 'antd';
 import Moment from 'moment';
@@ -283,7 +283,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
               <TableRow>
                 <TableCell colSpan={columnsHeadData.length}>
                   <Result
-                    icon={<SmileOutlined />}
+                    icon={<InboxOutlined />}
                     title="No Data Found!"
                   />
                 </TableCell>
@@ -292,7 +292,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
               <TableRow>
                 <TableCell colSpan={columnsHeadData.length}>
                   <Result
-                    icon={<SmileOutlined />}
+                    icon={<InboxOutlined />}
                     title="All Done!"
                   />
                 </TableCell>

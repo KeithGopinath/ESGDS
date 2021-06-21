@@ -1,32 +1,179 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Col, Button } from 'react-bootstrap';
-import moment from 'moment';
 import 'antd/dist/antd.css';
-import { Drawer } from 'antd';
+import { Drawer, Tabs } from 'antd';
+import moment from 'moment';
+
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import DataAccordian from './DataAccordian';
 import AddSource from './AddSource';
-import DataSheet from './DataSheet';
+
+import { DataSheetComponent } from './DataSheet';
+import DataAccordian from './DataAccordian';
+
 import ErrorDataSheet from './ErrorDataSheet';
 import ErrorAndComment from './ErrorAndComment';
+
 import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
 
-const DataPage = (props) => {
-  console.log(props, '#######################');
-  const sideBarRef = useRef();
-  const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-  // const currentRole = 'Company Representative';
-  const currentRole = sessionStorage.role;
-  console.log(currentRole);
 
-  const defaultApiData = () => {
+const DataSheetMain = (props) => {
+  const currentRole = sessionStorage.role;
+
+  const {
+    reqIndexes,
+    reqDpCodeData,
+    reqTask,
+    locationData,
+    reqSourceData,
+    reqErrorList,
+    openSourcePanel,
+  } = props;
+
+  const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData);
+
+  const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData);
+
+  useEffect(() => {
+    setReqCurrentData(reqDpCodeData.currentData);
+    setReqHistoricalData(reqDpCodeData.historicalData);
+  }, [locationData]);
+
+  const saveReqCurrentData = (data) => {
+    console.log(data, 'Incoming');
+    setReqCurrentData(reqCurrentData.map((e) => {
+      if (e.fiscalYear === data.fiscalYear) {
+        const returnableData = { ...e, ...data };
+        return returnableData;
+      }
+      return e;
+    }));
+    console.log(reqCurrentData.map((e) => {
+      if (e.fiscalYear === data.fiscalYear) {
+        const returnableData = { ...e, ...data };
+        return returnableData;
+      }
+      return e;
+    }));
+  };
+
+  const saveReqHistoricalData = (data) => {
+    console.log(data, 'Incoming');
+    setReqHistoricalData(reqHistoricalData.map((e) => {
+      if (e.fiscalYear === data.fiscalYear) {
+        const returnableData = { ...e, ...data };
+        return returnableData;
+      }
+      return e;
+    }));
+    console.log(reqHistoricalData.map((e) => {
+      if (e.fiscalYear === data.fiscalYear) {
+        const returnableData = { ...e, ...data };
+        return returnableData;
+      }
+      return e;
+    }));
+  };
+
+  const dataCheckBeforeSave = () => {
+    console.log(reqCurrentData);
+    const nonSavedYears = (reqCurrentData.map((e) => {
+      if (currentRole === 'Analyst' && e.status !== 'Completed') {
+        return e.fiscalYear;
+      }
+      if (currentRole !== 'Analyst' && e.error && e.error.errorStatus !== 'Completed') {
+        return e.fiscalYear;
+      }
+      if (currentRole !== 'Analyst' && !e.error) {
+        return e.fiscalYear;
+      }
+      return null;
+    })).filter((e) => (e !== null));
+    return nonSavedYears;
+  };
+
+  return (
+    <React.Fragment>
+      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+        <DataAccordian header="History">
+          <Tabs defaultActiveKey={reqHistoricalData[0].fiscalYear} >
+            {reqHistoricalData.map((e) => (
+              <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
+                <DataSheetComponent
+                  isHistoryType
+                  reqData={e}
+                  reqTask={reqTask}
+                  reqIndexes={reqIndexes}
+                  locationData={locationData}
+                  reqSourceData={reqSourceData}
+                  reqErrorList={reqErrorList}
+                  openSourcePanel={openSourcePanel}
+                  onClickSave={saveReqHistoricalData}
+                  dummyDataCheck={dataCheckBeforeSave}
+                />
+              </Tabs.TabPane>))}
+          </Tabs>
+        </DataAccordian>
+      </Col>
+      {currentRole === 'Analyst' &&
+      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+        <DataAccordian header="Error" isActive >
+          { true ?
+            <ErrorAndComment
+              action={null}
+              author="QA"
+              errorType="Data/information Missed"
+              errorInfo={null}
+              comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
+            /> :
+            <ErrorAndComment
+              action={
+                [
+                  <div>
+                    <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
+                    <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
+                  </div>,
+                ]
+              }
+              author="QA"
+              errorType="Data/information Missed"
+              errorInfo={<ErrorDataSheet isErrorCommentType reqData={reqDpCodeData.historicalData[0]} />}
+              comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
+            />}
+        </DataAccordian>
+      </Col>}
+      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+        <DataAccordian header="Current" isActive >
+          <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear} >
+            {reqCurrentData.map((e) => (
+              <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
+                <DataSheetComponent
+                  reqData={e}
+                  reqTask={reqTask}
+                  reqIndexes={reqIndexes}
+                  locationData={locationData}
+                  reqSourceData={reqSourceData}
+                  reqErrorList={reqErrorList}
+                  openSourcePanel={openSourcePanel}
+                  onClickSave={saveReqCurrentData}
+                  dummyDataCheck={dataCheckBeforeSave}
+                />
+              </Tabs.TabPane>))}
+          </Tabs>
+        </DataAccordian>
+      </Col>
+    </React.Fragment>
+  );
+};
+
+
+const DataPage = (props) => {
+  const sideBarRef = useRef();
+  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+  const currentRole = sessionStorage.role;
+
+  const getDefaultApiData = () => {
     if (currentRole === 'Company Representative') {
       return COMPANY_REP_DATA;
     }
@@ -42,7 +189,7 @@ const DataPage = (props) => {
     return [];
   };
 
-  const apiDataList = defaultApiData();
+  const defaultApiData = getDefaultApiData();
 
   const errorList = ['T1. Incorrect data input/typo', 'T1. Document missed',
     'T1. Data/Information missed',
@@ -55,53 +202,45 @@ const DataPage = (props) => {
     'T2. Comments and calculation',
     'T2. Others/No error'];
 
-  const sourceApiDataList = [
+  const srcList = [
     { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
   ];
 
-  const [sourceApiData, setSourceApiData] = useState(sourceApiDataList);
+  const [sourceApiData, setSourceApiData] = useState(srcList);
 
   const onUploadAddSource = (value) => {
-    const filteredData = sourceApiData.filter((src) => (value.sourceName !== src.sourceName));
+    const filteredData = srcList.filter((src) => (value.sourceName !== src.sourceName));
     setSourceApiData([...filteredData, { ...value }]);
   };
 
-  console.log(sourceApiData);
-
-  const getDataForDataSheet = (data) => {
-    console.log(props);
+  const getReqData = (data) => {
     const { taskId, dpCode } = props.location.state;
-    const [currentTask] = data.filter((task) => (task.taskId === taskId));
-    const max = currentTask.dpCodesData.length - 1;
-    const min = 0;
-    return (currentTask.dpCodesData.map((dpData, index) => {
+    const [reqTask] = data.filter((task) => (task.taskId === taskId));
+    const reqMaxIndex = reqTask.dpCodesData.length - 1;
+    const reqMinIndex = 0; // CONSTANT
+    const returnbaleData = (reqTask.dpCodesData.map((dpData, index) => {
       if (dpData.dpCode === dpCode) {
         return ({
-          maxIndex: max, minIndex: min, currentIndex: index, currentDpCode: dpData, currentTask,
+          reqIndexes: { maxIndex: reqMaxIndex, currentIndex: index, minIndex: reqMinIndex }, reqDpCodeData: dpData, reqTask,
         });
       }
       return null;
     })).filter((e) => (e !== null));
+
+    return returnbaleData;
   };
 
   const onClickOpenAddSource = () => {
-    setIsDrawerOpened(true);
+    setIsSrcPanelOpened(true);
   };
 
   const onClickCloseAddSource = () => {
-    setIsDrawerOpened(false);
+    setIsSrcPanelOpened(false);
   };
 
   const [{
-    maxIndex, minIndex, currentIndex, currentDpCode, currentTask,
-  }] = getDataForDataSheet(apiDataList);
-
-  // console.log(getDataForDataSheet(ANALYST_DC_DATA));
-
-  const reqDpCode = currentDpCode;
-  const reqTask = currentTask;
-  const reqIndexes = { maxIndex, minIndex, currentIndex };
-
+    reqIndexes, reqDpCodeData, reqTask,
+  }] = getReqData(defaultApiData);
 
   return (
     <div className="main">
@@ -115,56 +254,27 @@ const DataPage = (props) => {
               placement="right"
               closable={false}
               onClose={onClickCloseAddSource}
-              visible={isDrawerOpened}
+              visible={isSrcPanelOpened}
               key="right"
               width={300}
               headerStyle={{ backgroundColor: '#2199c8' }}
             >
-              {isDrawerOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
+              {isSrcPanelOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
             </Drawer>
-            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-              <DataAccordian header="History">
-                <DataSheet isHistoryType reqData={reqDpCode} locationData={props.location} reqSourceData={sourceApiData} reqErrorList={errorList} />
-              </DataAccordian>
-            </Col>
-            {currentRole === 'Analyst' &&
-            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-              <DataAccordian header="Error" isActive >
-                { false ?
-                  <ErrorAndComment
-                    action={null}
-                    author="QA"
-                    errorType="Data/information Missed"
-                    errorInfo={null}
-                    comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
-                  /> :
-                  <ErrorAndComment
-                    action={
-                      [
-                        <div>
-                          <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
-                          <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
-                        </div>,
-                      ]
-                    }
-                    author="QA"
-                    errorType="Data/information Missed"
-                    errorInfo={<ErrorDataSheet isErrorCommentType reqData={reqDpCode.historicalData[0]} />}
-                    comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
-                  />}
-              </DataAccordian>
-            </Col>}
-            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-              <DataAccordian header="Current" isActive >
-                <DataSheet reqData={reqDpCode} locationData={props.location} reqTask={reqTask} reqIndexes={reqIndexes} reqSourceData={sourceApiData} reqErrorList={errorList} openSourcePanel={onClickOpenAddSource} />
-              </DataAccordian>
-            </Col>
+            <DataSheetMain
+              reqIndexes={reqIndexes}
+              reqDpCodeData={reqDpCodeData}
+              reqTask={reqTask}
+              locationData={props.location}
+              reqSourceData={sourceApiData}
+              reqErrorList={errorList}
+              openSourcePanel={onClickOpenAddSource}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default DataPage;

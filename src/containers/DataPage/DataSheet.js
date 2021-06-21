@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
 import { history } from '../../routes';
-import ErrorDataSheet from './ErrorDataSheet';
+// import ErrorDataSheet from './ErrorDataSheet';
+import ErrorDataSheetTwo from './ErrorDataSheet2';
 import DataComment from './DataComment';
 
 const FieldWrapper = (props) => {
@@ -27,8 +28,7 @@ const FieldWrapper = (props) => {
   return null;
 };
 
-const DataSheet = (props) => {
-  console.log(props, '####');
+export const DataSheetComponent = (props) => {
   const currentRole = sessionStorage.role;
 
   const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
@@ -38,15 +38,22 @@ const DataSheet = (props) => {
     currentRole === 'Client Representative',
   ];
 
-  const { isHistoryType, reqTask, reqIndexes } = props;
+  const {
+    isHistoryType, reqTask, reqIndexes,
+  } = props;
 
-  const defaultData = isHistoryType ? props.reqData.historicalData[0] : props.reqData;
+  const defaultData = props.reqData;
   const formDpCode = defaultData.dpCode;
-  const formYear = defaultData.fiscalYear;
   const formDescription = defaultData.description;
   const formDataType = defaultData.dataType.toUpperCase();
+  const [formErrorRefData, setFormErrorRefData] = useState((defaultData.error && defaultData.error.isThere) ? {
+    ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+  } : {
+    fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
+  });
 
-  const [formHistoryYear, setFormHistoryYear] = useState(defaultData);
+  console.log(formErrorRefData);
+
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   const [formPageNo, setFormPageNo] = useState(defaultData.pageNo || '');
   const [formScreenShotPath, setFormScreenShotPath] = useState(defaultData.screenShot || '');
@@ -55,9 +62,9 @@ const DataSheet = (props) => {
   const [formURL, setFormURL] = useState((defaultData.source && defaultData.source.url) || '');
   const [formPublicDate, setFormPublicDate] = useState((defaultData.source && defaultData.source.publicationDate) || '');
   const [formScreenShotFile, setFormScreenShotFile] = useState(null);
-  const [formErrorType, setFormErrorType] = useState('');
-  const [formComment, setFormComment] = useState('');
-  const [formIsError, setFormIsError] = useState(false);
+  const [formErrorType, setFormErrorType] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.type) || '');
+  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+  const [formIsError, setFormIsError] = useState((defaultData.error && defaultData.error.isThere) || false);
 
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -67,26 +74,22 @@ const DataSheet = (props) => {
     setFormSource(defaultData.source || '');
     setFormURL((defaultData.source && defaultData.source.url) || '');
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
-    setFormIsError(false);
-  }, [props.locationData]);
+    setFormScreenShotFile(null);
+    setFormErrorType((defaultData.error && defaultData.error.isThere && defaultData.error.type) || '');
+    setFormComment((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+    setFormIsError((defaultData.error && defaultData.error.isThere) || false);
+    setFormErrorRefData((defaultData.error) ? {
+      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+    } : {
+      fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
+    });
+  }, [props.reqData]);
 
   const sourceList = props.reqSourceData;
 
   const textResponse = ['Yes', 'No', 'M', 'F', 'NA'];
 
   const errorTypeList = props.reqErrorList;
-
-  const onChangeFormHistoryYear = (event) => {
-    setFormHistoryYear(event.value);
-    //
-    setFormTextSnippet(event.value.textSnippet || '');
-    setFormPageNo(event.value.pageNo || '');
-    setFormScreenShotPath(event.value.screenShot || '');
-    setFormResponse(event.value.response || '');
-    setFormSource(event.value.source || '');
-    setFormURL((event.value.source && event.value.source.url) || '');
-    setFormPublicDate((event.value.source && event.value.source.publicationDate) || '');
-  };
 
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
@@ -140,7 +143,7 @@ const DataSheet = (props) => {
   };
 
   const onChangeFormIsError = (event) => {
-    setFormIsError(event.target.checked);
+    setFormIsError(event.target.value);
   };
 
   const screenShotBeforeUpload = (file) => {
@@ -156,10 +159,8 @@ const DataSheet = (props) => {
   const saveClickHandler = () => {
     console.log('Details To Be Saved: ');
     console.log('DP CODE: ', formDpCode);
-    console.log('YEAR: ', formYear);
     console.log('DESCRIPTION: ', formDescription);
     console.log('DATA TYPE: ', formDataType);
-    console.log('HISTORY YEAR: ', formHistoryYear);
     console.log('TEXT SNIPPET: ', formTextSnippet);
     console.log('PAGE NO: ', formPageNo);
     console.log('SCREENSHOT PATH: ', formScreenShotPath);
@@ -198,52 +199,118 @@ const DataSheet = (props) => {
   };
 
   const saveAndNextClickHandler = () => {
-    console.log('saveAndNextClickHandler');
-    console.log('Details To Be Saved: ');
-    console.log('DP CODE: ', formDpCode);
-    console.log('YEAR: ', formYear);
-    console.log('DESCRIPTION: ', formDescription);
-    console.log('DATA TYPE: ', formDataType);
-    console.log('HISTORY YEAR: ', formHistoryYear);
-    console.log('TEXT SNIPPET: ', formTextSnippet);
-    console.log('PAGE NO: ', formPageNo);
-    console.log('SCREENSHOT PATH: ', formScreenShotPath);
-    console.log('RESPONSE: ', formResponse);
-    console.log('SOURCE: ', formSource);
-    console.log('URL: ', formURL);
-    console.log('PUBLICATION DATE: ', formPublicDate);
-    console.log('SCREENSHOT FILE: ', formScreenShotFile);
-    console.log('ERROR TYPE: ', formErrorType);
-    console.log('COMMENTS: ', formComment);
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
-    history.push({
-      pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
-    });
+    console.log(props.dummyDataCheck(), 'LIST OF NUMS');
+    if ((props.dummyDataCheck()).length === 0) {
+      console.log('saveAndNextClickHandler');
+      console.log('Details To Be Saved: ');
+      console.log('DP CODE: ', formDpCode);
+      console.log('DESCRIPTION: ', formDescription);
+      console.log('DATA TYPE: ', formDataType);
+      console.log('TEXT SNIPPET: ', formTextSnippet);
+      console.log('PAGE NO: ', formPageNo);
+      console.log('SCREENSHOT PATH: ', formScreenShotPath);
+      console.log('RESPONSE: ', formResponse);
+      console.log('SOURCE: ', formSource);
+      console.log('URL: ', formURL);
+      console.log('PUBLICATION DATE: ', formPublicDate);
+      console.log('SCREENSHOT FILE: ', formScreenShotFile);
+      console.log('ERROR TYPE: ', formErrorType);
+      console.log('COMMENTS: ', formComment);
+      const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+      history.push({
+        pathname: `/dpcode/${nextDpCode.dpCode}`,
+        state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
+      });
+    } else {
+      message.error(`Current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) isn't saved! !`);
+    }
   };
 
   const saveAndCloseClickHandler = () => {
-    console.log('saveAndCloseClickHandler');
-    console.log('Details To Be Saved: ');
-    console.log('DP CODE: ', formDpCode);
-    console.log('YEAR: ', formYear);
-    console.log('DESCRIPTION: ', formDescription);
-    console.log('DATA TYPE: ', formDataType);
-    console.log('HISTORY YEAR: ', formHistoryYear);
-    console.log('TEXT SNIPPET: ', formTextSnippet);
-    console.log('PAGE NO: ', formPageNo);
-    console.log('SCREENSHOT PATH: ', formScreenShotPath);
-    console.log('RESPONSE: ', formResponse);
-    console.log('SOURCE: ', formSource);
-    console.log('URL: ', formURL);
-    console.log('PUBLICATION DATE: ', formPublicDate);
-    console.log('SCREENSHOT FILE: ', formScreenShotFile);
-    console.log('ERROR TYPE: ', formErrorType);
-    console.log('COMMENTS: ', formComment);
-    history.push({
-      pathname: `/task/${reqTask.taskId}`,
-      state: { taskId: reqTask.taskId },
-    });
+    console.log(props.dummyDataCheck(), 'LIST OF NUMS');
+    if ((props.dummyDataCheck()).length === 0) {
+      console.log('saveAndCloseClickHandler');
+      console.log('Details To Be Saved: ');
+      console.log('DP CODE: ', formDpCode);
+      console.log('DESCRIPTION: ', formDescription);
+      console.log('DATA TYPE: ', formDataType);
+      console.log('TEXT SNIPPET: ', formTextSnippet);
+      console.log('PAGE NO: ', formPageNo);
+      console.log('SCREENSHOT PATH: ', formScreenShotPath);
+      console.log('RESPONSE: ', formResponse);
+      console.log('SOURCE: ', formSource);
+      console.log('URL: ', formURL);
+      console.log('PUBLICATION DATE: ', formPublicDate);
+      console.log('SCREENSHOT FILE: ', formScreenShotFile);
+      console.log('ERROR TYPE: ', formErrorType);
+      console.log('COMMENTS: ', formComment);
+      history.push({
+        pathname: `/task/${reqTask.taskId}`,
+        state: { taskId: reqTask.taskId },
+      });
+    } else {
+      message.error(`Current data for ${props.dummyDataCheck().map((e) => `[${e}] `)} fiscal year(s) isn't saved! !`);
+    }
+  };
+
+  const dummySaveClickHandler = () => {
+    const dummyData = {
+      dpCode: formDpCode,
+      fiscalYear: defaultData.fiscalYear,
+      status: 'Completed',
+      textSnippet: formTextSnippet,
+      pageNo: formPageNo,
+      screenShot: formScreenShotPath,
+      response: formResponse,
+      source: formSource,
+    };
+    const dummyDataQA = {
+      error: {
+        isThere: formIsError,
+        type: formErrorType,
+        comment: formComment,
+        errorStatus: 'Completed',
+      },
+    };
+
+    let saveData;
+    if (isAnalyst) {
+      saveData = { ...dummyData };
+    }
+    if (isQA) {
+      saveData = { ...dummyData, ...dummyDataQA };
+    }
+    props.onClickSave(saveData);
+  };
+
+  const dummyEditClickHandler = () => {
+    const dummyData = {
+      dpCode: formDpCode,
+      fiscalYear: defaultData.fiscalYear,
+      status: 'unknown',
+      textSnippet: formTextSnippet,
+      pageNo: formPageNo,
+      screenShot: formScreenShotPath,
+      response: formResponse,
+      source: formSource,
+    };
+
+    const dummyDataQA = {
+      error: {
+        isThere: formIsError,
+        type: formErrorType,
+        comment: formComment,
+        errorStatus: 'unknown',
+      },
+    };
+    let saveData;
+    if (isAnalyst) {
+      saveData = { ...dummyData };
+    }
+    if (isQA) {
+      saveData = { ...dummyData, ...dummyDataQA };
+    }
+    props.onClickSave(saveData);
   };
 
   const getIsDisableOrNot = () => {
@@ -253,7 +320,12 @@ const DataSheet = (props) => {
       if (isCompanyRep) { return true; }
       if (isClientRep) { return true; }
     }
-    if (isAnalyst) { return false; }
+    if (isAnalyst) {
+      if (defaultData.status === 'Completed') {
+        return true;
+      }
+      return false;
+    }
     if (isQA) { return true; }
     if (isCompanyRep) { return true; }
     if (isClientRep) { return true; }
@@ -261,7 +333,6 @@ const DataSheet = (props) => {
   };
 
   const disableField = props.isDataCorrection ? true : getIsDisableOrNot();
-
 
   return (
     <Row>
@@ -280,31 +351,16 @@ const DataSheet = (props) => {
         }
       />
 
-      {/* YEAR Field */}
+      {/* HISTORY YEAR Field */}
       <FieldWrapper
-        label="Year*"
-        visible={(isAnalyst || isQA || isCompanyRep || isClientRep) && !isHistoryType}
+        label="Year"
+        visible
         body={
           <Form.Control
             name="year"
             type="text"
-            value={formYear}
+            value={defaultData.fiscalYear}
             disabled
-          />
-        }
-      />
-
-      {/* HISTORY YEAR Field */}
-      <FieldWrapper
-        label="History Year"
-        visible={isHistoryType}
-        body={
-          <Select
-            name="historyYear"
-            options={props.reqData.historicalData.map((e) => ({ label: e.fiscalYear, value: e }))}
-            onChange={onChangeFormHistoryYear}
-            value={formHistoryYear && { label: formHistoryYear.fiscalYear, value: formHistoryYear }}
-            placeholder="Choose Historical Year"
           />
         }
       />
@@ -316,7 +372,7 @@ const DataSheet = (props) => {
         body={
           <Select
             name="source"
-            options={sourceList.map((e) => ({ label: e.sourceName, value: e }))}
+            options={sourceList && sourceList.map((e) => ({ label: e.sourceName, value: e }))}
             onChange={onChangeFormSource}
             value={formSource && { label: formSource.sourceName, value: formSource }}
             placeholder="Choose Source File"
@@ -489,13 +545,35 @@ const DataSheet = (props) => {
         }
       />
 
+      {/* IS ERORR Field */}
+      {(isCompanyRep || isClientRep || isQA) && !isHistoryType &&
+      <React.Fragment>
+        <FieldWrapper
+          label="Error*"
+          visible
+          body={
+            <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
+              <Radio value>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </Radio.Group>
+          }
+        />
+        <FieldWrapper
+          label={null}
+          visible
+          body={null}
+        />
+      </React.Fragment>
+      }
+
       {/* ERROR TYPE Field */}
       <FieldWrapper
         label="Error Type*"
-        visible={isQA && !isHistoryType}
+        visible={isQA && !isHistoryType && formIsError}
         body={
           <Select
             name="errorType"
+            isDisabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
             options={errorTypeList.map((e) => ({ label: e, value: e }))}
             onChange={onChangeFormErrorType}
             value={formErrorType && { label: formErrorType, value: formErrorType }}
@@ -507,10 +585,11 @@ const DataSheet = (props) => {
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
-        visible={isQA && !isHistoryType}
+        visible={isQA && !isHistoryType && formIsError}
         body={
           <Form.Control
             as="textarea"
+            disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
             aria-label="With textarea"
             placeholder="Comments"
             onChange={onChangeFormComment}
@@ -519,31 +598,39 @@ const DataSheet = (props) => {
         }
       />
 
-      {/* IS ERORR Field */}
-      {(isCompanyRep || isClientRep) && !isHistoryType &&
-      <Col
-        lg={12}
-        style={{
-          justifyContent: 'flex-end',
-          display: 'flex',
-        }}
-      >
-        <Form.Check
-          type="checkbox"
-          label="Error"
-          onChange={onChangeFormIsError}
-          checked={formIsError}
-
-        />
-      </Col>}
-
       {/* ERROR DATA SHEET COMPANY AND CLIENT REP's */}
-      {(isCompanyRep || isClientRep) && formIsError &&
-      <ErrorDataSheet reqData={props.reqData} sourceList={sourceList} textResponse={textResponse} locationData={props.locationData} openSourcePanel={props.openSourcePanel} />}
+      {/* <ErrorDataSheet
+        visible={(isCompanyRep || isClientRep)}
+        isError={formIsError}
+        reqData={defaultData}
+        sourceList={sourceList}
+        textResponse={textResponse}
+        locationData={props.locationData}
+        openSourcePanel={props.openSourcePanel}
+        onClickSave={props.onClickSave}
+      /> */}
+
+      <ErrorDataSheetTwo
+        isVisible={(isCompanyRep || isClientRep)}
+        isError={formIsError}
+        reqData={formErrorRefData}
+        reqSourceData={sourceList}
+        textResponse={textResponse}
+        locationData={props.locationData}
+        openSourcePanel={props.openSourcePanel}
+        onClickSave={props.onClickSave}
+      />
 
       {/* COMMENTS */}
       {!isHistoryType && !isAnalyst &&
       <DataComment />}
+
+      <Col lg={12} className="datapage-button-wrap">
+        {(isQA) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>{`Save ${defaultData.fiscalYear}`}</Button>}
+        {(isQA) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>{`Edit ${defaultData.fiscalYear}`}</Button>}
+      </Col>
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
@@ -578,9 +665,14 @@ const DataSheet = (props) => {
         { (isAnalyst || isQA) && isHistoryType &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
 
+        { (isAnalyst) && !isHistoryType && defaultData.status !== 'Completed' &&
+        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>{`Save ${defaultData.fiscalYear}`}</Button>}
+        { (isAnalyst) && !isHistoryType && defaultData.status === 'Completed' &&
+        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>{`Edit ${defaultData.fiscalYear}`}</Button>}
+
+
       </Col>
+
     </Row>
   );
 };
-
-export default DataSheet;
