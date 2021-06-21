@@ -12,7 +12,7 @@ const TaxonomySubset = () => {
   const subsetTaxonomyTableData = (props) => {
     const tableRowData = (data) => data.map(({ name, id }) => ({
       name,
-      taxonomyView: <FontAwesomeIcon icon={faEye} size="lg" />,
+      viewTaxonomy: <FontAwesomeIcon icon={faEye} size="lg" />,
       downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" />,
       uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" />,
     }));
