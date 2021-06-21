@@ -7,65 +7,35 @@ import Overlay from '../../components/Overlay';
 import { Menu, Dropdown, Button } from 'antd';
 import 'antd/dist/antd.css';
 
-
 const RoleAssignment = ({ show, setShow }) => {
   const [name, setName] = useState('');
-  const [role, setRole] = useState();
-  const [primaryRole, setPrimaryRole] = useState();
-  const [flag, setFlag] = useState(true);
+  const [role, setRole] = useState([]);
+  const [primaryRole, setPrimaryRole] = useState({ value: '', label: '' });
+  const [flag, setFlag] = useState(false);
   const [alertMsg, setAlertMsg] = useState('');
   const [errorAlert, setErrorAlert] = useState('');
 
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
+  const userData = useSelector((state) => state.roleAssignment.roleAssignment);
+  const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
+  const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
 
   useEffect(() => {
-    if (flag == false) {
+    if (show) {
+      dispatch({ type: 'GET_ROLE_ASSIGNMENT_REQUEST' });
       dispatch({ type: 'GET_ROLES_REQUEST' });
     }
-  }, [flag]);
+  }, [show]);
 
-  const employeeDetails = [
-    {
-      'name': { 'value': '1', 'label': 'Jerin vs' },
-      'roles': {
-        'role': [
-          { 'value': 'Group Admin', 'label': 'Group Admin' },
-        ],
-        'primaryRole': { 'value': 'Group Admin', 'label': 'Group Admin' }
-      },
-    },
-    {
-      'name': { 'value': '2', 'label': 'Jerin vs' },
-      'roles': {
-        'role': [
-          { 'value': 'QA', 'label': 'QA' },
-        ],
-        'primaryRole': { 'value': 'QA', 'label': 'QA' },
-      },
-    },
-    {
-      'name': { 'value': '3', 'label': 'Rajesh' },
-      'roles': {
-        'role': [
-          { 'value': 'Group Admin', 'label': 'Group Admin' },
-          { 'value': 'QA', 'label': 'QA' },
-        ],
-        'primaryRole': { 'value': 'QA', 'label': 'QA' }
-      },
-    },
-    {
-      'name': { 'value': '4', 'label': 'Gopi' },
-      'roles': {
-        'role': [
-          { 'value': 'Group Admin', 'label': 'Group Admin' },
-          { 'value': 'QA', 'label': 'QA' },
-          { 'value': 'Super Admin', 'label': 'Super Admin' },
-        ],
-        'primaryRole': { 'value': 'Super Admin', 'label': 'Super Admin' }
-      },
-    },
-  ]
+  useEffect(() => {
+    if (roleAssignmentEdit) {
+      setAlertMsg(roleAssignmentEdit.message)
+    }
+    else if (roleAssignmentEditError) {
+      setAlertMsg(roleAssignmentEditError.message)
+    }
+  }, [roleAssignmentEdit, roleAssignmentEditError]);
 
   const roleOptions = roleData && roleData.rows.filter(val => val.roleName == 'GroupAdmin' ||
     val.roleName == 'Analyst' || val.roleName == 'QA').map((data) => ({
@@ -73,9 +43,9 @@ const RoleAssignment = ({ show, setShow }) => {
       label: data.roleName
     }))
 
-  const nameOptions = employeeDetails.map((data) => {
+  const nameOptions = userData && userData.rows.map((data) => {
     return (
-      data.name
+      data.userDetails
     )
   })
 
@@ -89,15 +59,15 @@ const RoleAssignment = ({ show, setShow }) => {
     setRole('')
     setPrimaryRole('')
     setAlertMsg('');
-    setFlag(true);
+    setFlag(false);
     setErrorAlert('')
   }
 
   const onNameChange = (name) => {
     setName(name);
-    employeeDetails.filter(val => val.name.value == name.value).map((data) => {
-      setRole(data.roles.role)
-      setPrimaryRole(data.roles.primaryRole)
+    userData && userData.rows.filter(val => val.userDetails.value == name.value).map((data) => {
+      setRole(data.roleDetails.role)
+      setPrimaryRole(data.roleDetails.primaryRole)
     })
   };
 
@@ -111,32 +81,30 @@ const RoleAssignment = ({ show, setShow }) => {
   }
 
   const onEditPrimary = () => {
-    setFlag(false)
+    setFlag(true)
   }
 
   const onSubmitDetails = () => {
-    if (!name || !role || !primaryRole) {
-      setAlertMsg('Please enter valid credentials')
+    if (!name || role.length == 0 || !primaryRole.value) {
+      setAlertMsg('Please enter all the details')
       setErrorAlert('error-alert')
     }
     else {
-      // dispatch({ type: 'GET_ROLES_REQUEST' });
+      const payload = {
+        userDetails: name,
+        roleDetails: {
+          role: role,
+          primaryRole: primaryRole
+        }
+      }
+      dispatch({ type: 'ROLE_ASSIGNMENT_EDIT_REQUEST', payload });
       setErrorAlert('');
     }
-    const payload = {
-      name,
-      roles: {
-        role: role,
-        primaryRole: primaryRole
-      }
-    }
-
-    console.log(payload);
   };
 
   const roleMenu = (
     <Menu>
-      {role && role.filter(val => val.label.includes(primaryRole.label) == false).map((data) => {
+      {role && role.filter(val => val.value !== primaryRole.value).map((data) => {
         return (
           <Menu.Item>
             <p onClick={() => { onPrimaryRoleChange(data) }}>{data.label}</p>
@@ -167,13 +135,13 @@ const RoleAssignment = ({ show, setShow }) => {
           <div className="head-dp">Role</div>
           <div>
             <Select
-              className={!role && errorAlert}
+              className={role.length == 0 && errorAlert}
               value={role}
               isMulti
               name="Roles"
               options={roleOptions}
               onChange={onRoleChange}
-              isDisabled={flag}
+              isDisabled={!flag}
             />
           </div>
         </Col>
@@ -181,8 +149,8 @@ const RoleAssignment = ({ show, setShow }) => {
       <Row>
         <Col lg={12} sm={12} className="modal-content">
           <div className="head-dp">Primary Role</div>
-          <Dropdown overlay={roleMenu} placement="bottomCenter" arrow disabled={flag} >
-            <Button className={!primaryRole && errorAlert}>{primaryRole ? primaryRole.label : "Select"}</Button>
+          <Dropdown overlay={roleMenu} placement="bottomCenter" arrow disabled={!flag} >
+            <Button className={!primaryRole.value && errorAlert}>{primaryRole && primaryRole.label ? primaryRole.label : "Select"}</Button>
           </Dropdown>
         </Col>
       </Row>
@@ -195,7 +163,8 @@ const RoleAssignment = ({ show, setShow }) => {
     </div>
   );
 
-  const alertClassName = 'danger'
+  // condition for checking alert className
+  const alertClassName = errorAlert ? 'danger' : roleAssignmentEdit && roleAssignmentEdit.status == '200' ? 'success' : 'danger';
 
   return (
     <Overlay

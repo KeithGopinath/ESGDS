@@ -11,6 +11,8 @@ import keyIssues from './KeyIssues';
 import masterTaxonomy from './MasterTaxonomy';
 import clientTaxonomy from './ClientTaxonomy';
 import roles from './Roles';
+import roleAssignment from './GetRoleAssignment';
+import roleAssignmentEdit from './RoleAssignmentEdit';
 
 const rootReducer = combineReducers({
   login,
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
   masterTaxonomy,
   clientTaxonomy,
   roles,
+  roleAssignment,
+  roleAssignmentEdit,
 });
 
 export default rootReducer;
