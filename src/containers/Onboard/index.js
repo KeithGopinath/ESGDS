@@ -12,7 +12,14 @@ import LoginCredentials from './LoginCredentials';
 import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 const Onboard = (props) => {
-  const selectedOption = props.location && props.location.state;
+  // const selectedOption = props.location && props.location.state;
+
+  // Queryparams for role
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const decode = params.get('role');
+  const info = window.atob(decode)
+  const role = JSON.parse(info)
 
   const dispatch = useDispatch();
 
@@ -95,7 +102,7 @@ const Onboard = (props) => {
   };
 
   const onFormSubmit = () => {
-    if (selectedOption === 'employee') {
+    if (role === 'employee') {
       const employeeDetails = {
         roleName: "Employee",
         firstName,
@@ -109,7 +116,6 @@ const Onboard = (props) => {
         bankIFSCCode,
         accountHolderName: `${firstName} ${middleName && `${middleName} `}${lastName}`,
         password,
-        access_token: sessionStorage.access,
         pancardUrl: fileName,
         aadhaarUrl: empID,
         cancelledChequeUrl: cancelledCheque,
@@ -120,7 +126,7 @@ const Onboard = (props) => {
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
       message.success('Your details saved successfully');
 
-    } else if (selectedOption === 'client') {
+    } else if (role === 'client') {
       const clientDetails = {
         roleName: "Client Representative",
         name: firstName,
@@ -128,7 +134,6 @@ const Onboard = (props) => {
         phoneNumber,
         companyName,
         password,
-        access_token: sessionStorage.access,
         authenticationLetterForClientUrl: fileName,
         companyIdForClient: empID,
       };
@@ -136,7 +141,7 @@ const Onboard = (props) => {
       const onboardingData = btoa(jsonString);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
       message.success('Your details saved successfully');
-    } else if (selectedOption === 'company') {
+    } else if (role === 'company') {
       const companyDetails = {
         roleName: "Company Representative",
         name: firstName,
@@ -144,7 +149,6 @@ const Onboard = (props) => {
         phoneNumber,
         companiesList: companyName,
         password,
-        access_token: sessionStorage.access,
         authenticationLetterForCompanyUrl: fileName,
         companyIdForCompany: empID,
       };
@@ -174,7 +178,7 @@ const Onboard = (props) => {
       </Stepper>
       <StepWizard>
         <PersonalDetails
-          role={selectedOption}
+          role={role}
           firstName={firstName}
           onFirstName={onFirstNameChange}
           onMiddleName={onMiddleNameChange}
@@ -191,7 +195,7 @@ const Onboard = (props) => {
           validatingSpaces={validatingSpaces}
         />
         <ProofUpload
-          role={selectedOption}
+          role={role}
           onCompany={onChangeCompanyRep}
           onEmployeeId={onChangeEmployeeId}
           onCancelledCheque={onChangeCancelledCheque}
@@ -199,7 +203,7 @@ const Onboard = (props) => {
           activeStep={activeStep}
         />
         <LoginCredentials
-          role={selectedOption}
+          role={role}
           onPassword={onChangePassword}
           onSubmit={onFormSubmit}
           setActiveStep={setActiveStep}
