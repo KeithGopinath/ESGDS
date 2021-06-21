@@ -91,10 +91,7 @@ const RoleAssignment = ({ show, setShow }) => {
     }
     else {
       const payload = {
-        userDetails: {
-          value: name.value,
-          label: name.label
-        },
+        userDetails: name,
         roleDetails: {
           role: role,
           primaryRole: primaryRole
