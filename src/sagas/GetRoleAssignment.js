@@ -5,7 +5,7 @@ import { doGet } from '../utils/fetchWrapper';
 
 export function* getRoleAssignmentRequest() {
   try {
-    const response = yield doGet(`${envConfig.apiEndPoints.getRoleAssignment}?access_token=${sessionStorage.access}`);
+    const response = yield doGet(envConfig.apiEndPoints.getRoleAssignment);
     yield put(actionCreators.getRoleAssignmentSuccess(response));
   } catch (error) {
     yield put(actionCreators.getRoleAssignmentFailure(error));

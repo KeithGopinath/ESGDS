@@ -5,7 +5,7 @@ import { doGet } from '../utils/fetchWrapper';
 
 export function* getMasterTaxonomyRequest() {
   try {
-    const response = yield doGet(`${envConfig.apiEndPoints.getMasterTaxonomy}?access_token=${sessionStorage.access}`);
+    const response = yield doGet(envConfig.apiEndPoints.getMasterTaxonomy);
     yield put(actionCreators.getMasterTaxonomySuccess(response));
   } catch (error) {
     yield put(actionCreators.getMasterTaxonomyFailure(error));
