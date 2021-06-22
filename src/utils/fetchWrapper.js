@@ -34,7 +34,10 @@ export const fetchURL = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
   urlPrefix.concat(url),
   Object.assign({}, {
     headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
   }),
 ), TIMEOUT, 504);
