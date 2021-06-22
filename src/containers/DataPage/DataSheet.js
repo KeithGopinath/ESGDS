@@ -611,7 +611,7 @@ export const DataSheetComponent = (props) => {
       /> */}
 
       <ErrorDataSheetTwo
-        isVisible={(isCompanyRep || isClientRep)}
+        isVisible={(isCompanyRep || isClientRep) && !isHistoryType}
         isError={formIsError}
         reqData={formErrorRefData}
         reqSourceData={sourceList}
@@ -626,10 +626,15 @@ export const DataSheetComponent = (props) => {
       <DataComment />}
 
       <Col lg={12} className="datapage-button-wrap">
+        { (isAnalyst) && !isHistoryType && defaultData.status !== 'Completed' &&
+        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
+        { (isAnalyst) && !isHistoryType && defaultData.status === 'Completed' &&
+        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
+        {/* FOR QA */}
         {(isQA) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>{`Save ${defaultData.fiscalYear}`}</Button>}
+        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
         {(isQA) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>{`Edit ${defaultData.fiscalYear}`}</Button>}
+        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
       </Col>
 
       {/* HORIZONTAL Line */}
@@ -664,12 +669,6 @@ export const DataSheetComponent = (props) => {
         {/* HISTORY SAVE Button */}
         { (isAnalyst || isQA) && isHistoryType &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
-
-        { (isAnalyst) && !isHistoryType && defaultData.status !== 'Completed' &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>{`Save ${defaultData.fiscalYear}`}</Button>}
-        { (isAnalyst) && !isHistoryType && defaultData.status === 'Completed' &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>{`Edit ${defaultData.fiscalYear}`}</Button>}
-
 
       </Col>
 
