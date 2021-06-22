@@ -12,10 +12,10 @@ import AddSource from './AddSource';
 import { DataSheetComponent } from './DataSheet';
 import DataAccordian from './DataAccordian';
 
-import ErrorDataSheet from './ErrorDataSheet';
 import ErrorAndComment from './ErrorAndComment';
 
 import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
+import ErrorDataSheetTwo from './ErrorDataSheet2';
 
 
 const DataSheetMain = (props) => {
@@ -95,6 +95,8 @@ const DataSheetMain = (props) => {
 
   return (
     <React.Fragment>
+
+      {/* HISTORICAL TABS */}
       <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
         <DataAccordian header="History">
           <Tabs defaultActiveKey={reqHistoricalData[0].fiscalYear} >
@@ -116,10 +118,12 @@ const DataSheetMain = (props) => {
           </Tabs>
         </DataAccordian>
       </Col>
+
+      {/* HISTORICAL TABS */}
       {currentRole === 'Analyst' &&
       <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
         <DataAccordian header="Error" isActive >
-          { true ?
+          { false ?
             <ErrorAndComment
               action={null}
               author="QA"
@@ -138,11 +142,13 @@ const DataSheetMain = (props) => {
               }
               author="QA"
               errorType="Data/information Missed"
-              errorInfo={<ErrorDataSheet isErrorCommentType reqData={reqDpCodeData.historicalData[0]} />}
+              errorInfo={<ErrorDataSheetTwo isErrorCommentType isVisible reqData={reqDpCodeData.historicalData[0]} />}
               comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
             />}
         </DataAccordian>
       </Col>}
+
+      {/* CURRENT TABS */}
       <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
         <DataAccordian header="Current" isActive >
           <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear} >
@@ -163,6 +169,7 @@ const DataSheetMain = (props) => {
           </Tabs>
         </DataAccordian>
       </Col>
+
     </React.Fragment>
   );
 };
@@ -170,8 +177,23 @@ const DataSheetMain = (props) => {
 
 const DataPage = (props) => {
   const sideBarRef = useRef();
-  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+
   const currentRole = sessionStorage.role;
+
+  const errorList = ['T1. Incorrect data input/typo', 'T1. Document missed',
+    'T1. Data/Information missed',
+    'T1. SOP not followed',
+    'T1. Incorrect Evidence',
+    'T1. Missed snippet',
+    'T1. Incorrect Scoring',
+    'T2. Evidence not substantive',
+    'T2. Improvement for next time',
+    'T2. Comments and calculation',
+    'T2. Others/No error'];
+
+  const srcList = [
+    { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
+  ];
 
   const getDefaultApiData = () => {
     if (currentRole === 'Company Representative') {
@@ -191,26 +213,21 @@ const DataPage = (props) => {
 
   const defaultApiData = getDefaultApiData();
 
-  const errorList = ['T1. Incorrect data input/typo', 'T1. Document missed',
-    'T1. Data/Information missed',
-    'T1. SOP not followed',
-    'T1. Incorrect Evidence',
-    'T1. Missed snippet',
-    'T1. Incorrect Scoring',
-    'T2. Evidence not substantive',
-    'T2. Improvement for next time',
-    'T2. Comments and calculation',
-    'T2. Others/No error'];
-
-  const srcList = [
-    { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
-  ];
+  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
 
   const [sourceApiData, setSourceApiData] = useState(srcList);
 
   const onUploadAddSource = (value) => {
     const filteredData = srcList.filter((src) => (value.sourceName !== src.sourceName));
     setSourceApiData([...filteredData, { ...value }]);
+  };
+
+  const onClickOpenAddSource = () => {
+    setIsSrcPanelOpened(true);
+  };
+
+  const onClickCloseAddSource = () => {
+    setIsSrcPanelOpened(false);
   };
 
   const getReqData = (data) => {
@@ -230,14 +247,6 @@ const DataPage = (props) => {
     return returnbaleData;
   };
 
-  const onClickOpenAddSource = () => {
-    setIsSrcPanelOpened(true);
-  };
-
-  const onClickCloseAddSource = () => {
-    setIsSrcPanelOpened(false);
-  };
-
   const [{
     reqIndexes, reqDpCodeData, reqTask,
   }] = getReqData(defaultApiData);
@@ -249,6 +258,7 @@ const DataPage = (props) => {
         <Header title="DP Code" sideBarRef={sideBarRef} />
         <div className="datapage-main" >
           <div className="datapage-info-group">
+
             <Drawer
               title="Add Source"
               placement="right"
@@ -261,6 +271,7 @@ const DataPage = (props) => {
             >
               {isSrcPanelOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
             </Drawer>
+
             <DataSheetMain
               reqIndexes={reqIndexes}
               reqDpCodeData={reqDpCodeData}
@@ -270,6 +281,7 @@ const DataPage = (props) => {
               reqErrorList={errorList}
               openSourcePanel={onClickOpenAddSource}
             />
+
           </div>
         </div>
       </div>
