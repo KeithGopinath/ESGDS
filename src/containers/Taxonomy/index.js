@@ -10,13 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
-import UploadTaxonomy from '../../containers/UploadTaxonomy';
 import NewTaxonomySubset from '../../containers/NewTaxonomySubset';
-import FileSaver from "file-saver";
-import XLSX from "xlsx";
 
 const Taxonomy = () => {
-  const [show, setShow] = useState(false);
   const [showSubset, setShowSubset] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
@@ -37,8 +33,6 @@ const Taxonomy = () => {
     dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
   }, []);
 
-  const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-  const fileExtension = ".xlsx";
   const sideBarRef = useRef();
   const flag = subsetData.length > 0 ? true : false;
 
@@ -75,21 +69,6 @@ const Taxonomy = () => {
     ];
     setTaxonomyData(temp);
     setNewTaxonomy('')
-  }
-
-  const exportTaxonomy = (Data, fileName) => {
-    let modifiedDta = [];
-    let obj = {};
-    for (let key in Data) {
-      const x = Data[key].name;
-      obj[x] = '';
-    }
-    modifiedDta.push(obj);
-    const ws = XLSX.utils.json_to_sheet(modifiedDta);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
   }
 
   const createSubset = (item, e) => {
@@ -158,14 +137,6 @@ const Taxonomy = () => {
     return filteredData;
   };
 
-  const handleShow = () => {
-    setShow(true);
-  };
-
-  const handleClose = () => {
-    setShow(false)
-  }
-
   const subsetHandleClose = () => {
     const temp = [...taxonomyData];
     var result = temp.map((el, index) => {
@@ -208,9 +179,6 @@ const Taxonomy = () => {
     </Col>
   ));
 
-  console.log(taxonomyData);
-  console.log(subsetData);
-
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -236,10 +204,6 @@ const Taxonomy = () => {
                   />
                 </ThemeProvider>
               </div>
-              <div className="taxonomy-button-container">
-                <Button variant="primary" className="taxonomy-btn" onClick={() => { exportTaxonomy(taxonomyData, "Taxonomy") }}>Download Excel</Button>
-                <Button variant="primary" className="taxonomy-btn" onClick={handleShow}>Upload Excel</Button>
-              </div>
             </div>
             <div className="view-min-height">
               <Row >
@@ -258,7 +222,6 @@ const Taxonomy = () => {
                 </div>
               </Col>
             </Row>
-            <UploadTaxonomy show={show} handleClose={handleClose} />
             <NewTaxonomySubset show={showSubset} handleClose={subsetHandleClose} subsetData={subsetData} />
           </Container>
         </div>
