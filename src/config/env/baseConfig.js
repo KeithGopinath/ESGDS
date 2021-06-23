@@ -14,6 +14,8 @@ export default {
     getRoles: 'role',
     getRoleAssignment: 'users/assign-role',
     roleAssignmentEdit: 'users/assign-role',
+    getRoleFileOnboarding: '',
+    getRoleListOnboarding: '',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
