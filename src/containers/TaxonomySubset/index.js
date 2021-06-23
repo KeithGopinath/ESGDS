@@ -1,20 +1,86 @@
 /* eslint-disable */
 import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faUpload, faEye } from '@fortawesome/free-solid-svg-icons';
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
+import UploadTaxonomy from '../../containers/UploadTaxonomy';
+import Taxonomy from '../../containers/Taxonomy';
+
 
 const TaxonomySubset = () => {
   const sideBarRef = useRef();
+  const [show, setShow] = useState(false);
+  const [showList, setShowList] = useState(false);
+  const [subsetName, setSubsetName] = useState('');
+  const [subsetId, setsubsetId] = useState('');
+  const [subsetList, setSubsetList] = useState('');
+
+  const dispatch = useDispatch();
+  const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+
+  useEffect(() => {
+    dispatch({ type: 'ClientTaxonomy_REQUEST' });
+  }, []);
+
+  // File handling
+  const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileExtension = ".xlsx";
+  const fileName = 'clientTaxonomy'
+
+  const onViewTaxonomy = (id) => {
+    let temp = []
+    let obj = {}
+    taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
+      return (
+        data.headers.map((value) => {
+          obj = {}
+          obj['name'] = value.label
+          obj['id'] = value.value
+          temp.push(obj)
+        })
+      )
+    })
+    setSubsetList(temp);
+    setShowList(true);
+  }
+
+  const onDownloadTaxonomy = (id) => {
+    let currentData = []
+    let obj = {}
+    taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
+      return (
+        data.headers.map((value) => {
+          obj[value.label] = ''
+        })
+      )
+    })
+    currentData.push(obj)
+    const ws = XLSX.utils.json_to_sheet(currentData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+
+  const onUploadTaxonomy = (id) => {
+    taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
+      setSubsetName(data.taxonomyName)
+      setsubsetId(data._id)
+    })
+    handleShow();
+  }
 
   const subsetTaxonomyTableData = (props) => {
     const tableRowData = (data) => data.map(({ name, id }) => ({
       name,
-      viewTaxonomy: <FontAwesomeIcon icon={faEye} size="lg" />,
-      downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" />,
-      uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" />,
+      viewTaxonomy: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
+      downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id) }} />,
+      uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" className="taxonomy-subset-icons" onClick={() => { onUploadTaxonomy(id) }} />,
     }));
     return {
       rowsData: tableRowData(props),
@@ -47,36 +113,43 @@ const TaxonomySubset = () => {
     };
   };
 
-  const taxonomyList = [
-    {
-      name: 'TaxonomyOne',
-      id: '1',
-    },
-    {
-      name: 'TaxonomyTwo',
-      id: '2',
-    },
-    {
-      name: 'TaxonomyThree',
-      id: '3',
-    },
-  ];
+  const clientTaxonomyData = taxonomyData && taxonomyData.rows.map((data) => ({
+    name: data.taxonomyName,
+    id: data._id
+  }))
 
-  const subsetTableData = subsetTaxonomyTableData(taxonomyList);
+  const subsetTableData = clientTaxonomyData ? subsetTaxonomyTableData(clientTaxonomyData) : subsetTaxonomyTableData([])
+
+  const handleShow = () => {
+    setShow(true);
+  };
+
+  const handleClose = () => {
+    setShow(false)
+  }
+
+  const handleListClose = () => {
+    setShowList(false)
+  }
 
   return (
     <React.Fragment>
-      <div className="main">
-        <SideMenuBar ref={sideBarRef} />
-        <div className="rightsidepane">
-          <Header title="Subsets" />
-          <div className="container-main">
-            <div>
-              <CustomTable tableData={subsetTableData} />
+      {showList ?
+        <Taxonomy subsetList={subsetList} showList={showList} handleListClose={handleListClose} />
+        :
+        <div className="main">
+          <SideMenuBar ref={sideBarRef} />
+          <div className="rightsidepane">
+            <Header title="Subset Taxonomy" />
+            <div className="container-main">
+              <div>
+                <CustomTable tableData={subsetTableData} />
+                <UploadTaxonomy show={show} handleClose={handleClose} subsetName={subsetName} subsetId={subsetId} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </React.Fragment>
   );
 };
