@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Card, Button, Container, Form } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import { faSearch, faEdit, faTrashAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
@@ -12,7 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
 import NewTaxonomySubset from '../../containers/NewTaxonomySubset';
 
-const Taxonomy = () => {
+const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   const [showSubset, setShowSubset] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
@@ -26,11 +26,16 @@ const Taxonomy = () => {
   const masterTaxonomy = taxonomy && taxonomy.rows;
 
   useEffect(() => {
-    setTaxonomyData(masterTaxonomy)
+    if (showList) {
+      setTaxonomyData(subsetList)
+    } else {
+      setTaxonomyData(masterTaxonomy)
+    }
   }, [taxonomy]);
 
   useEffect(() => {
-    dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
+    !showList &&
+      dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
   }, []);
 
   const sideBarRef = useRef();
@@ -155,12 +160,13 @@ const Taxonomy = () => {
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox">
         <div className="taxonomy-checkbox-container">
-          <Form.Control
-            type="checkbox"
-            className="taxonomy-checkbox"
-            onChange={(e) => { createSubset(item, e) }}
-            checked={item.checked}
-          />
+          {!showList &&
+            <Form.Control
+              type="checkbox"
+              className="taxonomy-checkbox"
+              onChange={(e) => { createSubset(item, e) }}
+              checked={item.checked}
+            />}
         </div>
         <Form.Control
           className="input-taxonomy"
@@ -173,7 +179,9 @@ const Taxonomy = () => {
         <Row className="taxonomy-icons-container">
           {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
             : null}
-          <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+          {!showList &&
+            <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+          }
         </Row>
       </Card>
     </Col>
@@ -183,7 +191,7 @@ const Taxonomy = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title="Taxonomy" />
+        <Header sideBarRef={sideBarRef} title={showList ? "Subset" : "Master Taxonomy"}/>
         <div className="container-main">
           <Container className="wrapper">
             <div className="head-tab">
@@ -204,6 +212,11 @@ const Taxonomy = () => {
                   />
                 </ThemeProvider>
               </div>
+              {showList &&
+                <div className="taxonomy-button-container">
+                  <Button variant="primary" className="taxonomy-btn" onClick={handleListClose}>Back</Button>
+                </div>
+              }
             </div>
             <div className="view-min-height">
               <Row >
