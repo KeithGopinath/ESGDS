@@ -19,7 +19,6 @@ import Taxonomy from './containers/Taxonomy';
 import Validation from './containers/Validation';
 import TaxonomySubset from './containers/TaxonomySubset';
 import ValidationList from './containers/ValidationList';
-import UserView from './containers/UserView';
 
 export const history = createBrowserHistory();
 
@@ -35,7 +34,6 @@ const Routes = () => (
         <Route exact path="/taxonomy" component={Taxonomy} />
         <Route path="/taxonomy/subsets" component={TaxonomySubset} />
         <Route path="/users" component={Users} />
-        <Route path="/user-view" component={UserView} />
         <Route path="/companies" component={Companies} />
         <Route exact path="/groups" component={Groups} />
         <Route path="/groups/creategroup" component={CreateGroup} />
