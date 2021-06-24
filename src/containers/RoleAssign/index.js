@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import Overlay from '../../components/Overlay';
-import { Menu, Dropdown, Button } from 'antd';
+import { Menu, Dropdown, Button as AntButton } from 'antd';
 import 'antd/dist/antd.css';
 
 const RoleAssignment = ({ show, setShow }) => {
@@ -150,7 +150,7 @@ const RoleAssignment = ({ show, setShow }) => {
         <Col lg={12} sm={12} className="modal-content">
           <div className="head-dp">Primary Role</div>
           <Dropdown overlay={roleMenu} placement="bottomCenter" arrow disabled={!flag} >
-            <Button className={!primaryRole.value && errorAlert}>{primaryRole && primaryRole.label ? primaryRole.label : "Select"}</Button>
+            <AntButton className={!primaryRole.value && errorAlert}>{primaryRole && primaryRole.label ? primaryRole.label : "Select"}</AntButton>
           </Dropdown>
         </Col>
       </Row>
@@ -159,7 +159,7 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const RoleAssignFooter = () => (
     <div>
-      <Button className="role-button" onClick={onSubmitDetails}>Submit</Button>
+      <Button variant="primary secondary-button" onClick={onSubmitDetails}>Submit</Button>
     </div>
   );
 

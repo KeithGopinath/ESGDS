@@ -16,6 +16,7 @@ export default {
     roleAssignmentEdit: 'users/assign-role',
     getRoleFileOnboarding: '',
     getRoleListOnboarding: '',
+    newClientTaxonomy: 'clientTaxonomies/create',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

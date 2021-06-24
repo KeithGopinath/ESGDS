@@ -39,8 +39,8 @@ const TaxonomySubset = () => {
       return (
         data.headers.map((value) => {
           obj = {}
-          obj['name'] = value.label
-          obj['id'] = value.value
+          obj['name'] = value.name
+          obj['id'] = value.id
           temp.push(obj)
         })
       )
@@ -55,7 +55,7 @@ const TaxonomySubset = () => {
     taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
       return (
         data.headers.map((value) => {
-          obj[value.label] = ''
+          obj[value.name] = ''
         })
       )
     })
