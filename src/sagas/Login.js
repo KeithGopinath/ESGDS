@@ -7,7 +7,10 @@ export function* getLogin(data) {
   try {
     const response = yield doPost(envConfig.apiEndPoints.getLogin, data.loginDetails);
     yield put(actionCreators.getLoginSuccess(response));
-    sessionStorage.role = response.user.roleId.roleName;
+    if (response.user.role !== 'admin') {
+      sessionStorage.access = response.token;
+    }
+    sessionStorage.role = response.user.role;
   } catch (error) {
     yield put(actionCreators.getLoginFailure(error));
   }
