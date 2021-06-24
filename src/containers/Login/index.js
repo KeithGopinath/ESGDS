@@ -175,8 +175,7 @@ const Login = () => {
     else {
       const payload = {
         email: forgotemail,
-        access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
-        link: "http://localhost:3000/password-resets",
+        link: "/password-resets",
       }
       dispatch(
         {
