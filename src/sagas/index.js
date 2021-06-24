@@ -13,6 +13,7 @@ import { getClientTaxonomyWatchers } from './ClientTaxonomy';
 import { getRolesWatchers } from './Roles';
 import { getRoleAssignmentWatchers } from './GetRoleAssignment';
 import { roleAssignmentEditWatchers } from './RoleAssignmentEdit';
+import { roleOnboarddingWatchers } from './RoleOnboarding';
 
 export default function* rootWatchers() {
   yield all([
@@ -30,5 +31,6 @@ export default function* rootWatchers() {
     getRolesWatchers(),
     getRoleAssignmentWatchers(),
     roleAssignmentEditWatchers(),
+    roleOnboarddingWatchers(),
   ]);
 }
