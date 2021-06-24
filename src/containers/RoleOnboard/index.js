@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
-import { message, Alert } from 'antd';
+import { message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import Overlay from '../../components/Overlay';
-import { history } from './../../routes';
 
 const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
 
@@ -78,7 +77,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   };
 
   const onRoleChange = (e, index, field) => {
-    const { label, value, link } = e;
+    const { value } = e;
     const list = [...inputList];
     list[index][field] = value;
     list.map((item) => {
@@ -90,7 +89,6 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
         return item.link = '/onboard?role=company';
       }
     });
-    // setInputList(list);
     setListOfData(list);
   }
 
