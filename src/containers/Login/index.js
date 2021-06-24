@@ -28,10 +28,6 @@ const Login = () => {
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
 
-  // Temp fix have to use in useEffect 
-  const token = login && login.token;
-  sessionStorage.access = token
-
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
   const invalidOtp = useSelector((state) => state.otp.error);
@@ -106,13 +102,11 @@ const Login = () => {
       setLoginAlert('');
       setLoginRole(true);
 
-      // To send the login details in base 64 format through header 
       const login = { email, password }
-      const user = btoa(`${login.email}:${login.password}`)
-      sessionStorage.auth = user
-
+      let objJsonStr = JSON.stringify(login);
+      let user = Buffer.from(objJsonStr).toString("base64");
       const loginDetails = {
-        access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
+        login: user
       }
 
       dispatch({ type: 'LOGIN_REQUEST', loginDetails });
@@ -124,6 +118,7 @@ const Login = () => {
     setShowOtp(false);
     setOtpAlert('');
     setOtp('');
+    sessionStorage.clear();
   };
 
   const onSubmitOtp = () => {
@@ -132,13 +127,15 @@ const Login = () => {
     } else {
       setOtpAlert('');
       setOtpLogin(true);
+
+      const login = { email, otp }
+      let objJsonStr = JSON.stringify(login);
+      let user = Buffer.from(objJsonStr).toString("base64");
+
       const otpDetails = {
-        email,
-        otp,
-        access_token: sessionStorage.access
+        login: user
       }
-      // const jsonString = JSON.stringify(otpDetails);
-      // const otpData = btoa(jsonString);
+  
       dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
@@ -150,7 +147,7 @@ const Login = () => {
   const otpHandleChange = (value) => {
     setOtp(value);
   }
-  
+
   // Forgot password screen
   const forgotPassword = () => {
     setshowForgotPassword(true);

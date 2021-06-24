@@ -25,23 +25,6 @@ function timeoutPromise(promise, timeout, error) {
   });
 }
 
-/** @description calls a native fetch method and returns a promise Object
- * @param {string} url
- * @param {string} urlPrefix
- * @returns {Promise}
- */
-export const fetchURL = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
-  urlPrefix.concat(url),
-  Object.assign({}, {
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      Accept: 'application/json; charset=UTF-8',
-      'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${sessionStorage.access}`,
-    },
-  }),
-), TIMEOUT, 504);
-
 /** @description Sending a GET request to JSON API.
  * doGet method resolves or rejects the promise that is obtained
  * from the fetchURl method
@@ -49,8 +32,19 @@ export const fetchURL = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
  * @param {string} urlPrefix
  * @returns {object}
  */
-export const doGet = (url, urlPrefix = baseUrl) => {
-  const fetchData = fetchURL(url, urlPrefix).then((res) => {
+export const doGet = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
+  urlPrefix.concat(url),
+  Object.assign({}, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      Accept: 'application/json; charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
+      Authorization: `Bearer ${sessionStorage.access}`,
+    },
+  }),
+), TIMEOUT, 504)
+  .then((res) => {
     let response = null;
     response = res.json();
     if (res.ok) {
@@ -58,8 +52,8 @@ export const doGet = (url, urlPrefix = baseUrl) => {
     }
     return response.then((error) => { throw error; });
   });
-  return fetchData;
-};
+//   return fetchData;
+// };
 
 /** @description Sending a POST request.
  * @param {string} url
@@ -75,7 +69,7 @@ export const doPost = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
-      Authorization: `Basic ${sessionStorage.auth}`,
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
     body: JSON.stringify(body),
   }),
