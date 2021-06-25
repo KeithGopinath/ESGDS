@@ -7,11 +7,9 @@ import { doPost } from '../utils/fetchWrapper';
 export function* getRoleOnboarding(data) {
   try {
     if (data.roleOnboardingData.emailList) {
-    console.log('email list data', data.roleOnboardingData);
       const response = yield doPost(envConfig.apiEndPoints.getRoleListOnboarding, data.roleOnboardingData);
       yield put(actionCreators.getRoleOnboardingSuccess(response));
     } else if (data.roleOnboardingData.emailFile) {
-    console.log('email file data', data.roleOnboardingData);
       const response = yield doPost(envConfig.apiEndPoints.getRoleFileOnboarding, data.roleOnboardingData);
       yield put(actionCreators.getRoleOnboardingSuccess(response));
     }
