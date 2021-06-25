@@ -8,8 +8,7 @@ export function* getLogin(data) {
     const response = yield doPost(envConfig.apiEndPoints.getLogin, data.loginDetails);
     yield put(actionCreators.getLoginSuccess(response));
     if (response.user.role !== 'admin') {
-      // sessionStorage.access = response.token;
-      sessionStorage.access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOWFhMGVmMWQ2NGNkMDFlZWRhMDhjOCIsImlhdCI6MTYyNDA0MDk5Mn0.g8SXiJrYLoZvP77R4_JVAjU-DJEoRUyKXCNp8BkS4oo';
+      sessionStorage.access = response.token;
     }
     sessionStorage.role = response.user.role;
   } catch (error) {
