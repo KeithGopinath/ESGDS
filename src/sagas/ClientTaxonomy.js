@@ -5,7 +5,7 @@ import { doGet } from '../utils/fetchWrapper';
 
 export function* getClientTaxonomyRequest() {
   try {
-    const response = yield doGet(`${envConfig.apiEndPoints.clientTaxonomy}?access_token=${sessionStorage.access}`);
+    const response = yield doGet(envConfig.apiEndPoints.clientTaxonomy);
     yield put(actionCreators.getClientTaxonomySuccess(response));
   } catch (error) {
     yield put(actionCreators.getClientTaxonomyFailure(error));
