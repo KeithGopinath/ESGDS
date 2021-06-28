@@ -97,3 +97,36 @@
         color: #2199c8 !important;
     }
 }
+
+.approve-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.approve-user-button {
+    background-color: green !important;
+    border-color: green !important;
+    color: #fffaf0 !important;
+
+    &.hover,
+    &:hover {
+        text-decoration: none !important;
+    }
+
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.reject-user-button {
+    background-color: red !important;
+    border-color: red !important;
+    color: #fffaf0 !important;
+
+    &.hover,
+    &:hover {
+        text-decoration: none !important;
+    }
+
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
