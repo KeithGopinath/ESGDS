@@ -11,7 +11,6 @@ import { getKeyIssuesWatchers } from './KeyIssues';
 import { getMasterTaxonomyWatchers } from './MasterTaxonomy';
 import { getClientTaxonomyWatchers } from './ClientTaxonomy';
 import { getRolesWatchers } from './Roles';
-import { getRoleAssignmentWatchers } from './GetRoleAssignment';
 import { roleAssignmentEditWatchers } from './RoleAssignmentEdit';
 import { roleOnboarddingWatchers } from './RoleOnboarding';
 import { newClientTaxonomyWatchers } from './NewClientTaxonomy';
@@ -31,7 +30,6 @@ export default function* rootWatchers() {
     getMasterTaxonomyWatchers(),
     getClientTaxonomyWatchers(),
     getRolesWatchers(),
-    getRoleAssignmentWatchers(),
     roleAssignmentEditWatchers(),
     roleOnboarddingWatchers(),
     newClientTaxonomyWatchers(),
