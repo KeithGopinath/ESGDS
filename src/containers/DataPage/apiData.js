@@ -12,6 +12,17 @@ export const ANALYST_DC_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -449,6 +460,55 @@ export const ANALYST_DC_DATA = [
           },
         ],
       },
+      {
+        dpCode: 'BIOP009',
+        fiscalYear: '2018-2019, 2019-2020',
+        status: 'Yet to start',
+        isStandAloneOrMatrix: 'Matrix',
+        keyIssue: 'Management structure',
+        currentData: [
+          {
+            dpCode: 'BIOP009',
+            fiscalYear: '2018-2019',
+            status: 'unknown',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+          },
+          {
+            dpCode: 'BIOP009',
+            fiscalYear: '2019-2020',
+            status: 'unknown',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+          },
+        ],
+        historicalData: [
+          {
+            dpCode: 'BIOP009',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2017-2018',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BIOP009',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2016-2017',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'No',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2016' },
+          },
+        ],
+      },
     ],
   },
 ];
@@ -467,6 +527,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -532,6 +603,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
@@ -597,6 +679,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',
@@ -662,15 +755,26 @@ export const QA_DV_DATA = [
     taskId: '0002',
     pillar: 'Social',
     company: 'Manglore Refinery Petrochemicals Ltd',
-    fiscalYear: '2018-2019, 2019-2020',
+    fiscalYear: '2018-2019',
     status: 'In progress',
     dpCodesData: [
       {
         dpCode: 'BIOP002',
-        fiscalYear: '2018-2019, 2019-2020',
+        fiscalYear: '2018-2019',
         status: 'Completed',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -685,21 +789,6 @@ export const QA_DV_DATA = [
             source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
             error: {
               isThere: true, type: 'T1. Document missed', comment: 'Comment No 1', errorStatus: 'Completed',
-            },
-          },
-          {
-            dpCode: 'BIOP002',
-            fiscalYear: '2019-2020',
-            status: 'Completed',
-            description: 'Does the company have a biodiversity restoration program ?',
-            dataType: 'text',
-            textSnippet: 'Biodiversity Snippet 2017-2018',
-            pageNo: '59',
-            screenShot: 'https://esgds.io/images/home/logo.png',
-            response: 'Yes',
-            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-            error: {
-              isThere: true, type: 'T1. Document missed', comment: 'Comment No 2', errorStatus: 'Completed',
             },
           },
         ],
@@ -732,29 +821,25 @@ export const QA_DV_DATA = [
       },
       {
         dpCode: 'BION002',
-        fiscalYear: '2018-2019, 2019-2020',
+        fiscalYear: '2018-2019',
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
             fiscalYear: '2018-2019',
-            status: 'Completed',
-            description: "Fines paid due to the impact of the company's operations on biodiversity",
-            dataType: 'number',
-            textSnippet: 'Biodiversity Snippet 2017-2018',
-            pageNo: '59',
-            screenShot: 'https://esgds.io/images/home/logo.png',
-            response: '10000',
-            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-            error: {
-              isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
-            },
-          },
-          {
-            dpCode: 'BION002',
-            fiscalYear: '2019-2020',
             status: 'Completed',
             description: "Fines paid due to the impact of the company's operations on biodiversity",
             dataType: 'number',
@@ -797,29 +882,25 @@ export const QA_DV_DATA = [
       },
       {
         dpCode: 'BION003',
-        fiscalYear: '2018-2019, 2019-2020',
+        fiscalYear: '2018-2019',
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',
             fiscalYear: '2018-2019',
-            status: 'unknown',
-            description: 'Fine Due Date',
-            dataType: 'date',
-            textSnippet: 'Biodiversity Snippet 2017-2018',
-            pageNo: '59',
-            screenShot: 'https://esgds.io/images/home/logo.png',
-            response: 'Tue May 01 2017',
-            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-            error: {
-              isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
-            },
-          },
-          {
-            dpCode: 'BION003',
-            fiscalYear: '2019-2020',
             status: 'unknown',
             description: 'Fine Due Date',
             dataType: 'date',
@@ -875,6 +956,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -940,6 +1032,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
@@ -1005,6 +1108,17 @@ export const QA_DV_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',
@@ -1082,6 +1196,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -1169,6 +1294,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
@@ -1256,6 +1392,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',
@@ -1352,6 +1499,17 @@ export const COMPANY_REP_DATA = [
         status: 'Completed',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -1439,6 +1597,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
@@ -1526,6 +1695,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',
@@ -1622,6 +1802,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -1709,6 +1900,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION002',
@@ -1796,6 +1998,17 @@ export const COMPANY_REP_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
         currentData: [
           {
             dpCode: 'BION003',

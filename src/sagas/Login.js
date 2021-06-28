@@ -10,7 +10,7 @@ export function* getLogin(data) {
     if (response.user.role !== 'admin') {
       sessionStorage.access = response.token;
     }
-    sessionStorage.role = response.user.role;
+    sessionStorage.role = response.user.name;
   } catch (error) {
     yield put(actionCreators.getLoginFailure(error));
   }

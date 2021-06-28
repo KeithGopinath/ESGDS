@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect } from 'react';
 import { Col, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
-import { Drawer, Tabs } from 'antd';
+import { Drawer, Tabs, Modal } from 'antd';
 import moment from 'moment';
 
 import Header from '../../components/Header';
@@ -14,13 +16,24 @@ import DataAccordian from './DataAccordian';
 
 import ErrorAndComment from './ErrorAndComment';
 
-import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
+
+import DataComment from './DataComment';
 
 
 const DataSheetMain = (props) => {
+  // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
+  // GET REQ ROLE BASED BOOLEANS
+  const [isAnalyst] = [
+    currentRole === 'Analyst',
+    // currentRole === 'QA',
+    // currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    // currentRole === 'Client Representative' || currentRole === 'ClientRep',
+  ];
+
+  // DESTRUCTURING VALUES FROM PROPS
   const {
     reqIndexes,
     reqDpCodeData,
@@ -31,9 +44,15 @@ const DataSheetMain = (props) => {
     openSourcePanel,
   } = props;
 
+  console.log('////DATAPAGE INDEX PROPS', props);
+
+  // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
   const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData);
 
+  // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
   const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData);
+
+  const reqCommentsList = reqDpCodeData.comments;
 
   useEffect(() => {
     setReqCurrentData(reqDpCodeData.currentData);
@@ -77,7 +96,7 @@ const DataSheetMain = (props) => {
   };
 
   const dataCheckBeforeSave = () => {
-    console.log(reqCurrentData);
+    console.log('DATACHECK BROFRE SAVE', reqCurrentData);
     const nonSavedYears = (reqCurrentData.map((e) => {
       if (currentRole === 'Analyst' && e.status !== 'Completed') {
         return e.fiscalYear;
@@ -92,6 +111,8 @@ const DataSheetMain = (props) => {
     })).filter((e) => (e !== null));
     return nonSavedYears;
   };
+
+  const [showError, setShowError] = useState(false);
 
   return (
     <React.Fragment>
@@ -119,41 +140,64 @@ const DataSheetMain = (props) => {
         </DataAccordian>
       </Col>
 
-      {/* HISTORICAL TABS */}
-      {currentRole === 'Analyst' &&
-      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-        <DataAccordian header="Error" isActive >
-          { false ?
-            <ErrorAndComment
-              action={null}
-              author="QA"
-              errorType="Data/information Missed"
-              errorInfo={null}
-              comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
-            /> :
-            <ErrorAndComment
-              action={
-                [
-                  <div>
-                    <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
-                    <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
-                  </div>,
-                ]
-              }
-              author="QA"
-              errorType="Data/information Missed"
-              errorInfo={<ErrorDataSheetTwo isErrorCommentType isVisible reqData={reqDpCodeData.historicalData[0]} />}
-              comment="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper, volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula"
-            />}
-        </DataAccordian>
-      </Col>}
-
       {/* CURRENT TABS */}
       <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
         <DataAccordian header="Current" isActive >
-          <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear} >
+          <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear}>
             {reqCurrentData.map((e) => (
-              <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
+              <Tabs.TabPane
+                tab={
+                  <div>
+                    {e.fiscalYear}
+                    {isAnalyst && e.error &&
+                    <React.Fragment>
+                      <Modal
+                        title="Error Panel"
+                        centered
+                        visible={showError}
+                        footer={null}
+                        onCancel={() => setShowError(false)}
+                        width="70%"
+                        bodyStyle={{
+                          overflow: 'auto',
+                          maxHeight: '85vh',
+                        }}
+                      >
+                        { true &&
+                        <ErrorAndComment
+                          action={
+                            [
+                              <div>
+                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
+                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
+                              </div>,
+                            ]
+                          }
+                          author="QA"
+                          errorType="Data/information Missed"
+                          errorInfo={null}
+                        /> }
+                        { true &&
+                        <ErrorAndComment
+                          action={
+                            [
+                              <div>
+                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
+                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
+                              </div>,
+                            ]
+                          }
+                          author="Company Representative"
+                          errorType="Data/information Missed"
+                          errorInfo={<ErrorDataSheetTwo isErrorCommentType reqData={reqDpCodeData.historicalData[0]} />}
+                        />}
+                      </Modal>
+                      <div onClick={() => setShowError(true)}>Error</div>
+                    </React.Fragment>}
+                  </div>
+                }
+                key={e.fiscalYear}
+              >
                 <DataSheetComponent
                   reqData={e}
                   reqTask={reqTask}
@@ -170,6 +214,27 @@ const DataSheetMain = (props) => {
         </DataAccordian>
       </Col>
 
+      {false &&
+      <Col
+        lg={12}
+        style={{
+          padding: 10,
+          margin: '3% 0',
+        }}
+      >
+        <div>
+          <h4>Comments</h4>
+        </div>
+        <DataComment reqCommentsList={reqCommentsList} />
+      </Col>}
+
+      {reqCommentsList &&
+      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+        <DataAccordian header="Comments" isActive >
+          <DataComment reqCommentsList={reqCommentsList} />
+        </DataAccordian>
+      </Col>}
+
     </React.Fragment>
   );
 };
@@ -178,8 +243,7 @@ const DataSheetMain = (props) => {
 const DataPage = (props) => {
   const sideBarRef = useRef();
 
-  const currentRole = sessionStorage.role;
-
+  // TEMP CONSTANTS THAT HAVE TO COME API
   const errorList = ['T1. Incorrect data input/typo', 'T1. Document missed',
     'T1. Data/Information missed',
     'T1. SOP not followed',
@@ -195,44 +259,34 @@ const DataPage = (props) => {
     { sourceName: 'Annual Report', url: 'https://www.hindustanpetroleum.com/documents/doc/HPCL%20Annual%20Report%202019-2020.pdf', publicationDate: moment('Tue May 04 2021') },
   ];
 
-  const getDefaultApiData = () => {
-    if (currentRole === 'Company Representative') {
-      return COMPANY_REP_DATA;
-    }
-    if (currentRole === 'Client Representative') {
-      return COMPANY_REP_DATA;
-    }
-    if (currentRole === 'QA') {
-      return QA_DV_DATA;
-    }
-    if (currentRole === 'Analyst') {
-      return ANALYST_DC_DATA;
-    }
-    return [];
-  };
 
-  const defaultApiData = getDefaultApiData();
-
+  // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
   const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
 
+  // TEMP SRC STATE TO STORE ALL SRC THAT ARE UPLODED FROM SOURCE PANEL
   const [sourceApiData, setSourceApiData] = useState(srcList);
 
+  // FUNC THAT UPDATES SRC STATE FOR EVERY SRC THAT ARE UPLOADED FROM SRC PANEL
   const onUploadAddSource = (value) => {
     const filteredData = srcList.filter((src) => (value.sourceName !== src.sourceName));
     setSourceApiData([...filteredData, { ...value }]);
   };
 
+  // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
   const onClickOpenAddSource = () => {
     setIsSrcPanelOpened(true);
   };
 
+  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
   const onClickCloseAddSource = () => {
     setIsSrcPanelOpened(false);
   };
 
-  const getReqData = (data) => {
-    const { taskId, dpCode } = props.location.state;
-    const [reqTask] = data.filter((task) => (task.taskId === taskId));
+  // A * FUNCTION THAT TAKES defaultApiData AS PARAMS, AND ALSO GRABS VALUES SUCH AS taskID, dpCode FROM props.location.state,
+  // AND BY HAVING ALL ABOVE DATA IT FILTER RETURNS reqDpcodeData, reqTask, reqIndexes.
+  const getReqData = () => {
+    const { dpCode } = props.location.state;
+    const reqTask = JSON.parse(sessionStorage.filteredData);
     const reqMaxIndex = reqTask.dpCodesData.length - 1;
     const reqMinIndex = 0; // CONSTANT
     const returnbaleData = (reqTask.dpCodesData.map((dpData, index) => {
@@ -247,9 +301,10 @@ const DataPage = (props) => {
     return returnbaleData;
   };
 
+  // reqIndexes, reqDpCodeData, reqTask are returned from getReqData FUNC
   const [{
     reqIndexes, reqDpCodeData, reqTask,
-  }] = getReqData(defaultApiData);
+  }] = getReqData();
 
   return (
     <div className="main">
@@ -259,6 +314,7 @@ const DataPage = (props) => {
         <div className="datapage-main" >
           <div className="datapage-info-group">
 
+            {/* ADD SOURCE PANEL */}
             <Drawer
               title="Add Source"
               placement="right"
@@ -272,6 +328,7 @@ const DataPage = (props) => {
               {isSrcPanelOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
             </Drawer>
 
+            {/* DATASHEETMAIN COMPONENT  */}
             <DataSheetMain
               reqIndexes={reqIndexes}
               reqDpCodeData={reqDpCodeData}

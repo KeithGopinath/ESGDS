@@ -10,7 +10,7 @@ const ErrorAndComment = (props) => (
     actions={props.action}
     author={<a>{props.author}</a>}
     avatar={
-      <Avatar>{props.author}</Avatar>
+      <Avatar>{((props.author.split(' ')).map((e) => (e[0]))).join('')}</Avatar>
     }
     content={
       <p>
@@ -20,11 +20,6 @@ const ErrorAndComment = (props) => (
         <Row>
           {props.errorInfo}
         </Row>
-        <span>Comment:</span>
-        <br />
-        <p>
-          {props.comment}
-        </p>
       </p>
     }
     datetime={
