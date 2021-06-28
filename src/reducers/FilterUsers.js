@@ -2,23 +2,23 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ROLE_ASSIGNMENT_REQUEST':
+    case 'FILTER_USERS_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        roleAssignment: false,
+        filterUsers: false,
       };
-    case 'GET_ROLE_ASSIGNMENT_SUCCESS':
+    case 'FILTER_USERS_SUCCESS':
       return {
         ...state,
-        isLoading: true,
-        roleAssignment: action.roleAssignment,
+        isLoading: false,
+        filterUsers: action.filterUsers,
       };
-    case 'GET_ROLE_ASSIGNMENT_FAILURE':
+    case 'FILTER_USERS_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:
