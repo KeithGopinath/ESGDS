@@ -8,7 +8,6 @@ import moment from 'moment';
 import { history } from '../../routes';
 // import ErrorDataSheet from './ErrorDataSheet';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
-import DataComment from './DataComment';
 
 const FieldWrapper = (props) => {
   if (props.visible) {
@@ -34,8 +33,8 @@ export const DataSheetComponent = (props) => {
   const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
     currentRole === 'Analyst',
     currentRole === 'QA',
-    currentRole === 'Company Representative',
-    currentRole === 'Client Representative',
+    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
   const {
@@ -52,7 +51,7 @@ export const DataSheetComponent = (props) => {
     fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
   });
 
-  console.log(formErrorRefData);
+  console.log('DATASHEET PROPS', props);
 
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   const [formPageNo, setFormPageNo] = useState(defaultData.pageNo || '');
@@ -84,6 +83,8 @@ export const DataSheetComponent = (props) => {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
   }, [props.reqData]);
+
+  console.log(formErrorRefData);
 
   const sourceList = props.reqSourceData;
 
@@ -332,7 +333,7 @@ export const DataSheetComponent = (props) => {
     return false;
   };
 
-  const disableField = props.isDataCorrection ? true : getIsDisableOrNot();
+  const disableField = getIsDisableOrNot();
 
   return (
     <Row>
@@ -609,9 +610,8 @@ export const DataSheetComponent = (props) => {
         openSourcePanel={props.openSourcePanel}
         onClickSave={props.onClickSave}
       /> */}
-
+      {(isCompanyRep || isClientRep) && !isHistoryType &&
       <ErrorDataSheetTwo
-        isVisible={(isCompanyRep || isClientRep) && !isHistoryType}
         isError={formIsError}
         reqData={formErrorRefData}
         reqSourceData={sourceList}
@@ -619,11 +619,7 @@ export const DataSheetComponent = (props) => {
         locationData={props.locationData}
         openSourcePanel={props.openSourcePanel}
         onClickSave={props.onClickSave}
-      />
-
-      {/* COMMENTS */}
-      {!isHistoryType && !isAnalyst &&
-      <DataComment />}
+      />}
 
       <Col lg={12} className="datapage-button-wrap">
         { (isAnalyst) && !isHistoryType && defaultData.status !== 'Completed' &&
@@ -647,7 +643,7 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
 
         {/* EDIT Button */}
-        { (isQA && !isHistoryType) &&
+        { (!isQA && !isHistoryType && !isAnalyst && !isCompanyRep && !isClientRep) &&
         <Button className="datapage-button" variant="primary" onClick={editClickHandler}>Edit</Button>}
 
         {/* PREVIOUS Button */}

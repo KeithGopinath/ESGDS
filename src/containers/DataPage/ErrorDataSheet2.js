@@ -30,8 +30,8 @@ const ErrorDataSheetTwo = (props) => {
   const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
     currentRole === 'Analyst',
     currentRole === 'QA',
-    currentRole === 'Company Representative',
-    currentRole === 'Client Representative',
+    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
   const defaultData = props.reqData;
@@ -65,9 +65,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const { textResponse } = props;
 
-  const { isError } = props;
-
-  const { isVisible } = props;
+  const { isError, isErrorCommentType } = props;
 
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
@@ -126,7 +124,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const getIsDisableOrNot = () => {
     if (isAnalyst) {
-      if (props.isErrorCommentType) {
+      if (isErrorCommentType) {
         return true;
       }
       if (defaultData.status === 'Completed') {
@@ -200,13 +198,13 @@ const ErrorDataSheetTwo = (props) => {
     <React.Fragment>
 
       {/* HORIZONTAL Line */}
-      {isVisible && isError &&
+      {!isErrorCommentType && isError &&
       <Col lg={12} className="datapage-horizontalLine"></Col>}
 
       {/* DESCRIPTION Field */}
       <FieldWrapper
         label="Description*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={formDescription}
       />
 
@@ -214,7 +212,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'NUMBER' &&
         <FieldWrapper
           label="Response*"
-          visible={props.isErrorCommentType || (isVisible && isError)}
+          visible={isErrorCommentType || isError}
           body={
             <Form.Control
               type="text"
@@ -231,7 +229,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'DATE' &&
         <FieldWrapper
           label="Response*"
-          visible={props.isErrorCommentType || (isVisible && isError)}
+          visible={isErrorCommentType || isError}
           body={
             <DatePicker
               className="datapage-datepicker"
@@ -248,7 +246,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'TEXT' &&
         <FieldWrapper
           label="Response*"
-          visible={props.isErrorCommentType || (isVisible && isError)}
+          visible={isErrorCommentType || isError}
           body={
             <Select
               name="response"
@@ -264,7 +262,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* SOURCE Field */}
       <FieldWrapper
         label="Source*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <Select
             name="source"
@@ -278,7 +276,7 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       {/* ADD SOURCE Button */}
-      {isVisible && isError &&
+      {!isErrorCommentType && isError &&
       <Col lg={6}>
         <Button onClick={props.openSourcePanel}>Add Source</Button>
       </Col>}
@@ -286,7 +284,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
         label="Text Snippet*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <Form.Control
             as="textarea"
@@ -302,7 +300,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* PAGE NO Field */}
       <FieldWrapper
         label="Page No*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <Form.Control
             type="number"
@@ -317,7 +315,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* URL Field */}
       <FieldWrapper
         label="URL*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <Form.Control
             type="text"
@@ -333,7 +331,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label="PublicationDate*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <DatePicker
             className="datapage-datepicker"
@@ -349,7 +347,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* UPLOAD Field */}
       <FieldWrapper
         label="Upload Screenshot*"
-        visible={(isVisible && isError)}
+        visible={!isErrorCommentType && isError}
         body={
           <Upload
             className="datapage-ant-upload"
@@ -371,7 +369,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* ScreenShot Field */}
       <FieldWrapper
         label="Screenshot*"
-        visible={props.isErrorCommentType || (isVisible && isError)}
+        visible={isErrorCommentType || isError}
         body={
           <Image
             width="50%"
@@ -384,7 +382,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
-        visible={(isVisible && isError)}
+        visible={!isErrorCommentType && isError}
         body={
           <Form.Control
             as="textarea"
@@ -398,9 +396,9 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       <Col lg={12} className="datapage-button-wrap">
-        {!props.isErrorCommentType && isVisible && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        {!isErrorCommentType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
         <Button className="datapage-button" variant="success" onClick={onClickSave}>Save</Button>}
-        {!props.isErrorCommentType && isVisible && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+        {!isErrorCommentType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
         <Button className="datapage-button" variant="primary" onClick={onClickEdit}>Edit</Button>}
       </Col>
 

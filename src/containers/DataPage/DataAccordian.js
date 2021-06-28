@@ -12,7 +12,7 @@ const DataAccordian = (props) => {
         <Card.Header style={{ backgroundColor: '#2199c8', display: 'flex', justifyContent: 'space-between' }}>
           <Accordion.Toggle
             style={{
-              border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+              border: 'none', background: 'none', color: '#fff', fontSize: 'larger',
             }}
             eventKey="0"
             onClick={() => { setIsArrowDown(!isArrowDown); }}
@@ -20,7 +20,7 @@ const DataAccordian = (props) => {
           </Accordion.Toggle>
           <Accordion.Toggle
             style={{
-              border: 'none', background: 'none', fontWeight: 500, color: '#fff', fontSize: 'larger',
+              border: 'none', background: 'none', color: '#fff', fontSize: 'larger',
             }}
             eventKey="0"
             onClick={() => { setIsArrowDown(!isArrowDown); }}
