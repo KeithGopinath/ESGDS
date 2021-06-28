@@ -60,7 +60,7 @@ const GroupsSubMenu = [
     id: 0, label: 'Create Group', icon: faFolderPlus, address: 'groups/creategroup'
   },
   {
-    id: 1, label: 'Group List', icon: faList, address: 'groups'
+    id: 1, label: 'Assignment', icon: faList, address: 'groups'
   },
 ]
 

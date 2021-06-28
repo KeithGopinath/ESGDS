@@ -18,6 +18,10 @@ const TaskCreate = () => {
   const [companyinfo, setcompanyinfo] = useState([]);
   const [pillar, setPillar] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
+  const [analystSla,setanalystSla] = useState('');
+  const [isDisabledQA, setisDisabledQA] = useState(true);
+  const [qacheckdate, setqacheckdate] = useState('')
+  const [qaSla, setqaSla] = useState('');
   const optionsForPagination = {
     sizePerPage: 10,
   };
@@ -259,13 +263,19 @@ const TaskCreate = () => {
   const onCreateTask = () => {
     alert('Task Created Successfully');
   };
-  function disabledDate(current) {
+  const analystdisabledDate = (current) => {
     const yourDate = new Date();
     const date= getFormatDate(yourDate);
     const customDate = date;
     return current && current < moment(customDate, 'YYYY-MM-DD');
   }
-
+  const qadisabledDate = (current) =>{
+    const analystEnddate = analystSla;
+    console.log(typeof(analystEnddate), 'analystEnddate');
+    if(analystEnddate){
+      return current && current < moment(analystEnddate, 'YYYY-MM-DD').add(1, 'days');
+    }
+  }
   const taskTitle = ['Groups', 'Batches', 'Assign Task'];
 
   const onselectGroup = (matchgrp) => {
@@ -321,13 +331,27 @@ const TaskCreate = () => {
       </Card>
     </Col>
   ));
-  const analystEndData=(e)=>{
+  const analystEndData=(e) => {
     //console.log(e._d, 'analyst end date');
     if(e !== null){
       const date = getFormatDate(e._d);
+      setanalystSla(date);
+      setisDisabledQA(false);
+      
     console.log(date, 'analystDate');
+    } else {
+      setqaSla('');
+      setqacheckdate('');
+      setisDisabledQA(true);
     }
     
+  }
+  const qaEndData = (e) => {
+    if(e !== null){
+      const date = getFormatDate(e._d);
+      setqaSla(date);
+      setqacheckdate(e);
+    }
   }
 
   const batchInfoTab = () => (
@@ -376,14 +400,14 @@ const TaskCreate = () => {
               </div>
             </div>
             <div className="date-picker-inner">
-              <div className="task-role" >Analyst End Date</div>
+              <div className="task-role" >Analyst SLA Date</div>
               <div >
                 <DatePicker
                   className="date-picker"
                   size="middle"
                   format="YYYY-MM-DD"
                   onChange={analystEndData}
-                  disabledDate={disabledDate}
+                  disabledDate={analystdisabledDate}
                 />
               </div>
             </div>
@@ -394,17 +418,21 @@ const TaskCreate = () => {
               <div>
                 <Select
                   options={companyInfo.Qa}
+                  isDisabled={isDisabledQA}
                 />
               </div>
             </div>
             <div className="date-picker-inner">
-              <div className="task-role" >QA End Date</div>
+              <div className="task-role" >QA SLA Date</div>
               <div>
                 <DatePicker
                   className="date-picker"
                   size="middle"
                   format="YYYY-MM-DD"
-                  disabledDate={disabledDate}
+                  onChange={qaEndData}
+                  disabledDate={qadisabledDate}
+                  value={qacheckdate}
+                  disabled={isDisabledQA}
                 />
               </div>
             </div>

@@ -3,8 +3,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
-import { DatePicker } from 'antd';
-import moment from 'moment';
+// import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,13 +21,13 @@ const BatchCreation = ({ show, setShow }) => {
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
   const [subsetTax, setsubsetTax] = useState('');
-  const [batchsla, Setbatchsla] = useState('');
+  // const [batchsla, Setbatchsla] = useState('');
   // const [companies, setCompanies] = useState([]);
   const handleClose = () => {
     setBatch('');
     setYear('');
     setsubsetTax('');
-    Setbatchsla('');
+    // Setbatchsla('');
     setRowDetails([]);
     setAlert(0);
     setValidBorder(false);
@@ -147,36 +146,35 @@ const BatchCreation = ({ show, setShow }) => {
       setBatch(batchname.target.value);
     }
   };
-  const getFormatDate = (arg) => {
-    const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
-    return date;
-  };
-  const batchEndData = (e) => {
-    console.log(e, 'batch end date');
-    if (e !== null) {
-      const date = getFormatDate(e._d);
-      console.log(date, 'analystDate');
-      Setbatchsla(date);
-    } else {
-      Setbatchsla('');
-    }
-  };
+  // const getFormatDate = (arg) => {
+  //   const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
+  //   return date;
+  // };
+  // const batchEndData = (e) => {
+  //   console.log(e, 'batch end date');
+  //   if (e !== null) {
+  //     const date = getFormatDate(e._d);
+  //     console.log(date, 'analystDate');
+  //     Setbatchsla(date);
+  //   } else {
+  //     Setbatchsla('');
+  //   }
+  // };
   const onCreatebBatch = () => {
-    console.log(batchsla, 'batchsla');
     console.log(validBorder, 'validBorder');
     console.log(subsetTax, 'subsetTax');
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
-    } else if (!year || !subsetTax || !batchsla) {
+    } else if (!year || !subsetTax) {
       setValidBorder(true);
     }
     // else if (!batchSLA) {
     //   setValidBorder('sla');
     // }
-    if ((batch.length && year.length && rowDetail.length && subsetTax.value.length && batchsla.length) > 0) {
+    if ((batch.length && year.length && rowDetail.length && subsetTax.value.length) > 0) {
       const data = {
-        taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail, batchSLA: batchsla,
+        taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail,
       };
       dispatch({ type: 'BATCH_CREATE_REQUEST', payload: data });
       setTimeout(() => {
@@ -214,7 +212,7 @@ const BatchCreation = ({ show, setShow }) => {
               onChange={onHandleYear}
             />
           </div>
-          <div className="batch-sla">Batch SLA*</div>
+          {/* <div className="batch-sla">Batch SLA*</div>
           <div className={`batch-input-width ${batchsla === '' && validBorder && 'dropdown-alert-sla' }`}>
             <DatePicker
               className="date-picker"
@@ -222,7 +220,7 @@ const BatchCreation = ({ show, setShow }) => {
               format="YYYY-MM-DD"
               onChange={batchEndData}
             />
-          </div>
+          </div> */}
         </Col>
         <Col lg={6} sm={12}>
           <BootstrapTable data={rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
