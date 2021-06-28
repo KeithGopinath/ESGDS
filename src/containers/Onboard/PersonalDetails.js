@@ -4,8 +4,12 @@ import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { message } from 'antd';
 import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
+import { Image } from 'antd';
+import UserStatusManage from '../../containers/UserStatusManage';
 
-const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone, onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep, activeStep, validatingSpaces }) => {
+const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone,
+  onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep,
+  activeStep, validatingSpaces, flag, userID }) => {
 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,11 +23,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [bankIFSCCode, setBankIFSCCode] = useState('');
   const [validate, setValidate] = useState(false);
   const [personalDetailsAlert, setPersonalDetailsAlert] = useState('');
+  const [show, setShow] = useState(false);
+  const [decision, setDecision] = useState('');
+
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (role === 'company') {
+    if (!flag && role === 'company') {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
   }, []);
@@ -176,6 +183,15 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
+  const handleClose = () => {
+    setShow(false)
+  }
+
+  const handleShow = (e) => {
+    setDecision(e);
+    setShow(true);
+  }
+
   return (
     <Container>
       <Row className="personal-content mr-0">
@@ -195,6 +211,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   placeholder={`${role === 'employee' ? "Enter your first name" : "Enter your name"}`}
                   onChange={onFirstNameChange}
                   name={firstName}
+                  disabled={flag}
                 />
               </Form.Group>
             </Col>
@@ -211,6 +228,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       placeholder="Optional"
                       value={middleName}
                       onChange={onMiddleNameChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -225,6 +243,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={lastName}
                       placeholder="Enter your last name"
                       onChange={onLastNameChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -241,6 +260,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   value={email}
                   placeholder="This will be your user ID"
                   onChange={onEmailChange}
+                  disabled={flag}
                 />
               </Form.Group>
             </Col>
@@ -255,6 +275,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   value={phoneNumber}
                   placeholder="Enter your valid phone number"
                   onChange={onPhoneChange}
+                  disabled={flag}
                 />
               </Form.Group>
             </Col>
@@ -270,6 +291,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                     value={companyName}
                     placeholder="Enter your company name"
                     onChange={onCompanyNameChange}
+                    disabled={flag}
                   />
                 </Form.Group>
               </Col>}
@@ -284,6 +306,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       name="companyName"
                       value={companyName}
                       onChange={onCompanyNameSelect}
+                      isDisabled={flag}
                     />
                   </div>
                 </Form.Group>
@@ -302,6 +325,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={pancardNumber}
                       placeholder="Enter your pancard number"
                       onChange={onPancardNoChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -317,6 +341,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={adharCard}
                       placeholder="Enter your aadhar number"
                       onChange={onAadharNoChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -331,6 +356,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={`${firstName} ${middleName && `${middleName} `}${lastName}`}
                       readOnly
                       placeholder="Same as your name"
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -347,6 +373,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={bankAccountNumber}
                       placeholder="Enter your account number"
                       onChange={onAccountNumberChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
@@ -361,20 +388,67 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={bankIFSCCode}
                       placeholder="Enter your IFSC code"
                       onChange={onBankIfscChange}
+                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>
               </React.Fragment>
             }
           </Row>
-          <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
-          {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
-          <div className="d-flex flex-row justify-content-end mt-1">
-            <span><Button className="save-continue" onClick={gotoProofUpload}>Save & Continue</Button></span>
-          </div>
+          {flag &&
+            <div>
+              <h4 className="personal-text">Uploaded Documents</h4>
+              <Row className='d-flex ml-2 mr-2'>
+                <Col lg={4} sm={4} md={4}>
+                  <Form.Group>
+                    <Form.Label>{role == 'employee' ? 'Pan Card ' : 'Letter of authentication '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                    <Image
+                      width={200}
+                      src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    />
+                  </Form.Group>
+                </Col>
+                <Col lg={4} sm={4} md={4}>
+                  <Form.Group>
+                    <Form.Label>{role == 'employee' ? 'Aadhar Card ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                    <Image
+                      width={200}
+                      src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    />
+                  </Form.Group>
+                </Col>
+                {role == 'employee' &&
+                  <Col lg={4} sm={4} md={4}>
+                    <Form.Group>
+                      <Form.Label>Cancelled Cheque <sup className="text-danger">*</sup></Form.Label><br></br>
+                      <Image
+                        width={200}
+                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                      />
+                    </Form.Group>
+                  </Col>
+                }
+              </Row>
+              <React.Fragment>
+                <div className="approve-button-container">
+                  <span><Button className="reject-user-button" onClick={() => { handleShow('reject') }}>Reject</Button></span>
+                  <span><Button className="approve-user-button" onClick={() => { handleShow('approve') }}>Approve</Button></span>
+                </div>
+              </React.Fragment>
+            </div>
+          }
+          {!flag &&
+            <React.Fragment>
+              <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
+              {role === 'employee' && <p className="ml-3 mt-2"><sup className="text-danger">*</sup> Please enter your name same as bank account details</p>}
+              <div className="d-flex flex-row justify-content-end mt-1">
+                <span><Button className="save-continue" onClick={gotoProofUpload}>Save & Continue</Button></span>
+              </div>
+            </React.Fragment>
+          }
         </Card>
-
       </Row>
+      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userID} />
     </Container>
   );
 };
