@@ -17,13 +17,14 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
-  const userData = useSelector((state) => state.roleAssignment.roleAssignment);
+  const userData = useSelector((state) => state.filterUsers.filterUsers);
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
 
   useEffect(() => {
     if (show) {
-      dispatch({ type: 'GET_ROLE_ASSIGNMENT_REQUEST' });
+      const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
       dispatch({ type: 'GET_ROLES_REQUEST' });
     }
   }, [show]);
@@ -43,7 +44,7 @@ const RoleAssignment = ({ show, setShow }) => {
       label: data.roleName
     }))
 
-  const nameOptions = userData && userData.rows.map((data) => {
+  const nameOptions = userData && userData.data.map((data) => {
     return (
       data.userDetails
     )
@@ -65,7 +66,7 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const onNameChange = (name) => {
     setName(name);
-    userData && userData.rows.filter(val => val.userDetails.value == name.value).map((data) => {
+    userData && userData.data.filter(val => val.userDetails.value == name.value).map((data) => {
       setRole(data.roleDetails.role)
       setPrimaryRole(data.roleDetails.primaryRole)
     })
