@@ -76,7 +76,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
   const DEFAULT_PAGE = 0;
-  const DEFAULT_ROWS_PER_PAGE = 5;
+  const DEFAULT_ROWS_PER_PAGE = 10;
   const { RangePicker } = DatePicker;
 
   // STATES
@@ -215,7 +215,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
             </div>
             <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
               <RangePicker
-                showTime={{ format: 'HH:mm' }}
+                // showTime={{ format: 'HH:mm' }}
                 format="YYYY-MM-DD HH:mm"
                 onChange={(x) => {
                   if (x) {

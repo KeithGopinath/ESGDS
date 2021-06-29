@@ -1,68 +1,93 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
-import { Avatar, Comment, Modal } from 'antd';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { Comment, List, Avatar } from 'antd';
 import moment from 'moment';
-const DataComment = () => {
-  const [visible, setVisible] = useState(false);
+
+
+const DataComment = (props) => {
+  console.log(props);
+  // const [showAllCmts, steShowAllCmts] = useState(false);
+  const comments = props.reqCommentsList;
+
+  // const latestCmts = comments.filter((e, i) => (i > comments.length - 3 && i < comments.length));
   return (
-    <React.Fragment>
-      <Comment
-        style={{ padding: '0 2%', cursor: 'pointer' }}
-        onClick={() => setVisible(true)}
-        author={<a>QA</a>}
-        avatar={
-          <Avatar>QA</Avatar>
-        }
-        content={
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper,
-            volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula.
-          </p>
-        }
-        datetime={
-          <span>{moment().format('YYYY-MM-DD HH:mm:ss')}</span>
-        }
-      />
-      <Modal
-        title="Comments"
-        centered
-        visible={visible}
-        footer={null}
-        onCancel={() => setVisible(false)}
-        width="80%"
-        bodyStyle={{ maxHeight: '50vh', overflow: 'auto' }}
-      >
+    // <React.Fragment>
+    //   <List
+    //     dataSource={latestCmts}
+    //     header={<div style={{ display: 'flex', justifyContent: 'space-between' }}>{`${comments.length - latestCmts.length}+ ${(comments.length - latestCmts.length) > 1 ? 'replies' : 'reply'}`}<div style={{ cursor: 'pointer' }} onClick={() => steShowAllCmts(true)}>View more</div></div>}
+    //     itemLayout="horizontal"
+    //     renderItem={(eachCmt) => (
+    //       <Comment
+    //         author={<span style={{ color: '#2199c8' }}>{eachCmt.author}</span>}
+    //         avatar={
+    //           <Avatar style={{ backgroundColor: '#2199c8' }}>{eachCmt.author.split(' ').map((e) => (e[0])).join('')}</Avatar>}
+    //         content={
+    //           <p
+    //             style={{
+    //               background: 'rgb(222 222 222 / 34%)',
+    //               padding: '10px',
+    //               width: 'max-content',
+    //               borderRadius: '5px',
+    //             }}
+    //           >{eachCmt.content}
+    //           </p>}
+    //         datetime={`${moment(eachCmt.datetime).fromNow()}, (${eachCmt.fiscalYear})`}
+    //       />)}
+    //   />
+    //   <Modal
+    //     title={`${comments.length > 1 ? 'All' : ''} ${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+    //     centered
+    //     visible={showAllCmts}
+    //     footer={null}
+    //     onCancel={() => steShowAllCmts(false)}
+    //     width="100%"
+    //     bodyStyle={{
+    //       overflow: 'auto',
+    //       maxHeight: '85vh',
+    //     }}
+    //   >
+    //     {comments.map((eachCmt) => (<Comment
+    //       author={<span style={{ color: '#2199c8' }}>{eachCmt.author}</span>}
+    //       avatar={
+    //         <Avatar style={{ backgroundColor: '#2199c8' }}>{eachCmt.author.split(' ').map((e) => (e[0])).join('')}</Avatar>}
+    //       content={
+    //         <p
+    //           style={{
+    //             background: 'rgb(222 222 222 / 34%)',
+    //             padding: '10px',
+    //             width: 'max-content',
+    //             borderRadius: '5px',
+    //           }}
+    //         >{eachCmt.content}
+    //         </p>}
+    //       datetime={`${moment(eachCmt.datetime).fromNow()}, (${eachCmt.fiscalYear})`}
+    //     />))}
+    //   </Modal>
+    // </React.Fragment>
+    <List
+      dataSource={comments}
+      header={`${comments.length} ${(comments.length) > 1 ? 'replies' : 'reply'}`}
+      itemLayout="horizontal"
+      renderItem={(eachCmt) => (
         <Comment
-          style={{ padding: '0 2%' }}
-          author={<a>Company Representative</a>}
+          author={<span style={{ color: '#2199c8' }}>{eachCmt.author}</span>}
           avatar={
-            <Avatar>CR</Avatar>
-          }
+            <Avatar style={{ backgroundColor: '#2199c8' }}>{eachCmt.author.split(' ').map((e) => (e[0])).join('')}</Avatar>}
           content={
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper,
-              volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula.
-            </p>
-          }
-          datetime={
-            <span>{moment().format('YYYY-MM-DD HH:mm:ss')}</span>
-          }
-        />
-        <Comment
-          style={{ padding: '0 2%' }}
-          author={<a>QA</a>}
-          avatar={
-            <Avatar>QA</Avatar>
-          }
-          content={
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel ex ullamcorper,
-              volutpat diam vel, volutpat orci. Nunc in felis sed velit rhoncus eleifend eget tempus ligula.
-            </p>
-          }
-          datetime={
-            <span>{moment().format('YYYY-MM-DD HH:mm:ss')}</span>
-          }
-        />
-      </Modal>
-    </React.Fragment>
+            <p
+              style={{
+                background: 'rgb(222 222 222 / 34%)',
+                padding: '10px',
+                width: 'max-content',
+                borderRadius: '5px',
+              }}
+            >{eachCmt.content}
+            </p>}
+          datetime={`${moment(eachCmt.datetime).fromNow()}, (${eachCmt.fiscalYear})`}
+        />)}
+    />
   );
 };
 

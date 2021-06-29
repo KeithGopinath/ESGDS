@@ -6,7 +6,7 @@ import { doPost } from '../utils/fetchWrapper';
 export function* BatchCreateRequest(data) {
   try {
     // eslint-disable-next-line no-sequences
-    const response = yield doPost(`${envConfig.apiEndPoints.createBatch}?access_token=${sessionStorage.access}`, data.payload);
+    const response = yield doPost(envConfig.apiEndPoints.createBatch, data.payload);
     yield put(actionCreators.BatchCreateSuccess(response));
   } catch (error) {
     yield put(actionCreators.BatchCreateFailure(error));

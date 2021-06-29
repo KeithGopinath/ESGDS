@@ -67,6 +67,7 @@
     align-items: center;
     margin-bottom: 2%;
     justify-content: space-evenly;
+    height: 40px;
 }
 
 .tabs-label-count-wrap {
@@ -122,4 +123,26 @@
 .tabs-label-count-wrap-active>.tabs-count-wrap {
     background-color: #2199c8;
     color: #ffffff;
+}
+
+.user-status-active-button {
+    background-color: green !important;
+    border-color: green !important;
+    color: #fffaf0 !important;
+
+    &.hover,
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+.user-status-inactive-button {
+    background-color: red !important;
+    border-color:red !important;
+    color: #fffaf0 !important;
+
+    &.hover,
+    &:hover {
+        text-decoration: none !important;
+    }
 }

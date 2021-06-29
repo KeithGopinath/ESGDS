@@ -1,15 +1,16 @@
-/* eslint-disable*/
-import React, { useRef, useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
+import { ANALYST_DC_DATA, COMPANY_REP_DATA, QA_DV_DATA } from '../DataPage/apiData';
 
 
 const PendingTaskTable = (props) => {
   // TABLE DATA
-
   const tablePopulate = (data) => data.map(({
     taskId, pillar, company, fiscalYear, status,
   }) => ({
@@ -60,69 +61,56 @@ const PendingTaskTable = (props) => {
 };
 
 const PendingTasks = () => {
+  // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
-  const sideBarRef = useRef();
+  // GET REQ ROLE BASED BOOLEANS
+  const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
+    currentRole === 'Analyst',
+    currentRole === 'QA',
+    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+  ];
 
-  const getTabs = () => {
-    let tabsList = [];
-    if (currentRole === 'Analyst') {
-      tabsList = ['Data Collection', 'Data Correction'];
-    }
-    if (currentRole === 'QA') {
-      tabsList = ['Data Verification'];
-    }
-    if (currentRole === 'Company Representative') {
-      tabsList = ['Data Review'];
-    }
-    if (currentRole === 'Client Representative') {
-      tabsList = ['Data Review'];
-    }
-    return tabsList;
-  };
-
-  const tabs = getTabs();
-
-  const tabsRef = useRef(tabs.map(() => React.createRef()));
-
-  const defaultApiData = () => {
-    if (currentRole === 'Company Representative') {
-      return COMPANY_REP_DATA;
-    }
-    if (currentRole === 'Client Representative') {
-      return COMPANY_REP_DATA;
-    }
-    if (currentRole === 'QA') {
-      return QA_DV_DATA;
-    }
-    if (currentRole === 'Analyst') {
-      return ANALYST_DC_DATA;
-    }
+  const getReqTabs = () => {
+    if (isAnalyst) { return [{ label: 'Data Collection', data: ANALYST_DC_DATA }, { label: 'Data Correction', data: QA_DV_DATA }]; }
+    if (isQA) { return [{ label: 'Data Verification', data: QA_DV_DATA }]; }
+    if (isCompanyRep) { return [{ label: 'Data Review', data: COMPANY_REP_DATA }]; }
+    if (isClientRep) { return [{ label: 'Data Review', data: COMPANY_REP_DATA }]; }
     return [];
   };
 
-  const apiDataList = defaultApiData();
+  const tabs = getReqTabs();
 
-  const onClickTabChanger = (event, data) => {
+  const tabsRef = useRef(tabs.map(() => React.createRef()));
+
+  const sideBarRef = useRef();
+
+  const [reqAPIData, setReqAPIData] = useState([]);
+
+
+  const setDefaultTab = () => {
+    const defaultTab = tabsRef.current[0] && tabsRef.current[0].current;
+    if (defaultTab) { defaultTab.classList.add('tabs-label-count-wrap-active'); }
+    setReqAPIData(tabs[0].data);
+    sessionStorage.tab = tabs[0].label;
+    console.log(`GET REQUEST FOR ${currentRole} ${defaultTab.getAttribute('data-id')}`);
+  };
+
+  const onClickChangeTab = (event, data, label) => {
     tabsRef.current.forEach((element) => {
       const btn = element.current;
       btn.classList.remove('tabs-label-count-wrap-active');
     });
     const { currentTarget } = event;
     currentTarget.classList.add('tabs-label-count-wrap-active');
+    setReqAPIData(data);
+    sessionStorage.tab = label;
   };
 
   useEffect(() => {
-    const defaultTab = tabsRef.current[0] && tabsRef.current[0].current;
-    if (defaultTab) {
-      defaultTab.classList.add('tabs-label-count-wrap-active');
-  // useEffect(() => {
-  //   const defaultTab = tabsRef.current[0].current;
-  //   if (defaultTab) {
-  //     defaultTab.classList.add('pendingtasks-tab-active');
-    }
+    setDefaultTab();
   }, []);
-
 
   return (
     <div className="main">
@@ -131,19 +119,18 @@ const PendingTasks = () => {
         <Header title="Pending Tasks" />
         <div className="container-main" >
           <div className="users-tabs-stack">
-            {tabs.map((tab, index) =>
-              <div key={tab} ref={tabsRef.current[index]} onClick={(event) => (onClickTabChanger(event))} className="tabs-label-count-wrap">
+            {tabs.map((tab, index) => (
+              <div key={tab.label} ref={tabsRef.current[index]} data-id={tab.label} onClick={(event) => onClickChangeTab(event, tab.data, tab.label)} className="tabs-label-count-wrap">
                 <div className="tabs-label">
-                  {tab}
+                  {tab.label}
                 </div>
-                <div title={tab} className="tabs-count-wrap">
-                  <div className="tabs-count">3
+                <div title={tab.label} className="tabs-count-wrap">
+                  <div className="tabs-count">{tab.data.length}
                   </div>
                 </div>
-              </div>
-            )}
+              </div>))}
           </div>
-          <PendingTaskTable data={apiDataList} />
+          <PendingTaskTable data={reqAPIData} />
         </div>
       </div>
     </div>

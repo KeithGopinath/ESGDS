@@ -5,7 +5,7 @@ import { doGet } from '../utils/fetchWrapper';
 
 export function* getCompanyListRequest() {
   try {
-    const response = yield doGet(`${envConfig.apiEndPoints.getCompanylist}?access_token=${sessionStorage.access}`);
+    const response = yield doGet(envConfig.apiEndPoints.getCompanylist);
     yield put(actionCreators.getCompanyListSuccess(response));
   } catch (error) {
     yield put(actionCreators.getCompanyListFailure(error));

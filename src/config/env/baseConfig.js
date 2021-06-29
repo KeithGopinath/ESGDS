@@ -12,11 +12,11 @@ export default {
     getKeyIssues: 'key_issues',
     getMasterTaxonomy: 'taxonomies',
     getRoles: 'role',
-    getRoleAssignment: 'users/assign-role',
     roleAssignmentEdit: 'users/assign-role',
     getRoleFileOnboarding: '/users/new-onboard/upload-emails-file',
     getRoleListOnboarding: '/users/new-onboard/send-mails',
     newClientTaxonomy: 'clientTaxonomies/create',
+    getFilterUsers: 'users/filter-user',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
