@@ -8,7 +8,6 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import ValidationTypeEdit from '../ValidationTypeEdit';
-import { ValidationJson } from './ValidationJsonStructure';
 
 const Validation = () => {
   const sideBarRef = useRef();
