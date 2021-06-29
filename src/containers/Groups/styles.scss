@@ -18,8 +18,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1.5rem;
-    margin-top: 2rem;
+  
+    margin-top: 3rem;
 }
 .group-dropdown-width-assign{
     min-width: 40%;
@@ -30,7 +30,7 @@
     top:-2.5px !important;
 }
 .status-assign{
-    min-height: 35rem;
+    min-height: 30rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,10 +41,13 @@
     align-items: center;
     margin-bottom: 1rem;
 }
+.ant-divider-horizontal{
+    margin: 10px 0 20px 0px !important;
+}
 .row-header{
     display: flex;
     align-items: center;
-    margin: 2rem 0rem 1rem 0rem;
+    margin: 2rem 0rem 0rem 0rem;
     font-size: 1rem;
     color: #04385a9e;
     font-weight: bold;
@@ -62,9 +65,7 @@
     margin-bottom: 8rem !important;
 
 }
-.ant-divider-horizontal{
-    margin-top:3rem !important;
-}
+
 .ant-tabs-tabpane {
     padding:1% !important;
 }
@@ -132,7 +133,7 @@
 }
 .add-member{
     .ant-table-content{
-        min-height: 25rem !important;
+        min-height: 27rem !important;
         
     }
     .ant-transfer-operation{
