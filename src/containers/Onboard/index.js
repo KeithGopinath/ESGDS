@@ -4,22 +4,19 @@ import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
-import { message } from 'antd';
 import './styles.scss';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';
+import Status from './Status';
 import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 const Onboard = (props) => {
-  // const selectedOption = props.location && props.location.state;
 
   // Queryparams for role
   const search = window.location.search;
   const params = new URLSearchParams(search);
-  const decode = params.get('role');
-  const info = window.atob(decode)
-  const role = JSON.parse(info)
+  const role = params.get('role');
 
   const dispatch = useDispatch();
 
@@ -122,10 +119,7 @@ const Onboard = (props) => {
       };
       const jsonString = JSON.stringify(employeeDetails);
       const onboardingData = btoa(jsonString);
-      console.log("employee: ", onboardingData);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
-      message.success('Your details saved successfully');
-
     } else if (role === 'client') {
       const clientDetails = {
         roleName: "Client Representative",
@@ -140,7 +134,6 @@ const Onboard = (props) => {
       const jsonString = JSON.stringify(clientDetails);
       const onboardingData = btoa(jsonString);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
-      message.success('Your details saved successfully');
     } else if (role === 'company') {
       const companyDetails = {
         roleName: "Company Representative",
@@ -155,7 +148,6 @@ const Onboard = (props) => {
       const jsonString = JSON.stringify(companyDetails);
       const onboardingData = btoa(jsonString);
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
-      message.success('Your details saved successfully');
     }
     // history.push('/users');
   };
@@ -209,6 +201,10 @@ const Onboard = (props) => {
           setActiveStep={setActiveStep}
           activeStep={activeStep}
           validatingSpaces={validatingSpaces}
+        />
+        <Status 
+          setActiveStep={setActiveStep}
+          activeStep={activeStep}
         />
       </StepWizard>
     </Container>

@@ -5,7 +5,7 @@ import { message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
-const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, activeStep }) => {
+const LoginCredentials = ({ onPassword, previousStep, nextStep, onSubmit, setActiveStep, activeStep }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginCredentialsAlert, setLoginCredentialsAlert] = useState('');
@@ -36,7 +36,8 @@ const LoginCredentials = ({ onPassword, previousStep, onSubmit, setActiveStep, a
         setValidPassword(true);
         setLoginCredentialsAlert('');
         onSubmit();
-
+        nextStep();
+        setActiveStep(activeStep + 1);
       } else {
         message.error('Should match confirm password');
         setValidPassword(false);

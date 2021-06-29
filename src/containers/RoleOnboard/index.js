@@ -24,7 +24,21 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
 
-  //getRoles API
+  const validMailStatus = useSelector((state) => state.RoleOnboarding.roleOnboarding);
+  const InvalidMailStatus = useSelector((state) => state.RoleOnboarding.error);
+
+// mail status alert
+  useEffect(() => {
+    if (validMailStatus) {
+      setOnboardAlert(validMailStatus.message);
+    } else if (InvalidMailStatus) {
+      setOnboardAlert(InvalidMailStatus.message);
+    }
+  }, [validMailStatus, InvalidMailStatus]);
+
+  // role onboarding status class
+  const mailStatusClass = validMailStatus || InvalidMailStatus ? "success" : "danger" ;
+
   useEffect(() => {
     if (showOnboardRoles) {
       dispatch({ type: 'GET_ROLES_REQUEST' });
@@ -39,9 +53,11 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     let data = e.target.id;
     setChooseOption(data);
     if (data === 'email') {
+      setOnboardAlert("");
       setEmailValid(false);
       setFileValid(true);
     } else if (data === 'excel') {
+      setOnboardAlert("");
       setEmailValid(true);
       setFileValid(false);
     }
@@ -53,17 +69,12 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     } else if (chooseOption === 'email') {
       const roleOnboardingData = { emailList: listOfData };
       dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
-      message.success("Onboarding links send successfully");
-      { handleClose() }
     } else if (chooseOption === 'excel') {
       if (!emailFileUpload) {
         setFileUploadValidation(true);
-        setOnboardAlert("Should upload excel file");
       } else {
         const roleOnboardingData = { emailFile };
         dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
-        message.success("Onboarding links send successfully");
-        { handleClose() }
       }
     }
   };
@@ -224,7 +235,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       title="Select role:"
       body={RoleBody()}
       alert={onboardAlert}
-      alertClass='danger'
+      alertClass={mailStatusClass}
       primary="Send"
       onSubmitPrimary={onSubmitOnboard}
     />
