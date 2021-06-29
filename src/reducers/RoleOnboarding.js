@@ -6,14 +6,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        RoleOnboard: false,
+        roleOnboard: false,
         error: false,
       };
     case 'ROLE_ONBOARDING_SUCCESS':
       return {
         ...state,
         isLoading: true,
-        roleOnboarding: action.roleOnboarding,
+        roleOnboarding: action.onboard,
       };
     case 'ROLE_ONBOARDING_FAILURE':
       return {
