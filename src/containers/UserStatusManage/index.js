@@ -5,18 +5,49 @@ import { Form, Col } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
 import { history } from '../../routes';
 
-
 const UserStatusManage = ({ show, handleClose, decision, userID }) => {
     const [comment, setComment] = useState('');
     const [alertMsg, setAlertMsg] = useState('');
     const [errorAlert, setErrorAlert] = useState('');
 
     const dispatch = useDispatch();
+    const userUpdate = useSelector((state) => state.userUpdate.userUpdate);
+    const userUpdateError = useSelector((state) => state.userUpdate.error);
+
+    useEffect(() => {
+        if (userUpdate) {
+            setAlertMsg(userUpdate.message);
+        }
+        else if (userUpdateError) {
+            setAlertMsg(userUpdateError.message)
+        }
+    }, [userUpdate, userUpdateError]);
+
+    useEffect(() => {
+        setAlertMsg('')
+        setErrorAlert('')
+    }, []);
 
     const closeButton = () => {
         handleClose();
         setErrorAlert('');
         setAlertMsg('');
+    }
+
+    const handleRedirect = () => {
+        if (decision == 'approve' || decision == 'reject') {
+            setTimeout(() => {
+                closeButton();
+                history.push({ pathname: '/users', state: decision });
+            }, 2000);
+        } else {
+            setTimeout(() => {
+                closeButton();
+                const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
+                dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+            }, 2000);
+
+        }
     }
 
     const onCommentChange = (e) => {
@@ -25,49 +56,29 @@ const UserStatusManage = ({ show, handleClose, decision, userID }) => {
 
     const onSubmit = () => {
         if (decision == 'approve') {
-            const payload = {
-                userId: userID,
-                isUserApproved: true,
-                comments: "",
-            }
-            console.log(payload);
-            // dispatch({ type: 'COMPANY_LIST_REQUEST' });
-            history.push({ pathname: '/users' });
+            const payload = { userId: userID, userDetails: { isUserApproved: true } }
+            dispatch({ type: 'USER_UPDATE_REQUEST', payload });
+            handleRedirect();
         }
         else if (decision == 'reject') {
-            if(!comment){
+            if (!comment) {
                 setAlertMsg('Please enter the comments')
-                setErrorAlert('error-alert')
+                setErrorAlert('border-danger')
             } else {
-            const payload = {
-                userId: userID,
-                isUserApproved: false,
-                comments: comment
+                const payload = { userId: userID, userDetails: { isUserApproved: false, comments: comment } }
+                dispatch({ type: 'USER_UPDATE_REQUEST', payload });
+                handleRedirect();
             }
-            console.log(payload);
-            // dispatch({ type: 'COMPANY_LIST_REQUEST' });
-            history.push({ pathname: '/users' });
-             }
         }
         else if (decision == 'active') {
-            const payload = {
-                userId: userID,
-                isUserApproved: true,
-                comments: '',
-                isUserActive: true
-            }
-            console.log(payload);
-            // dispatch({ type: 'COMPANY_LIST_REQUEST' });
+            const payload = { userId: userID, userDetails: { isUserActive: true } }
+            dispatch({ type: 'USER_UPDATE_REQUEST', payload });
+            handleRedirect();
         }
         else if (decision == 'archive') {
-            const payload = {
-                userId: userID,
-                isUserApproved: true,
-                comments: '',
-                isUserActive: false
-            }
-            console.log(payload);
-            // dispatch({ type: 'COMPANY_LIST_REQUEST' });
+            const payload = { userId: userID, userDetails: { isUserActive: false } }
+            dispatch({ type: 'USER_UPDATE_REQUEST', payload });
+            handleRedirect();
         }
     };
 
@@ -92,7 +103,7 @@ const UserStatusManage = ({ show, handleClose, decision, userID }) => {
         </div>
     )
 
-    const alertClassName = 'danger';
+    const alertClassName = userUpdate ? 'success' : 'danger';
 
     return (
         <Overlay
