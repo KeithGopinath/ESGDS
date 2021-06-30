@@ -38,7 +38,6 @@ const Routes = () => (
         <Route path="/user-view" component={UserView} />
         <Route path="/companies" component={Companies} />
         <Route exact path="/groups" component={Groups} />
-        <Route path="/groups/creategroup" component={CreateGroup} />
         <Route path="/manageusers" component={ManageUsers} />
         <Route path="/onboard" component={Onboard} />
         <Route path="/task" component={Task} />

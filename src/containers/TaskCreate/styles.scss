@@ -166,7 +166,7 @@
 
 .date-picker-outer {
     display: flex;
-    margin-top: 7%;
+    margin-bottom: 5%;
 }
 
 .date-picker-inner {
@@ -200,4 +200,9 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+}
+
+.ant-radio-wrapper{
+    font-size: 15px;
+    margin: 10px;
 }
