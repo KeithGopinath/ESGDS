@@ -118,7 +118,7 @@ const Onboard = (props) => {
         cancelledChequeUrl: cancelledCheque,
       };
       const jsonString = JSON.stringify(employeeDetails);
-      const onboardingData = btoa(jsonString);
+      const onboardingData ={onBoardingDetails:btoa(jsonString)};
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (role === 'client') {
       const clientDetails = {
@@ -132,7 +132,7 @@ const Onboard = (props) => {
         companyIdForClient: empID,
       };
       const jsonString = JSON.stringify(clientDetails);
-      const onboardingData = btoa(jsonString);
+      const onboardingData ={onBoardingDetails:btoa(jsonString)};
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (role === 'company') {
       const companyDetails = {
@@ -146,7 +146,7 @@ const Onboard = (props) => {
         companyIdForCompany: empID,
       };
       const jsonString = JSON.stringify(companyDetails);
-      const onboardingData = btoa(jsonString);
+      const onboardingData ={onBoardingDetails:btoa(jsonString)};
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     }
     // history.push('/users');
