@@ -172,7 +172,7 @@ const Validation = () => {
   // type1 options
   const typeOneOptions = [
     { label: 'Text', value: 'Text' },
-    { label: 'Booelan', value: 'Boolean' },
+    { label: 'Boolean', value: 'Boolean' },
     { label: 'Numerical', value: 'Numerical' }
   ]
 
