@@ -1,14 +1,16 @@
 /*eslint-disable*/
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import PersonalDetails from '../../containers/Onboard/PersonalDetails';
 
-const UserView = (props) => {
+const UserView = () => {
     const sideBarRef = useRef();
-    const userType = props.location.state.userType;
+    const userData = useSelector((state) => state.getUserById.userById);
+    const userType = userData && userData.user.userType;
     const role = userType == 'Client Representative' ? 'client' : userType == 'Employee' ? 'employee' : 'company';
-    const userID = props.location.state.id;
+    const userDetails = userData && userData.user;
 
     return (
         <React.Fragment>
@@ -17,25 +19,7 @@ const UserView = (props) => {
                 <div className="rightsidepane">
                     <Header title="User View" />
                     <div className="container-main">
-                        <PersonalDetails
-                            role={role}
-                            flag={true}
-                            userID={userID}
-                        // firstName={firstName}
-                        // onFirstName={onFirstNameChange}
-                        // onMiddleName={onMiddleNameChange}
-                        // onLastName={onLastNameChange}
-                        // onEmail={onEmailChange}
-                        // onPhone={onPhoneNumberChange}
-                        // onPancard={onPancardChange}
-                        // onAadhar={onAadharChange}
-                        // onBankAccount={onBankAccountNumberChange}
-                        // onBankIfsc={onBankIfscChange}
-                        // onCompanyName={onCompanyNameChange}
-                        // setActiveStep={setActiveStep}
-                        // activeStep={activeStep}
-                        // validatingSpaces={validatingSpaces}
-                        />
+                        {userData && <PersonalDetails role={role} flag={true} userDetails={userDetails} />}
                     </div>
                 </div>
             </div>

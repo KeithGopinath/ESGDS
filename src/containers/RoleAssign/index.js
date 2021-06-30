@@ -6,6 +6,7 @@ import Select from 'react-select';
 import Overlay from '../../components/Overlay';
 import { Menu, Dropdown, Button as AntButton } from 'antd';
 import 'antd/dist/antd.css';
+import { history } from '../../routes';
 
 const RoleAssignment = ({ show, setShow }) => {
   const [name, setName] = useState('');
@@ -44,7 +45,7 @@ const RoleAssignment = ({ show, setShow }) => {
       label: data.roleName
     }))
 
-  const nameOptions = userData && userData.data.map((data) => {
+  const nameOptions = userData && userData.data.filter(val => val.isUserActive == true).map((data) => {
     return (
       data.userDetails
     )
@@ -99,7 +100,10 @@ const RoleAssignment = ({ show, setShow }) => {
         }
       }
       dispatch({ type: 'ROLE_ASSIGNMENT_EDIT_REQUEST', payload });
-      setErrorAlert('');
+      setTimeout(() => {
+        handleClose();
+        history.push({ pathname: '/users', state: 'approve' });
+      }, 2000);
     }
   };
 
