@@ -17,6 +17,7 @@ export default {
     getRoleListOnboarding: '/users/new-onboard/send-mails',
     newClientTaxonomy: 'clientTaxonomies/create',
     getFilterUsers: 'users/filter-user',
+    userUpdate: 'users',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

@@ -24,7 +24,6 @@ const Groups = () => {
   const [assignment, setassignment] = useState(null);
   const [selectedBatch, setSelectedBatch] = useState('');
   const [selectedmember, setselectedmember] = useState('');
-  const [pillarAssignArr, setpillarAssignArr] = useState([]);
   const [grpNamedisplay, setgrpName]= useState(null);
   const [baseformat, setbaseformat] = useState([]);
   // create group states
@@ -120,12 +119,10 @@ const Groups = () => {
 
   // *** batch assignments starts ***
  
-
   const onChangebatchTransfer = (newTargetKeys) => {
     console.log(newTargetKeys, 'newTargetKeys')
     setTargetKeys(newTargetKeys);
   };
-
 
   const next = () => {
     const batcharr = [];
@@ -139,24 +136,24 @@ const Groups = () => {
         }
       }
       
-      const memberList = creategrplist.members.map((memberinfo) => {
-        const Mtemp = { name: memberinfo.userDetail.label, pillars : [
+  const memberList = creategrplist.members.map((memberinfo) => {
+    const Mtemp = { name: memberinfo.userDetail.label, pillars : [
             {
               type : 'primary',
               pillar: null,
             },
-            {
-              type : 'secondary',
-              pillar: null,
-            }
+            // {
+            //   type : 'secondary',
+            //   pillar: null,
+            // }
           ] 
         };
         return Mtemp;
       });
       
-      const BaseArr = batcharr.map((obj)=>{
+  const BaseArr = batcharr.map((obj)=>{
         
-        const base = {id: obj.batchId, batchName:obj.batchName ,years: obj.years, companies: obj.companies, taxonomyName:obj.taxonomy, pillarOptions:null, members : memberList };
+    const base = {id: obj.batchId, batchName:obj.batchName ,years: obj.years, companies: obj.companies, taxonomyName:obj.taxonomy, pillarOptions:null, members : memberList };
         return base;
       });
       BaseArr && BaseArr.map((e)=>{
@@ -167,10 +164,10 @@ const Groups = () => {
         }
       });
       console.log(final, 'final');
-      const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: final };
+  const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: final };
       setassignment(finalArr);
       
-      setpillarAssignArr(memberList);
+      
       setbaseformat(final);
       
       setCurrent(current + 1);
@@ -185,19 +182,20 @@ const Groups = () => {
  // batch assignments ends **** 
 
 // *** pillar assignments starts here ***
+
   const onclickDD = (batchName,memName) => {
     console.log(batchName,memName, 'batchName,memName');
    setselectedmember(memName);
    setSelectedBatch(batchName);
-}
+  }
 
   const onPrimaryRoleChange = (args) => {
     console.log(args, 'primary role');
     if(args){
       // console.log(Array.isArray(args), 'checking arg');
-        const pillarType = (Array.isArray(args) === true) ?'secondary':'primary';
+        // const pillarType = (Array.isArray(args) === true) ?'secondary':'primary';
         // const addarg = (Array.isArray(args) === true) ? {{ value: arg.},{}} :args;
-      console.log(pillarType, 'pillarType');
+  
       console.log(selectedBatch, 'selectedBatch onchange');
       console.log(selectedmember, 'selectedmember onchange');
       console.log(baseformat, 'onchange');
@@ -207,7 +205,7 @@ const Groups = () => {
             const z = e.members.map((d) => {
                 if(d.name === selectedmember){
                     const c = d.pillars.map((q) => {
-                        if(q.type === pillarType){
+                        if(q.type === 'primary'){
                             const o = { ...q, pillar: args };
                             return o;
                         }
@@ -266,38 +264,38 @@ const Groups = () => {
       console.log(getvalue[0], 'getvalue');
     return getvalue[0];
   }
-  const getvalSecdd = (memobj, name) =>{
-    const getvaluesec =[];
-    console.log(memobj, name, 'getvaldd')
-    for (const i of memobj) {
-      if(i.name === name){
-        for (const j of i.pillars) {
-          if(j.type === 'secondary'){
-            if(j.pillar !== null){
-              getvaluesec.push(j);
-            }
-          }
-        }
-      }
+  // const getvalSecdd = (memobj, name) =>{
+  //   const getvaluesec =[];
+  //   console.log(memobj, name, 'getvaldd')
+  //   for (const i of memobj) {
+  //     if(i.name === name){
+  //       for (const j of i.pillars) {
+  //         if(j.type === 'secondary'){
+  //           if(j.pillar !== null){
+  //             getvaluesec.push(j);
+  //           }
+  //         }
+  //       }
+  //     }
       
-    }
-    // setprimaryDDvalue(getvalue);
+  //   }
+  //   // setprimaryDDvalue(getvalue);
     
-      console.log(getvaluesec[0], 'getvalue');
+  //     console.log(getvaluesec[0], 'getvalue');
     
 
     
-    return getvaluesec;
-  }
+  //   return getvaluesec;
+  // }
   // iterating member row
   const memberRow = baseformat && baseformat.map((row,i)=>(
     
       
-      <TabPane tab={<span style={{ color: getValidate(row.members)? 'green':'red'}}  >{row.batchName}</span>} key={i} className="pillar-assign-box">
+      <TabPane tab={<span style={{ color: getValidate(row.members)? 'green':'#1890ff'}}  >{row.batchName}</span>} key={i} className="pillar-assign-box">
       <div className="row-header">
         <div style={{ width: '25%', display:'flex' }}>Members</div>
         <div style={{ width: '37%', marginRight: '1rem' }}>Primary pillar</div>
-        <div style={{ width: '37%' }}>Optional pillar</div>
+        {/* <div style={{ width: '37%' }}>Optional pillar</div> */}
       </div>
       <Divider  className="divide" ></Divider>
       {/* <Divider orientation="right"><Tag color='processing' style={{margin:'0px', fontSize:'1.5rem', padding:'7px 7px 7px 7px'}}>{row.batchName}</Tag></Divider> */}
@@ -314,7 +312,7 @@ const Groups = () => {
                 />
               </div>
               
-              <div style={{ width: '37%' }} onClick={()=>onclickDD(row.batchName,mem.name)}>
+              {/* <div style={{ width: '37%' }} onClick={()=>onclickDD(row.batchName,mem.name)}>
                 <Select
                   isMulti
                   onChange = {onPrimaryRoleChange}
@@ -325,7 +323,7 @@ const Groups = () => {
                   value = {(getvalSecdd(row.members, mem.name)) ? (getvalSecdd(row.members, mem.name).pillar) : '(optional)'  }
                   
                 />
-              </div>
+              </div> */}
           </div>
         ))}
          </TabPane>
@@ -385,12 +383,7 @@ const Groups = () => {
     setCurrent(current + 1);
   }
   }
-  // batch assiginment
-  // const groupwise = groups.map((g) => {
-  //   const detail = { value: g.grpID, label: g.grpName };
-  //   return detail;
-  // });
-
+ 
 
 // *** create group starts here ***
 const onChangeTransfer = (newTargetKeys) => {
@@ -533,7 +526,6 @@ const onChangeTransfer = (newTargetKeys) => {
               .filter((item) => !item.disabled)
               .map(({ key }) => key);
             const diffKeys = selected
-              // eslint-disable-next-line no-undef
               ? difference(treeSelectedKeys, listSelectedKeys)
               : difference(listSelectedKeys, treeSelectedKeys);
             onItemSelectAll(diffKeys, selected);
@@ -597,13 +589,13 @@ const onChangeTransfer = (newTargetKeys) => {
 
  const GroupCreation = () =>(
     <Container>
-      <Row>
+      {/* <Row >
         <Col lg={12}>
           <div className="group-detail">
             <div>Group Details</div>
           </div>
         </Col>
-      </Row>
+      </Row> */}
       <Row>
         <Col lg={6} sm={12}>
           <div className="group-content">Group name*</div>
@@ -647,14 +639,7 @@ const onChangeTransfer = (newTargetKeys) => {
 // batch assiginment
   const batchAssignments = () => (
     <div>
-      {/* <Divider orientation="left">batches</Divider> */}
-      {/* <div className="group-content">Select Group*</div>
-      <div className="group-dropdown-width-assign">
-        <Select
-          options={groupwise}
-          onChange={handleGroups}
-        />
-      </div> */}
+     
       <div className="group-content">Add batches to your groups</div>
       <div className="add-member">
         <TableTransferbatch
@@ -735,7 +720,7 @@ const onChangeTransfer = (newTargetKeys) => {
                     </Col>
                     <Col lg={9} sm={12} className="assignment-box">
                       <Row>
-                        <Col lg={12} sm={12}>
+                        <Col lg={12} sm={12} >
                           {current ===0 && GroupCreation()}
                           {current === 1 && batchAssignments()}
                           {current === 2 && pillarAssignments()}
@@ -743,7 +728,7 @@ const onChangeTransfer = (newTargetKeys) => {
 
                         </Col>
                         <Col lg={12}>
-                        <Divider className="divide"></Divider>
+                       
                           {/* { alert &&
                             <div style={{ display: 'flex', justifyContent: 'center', color: 'red', marginTop: '2rem' }}>
                               <div>{alert}</div>
