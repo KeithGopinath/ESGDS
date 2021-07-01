@@ -10,7 +10,6 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
   const [fileName, setFileName] = useState('');
   const [empID, setEmpID] = useState('');
   const [cancelledCheque, setCancelledCheque] = useState('');
-  const [proofUploadAlert, setProofUploadAlert] = useState('');
   const [fileSize, setFileSize] = useState({ authentication: '', idProof: '', cancelCheque: '' });
   const [authValidate, setAuthValidate] = useState(false);
   const [idProofValidate, setIdProofValidate] = useState(false);
@@ -27,11 +26,10 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
       }
       reader.readAsDataURL(file);
       setAuthValidate(false);
-      setProofUploadAlert('');
       setFileSize({ ...fileSize, authentication: file.size });
     } else {
       setAuthValidate(true);
-      setProofUploadAlert("File type should be .png/.jpg/.jpeg");
+      message.error("File type should be .png/.jpg/.jpeg");
     }
   }
 
@@ -45,12 +43,10 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
       }
       reader.readAsDataURL(file);
       setIdProofValidate(false);
-      setProofUploadAlert('');
       setFileSize({ ...fileSize, idProof: file.size });
     } else {
       setIdProofValidate(true);
       message.error('File type should be .png/.jpg/.jpeg');
-
     }
   };
 
@@ -64,7 +60,6 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
       }
       reader.readAsDataURL(file);
       setChequeValidate(false);
-      setProofUploadAlert('');
       setFileSize({ ...fileSize, cancelCheque: file.size });
     } else {
       setChequeValidate(true);
@@ -72,6 +67,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     }
   };
 
+  // save and continue
   const goToLoginCredentials = () => {
     if (role === 'client' || role === 'company') {
       if (!fileName || !empID) {
@@ -94,32 +90,31 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         nextStep();
         setAuthValidate(false);
         setIdProofValidate(false);
-        setProofUploadAlert('');
         setActiveStep(activeStep + 1);
       }
     } else if (role === 'employee') {
       if (!fileName || !empID || !cancelledCheque) {
-        setProofUploadAlert('Should upload all files');
+        message.error('Should upload all files');
         setAuthValidate(true);
         setIdProofValidate(true);
         setChequeValidate(true);
       } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728) && (cancelledCheque && fileSize.cancelCheque > 3145728)) {
-        setProofUploadAlert('File size should not be more than 3 MB');
+        message.error('File size should not be more than 3 MB');
         setAuthValidate(true);
         setIdProofValidate(true);
         setChequeValidate(true);
       } else if (fileName && fileSize.authentication > 3145728) {
-        setProofUploadAlert('File size should not be more than 3 MB');
+        message.error('File size should not be more than 3 MB');
         setAuthValidate(true);
         setIdProofValidate(false);
         setChequeValidate(false);
       } else if (empID && fileSize.idProof > 3145728) {
-        setProofUploadAlert('File size should not be more than 3 MB');
+        message.error('File size should not be more than 3 MB');
         setAuthValidate(false);
         setIdProofValidate(true);
         setChequeValidate(false);
       } else if (cancelledCheque && fileSize.cancelCheque > 3145728) {
-        setProofUploadAlert('File size should not be more than 3 MB');
+        message.error('File size should not be more than 3 MB');
         setAuthValidate(false);
         setIdProofValidate(false);
         setChequeValidate(true);
@@ -128,17 +123,18 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setChequeValidate(false);
         setAuthValidate(false);
         setIdProofValidate(false);
-        setProofUploadAlert('');
         setActiveStep(activeStep + 1);
       }
     }
   };
 
+  // back button
   const goToPersonalDetails = () => {
     previousStep();
     setActiveStep(activeStep - 1);
   };
 
+  // tool tip
   const renderTooltip = (props) => (
     <Tooltip className="proofUpload-tooltip" {...props}>
       <strong>File :</strong>
@@ -244,7 +240,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
           <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
           <div className="d-flex flex-row justify-content-end mt-1">
             <span><Button className="back mr-1" onClick={goToPersonalDetails}>Back</Button></span>
-            <span><Button className="save-continue" onClick={goToLoginCredentials}>Save & Continue</Button></span>
+            <span><Button className="save-continue" onClick={goToLoginCredentials}>'Save & Continue'</Button></span>
           </div>
         </Card>
       </Row>

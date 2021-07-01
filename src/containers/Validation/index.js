@@ -2,12 +2,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Card, Row, Col, Container, Form, Button, Table } from 'react-bootstrap';
 import Select from 'react-select';
+import { message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import ValidationTypeEdit from '../ValidationTypeEdit';
+import Overlay from '../../components/Overlay';
 
 const Validation = () => {
   const sideBarRef = useRef();
@@ -32,6 +33,7 @@ const Validation = () => {
   const [methodName, setMethodName] = useState('');
   const [parameters, setParameters] = useState('');
   const [validationRule, setValidationRule] = useState('');
+  const [validAlert, setValidAlert] = useState(false);
 
   const validateOptions = [
     {
@@ -134,7 +136,6 @@ const Validation = () => {
 
   const onChangeTaxonomy = (e) => {
     setTaxonomy(e);
-    console.log(" taxonomy : ", e);
     setDpCodeTypeOption(e.data.dpCodeTypeOptions);
     setDpCodeType('');
     setDpCode('');
@@ -148,25 +149,30 @@ const Validation = () => {
     setValidationType('');
   };
 
-  const onChangeDpCode = (e) => {
-    setDpCode(e);
+  const onChangeDpCode = (dpCode) => {
+    setDpCode(dpCode);
     setValidationType('');
   };
 
+  // Types
   const onChangeThresholdValue = (e) => {
+    setValidAlert(false);
     setMin(e.target.value);
   };
 
-  const onChangeThresholdValueMaximum = (e) => {
-    setMax(e.target.value);
+  const onChangeThresholdValueMaximum = (thresholdMaxValue) => {
+    setValidAlert(false);
+    setMax(thresholdMaxValue.target.value);
   };
 
-  const onChangeDescription = (e) => {
-    setDescription(e.target.value);
+  const onChangeDescription = (description) => {
+    setValidAlert(false);
+    setDescription(description.target.value);
   };
 
-  const onChangeTypeOfData = (e) => {
-    setTypeOfData(e);
+  const onChangeTypeOfData = (dataType) => {
+    setValidAlert(false);
+    setTypeOfData(dataType);
   };
 
   // type1 options
@@ -192,35 +198,71 @@ const Validation = () => {
   ];
 
   const onConditionCheck = (e) => {
+    setValidAlert(false);
     setConditionCheck(e.target.value);
   };
 
   const onChangeCriteria = (e) => {
+    setValidAlert(false);
     setCriteria(e.target.value);
   };
 
   const handleSelect = (e) => {
+    setValidAlert(false);
     setHasDependentCode(e.target.id);
   }
 
   const onChangeDependentCodes = (e) => {
+    setValidAlert(false);
     setDependentCodes(e);
   };
 
   const onChangeMethodName = (e) => {
+    setValidAlert(false);
     setMethodName(e.target.value);
   };
 
   const onChangeValidationRule = (e) => {
+    setValidAlert(false);
     setValidationRule(e.target.value);
   };
 
   const onChangeParameters = (e) => {
+    setValidAlert(false);
     setParameters(e);
   };
 
   // submit the data
   const onSubmitData = () => {
+    if ((selectedType === 'Type 1' && typeOfData) || (selectedType === 'Type 2' && min) || ((selectedType === 'Type 3' || selectedType === 'Type 4' || selectedType === 'Type 5' || selectedType === 'Type 6') && description) || (selectedType === 'Type 7' && max) || (selectedType === 'Type 8' && (hasDependentCode && conditionCheck && criteria && dependentCodes && methodName && parameters))) {
+      const dpCodeUpdate = dpCode.data.types.map(item => {
+        if (item.type === selectedType) {
+          item.status = true;
+          return item;
+        }
+        return item;
+      })
+      const updatedCode = {
+        ...dpCode,
+        types: dpCodeUpdate
+      }
+      setDpCode(updatedCode);
+      setDisableFileds(true);
+    } else {
+      message.error("Should choose/enter valid details");
+      setValidAlert(true);
+    }
+
+  };
+
+  const onTypeClick = (e, data) => {
+    setSelectedType(data.type);
+    setSelectedItem(data);
+    setValidationType(e.target.id);
+  };
+
+  const onNaClick = () => {
+    setValidAlert(false);
     const dpCodeUpdate = dpCode.data.types.map(item => {
       if (item.type === selectedType) {
         item.status = true;
@@ -234,16 +276,6 @@ const Validation = () => {
     }
     setDpCode(updatedCode);
     setDisableFileds(true);
-  };
-
-  const onTypeClick = (e, data) => {
-    setSelectedType(data.type);
-    setSelectedItem(data);
-    setValidationType(e.target.id);
-  };
-
-  const onNaClick = () => {
-    onSubmitData();
   };
 
   // edit type model
@@ -367,6 +399,7 @@ const Validation = () => {
                       <Form.Group>
                         <Form.Label>Data Type</Form.Label><sup className="text-danger">*</sup>
                         <Select
+                          className={typeOfData.length === 0 && validAlert && 'type-validation'}
                           options={typeOneOptions}
                           isDisabled={validationType && disableFileds && selectedItem.status}
                           name="datatype"
@@ -380,6 +413,7 @@ const Validation = () => {
                     <Form.Group>
                       <Form.Label>Threshold Value</Form.Label><sup className="text-danger">*</sup>
                       <Form.Control
+                        className={!min && validAlert && 'border-danger'}
                         disabled={validationType && disableFileds && selectedItem.status}
                         type="number"
                         name="thresholdValue"
@@ -395,6 +429,7 @@ const Validation = () => {
                       <Form.Group>
                         <Form.Label>Description<sup className="text-danger">*</sup></Form.Label>
                         <Form.Control
+                          className={!description && validAlert && 'border-danger'}
                           disabled={validationType && disableFileds && selectedItem.status}
                           as="textarea"
                           // name={validationType === 'Type 3' ? 'type3description' : validationType === 'Type 4' ? 'type4description' : validationType === 'Type 5' ? 'type5description' : validationType === 'Type 6' ? 'type6description' : ''}
@@ -409,6 +444,7 @@ const Validation = () => {
                       <Form.Group>
                         <Form.Label>Threshold Value(Max)<sup className="text-danger">*</sup></Form.Label>
                         <Form.Control
+                          className={!max && validAlert && 'border-danger'}
                           disabled={validationType && disableFileds && selectedItem.status}
                           type="number"
                           // name="thresholdValueMax"
@@ -451,6 +487,7 @@ const Validation = () => {
                             <Form.Group>
                               <Form.Label>Condition Check<sup className="text-danger">*</sup></Form.Label>
                               <Form.Control
+                                className={!conditionCheck && validAlert && 'border-danger'}
                                 disabled={validationType && disableFileds && selectedItem.status}
                                 type="text"
                                 name="checkCondition"
@@ -464,6 +501,7 @@ const Validation = () => {
                             <Form.Group>
                               <Form.Label>Criteria<sup className="text-danger">*</sup></Form.Label>
                               <Form.Control
+                                className={!criteria && validAlert && 'border-danger'}
                                 disabled={validationType && disableFileds && selectedItem.status}
                                 type="text"
                                 name="criteria"
@@ -477,6 +515,7 @@ const Validation = () => {
                             <Form.Group>
                               <Form.Label>Dependent Codes<sup className="text-danger">*</sup></Form.Label>
                               <Select
+                                className={dependentCodes.length === 0 && validAlert && 'type-validation'}
                                 options={dependentCodeOptions}
                                 isMulti
                                 isDisabled={validationType && disableFileds && selectedItem.status}
@@ -491,6 +530,7 @@ const Validation = () => {
                             <Form.Group>
                               <Form.Label>Method Name<sup className="text-danger">*</sup></Form.Label>
                               <Form.Control
+                                className={!methodName && validAlert && 'border-danger'}
                                 disabled={validationType && disableFileds && selectedItem.status}
                                 type="text"
                                 name="methodName"
@@ -505,6 +545,7 @@ const Validation = () => {
                               <Form.Label>Perameters<sup className="text-danger">*</sup></Form.Label>
                               <Select
                                 // options={parameterOptions}
+                                className={parameters.length === 0 && validAlert && 'type-validation'}
                                 options={dependentCodeOptions}
                                 isMulti
                                 isDisabled={validationType && disableFileds && selectedItem.status}
@@ -519,6 +560,7 @@ const Validation = () => {
                             <Form.Group>
                               <Form.Label>validation Rule<sup className="text-danger">*</sup></Form.Label>
                               <Form.Control
+                                className={!validationRule && validAlert && 'border-danger'}
                                 disabled={validationType && disableFileds && selectedItem.status}
                                 type="text"
                                 name="validationRule"
@@ -557,6 +599,33 @@ const Validation = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// validation type edit popup
+const ValidationTypeEdit = ({ show, handleClose, onEditSubmit, onSubmitSecondary, selectedType }) => {
+  const EditTypeBody = () => (
+    <div className="w-100 text-center">
+      <p>Do you want to edit <span className="font-weight-bold text-primary">{selectedType}?</span></p>
+    </div>);
+
+  return (
+    <Overlay
+      className="text-center"
+      show={show}
+      onHide={handleClose}
+      backdrop="static"
+      keyboard={false}
+      animation
+      centered
+      size="md"
+      title="Edit Type"
+      body={EditTypeBody()}
+      primary="Yes"
+      secondary="No"
+      onSubmitPrimary={onEditSubmit}
+      onSubmitSecondary={onSubmitSecondary}
+    />
   );
 };
 

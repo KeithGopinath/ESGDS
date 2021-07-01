@@ -105,7 +105,7 @@ const NotificationPanel = () => {
                 <Scrollbars thumbSize={500} style={scrollStyle}>
                     {notificationData.map((item, index) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 <CDropdownItem href="#">
                                     <div className="message">
                                         <div className="text-truncate font-weight-bold">
