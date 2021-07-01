@@ -12,17 +12,6 @@ export const ANALYST_DC_DATA = [
         status: 'Yet to start',
         isStandAloneOrMatrix: 'Standalone',
         keyIssue: 'Biodiversity impact',
-        comments: [
-          {
-            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
-          },
-          {
-            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
-          },
-          {
-            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
-          },
-        ],
         currentData: [
           {
             dpCode: 'BIOP002',
@@ -497,6 +486,112 @@ export const ANALYST_DC_DATA = [
           },
           {
             dpCode: 'BIOP009',
+            fiscalYear: '2016-2017',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2016-2017',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'No',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2016' },
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const ANALYST_DCR_DATA = [
+  {
+    taskId: '0001',
+    pillar: 'Environmental',
+    company: 'Manglore Refinery Petrochemicals Ltd',
+    fiscalYear: '2018-2019, 2019-2020',
+    status: 'Yet to start',
+    dpCodesData: [
+      {
+        dpCode: 'BIOP002',
+        fiscalYear: '2018-2019, 2019-2020',
+        status: 'Yet to start',
+        isStandAloneOrMatrix: 'Standalone',
+        keyIssue: 'Biodiversity impact',
+        comments: [
+          {
+            author: 'Quality Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Analyst', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+          {
+            author: 'Company Representative', content: 'Comment', fiscalYear: '2018-2019', dateTime: 'Thu Jun 24 2018',
+          },
+        ],
+        currentData: [
+          {
+            dpCode: 'BIOP002',
+            fiscalYear: '2018-2019',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2017-2018',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+            isErrorRaised: true,
+            error: {
+              raisedBy: 'QA',
+              errorType: 'T1. Incorrect data input/typo',
+              errorStatus: 'Incomplete',
+            },
+          },
+          {
+            dpCode: 'BIOP002',
+            fiscalYear: '2019-2020',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2017-2018',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+            isErrorRaised: true,
+            error: {
+              raisedBy: 'CompanyRep',
+              errorType: 'Data/information Missed',
+              refData: {
+                description: 'Does the company have a biodiversity restoration program ?',
+                dataType: 'text',
+                fiscalYear: '2019-2020',
+                textSnippet: 'Snippet 1',
+                pageNo: '46',
+                screenShot: null,
+                response: 'Yes',
+                source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+                url: '',
+                publicationDate: '',
+              },
+              errorStatus: 'Incomplete',
+            },
+          },
+        ],
+        historicalData: [
+          {
+            dpCode: 'BIOP002',
+            fiscalYear: '2017-2018',
+            status: 'Completed',
+            description: 'Does the company have a biodiversity restoration program ?',
+            dataType: 'text',
+            textSnippet: 'Biodiversity Snippet 2017-2018',
+            pageNo: '59',
+            screenShot: 'https://esgds.io/images/home/logo.png',
+            response: 'Yes',
+            source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+          },
+          {
+            dpCode: 'BIOP002',
             fiscalYear: '2016-2017',
             status: 'Completed',
             description: 'Does the company have a biodiversity restoration program ?',

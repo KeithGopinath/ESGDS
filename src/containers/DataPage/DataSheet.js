@@ -1,13 +1,15 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message, Radio } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
 import { history } from '../../routes';
 // import ErrorDataSheet from './ErrorDataSheet';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
+import ErrorPanel from './ErrorPanel';
 
 const FieldWrapper = (props) => {
   if (props.visible) {
@@ -28,10 +30,16 @@ const FieldWrapper = (props) => {
 };
 
 export const DataSheetComponent = (props) => {
+  // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
-  const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
-    currentRole === 'Analyst',
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
+  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+    currentRole === 'Analyst' && currentTab === 'Data Collection',
+    currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
@@ -65,6 +73,8 @@ export const DataSheetComponent = (props) => {
   const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
   const [formIsError, setFormIsError] = useState((defaultData.error && defaultData.error.isThere) || false);
 
+  const [isErrorAccepted, setIsErrorAccepted] = useState(null);
+  const [isErrorPanelVisible, setIsErrorPanelVisible] = useState(false);
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
@@ -82,6 +92,9 @@ export const DataSheetComponent = (props) => {
     } : {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
+
+
+    setIsErrorPanelVisible(false);
   }, [props.reqData]);
 
   console.log(formErrorRefData);
@@ -275,10 +288,13 @@ export const DataSheetComponent = (props) => {
     };
 
     let saveData;
-    if (isAnalyst) {
+    if (isAnalyst_DC) {
       saveData = { ...dummyData };
     }
-    if (isQA) {
+    if (isAnalyst_DCR) {
+      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
+    }
+    if (isQA_DV) {
       saveData = { ...dummyData, ...dummyDataQA };
     }
     props.onClickSave(saveData);
@@ -305,10 +321,10 @@ export const DataSheetComponent = (props) => {
       },
     };
     let saveData;
-    if (isAnalyst) {
+    if (isAnalyst_DC || isAnalyst_DCR) {
       saveData = { ...dummyData };
     }
-    if (isQA) {
+    if (isQA_DV) {
       saveData = { ...dummyData, ...dummyDataQA };
     }
     props.onClickSave(saveData);
@@ -316,24 +332,79 @@ export const DataSheetComponent = (props) => {
 
   const getIsDisableOrNot = () => {
     if (isHistoryType) {
-      if (isAnalyst) { return true; }
-      if (isQA) { return true; }
-      if (isCompanyRep) { return true; }
-      if (isClientRep) { return true; }
+      if (isAnalyst_DC) { return true; }
+      if (isAnalyst_DCR) { return true; }
+      if (isQA_DV) { return true; }
+      if (isCompanyRep_DR) { return true; }
+      if (isClientRep_DR) { return true; }
     }
-    if (isAnalyst) {
+    if (isAnalyst_DC) {
       if (defaultData.status === 'Completed') {
         return true;
       }
       return false;
     }
-    if (isQA) { return true; }
-    if (isCompanyRep) { return true; }
-    if (isClientRep) { return true; }
+    if (isAnalyst_DCR) {
+      if (defaultData.status === 'Completed') {
+        return true;
+      }
+
+      return false;
+    }
+    if (isQA_DV) { return true; }
+    if (isCompanyRep_DR) { return true; }
+    if (isClientRep_DR) { return true; }
     return false;
   };
 
   const disableField = getIsDisableOrNot();
+
+  const onCloseErrorPanel = () => {
+    setIsErrorPanelVisible(false);
+  };
+
+  const onAccept = () => {
+    const dummyData = {
+      dpCode: formDpCode,
+      fiscalYear: defaultData.fiscalYear,
+      status: 'unknown',
+      textSnippet: formTextSnippet,
+      pageNo: formPageNo,
+      screenShot: formScreenShotPath,
+      response: formResponse,
+      source: formSource,
+    };
+    let saveData;
+    if (isAnalyst_DCR) {
+      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Incomplete' } };
+    }
+    props.onClickSave(saveData);
+    setIsErrorAccepted(true);
+    setIsErrorPanelVisible(false);
+  };
+
+  const onReject = () => {
+    setIsErrorAccepted(false);
+  };
+
+  const onRejectSubmit = () => {
+    const dummyData = {
+      dpCode: formDpCode,
+      fiscalYear: defaultData.fiscalYear,
+      status: 'Completed',
+      textSnippet: formTextSnippet,
+      pageNo: formPageNo,
+      screenShot: formScreenShotPath,
+      response: formResponse,
+      source: formSource,
+    };
+    let saveData;
+    if (isAnalyst_DCR) {
+      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
+    }
+    props.onClickSave(saveData);
+    setIsErrorPanelVisible(false);
+  };
 
   return (
     <Row>
@@ -383,7 +454,7 @@ export const DataSheetComponent = (props) => {
       />
 
       {/* ADD SOURCE Button */}
-      {(isAnalyst || isQA) && !isHistoryType &&
+      {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType &&
       <Col lg={6}>
         <Button onClick={props.openSourcePanel}>Add Source</Button>
       </Col>}
@@ -483,7 +554,7 @@ export const DataSheetComponent = (props) => {
       {/* URL Field */}
       <FieldWrapper
         label="URL*"
-        visible={isHistoryType || isQA || isCompanyRep || isClientRep}
+        visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR}
         body={
           <Form.Control
             type="text"
@@ -499,7 +570,7 @@ export const DataSheetComponent = (props) => {
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label="PublicationDate*"
-        visible={isHistoryType || isQA || isCompanyRep || isClientRep}
+        visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR}
         body={
           <DatePicker
             className="datapage-datepicker"
@@ -547,7 +618,7 @@ export const DataSheetComponent = (props) => {
       />
 
       {/* IS ERORR Field */}
-      {(isCompanyRep || isClientRep || isQA) && !isHistoryType &&
+      {(isCompanyRep_DR || isClientRep_DR || isQA_DV) && !isHistoryType &&
       <React.Fragment>
         <FieldWrapper
           label="Error*"
@@ -570,7 +641,7 @@ export const DataSheetComponent = (props) => {
       {/* ERROR TYPE Field */}
       <FieldWrapper
         label="Error Type*"
-        visible={isQA && !isHistoryType && formIsError}
+        visible={isQA_DV && !isHistoryType && formIsError}
         body={
           <Select
             name="errorType"
@@ -586,7 +657,7 @@ export const DataSheetComponent = (props) => {
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
-        visible={isQA && !isHistoryType && formIsError}
+        visible={isQA_DV && !isHistoryType && formIsError}
         body={
           <Form.Control
             as="textarea"
@@ -610,7 +681,7 @@ export const DataSheetComponent = (props) => {
         openSourcePanel={props.openSourcePanel}
         onClickSave={props.onClickSave}
       /> */}
-      {(isCompanyRep || isClientRep) && !isHistoryType &&
+      {(isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
       <ErrorDataSheetTwo
         isError={formIsError}
         reqData={formErrorRefData}
@@ -622,14 +693,16 @@ export const DataSheetComponent = (props) => {
       />}
 
       <Col lg={12} className="datapage-button-wrap">
-        { (isAnalyst) && !isHistoryType && defaultData.status !== 'Completed' &&
+        { (isAnalyst_DC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        { (isAnalyst) && !isHistoryType && defaultData.status === 'Completed' &&
+        { (isAnalyst_DC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
+        { isAnalyst_DCR && !isHistoryType &&
+        <Button className="datapage-button" variant="success" onClick={() => setIsErrorPanelVisible(true)}>View Error</Button>}
         {/* FOR QA */}
-        {(isQA) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        {(isQA_DV) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        {(isQA) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+        {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
       </Col>
 
@@ -639,34 +712,40 @@ export const DataSheetComponent = (props) => {
       <Col lg={12} className="datapage-button-wrap">
 
         {/* BACK Button */}
-        { (isAnalyst || isQA || isCompanyRep || isClientRep) && !isHistoryType &&
+        { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
         <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
 
         {/* EDIT Button */}
-        { (!isQA && !isHistoryType && !isAnalyst && !isCompanyRep && !isClientRep) &&
+        { (!isQA_DV && !isHistoryType && !isAnalyst_DC && !isAnalyst_DCR && !isCompanyRep_DR && !isClientRep_DR) &&
         <Button className="datapage-button" variant="primary" onClick={editClickHandler}>Edit</Button>}
 
         {/* PREVIOUS Button */}
-        { (isAnalyst || isQA || isCompanyRep || isClientRep) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
+        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
         <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
 
         {/* SAVE&NEXT Button */}
-        { (isAnalyst || isQA || isCompanyRep || isClientRep) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
+        { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
         <Button className="datapage-button" variant="success" onClick={saveAndNextClickHandler}>Save And Next</Button>}
 
         {/* SAVE&CLOSE Button */}
-        { (isAnalyst || isQA || isCompanyRep || isClientRep) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex) &&
+        { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex) &&
         <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
 
         {/* HISTORY UNFREEZE Button */}
-        { (isAnalyst || isQA) && isHistoryType &&
+        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType &&
         <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
 
         {/* HISTORY SAVE Button */}
-        { (isAnalyst || isQA) && isHistoryType &&
+        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
 
+
       </Col>
+
+      <Modal title="Error Panel" width="70%" visible={isErrorPanelVisible} footer={null} onCancel={onCloseErrorPanel}>
+        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} onClickAccept={onAccept} onClickReject={onReject} />
+        {isErrorAccepted === false && <div style={{ display: 'flex', justifyContent: 'center' }}><Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} className="datapage-button" variant="success" onClick={onRejectSubmit}>Save</Button></div>}
+      </Modal>
 
     </Row>
   );

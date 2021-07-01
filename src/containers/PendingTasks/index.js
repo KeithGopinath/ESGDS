@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-import { ANALYST_DC_DATA, COMPANY_REP_DATA, QA_DV_DATA } from '../DataPage/apiData';
+
+import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 
 
 const PendingTaskTable = (props) => {
@@ -73,10 +74,10 @@ const PendingTasks = () => {
   ];
 
   const getReqTabs = () => {
-    if (isAnalyst) { return [{ label: 'Data Collection', data: ANALYST_DC_DATA }, { label: 'Data Correction', data: QA_DV_DATA }]; }
-    if (isQA) { return [{ label: 'Data Verification', data: QA_DV_DATA }]; }
-    if (isCompanyRep) { return [{ label: 'Data Review', data: COMPANY_REP_DATA }]; }
-    if (isClientRep) { return [{ label: 'Data Review', data: COMPANY_REP_DATA }]; }
+    if (isAnalyst) { return [{ label: 'Data Collection', data: PENDING_TASK.ANALYST_DC }, { label: 'Data Correction', data: PENDING_TASK.ANALYST_DCR }]; }
+    if (isQA) { return [{ label: 'Data Verification', data: PENDING_TASK.QA_DV }]; }
+    if (isCompanyRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
+    if (isClientRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
     return [];
   };
 
