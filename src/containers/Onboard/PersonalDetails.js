@@ -9,7 +9,7 @@ import UserStatusManage from '../../containers/UserStatusManage';
 
 const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone,
   onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep,
-  activeStep, validatingSpaces, flag, userDetails }) => {
+  activeStep, validatingSpaces, flag, userDetails, getMailId }) => {
 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,7 +22,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [bankAccountNumber, setBankAccountNumber] = useState('');
   const [bankIFSCCode, setBankIFSCCode] = useState('');
   const [validate, setValidate] = useState(false);
-  const [personalDetailsAlert, setPersonalDetailsAlert] = useState('');
   const [show, setShow] = useState(false);
   const [decision, setDecision] = useState('');
 
@@ -30,19 +29,19 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setFirstName(userDetails.firstName ? userDetails.firstName : userDetails.name);
-    setMiddleName(userDetails.middleName);
-    setLastName(userDetails.lastName);
-    setEmail(userDetails.email);
-    setPhoneNumber(userDetails.phoneNumber);
-    setPancardNumber(userDetails.panNumber);
-    setAdharCard(userDetails.aadhaarNumber);
-    setBankAccountNumber(userDetails.bankAccountNumber);
-    setBankIFSCCode(userDetails.bankIFSCCode)
+    setFirstName(userDetails && userDetails.firstName ? userDetails.firstName : userDetails && userDetails.name);
+    setMiddleName(userDetails && userDetails.middleName);
+    setLastName(userDetails && userDetails.lastName);
+    setEmail(userDetails && userDetails.email);
+    setPhoneNumber(userDetails && userDetails.phoneNumber);
+    setPancardNumber(userDetails && userDetails.panNumber);
+    setAdharCard(userDetails && userDetails.aadhaarNumber);
+    setBankAccountNumber(userDetails && userDetails.bankAccountNumber);
+    setBankIFSCCode(userDetails && userDetails.bankIFSCCode)
   }, [userDetails]);
 
   useEffect(() => {
-    if (!flag && role === 'company') {
+    if (!flag && role === 'company' || role === 'client') {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
   }, []);
@@ -76,13 +75,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
-  const onEmailChange = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
-      setEmail(e.target.value);
-      onEmail(e.target.value);
-    }
-  };
-
   const onPhoneChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
       setPhoneNumber(e.target.value);
@@ -104,15 +96,17 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
-  const onCompanyNameChange = (e) => {
-    setCompanyName(e.target.value);
-    onCompanyName(e.target.value);
-  };
-
   const onCompanyNameSelect = (companySelect) => {
     setCompanyName(companySelect);
     onCompanyName(companySelect);
+    console.log("client selected value: ", companySelect);
+
   };
+
+  const onCompanyClientSelect = (companySelect) => {
+    setCompanyName(companySelect);
+    onCompanyName(companySelect.value);
+  }
 
   const onAccountNumberChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
@@ -128,52 +122,30 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
-  // const companyList = [
-  //   { value: 'Reliance', label: 'Reliance' },
-  //   { value: 'Indian Oils', label: 'Indian Oils' },
-  //   { value: 'Hindustan', label: 'Hindustan' },
-  //   { value: 'Bharat', label: 'Bharat' }
-  // ];
-
+  // save & continue button
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);
     const re = /^[6-9]{1}[0-9]{9}$/;
     if (role === 'client' || role === 'company') {
-      if (!email && !phoneNumber && valid === false) {
+      if (!phoneNumber && valid === false) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (!firstName) {
         message.error('Please enter your name');
         setValidate('border-danger');
-      } else if (!email) {
-        message.error('Please enter email id');
-        setValidate('border-danger');
       } else if (!phoneNumber) {
         message.error('Please enter phone number');
         setValidate('border-danger');
-        //         if (re.test(phoneNumber)) {
-        // setPersonalDetailsAlert('Please enter valid phone number');
-        //         setValidate('border-danger');
-        //         }
       } else if (!companyName) {
-        if (role === 'client') {
-          message.error('Please enter company name');
-          setValidate('border-danger');
-        } else {
-          setValidate(true);
-          message.error('Please choose company name');
-        }
-      } else if (valid == false) {
-        setValidate('border-danger');
-        message.error('Please enter valid email');
-      } else if (!firstName || !email || !phoneNumber || !companyName) {
+        setValidate(true);
+        message.error('Please choose company name');
+      } else if (!firstName || !phoneNumber || !companyName) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
       }
-      if ((firstName.length && email.length && phoneNumber.length && companyName.length) > 0) {
+      if ((firstName.length && phoneNumber.length && (companyName.length || companyName.value.length)) > 0) {
         nextStep();
         setActiveStep(activeStep + 1);
-        setPersonalDetailsAlert('');
       }
     }
     else if (role === 'employee') {
@@ -189,7 +161,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       } else {
         nextStep();
         setValidate('');
-        setPersonalDetailsAlert('');
         setActiveStep(activeStep + 1);
       }
     }
@@ -205,9 +176,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   }
 
   // Images in different types
-  const imageOne = userDetails.documents.authenticationLetterForClientUrl || userDetails.documents.aadhaarUrl || userDetails.documents.authenticationLetterForCompanyUrl;
-  const imageTwo = userDetails.documents.companyIdForClient || userDetails.documents.companyIdForCompany || userDetails.documents.cancelledChequeUr;
-  const imageThree = userDetails.documents.pancardUrl;
+  const imageOne = userDetails && userDetails.documents.authenticationLetterForClientUrl || userDetails && userDetails.documents.aadhaarUrl || userDetails && userDetails.documents.authenticationLetterForCompanyUrl;
+  const imageTwo = userDetails && userDetails.documents.companyIdForClient || userDetails && userDetails.documents.companyIdForCompany || userDetails && userDetails.documents.cancelledChequeUr;
+  const imageThree = userDetails && userDetails.documents.pancardUrl;
 
   return (
     <Container>
@@ -270,14 +241,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Form.Group>
                 <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
                 <Form.Control
-                  className={(email === '' || !flag && validatingSpaces(email) === false) && validate}
+                  className={(email === '' || !flag && validatingSpaces(email) === false)}
                   type="text"
                   name="email"
                   id="email"
-                  value={email}
-                  placeholder="This will be your user ID"
-                  onChange={onEmailChange}
-                  disabled={flag}
+                  // value={email}
+                  value={flag ? email : getMailId}
+                  // onChange={onEmailChange}
+                  disabled={flag || true}
                 />
               </Form.Group>
             </Col>
@@ -296,33 +267,17 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 />
               </Form.Group>
             </Col>
-            {role === 'client' &&
-              <Col lg={6} sm={6} md={6}>
-                <Form.Group>
-                  <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                  <Form.Control
-                    className={!companyName && validate}
-                    type="text"
-                    name="companyName"
-                    id="companyName"
-                    value={companyName}
-                    placeholder="Enter your company name"
-                    onChange={onCompanyNameChange}
-                    disabled={flag}
-                  />
-                </Form.Group>
-              </Col>}
-            {role === 'company' &&
+            {(role === 'company' || role === 'client') &&
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
                   <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
                   <div className={companyName.length === 0 && validate && 'dropdown-alert'}>
                     <Select
-                      isMulti
+                      isMulti={role === 'company' ? true : false}
                       options={companyList}
                       name="companyName"
                       value={companyName}
-                      onChange={onCompanyNameSelect}
+                      onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
                       isDisabled={flag}
                     />
                   </div>
@@ -502,7 +457,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
           }
         </Card>
       </Row>
-      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails._id} />
+      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails && userDetails._id} />
     </Container>
   );
 };

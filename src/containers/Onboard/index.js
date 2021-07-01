@@ -1,8 +1,7 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import StepWizard from 'react-step-wizard';
-import { history } from './../../routes';
 import { Container } from 'react-bootstrap';
 import './styles.scss';
 import PersonalDetails from './PersonalDetails';
@@ -17,13 +16,19 @@ const Onboard = (props) => {
   const search = window.location.search;
   const params = new URLSearchParams(search);
   const role = params.get('role');
+  // const getmailId = params.get('email');
+  const getmailId = 'rajeshny@gmail.com';
+  // user rejects
+  // const userId = params.get('id');
+  // setUserDataId(userId); 60b751e851ac91bbf2ec9423
+  const userId = '';
+
+  const userIdValidation = userId ? true : false;
 
   const dispatch = useDispatch();
-
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [pancardNumber, setPancardNumber] = useState('');
   const [adharCard, setAdharCard] = useState('');
@@ -46,10 +51,6 @@ const Onboard = (props) => {
 
   const onLastNameChange = (lastName) => {
     setLastName(lastName);
-  };
-
-  const onEmailChange = (email) => {
-    setEmail(email);
   };
 
   const onPhoneNumberChange = (phone) => {
@@ -105,7 +106,7 @@ const Onboard = (props) => {
         firstName,
         middleName,
         lastName,
-        email,
+        email: getmailId,
         phoneNumber,
         panNumber: pancardNumber,
         aadhaarNumber: adharCard,
@@ -118,13 +119,13 @@ const Onboard = (props) => {
         cancelledChequeUrl: cancelledCheque,
       };
       const jsonString = JSON.stringify(employeeDetails);
-      const onboardingData ={onBoardingDetails:btoa(jsonString)};
+      const onboardingData = { onBoardingDetails: btoa(jsonString) };
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (role === 'client') {
       const clientDetails = {
         roleName: "Client Representative",
         name: firstName,
-        email,
+        email: getmailId,
         phoneNumber,
         companyName,
         password,
@@ -132,13 +133,13 @@ const Onboard = (props) => {
         companyIdForClient: empID,
       };
       const jsonString = JSON.stringify(clientDetails);
-      const onboardingData ={onBoardingDetails:btoa(jsonString)};
+      const onboardingData = { onBoardingDetails: btoa(jsonString) };
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     } else if (role === 'company') {
       const companyDetails = {
         roleName: "Company Representative",
         name: firstName,
-        email,
+        email: getmailId,
         phoneNumber,
         companiesList: companyName,
         password,
@@ -146,10 +147,9 @@ const Onboard = (props) => {
         companyIdForCompany: empID,
       };
       const jsonString = JSON.stringify(companyDetails);
-      const onboardingData ={onBoardingDetails:btoa(jsonString)};
+      const onboardingData = { onBoardingDetails: btoa(jsonString) };
       dispatch({ type: 'ONBOARD_REQUEST', onboardingData });
     }
-    // history.push('/users');
   };
 
   // stepper 
@@ -175,7 +175,9 @@ const Onboard = (props) => {
           onFirstName={onFirstNameChange}
           onMiddleName={onMiddleNameChange}
           onLastName={onLastNameChange}
-          onEmail={onEmailChange}
+          userIdValidation={userIdValidation}
+          getMailId={getmailId}
+          userID={userId}
           onPhone={onPhoneNumberChange}
           onPancard={onPancardChange}
           onAadhar={onAadharChange}
@@ -188,11 +190,13 @@ const Onboard = (props) => {
         />
         <ProofUpload
           role={role}
+          userID={userId}
           onCompany={onChangeCompanyRep}
           onEmployeeId={onChangeEmployeeId}
           onCancelledCheque={onChangeCancelledCheque}
           setActiveStep={setActiveStep}
           activeStep={activeStep}
+          onSubmit={onFormSubmit}
         />
         <LoginCredentials
           role={role}
@@ -202,7 +206,7 @@ const Onboard = (props) => {
           activeStep={activeStep}
           validatingSpaces={validatingSpaces}
         />
-        <Status 
+        <Status
           setActiveStep={setActiveStep}
           activeStep={activeStep}
         />
