@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Col, Row, Container, Card, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
-import { DatePicker, Checkbox } from 'antd';
+import { DatePicker, Radio } from 'antd';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from 'react-select';
@@ -72,7 +72,13 @@ const TaskCreate = () => {
       setRowDetails([]);
     }
   };
-  const pillarOptions = ['Environment', 'Social', 'Governance'];
+  const pillarOptions = [
+    { value: "sfg4", label: "Environment" },
+    { value: "sg3d", label: "social" },
+    { value: "v4", label: "governance" },
+    { value: "sfgs4", label: "xsdfad" },
+    { value: "sfdfg4", label: "yasdvadv" },
+  ];
   const selectRowProp = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -321,9 +327,13 @@ const TaskCreate = () => {
     });
   };
   const handleChangePillar = (checkedValues) => {
-    setPillar(checkedValues);
+    setPillar(checkedValues.target.value);
     console.log(pillar, 'pillar');
   };
+  const pillaRadio = pillarOptions.map((e)=>(
+    <Radio value={e.value}>{e.label}</Radio>
+    
+  ));
   const grpDetail = groupDetails.map((element) => (
     <Col lg={3} md={6} sm={12}>
       <Card className="card-view groupbox" key={element.groupID} onClick={() => onselectGroup(element.groupID)} >
@@ -380,17 +390,7 @@ const TaskCreate = () => {
       </Row>
       <Row className="row-pad task-row">
         <Col lg={6} sm={12}>
-          <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
-            <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-            <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
-          </BootstrapTable>
-        </Col>
-        <Col lg={6} sm={12}>
-          <div className="radio-select">
-            <div className="task-role">Assigned To</div>
-            <Checkbox.Group options={pillarOptions} onChange={handleChangePillar} />
-          </div>
-          <div className="date-picker-outer">
+        <div className="date-picker-outer">
             <div className="date-picker-inner">
               <div className="task-role">Assigned Analyst</div>
               <div>
@@ -437,6 +437,19 @@ const TaskCreate = () => {
               </div>
             </div>
           </div>
+          <div className="radio-select">
+            <div className="task-role">Assigned To</div>
+            <Radio.Group  onChange={handleChangePillar}  value={pillar}>
+                {pillaRadio}
+            </Radio.Group>
+          </div>
+          
+        </Col>
+        <Col lg={6} sm={12}>
+          <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+            <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+            <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
+          </BootstrapTable>
         </Col>
       </Row>
       <Row style={{ padding: '5%' }} className="task-row">

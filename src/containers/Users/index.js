@@ -135,7 +135,7 @@ const personalDetailsUpdateTableData = (props) => {
 
 
 
-const Users = () => {
+const Users = (props) => {
   const sideBarRef = useRef();
   const [show, setShow] = useState(false);
   const [tabFlag, setTabFlag] = useState();
@@ -147,8 +147,16 @@ const Users = () => {
   const filteredUsers = userData && userData.data;
 
   useEffect(() => {
-    tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
-    setTabFlag('Pending Users')
+    if (props.location.state == 'approve') {
+      tabsRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
+      setTabFlag('Approved Users')
+    } else if (props.location.state == 'reject') {
+      tabsRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
+      setTabFlag('Rejected Users')
+    } else {
+      tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
+      setTabFlag('Pending Users')
+    }
   }, []);
 
   useEffect(() => {
@@ -157,6 +165,9 @@ const Users = () => {
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else if (tabFlag == 'Approved Users') {
       const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+    } else if (tabFlag == 'Rejected Users') {
+      const payload = { filters: [{ filterWith: "isUserRejected", value: true }] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     }
   }, [tabFlag]);
@@ -167,7 +178,7 @@ const Users = () => {
       email: data.email,
       type: data.userType,
       registeredDate: new Date(data.createdAt).toDateString(),
-      viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value, data.userType) }} />
+      viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value) }} />
     }));
     return {
       rowsData: tableRowData(props),
@@ -210,13 +221,13 @@ const Users = () => {
     const tableRowData = (data) => data.map((data) => ({
       name: data.userDetails.label,
       email: data.email,
-      primaryRole: data.roleDetails.primaryRole.label,
+      primaryRole: data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA",
       registeredDate: new Date(data.createdAt).toDateString(),
       roleAssigned: data.isRoleAssigned ? 'Assigned' : 'Unassigned',
       groupAssigned: data.isAssignedToGroup ? 'Assigned' : 'Unassigned',
-      status: <Button onClick={() => { handleShow(data.userDetails.value, data.status) }}
-        className={data.status ? 'user-status-active-button' : 'user-status-inactive-button'}>
-        {data.status ? 'Active User' : 'Inactive User'}</Button>
+      status: <Button onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }}
+        className={data.isUserActive ? 'user-status-active-button' : 'user-status-inactive-button'}>
+        {data.isUserActive ? 'Active User' : 'Inactive User'}</Button>
     }));
     return {
       rowsData: tableRowData(props),
@@ -269,10 +280,10 @@ const Users = () => {
 
   const rejectedUsersTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
-      name: data.name,
+      name: data.userDetails.label,
       email: data.email,
-      type: data.type,
-      registeredDate: new Date(data.registeredDate).toDateString(),
+      type: data.userType,
+      registeredDate: new Date(data.createdAt).toDateString(),
     }));
     return {
       rowsData: tableRowData(props),
@@ -305,19 +316,9 @@ const Users = () => {
     };
   };
 
-  const rejectedUsersData = [
-    {
-      name: 'Balaji',
-      email: 'blaji@gmail.com',
-      type: 'Employee',
-      registeredDate: '5-13-2020'
-    }
-  ]
-
-
-  const onViewUser = (id, userType) => {
-    const userDetails = { id, userType }
-    history.push({ pathname: '/user-view', state: userDetails });
+  const onViewUser = (userId) => {
+    dispatch({ type: 'USER_BY_ID_REQUEST', userId });
+    history.push({ pathname: '/user-view' });
   }
 
   const tabLabelSets = [
@@ -349,7 +350,7 @@ const Users = () => {
     setShow(false)
   }
 
-  const tableData = userData ? (tabFlag == "Pending Users" ? pendingUsersTableData(filteredUsers) : tabFlag == "Approved Users" ? approvedUsersTableData(filteredUsers) : tabFlag == "Rejected Users" ? rejectedUsersTableData(rejectedUsersData) : personalDetailsUpdateTableData(PERSONAL_DETAILS_UPDATE_DATA)) : pendingUsersTableData([])
+  const tableData = userData ? (tabFlag == "Pending Users" ? pendingUsersTableData(filteredUsers) : tabFlag == "Approved Users" ? approvedUsersTableData(filteredUsers) : tabFlag == "Rejected Users" ? rejectedUsersTableData(filteredUsers) : personalDetailsUpdateTableData(PERSONAL_DETAILS_UPDATE_DATA)) : pendingUsersTableData([])
 
   return (
     <div className="main">

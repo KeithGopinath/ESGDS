@@ -57,7 +57,7 @@ const ValidationSubMenu = [
 
 const GroupsSubMenu = [
   {
-    id: 0, label: 'Create Group', icon: faFolderPlus, address: 'groups/creategroup'
+    id: 0, label: 'Create Group', icon: faFolderPlus, address: 'creategroup'
   },
   {
     id: 1, label: 'Assignment', icon: faList, address: 'groups'

@@ -2,20 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'ROLE_ONBOARDING_REQUEST':
+    case 'USER_BY_ID_REQUEST':
       return {
         ...state,
         isLoading: true,
-        roleOnboard: false,
         error: false,
+        userById: false,
       };
-    case 'ROLE_ONBOARDING_SUCCESS':
+    case 'USER_BY_ID_SUCCESS':
       return {
         ...state,
         isLoading: true,
-        roleOnboarding: action.onboard,
+        userById: action.userById,
       };
-    case 'ROLE_ONBOARDING_FAILURE':
+    case 'USER_BY_ID_FAILURE':
       return {
         ...state,
         isLoading: true,
