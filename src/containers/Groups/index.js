@@ -695,7 +695,7 @@ const onChangeTransfer = (newTargetKeys) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Create Group" />
+        <Header title="Group Assignment" />
         <div className="container-main">
           <Row>
             <Col lg={12}>

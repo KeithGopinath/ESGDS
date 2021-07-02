@@ -638,7 +638,7 @@ const GroupView = () => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title="Batch" />
+        <Header sideBarRef={sideBarRef} title="Group List" />
         <div className="container-main">
           <Container className="wrapper">
             <div className="head-tab">
