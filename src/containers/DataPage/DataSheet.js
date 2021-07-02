@@ -1,15 +1,18 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, notification } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
 import { history } from '../../routes';
 // import ErrorDataSheet from './ErrorDataSheet';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
 import ErrorPanel from './ErrorPanel';
+
+let temporaryData;
 
 const FieldWrapper = (props) => {
   if (props.visible) {
@@ -37,9 +40,10 @@ export const DataSheetComponent = (props) => {
   const currentTab = sessionStorage.tab;
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
-  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
+    currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
@@ -168,6 +172,11 @@ export const DataSheetComponent = (props) => {
     return false;
   };
 
+
+  const onClickViewError = () => {
+    setIsErrorPanelVisible(true);
+  };
+
   // BUTTON HANDLERS
 
   const saveClickHandler = () => {
@@ -236,7 +245,41 @@ export const DataSheetComponent = (props) => {
         state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
       });
     } else {
-      message.error(`Current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) isn't saved! !`);
+      if (isAnalyst_DC) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isAnalyst_DCR) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isAnalyst_CC) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is accepted and rejected.`,
+        });
+      }
+      if (isQA_DV) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isClientRep_DR || isCompanyRep_DR) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
     }
   };
 
@@ -263,7 +306,41 @@ export const DataSheetComponent = (props) => {
         state: { taskId: reqTask.taskId },
       });
     } else {
-      message.error(`Current data for ${props.dummyDataCheck().map((e) => `[${e}] `)} fiscal year(s) isn't saved! !`);
+      if (isAnalyst_DC) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isAnalyst_DCR) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is accepted and rejected.`,
+        });
+      }
+      if (isAnalyst_CC) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isQA_DV) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
+      if (isClientRep_DR || isCompanyRep_DR) {
+        notification.error({
+          message: 'Error',
+          description:
+            `Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`,
+        });
+      }
     }
   };
 
@@ -328,6 +405,7 @@ export const DataSheetComponent = (props) => {
       saveData = { ...dummyData, ...dummyDataQA };
     }
     props.onClickSave(saveData);
+    message.success('Saved Successfully');
   };
 
   const getIsDisableOrNot = () => {
@@ -360,7 +438,32 @@ export const DataSheetComponent = (props) => {
   const disableField = getIsDisableOrNot();
 
   const onCloseErrorPanel = () => {
+    temporaryData = defaultData;
+    console.log('sdfsadsfdfdsfdsafsdf', temporaryData, defaultData);
     setIsErrorPanelVisible(false);
+  };
+
+  const openNotificationWithIcon = (type, subType) => {
+    if (subType === 'accepted') {
+      notification[type]({
+        message: 'Error Accepted Successfully',
+        description:
+          'Please make required changes and, Click "Save" button to update changes!',
+      });
+    }
+    if (subType === 'revert') {
+      notification[type]({
+        message: 'Reverted Successfully',
+        description:
+          'Please click "View Error" button to Accept or Reject the error, again!',
+      });
+    }
+    if (subType === 'rejected') {
+      notification[type]({
+        message: 'Error Rejected Successfully',
+        description: 'And your response has been recorded! ',
+      });
+    }
   };
 
   const onAccept = () => {
@@ -380,11 +483,19 @@ export const DataSheetComponent = (props) => {
     }
     props.onClickSave(saveData);
     setIsErrorAccepted(true);
-    setIsErrorPanelVisible(false);
+    onCloseErrorPanel();
+    openNotificationWithIcon('success', 'accepted');
   };
 
   const onReject = () => {
     setIsErrorAccepted(false);
+  };
+
+  const onRevert = () => {
+    console.log(temporaryData);
+    props.onClickSave(temporaryData);
+    setIsErrorAccepted(null);
+    openNotificationWithIcon('info', 'revert');
   };
 
   const onRejectSubmit = () => {
@@ -403,7 +514,8 @@ export const DataSheetComponent = (props) => {
       saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
     }
     props.onClickSave(saveData);
-    setIsErrorPanelVisible(false);
+    onCloseErrorPanel();
+    openNotificationWithIcon('success', 'rejected');
   };
 
   return (
@@ -454,7 +566,7 @@ export const DataSheetComponent = (props) => {
       />
 
       {/* ADD SOURCE Button */}
-      {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType &&
+      {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField &&
       <Col lg={6}>
         <Button onClick={props.openSourcePanel}>Add Source</Button>
       </Col>}
@@ -698,7 +810,7 @@ export const DataSheetComponent = (props) => {
         { (isAnalyst_DC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
         { isAnalyst_DCR && !isHistoryType &&
-        <Button className="datapage-button" variant="success" onClick={() => setIsErrorPanelVisible(true)}>View Error</Button>}
+        <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
         {/* FOR QA */}
         {(isQA_DV) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
@@ -742,9 +854,23 @@ export const DataSheetComponent = (props) => {
 
       </Col>
 
-      <Modal title="Error Panel" width="70%" visible={isErrorPanelVisible} footer={null} onCancel={onCloseErrorPanel}>
-        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} onClickAccept={onAccept} onClickReject={onReject} />
-        {isErrorAccepted === false && <div style={{ display: 'flex', justifyContent: 'center' }}><Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} className="datapage-button" variant="success" onClick={onRejectSubmit}>Save</Button></div>}
+      <Modal
+        title="Error Panel"
+        width="75%"
+        style={{ top: 20, maxWidth: 1000 }}
+        className="error-panel"
+        visible={isErrorPanelVisible}
+        footer={
+          <React.Fragment>
+            {isErrorAccepted === false && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Submit And Close</Button>}
+            {(isErrorAccepted === null) && <Button className="datapage-button" variant="success" onClick={onAccept}>Accept</Button>}
+            {(isErrorAccepted === null) && <Button className="datapage-button" variant="danger" onClick={onReject}>Reject</Button>}
+            {(isErrorAccepted !== null) && (defaultData.error) && (defaultData.error.status) && <Button className="datapage-button" variant="info" onClick={onRevert}>Revert</Button>}
+          </React.Fragment>
+        }
+        onCancel={onCloseErrorPanel}
+      >
+        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} />
       </Modal>
 
     </Row>

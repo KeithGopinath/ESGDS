@@ -75,6 +75,20 @@ const PENDING_TASK = {
       fiscalYear: '2018-2019, 2019-2020',
       status: 'Yet to Collect',
     }],
+  ANALYST_CC: [
+    {
+      dpCode: 'BUSN001',
+      company: 'Reliance Ltd',
+      fiscalYear: '2018-2019,2019-2020',
+      status: 'Yet to collect',
+    },
+    {
+      dpCode: 'BUSN002',
+      company: 'Reliance Ltd',
+      fiscalYear: '2017-2018',
+      status: 'Yet to collect',
+    },
+  ],
 };
 
 const TASK_API_DATA = {
@@ -2382,7 +2396,7 @@ const TASK_API_DATA = {
                   fiscalYear: '2019-2020',
                   textSnippet: 'Snippet 1',
                   pageNo: '46',
-                  screenShot: null,
+                  screenShot: 'https://esgds.io/images/home/logo.png',
                   response: 'Yes',
                   source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                   url: '',
