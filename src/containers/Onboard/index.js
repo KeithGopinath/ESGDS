@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { Container } from 'react-bootstrap';
 import './styles.scss';
@@ -11,19 +11,11 @@ import Status from './Status';
 import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 const Onboard = (props) => {
-
   // Queryparams for role
   const search = window.location.search;
   const params = new URLSearchParams(search);
-  const role = params.get('role');
-  // const getmailId = params.get('email');
-  const getmailId = 'rajeshny@gmail.com';
-  // user rejects
-  // const userId = params.get('id');
-  // setUserDataId(userId); 60b751e851ac91bbf2ec9423
-  const userId = '';
-
-  const userIdValidation = userId ? true : false;
+  const getRole = params.get('role');
+  const getmailId = params.get('email');
 
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState('');
@@ -40,6 +32,17 @@ const Onboard = (props) => {
   const [cancelledCheque, setCancelledCheque] = useState('');
   const [password, setPassword] = useState('');
   const [activeStep, setActiveStep] = useState(0);
+  const [role, setRole] = useState('');
+
+  useEffect(() => {
+    if (getRole === 'ClientRepresentative') {
+      setRole('client');
+    } else if (getRole === 'CompanyRepresentative') {
+      setRole('company');
+    } else {
+      setRole('employee');
+    }
+  }, [])
 
   const onFirstNameChange = (firstName) => {
     setFirstName(firstName);
@@ -175,9 +178,7 @@ const Onboard = (props) => {
           onFirstName={onFirstNameChange}
           onMiddleName={onMiddleNameChange}
           onLastName={onLastNameChange}
-          userIdValidation={userIdValidation}
           getMailId={getmailId}
-          userID={userId}
           onPhone={onPhoneNumberChange}
           onPancard={onPancardChange}
           onAadhar={onAadharChange}
@@ -190,7 +191,6 @@ const Onboard = (props) => {
         />
         <ProofUpload
           role={role}
-          userID={userId}
           onCompany={onChangeCompanyRep}
           onEmployeeId={onChangeEmployeeId}
           onCancelledCheque={onChangeCancelledCheque}

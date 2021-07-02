@@ -47,7 +47,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : false;
     const subMenuRef = label == 'Taxonomy' ? taxonomyBtnRefs : label == 'Validation' ? validationBtnRefs : label == 'Groups' ? groupsBtnRefs : false;
     return (
-      <div>
+      <div key={label}>
         { id == 1 || id == 2 || id == 5 ?
           <div ref={sideMenuBtnRefs.current[index]} className={handler ? (subMenuShow ? 'submenu' : 'submenu-button') : (subMenuShow ? 'submenu-mini-button' : 'sideMenuMini-btn')}
             key={id} onClick={(event) => buttonClickHandler(event, address)}>
@@ -60,7 +60,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
               <div>
                 {subMenuShow && subMenuList.map(({ label, icon, address }, index) => {
                   return (
-                    <div onClick={(event) => buttonClickHandler(event, address)} ref={subMenuRef.current[index]}
+                    <div key={label} onClick={(event) => buttonClickHandler(event, address)} ref={subMenuRef.current[index]}
                       className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
                       <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
                       {handler && <div className="sideMenu-btn-label">{label}</div>}
