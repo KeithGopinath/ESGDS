@@ -20,6 +20,9 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const [fileValid, setFileValid] = useState(true);
   const [disableAdd, setDisableAdd] = useState(false);
   const [chooseOption, setChooseOption] = useState('');
+  const [emailFiledsValidation, setEmailFiledsValidation] = useState(false);
+  const [roleSelect, setRoleSelect] = useState('');
+  const [email, setEmail] = useState('');
 
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
@@ -27,7 +30,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const validMailStatus = useSelector((state) => state.RoleOnboarding.roleOnboarding);
   const InvalidMailStatus = useSelector((state) => state.RoleOnboarding.error);
 
-// mail status alert
+  // mail status alert
   useEffect(() => {
     if (validMailStatus) {
       setOnboardAlert(validMailStatus.message);
@@ -37,7 +40,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   }, [validMailStatus, InvalidMailStatus]);
 
   // role onboarding status class
-  const mailStatusClass = validMailStatus || InvalidMailStatus ? "success" : "danger" ;
+  const mailStatusClass = validMailStatus ? "success" : "danger";
 
   useEffect(() => {
     if (showOnboardRoles) {
@@ -46,6 +49,9 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       setEmailValid(true);
       setFileValid(true);
       setInputList([{ email: '', onboardingtype: '', link: '' }]);
+      setEmailFileUpload('');
+      setFileUploadValidation(false);
+      setEmailFiledsValidation(false);
     }
   }, [showOnboardRoles]);
 
@@ -67,11 +73,20 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     if (!chooseOption) {
       setOnboardAlert("Should choose anyone option");
     } else if (chooseOption === 'email') {
-      const roleOnboardingData = { emailList: listOfData };
-      dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
+      if (!email) {
+        setEmailFiledsValidation(true);
+        setOnboardAlert("Enter the all fileds");
+      } else if (!roleSelect) {
+        setEmailFiledsValidation(true);
+        setOnboardAlert("Enter the all fileds");
+      } else {
+        const roleOnboardingData = { emailList: listOfData };
+        dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
+      }
     } else if (chooseOption === 'excel') {
       if (!emailFileUpload) {
         setFileUploadValidation(true);
+        setOnboardAlert("Should upload excel file only");
       } else {
         const roleOnboardingData = { emailFile };
         dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
@@ -81,14 +96,18 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
 
   // Email text filed
   const handleEmailChange = (e, index) => {
+    setEmailFiledsValidation(false);
     const { name, value } = e.target;
+    setEmail(value);
     const list = [...inputList];
     list[index][name] = value;
     setListOfData(list);
   };
 
   const onRoleChange = (e, index, field) => {
+    setEmailFiledsValidation(false);
     const { value } = e;
+    setRoleSelect(e);
     const list = [...inputList];
     list[index][field] = value;
     list.map((item) => {
@@ -131,6 +150,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const onUploadExcel = (e) => {
     let file = e.target.files[0];
     if (file.type.match('^.*\.(xls|xlsx|sheet)$')) {
+      setFileUploadValidation(false);
       setEmailFileUpload(file.name);
       let reader = new FileReader();
       reader.onloadend = function () {
@@ -138,9 +158,6 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       }
       reader.readAsDataURL(file);
       setFileUploadValidation(false);
-    } else {
-      setFileUploadValidation(true);
-      setOnboardAlert("Should upload excel file only");
     }
   }
 
@@ -160,6 +177,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
                 />Email:</Form.Label> : index <= 5 ? <Form.Label column sm="3" className=""></Form.Label> : ''}
               <Col sm="4" className="">
                 <Form.Control
+                  className={emailFiledsValidation && 'border-danger'}
                   type="email"
                   name="email"
                   placeholder="Enter email"
@@ -170,6 +188,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
               </Col>
               <Col sm="3">
                 <Select
+                  className={roleSelect.length === 0 && emailFiledsValidation && 'dropdown-alert'}
                   options={roleOptions}
                   name="role"
                   onChange={e => onRoleChange(e, index, "onboardingtype")}
