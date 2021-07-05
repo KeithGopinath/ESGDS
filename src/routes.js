@@ -20,6 +20,8 @@ import TaxonomySubset from './containers/TaxonomySubset';
 import ValidationList from './containers/ValidationList';
 import UserView from './containers/UserView';
 import UserProfile from './containers/UserProfile';
+import Controversy from './containers/Controversy';
+import ControversyPage from './containers/Controversy/ControversyPage';
 
 export const history = createBrowserHistory();
 
@@ -44,6 +46,8 @@ const Routes = () => (
         <Route path="/createbatch" component={Createbatch} />
         <Route path="/pendingtasks" component={PendingTasks} />
         <Route path="/task" component={Task} />
+        <Route path="/controversy" component={Controversy} />
+        <Route path="/controversypage" component={ControversyPage} />
         <Route path="/dpcode" component={DataPage} />
         <Route path="/createtask" component={TaskCreate} />
       </Switch>
