@@ -69,7 +69,7 @@ const ErrorPanel = (props) => {
                   </Tooltip>
                 </Tag>
               </div>
-              <Divider />
+              {!props.isAccepted && props.isAccepted !== null && <Divider />}
               {/* {props.isAccepted !== null && <Divider orientation="left">{`Status: ${props.isAccepted ? 'Accepted' : (props.isAccepted === false ? 'Rejected' : '')}`}</Divider>} */}
               {/* Comments Field */}
               <FieldWrapper

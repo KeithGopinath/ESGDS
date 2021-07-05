@@ -74,10 +74,10 @@ const ControversyPendingTaskTable = (props) => {
     action:
   <Link
     href
-    // to={{
-    //   pathname: `/task/${taskId}`,
-    //   state: { taskId },
-    // }}
+    to={{
+      pathname: `/controversy/${dpCode}`,
+      state: { dpCode },
+    }}
   >Enter
   </Link>,
   }));
