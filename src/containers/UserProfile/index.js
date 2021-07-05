@@ -1,17 +1,22 @@
-import React, { useRef } from 'react';
+/* eslint-disable */
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 
-const Companies = () => {
+const UserProfile = () => {
   const sideBarRef = useRef();
+
   return (
     <React.Fragment>
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header title="Companies" />
+          <Header title="User Profile" />
           <div className="container-main">
-            <div>Companies</div>
+            <div>
+                {/* content */}
+            </div>
           </div>
         </div>
       </div>
@@ -19,4 +24,4 @@ const Companies = () => {
   );
 };
 
-export default Companies;
+export default UserProfile;

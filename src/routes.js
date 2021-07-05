@@ -4,7 +4,6 @@ import { Router, Route, Switch } from 'react-router-dom';
 import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 import Users from './containers/Users';
-import Companies from './containers/Companies';
 import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
@@ -20,6 +19,7 @@ import Validation from './containers/Validation';
 import TaxonomySubset from './containers/TaxonomySubset';
 import ValidationList from './containers/ValidationList';
 import UserView from './containers/UserView';
+import UserProfile from './containers/UserProfile';
 
 export const history = createBrowserHistory();
 
@@ -30,23 +30,22 @@ const Routes = () => (
         <Route exact path="/" component={Login} />
         <Route path="/password-resets" component={UpdatePassword} />
         <Route path="/dashboard" component={Dashboard} />
-        <Route exact path="/validation" component={ValidationList} />
-        <Route path="/validation/addvalidation" component={Validation} />
-        <Route exact path="/taxonomy" component={Taxonomy} />
-        <Route path="/taxonomy/subsets" component={TaxonomySubset} />
+        <Route path="/validation" component={ValidationList} />
+        <Route path="/addvalidation" component={Validation} />
+        <Route path="/taxonomy" component={Taxonomy} />
+        <Route path="/taxonomy-subsets" component={TaxonomySubset} />
         <Route path="/users" component={Users} />
-        <Route path="/user-view" component={UserView} />
-        <Route path="/companies" component={Companies} />
-        <Route exact path="/groups" component={Groups} />
         <Route path="/manageusers" component={ManageUsers} />
+        <Route path="/user-view" component={UserView} />
+        <Route path="/user-profile" component={UserProfile} />
+        <Route path="/group-assignment" component={Groups} />
+        <Route path="/group-list" component={CreateGroup} />
         <Route path="/onboard" component={Onboard} />
-        <Route path="/task" component={Task} />
         <Route path="/createbatch" component={Createbatch} />
-        <Route path="/creategroup" component={CreateGroup} />
         <Route path="/pendingtasks" component={PendingTasks} />
         <Route path="/task" component={Task} />
         <Route path="/dpcode" component={DataPage} />
-        <Route exact path="/createtask" component={TaskCreate} />
+        <Route path="/createtask" component={TaskCreate} />
       </Switch>
     </React.Fragment>
   </Router >

@@ -6,7 +6,6 @@ import Select from 'react-select';
 import Overlay from '../../components/Overlay';
 import { Menu, Dropdown, Button as AntButton } from 'antd';
 import 'antd/dist/antd.css';
-import { history } from '../../routes';
 
 const RoleAssignment = ({ show, setShow }) => {
   const [name, setName] = useState('');
@@ -18,16 +17,24 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
-  const userData = useSelector((state) => state.filterUsers.filterUsers);
+  const userData = useSelector((state) => state.getRoleAssignment.getRoleAssignment);
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
 
   useEffect(() => {
     if (show) {
-      const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
-      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+      const payload = {
+        filters: [
+          { filterWith: "isUserApproved", value: true },
+          { filterWith: "isUserActive", value: true },
+          { filterWith: "userType", value: "Employee" }
+        ]
+      }
+      dispatch({ type: 'ROLE_ASSIGNMENT_REQUEST', payload });
       dispatch({ type: 'GET_ROLES_REQUEST' });
     }
+    setAlertMsg('');
+    setErrorAlert('')
   }, [show]);
 
   useEffect(() => {
@@ -40,12 +47,12 @@ const RoleAssignment = ({ show, setShow }) => {
   }, [roleAssignmentEdit, roleAssignmentEditError]);
 
   const roleOptions = roleData && roleData.rows.filter(val => val.roleName == 'GroupAdmin' ||
-    val.roleName == 'Analyst' || val.roleName == 'QA').map((data) => ({
+    val.roleName == 'Analyst' || val.roleName == 'QA' || val.roleName == 'SuperAdmin').map((data) => ({
       value: data.id,
       label: data.roleName
     }))
 
-  const nameOptions = userData && userData.data.filter(val => val.isUserActive == true).map((data) => {
+  const nameOptions = userData && userData.data.map((data) => {
     return (
       data.userDetails
     )
@@ -102,7 +109,6 @@ const RoleAssignment = ({ show, setShow }) => {
       dispatch({ type: 'ROLE_ASSIGNMENT_EDIT_REQUEST', payload });
       setTimeout(() => {
         handleClose();
-        history.push({ pathname: '/users', state: 'approve' });
       }, 2000);
     }
   };

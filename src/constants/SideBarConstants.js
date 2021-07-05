@@ -6,34 +6,31 @@ const ButtonList = [
     id: 0, label: 'Dashboard', icon: faHome, address: 'dashboard',
   },
   {
-    id: 1, label: 'Validation', icon: faCheckDouble, address: 'validationhead',
+    id: 1, label: 'Taxonomy', icon: faCodeBranch, address: 'taxonomyhead',
   },
   {
-    id: 2, label: 'Taxonomy', icon: faCodeBranch, address: 'taxonomyhead',
+    id: 2, label: 'Validation', icon: faCheckDouble, address: 'validationhead',
   },
   {
-    id: 3, label: 'Users', icon: faUser, address: 'Users',
+    id: 3, label: 'Users', icon: faUser, address: 'usershead',
   },
   {
-    id: 4, label: 'Companies', icon: faBuilding, address: 'companies',
+    id: 4, label: 'Profile', icon: faUser, address: 'user-profile',
   },
   {
-    id: 5, label: 'Groups', icon: faUsers, address: 'groupshead',
+    id: 5, label: 'Role Assignment', icon: faUserTag, address: '',
   },
   {
-    id: 6, label: 'Manage Users', icon: faCog, address: 'manageusers',
+    id: 6, label: 'Groups', icon: faUsers, address: 'groupshead',
   },
   {
-    id: 7, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
+    id: 7, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 8, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
+    id: 8, label: 'Task', icon: faUserTag, address: 'createtask',
   },
   {
-    id: 9, label: 'Role Assignment', icon: faUserTag, address: '',
-  },
-  {
-    id: 10, label: 'Task', icon: faUserTag, address: 'createtask',
+    id: 9, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
 ];
 
@@ -42,13 +39,13 @@ const TaxonomySubMenu = [
     id: 0, label: 'Master Taxonomy', icon: faNetworkWired, address: 'taxonomy'
   },
   {
-    id: 1, label: 'Subset Taxonomy', icon: faProjectDiagram, address: 'taxonomy/subsets'
+    id: 1, label: 'Subset Taxonomy', icon: faProjectDiagram, address: 'taxonomy-subsets'
   },
 ]
 
 const ValidationSubMenu = [
   {
-    id: 0, label: 'Add Validation', icon: faFolderPlus, address: 'validation/addvalidation'
+    id: 0, label: 'Add Validation', icon: faFolderPlus, address: 'addvalidation'
   },
   {
     id: 1, label: 'Validation List', icon: faList, address: 'validation'
@@ -57,11 +54,20 @@ const ValidationSubMenu = [
 
 const GroupsSubMenu = [
   {
-    id: 0, label: 'Create Group', icon: faFolderPlus, address: 'creategroup'
+    id: 0, label: 'Group Assignment', icon: faFolderPlus, address: 'group-assignment'
   },
   {
-    id: 1, label: 'Assignment', icon: faList, address: 'groups'
+    id: 1, label: 'Group List', icon: faList, address: 'group-list'
   },
 ]
 
-export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu };
+const UsersSubMenu = [
+  {
+    id: 0, label: 'User List', icon: faList, address: 'users'
+  },
+  {
+    id: 1, label: 'Manage Users', icon: faCog, address: 'manageusers'
+  },
+]
+
+export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu };

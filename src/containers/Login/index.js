@@ -35,12 +35,14 @@ const Login = () => {
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
-  const role = login && login.user.role;
+  const role = login && login.user.name || sessionStorage.role;
 
   useEffect(() => {
     if (loginRole && role) {
       setLoginRole(false);
-      if (role !== 'admin') {
+      if (role == 'CompanyRep' || role == 'ClientRep') {
+        history.push("/user-profile");
+      } else if (role == 'GroupAdmin' || role == 'QA' || role == 'Analyst') {
         history.push("/dashboard");
       } else {
         setShowOtp(true);

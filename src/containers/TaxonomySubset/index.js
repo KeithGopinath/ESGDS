@@ -22,6 +22,7 @@ const TaxonomySubset = () => {
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const loading = useSelector((state) => state.clientTaxonomy.isLoading);
 
   useEffect(() => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
@@ -143,7 +144,7 @@ const TaxonomySubset = () => {
             <Header title="Subset Taxonomy" />
             <div className="container-main">
               <div>
-                <CustomTable tableData={subsetTableData} />
+                <CustomTable tableData={subsetTableData} isLoading={loading} />
                 <UploadTaxonomy show={show} handleClose={handleClose} subsetName={subsetName} subsetId={subsetId} />
               </div>
             </div>

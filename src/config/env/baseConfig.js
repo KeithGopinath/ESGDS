@@ -18,6 +18,7 @@ export default {
     newClientTaxonomy: 'clientTaxonomies/create',
     getFilterUsers: 'users/filter-user',
     userUpdate: 'users',
+    uploadTaxonomy: 'datapoints/upload',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

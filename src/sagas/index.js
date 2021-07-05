@@ -17,6 +17,8 @@ import { newClientTaxonomyWatchers } from './NewClientTaxonomy';
 import { filterUsersWatchers } from './FilterUsers';
 import { userUpdateWatchers } from './UserUpdate';
 import { getUsersByIdWatchers } from './GetUserById';
+import { uploadTaxonomyWatchers } from './UploadTaxonomy';
+import { roleAssignmentWatchers } from './GetRoleAssignment';
 
 export default function* rootWatchers() {
   yield all([
@@ -38,5 +40,7 @@ export default function* rootWatchers() {
     filterUsersWatchers(),
     userUpdateWatchers(),
     getUsersByIdWatchers(),
+    uploadTaxonomyWatchers(),
+    roleAssignmentWatchers(),
   ]);
 }

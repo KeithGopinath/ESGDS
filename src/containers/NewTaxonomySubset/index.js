@@ -59,7 +59,7 @@ const NewTaxonomySubset = ({ show, handleClose, subsetData }) => {
         else {
             const payload = {
                 taxonomyName: subsetName,
-                fields: subsetData,
+                headers: subsetData,
             }
             dispatch({ type: 'NEW_CLIENT_TAXONOMY_REQUEST', payload });
             setAlertMsg('')

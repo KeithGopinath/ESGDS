@@ -2,20 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'ClientTaxonomy_REQUEST':
+    case 'ROLE_ASSIGNMENT_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        taxonomydata: false,
+        getRoleAssignment: false,
       };
-    case 'ClientTaxonomy_SUCCESS':
+    case 'ROLE_ASSIGNMENT_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        taxonomydata: action.ClientTaxonomy,
+        getRoleAssignment: action.getRoleAssignment,
       };
-    case 'ClientTaxonomy_FAILURE':
+    case 'ROLE_ASSIGNMENT_FAILURE':
       return {
         ...state,
         isLoading: false,

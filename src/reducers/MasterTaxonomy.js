@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'MASTER_TAXONOMY_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         masterTaxonomy: action.masterTaxonomy,
       };
     case 'MASTER_TAXONOMY_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

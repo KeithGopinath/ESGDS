@@ -2,23 +2,23 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'ClientTaxonomy_REQUEST':
+    case 'UPLOAD_TAXONOMY_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        taxonomydata: false,
+        uploadTaxonomy: false,
       };
-    case 'ClientTaxonomy_SUCCESS':
+    case 'UPLOAD_TAXONOMY_SUCCESS':
       return {
         ...state,
-        isLoading: false,
-        taxonomydata: action.ClientTaxonomy,
+        isLoading: true,
+        uploadTaxonomy: action.uploadTaxonomy,
       };
-    case 'ClientTaxonomy_FAILURE':
+    case 'UPLOAD_TAXONOMY_FAILURE':
       return {
         ...state,
-        isLoading: false,
+        isLoading: true,
         error: action.error,
       };
     default:

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -19,6 +19,8 @@ import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { DatePicker, Space, Result, Button } from 'antd';
 import Moment from 'moment';
+import PageLoader from '../../components/PageLoader';
+
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
   const {
@@ -69,7 +71,7 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const CustomTable = ({ tableData, showDatePicker }) => {
+const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
   // CONSTANTS
@@ -274,29 +276,32 @@ const CustomTable = ({ tableData, showDatePicker }) => {
                     </TableRow>
                   );
                 })}
-              { !(mainData.length === 0) && emptyRows > 0 && (
+              {!(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
               )}
               {(mainData.length === 0) && (searchQuery || searchDate) &&
-              <TableRow>
-                <TableCell colSpan={columnsHeadData.length}>
-                  <Result
-                    icon={<InboxOutlined />}
-                    title="No Data Found!"
-                  />
-                </TableCell>
-              </TableRow>}
+                <TableRow>
+                  <TableCell colSpan={columnsHeadData.length}>
+                    <Result
+                      icon={<InboxOutlined />}
+                      title="No Data Found!"
+                    />
+                  </TableCell>
+                </TableRow>}
               {(mainData.length === 0) && !(searchQuery || searchDate) &&
-              <TableRow>
-                <TableCell colSpan={columnsHeadData.length}>
-                  <Result
-                    icon={<InboxOutlined />}
-                    title="All Done!"
-                  />
-                </TableCell>
-              </TableRow>}
+                <TableRow>
+                  <TableCell colSpan={columnsHeadData.length}>
+                    {isLoading ?
+                      <PageLoader /> :
+                      <Result
+                        icon={<InboxOutlined />}
+                        title="All Done!"
+                      />
+                    }
+                  </TableCell>
+                </TableRow>}
             </TableBody>
           </Table>
         </TableContainer>
