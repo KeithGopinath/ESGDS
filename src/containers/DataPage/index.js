@@ -1,10 +1,12 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect } from 'react';
-import { Col, Button } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import 'antd/dist/antd.css';
-import { Drawer, Tabs, Modal } from 'antd';
+import { ExclamationCircleTwoTone } from '@ant-design/icons';
+import { Drawer, Tabs } from 'antd';
 import moment from 'moment';
 
 import Header from '../../components/Header';
@@ -14,10 +16,6 @@ import AddSource from './AddSource';
 import { DataSheetComponent } from './DataSheet';
 import DataAccordian from './DataAccordian';
 
-import ErrorAndComment from './ErrorAndComment';
-
-import ErrorDataSheetTwo from './ErrorDataSheet2';
-
 import DataComment from './DataComment';
 
 
@@ -25,12 +23,16 @@ const DataSheetMain = (props) => {
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
-  // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst] = [
-    currentRole === 'Analyst',
-    // currentRole === 'QA',
-    // currentRole === 'Company Representative' || currentRole === 'CompanyRep',
-    // currentRole === 'Client Representative' || currentRole === 'ClientRep',
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
+  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+    currentRole === 'Analyst' && currentTab === 'Data Collection',
+    currentRole === 'Analyst' && currentTab === 'Data Correction',
+    currentRole === 'QA',
+    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
   // DESTRUCTURING VALUES FROM PROPS
@@ -98,21 +100,25 @@ const DataSheetMain = (props) => {
   const dataCheckBeforeSave = () => {
     console.log('DATACHECK BROFRE SAVE', reqCurrentData);
     const nonSavedYears = (reqCurrentData.map((e) => {
-      if (currentRole === 'Analyst' && e.status !== 'Completed') {
+      if (isAnalyst_DC && e.status !== 'Completed') {
         return e.fiscalYear;
       }
-      if (currentRole !== 'Analyst' && e.error && e.error.errorStatus !== 'Completed') {
+      if (isAnalyst_DCR && e.status !== 'Completed' && (e.error.status !== 'Completed')) {
         return e.fiscalYear;
       }
-      if (currentRole !== 'Analyst' && !e.error) {
+      if (isAnalyst_DCR && e.status === 'Completed' && (e.error.status !== 'Completed')) {
+        return e.fiscalYear;
+      }
+      if ((isQA_DV || isCompanyRep_DR || isClientRep_DR) && e.error && e.error.errorStatus !== 'Completed') {
+        return e.fiscalYear;
+      }
+      if ((isQA_DV || isCompanyRep_DR || isClientRep_DR) && !e.error) {
         return e.fiscalYear;
       }
       return null;
     })).filter((e) => (e !== null));
     return nonSavedYears;
   };
-
-  const [showError, setShowError] = useState(false);
 
   return (
     <React.Fragment>
@@ -147,53 +153,9 @@ const DataSheetMain = (props) => {
             {reqCurrentData.map((e) => (
               <Tabs.TabPane
                 tab={
-                  <div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     {e.fiscalYear}
-                    {isAnalyst && e.error &&
-                    <React.Fragment>
-                      <Modal
-                        title="Error Panel"
-                        centered
-                        visible={showError}
-                        footer={null}
-                        onCancel={() => setShowError(false)}
-                        width="70%"
-                        bodyStyle={{
-                          overflow: 'auto',
-                          maxHeight: '85vh',
-                        }}
-                      >
-                        { true &&
-                        <ErrorAndComment
-                          action={
-                            [
-                              <div>
-                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
-                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
-                              </div>,
-                            ]
-                          }
-                          author="QA"
-                          errorType="Data/information Missed"
-                          errorInfo={null}
-                        /> }
-                        { true &&
-                        <ErrorAndComment
-                          action={
-                            [
-                              <div>
-                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="success">Accept</Button>
-                                <Button style={{ fontSize: '14px', padding: '2px 5px', margin: 3 }} variant="danger">Reject</Button>
-                              </div>,
-                            ]
-                          }
-                          author="Company Representative"
-                          errorType="Data/information Missed"
-                          errorInfo={<ErrorDataSheetTwo isErrorCommentType reqData={reqDpCodeData.historicalData[0]} />}
-                        />}
-                      </Modal>
-                      <div onClick={() => setShowError(true)}>Error</div>
-                    </React.Fragment>}
+                    {e.error && e.error.isErrorRaised && <ExclamationCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#FF0000" />}
                   </div>
                 }
                 key={e.fiscalYear}
@@ -213,20 +175,6 @@ const DataSheetMain = (props) => {
           </Tabs>
         </DataAccordian>
       </Col>
-
-      {false &&
-      <Col
-        lg={12}
-        style={{
-          padding: 10,
-          margin: '3% 0',
-        }}
-      >
-        <div>
-          <h4>Comments</h4>
-        </div>
-        <DataComment reqCommentsList={reqCommentsList} />
-      </Col>}
 
       {reqCommentsList &&
       <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>

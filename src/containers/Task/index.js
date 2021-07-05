@@ -1,17 +1,17 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
+import Select, { components } from 'react-select';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import Select, { components } from 'react-select';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import CustomTable from '../../components/CustomTable/index';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import { ANALYST_DC_DATA, QA_DV_DATA, COMPANY_REP_DATA } from '../../containers/DataPage/apiData';
+import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
 import AddNewBoardMember from './AddNewBoardMember';
 import AddNewKMPMember from './AddNewKMPMember';
 
@@ -74,10 +74,10 @@ const TaskTable = (props) => {
   );
 };
 
-
 const Task = (props) => {
+  // CURRENT ROLE
   const currentRole = sessionStorage.role;
-
+  // CURRENT TAB
   const tabLabel = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
@@ -90,114 +90,6 @@ const Task = (props) => {
 
   const sideBarRef = useRef();
 
-  const getReqAPIData = () => {
-    console.log(tabLabel === 'Data Correction', tabLabel === 'Data Collection');
-    if (isClientRep) { return COMPANY_REP_DATA; }
-    if (isCompanyRep) { return COMPANY_REP_DATA; }
-    if (isQA) { return QA_DV_DATA; }
-    if (isAnalyst && tabLabel === 'Data Collection') { return ANALYST_DC_DATA; }
-    if (isAnalyst && tabLabel === 'Data Correction') { return QA_DV_DATA; }
-    return [];
-  };
-
-  const extractReqTask = (data) => {
-    const { taskId } = props.location.state;
-    const [filteredTask] = data.filter((e) => (e.taskId === taskId));
-    return filteredTask;
-  };
-
-
-  const [reqAPIData, setReqAPIData] = useState(extractReqTask(getReqAPIData()));
-
-  const [dpCodeType, setDpCodeType] = useState('Standalone');
-
-  const [reqKeyIssue, setReqKeyIssue] = useState('');
-
-  const [isAddNewBoardVisible, setIsAddNewBoardVisible] = useState(false);
-
-  const [isAddNewKMPVisible, setIsAddNewKMPVisible] = useState(false);
-
-
-  useEffect(() => {
-    setReqAPIData(extractReqTask(getReqAPIData()));
-    setDpCodeType('Standalone');
-  }, []);
-
-  useState(() => {
-    setReqKeyIssue('');
-  }, [dpCodeType]);
-
-  const getReqTableData2 = (reqData) => {
-    if (dpCodeType) {
-      if (reqKeyIssue) {
-        return {
-          ...reqData,
-          dpCodesData: reqData.dpCodesData.filter((e) => ((e.isStandAloneOrMatrix === dpCodeType) && (e.keyIssue === reqKeyIssue.name))),
-        };
-      }
-      return {
-        ...reqData,
-        dpCodesData: reqData.dpCodesData.filter((e) => (e.isStandAloneOrMatrix === dpCodeType)),
-      };
-    }
-    return {
-      ...reqData,
-      dpCodesData: reqData.dpCodesData.filter((e) => (e.isStandAloneOrMatrix === dpCodeType)),
-    };
-  };
-
-  console.log(reqAPIData);
-
-  const reqTableData2 = getReqTableData2(reqAPIData);
-
-
-  const KMPMenuList = (e) => (
-    <components.MenuList {...e}>
-      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewKMPVisible(true)}>Add New Member</Button></div>
-      {e.children}
-    </components.MenuList>
-  );
-
-  const BoardMemMenuList = (e) => (
-    <components.MenuList {...e}>
-      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewBoardVisible(true)}>Add New Member</Button></div>
-      {e.children}
-    </components.MenuList>
-  );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch({ type: 'KEYISSUES_REQUEST' });
-    defaultActiveTab();
-  }, []);
-
-  // useSelector((state) => ((state.keyIssues.keyIssuesList) ? (state.keyIssues.keyIssuesList.rows) :
-  const reqKeyIssuesAPIData = ([
-    {
-      id: 0, name: 'Biodiversity impact', type: 'Standalone', subType: null,
-    },
-    {
-      id: 1, name: 'Shareholders rights', type: 'Matrix', subType: 'Board Member',
-    },
-    {
-      id: 3, name: 'Management structure', type: 'Matrix', subType: 'KMP',
-    },
-  ]);
-
-
-  const reqBoardMemAPIData = ['Shri Mukesh Kumar Surana', 'Shri Pushp Kumar Joshi'];
-
-  const reqKMPAPIData = ['Shri R Kesavan', 'Shri Sunil Kumar'];
-
-  const onChangeKeyIssue = (event) => {
-    if (event) {
-      setReqKeyIssue(event.value);
-    } else {
-      setReqKeyIssue(event);
-    }
-  };
-
   const tabs = ['Standalone', 'Matrix'];
 
   const tabsRef = useRef(tabs.map(() => React.createRef()));
@@ -209,10 +101,79 @@ const Task = (props) => {
     }
   };
 
+  const getReqAPIData = () => {
+    console.log(tabLabel === 'Data Correction', tabLabel === 'Data Collection');
+    if (isClientRep) { return TASK_API_DATA.COMPANY_REP_DR; }
+    if (isCompanyRep) { return TASK_API_DATA.COMPANY_REP_DR; }
+    if (isQA) { return TASK_API_DATA.QA_DV; }
+    if (isAnalyst && tabLabel === 'Data Collection') { return TASK_API_DATA.ANALYST_DC; }
+    if (isAnalyst && tabLabel === 'Data Correction') { return TASK_API_DATA.ANALYST_DCR; }
+    return [];
+  };
+
+  const extractReqTask = (data) => {
+    const { taskId } = props.location.state;
+    const [filteredTask] = data.filter((e) => (e.taskId === taskId));
+    return filteredTask;
+  };
+
+  const [reqTaskData, setReqTaskData] = useState(extractReqTask(getReqAPIData()));
+  const [dpCodeType, setDpCodeType] = useState('Standalone');
+  const [reqKeyIssue, setReqKeyIssue] = useState(null);
+  const [reqBoardMember, setReqBoardMember] = useState(null);
+  const [reqKmpMember, setReqKmpMember] = useState(null);
+
+  const [isAddNewBoardVisible, setIsAddNewBoardVisible] = useState(false);
+  const [isAddNewKMPVisible, setIsAddNewKMPVisible] = useState(false);
+
   useEffect(() => {
     defaultActiveTab();
+    setReqTaskData(extractReqTask(getReqAPIData()));
+    setDpCodeType('Standalone');
   }, []);
 
+  useEffect(() => {
+    setReqKeyIssue(null);
+  }, [dpCodeType]);
+
+  const getReqDpCodesList = () => {
+    if (dpCodeType === 'Standalone') {
+      if (reqKeyIssue) {
+        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id));
+      }
+      return reqTaskList.dpCodesData;
+    }
+    if (dpCodeType === 'Matrix') {
+      if (reqKeyIssue && reqBoardMember) {
+        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id && e.boardMember && e.boardMember === reqBoardMember.value));
+      }
+      if (reqKeyIssue && reqKmpMember) {
+        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id && e.kmpMember && e.kmpMember === reqKmpMember.value));
+      }
+      if (reqKeyIssue) {
+        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id));
+      }
+      return reqTaskList.dpCodesData;
+    }
+    return [];
+  };
+
+  const reqTaskList = dpCodeType === 'Standalone' ? reqTaskData.STANDALONE : reqTaskData.MATRIX;
+  const reqKeyIssueList = reqTaskList.keyIssuesList;
+  const boardMembersList = dpCodeType === 'Matrix' ? (reqKeyIssue && reqKeyIssue.boardMembers ? reqKeyIssue.boardMembers : []) : [];
+  const kmpMembersList = dpCodeType === 'Matrix' ? (reqKeyIssue && reqKeyIssue.kmpMembers ? reqKeyIssue.kmpMembers : []) : [];
+  const reqDpCodesData = getReqDpCodesList();
+
+  const taskToNextPage = {
+    taskId: reqTaskData.taskId,
+    pillar: reqTaskData.pillar,
+    company: reqTaskData.company,
+    dpCodesData: reqDpCodesData,
+  };
+
+  sessionStorage.filteredData = JSON.stringify(taskToNextPage);
+
+  console.log('///////', reqKeyIssue, '////', boardMembersList, kmpMembersList);
   const onClickTabChanger = (event) => {
     tabsRef.current.forEach((element) => {
       const btn = element.current;
@@ -228,8 +189,46 @@ const Task = (props) => {
     }
   };
 
-  sessionStorage.filteredData = JSON.stringify(reqTableData2);
+  const onChangeReqKeyIssue = (event) => {
+    if (event) {
+      const keyIssueId = event.value;
+      setReqKeyIssue(reqKeyIssueList.filter((keyIssue) => (keyIssue.id === keyIssueId))[0]);
+    } else {
+      setReqKeyIssue(null);
+    }
+  };
 
+  const onChangeReqBoardMember = (event) => {
+    if (event) {
+      const boardMemberName = event.value;
+      setReqBoardMember(boardMembersList.filter((boardMember) => (boardMember.value === boardMemberName))[0]);
+    } else {
+      setReqBoardMember(null);
+    }
+  };
+
+  const onChangeReqKmpMember = (event) => {
+    if (event) {
+      const kmpMemberName = event.value;
+      setReqKmpMember(kmpMembersList.filter((kmpMember) => (kmpMember.value === kmpMemberName))[0]);
+    } else {
+      setReqKmpMember(null);
+    }
+  };
+
+  const KMPMenuList = (e) => (
+    <components.MenuList {...e}>
+      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewKMPVisible(true)}>Add New Member</Button></div>
+      {e.children}
+    </components.MenuList>
+  );
+
+  const BoardMemMenuList = (e) => (
+    <components.MenuList {...e}>
+      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewBoardVisible(true)}>Add New Member</Button></div>
+      {e.children}
+    </components.MenuList>
+  );
 
   return (
     <div className="main">
@@ -239,13 +238,13 @@ const Task = (props) => {
         <div className="container-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
-              <div className="task-pillar">{`${reqAPIData.company} / ${reqAPIData.pillar}`}</div>
-              <div className="task-id">{`Task Id: ${reqAPIData.taskId}`}</div>
+              <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>
+              <div className="task-id">{`Task Id: ${reqTaskData.taskId}`}</div>
             </div>
-            {reqAPIData.pillar === 'Governance' &&
-              <div className="task-tabs-wrap">
-                {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
-              </div>}
+            {reqTaskData.pillar === 'Governance' &&
+            <div className="task-tabs-wrap">
+              {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
+            </div>}
             <div className="task-keyissue">
               <Row>
                 <FieldWrapper
@@ -254,23 +253,25 @@ const Task = (props) => {
                   body={
                     <Select
                       name="userRole"
-                      onChange={onChangeKeyIssue}
-                      options={(reqKeyIssuesAPIData.filter((e) => (e.type === dpCodeType))).map((keyIssue) => ({ label: keyIssue.name, value: keyIssue }))}
+                      onChange={onChangeReqKeyIssue}
+                      options={reqKeyIssueList.map((keyIssue) => ({ label: keyIssue.label, value: keyIssue.id }))}
+                      value={reqKeyIssue && { label: reqKeyIssue.label, value: reqKeyIssue.id }}
                       isSearchable
                       isClearable
                       maxLength={30}
                     />}
                 />
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqAPIData.pillar === 'Governance' && (reqKeyIssue && reqKeyIssue.subType === 'Board Member') &&
+                { reqTaskData.pillar === 'Governance' && boardMembersList.length > 0 &&
                 <FieldWrapper
                   label="Board Members*"
                   visible
                   body={
                     <Select
                       name="userRole"
-                      onChange={null}
-                      options={reqBoardMemAPIData.map((boardMember) => ({ label: boardMember, value: boardMember }))}
+                      onChange={onChangeReqBoardMember}
+                      options={boardMembersList.map((boardMember) => ({ label: boardMember.label, value: boardMember.value }))}
+                      value={reqBoardMember && { label: reqBoardMember.label, value: reqBoardMember.value }}
                       isSearchable
                       isClearable
                       maxLength={30}
@@ -278,15 +279,16 @@ const Task = (props) => {
                     />}
                 />}
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqAPIData.pillar === 'Governance' && (reqKeyIssue && reqKeyIssue.subType === 'KMP') &&
+                { reqTaskData.pillar === 'Governance' && kmpMembersList.length > 0 &&
                 <FieldWrapper
                   label="KMP*"
                   visible
                   body={
                     <Select
                       name="userRole"
-                      onChange={null}
-                      options={reqKMPAPIData.map((KMPMember) => ({ label: KMPMember, value: KMPMember }))}
+                      onChange={onChangeReqKmpMember}
+                      options={kmpMembersList.map((KMPMember) => ({ label: KMPMember.label, value: KMPMember.value }))}
+                      value={reqKmpMember && { label: reqKmpMember.label, value: reqKmpMember.value }}
                       isSearchable
                       isClearable
                       maxLength={30}
@@ -295,7 +297,7 @@ const Task = (props) => {
                 />}
               </Row>
             </div>
-            <TaskTable data={reqTableData2} />
+            <TaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />
             <Modal title="Add New Board Member" width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
               <AddNewBoardMember />
             </Modal>

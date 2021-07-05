@@ -191,7 +191,7 @@ const CustomTable = ({ tableData, showDatePicker }) => {
     } else if (searchedQuery) {
       rowDataToBeReturned = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if ((eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if (eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
