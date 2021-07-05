@@ -153,12 +153,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       if (!pancardNumber && !bankAccountNumber && !bankIFSCCode && !adharCard && valid === false) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
-      } else if (!firstName || !lastName || !email || !phoneNumber || !pancardNumber || !bankAccountNumber || !bankIFSCCode || !adharCard) {
+      } else if (!firstName || !lastName || !phoneNumber || !pancardNumber || !bankAccountNumber || !bankIFSCCode || !adharCard) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
-      } else if (valid == false) {
-        setValidate('border-danger');
-        message.error('Please enter valid mail id');
       } else {
         nextStep();
         setValidate('');
@@ -322,14 +319,12 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   <Form.Group>
                     <Form.Label>Account Holder Name <sup className="text-danger">*</sup></Form.Label>
                     <Form.Control
-                      className=""
                       type="text"
                       name="accHolderName"
                       id="accHolderName"
                       value={`${firstName} ${middleName && `${middleName} `}${lastName}`}
                       readOnly
                       placeholder="Same as your name"
-                      disabled={flag}
                     />
                   </Form.Group>
                 </Col>

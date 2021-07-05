@@ -84,7 +84,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
               <div>
                 {subMenuShow && subMenuList.map(({ label, icon, address }, index) => {
                   return (
-                    <div onClick={(event) => buttonClickHandler(event, address)} ref={subMenuRef.current[index]}
+                    <div key={label} onClick={(event) => buttonClickHandler(event, address)} ref={subMenuRef.current[index]}
                       className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
                       <FontAwesomeIcon className={handler ? 'sideMenu-btn-icon' : 'sideMenuMini-btn-icon'} icon={icon} />
                       {handler && <div className="sideMenu-btn-label">{label}</div>}

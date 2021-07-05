@@ -240,7 +240,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
           <span className="ml-3 mt-5"> <sup className="text-danger">*</sup> Required fields</span>
           <div className="d-flex flex-row justify-content-end mt-1">
             <span><Button className="back mr-1" onClick={goToPersonalDetails}>Back</Button></span>
-            <span><Button className="save-continue" onClick={goToLoginCredentials}>'Save & Continue'</Button></span>
+            <span><Button className="save-continue" onClick={goToLoginCredentials}>Save & Continue</Button></span>
           </div>
         </Card>
       </Row>

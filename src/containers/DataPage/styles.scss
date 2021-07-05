@@ -70,3 +70,12 @@
 .addsource-validate-text{
     color: red;
 }
+
+.error-panel{
+    .ant-modal-header{
+        background-color: #dc4535;
+    }
+    .ant-modal-title{
+        color: #fff;
+    }
+}
