@@ -20,6 +20,7 @@ const Users = (props) => {
 
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.filterUsers.filterUsers);
+  const loading = useSelector((state) => state.filterUsers.isLoading);
   const filteredUsers = userData && userData.data;
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Users = (props) => {
 
   useEffect(() => {
     if (tabFlag == 'Pending Users') {
-      const payload = { filters: [{ filterWith: "isUserApproved", value: false }] }
+      const payload = { filters: [{ filterWith: "isUserApproved", value: false },{ filterWith: "isUserRejected", value: false }] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else if (tabFlag == 'Approved Users') {
       const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
@@ -98,12 +99,13 @@ const Users = (props) => {
       name: data.userDetails.label,
       email: data.email,
       primaryRole: data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA",
+      type: data.userType,
       registeredDate: new Date(data.createdAt).toDateString(),
       roleAssigned: data.isRoleAssigned ? 'Assigned' : 'Unassigned',
       groupAssigned: data.isAssignedToGroup ? 'Assigned' : 'Unassigned',
       status: <Button onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }}
         className={data.isUserActive ? 'user-status-active-button' : 'user-status-inactive-button'}>
-        {data.isUserActive ? 'Active User' : 'Inactive User'}</Button>
+        {data.isUserActive ? 'Active' : 'Inactive'}</Button>
     }));
     return {
       rowsData: tableRowData(props),
@@ -126,6 +128,12 @@ const Users = (props) => {
         dataType: 'string',
       },
       {
+        id: 'type',
+        align: 'center',
+        label: 'Type',
+        dataType: 'string',
+      },
+      {
         id: 'registeredDate',
         align: 'center',
         label: 'Registered Date',
@@ -134,13 +142,13 @@ const Users = (props) => {
       {
         id: 'roleAssigned',
         align: 'center',
-        label: 'Group Assigned',
+        label: 'Role Assigned',
         dataType: 'string',
       },
       {
         id: 'groupAssigned',
         align: 'center',
-        label: 'Role Assigned',
+        label: 'Group Assigned',
         dataType: 'string',
       },
       {
@@ -243,7 +251,7 @@ const Users = (props) => {
             ))}
           </div>
           <div>
-            <CustomTable tableData={tableData} showDatePicker />
+            <CustomTable tableData={tableData} showDatePicker isLoading={loading} />
             <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userID} />
           </div>
         </div>

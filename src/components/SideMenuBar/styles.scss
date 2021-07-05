@@ -39,7 +39,8 @@
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
     color: $color-white;
-    margin: 0 0 0 30px;
+    margin-left: 20px;
+    width: 120px;
 }
 
 .sideMenu-btn-icon {
@@ -49,7 +50,7 @@
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
     color: $color-white;
-    margin: 0 0 0 20px;
+    margin-left: 10px;
 }
 
 .sideMenu-btn:hover {
@@ -153,7 +154,7 @@
     margin: 10px 0 10px 0;
     outline: none;
     text-decoration: none !important;
-    transition: 0.5s;
+    transition:0.5s;
 }
 
 .submenu-mini-button {

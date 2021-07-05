@@ -125,7 +125,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const onRenderButtonHighter = () => {
     const BtnRefs = showValidationSubMenu && !show ? validationBtnRefs : showTaxonomySubMenu && !show ? taxonomyBtnRefs : showGroupsSubMenu && !show ? groupsBtnRefs : showUsersSubMenu && !show ? usersBtnRefs : sideMenuBtnRefs;
     const MenuButton = showValidationSubMenu && !show ? ValidationSubMenu : showTaxonomySubMenu && !show ? TaxonomySubMenu : showGroupsSubMenu && !show ? GroupsSubMenu : showUsersSubMenu && !show ? UsersSubMenu : modifiedButtonList;
-    const subMenuRefs = showTaxonomySubMenu ? taxonomyBtnRefs : showValidationSubMenu ? validationBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : false;
+    const subMenuRefs = showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : false;
 
     subMenuRefs && subMenuRefs.current.forEach((element) => {
       const btn = element.current;

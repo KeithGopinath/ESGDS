@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
 import NewTaxonomySubset from '../../containers/NewTaxonomySubset';
+import PageLoader from '../../components/PageLoader';
 
 const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   const [showSubset, setShowSubset] = useState(false);
@@ -23,6 +24,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
 
   const dispatch = useDispatch();
   const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
+  const loading = useSelector((state) => state.masterTaxonomy.isLoading);
   const masterTaxonomy = taxonomy && taxonomy.rows;
 
   useEffect(() => {
@@ -106,6 +108,12 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   }
 
   const onSubmitSubset = () => {
+    const temp = [...subsetData];
+    taxonomyData.map((data) => {
+      data.isRequired &&
+        temp.push({ name: data.name, id: data.id })
+    })
+    setSubsetData(temp)
     setShowSubset(true);
   }
 
@@ -159,14 +167,19 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   const batchlist = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData) : taxonomyData).slice(min, max).map((item, index) => (
     <Col lg={3} md={6}>
       <Card className="batch-card batchbox">
-        <div className="taxonomy-checkbox-container">
+        <div className={item.isRequired ? "taxonomy-checkbox-mandatory-container" : "taxonomy-checkbox-container"}>
           {!showList &&
-            <Form.Control
-              type="checkbox"
-              className="taxonomy-checkbox"
-              onChange={(e) => { createSubset(item, e) }}
-              checked={item.checked}
-            />}
+            <div>
+              {!item.isRequired &&
+                <Form.Control
+                  type="checkbox"
+                  className="taxonomy-checkbox"
+                  onChange={(e) => { createSubset(item, e) }}
+                  checked={item.checked}
+                />
+              }
+            </div>
+          }
         </div>
         <Form.Control
           className="input-taxonomy"
@@ -191,7 +204,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title={showList ? "Subset" : "Master Taxonomy"}/>
+        <Header sideBarRef={sideBarRef} title={showList ? "Subset" : "Master Taxonomy"} />
         <div className="container-main">
           <Container className="wrapper">
             <div className="head-tab">
@@ -219,6 +232,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
               }
             </div>
             <div className="view-min-height">
+              {loading && <PageLoader />}
               <Row >
                 {batchlist}
               </Row>
@@ -227,9 +241,9 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
               <Col lg={12} sm={12}>
                 <div className="taxonomy-footer">
                   <div className="taxonomy-submit">
-                    {flag ?
+                    {!showList &&
                       <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Create New Subset</Button>
-                      : null}
+                    }
                   </div>
                   <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
                 </div>
