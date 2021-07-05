@@ -17,6 +17,8 @@ import newClientTaxonomy from './NewClientTaxonomy';
 import filterUsers from './FilterUsers';
 import userUpdate from './UserUpdate';
 import getUserById from './GetUserById';
+import uploadTaxonomy from './UploadTaxonomy';
+import getRoleAssignment from './GetRoleAssignment';
 
 const rootReducer = combineReducers({
   login,
@@ -37,6 +39,8 @@ const rootReducer = combineReducers({
   filterUsers,
   userUpdate,
   getUserById,
+  uploadTaxonomy,
+  getRoleAssignment,
 });
 
 export default rootReducer;

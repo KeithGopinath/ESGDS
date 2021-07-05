@@ -7,17 +7,26 @@ import Overlay from '../../components/Overlay';
 const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
     const [file, setFile] = useState('');
     const [alertMsg, setAlertMsg] = useState('');
+    const [alertFlag, setAlertFlag] = useState(false);
 
     const dispatch = useDispatch();
+    const taxonomyUpload = useSelector((state) => state.uploadTaxonomy.uploadTaxonomy);
+    const taxonomyUploadError = useSelector((state) => state.uploadTaxonomy.error);
+
+    useEffect(() => {
+        setAlertMsg('');
+    }, [show]);
+
+    useEffect(() => {
+        if (taxonomyUpload) {
+            setAlertMsg(taxonomyUpload.message)
+        } else if (taxonomyUploadError) {
+            setAlertMsg(taxonomyUploadError.message)
+        }
+    }, [taxonomyUpload, taxonomyUploadError]);
 
     const fileHandler = (e) => {
-        let file = e.target.files[0];
-        console.log(file);
-        let reader = new FileReader();
-        reader.onloadend = function () {
-            setFile(reader.result);
-        }
-        reader.readAsDataURL(file);
+        setFile(e.target.files[0])
     };
 
     const closeButton = () => {
@@ -26,16 +35,17 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
     }
 
     const onSubmit = () => {
+        var payload = new FormData();
+        payload.append('file', file);
+        payload.append('clientTaxonomyId', subsetId);
+
         if (!file) {
             setAlertMsg('Please choose a file to upload');
+            setAlertFlag(true);
         }
         else {
-            const payload = {
-                id: subsetId,
-                taxonomyName: subsetName,
-                file
-            }
-            console.log(payload);
+            dispatch({ type: 'UPLOAD_TAXONOMY_REQUEST', payload });
+            setAlertFlag(false);
         }
     };
 
@@ -56,7 +66,7 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
     )
 
     // condition for alertClassName
-    const alertClassName = alert ? 'danger' : 'success';
+    const alertClassName = alertFlag ? 'danger' : taxonomyUpload ? 'success' : 'danger';
 
     return (
         <Overlay

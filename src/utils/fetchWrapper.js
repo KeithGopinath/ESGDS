@@ -73,7 +73,7 @@ export const doPost = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
     },
     body: JSON.stringify(body),
   }),
-), TIMEOUT, 504)
+), TIMEOUT, 501)
   .then((res) => {
     let response = null;
     response = res.json();
@@ -143,8 +143,7 @@ export const doPostFile = (url, body, urlPrefix = baseUrl) => timeoutPromise(fet
   Object.assign({}, {
     method: 'post',
     headers: {
-      // 'Content-Type': 'application/json; charset=UTF-8',
-      // Authorization: `Bearer ${sessionStorage.token}`,
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
     body,
   }),
@@ -153,9 +152,7 @@ export const doPostFile = (url, body, urlPrefix = baseUrl) => timeoutPromise(fet
     let response = null;
     response = res.json();
     if (res.ok) {
-      response = res.json();
-    } else {
-      throw new Error(res.statusText);
+      return response;
     }
-    return response;
+    return response.then((error) => { throw error; });
   });
