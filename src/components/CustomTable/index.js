@@ -256,20 +256,20 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
             <TableBody>
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                .map((eachRow) => {
-                  const cellArray = Object.keys(eachRow).map((key) => {
+                .map((eachRow, rowIndex) => {
+                  const cellArray = Object.keys(eachRow).map((data, index) => {
                     let cellColumnData;
-                    if (key !== 'id') {
-                      [cellColumnData] = columnsHeadData.filter((column) => (key === column.id));
+                    if (data !== 'id') {
+                      [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     }
                     return (
-                      <TableCell key={key} className="users-table-row-cell" hidden={key === 'id'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[key]}</TableCell>
+                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'id'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
                     );
                   });
                   return (
                     <TableRow
                       hover={false}
-                      key={eachRow.id}
+                      key={`table cell data ${rowIndex}`}
                       onClick={null}
                     >
                       {cellArray}

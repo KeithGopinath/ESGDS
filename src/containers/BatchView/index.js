@@ -69,8 +69,8 @@ const BatchView = () => {
   const calculateCount = batches && (searchQuery ? searchfilter(searchQuery, batches).length : batchCount) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = batches && (searchQuery ? searchfilter(searchQuery, batches) : batches).slice(min, max).map(({ batchName }) => (
-    <Col lg={3} md={6}>
-      <Card className="batch-card batchbox" key={batchName} >
+    <Col lg={3} md={6} key={batchName}>
+      <Card className="batch-card batchbox">
         <ListItemText primary={batchName} />
       </Card>
     </Col>

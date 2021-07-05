@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+
 const TaskCreate = () => {
   const [taskFlow, settaskFlow] = useState(0);
   const [companyInfo, setcompanyInfo] = useState([]);
@@ -25,6 +26,7 @@ const TaskCreate = () => {
   const optionsForPagination = {
     sizePerPage: 10,
   };
+
   const onSelectRow = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { id: row.id, selectedCompany: row.companyName };
@@ -331,12 +333,12 @@ const TaskCreate = () => {
     console.log(pillar, 'pillar');
   };
   const pillaRadio = pillarOptions.map((e)=>(
-    <Radio value={e.value}>{e.label}</Radio>
+    <Radio key={e.label} value={e.value}>{e.label}</Radio>
     
   ));
   const grpDetail = groupDetails.map((element) => (
-    <Col lg={3} md={6} sm={12}>
-      <Card className="card-view groupbox" key={element.groupID} onClick={() => onselectGroup(element.groupID)} >
+    <Col lg={3} md={6} sm={12} key={element.groupID}>
+      <Card className="card-view groupbox" onClick={() => onselectGroup(element.groupID)} >
         <ListItemText primary={element.groupName} secondary={element.groupID} />
       </Card>
     </Col>
@@ -381,8 +383,8 @@ const TaskCreate = () => {
             </div>
             <div className="align-chip">
               <div className="batch-year-head">Year :</div>
-              {batchInfo.Batchyear.map(({ label }) => (
-                <Chip label={label} className="chip-space-bwt" />
+              {batchInfo.Batchyear.map(({ label }, index) => (
+                <Chip key={label[index]} label={label} className="chip-space-bwt" />
               ))}
             </div>
           </div>
@@ -496,8 +498,8 @@ const TaskCreate = () => {
         <Row>
           {companyInfo && companyInfo.batches.map(({ batchName, batchID }) =>
             (
-              <Col lg={3} md={6} sm={12}>
-                <Card className="card-view groupbox" key={batchID} onClick={() => onselectBatch(batchID)} >
+              <Col lg={3} md={6} sm={12} key={batchID}>
+                <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
                   <ListItemText primary={batchName} secondary={batchID} />
                 </Card>
               </Col>

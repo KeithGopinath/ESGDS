@@ -243,7 +243,7 @@ const Task = (props) => {
             </div>
             {reqTaskData.pillar === 'Governance' &&
             <div className="task-tabs-wrap">
-              {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
+              {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} key={tab[index]} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
             </div>}
             <div className="task-keyissue">
               <Row>

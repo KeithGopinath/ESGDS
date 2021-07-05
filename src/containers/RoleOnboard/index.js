@@ -23,12 +23,15 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const [emailFiledsValidation, setEmailFiledsValidation] = useState(false);
   const [roleSelect, setRoleSelect] = useState('');
   const [email, setEmail] = useState('');
+  const [duplcateMail, setDuplicateMail] = useState([]);
 
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
 
   const validMailStatus = useSelector((state) => state.RoleOnboarding.roleOnboarding);
   const InvalidMailStatus = useSelector((state) => state.RoleOnboarding.error);
+
+  const duplicateMails = InvalidMailStatus && InvalidMailStatus.DuplicateEmailsList;
 
   // mail status alert
   useEffect(() => {
@@ -39,8 +42,10 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     }
   }, [validMailStatus, InvalidMailStatus]);
 
+// const checkDuplicateMailAlert = duplicateMails==="Nil" ? onboardAlert : `${onboardAlert}\n ${duplicateMails}`;
+
   // role onboarding status class
-  const mailStatusClass = validMailStatus ? "success" : "danger";
+  const mailStatusClass = validMailStatus ? "success" : !duplicateMails ? '': "danger";
 
   useEffect(() => {
     if (showOnboardRoles) {
@@ -168,13 +173,18 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
         return (
           <Form.Group controlId="formPlaintextEmail" key={index}>
             <Row>
-              {index === 0 ? <Form.Label column sm="3" className="d-flex">
+              {index === 0 ? 
+              <Col sm="3">
+              <Form.Label className="d-flex">
                 <Form.Check
                   type="radio"
                   name="formHorizontalRadios"
                   id="email"
                   onChange={handleSelect}
-                />Email:</Form.Label> : index <= 5 ? <Form.Label column sm="3" className=""></Form.Label> : ''}
+                />Email:</Form.Label>
+              </Col> : index <= 5 ? 
+              <Col sm="3">
+              <Form.Label className=""></Form.Label></Col> : ''}
               <Col sm="4" className="">
                 <Form.Control
                   className={emailFiledsValidation && 'border-danger'}
@@ -188,15 +198,15 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
               </Col>
               <Col sm="3">
                 <Select
-                  className={roleSelect.length === 0 && emailFiledsValidation && 'dropdown-alert'}
+                  className={(roleSelect.length === 0 && emailFiledsValidation )? 'dropdown-alert' : ''}
                   options={roleOptions}
                   name="role"
                   onChange={e => onRoleChange(e, index, "onboardingtype")}
                   isDisabled={emailValid && true}
                 />
               </Col>
-              <div className="role-email-buttons ml-1"
-                column sm="2"
+              <Col sm="2">
+              <div className="role-email-buttons d-flex ml-1"
                 disabled={emailValid && true}>
                 {inputList.length !== 1 &&
                   <FontAwesomeIcon
@@ -211,19 +221,22 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
                     onClick={onClickAdd}
                   />}
               </div>
+              </Col>
             </Row>
           </Form.Group>
         );
       })}
       <Form.Group>
         <Row>
-          <Form.Label column sm="3" className="d-flex">
+          <Col sm="3">
+          <Form.Label className="d-flex">
             <Form.Check
               type="radio"
               name="formHorizontalRadios"
               id="excel"
               onChange={handleSelect}
             />Upload Excel:</Form.Label>
+            </Col>
           <Col sm="4">
             <Form.File
               type="file"
@@ -241,6 +254,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       </Form.Group>
     </div>
   );
+
   return (
     <Overlay
       className="text-center otp-modal"
@@ -253,7 +267,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       size="lg"
       title="Select role:"
       body={RoleBody()}
-      alert={onboardAlert}
+      alert={`${onboardAlert}\n ${!duplicateMails ? '' : duplicateMails }`}
       alertClass={mailStatusClass}
       primary="Send"
       onSubmitPrimary={onSubmitOnboard}

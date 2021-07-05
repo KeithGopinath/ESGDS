@@ -165,7 +165,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   const calculateCount = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData).length : taxonomyData.length) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData) : taxonomyData).slice(min, max).map((item, index) => (
-    <Col lg={3} md={6}>
+    <Col key={item.id} lg={3} md={6}>
       <Card className="batch-card batchbox">
         <div className={item.isRequired ? "taxonomy-checkbox-mandatory-container" : "taxonomy-checkbox-container"}>
           {!showList &&
