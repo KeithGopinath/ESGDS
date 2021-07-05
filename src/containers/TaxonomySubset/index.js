@@ -79,7 +79,7 @@ const TaxonomySubset = () => {
   const subsetTaxonomyTableData = (props) => {
     const tableRowData = (data) => data.map(({ name, id }) => ({
       name,
-      viewTaxonomy: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
+      viewTaxonomy: <FontAwesomeIcon key={id} icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
       downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id) }} />,
       uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" className="taxonomy-subset-icons" onClick={() => { onUploadTaxonomy(id) }} />,
     }));

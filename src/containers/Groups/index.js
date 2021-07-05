@@ -291,7 +291,7 @@ const Groups = () => {
   const memberRow = baseformat && baseformat.map((row,i)=>(
     
       
-      <TabPane tab={<span style={{ color: getValidate(row.members)? 'green':'#1890ff'}}  >{row.batchName}</span>} key={i} className="pillar-assign-box">
+      <TabPane tab={<span style={{ color: getValidate(row.members)? 'green':'#1890ff'}} key={row[i]} >{row.batchName}</span>} key={i} className="pillar-assign-box">
       <div className="row-header">
         <div style={{ width: '25%', display:'flex' }}>Members</div>
         <div style={{ width: '37%', marginRight: '1rem' }}>Primary pillar</div>
@@ -301,7 +301,7 @@ const Groups = () => {
       {/* <Divider orientation="right"><Tag color='processing' style={{margin:'0px', fontSize:'1.5rem', padding:'7px 7px 7px 7px'}}>{row.batchName}</Tag></Divider> */}
       { row.members.map((mem)=>(
 
-        <div className="row-pillar">
+        <div className="row-pillar" key={mem.name}>
               <div style={{ width: '25%', display:'flex', color:'#04385a', alignItems:'center',fontWeight:'450' }}><div>{mem.name}</div></div>
               <div style={{ width: '37%', marginRight: '1rem' }} onClick={()=>onclickDD(row.batchName,mem.name)}>
                 <Select
@@ -493,7 +493,7 @@ const onChangeTransfer = (newTargetKeys) => {
     {
       dataIndex: 'SecRole',
       title: 'Secondary',
-      render: (Secondary) => Secondary.map((e) => (<Tag color="cyan">{e.label}</Tag>)),
+      render: (Secondary) => Secondary.map((e) => (<Tag color="cyan" key={e.label}>{e.label}</Tag>)),
     },
   ];
   const rightTableColumns = [
@@ -604,7 +604,7 @@ const onChangeTransfer = (newTargetKeys) => {
         <Col lg={6} sm={12}>
           <div className="group-dropdown-width">
             <div className="group-content" >Select Group Admin*</div>
-            <div className={creategrpAdmin.length === 0 && inputValidate && 'group-dropdown-alert'}>
+            <div className={(creategrpAdmin.length === 0 && inputValidate) ? 'group-dropdown-alert' : ""}>
               <Select
                 options={groupAdminOptions}
                 name="name"
@@ -625,7 +625,7 @@ const onChangeTransfer = (newTargetKeys) => {
               onChange={onChangeTransfer}
               leftColumns={leftTableColumns}
               rightColumns={rightTableColumns}
-              pagination
+              //pagination
             />
           </div>
         </Col>

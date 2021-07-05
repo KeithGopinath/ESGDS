@@ -15,7 +15,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
 
 const GroupView = () => {
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(20);
@@ -32,571 +32,570 @@ const GroupView = () => {
 
   const grpList = [
     {
-      grpName:"group1",
-      grpAdmin:{
-         value:"Praveen",
-         label:"Praveen"
+      grpName: "group1",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
       },
-      grpMembers:[
-         {
-            userDetail:{
-               value:"24dgdsf4",
-               label:"user1"
-            },
-            roleDetails:{
-               primaryRole:{
-                  value:"dfgvsf4",
-                  label:"analyst"
-               },
-               secRole:[
-                  {
-                     value:"dfgvsf4",
-                     label:"qa"
-                  },
-                  {
-                     value:"dfgvsf4",
-                     label:"emp"
-                  }
-               ]
-            }
-         },
-         {
-          userDetail:{
-             value:"24dsdgdsf4",
-             label:"user2"
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
           },
-          roleDetails:{
-             primaryRole:{
-                value:"dfgvsf4",
-                label:"analyst"
-             },
-             secRole:[
-                {
-                   value:"dfgvsf4",
-                   label:"qa"
-                },
-                {
-                   value:"dfgvsf4",
-                   label:"emp"
-                }
-             ]
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
           }
-       },
-         
-        
-      ],
-      "assignedBatches":[]
-   },
-   {
-    grpName:"group1",
-    grpAdmin:{
-       value:"Praveen",
-       label:"Praveen"
-    },
-    grpMembers:[
-       {
-          userDetail:{
-             value:"24dgdsf4",
-             label:"user1"
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
           },
-          roleDetails:{
-             primaryRole:{
-                value:"dfgvsf4",
-                label:"analyst"
-             },
-             secRole:[
-                {
-                   value:"dfgvsf4",
-                   label:"qa"
-                },
-                {
-                   value:"dfgvsf4",
-                   label:"emp"
-                }
-             ]
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
           }
-       },
-       {
-        userDetail:{
-           value:"24dsdgdsf4",
-           label:"user2"
         },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-       
-      
-    ],
-    "assignedBatches":[]
- },
- {
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-{
-  grpName:"group1",
-  grpAdmin:{
-     value:"Praveen",
-     label:"Praveen"
-  },
-  grpMembers:[
-     {
-        userDetail:{
-           value:"24dgdsf4",
-           label:"user1"
-        },
-        roleDetails:{
-           primaryRole:{
-              value:"dfgvsf4",
-              label:"analyst"
-           },
-           secRole:[
-              {
-                 value:"dfgvsf4",
-                 label:"qa"
-              },
-              {
-                 value:"dfgvsf4",
-                 label:"emp"
-              }
-           ]
-        }
-     },
-     {
-      userDetail:{
-         value:"24dsdgdsf4",
-         label:"user2"
-      },
-      roleDetails:{
-         primaryRole:{
-            value:"dfgvsf4",
-            label:"analyst"
-         },
-         secRole:[
-            {
-               value:"dfgvsf4",
-               label:"qa"
-            },
-            {
-               value:"dfgvsf4",
-               label:"emp"
-            }
-         ]
-      }
-   },
-     
-    
-  ],
-  "assignedBatches":[]
-},
-  
-  ]
-  
 
-  const groupCount =  grpList.length;
-  
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group2",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group3",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group4",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group5",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group6",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group7",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group8",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group9",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+    {
+      grpName: "group10",
+      grpAdmin: {
+        value: "Praveen",
+        label: "Praveen"
+      },
+      grpMembers: [
+        {
+          userDetail: {
+            value: "24dgdsf4",
+            label: "user1"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+        {
+          userDetail: {
+            value: "24dsdgdsf4",
+            label: "user2"
+          },
+          roleDetails: {
+            primaryRole: {
+              value: "dfgvsf4",
+              label: "analyst"
+            },
+            secRole: [
+              {
+                value: "dfgvsf4",
+                label: "qa"
+              },
+              {
+                value: "dfgvsf4",
+                label: "emp"
+              }
+            ]
+          }
+        },
+
+
+      ],
+      "assignedBatches": []
+    },
+
+  ]
+
+
+  const groupCount = grpList.length;
 
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
@@ -626,8 +625,8 @@ const GroupView = () => {
   const calculateCount = grpList && (searchQuery ? searchfilter(searchQuery, grpList).length : groupCount) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = grpList && (searchQuery ? searchfilter(searchQuery, grpList) : grpList).slice(min, max).map(({ grpName }) => (
-    <Col lg={3} md={6}>
-      <Card className="batch-card batchbox" key={grpName} >
+    <Col lg={3} md={6} key={grpName}>
+      <Card className="batch-card batchbox">
         <ListItemText primary={grpName} />
       </Card>
     </Col>

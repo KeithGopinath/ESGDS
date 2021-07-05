@@ -42,10 +42,10 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   }, [userDetails]);
 
   useEffect(() => {
-    if (!flag && (role === 'company' || role === 'client')) {
+    if (!flag && ( role === 'company' ||  role === 'client')) {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
-  }, []);
+  }, [role]);
 
   // Getting the list of companies
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
@@ -100,7 +100,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const onCompanyNameSelect = (companySelect) => {
     setCompanyName(companySelect);
     onCompanyName(companySelect);
-    console.log("client selected value: ", companySelect);
 
   };
 
@@ -269,7 +268,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
                   <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                  <div className={companyName && companyName.length === 0 && validate && 'dropdown-alert'}>
+                  <div className={(companyName.length === 0 && validate) ? 'dropdown-alert': ''}>
                     <Select
                       isMulti={role === 'company' ? true : false}
                       options={companyList}

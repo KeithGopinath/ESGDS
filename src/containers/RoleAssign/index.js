@@ -117,7 +117,7 @@ const RoleAssignment = ({ show, setShow }) => {
     <Menu>
       {role && role.filter(val => val.value !== primaryRole.value).map((data) => {
         return (
-          <Menu.Item>
+          <Menu.Item key={data.label}>
             <p onClick={() => { onPrimaryRoleChange(data) }}>{data.label}</p>
           </Menu.Item>
         )
