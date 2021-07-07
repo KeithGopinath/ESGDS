@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Col, Row, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
-import { message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import Overlay from '../../components/Overlay';
@@ -23,16 +22,14 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const [emailFiledsValidation, setEmailFiledsValidation] = useState(false);
   const [roleSelect, setRoleSelect] = useState('');
   const [email, setEmail] = useState('');
-  const [duplcateMail, setDuplicateMail] = useState([]);
-
+  
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
 
   const validMailStatus = useSelector((state) => state.RoleOnboarding.roleOnboarding);
   const InvalidMailStatus = useSelector((state) => state.RoleOnboarding.error);
-
-  const duplicateMails = InvalidMailStatus && InvalidMailStatus.DuplicateEmailsList;
-
+  const duplicateMails = InvalidMailStatus && InvalidMailStatus.duplicateEmailsList
+  
   // mail status alert
   useEffect(() => {
     if (validMailStatus) {
@@ -42,10 +39,8 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     }
   }, [validMailStatus, InvalidMailStatus]);
 
-// const checkDuplicateMailAlert = duplicateMails==="Nil" ? onboardAlert : `${onboardAlert}\n ${duplicateMails}`;
-
   // role onboarding status class
-  const mailStatusClass = validMailStatus ? "success" : !duplicateMails ? '': "danger";
+  const mailStatusClass = validMailStatus ? "success" : "danger";
 
   useEffect(() => {
     if (showOnboardRoles) {
@@ -64,10 +59,12 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     let data = e.target.id;
     setChooseOption(data);
     if (data === 'email') {
+      setFileUploadValidation(false);
       setOnboardAlert("");
       setEmailValid(false);
       setFileValid(true);
     } else if (data === 'excel') {
+      setEmailFiledsValidation(false);
       setOnboardAlert("");
       setEmailValid(true);
       setFileValid(false);
@@ -78,6 +75,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     if (!chooseOption) {
       setOnboardAlert("Should choose anyone option");
     } else if (chooseOption === 'email') {
+      setFileUploadValidation(false);
       if (!email) {
         setEmailFiledsValidation(true);
         setOnboardAlert("Enter the all fileds");
@@ -89,7 +87,8 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
         dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
       }
     } else if (chooseOption === 'excel') {
-      if (!emailFileUpload) {
+        setEmailFiledsValidation(false);
+        if (!emailFileUpload) {
         setFileUploadValidation(true);
         setOnboardAlert("Should upload excel file only");
       } else {
@@ -143,6 +142,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
+    setListOfData(list);
   };
 
   // role_options api integration
@@ -174,8 +174,8 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
           <Form.Group controlId="formPlaintextEmail" key={index}>
             <Row>
               {index === 0 ? 
-              <Col sm="3">
-              <Form.Label className="d-flex">
+              <Col sm="3" className="mt-auto mb-auto">
+              <Form.Label className="d-flex mt-auto mb-auto">
                 <Form.Check
                   type="radio"
                   name="formHorizontalRadios"
@@ -187,7 +187,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
               <Form.Label className=""></Form.Label></Col> : ''}
               <Col sm="4" className="">
                 <Form.Control
-                  className={emailFiledsValidation && 'border-danger'}
+                  className={emailFiledsValidation=== true ? 'border-danger' : ''}
                   type="email"
                   name="email"
                   placeholder="Enter email"
@@ -205,7 +205,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
                   isDisabled={emailValid && true}
                 />
               </Col>
-              <Col sm="2">
+              <Col sm="2" className="mt-auto mb-auto">
               <div className="role-email-buttons d-flex ml-1"
                 disabled={emailValid && true}>
                 {inputList.length !== 1 &&
@@ -228,8 +228,8 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       })}
       <Form.Group>
         <Row>
-          <Col sm="3">
-          <Form.Label className="d-flex">
+          <Col sm="3" className="mt-auto mb-auto">
+          <Form.Label className="d-flex mt-auto mb-auto">
             <Form.Check
               type="radio"
               name="formHorizontalRadios"
@@ -242,7 +242,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
               type="file"
               title="Upload excel files only"
               accept="*/.xlxs,*/.xls"
-              className={fileUploadValidation && 'file-not-upload'}
+              className={ fileUploadValidation ? 'file-not-upload' : ''}
               id="choose-file"
               label={emailFileUpload === '' ? "Upload excel file" : emailFileUpload}
               onChange={onUploadExcel}
@@ -267,7 +267,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       size="lg"
       title="Select role:"
       body={RoleBody()}
-      alert={`${onboardAlert}\n ${!duplicateMails ? '' : duplicateMails }`}
+      alert={`${onboardAlert}\n${!duplicateMails ? '' : duplicateMails.map(e => `${e}\n`)}`}
       alertClass={mailStatusClass}
       primary="Send"
       onSubmitPrimary={onSubmitOnboard}
