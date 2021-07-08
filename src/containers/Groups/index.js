@@ -5,10 +5,10 @@ import { Transfer, Steps, message, Button, Result, Divider, Tabs, Tag, Table } f
 import difference from 'lodash/difference';
 import {
   IdcardFilled,
-  MessageOutlined,
   ExceptionOutlined
 } from '@ant-design/icons';
 import Select from 'react-select';
+import { useDispatch, useSelector } from 'react-redux';
 // import ListItemText from '@material-ui/core/ListItemText';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -35,6 +35,7 @@ const Groups = () => {
   const sideBarRef = useRef();
   const { Step } = Steps;
   const { TabPane } = Tabs;
+  const dispatch = useDispatch();
   const steps = [
     {
       title:'Create group',
@@ -116,7 +117,19 @@ const Groups = () => {
       },
     },
   ];
-
+  // *** API call *** ***
+  useEffect(()=>{
+    const payload = { 
+      filters: [
+        // { filterWith: "isUserApproved", value: true },
+        { filterWith: "isAssignedToGroup", value: false },
+        // { filterWith: "isRoleAssigned", value: true }
+        // { filterWith: "isUserActive", value: true }
+        
+      ] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+  })
+   
   // *** batch assignments starts ***
  
   const onChangebatchTransfer = (newTargetKeys) => {
@@ -297,7 +310,7 @@ const Groups = () => {
         <div style={{ width: '37%', marginRight: '1rem' }}>Primary pillar</div>
         {/* <div style={{ width: '37%' }}>Optional pillar</div> */}
       </div>
-      <Divider  className="divide" ></Divider>
+      {/* <Divider  className="divide" ></Divider> */}
       {/* <Divider orientation="right"><Tag color='processing' style={{margin:'0px', fontSize:'1.5rem', padding:'7px 7px 7px 7px'}}>{row.batchName}</Tag></Divider> */}
       { row.members.map((mem)=>(
 
@@ -408,19 +421,25 @@ const onChangeTransfer = (newTargetKeys) => {
       }
     }
     console.log(memobj, 'memobj');
-    if ((creategrpName.length && creategrpAdmin.value.length && usertargetKeys.length) > 0) {
-      const grpDetails = { groupName: creategrpName, groupAdmin: creategrpAdmin, members: memobj };
-      // const updatedgrplist = [grpDetails, ...grplist];
-      setcreateGrpList(grpDetails);
-      setgrpName(creategrpName);
-      // setGrpCount(grplist.length + 1);
-      message.success('Group created sucessfully');
-      setCurrent(current + 1);
-     
-    } else {
-      message.error('Fill all the required fields');
-      setcreateGrpList([]);
+    if(creategrpAdmin){
+
+      if ((creategrpName.length && usertargetKeys.length && creategrpAdmin.value.length) > 0) {
+        const grpDetails = { groupName: creategrpName, groupAdmin: creategrpAdmin, members: memobj };
+        // const updatedgrplist = [grpDetails, ...grplist];
+        setcreateGrpList(grpDetails);
+        setgrpName(creategrpName);
+        // setGrpCount(grplist.length + 1);
+        message.success('Group created sucessfully');
+        setCurrent(current + 1);
+      
+      } else {
+        message.error('Fill all the required fields');
+        setcreateGrpList([]);
+      }
     }
+    else{
+      message.error('Fill all the required fields');
+    }  
     console.log(creategrplist, 'grplist');
   };
 
@@ -492,8 +511,8 @@ const onChangeTransfer = (newTargetKeys) => {
     },
     {
       dataIndex: 'SecRole',
-      title: 'Secondary',
-      render: (Secondary) => Secondary.map((e) => (<Tag color="cyan" key={e.label}>{e.label}</Tag>)),
+      title: 'Roles',
+      render: (Roles) => Roles.map((e) => (<Tag color="cyan">{e.label}</Tag>)),
     },
   ];
   const rightTableColumns = [

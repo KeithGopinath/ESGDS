@@ -1,12 +1,12 @@
 /* eslint-disable*/
 import React, { useState, useRef } from 'react';
-import { Col, Row, Container, Card, Button } from 'react-bootstrap';
+import { Col, Row, Container, Card, Button, Accordion } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
-import { DatePicker, Radio } from 'antd';
+import { DatePicker, Radio, message, notification, Tag, Divider, Tabs} from 'antd';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
-import Select from 'react-select';
+import CustomTable from '../../components/CustomTable';
 import TextField from '@material-ui/core/TextField';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from '../../components/Header';
@@ -21,12 +21,17 @@ const TaskCreate = () => {
   const [rowDetail, setRowDetails] = useState([]);
   const [analystSla,setanalystSla] = useState('');
   const [isDisabledQA, setisDisabledQA] = useState(true);
-  const [qacheckdate, setqacheckdate] = useState('')
+  const [statusRole, setstatusRole] = useState(true);
+  const [qacheckdate, setqacheckdate] = useState('');
+  const [selectedAnalyst, setselectedAnalyst] = useState('');
+  const [selectedQa, setselectedQa] = useState('');
   const [qaSla, setqaSla] = useState('');
+  const [radioEle, setRadioEle] = useState('');
+  const [radioEleqa, setRadioEleqa] = useState('');
   const optionsForPagination = {
     sizePerPage: 10,
   };
-
+  const { TabPane } = Tabs;
   const onSelectRow = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { id: row.id, selectedCompany: row.companyName };
@@ -78,8 +83,8 @@ const TaskCreate = () => {
     { value: "sfg4", label: "Environment" },
     { value: "sg3d", label: "social" },
     { value: "v4", label: "governance" },
-    { value: "sfgs4", label: "xsdfad" },
-    { value: "sfdfg4", label: "yasdvadv" },
+    { value: "sfgs4", label: "pillarX" },
+    { value: "sfdfg4", label: "pillarY" },
   ];
   const selectRowProp = {
     mode: 'checkbox',
@@ -267,9 +272,13 @@ const TaskCreate = () => {
     const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
     return date
   }
-
-  const onCreateTask = () => {
-    alert('Task Created Successfully');
+  const openNotificationWithIcon = type => {
+    notification[type]({
+      message: 'Detail',
+      description:
+        'name : Rajesh, Pillar : Enviroment, Role: Analyst',
+        duration:0
+    });
   };
   const analystdisabledDate = (current) => {
     const yourDate = new Date();
@@ -279,7 +288,7 @@ const TaskCreate = () => {
   }
   const qadisabledDate = (current) =>{
     const analystEnddate = analystSla;
-    console.log(typeof(analystEnddate), 'analystEnddate');
+    // console.log(typeof(analystEnddate), 'analystEnddate');
     if(analystEnddate){
       return current && current < moment(analystEnddate, 'YYYY-MM-DD').add(1, 'days');
     }
@@ -291,11 +300,11 @@ const TaskCreate = () => {
       if (args.groupID === matchgrp) {
         console.log(args, 'args');
         const modifiedQA = args.assignedQa.map((qa) => {
-          const qaArray = { name: qa.QAname, label: qa.QAname };
+          const qaArray = { value: qa.QAname, label: qa.QAname };
           return qaArray;
         });
         const modifiedAnalyst = args.assignedAnalyst.map((analyst) => {
-          const analystArray = { name: analyst.Analyst, label: analyst.Analyst };
+          const analystArray = { value: analyst.Analyst, label: analyst.Analyst };
           return analystArray;
         });
         const currentGrpinfo = {
@@ -329,8 +338,15 @@ const TaskCreate = () => {
     });
   };
   const handleChangePillar = (checkedValues) => {
-    setPillar(checkedValues.target.value);
-    console.log(pillar, 'pillar');
+    const val = checkedValues.target.value;
+    const selectedPillar = [];
+    pillarOptions.map((e)=>{
+      if(e.value === val){
+        selectedPillar.push(e);
+      }
+    });
+    setPillar(selectedPillar[0]);
+    console.log(selectedPillar, 'selectedPillar');
   };
   const pillaRadio = pillarOptions.map((e)=>(
     <Radio key={e.label} value={e.value}>{e.label}</Radio>
@@ -357,14 +373,204 @@ const TaskCreate = () => {
       setisDisabledQA(true);
     }
     
-  }
+  };
+
   const qaEndData = (e) => {
     if(e !== null){
       const date = getFormatDate(e._d);
       setqaSla(date);
       setqacheckdate(e);
     }
-  }
+  };
+
+  const onhandleAnalyst = (arg) => {
+    console.log(arg, 'analyst');
+    if(arg){
+    setselectedAnalyst(arg);
+    setRadioEle(arg.key);
+    setstatusRole(false);
+    setselectedQa('');
+    }
+    else{
+      setstatusRole(true);
+    }
+
+  };
+
+  
+
+  const onhandleQa = (arg) => {
+    console.log(arg, 'qa');
+    setselectedQa(arg);
+    setRadioEleqa(arg.key);
+  };
+
+  const onCreateTask = () => {
+    if(pillar && selectedAnalyst && selectedQa){
+        if((rowDetail.length && pillar.value.length  && selectedAnalyst.name.length &&  selectedQa.name.length &&  analystSla.length && qaSla.length) > 0)
+          {
+          const taskPayload =  {
+            
+              bachid: batchInfo.Batchid,
+              year: batchInfo.Batchyear,
+              pillar: pillar,
+              company: rowDetail,
+              analyst: selectedAnalyst,
+              qa: selectedQa,
+              analystSla: analystSla,
+              qaSla: qaSla
+        
+            };
+            
+
+          
+          console.log(taskPayload, 'taskPayload');
+
+          message.success("group created successfully");
+      }
+        else {
+          message.error("fill all the required fields");
+        }
+      }
+      else{
+        message.error("fill all the required fields");
+      }    
+  };
+
+  
+  const data = [
+    {
+      key: '1',
+      name: 'John Brown',
+      pillar: 'Environment',
+      role: 'Analyst',
+      assignedTask:'2'
+    },
+    {
+      key: '2',
+      name: 'Jim Green',
+      pillar: 'Social',
+      role: 'Qa',
+      assignedTask:'5'
+    },
+    {
+      key: '3',
+      name: 'Joe Black',
+      pillar: 'governance',
+      role: 'analyst',
+      assignedTask:'8'
+    },
+    {
+      key: '4',
+      name: 'Tom',
+      pillar: 'Social',
+      role: 'analyst',
+      assignedTask:'0'
+    },
+  ]; // rowSelection object indicates the need for row selection
+  
+  const analystTableData = (props) => {
+    const tableRowData = (data) => data.map((obj) => ({
+      id: obj.Analystkey,
+      select:<div><Radio value={obj.key} onChange={()=>onhandleAnalyst(obj)} checked={(obj.key ===radioEle)?true:false}></Radio></div>,
+      name:obj.name,
+      pillar:<Tag color="cyan">{obj.pillar}</Tag>,
+      role:obj.role,
+      assignedTask:obj.assignedTask
+      
+    }));
+  
+    return {
+      rowsData: tableRowData(props),
+      columnsHeadData: [
+        {
+          id: 'select',
+          align: 'center',
+          label: 'Select',
+          dataType: 'element',
+        },
+        {
+        id: 'name',
+        align: 'center',
+        label: 'Name',
+        dataType: 'string',
+      },
+      {
+        id: 'pillar',
+        align: 'center',
+        label: 'Pillar',
+        dataType: 'element',
+      },
+      {
+        id: 'role',
+        align: 'center',
+        label: 'Role',
+        dataType: 'string',
+      },
+      {
+        id: 'assignedTask',
+        align: 'center',
+        label: 'Task',
+        dataType: 'string',
+      },
+     
+      ],
+      tableLabel: 'List',
+    };
+  };
+  const qaTableData = (props) => {
+    const tableRowData = (data) => data.filter((i)=> selectedAnalyst.key !== i.key).map((e) => ({
+      id: e.key,
+      select:<div><Radio value={e.key} onChange={()=>onhandleQa(e)} checked={(e.key ===radioEleqa)?true:false} disabled={statusRole}></Radio></div>,
+      name:e.name,
+      pillar:<Tag color="cyan">{e.pillar}</Tag>,
+      role:e.role,
+      assignedTask:e.assignedTask,
+      
+    }));
+  
+    return {
+      rowsData: tableRowData(props),
+      columnsHeadData: [
+        {
+          id: 'select',
+          align: 'center',
+          label: 'Select',
+          dataType: 'element',
+        },
+        {
+        id: 'name',
+        align: 'center',
+        label: 'Name',
+        dataType: 'string',
+      },
+      {
+        id: 'pillar',
+        align: 'center',
+        label: 'Pillar',
+        dataType: 'element',
+      },
+      {
+        id: 'role',
+        align: 'center',
+        label: 'Role',
+        dataType: 'string',
+      },
+      {
+        id: 'assignedTask',
+        align: 'center',
+        label: 'Task',
+        dataType: 'string',
+      },
+     
+      ],
+      tableLabel: 'List',
+    };
+  };
+ 
+ 
+  const tableDataanalyst = analystTableData(data);
+  const tableDataqa = qaTableData(data);
 
   const batchInfoTab = () => (
     <Container>
@@ -389,20 +595,36 @@ const TaskCreate = () => {
             </div>
           </div>
         </Col>
+        
       </Row>
+      <Divider style={{borderTop:'3px solid rgba(0, 0, 0, 0.06)'}}></Divider>
       <Row className="row-pad task-row">
-        <Col lg={6} sm={12}>
-        <div className="date-picker-outer">
-            <div className="date-picker-inner">
-              <div className="task-role">Assigned Analyst</div>
-              <div>
-                <Select
-                  options={companyInfo.analyst}
-                />
-              </div>
-            </div>
-            <div className="date-picker-inner">
-              <div className="task-role" >Analyst SLA Date</div>
+        <Col lg={12} sm={12} style={{marginBottom:'2rem'}}>
+        <div className="radio-select">
+            <div className="task-role">Select pillar for task*</div>
+            <Radio.Group  onChange={handleChangePillar}  value={pillar.value}>
+                {pillaRadio}
+            </Radio.Group>
+          </div>
+          
+        </Col>
+        <Col lg={12} sm={12} style={{marginBottom:'2rem'}}>
+          <div className="detail-task-tab"> 
+        <Tabs defaultActiveKey="1" className="tab-select" size="medium" tabPosition="top" >
+   
+          <TabPane tab={<span style={{ color: '#3690ffd4'}}  >Choose company</span>} key="1">
+            
+                <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+                  <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+                  <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
+                </BootstrapTable>
+            
+          </TabPane>
+    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Analyst</span>} key="2" >
+    
+       
+          <div className="date-picker-analyst">
+              <div className="task-role-analystsla" > SLA Date</div>
               <div >
                 <DatePicker
                   className="date-picker"
@@ -413,20 +635,17 @@ const TaskCreate = () => {
                 />
               </div>
             </div>
-          </div>
-          <div className="date-picker-outer">
-            <div className="date-picker-inner">
-              <div className="task-role">Assigned QA</div>
-              <div>
-                <Select
-                  options={companyInfo.Qa}
-                  isDisabled={isDisabledQA}
-                />
-              </div>
-            </div>
-            <div className="date-picker-inner">
-              <div className="task-role" >QA SLA Date</div>
-              <div>
+          <div className="task-role-analyst">Select Analyst for task</div>  
+          <div className="analystQa-table">
+          <CustomTable tableData={tableDataanalyst} />
+      </div>
+         
+        
+    </TabPane>
+    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Qa</span>} key="3">
+          <div className="date-picker-analyst">
+              <div className="task-role-analystsla" > SLA Date</div>
+              <div >
                 <DatePicker
                   className="date-picker"
                   size="middle"
@@ -438,22 +657,22 @@ const TaskCreate = () => {
                 />
               </div>
             </div>
-          </div>
-          <div className="radio-select">
-            <div className="task-role">Assigned To</div>
-            <Radio.Group  onChange={handleChangePillar}  value={pillar}>
-                {pillaRadio}
-            </Radio.Group>
-          </div>
-          
-        </Col>
-        <Col lg={6} sm={12}>
-          <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
-            <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-            <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
-          </BootstrapTable>
-        </Col>
+          <div className="task-role-analyst">Select Qa for task</div>  
+          <div className="analystQa-table">
+          <CustomTable tableData={tableDataqa} />
+        </div>
+        
+    </TabPane>
+  </Tabs>
+  </div>
+  </Col>
+       
+        
+        
+        
+       
       </Row>
+      <Divider style={{borderTop:'3px solid rgba(0, 0, 0, 0.06)'}}></Divider>
       <Row style={{ padding: '5%' }} className="task-row">
         <Col>
           <div className="task-foo">
