@@ -1,0 +1,28 @@
+.profile-row {
+    display: flex;
+    margin: 10px;
+}
+
+.profile-update-button {
+    margin-top: 10px;
+}
+
+.profile-images-row {
+    display: flex;
+    margin: 10px;
+}
+
+.profile-image {
+    text-align: center;
+}
+
+.ant-input-suffix {
+    color: #2199c8 !important;
+    cursor: pointer !important;
+}
+
+.profile-image-container {
+    .d-flex {
+        justify-content: space-evenly !important;
+    }
+}
