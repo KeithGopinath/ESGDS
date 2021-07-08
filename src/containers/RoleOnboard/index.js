@@ -4,7 +4,7 @@ import { Col, Row, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUserTimes, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import Overlay from '../../components/Overlay';
 
 const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
@@ -22,26 +22,31 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
   const [emailFiledsValidation, setEmailFiledsValidation] = useState(false);
   const [roleSelect, setRoleSelect] = useState('');
   const [email, setEmail] = useState('');
-  
+  const [duplicateMails, setDuplicateMails] = useState([]);
+
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
+  // const rolesLoading = useSelector((state) => state.roles.isLoading);
 
-  const validMailStatus = useSelector((state) => state.RoleOnboarding.roleOnboarding);
-  const InvalidMailStatus = useSelector((state) => state.RoleOnboarding.error);
-  const duplicateMails = InvalidMailStatus && InvalidMailStatus.duplicateEmailsList
-  
+  const validMailStatus = useSelector((state) => state.roleOnboarding.roleOnboarding);
+  const loading = useSelector((state) => state.roleOnboarding.isLoading);
+  const InvalidMailStatus = useSelector((state) => state.roleOnboarding.error);
+
   // mail status alert
   useEffect(() => {
     if (validMailStatus) {
       setOnboardAlert(validMailStatus.message);
+      setDuplicateMails([]);
     } else if (InvalidMailStatus) {
       setOnboardAlert(InvalidMailStatus.message);
+      setDuplicateMails(InvalidMailStatus && InvalidMailStatus.duplicateEmailsList);
     }
   }, [validMailStatus, InvalidMailStatus]);
 
   // role onboarding status class
   const mailStatusClass = validMailStatus ? "success" : "danger";
 
+  // get roles API
   useEffect(() => {
     if (showOnboardRoles) {
       dispatch({ type: 'GET_ROLES_REQUEST' });
@@ -55,40 +60,43 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     }
   }, [showOnboardRoles]);
 
+  // radio button select
   const handleSelect = (e) => {
+    setOnboardAlert("");
     let data = e.target.id;
     setChooseOption(data);
     if (data === 'email') {
       setFileUploadValidation(false);
+      setDuplicateMails([]);
       setOnboardAlert("");
       setEmailValid(false);
       setFileValid(true);
     } else if (data === 'excel') {
       setEmailFiledsValidation(false);
+      setDuplicateMails([]);
       setOnboardAlert("");
       setEmailValid(true);
       setFileValid(false);
     }
   }
 
+  // Submit role onbaord
   const onSubmitOnboard = () => {
     if (!chooseOption) {
-      setOnboardAlert("Should choose anyone option");
+      setOnboardAlert("Please choose anyone option");
     } else if (chooseOption === 'email') {
       setFileUploadValidation(false);
-      if (!email) {
+      if (!email || !roleSelect) {
         setEmailFiledsValidation(true);
-        setOnboardAlert("Enter the all fileds");
-      } else if (!roleSelect) {
-        setEmailFiledsValidation(true);
-        setOnboardAlert("Enter the all fileds");
+        setOnboardAlert("Please fill all fields");
+        setDuplicateMails([]);
       } else {
         const roleOnboardingData = { emailList: listOfData };
         dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
       }
     } else if (chooseOption === 'excel') {
-        setEmailFiledsValidation(false);
-        if (!emailFileUpload) {
+      setEmailFiledsValidation(false);
+      if (!emailFileUpload) {
         setFileUploadValidation(true);
         setOnboardAlert("Should upload excel file only");
       } else {
@@ -108,9 +116,10 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     setListOfData(list);
   };
 
-  const onRoleChange = (e, index, field) => {
+  // Role Choose
+  const onRoleChange = (e, index) => {
     setEmailFiledsValidation(false);
-    const { value } = e;
+    const { field, value } = e;
     setRoleSelect(e);
     const list = [...inputList];
     list[index][field] = value;
@@ -173,21 +182,21 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
         return (
           <Form.Group controlId="formPlaintextEmail" key={index}>
             <Row>
-              {index === 0 ? 
-              <Col sm="3" className="mt-auto mb-auto">
-              <Form.Label className="d-flex mt-auto mb-auto">
-                <Form.Check
-                  type="radio"
-                  name="formHorizontalRadios"
-                  id="email"
-                  onChange={handleSelect}
-                />Email:</Form.Label>
-              </Col> : index <= 5 ? 
-              <Col sm="3">
-              <Form.Label className=""></Form.Label></Col> : ''}
+              {index === 0 ?
+                <Col sm="3" className="mt-auto mb-auto">
+                  <Form.Label className="d-flex mt-auto mb-auto">
+                    <Form.Check
+                      type="radio"
+                      name="formHorizontalRadios"
+                      id="email"
+                      onChange={handleSelect}
+                    />Email:</Form.Label>
+                </Col> : index <= 5 ?
+                  <Col sm="3">
+                    <Form.Label className=""></Form.Label></Col> : ''}
               <Col sm="4" className="">
                 <Form.Control
-                  className={emailFiledsValidation=== true ? 'border-danger' : ''}
+                  className={emailFiledsValidation === true ? 'border-danger' : ''}
                   type="email"
                   name="email"
                   placeholder="Enter email"
@@ -198,29 +207,31 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
               </Col>
               <Col sm="3">
                 <Select
-                  className={(roleSelect.length === 0 && emailFiledsValidation )? 'dropdown-alert' : ''}
+                  className={(roleSelect.length === 0 && emailFiledsValidation) ? 'dropdown-alert' : ''}
                   options={roleOptions}
                   name="role"
-                  onChange={e => onRoleChange(e, index, "onboardingtype")}
+                  onChange={e => onRoleChange(e, index)}
                   isDisabled={emailValid && true}
                 />
               </Col>
               <Col sm="2" className="mt-auto mb-auto">
-              <div className="role-email-buttons d-flex ml-1"
-                disabled={emailValid && true}>
-                {inputList.length !== 1 &&
-                  <FontAwesomeIcon
-                    className="minus-icon"
-                    icon={faMinusCircle}
-                    onClick={() => onClickRemove(index)}
-                  />}
-                {inputList.length - 1 === index &&
-                  <FontAwesomeIcon
-                    className={disableAdd === true ? "d-none" : "plus-icon"}
-                    icon={faPlusCircle}
-                    onClick={onClickAdd}
-                  />}
-              </div>
+                <div className="role-email-buttons d-flex ml-1"
+                  disabled={emailValid && true}>
+                  {inputList.length !== 1 &&
+                    <FontAwesomeIcon
+                      title="remove user from list"
+                      className="minus-icon"
+                      icon={faUserTimes}
+                      onClick={() => onClickRemove(index)}
+                    />}
+                  {inputList.length - 1 === index &&
+                    <FontAwesomeIcon
+                      title="add new user to list"
+                      className={disableAdd === true ? "d-none" : "plus-icon"}
+                      icon={faUserPlus}
+                      onClick={onClickAdd}
+                    />}
+                </div>
               </Col>
             </Row>
           </Form.Group>
@@ -229,20 +240,20 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       <Form.Group>
         <Row>
           <Col sm="3" className="mt-auto mb-auto">
-          <Form.Label className="d-flex mt-auto mb-auto">
-            <Form.Check
-              type="radio"
-              name="formHorizontalRadios"
-              id="excel"
-              onChange={handleSelect}
-            />Upload Excel:</Form.Label>
-            </Col>
+            <Form.Label className="d-flex mt-auto mb-auto">
+              <Form.Check
+                type="radio"
+                name="formHorizontalRadios"
+                id="excel"
+                onChange={handleSelect}
+              />Upload Excel:</Form.Label>
+          </Col>
           <Col sm="4">
             <Form.File
               type="file"
               title="Upload excel files only"
               accept="*/.xlxs,*/.xls"
-              className={ fileUploadValidation ? 'file-not-upload' : ''}
+              className={fileUploadValidation ? 'file-not-upload' : ''}
               id="choose-file"
               label={emailFileUpload === '' ? "Upload excel file" : emailFileUpload}
               onChange={onUploadExcel}
@@ -267,9 +278,10 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       size="lg"
       title="Select role:"
       body={RoleBody()}
-      alert={`${onboardAlert}\n${!duplicateMails ? '' : duplicateMails.map(e => `${e}\n`)}`}
+      alert={onboardAlert && !duplicateMails ? `${onboardAlert}` : (onboardAlert && duplicateMails ? `${onboardAlert} \n${duplicateMails.map(e => ` ${e} \n`)}` : '')}
       alertClass={mailStatusClass}
       primary="Send"
+      isLoading={loading}
       onSubmitPrimary={onSubmitOnboard}
     />
   );

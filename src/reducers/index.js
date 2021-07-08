@@ -12,7 +12,7 @@ import masterTaxonomy from './MasterTaxonomy';
 import clientTaxonomy from './ClientTaxonomy';
 import roles from './Roles';
 import roleAssignmentEdit from './RoleAssignmentEdit';
-import RoleOnboarding from './RoleOnboarding';
+import roleOnboarding from './RoleOnboarding';
 import newClientTaxonomy from './NewClientTaxonomy';
 import filterUsers from './FilterUsers';
 import userUpdate from './UserUpdate';
@@ -34,7 +34,7 @@ const rootReducer = combineReducers({
   clientTaxonomy,
   roles,
   roleAssignmentEdit,
-  RoleOnboarding,
+  roleOnboarding,
   newClientTaxonomy,
   filterUsers,
   userUpdate,
