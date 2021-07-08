@@ -5,7 +5,7 @@ import { doPut } from '../utils/fetchWrapper';
 
 export function* getUpdatePasswordRequest(data) {
   try {
-    const response = yield doPut(`${envConfig.apiEndPoints.getUpdatePassword}${data.token}`, data.payload);
+    const response = yield doPut(`${envConfig.apiEndPoints.getForgotPassword}/${data.token}`, data.payload);
     yield put(updatePasswordActionCreators.getUpdatePasswordSuccess(response));
   } catch (error) {
     yield put(updatePasswordActionCreators.getUpdatePasswordFailure(error));

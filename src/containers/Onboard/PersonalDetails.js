@@ -38,11 +38,11 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     setAdharCard(userDetails && userDetails.aadhaarNumber);
     setBankAccountNumber(userDetails && userDetails.bankAccountNumber);
     setBankIFSCCode(userDetails && userDetails.bankIFSCCode);
-    // setCompanyName(userDetails && userDetails.companyName)
+    setCompanyName(userDetails && userDetails.companyName)
   }, [userDetails]);
 
   useEffect(() => {
-    if (!flag && ( role === 'company' ||  role === 'client')) {
+    if (!flag && (role === 'company' || role === 'client')) {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
   }, [role]);
@@ -172,6 +172,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     setShow(true);
   }
 
+  // showing company names for copmany representative
+  const companyNameList = userDetails && userDetails.companies
+
   // Images in different types
   const imageOne = userDetails && userDetails.documents.authenticationLetterForClientUrl || userDetails && userDetails.documents.aadhaarUrl || userDetails && userDetails.documents.authenticationLetterForCompanyUrl;
   const imageTwo = userDetails && userDetails.documents.companyIdForClient || userDetails && userDetails.documents.companyIdForCompany || userDetails && userDetails.documents.cancelledChequeUrl;
@@ -268,15 +271,33 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
                   <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                  <div className={(companyName.length === 0 && validate) ? 'dropdown-alert': ''}>
-                    <Select
-                      isMulti={role === 'company' ? true : false}
-                      options={companyList}
-                      name="companyName"
-                      value={companyName}
-                      onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
-                      isDisabled={flag}
-                    />
+                  <div className={(companyName && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
+                    {flag ?
+                      <React.Fragment>
+                        {role === 'company' ?
+                          <Select
+                            isMulti
+                            value={companyNameList}
+                            isDisabled
+                            className="company-select-list"
+                          /> :
+                          <Form.Control
+                            type="text"
+                            name="companylist"
+                            value={companyName.label}
+                            disabled
+                          />
+                        }
+                      </React.Fragment> :
+                      <Select
+                        isMulti={role === 'company' ? true : false}
+                        options={companyList}
+                        name="companyName"
+                        value={companyName}
+                        onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
+                        isDisabled={flag}
+                      />
+                    }
                   </div>
                 </Form.Group>
               </Col>}
@@ -363,10 +384,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
             }
           </Row>
           {flag &&
-            <div>
-              <h4 className="personal-text">Uploaded Documents</h4>
+            <div className="profile-image-container">
               <Row className='d-flex ml-2 mr-2'>
-                <Col lg={4} sm={4} md={4}>
+                <Col lg={4} sm={4} md={4} className="profile-image">
                   <Form.Group>
                     <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}<sup className="text-danger">*</sup></Form.Label><br></br>
                     <Image
@@ -376,7 +396,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                     />
                   </Form.Group>
                 </Col>
-                <Col lg={4} sm={4} md={4}>
+                <Col lg={4} sm={4} md={4} className="profile-image">
                   <Form.Group>
                     <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}<sup className="text-danger">*</sup></Form.Label><br></br>
                     <Image
@@ -387,7 +407,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   </Form.Group>
                 </Col>
                 {role == 'employee' &&
-                  <Col lg={4} sm={4} md={4}>
+                  <Col lg={4} sm={4} md={4} className="profile-image">
                     <Form.Group>
                       <Form.Label>Pan Card <sup className="text-danger">*</sup></Form.Label><br></br>
                       <Image

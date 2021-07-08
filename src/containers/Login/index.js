@@ -177,20 +177,16 @@ const Login = () => {
     else {
       const payload = {
         email: forgotemail,
-        link: "/password-resets",
+        link: "http://localhost:3000/password-resets",
       }
-      dispatch(
-        {
-          type: 'FORGOT_PASSWORD_REQUEST',
-          payload
-        });
+      dispatch({ type: 'FORGOT_PASSWORD_REQUEST', payload });
       setforgotPasswordvalidate('');
       setforgotPasswordAlert('')
     }
   }
 
   // condition for Forgot password alert message class name
-  const forgotPasswordClass = forgotPasswordvalidate || InvalidPasswordChange ? "danger" : "success";
+  const forgotPasswordClass = forgotPasswordvalidate ? 'danger' : validPasswordChange ? 'success' : 'danger';
 
   return (
     <Row className="login-container overflow-hidden">
