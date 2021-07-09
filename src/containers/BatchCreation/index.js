@@ -6,9 +6,9 @@ import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileImport } from '@fortawesome/free-solid-svg-icons';
-import * as XLSX from 'xlsx';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faFileImport } from '@fortawesome/free-solid-svg-icons';
+// import * as XLSX from 'xlsx';
 import Select from 'react-select';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Overlay from '../../components/Overlay';
@@ -245,38 +245,38 @@ const BatchCreation = ({ show, setShow }) => {
       </div>
       <div className="batch-submit-btn">
         <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
-        <div className="imp-btn-company">
+        {/* <div className="imp-btn-company">
           <input type="file" id="actual-btn" hidden onChange={getCompanyData} />
           <FontAwesomeIcon className="import-icon" icon={faFileImport} />
           <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
-        </div>
+        </div> */}
       </div>
     </div>
 
   );
 
 
-  const getCompanyData = (e) => {
-    const file = e.target.files[0];
-    const promise = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-      fileReader.onload = (args) => {
-        const bufferArray = args.target.result;
-        const wb = XLSX.read(bufferArray, { type: 'buffer' });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-        resolve(data);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-    promise.then((data) => {
-      console.log(data);
-    });
-  };
+  // const getCompanyData = (e) => {
+  //   const file = e.target.files[0];
+  //   const promise = new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsArrayBuffer(file);
+  //     fileReader.onload = (args) => {
+  //       const bufferArray = args.target.result;
+  //       const wb = XLSX.read(bufferArray, { type: 'buffer' });
+  //       const wsname = wb.SheetNames[0];
+  //       const ws = wb.Sheets[wsname];
+  //       const data = XLSX.utils.sheet_to_json(ws);
+  //       resolve(data);
+  //     };
+  //     fileReader.onerror = (error) => {
+  //       reject(error);
+  //     };
+  //   });
+  //   promise.then((data) => {
+  //     console.log(data);
+  //   });
+  // };
   return (
     <Overlay
       className="Batch-modal"

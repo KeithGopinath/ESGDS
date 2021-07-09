@@ -48,10 +48,7 @@ const UpdatePassword = () => {
         else {
             const pathArray = url.pathname.split('/');
             const token = pathArray[2];
-            const payload = {
-                password: password,
-                access_token: "lO2xCXWdiE6hbOU600RY8ffonQnQpXAq",
-            }
+            const payload = { password: password }
             dispatch({ type: 'UPDATE_PASSWORD_REQUEST', payload, token });
             setValidate('');
             setAlertMsg('')

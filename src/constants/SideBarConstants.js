@@ -32,6 +32,9 @@ const ButtonList = [
   {
     id: 9, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
+  {
+    id: 10, label: 'Task List', icon: faList, address: 'tasklist',
+  },
 ];
 
 const TaxonomySubMenu = [

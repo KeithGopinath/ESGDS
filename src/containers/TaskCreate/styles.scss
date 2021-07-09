@@ -29,7 +29,10 @@
     margin: 0px auto;
     width: 98%;
 }
-
+.tab-select {
+    margin: 0px auto;
+    width: 98%;
+}
 .task-foo {
     display: flex;
     justify-content: center;
@@ -53,7 +56,27 @@
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0.00938em;
-    margin: 5% 0% 5% 0%;
+    margin: 0% 0% 1% 0%;
+}
+.task-role-analystsla {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+    margin: 0% 0% 2% 0%;
+}
+.task-role-analyst {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+    margin: 0% 0% 1% 0%;
 }
 .taskcreate-head {
     display: flex;
@@ -205,4 +228,42 @@
 .ant-radio-wrapper{
     font-size: 15px;
     margin: 10px;
+}
+
+
+// dummy css
+
+.date-picker-analyst{
+    width:40%;
+    margin-bottom: 2rem;
+}
+
+.analystQa-table {
+.ant-table-thead > tr > th{
+    background-color:#2da68a  !important;
+    color:white;
+
+}
+
+}
+.ant-radio-wrapper{
+    color: #04385a !important;
+    font-size: 1.2rem !important;
+    margin:0px !important;
+    margin-right: 1rem !important;
+}
+.ant-radio-group {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+.detail-task-tab{
+.ant-tabs-tab-btn{
+font-size: 1rem !important;
+}
+}
+.tab-select{
+    padding: 8px 25px 0px 25px !important;
+    border: 1px solid #88888861 !important;
+    border-radius: 10px !important;
+    
 }
