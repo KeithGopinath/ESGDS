@@ -13,7 +13,7 @@ import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';
 import DataPage from './containers/DataPage';
 import UpdatePassword from './containers/UpdatePassword';
-import TaskCreate from './containers/TaskCreate/index';
+import TaskCreate from './containers/TaskCreate';
 import Taxonomy from './containers/Taxonomy';
 import Validation from './containers/Validation';
 import TaxonomySubset from './containers/TaxonomySubset';
@@ -22,6 +22,7 @@ import UserView from './containers/UserView';
 import UserProfile from './containers/UserProfile';
 import Controversy from './containers/Controversy';
 import ControversyPage from './containers/Controversy/ControversyPage';
+import TaskList from './containers/TaskList';
 
 export const history = createBrowserHistory();
 
@@ -50,6 +51,7 @@ const Routes = () => (
         <Route path="/controversypage" component={ControversyPage} />
         <Route path="/dpcode" component={DataPage} />
         <Route path="/createtask" component={TaskCreate} />
+        <Route path="/tasklist" component={TaskList} />
       </Switch>
     </React.Fragment>
   </Router >
