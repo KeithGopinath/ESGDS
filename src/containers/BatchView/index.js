@@ -104,7 +104,7 @@ const BatchView = () => {
               </div>
               <div>
                 <Button variant="primary" className="imp-btn" onClick={handleShow}>
-                  <div>Create batch</div>
+                  <div>Create Batch</div>
                 </Button>
               </div>
             </div>
