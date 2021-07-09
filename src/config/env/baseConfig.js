@@ -2,11 +2,10 @@ export default {
   apiEndPoints: {
     getLogin: 'auth',
     getOtp: 'auth/auth-otp',
-    getForgotPassword: 'forgotpassword',
+    getForgotPassword: 'password-resets',
     getCompanylist: 'companies',
     getBatchlist: 'batches',
     getOnboard: 'users/new-onboard',
-    getUpdatePassword: 'updatepassword',
     createBatch: 'batches/create',
     clientTaxonomy: 'clientTaxonomies',
     getKeyIssues: 'key_issues',
