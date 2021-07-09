@@ -1,10 +1,12 @@
 /*eslint-disable*/
 import React, { useState, useEffect } from 'react';
-import { Card, Form, Row, Col, Container, Button } from 'react-bootstrap';
+import { Card, Form, Row, Col, Container, Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { message } from 'antd';
 import Select from 'react-select';
 import { useSelector, useDispatch } from 'react-redux';
 import { Image } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import UserStatusManage from '../../containers/UserStatusManage';
 
 const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone,
@@ -29,16 +31,17 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setFirstName(userDetails && userDetails.firstName ? userDetails.firstName : userDetails && userDetails.name);
-    setMiddleName(userDetails && userDetails.middleName);
-    setLastName(userDetails && userDetails.lastName);
-    setEmail(userDetails && userDetails.email);
-    setPhoneNumber(userDetails && userDetails.phoneNumber);
-    setPancardNumber(userDetails && userDetails.panNumber);
-    setAdharCard(userDetails && userDetails.aadhaarNumber);
-    setBankAccountNumber(userDetails && userDetails.bankAccountNumber);
-    setBankIFSCCode(userDetails && userDetails.bankIFSCCode);
-    setCompanyName(userDetails && userDetails.companyName)
+    if (flag) {
+      setFirstName(userDetails && userDetails.firstName ? userDetails.firstName : userDetails && userDetails.name);
+      setMiddleName(userDetails && userDetails.middleName);
+      setLastName(userDetails && userDetails.lastName);
+      setEmail(userDetails && userDetails.email);
+      setPhoneNumber(userDetails && userDetails.phoneNumber);
+      setPancardNumber(userDetails && userDetails.panNumber);
+      setAdharCard(userDetails && userDetails.aadhaarNumber);
+      setBankAccountNumber(userDetails && userDetails.bankAccountNumber);
+      setBankIFSCCode(userDetails && userDetails.bankIFSCCode);
+    }
   }, [userDetails]);
 
   useEffect(() => {
@@ -85,8 +88,8 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const onPancardNoChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-      setPancardNumber(e.target.value);
-      onPancard(e.target.value);
+      setPancardNumber(e.target.value.toUpperCase());
+      onPancard(e.target.value.toUpperCase());
     }
   };
 
@@ -122,28 +125,31 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     }
   };
 
+  // pancard tooltip
+  const renderTooltip = (props) => (
+    <Tooltip className="password-tooltip" {...props}>
+      Pancard number format RAJES9876H
+    </Tooltip>
+  );
   // save & continue button
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);
     const re = /^[6-9]{1}[0-9]{9}$/;
+    const pancardRe = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$/;
     if (role === 'client' || role === 'company') {
       if (!phoneNumber && valid === false) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
-      } else if (!firstName) {
-        message.error('Please enter your name');
+      } else if (!firstName || !phoneNumber || !companyName) {
+        message.error('Please fill all required fields');
         setValidate('border-danger');
-      } else if (!phoneNumber) {
-        message.error('Please enter phone number');
+      } else if (phoneNumber && !re.test(phoneNumber)) {
+        message.error('Please enter correct mobile number');
         setValidate('border-danger');
       } else if (!companyName) {
         setValidate(true);
         message.error('Please choose company name');
-      } else if (!firstName || !phoneNumber || !companyName) {
-        message.error('Please fill all required fields');
-        setValidate('border-danger');
-      }
-      if ((firstName.length && phoneNumber.length && (companyName.length || companyName.value.length)) > 0) {
+      } else if ((firstName.length && phoneNumber.length && (companyName.length || companyName.value.length)) > 0) {
         nextStep();
         setActiveStep(activeStep + 1);
       }
@@ -155,6 +161,15 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       } else if (!firstName || !lastName || !phoneNumber || !pancardNumber || !bankAccountNumber || !bankIFSCCode || !adharCard) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
+      } else if (phoneNumber && !re.test(phoneNumber)) {
+        message.error('Please enter valid mobile number');
+        setValidate('border-danger');
+      } else if (adharCard.length < 12) {
+        message.error('Should aadhar number have 12 digits');
+        setValidate('border-danger');
+      } else if (pancardNumber && !pancardRe.test(pancardNumber)) {
+        message.error('Please enter valid pancard number');
+        setValidate(true);
       } else {
         nextStep();
         setValidate('');
@@ -245,9 +260,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   type="text"
                   name="email"
                   id="email"
-                  // value={email}
                   value={flag ? email : getMailId}
-                  // onChange={onEmailChange}
                   disabled={flag || true}
                 />
               </Form.Group>
@@ -256,7 +269,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Form.Group>
                 <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
                 <Form.Control
-                  className={!phoneNumber && validate}
+                  className={(!phoneNumber || phoneNumber) && validate}
                   type="tel"
                   name="phone"
                   id="phone"
@@ -271,33 +284,15 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
                   <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                  <div className={(companyName && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
-                    {flag ?
-                      <React.Fragment>
-                        {role === 'company' ?
-                          <Select
-                            isMulti
-                            value={companyNameList}
-                            isDisabled
-                            className="company-select-list"
-                          /> :
-                          <Form.Control
-                            type="text"
-                            name="companylist"
-                            value={companyName.label}
-                            disabled
-                          />
-                        }
-                      </React.Fragment> :
-                      <Select
-                        isMulti={role === 'company' ? true : false}
-                        options={companyList}
-                        name="companyName"
-                        value={companyName}
-                        onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
-                        isDisabled={flag}
-                      />
-                    }
+                  <div className={(companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
+                    <Select
+                      isMulti={role === 'company' ? true : false}
+                      options={companyList}
+                      name="companyName"
+                      value={companyName}
+                      onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
+                      isDisabled={flag}
+                    />
                   </div>
                 </Form.Group>
               </Col>}
@@ -305,9 +300,15 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <React.Fragment>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Pan Card Number <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Pan Card Number <sup className="text-danger">*</sup>
+                      {!flag ? <span>
+                        <OverlayTrigger placement="auto-end" overlay={renderTooltip} className="password-tooltip">
+                          <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                        </OverlayTrigger>
+                      </span> : ''}
+                    </Form.Label>
                     <Form.Control
-                      className={!pancardNumber && validate}
+                      className={!pancardNumber && validate || (pancardNumber && validate === true ? 'border-danger' : '')}
                       type="text"
                       maxLength={10}
                       name="pancardNumber"
@@ -323,7 +324,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   <Form.Group>
                     <Form.Label>Aadhar Number <sup className="text-danger">*</sup></Form.Label>
                     <Form.Control
-                      className={!adharCard && validate}
+                      className={(!adharCard || adharCard && adharCard.length < 12) && validate}
                       type="tel"
                       maxLength={12}
                       name="aadharNumber"
