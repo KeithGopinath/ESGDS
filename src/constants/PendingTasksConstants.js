@@ -2399,9 +2399,9 @@ const TASK_API_DATA = {
       dpCodesData: [
         {
           dpCode: 'BUSN001',
-          indicator: 'xxxxx',
+          indicator: 'Biodiversity Controversies',
           description: 'Are there any reported controversies on biodiversity for the fiscal year?',
-          keyIssue: 'zzzzzzz',
+          keyIssue: 'Biodiversity impact',
           dataType: 'text',
           avgResponse: 'Low',
           controversyList: [

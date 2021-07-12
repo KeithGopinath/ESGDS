@@ -11,7 +11,3 @@ export const matrixMemberPutFailure = (error) => ({
   type: 'MATRIX_MEMBER_PUT_FAILURE',
   error,
 });
-
-export const matrixMemberSetDefault = () => ({
-  type: 'MATRIX_MEMBER_SET_DEFAULT',
-});

@@ -42,7 +42,7 @@ const ControversyPendingTaskTable = (props) => {
       pathname: '/controversypage',
       state: { dpCodeData: e },
     }}
-  >Enter
+  >View
   </Link>,
   }));
 
@@ -75,6 +75,7 @@ const ControversyPendingTaskTable = (props) => {
 
 const Controversy = (props) => {
   const sideBarRef = useRef();
+  const { taskId } = props.location.state;
   const extractReqDpCode = (data) => {
     const { dpCode } = props.location.state;
     return data.filter((e) => (e.dpCode === dpCode));
@@ -86,7 +87,7 @@ const Controversy = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Task" sideBarRef={sideBarRef} />
+        <Header title="Controversy" sideBarRef={sideBarRef} />
         <div className="container-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap" style={{ marginBottom: '1%' }}>
@@ -139,6 +140,20 @@ const Controversy = (props) => {
             <div style={{ padding: '20px 2%' }}>
               <ControversyPendingTaskTable data={reqDpCodeData.controversyList} />
             </div>
+            <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
+              {/* Button */}
+              { true &&
+              <Button
+                className="datapage-button"
+                variant="danger"
+                onClick={() => {
+                  history.push({
+                    pathname: `/task/${taskId}`, state: { taskId },
+                  });
+                }}
+              >Back
+              </Button>}
+            </Col>
           </div>
         </div>
       </div>

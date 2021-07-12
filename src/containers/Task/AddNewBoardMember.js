@@ -13,10 +13,11 @@ const AddNewBoardMember = (props) => {
   // STATES
   const [reqMemberName, setReqMemberName] = useState('');
   const [reqFiscalYears, setreqFiscalYears] = useState([]);
+  const [statusAlert, setStatusAlert] = useState(false);
 
   // REDUX FUNC'S
   const dispatch = useDispatch();
-  const matrixMember = useSelector((state) => (state.matrixMember.matrixMember));
+  const matrixMember = useSelector((state) => (state.matrixMember));
 
   // ONCHNAGE & ONCLICK FUNC'S
   const onChangeMemberName = (event) => {
@@ -36,14 +37,19 @@ const AddNewBoardMember = (props) => {
     };
 
     dispatch({ type: 'MATRIX_MEMBER_PUT_REQUEST', payload: putData });
+    setStatusAlert(true);
   };
 
   // USEEFFECTS FUNC'S
   useEffect(() => {
-    if (matrixMember && matrixMember.status) {
-      message[matrixMember.status === '200' ? 'success' : 'error'](matrixMember.message);
-      dispatch({ type: 'MATRIX_MEMBER_SET_DEFAULT' });
+    if (matrixMember && matrixMember.matrixMember && matrixMember.matrixMember.status && statusAlert) {
+      message[matrixMember.matrixMember.status === '200' ? 'success' : 'error'](matrixMember.matrixMember.message);
       onCloseAddNewMemberModal();
+      setStatusAlert(false);
+    }
+    if (matrixMember && matrixMember.error && statusAlert) {
+      message.error(matrixMember.error.message ? matrixMember.error.message : 'Something went wrong, Try again later !');
+      setStatusAlert(false);
     }
   }, [matrixMember]);
 

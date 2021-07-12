@@ -327,6 +327,13 @@ const Task = (props) => {
             </div>
             {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
             {isAnalyst_CC && <ControversyTaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
+
+            <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
+              {/* Button */}
+              { true &&
+              <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
+            </Col>
+
             <Modal title="Add New Board Member" width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
               {isAddNewBoardVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
             </Modal>

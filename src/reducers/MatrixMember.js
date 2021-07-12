@@ -20,8 +20,6 @@ export default (state = initialState, action) => {
         isLoading: false,
         error: action.error,
       };
-    case 'MATRIX_MEMBER_SET_DEFAULT':
-      return initialState;
     default:
       return state;
   }
