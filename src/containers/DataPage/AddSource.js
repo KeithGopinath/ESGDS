@@ -71,7 +71,6 @@ const AddSource = (props) => {
 
   const resetFields = () => {
     setCurrentSubSourceType(null);
-    setIsMultiyear(false);
     setSourceURL('');
     setPublicationDate(null);
     setSourcePDF(null);
@@ -79,6 +78,8 @@ const AddSource = (props) => {
 
   const onChangeSourceType = (event) => {
     setCurrentSourceType(event.currentTarget.value);
+    console.log(event.currentTarget.value.value.isMultiyear);
+    setIsMultiyear(event.currentTarget.value.value.isMultiyear);
     if (event.currentTarget.value.label !== 'Others') {
       setSourceName(event.currentTarget.value.label);
     } else {
@@ -166,7 +167,8 @@ const AddSource = (props) => {
   console.log(currentSourceType, currentSubSourceType, sourcePDF, sourceURL, sourceName, isMultiyear, publicationDate, errors);
   const onClickUpload = () => {
     if (validate()) {
-      const newSourceName = (currentSourceType.label === 'Others' || (currentSubSourceType && currentSubSourceType.label === 'Others')) && !isMultiyear ? (`${sourceName} 2018-2019`) : sourceName;
+      console.log(isMultiyear);
+      const newSourceName = !isMultiyear ? (`${sourceName} 2018-2019`) : sourceName;
       const uploadSourceData = { sourceName: newSourceName, url: sourceURL, publicationDate };
       props.onUploadAddSource(uploadSourceData);
       props.closeAddSourcePanel();

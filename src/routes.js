@@ -47,7 +47,7 @@ const Routes = () => (
         <Route path="/createbatch" component={Createbatch} />
         <Route path="/pendingtasks" component={PendingTasks} />
         <Route path="/task" component={Task} />
-        <Route path="/controversy" component={Controversy} />
+        <Route path="/controversydpcode" component={Controversy} />
         <Route path="/controversypage" component={ControversyPage} />
         <Route path="/dpcode" component={DataPage} />
         <Route path="/createtask" component={TaskCreate} />

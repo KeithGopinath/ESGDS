@@ -6,6 +6,17 @@ import { Card, Row, Col } from 'react-bootstrap';
 import Avatar from 'react-avatar';
 
 const Dashboard = () => {
+  // CURRENT ROLE
+  const currentRole = sessionStorage.role;
+
+  // GET REQ ROLE BASED BOOLEANS
+  const [isAnalyst, isQA, isSuperAdmin, isGroupAdmin] = [
+    currentRole === 'Analyst',
+    currentRole === 'QA',
+    currentRole === 'SuperAdmin' || currentRole === 'esg',
+    currentRole === 'GroupAdmin',
+  ];
+
   const sideBarRef = useRef();
   const [activeTab, setActiveTab] = useState([]);
 
@@ -103,7 +114,22 @@ const Dashboard = () => {
     },
   ];
 
-  const cardsList = superAdminCardsList;
+  const getCardsBasedOnRole = () => {
+    if(isAnalyst){
+      return analystCardsList;
+    }
+    if(isQA){
+      return qualityAnalystCardsList;
+    }
+    if(isSuperAdmin){
+      return superAdminCardsList;
+    }
+    if(isGroupAdmin){
+      return groupAdminCardsList;
+    }
+  }
+
+  const cardsList = getCardsBasedOnRole();
   const dashboardTabsRef = useRef(cardsList.map(() => React.createRef()));
 
   const tabsClickHandler = (event, data) => {

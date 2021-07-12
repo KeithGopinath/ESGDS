@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useRef } from 'react';
 import { Col, Form, Row, Button } from 'react-bootstrap';
-import { Tabs, Divider } from 'antd';
+import { Divider } from 'antd';
 import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
@@ -30,19 +30,17 @@ const FieldWrapper = (props) => {
 const ControversyPendingTaskTable = (props) => {
   // TABLE DATA
   console.log(props);
-  const tablePopulate = (data) => data.map(({
-    source, response,
-  }, index) => ({
-    index,
-    srcName: source.sourceName,
-    publicationDate: source.publicationDate,
-    response,
+  const tablePopulate = (data) => data.map((e) => ({
+    conId: e.id,
+    srcName: e.source.sourceName,
+    publicationDate: e.source.publicationDate,
+    response: e.response,
     action:
   <Link
     href
     to={{
       pathname: '/controversypage',
-      state: { page: 'edit' },
+      state: { dpCodeData: e },
     }}
   >Enter
   </Link>,
@@ -52,7 +50,7 @@ const ControversyPendingTaskTable = (props) => {
     rowsData: tablePopulate(props.data),
     columnsHeadData: [
       {
-        id: 'index', label: 'Id', align: 'center', dataType: 'string',
+        id: 'conId', label: 'Id', align: 'center', dataType: 'string',
       },
       {
         id: 'srcName', label: 'Source Name', align: 'center', dataType: 'string',
@@ -75,72 +73,15 @@ const ControversyPendingTaskTable = (props) => {
   );
 };
 
-const controversyJSONList = [
-  {
-    id: '001',
-    dpCode: 'BUSN001',
-    year: '2018-2019, 2019-2020',
-    indicator: 'Biodiversity Controversies',
-
-    currentData: [
-      {
-        dpCode: 'BUSN001',
-        fiscalYear: '2018-2019',
-        avgResponseUnit: 'High', // it can high/medium/low/na
-        controversyList: [
-          {
-            dpCode: 'BIOP002',
-            fiscalYear: '2018-2019',
-            status: 'unknown',
-            description: 'Are there any reported controversies on biodiversity for the fiscal year?',
-            dataType: 'text',
-            textSnippet: 'Snippet',
-            pageNo: '45',
-            screenShot: '',
-            response: 'High',
-            uploadedFile: '',
-            source: { sourceName: 'The Hindu', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-          },
-          {
-            dpCode: 'BIOP002',
-            fiscalYear: '2018-2019',
-            status: 'unknown',
-            description: 'Are there any reported controversies on biodiversity for the fiscal year?',
-            dataType: 'text',
-            textSnippet: 'Snippet',
-            pageNo: '45',
-            screenShot: '',
-            response: 'High',
-            uploadedFile: '',
-            source: { sourceName: 'India Times', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-          },
-        ],
-      },
-      {
-        dpCode: 'BUSN001',
-        fiscalYear: '2019-2020',
-        avgResponseUnit: 'Low', // it can high/medium/low/na
-        controversyList: [
-          {
-            dpCode: 'BIOP002',
-            fiscalYear: '2019-2020',
-            status: 'unknown',
-            description: 'Are there any reported controversies on biodiversity for the fiscal year?',
-            dataType: 'text',
-            textSnippet: 'Snippet',
-            pageNo: '45',
-            screenShot: '',
-            response: 'High',
-            uploadedFile: '',
-            source: { sourceName: 'India Times', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
-          },
-        ],
-      },
-    ],
-  },
-];
-const Controversy = () => {
+const Controversy = (props) => {
   const sideBarRef = useRef();
+  const extractReqDpCode = (data) => {
+    const { dpCode } = props.location.state;
+    return data.filter((e) => (e.dpCode === dpCode));
+  };
+  const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
+  const [reqDpCodeData] = extractReqDpCode(reqDpCodesData);
+  console.log(reqDpCodeData);
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -149,52 +90,54 @@ const Controversy = () => {
         <div className="container-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap" style={{ marginBottom: '1%' }}>
-              <div className="task-pillar">BUSN001</div>
+              <div className="task-pillar">{reqDpCodeData.dpCode}</div>
             </div>
             <div className="task-keyissue">
               <Row>
-                <FieldWrapper
+                {/* <FieldWrapper
                   label="Description*"
                   visible
-                  body="Are there any reported controversies on biodiversity for the fiscal year?"
-                />
+                  body={reqDpCodeData.description}
+                /> */}
                 <FieldWrapper
                   label="Indicator*"
                   visible
-                  body="Biodiversity Controversies"
+                  body={reqDpCodeData.indicator}
                 />
                 <FieldWrapper
                   label="KeyIssue*"
                   visible
-                  body="Biodiversity impact"
+                  body={reqDpCodeData.keyIssue}
                 />
+                <FieldWrapper
+                  label="Response*"
+                  visible
+                  body={reqDpCodeData.avgResponse}
+                />
+                <Divider />
+                <Col lg={12} style={{ justifyContent: 'flex-end', alignItems: 'center', display: 'flex' }}>
+                  <Button
+                    variant="light"
+                    style={{ color: '#007bff' }}
+                    onClick={() => history.push({
+                      pathname: '/controversypage',
+                      state: {
+                        dpCodeData:
+                        {
+                          dpCode: reqDpCodeData.dpCode,
+                          status: 'Add New',
+                          description: reqDpCodeData.description,
+                          dataType: reqDpCodeData.dataType,
+                        },
+                      },
+                    })}
+                  >Add New +
+                  </Button>
+                </Col>
               </Row>
             </div>
-            {false && controversyJSONList.map((e) => <div>{e.id}</div>)}
             <div style={{ padding: '20px 2%' }}>
-              <Tabs defaultActiveKey={controversyJSONList[0].currentData[0].fiscalYear} >
-                {controversyJSONList[0].currentData.map((e) => (
-                  <Tabs.TabPane style={{ padding: '0 !important' }} tab={<span style={{ fontSize: '1rem' }}>{e.fiscalYear}</span>} key={e.fiscalYear}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <FieldWrapper
-                        label="Response*"
-                        visible
-                        body="High"
-                      />
-                      <Button
-                        variant="light"
-                        style={{ color: '#007bff' }}
-                        onClick={() => history.push({
-                          pathname: '/controversypage',
-                          state: { page: 'new' },
-                        })}
-                      >Add New +
-                      </Button>
-                    </div>
-                    <Divider />
-                    <ControversyPendingTaskTable data={e.controversyList} />
-                  </Tabs.TabPane>))}
-              </Tabs>
+              <ControversyPendingTaskTable data={reqDpCodeData.controversyList} />
             </div>
           </div>
         </div>

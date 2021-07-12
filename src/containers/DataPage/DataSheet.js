@@ -60,7 +60,7 @@ export const DataSheetComponent = (props) => {
 
   const sourceList = props.reqSourceData;
 
-  const textResponse = ['Yes', 'No', 'M', 'F', 'NA'];
+  const textResponse = isAnalyst_CC ? ['Very High', 'High', 'Medium', 'Low', 'No'] : ['Yes', 'No', 'M', 'F', 'NA'];
 
   const errorTypeList = props.reqErrorList;
 
@@ -109,6 +109,9 @@ export const DataSheetComponent = (props) => {
   // *ANALYST DCR ERROR PANEL BOOLEAN*
   const [isErrorPanelVisible, setIsErrorPanelVisible] = useState(false);
 
+  // CONTROVERSY COLLECTION COMMENT
+  const [formControversyComment, setFormControversyComment] = useState(defaultData.comment || '');
+
   // USEEFFECTS
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -128,6 +131,7 @@ export const DataSheetComponent = (props) => {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
     setIsErrorPanelVisible(false);
+    setFormControversyComment(defaultData.comment || '');
   }, [props.reqData]);
 
   // Onchange Functions
@@ -162,16 +166,35 @@ export const DataSheetComponent = (props) => {
   };
 
   const onChangeFormSource = (event) => {
-    setFormSource(event.value);
-    setFormURL(event.value.url);
-    setFormPublicDate(event.value.publicationDate);
+    if (isAnalyst_CC) {
+      setFormSource({
+        ...formSource,
+        sourceName: event.target.value,
+      });
+    } else {
+      setFormSource(event.value);
+      setFormURL(event.value.url);
+      setFormPublicDate(event.value.publicationDate);
+    }
   };
 
   const onChangeFormURL = (event) => {
+    if (isAnalyst_CC) {
+      setFormSource({
+        ...formSource,
+        url: event.target.value,
+      });
+    }
     setFormURL(event.currentTarget.value);
   };
 
   const onChangeFormPublicDate = (event) => {
+    if (isAnalyst_CC) {
+      setFormSource({
+        ...formSource,
+        publicationDate: event.target.value,
+      });
+    }
     setFormPublicDate(event);
   };
 
@@ -181,6 +204,10 @@ export const DataSheetComponent = (props) => {
 
   const onChangeFormComment = (event) => {
     setFormComment(event.currentTarget.value);
+  };
+
+  const onChangeFormControversyComment = (event) => {
+    setFormControversyComment(event.target.value);
   };
 
   const onChangeFormIsError = (event) => {
@@ -203,24 +230,13 @@ export const DataSheetComponent = (props) => {
   // BUTTON HANDLERS
 
   const saveClickHandler = () => {
-    console.log('Details To Be Saved: ');
-    console.log('DP CODE: ', formDpCode);
-    console.log('DESCRIPTION: ', formDescription);
-    console.log('DATA TYPE: ', formDataType);
-    console.log('TEXT SNIPPET: ', formTextSnippet);
-    console.log('PAGE NO: ', formPageNo);
-    console.log('SCREENSHOT PATH: ', formScreenShotPath);
-    console.log('RESPONSE: ', formResponse);
-    console.log('SOURCE: ', formSource);
-    console.log('URL: ', formURL);
-    console.log('PUBLICATION DATE: ', formPublicDate);
-    console.log('SCREENSHOT FILE: ', formScreenShotFile);
-    console.log('ERROR TYPE: ', formErrorType);
-    console.log('COMMENTS: ', formComment);
+    console.log('HISTORICAL SAVE');
+    dummySaveClickHandler();
   };
 
   const unFreezeClickHandler = () => {
     console.log('UNFREEZE');
+    dummyEditClickHandler();
   };
 
   const backClickHandler = () => {
@@ -229,10 +245,6 @@ export const DataSheetComponent = (props) => {
       pathname: `/task/${reqTask.taskId}`,
       state: { taskId: reqTask.taskId },
     });
-  };
-
-  const editClickHandler = () => {
-    console.log('editClickHandler');
   };
 
   const previousClickHandler = () => {
@@ -246,7 +258,7 @@ export const DataSheetComponent = (props) => {
 
   const saveAndNextClickHandler = () => {
     console.log(props.dummyDataCheck(), 'LIST OF NUMS');
-    if ((props.dummyDataCheck()).length === 0) {
+    if ((props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
       console.log('saveAndNextClickHandler');
       console.log('Details To Be Saved: ');
       console.log('DP CODE: ', formDpCode);
@@ -268,27 +280,29 @@ export const DataSheetComponent = (props) => {
         state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
       });
     } else {
+      const msgCurrent = props.dummyDataCheck().currentData;
+      const msgHistorical = props.dummyDataCheck().historicalData;
       if (isAnalyst_DC) {
-        message.error(`Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
       if (isAnalyst_DCR) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is accepted or rejected.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
       }
       if (isAnalyst_CC) {
-        message.error(`Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the current data for ${msgCurrent} fiscal year(s) is entered and saved.`, 8);
       }
       if (isQA_DV) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
       if (isClientRep_DR || isCompanyRep_DR) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
     }
   };
 
   const saveAndCloseClickHandler = () => {
     console.log(props.dummyDataCheck(), 'LIST OF NUMS');
-    if ((props.dummyDataCheck()).length === 0) {
+    if ((props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
       console.log('saveAndCloseClickHandler');
       console.log('Details To Be Saved: ');
       console.log('DP CODE: ', formDpCode);
@@ -309,93 +323,127 @@ export const DataSheetComponent = (props) => {
         state: { taskId: reqTask.taskId },
       });
     } else {
+      const msgCurrent = props.dummyDataCheck().currentData;
+      const msgHistorical = props.dummyDataCheck().historicalData;
       if (isAnalyst_DC) {
-        message.error(`Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
       if (isAnalyst_DCR) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is accepted or rejected.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
       }
       if (isAnalyst_CC) {
-        message.error(`Please make sure the current data for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the current data for ${msgCurrent} fiscal year(s) is entered and saved.`, 8);
       }
       if (isQA_DV) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
       if (isClientRep_DR || isCompanyRep_DR) {
-        message.error(`Please make sure the error(s) for ${props.dummyDataCheck().map((e) => ` ${e}`)} fiscal year(s) is entered and saved.`, 8);
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
       }
     }
   };
 
   const dummySaveClickHandler = () => {
-    const dummyData = {
-      dpCode: formDpCode,
-      fiscalYear: defaultData.fiscalYear,
-      status: 'Completed',
-      textSnippet: formTextSnippet,
-      pageNo: formPageNo,
-      screenShot: formScreenShotPath,
-      response: formResponse,
-      source: formSource,
-    };
-    const dummyDataQA = {
-      error: {
-        isThere: formIsError,
-        type: formErrorType,
-        comment: formComment,
-        errorStatus: 'Completed',
-      },
-    };
-
     let saveData;
-    if (isAnalyst_DC) {
-      saveData = { ...dummyData };
-    }
-    if (isAnalyst_DCR) {
-      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
-    }
-    if (isQA_DV) {
-      saveData = { ...dummyData, ...dummyDataQA };
+
+    if (isHistoryType) {
+      saveData = {
+        ...defaultData,
+        status: 'Completed',
+        source: formSource,
+        response: formResponse,
+        textSnippet: formTextSnippet,
+        pageNo: formPageNo,
+        screenShot: formScreenShotPath,
+      };
+    } else {
+      if (isAnalyst_DC) {
+        saveData = {
+          ...defaultData,
+          status: 'Completed',
+          source: formSource,
+          response: formResponse,
+          textSnippet: formTextSnippet,
+          pageNo: formPageNo,
+          screenShot: formScreenShotPath,
+        };
+      }
+      if (isAnalyst_DCR) {
+        saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, status: 'Completed' } };
+      }
+      if (isQA_DV) {
+        saveData = {
+          ...defaultData,
+          error: {
+            isThere: formIsError,
+            type: formErrorType,
+            comment: formComment,
+            errorStatus: 'Completed',
+          },
+        };
+      }
+      if (isAnalyst_CC) {
+        saveData = {
+          ...defaultData,
+          status: 'Completed',
+          source: formSource,
+          response: formResponse,
+          textSnippet: formTextSnippet,
+          pageNo: formPageNo,
+          screenShot: formScreenShotPath,
+          comment: formComment,
+        };
+      }
     }
     props.onClickSave(saveData);
     message.success('Saved Successfully');
   };
 
   const dummyEditClickHandler = () => {
-    const dummyData = {
-      dpCode: formDpCode,
-      fiscalYear: defaultData.fiscalYear,
-      status: 'unknown',
-      textSnippet: formTextSnippet,
-      pageNo: formPageNo,
-      screenShot: formScreenShotPath,
-      response: formResponse,
-      source: formSource,
-    };
-
-    const dummyDataQA = {
-      error: {
-        isThere: formIsError,
-        type: formErrorType,
-        comment: formComment,
-        errorStatus: 'unknown',
-      },
-    };
     let saveData;
-    if (isAnalyst_DC || isAnalyst_DCR) {
-      saveData = { ...dummyData };
-    }
-    if (isQA_DV) {
-      saveData = { ...dummyData, ...dummyDataQA };
+
+    if (isHistoryType) {
+      saveData = { ...defaultData, status: 'Editable' };
+    } else {
+      if (isAnalyst_DC) {
+        saveData = { ...defaultData, status: 'Editable' };
+      }
+      if (isAnalyst_DCR) {
+        saveData = { ...defaultData, status: 'Editable' };
+      }
+      if (isQA_DV) {
+        saveData = {
+          ...defaultData,
+          error: {
+            isThere: formIsError,
+            type: formErrorType,
+            comment: formComment,
+            status: 'Editable',
+          },
+        };
+      }
+      if (isAnalyst_CC) {
+        saveData = { ...defaultData, status: 'Editable' };
+      }
     }
     props.onClickSave(saveData);
   };
 
   const getIsDisableOrNot = () => {
     if (isHistoryType) {
-      if (isAnalyst_DC) { return true; }
+      if (isAnalyst_DC) {
+        if (defaultData.status === 'Completed') {
+          return true;
+        }
+        return false;
+      }
       if (isAnalyst_DCR) { return true; }
-      if (isQA_DV) { return true; }
+      if (isQA_DV) {
+        if (defaultData.status === 'Completed') {
+          return true;
+        }
+        return false;
+      }
       if (isCompanyRep_DR) { return true; }
       if (isClientRep_DR) { return true; }
     }
@@ -406,6 +454,13 @@ export const DataSheetComponent = (props) => {
       return false;
     }
     if (isAnalyst_DCR) {
+      if (defaultData.status === 'Completed') {
+        return true;
+      }
+
+      return false;
+    }
+    if (isAnalyst_CC) {
       if (defaultData.status === 'Completed') {
         return true;
       }
@@ -510,13 +565,29 @@ export const DataSheetComponent = (props) => {
       {/* HISTORY YEAR Field */}
       <FieldWrapper
         label="Year"
-        visible
+        visible={!isAnalyst_CC}
         body={
           <Form.Control
             name="year"
             type="text"
             value={defaultData.fiscalYear}
             disabled
+          />
+        }
+      />
+
+      {/* SOURCE NAME Field */}
+      <FieldWrapper
+        label="Source Name*"
+        visible={isAnalyst_CC}
+        body={
+          <Form.Control
+            type="text"
+            name="response"
+            placeholder="Response"
+            onChange={null}
+            value={formSource.sourceName}
+            disabled={disableField}
           />
         }
       />
@@ -603,22 +674,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />}
-
-      {/* SOURCE NAME Field */}
-      <FieldWrapper
-        label="Source Name*"
-        visible={isAnalyst_CC}
-        body={
-          <Form.Control
-            type="text"
-            name="response"
-            placeholder="Response"
-            onChange={null}
-            value={formSource.sourceName}
-            disabled={disableField}
-          />
-        }
-      />
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
@@ -757,7 +812,7 @@ export const DataSheetComponent = (props) => {
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
-        visible={isQA_DV && !isHistoryType && formIsError}
+        visible={(isQA_DV && !isHistoryType && formIsError)}
         body={
           <Form.Control
             as="textarea"
@@ -766,6 +821,22 @@ export const DataSheetComponent = (props) => {
             placeholder="Comments"
             onChange={onChangeFormComment}
             value={formComment}
+          />
+        }
+      />
+
+      {/* Controversy Comments Field */}
+      <FieldWrapper
+        label="Comments*"
+        visible={isAnalyst_CC}
+        body={
+          <Form.Control
+            as="textarea"
+            disabled={disableField}
+            aria-label="With textarea"
+            placeholder="Comments"
+            onChange={onChangeFormControversyComment}
+            value={formControversyComment}
           />
         }
       />
@@ -783,9 +854,9 @@ export const DataSheetComponent = (props) => {
       />}
 
       <Col lg={12} className="datapage-button-wrap">
-        { (isAnalyst_DC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
+        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        { (isAnalyst_DC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
+        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
         { isAnalyst_DCR && !isHistoryType &&
         <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
@@ -805,14 +876,6 @@ export const DataSheetComponent = (props) => {
         { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
         <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
 
-        {/* SAVE CC Button */}
-        { (!isQA_DV && !isHistoryType && !isAnalyst_DC && !isAnalyst_DCR && !isCompanyRep_DR && !isClientRep_DR) &&
-        <Button className="datapage-button" variant="primary" onClick={editClickHandler}>Save</Button>}
-
-        {/* EDIT Button */}
-        { (!isQA_DV && !isHistoryType && !isAnalyst_DC && !isAnalyst_DCR && !isCompanyRep_DR && !isClientRep_DR) &&
-        <Button className="datapage-button" variant="primary" onClick={editClickHandler}>Edit</Button>}
-
         {/* PREVIOUS Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
         <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
@@ -826,11 +889,11 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
 
         {/* HISTORY UNFREEZE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType &&
+        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
 
         {/* HISTORY SAVE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType &&
+        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
 
 

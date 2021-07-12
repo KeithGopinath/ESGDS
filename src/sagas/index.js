@@ -19,6 +19,8 @@ import { userUpdateWatchers } from './UserUpdate';
 import { getUsersByIdWatchers } from './GetUserById';
 import { uploadTaxonomyWatchers } from './UploadTaxonomy';
 import { roleAssignmentWatchers } from './GetRoleAssignment';
+import { getPendingTasksWatchers } from './PendingTask';
+import { matrixMemberWatchers } from './MatrixMember';
 
 export default function* rootWatchers() {
   yield all([
@@ -42,5 +44,7 @@ export default function* rootWatchers() {
     getUsersByIdWatchers(),
     uploadTaxonomyWatchers(),
     roleAssignmentWatchers(),
+    getPendingTasksWatchers(),
+    matrixMemberWatchers(),
   ]);
 }
