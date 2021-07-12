@@ -8,32 +8,28 @@ import Overlay from '../../components/Overlay';
 import OtpInput from 'react-otp-input';
 import { Image } from 'antd';
 import { Input } from 'antd';
-import { message } from 'antd';
 import Select from 'react-select';
-import { CheckCircleFilled, InfoCircleOutlined } from '@ant-design/icons';
+import { EditFilled, InfoCircleOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const UserProfile = () => {
   const sideBarRef = useRef();
-  const [showEdit, setShowEdit] = useState(true);
+  const [flag, setFlag] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [updateFlag, setUpdateFlag] = useState();
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneFlag, setPhoneFlag] = useState(false);
   const [email, setEmail] = useState('');
-  const [emailFlag, setEmailFlag] = useState(false);
   const [bankAccountNumber, setBankAccountNumber] = useState('');
-  const [bankAccountNumberFlag, setBankAccountNumberFlag] = useState(false);
   const [bankIFSCCode, setBankIFSCCode] = useState('');
-  const [bankIFSCCodeFlag, setBankIFSCCodeFlag] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordFlag, setPasswordFlag] = useState(false);
   const [inputOtp, setInputOtp] = useState('');
   const [chequeFile, setChequeFile] = useState();
   const [fileLabel, setFileLabel] = useState('');
   const [alertMsg, setAlertMsg] = useState('');
   const [errorAlert, setErrorAlert] = useState('');
+
 
   const role = 'employee'
   // const role = 'client'
@@ -49,105 +45,49 @@ const UserProfile = () => {
   // password validation
   const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
-  const editHandler = () => {
-    setShowEdit(false)
-  }
-
   const updateHandler = (type) => {
-    if (type == 'phone') {
-      if (phoneNumber.length < 10) {
-        message.error('Please enter a valid phone number');
-        setErrorAlert('error-alert')
-      }
-      else {
-        setShowPopUp(true);
-        setUpdateFlag(type);
-        setErrorAlert('')
-      }
-    } else if (type == 'email') {
-      if (!email || valid == false) {
-        message.error('Please enter a valid email');
-        setErrorAlert('error-alert')
-      }
-      else {
-        setShowPopUp(true);
-        setUpdateFlag(type);
-        setErrorAlert('')
-      }
-    } else if (type == 'accountnumber') {
-      if (!bankAccountNumber) {
-        message.error('Please enter a valid account number');
-        setErrorAlert('error-alert')
-      }
-      else {
-        setShowPopUp(true);
-        setUpdateFlag(type);
-        setErrorAlert('')
-      }
-    } else if (type == 'bankifsc') {
-      if (!bankIFSCCode) {
-        message.error('Please enter a valid IFSC code');
-        setErrorAlert('error-alert')
-      }
-      else {
-        setShowPopUp(true);
-        setUpdateFlag(type);
-        setErrorAlert('')
-      }
-    } else if (type == 'password') {
-      if (!password) {
-        message.error('Password should be minimum of (8) characters ');
-        setErrorAlert('error-alert')
-      }
-      else if (re.test(password) == false) {
-        message.error('Password should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*)');
-        setErrorAlert('error-alert')
-      }
-      else {
-        setShowPopUp(true);
-        setUpdateFlag(type);
-        setErrorAlert('')
-      }
-    }
+    setUpdateFlag(type);
+    setShowPopUp(true)
   }
 
   const onPhoneChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
       setPhoneNumber(e.target.value);
-      setPhoneFlag(true)
     }
   };
 
   const onEmailChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
       setEmail(e.target.value);
-      setEmailFlag(true);
     }
   };
 
   const onAccountNumberChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
       setBankAccountNumber(e.target.value);
-      setBankAccountNumberFlag(true);
     }
   };
 
   const onBankIfscChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
       setBankIFSCCode(e.target.value);
-      setBankIFSCCodeFlag(true);
     }
   };
 
   const onPasswordChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
       setPassword(e.target.value);
-      setPasswordFlag(true);
     }
   };
 
-  const onChangeOtp = (e) => {
-    setInputOtp(e.target.value)
+  const onCurrentPasswordChange = (e) => {
+    if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
+      setCurrentPassword(e.target.value);
+    }
+  };
+
+  const onChangeOtp = (value) => {
+    setInputOtp(value)
   }
 
   const onChangeCancelledCheque = (e) => {
@@ -173,82 +113,254 @@ const UserProfile = () => {
 
   const profileEditBody = () => (
     <div>
-      {(updateFlag == 'phone' || updateFlag == 'email') ?
+      {(updateFlag == 'phone') ?
         <React.Fragment>
-          <p>We've sent a one time password to the email <span>{email}</span></p>
-          <OtpInput
-            value={inputOtp}
-            onChange={onChangeOtp}
-            numInputs={4}
-            className="otp-input"
-            inputStyle="otp-input-style"
-            containerStyle="otp-input-container"
-            shouldAutoFocus
-            isInputNum
-            focusStyle="otp-focus"
-          />
-        </React.Fragment>
-        : (updateFlag == 'accountnumber' || updateFlag == 'bankifsc') ?
-          <React.Fragment>
+          {flag ?
+            <React.Fragment>
+              <p>We've sent a one time password to the email <span>{email}</span></p>
+              <OtpInput
+                value={inputOtp}
+                onChange={onChangeOtp}
+                numInputs={4}
+                className="otp-input"
+                inputStyle="otp-input-style"
+                containerStyle="otp-input-container"
+                shouldAutoFocus
+                isInputNum
+                focusStyle="otp-focus"
+              />
+            </React.Fragment>
+            :
             <Form.Group>
-              <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
-                <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
-                  <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
-                </OverlayTrigger>
-              </span>
-              </Form.Label>
-              <Form.File
-                type="file"
-                accept="image/*"
-                className={!chequeFile && errorAlert}
-                label={fileLabel === '' ? 'Drag and drop a file or click' : fileLabel}
-                onChange={onChangeCancelledCheque}
-                custom
+              <Form.Label>Please enter new phone number <sup className="text-danger">*</sup></Form.Label>
+              <Input
+                size="large"
+                type="tel"
+                maxLength={10}
+                onChange={onPhoneChange}
+                value={phoneNumber}
+                className={phoneNumber.length < 10 && errorAlert}
               />
             </Form.Group>
-          </React.Fragment>
-          : updateFlag == 'password' ?
-            <React.Fragment>
-              <Form.Group>
-                <Form.Label>Please enter current password <sup className="text-danger">*</sup></Form.Label>
-                <Input
-                  size="large"
-                  type="text"
-                // onChange={onEmailChange}
-                // value={email}
-                // className={role == 'employee' ? '' : !email && errorAlert}
+          }
+        </React.Fragment>
+        : (updateFlag == 'email') ?
+          <React.Fragment>
+            {flag ?
+              <React.Fragment>
+                <p>We've sent a one time password to the email <span>{email}</span></p>
+                <OtpInput
+                  value={inputOtp}
+                  onChange={onChangeOtp}
+                  numInputs={4}
+                  className="otp-input"
+                  inputStyle="otp-input-style"
+                  containerStyle="otp-input-container"
+                  shouldAutoFocus
+                  isInputNum
+                  focusStyle="otp-focus"
                 />
-                <Form.Label>Please enter updated password again <sup className="text-danger">*</sup></Form.Label>
+              </React.Fragment>
+              :
+              <Form.Group>
+                <Form.Label>Please enter new email <sup className="text-danger">*</sup></Form.Label>
                 <Input
                   size="large"
-                  type="text"
-                // onChange={onEmailChange}
-                // value={email}
-                // className={role == 'employee' ? '' : !email && errorAlert}
+                  type="email"
+                  onChange={onEmailChange}
+                  value={email}
+                  className={(!email || !valid) && errorAlert}
                 />
               </Form.Group>
+            }
+          </React.Fragment>
+          : (updateFlag == 'accountnumber') ?
+            <React.Fragment>
+              {flag ?
+                <Form.Group>
+                  <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
+                    <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
+                      <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                    </OverlayTrigger>
+                  </span>
+                  </Form.Label>
+                  <Form.File
+                    type="file"
+                    accept="image/*"
+                    className={!chequeFile && errorAlert}
+                    label={fileLabel === '' ? 'Drag and drop a file or click' : fileLabel}
+                    onChange={onChangeCancelledCheque}
+                    custom
+                  />
+                </Form.Group>
+                :
+                <Form.Group>
+                  <Form.Label>Please enter new account number <sup className="text-danger">*</sup></Form.Label>
+                  <Input
+                    size="large"
+                    type="text"
+                    minLength={11}
+                    maxLength={16}
+                    onChange={onAccountNumberChange}
+                    value={bankAccountNumber}
+                    className={bankAccountNumber.length < 11 && errorAlert}
+                  />
+                </Form.Group>
+              }
             </React.Fragment>
-            : null
+            : (updateFlag == 'bankifsc') ?
+              <React.Fragment>
+                {flag ?
+                  <Form.Group>
+                    <Form.Label>Upload your Cancelled Cheque <sup className="text-danger">*</sup>                          <span>
+                      <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
+                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                      </OverlayTrigger>
+                    </span>
+                    </Form.Label>
+                    <Form.File
+                      type="file"
+                      accept="image/*"
+                      className={!chequeFile && errorAlert}
+                      label={fileLabel === '' ? 'Drag and drop a file or click' : fileLabel}
+                      onChange={onChangeCancelledCheque}
+                      custom
+                    />
+                  </Form.Group>
+                  :
+                  <Form.Group>
+                    <Form.Label>Please enter new bank IFSC <sup className="text-danger">*</sup></Form.Label>
+                    <Input
+                      size="large"
+                      type="text"
+                      maxLength={11}
+                      onChange={onBankIfscChange}
+                      value={bankIFSCCode}
+                      className={bankIFSCCode.length < 11 && errorAlert}
+                    />
+                  </Form.Group>
+                }
+              </React.Fragment>
+              : updateFlag == 'password' ?
+                <React.Fragment>
+                  <Form.Group>
+                    <Form.Label>Please enter current password <sup className="text-danger">*</sup></Form.Label>
+                    <Input
+                      size="large"
+                      type="text"
+                      onChange={onCurrentPasswordChange}
+                      value={currentPassword}
+                      className={!currentPassword && errorAlert}
+                    />
+                    <Form.Label>Please enter new password <sup className="text-danger">*</sup></Form.Label>
+                    <Input
+                      size="large"
+                      type="text"
+                      onChange={onPasswordChange}
+                      value={password}
+                      className={(!password || !re.test(password)) && errorAlert}
+                    />
+                  </Form.Group>
+                </React.Fragment>
+                : null
       }
     </div>
   )
 
   const onSubmit = () => {
-    if (updateFlag == 'phone') {
-      setAlertMsg('Phone number updated successfully')
-    }
-    else if (updateFlag == 'accountnumber' || updateFlag == 'bankifsc') {
-      if (!chequeFile) {
-        setAlertMsg('Please upload a valid file')
-        setErrorAlert('file-not-upload')
+    if (updateFlag == 'phone' && !flag) {
+      if (phoneNumber.length < 10) {
+        setAlertMsg('Please enter a valid phone number');
+        setErrorAlert('error-alert')
       }
       else {
-        console.log(chequeFile);
+        setAlertMsg('');
+        setErrorAlert('');
+        setFlag(true)
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+    } else if (updateFlag == 'phone' && flag) {
+      if (!inputOtp) {
+        setAlertMsg('Please enter the OTP');
+        setErrorAlert('error-alert');
+      }
+      else {
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+
+    } else if (updateFlag == 'email' && !flag) {
+      if (!email || !valid) {
+        setAlertMsg('Please enter a valid email')
+        setErrorAlert('error-alert');
+      }
+      else {
+        setAlertMsg('');
+        setErrorAlert('');
+        setFlag(true)
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+    } else if (updateFlag == 'email' && flag) {
+      if (!inputOtp) {
+        setAlertMsg('Please enter the OTP');
+        setErrorAlert('error-alert');
+      }
+      else {
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+
+    } else if (updateFlag == 'accountnumber' && !flag) {
+      if (bankAccountNumber.length < 11) {
+        setAlertMsg('Please enter a valid account number of minimum (11) characters');
+        setErrorAlert('error-alert');
+      }
+      else {
+        setAlertMsg('');
         setErrorAlert('')
+        setFlag(true);
+      }
+    } else if (updateFlag == 'accountnumber' && flag) {
+      if (!chequeFile) {
+        setAlertMsg('Please upload a valid file');
+        setErrorAlert('file-not-upload');
+      }
+      else {
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+    } else if (updateFlag == 'bankifsc' && !flag) {
+      if (bankIFSCCode.length !== 11) {
+        setAlertMsg('Please enter a valid bank IFSC code of (11) characters');
+        setErrorAlert('error-alert');
+      }
+      else {
+        setAlertMsg('');
+        setErrorAlert('')
+        setFlag(true);
+      }
+    } else if (updateFlag == 'bankifsc' && flag) {
+      if (!chequeFile) {
+        setAlertMsg('Please upload a valid file');
+        setErrorAlert('file-not-upload');
+      }
+      else {
+        // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
+    } else if (updateFlag == 'password') {
+      if (!password) {
+        setAlertMsg('Password should be minimum of (8) characters ');
+        setErrorAlert('error-alert')
+      }
+      else if (re.test(password) == false) {
+        setAlertMsg('Password should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*)');
+        setErrorAlert('error-alert')
+      }
+      // else if (currentPassword !== responsepassword){
+      //   setAlertMsg('Please enter correct current password');
+      //   setErrorAlert('error-alert');
+      // }
+      else {
         // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
       }
     }
-
   }
 
   const handleClose = () => {
@@ -256,7 +368,13 @@ const UserProfile = () => {
     setErrorAlert('');
     setChequeFile('')
     setFileLabel('')
+    setPhoneNumber('');
+    setEmail('');
+    setBankAccountNumber('');
+    setBankIFSCCode('');
+    setPassword('');
     setShowPopUp(false)
+    setFlag(false)
   }
 
   const alertClassName = 'danger';
@@ -273,8 +391,8 @@ const UserProfile = () => {
                 <Row className='d-flex ml-2 mr-2'>
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      {(role === 'client' || role === 'company') && <Form.Label>Representative ID <sup className="text-danger">*</sup></Form.Label>}
-                      {role === 'employee' && <Form.Label>Employee ID <sup className="text-danger">*</sup></Form.Label>}
+                      {(role === 'client' || role === 'company') && <Form.Label>Representative ID</Form.Label>}
+                      {role === 'employee' && <Form.Label>Employee ID</Form.Label>}
                       <Input
                         size="large"
                         type="text"
@@ -284,7 +402,7 @@ const UserProfile = () => {
                   </Col>
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      <Form.Label>Name <sup className="text-danger">*</sup></Form.Label>
+                      <Form.Label>Name</Form.Label>
                       <Input
                         size="large"
                         type="text"
@@ -294,41 +412,34 @@ const UserProfile = () => {
                   </Col>
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
+                      <Form.Label>Email</Form.Label>
                       <Input
                         size="large"
                         type="email"
-                        suffix={role == 'employee' ? null : emailFlag && <CheckCircleFilled onClick={() => { updateHandler('email') }} />}
-                        onChange={onEmailChange}
-                        value={email}
-                        className={role == 'employee' ? '' : !email && errorAlert}
-                        disabled={role == 'employee' ? true : showEdit}
+                        suffix={role == 'employee' ? null : <EditFilled onClick={() => { updateHandler('email') }} />}
+                        disabled
                       />
                     </Form.Group>
                   </Col>
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
+                      <Form.Label>Phone</Form.Label>
                       <Input
                         size="large"
                         type="tel"
                         maxLength={10}
-                        suffix={phoneFlag && <CheckCircleFilled onClick={() => { updateHandler('phone') }} />}
-                        onChange={onPhoneChange}
-                        value={phoneNumber}
-                        className={phoneNumber.length < 10 && errorAlert}
-                        disabled={showEdit}
+                        suffix={<EditFilled onClick={() => { updateHandler('phone') }} />}
+                        disabled
                       />
                     </Form.Group>
                   </Col>
                   {(role === 'company' || role === 'client') &&
                     <Col lg={6} sm={6} md={6}>
                       <Form.Group>
-                        <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
+                        <Form.Label>Company Name</Form.Label>
                         {role === 'company' ?
                           <Select
                             isMulti
-                            //  value={companyNameList}
                             isDisabled
                             className="company-select-list"
                           /> :
@@ -344,7 +455,7 @@ const UserProfile = () => {
                     <React.Fragment>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
-                          <Form.Label>Current Group <sup className="text-danger">*</sup></Form.Label>
+                          <Form.Label>Current Group</Form.Label>
                           <Input
                             size="large"
                             type="text"
@@ -355,7 +466,7 @@ const UserProfile = () => {
                       </Col>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
-                          <Form.Label>Current Pillar <sup className="text-danger">*</sup></Form.Label>
+                          <Form.Label>Current Pillar</Form.Label>
                           <Input
                             size="large"
                             type="text"
@@ -366,38 +477,32 @@ const UserProfile = () => {
                       </Col>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
-                          <Form.Label>Account Number <sup className="text-danger">*</sup></Form.Label>
+                          <Form.Label>Account Number</Form.Label>
                           <Input
                             size="large"
                             type="text"
                             minLength={11}
                             maxLength={16}
-                            suffix={bankAccountNumberFlag && <CheckCircleFilled onClick={() => { updateHandler('accountnumber') }} />}
-                            onChange={onAccountNumberChange}
-                            value={bankAccountNumber}
-                            className={!bankAccountNumber && errorAlert}
-                            disabled={showEdit}
+                            suffix={<EditFilled onClick={() => { updateHandler('accountnumber') }} />}
+                            disabled
                           />
                         </Form.Group>
                       </Col>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
-                          <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
+                          <Form.Label>Bank IFSC</Form.Label>
                           <Input
                             size="large"
                             type="text"
                             maxLength={11}
-                            suffix={bankIFSCCodeFlag && <CheckCircleFilled onClick={() => { updateHandler('bankifsc') }} />}
-                            onChange={onBankIfscChange}
-                            value={bankIFSCCode}
-                            className={!bankIFSCCode && errorAlert}
-                            disabled={showEdit}
+                            suffix={<EditFilled onClick={() => { updateHandler('bankifsc') }} />}
+                            disabled
                           />
                         </Form.Group>
                       </Col>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
-                          <Form.Label>Pan Card Number <sup className="text-danger">*</sup></Form.Label>
+                          <Form.Label>Pan Card Number</Form.Label>
                           <Input
                             size="large"
                             type="text"
@@ -409,15 +514,12 @@ const UserProfile = () => {
                   }
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      <Form.Label>Password <sup className="text-danger">*</sup></Form.Label>
+                      <Form.Label>Password</Form.Label>
                       <Input
                         size="large"
                         type="password"
-                        suffix={passwordFlag && <CheckCircleFilled onClick={() => { updateHandler('password') }} />}
-                        onChange={onPasswordChange}
-                        value={password}
-                        className={(!password || !re.test(password)) && errorAlert}
-                        disabled={showEdit}
+                        suffix={<EditFilled onClick={() => { updateHandler('password') }} />}
+                        disabled
                       />
                     </Form.Group>
                   </Col>
@@ -426,7 +528,7 @@ const UserProfile = () => {
                   <Row className='d-flex ml-2 mr-2'>
                     <Col lg={4} sm={4} md={4} className="profile-image">
                       <Form.Group>
-                        <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                        <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}</Form.Label><br></br>
                         <Image
                           width={200}
                           src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -436,7 +538,7 @@ const UserProfile = () => {
                     </Col>
                     <Col lg={4} sm={4} md={4} className="profile-image">
                       <Form.Group>
-                        <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                        <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}</Form.Label><br></br>
                         <Image
                           width={200}
                           src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -447,7 +549,7 @@ const UserProfile = () => {
                     {role == 'employee' &&
                       <Col lg={4} sm={4} md={4} className="profile-image">
                         <Form.Group>
-                          <Form.Label>Pan Card <sup className="text-danger">*</sup></Form.Label><br></br>
+                          <Form.Label>Pan Card</Form.Label><br></br>
                           <Image
                             width={200}
                             src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
@@ -458,11 +560,6 @@ const UserProfile = () => {
                     }
                   </Row>
                 </div>
-                <React.Fragment>
-                  <div className="approve-button-container">
-                    {showEdit && <Button onClick={editHandler}>Edit Profile</Button>}
-                  </div>
-                </React.Fragment>
               </Card>
             </Row>
           </div>
