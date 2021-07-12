@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -13,7 +14,7 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
 import AddNewBoardMember from './AddNewBoardMember';
-import AddNewKMPMember from './AddNewKMPMember';
+// import AddNewKMPMember from './AddNewKMPMember';
 
 
 const FieldWrapper = (props) => {
@@ -74,15 +75,53 @@ const TaskTable = (props) => {
   );
 };
 
+const ControversyTaskTable = (props) => {
+  console.log(props);
+  const tablePopulate = ({ taskId, dpCodesData }) => dpCodesData.map((x) => ({
+    dpCode: x.dpCode,
+    keyIssue: x.keyIssue,
+    action:
+  <Link
+    to={{
+      pathname: `/controversydpcode/${x.dpCode}`,
+      state: { taskId, dpCode: x.dpCode },
+    }}
+  >Enter Data
+  </Link>,
+  }));
+
+  const CONTROVERSY_TASK_DATA = {
+    rowsData: tablePopulate(props.data),
+    columnsHeadData: [
+      {
+        id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'action', label: 'Action', align: 'right', dataType: 'element',
+      },
+    ],
+    tableLabel: 'Dp Codes',
+  };
+
+  return (
+    <CustomTable tableData={CONTROVERSY_TASK_DATA} />
+  );
+};
+
 const Task = (props) => {
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
   // CURRENT TAB
-  const tabLabel = sessionStorage.tab;
+  const currentTab = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
-    currentRole === 'Analyst',
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+    currentRole === 'Analyst' && currentTab === 'Data Collection',
+    currentRole === 'Analyst' && currentTab === 'Data Correction',
+    currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
@@ -90,7 +129,7 @@ const Task = (props) => {
 
   const sideBarRef = useRef();
 
-  const tabs = ['Standalone', 'Matrix'];
+  const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
 
   const tabsRef = useRef(tabs.map(() => React.createRef()));
 
@@ -102,12 +141,12 @@ const Task = (props) => {
   };
 
   const getReqAPIData = () => {
-    console.log(tabLabel === 'Data Correction', tabLabel === 'Data Collection');
-    if (isClientRep) { return TASK_API_DATA.COMPANY_REP_DR; }
-    if (isCompanyRep) { return TASK_API_DATA.COMPANY_REP_DR; }
-    if (isQA) { return TASK_API_DATA.QA_DV; }
-    if (isAnalyst && tabLabel === 'Data Collection') { return TASK_API_DATA.ANALYST_DC; }
-    if (isAnalyst && tabLabel === 'Data Correction') { return TASK_API_DATA.ANALYST_DCR; }
+    if (isClientRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
+    if (isCompanyRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
+    if (isQA_DV) { return TASK_API_DATA.QA_DV; }
+    if (isAnalyst_DC) { return TASK_API_DATA.ANALYST_DC; }
+    if (isAnalyst_DCR) { return TASK_API_DATA.ANALYST_DCR; }
+    if (isAnalyst_CC) { return TASK_API_DATA.ANALYST_CC; }
     return [];
   };
 
@@ -119,7 +158,6 @@ const Task = (props) => {
 
   const [reqTaskData, setReqTaskData] = useState(extractReqTask(getReqAPIData()));
   const [dpCodeType, setDpCodeType] = useState('Standalone');
-  const [reqKeyIssue, setReqKeyIssue] = useState(null);
   const [reqBoardMember, setReqBoardMember] = useState(null);
   const [reqKmpMember, setReqKmpMember] = useState(null);
 
@@ -132,36 +170,52 @@ const Task = (props) => {
     setDpCodeType('Standalone');
   }, []);
 
-  useEffect(() => {
-    setReqKeyIssue(null);
-  }, [dpCodeType]);
 
   const getReqDpCodesList = () => {
-    if (dpCodeType === 'Standalone') {
-      if (reqKeyIssue) {
-        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id));
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+      if (dpCodeType === 'Standalone') {
+        return reqTaskList.dpCodesData;
       }
-      return reqTaskList.dpCodesData;
+      if (dpCodeType === 'Board Matrix') {
+        if (reqBoardMember) {
+          return reqTaskList.dpCodesData.filter((e) => (e.boardMember && e.boardMember === reqBoardMember.value));
+        }
+        return reqTaskList.dpCodesData;
+      }
+      if (dpCodeType === 'Kmp Matrix') {
+        if (reqKmpMember) {
+          return reqTaskList.dpCodesData.filter((e) => (e.kmpMember && e.kmpMember === reqKmpMember.value));
+        }
+        return reqTaskList.dpCodesData;
+      }
     }
-    if (dpCodeType === 'Matrix') {
-      if (reqKeyIssue && reqBoardMember) {
-        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id && e.boardMember && e.boardMember === reqBoardMember.value));
-      }
-      if (reqKeyIssue && reqKmpMember) {
-        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id && e.kmpMember && e.kmpMember === reqKmpMember.value));
-      }
-      if (reqKeyIssue) {
-        return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId === reqKeyIssue.id));
-      }
+    if (isAnalyst_CC) {
       return reqTaskList.dpCodesData;
     }
     return [];
   };
 
-  const reqTaskList = dpCodeType === 'Standalone' ? reqTaskData.STANDALONE : reqTaskData.MATRIX;
-  const reqKeyIssueList = reqTaskList.keyIssuesList;
-  const boardMembersList = dpCodeType === 'Matrix' ? (reqKeyIssue && reqKeyIssue.boardMembers ? reqKeyIssue.boardMembers : []) : [];
-  const kmpMembersList = dpCodeType === 'Matrix' ? (reqKeyIssue && reqKeyIssue.kmpMembers ? reqKeyIssue.kmpMembers : []) : [];
+  const getReqTaskList = () => {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+      if (dpCodeType === 'Standalone') {
+        return reqTaskData.STANDALONE;
+      }
+      if (dpCodeType === 'Board Matrix') {
+        return reqTaskData.BOARDMATRIX;
+      }
+      if (dpCodeType === 'Kmp Matrix') {
+        return reqTaskData.KMPMATRIX;
+      }
+    }
+    if (isAnalyst_CC) {
+      return reqTaskData;
+    }
+    return {};
+  };
+
+  const reqTaskList = getReqTaskList();
+  const boardMembersList = dpCodeType === 'Board Matrix' ? (reqTaskData.BOARDMATRIX.boardMembersList) : [];
+  const kmpMembersList = dpCodeType === 'Kmp Matrix' ? (reqTaskData.KMPMATRIX.kmpMembersList) : [];
   const reqDpCodesData = getReqDpCodesList();
 
   const taskToNextPage = {
@@ -171,9 +225,8 @@ const Task = (props) => {
     dpCodesData: reqDpCodesData,
   };
 
-  sessionStorage.filteredData = JSON.stringify(taskToNextPage);
+  sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
 
-  console.log('///////', reqKeyIssue, '////', boardMembersList, kmpMembersList);
   const onClickTabChanger = (event) => {
     tabsRef.current.forEach((element) => {
       const btn = element.current;
@@ -181,20 +234,8 @@ const Task = (props) => {
     });
     const { currentTarget } = event;
     currentTarget.classList.add('active');
-    if (currentTarget.innerHTML === 'Matrix') {
-      setDpCodeType('Matrix');
-    }
-    if (currentTarget.innerHTML === 'Standalone') {
-      setDpCodeType('Standalone');
-    }
-  };
-
-  const onChangeReqKeyIssue = (event) => {
-    if (event) {
-      const keyIssueId = event.value;
-      setReqKeyIssue(reqKeyIssueList.filter((keyIssue) => (keyIssue.id === keyIssueId))[0]);
-    } else {
-      setReqKeyIssue(null);
+    if (currentTarget.innerHTML) {
+      setDpCodeType(currentTarget.innerHTML);
     }
   };
 
@@ -238,7 +279,8 @@ const Task = (props) => {
         <div className="container-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
-              <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>
+              {!isAnalyst_CC && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
+              {isAnalyst_CC && <div className="task-pillar">{reqTaskData.company}</div>}
               <div className="task-id">{`Task Id: ${reqTaskData.taskId}`}</div>
             </div>
             {reqTaskData.pillar === 'Governance' &&
@@ -247,22 +289,8 @@ const Task = (props) => {
             </div>}
             <div className="task-keyissue">
               <Row>
-                <FieldWrapper
-                  label="Key Issues*"
-                  visible
-                  body={
-                    <Select
-                      name="userRole"
-                      onChange={onChangeReqKeyIssue}
-                      options={reqKeyIssueList.map((keyIssue) => ({ label: keyIssue.label, value: keyIssue.id }))}
-                      value={reqKeyIssue && { label: reqKeyIssue.label, value: reqKeyIssue.id }}
-                      isSearchable
-                      isClearable
-                      maxLength={30}
-                    />}
-                />
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqTaskData.pillar === 'Governance' && boardMembersList.length > 0 &&
+                { reqTaskData.pillar === 'Governance' && dpCodeType === 'Board Matrix' && boardMembersList.length > 0 &&
                 <FieldWrapper
                   label="Board Members*"
                   visible
@@ -279,7 +307,7 @@ const Task = (props) => {
                     />}
                 />}
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqTaskData.pillar === 'Governance' && kmpMembersList.length > 0 &&
+                { reqTaskData.pillar === 'Governance' && dpCodeType === 'Kmp Matrix' && kmpMembersList.length > 0 &&
                 <FieldWrapper
                   label="KMP*"
                   visible
@@ -297,13 +325,22 @@ const Task = (props) => {
                 />}
               </Row>
             </div>
-            <TaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
+            {isAnalyst_CC && <ControversyTaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
+
+            <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
+              {/* Button */}
+              { true &&
+              <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
+            </Col>
+
             <Modal title="Add New Board Member" width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
-              <AddNewBoardMember />
+              {isAddNewBoardVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
             </Modal>
 
             <Modal title="Add New Kmp Member" width="80%" visible={isAddNewKMPVisible} footer={null} onCancel={() => setIsAddNewKMPVisible(false)}>
-              <AddNewKMPMember />
+              {/* <AddNewKMPMember /> */}
+              {isAddNewKMPVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="kmpMatrix" onCloseAddNewMemberModal={() => setIsAddNewKMPVisible(false)} />}
             </Modal>
           </div>
         </div>

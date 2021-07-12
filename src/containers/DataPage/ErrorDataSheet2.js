@@ -187,7 +187,7 @@ const ErrorDataSheetTwo = (props) => {
           publicationDate: formPublicDate,
         },
         comment: formComment,
-        errorStatus: 'unknown',
+        errorStatus: 'Editable',
       },
     };
 

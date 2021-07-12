@@ -259,11 +259,9 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
                 .map((eachRow, rowIndex) => {
                   const cellArray = Object.keys(eachRow).map((data, index) => {
                     let cellColumnData;
-                    if (data !== 'id') {
-                      [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
-                    }
+                    [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     return (
-                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'id'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
+                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
                     );
                   });
                   return (

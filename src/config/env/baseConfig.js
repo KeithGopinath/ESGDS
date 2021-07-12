@@ -18,6 +18,8 @@ export default {
     getFilterUsers: 'users/filter-user',
     userUpdate: 'users',
     uploadTaxonomy: 'datapoints/upload',
+    getPendingTasksList: 'taskAssignments/my-tasks',
+    putMatrixMember: '/companies/add/member',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

@@ -20,6 +20,20 @@ const AddNewKMPMember = () => (
     <Col lg={6}>
       <Form.Group as={Row} >
         <Form.Label column sm={5}>
+          Year*
+        </Form.Label>
+        <Col sm={7}>
+          <Select
+            options={['2018-2019', '2019-2020'].map((e) => ({ label: e, value: e }))}
+            maxLength={30}
+            isMulti
+          />
+        </Col>
+      </Form.Group>
+    </Col>
+    {/* <Col lg={6}>
+      <Form.Group as={Row} >
+        <Form.Label column sm={5}>
           Status*
         </Form.Label>
         <Col sm={7}>
@@ -58,7 +72,7 @@ const AddNewKMPMember = () => (
           />
         </Col>
       </Form.Group>
-    </Col>
+    </Col> */}
     <Col style={{ display: 'flex', justifyContent: 'center' }}><Button variant="success">Submit</Button></Col>
   </Row>
 );

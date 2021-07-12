@@ -4,21 +4,21 @@ const PENDING_TASK = {
       taskId: '0001',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'Yet to Collect',
     },
     {
       taskId: '0002',
       pillar: 'Social',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'In progress',
     },
     {
       taskId: '0003',
       pillar: 'Governance',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'In Progress',
     },
   ],
@@ -27,7 +27,7 @@ const PENDING_TASK = {
       taskId: '0001',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'Yet to Collect',
     },
     {
@@ -50,21 +50,21 @@ const PENDING_TASK = {
       taskId: '0001',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'Yet to Collect',
     },
     {
       taskId: '0002',
       pillar: 'Social',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'In progress',
     },
     {
       taskId: '0003',
       pillar: 'Governance',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'In Progress',
     }],
   ANALYST_DCR: [
@@ -72,20 +72,13 @@ const PENDING_TASK = {
       taskId: '0001',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
-      fiscalYear: '2018-2019, 2019-2020',
+      fiscalYear: '2018-2019,2019-2020',
       status: 'Yet to Collect',
     }],
   ANALYST_CC: [
     {
-      dpCode: 'BUSN001',
+      taskId: '0001',
       company: 'Reliance Ltd',
-      fiscalYear: '2018-2019,2019-2020',
-      status: 'Yet to collect',
-    },
-    {
-      dpCode: 'BUSN002',
-      company: 'Reliance Ltd',
-      fiscalYear: '2017-2018',
       status: 'Yet to collect',
     },
   ],
@@ -95,17 +88,14 @@ const TASK_API_DATA = {
   ANALYST_DC: [
     {
       taskId: '0001',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -164,7 +154,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssue: 'Biodiversity impact',
           keyIssueId: '0001',
@@ -224,7 +214,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION003',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -286,17 +276,14 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0002',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Social',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Completed',
           keyIssueId: '0001',
           pillar: 'Social',
@@ -355,7 +342,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssue: 'Biodiversity impact',
           keyIssueId: '0001',
@@ -415,7 +402,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION003',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Social',
@@ -477,18 +464,15 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0003',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Governance',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [
           {
             dpCode: 'BIOP002',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Completed',
             keyIssueId: '0001',
             pillar: 'Governance',
@@ -547,32 +531,17 @@ const TASK_API_DATA = {
             ],
           }],
       },
-      MATRIX: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Shareholder Rights',
-          value: 'Shareholfer Rights',
-          boardMembers: [
-            {
-              label: 'Shri Sunil Kumar',
-              value: 'Shri Sunil Kumar',
-            },
-          ],
-        }, {
-          id: '0002',
-          label: 'Management Structure',
-          value: 'Management Structure',
-          kmpMembers: [
-            {
-              label: 'Shri Kumar',
-              value: 'Shri Kumar',
-            },
-          ],
-        }],
+      BOARDMATRIX: {
+        boardMembersList: [
+          {
+            label: 'Shri Sunil Kumar',
+            value: 'Shri Sunil Kumar',
+          },
+        ],
         dpCodesData: [
           {
             dpCode: 'BION002',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Yet to start',
             keyIssue: 'Biodiversity impact',
             keyIssueId: '0001',
@@ -631,9 +600,23 @@ const TASK_API_DATA = {
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2016' },
               },
             ],
-          }, {
+          }],
+      },
+      KMPMATRIX: {
+        kmpMembersList: [
+          {
+            label: 'Shri Kumar',
+            value: 'Shri Kumar',
+          },
+          {
+            label: 'Praveen Kumar',
+            value: 'Praveen Kumar',
+          },
+        ],
+        dpCodesData: [
+          {
             dpCode: 'BION003',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Yet to start',
             keyIssueId: '0002',
             kmpMember: 'Shri Kumar',
@@ -702,17 +685,14 @@ const TASK_API_DATA = {
   QA_DV: [
     {
       taskId: '0001',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -788,7 +768,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssue: 'Biodiversity impact',
           keyIssueId: '0001',
@@ -865,7 +845,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION003',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -944,14 +924,11 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0002',
+      fiscalYear: '2018-2019',
       pillar: 'Social',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
           fiscalYear: '2018-2019',
@@ -1141,14 +1118,11 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0003',
+      fiscalYear: '2018-2019',
       pillar: 'Governance',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [
           {
             dpCode: 'BIOP002',
@@ -1213,28 +1187,13 @@ const TASK_API_DATA = {
             ],
           }],
       },
-      MATRIX: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Shareholder Rights',
-          value: 'Shareholfer Rights',
-          boardMembers: [
-            {
-              label: 'Shri Sunil Kumar',
-              value: 'Shri Sunil Kumar',
-            },
-          ],
-        }, {
-          id: '0002',
-          label: 'Management Structure',
-          value: 'Management Structure',
-          kmpMembers: [
-            {
-              label: 'Shri Kumar',
-              value: 'Shri Kumar',
-            },
-          ],
-        }],
+      BOARDMATRIX: {
+        boardMembersList: [
+          {
+            label: 'Shri Sunil Kumar',
+            value: 'Shri Sunil Kumar',
+          },
+        ],
         dpCodesData: [
           {
             dpCode: 'BION002',
@@ -1299,7 +1258,17 @@ const TASK_API_DATA = {
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2016' },
               },
             ],
-          }, {
+          }],
+      },
+      KMPMATRIX: {
+        kmpMembersList: [
+          {
+            label: 'Shri Kumar',
+            value: 'Shri Kumar',
+          },
+        ],
+        dpCodesData: [
+          {
             dpCode: 'BION003',
             fiscalYear: '2018-2019',
             status: 'Yet to start',
@@ -1372,17 +1341,14 @@ const TASK_API_DATA = {
   COMPANY_REP_DR: [
     {
       taskId: '0001',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Enviromental',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -1480,7 +1446,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssue: 'Biodiversity impact',
           keyIssueId: '0001',
@@ -1579,7 +1545,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION003',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -1680,17 +1646,14 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0002',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Social',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Completed',
           keyIssueId: '0001',
           pillar: 'Social',
@@ -1788,7 +1751,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssue: 'Biodiversity impact',
           keyIssueId: '0001',
@@ -1887,7 +1850,7 @@ const TASK_API_DATA = {
           ],
         }, {
           dpCode: 'BION003',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Social',
@@ -1988,18 +1951,15 @@ const TASK_API_DATA = {
     },
     {
       taskId: '0003',
+      fiscalYear: '2018-2019,2019-2020',
       pillar: 'Governance',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [
           {
             dpCode: 'BIOP002',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Completed',
             keyIssueId: '0001',
             pillar: 'Governance',
@@ -2097,32 +2057,17 @@ const TASK_API_DATA = {
             ],
           }],
       },
-      MATRIX: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Shareholder Rights',
-          value: 'Shareholfer Rights',
-          boardMembers: [
-            {
-              label: 'Shri Sunil Kumar',
-              value: 'Shri Sunil Kumar',
-            },
-          ],
-        }, {
-          id: '0002',
-          label: 'Management Structure',
-          value: 'Management Structure',
-          kmpMembers: [
-            {
-              label: 'Shri Kumar',
-              value: 'Shri Kumar',
-            },
-          ],
-        }],
+      BOARDMATRIX: {
+        boardMembersList: [
+          {
+            label: 'Shri Sunil Kumar',
+            value: 'Shri Sunil Kumar',
+          },
+        ],
         dpCodesData: [
           {
             dpCode: 'BION002',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Yet to start',
             keyIssue: 'Biodiversity impact',
             keyIssueId: '0001',
@@ -2220,9 +2165,19 @@ const TASK_API_DATA = {
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2016' },
               },
             ],
-          }, {
+          }],
+      },
+      KMPMATRIX: {
+        kmpMembersList: [
+          {
+            label: 'Shri Kumar',
+            value: 'Shri Kumar',
+          },
+        ],
+        dpCodesData: [
+          {
             dpCode: 'BION003',
-            fiscalYear: '2018-2019, 2019-2020',
+            fiscalYear: '2018-2019,2019-2020',
             status: 'Yet to start',
             keyIssueId: '0002',
             kmpMember: 'Shri Kumar',
@@ -2331,16 +2286,13 @@ const TASK_API_DATA = {
     {
       taskId: '0001',
       pillar: 'Enviromental',
+      fiscalYear: '2018-2019,2019-2020',
       company: 'Manglore Refinery Petrochemicals Ltd',
       STANDALONE: {
-        keyIssuesList: [{
-          id: '0001',
-          label: 'Biodiversity impact',
-          value: 'Biodiversity impact',
-        }],
+
         dpCodesData: [{
           dpCode: 'BIOP002',
-          fiscalYear: '2018-2019, 2019-2020',
+          fiscalYear: '2018-2019,2019-2020',
           status: 'Yet to start',
           keyIssueId: '0001',
           pillar: 'Enviromental',
@@ -2434,6 +2386,76 @@ const TASK_API_DATA = {
           ],
         }],
       },
+    }],
+
+  // 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+  // 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+  // 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+
+  ANALYST_CC: [
+    {
+      taskId: '0001',
+      company: 'Reliance Ltd',
+      dpCodesData: [
+        {
+          dpCode: 'BUSN001',
+          indicator: 'Biodiversity Controversies',
+          description: 'Are there any reported controversies on biodiversity for the fiscal year?',
+          keyIssue: 'Biodiversity impact',
+          dataType: 'text',
+          avgResponse: 'Low',
+          controversyList: [
+            {
+              id: 'CON01',
+              dpCode: 'BUSN001',
+              status: 'Completed',
+              description: 'Are there any reported controversies on biodiversity for the fiscal year?',
+              dataType: 'text',
+              textSnippet: 'Snippet',
+              pageNo: '45',
+              screenShot: '',
+              response: 'High',
+              source: { sourceName: 'The Hindu', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+              comments: [
+                {
+                  author: 'Analyst', content: 'Comment', dateTime: 'Thu Jun 24 2018', prevResponse: { value: 'Very High', color: 'red' }, latestResponse: { value: 'High', color: 'orange' },
+                },
+                {
+                  author: 'Analyst', content: 'Comment', dateTime: 'Thu Jun 24 2018', prevResponse: { value: 'High', color: 'orange' }, latestResponse: { value: 'Medium', color: 'blue' },
+                },
+                {
+                  author: 'Analyst', content: 'Comment', dateTime: 'Thu Jun 24 2018', prevResponse: { value: 'Medium', color: 'blue' }, latestResponse: { value: 'Low', color: 'green' },
+                },
+                {
+                  author: 'Analyst', content: 'Comment', dateTime: 'Thu Jun 24 2018', prevResponse: { value: 'Low', color: 'green' }, latestResponse: { value: 'No', color: '' },
+                },
+              ],
+            },
+            {
+              id: 'CON02',
+              dpCode: 'BUSN001',
+              status: 'Completed',
+              description: 'Are there any reported controversies on biodiversity for the fiscal year?',
+              dataType: 'text',
+              textSnippet: 'Snippet',
+              pageNo: '45',
+              screenShot: '',
+              response: 'High',
+              source: { sourceName: 'India Times', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+            },
+            {
+              id: 'CON03',
+              dpCode: 'BUSN001',
+              status: 'Completed',
+              description: 'Are there any reported controversies on biodiversity for the fiscal year?',
+              dataType: 'text',
+              textSnippet: 'Snippet',
+              pageNo: '45',
+              screenShot: '',
+              response: 'High',
+              source: { sourceName: 'India Times', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
+            }],
+        }],
     }],
 };
 

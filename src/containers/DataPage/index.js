@@ -97,8 +97,7 @@ const DataSheetMain = (props) => {
     }));
   };
 
-  const dataCheckBeforeSave = () => {
-    console.log('DATACHECK BROFRE SAVE', reqCurrentData);
+  const getUnsavedCurrentYears = () => {
     const nonSavedYears = (reqCurrentData.map((e) => {
       if (isAnalyst_DC && e.status !== 'Completed') {
         return e.fiscalYear;
@@ -107,6 +106,9 @@ const DataSheetMain = (props) => {
         return e.fiscalYear;
       }
       if (isAnalyst_DCR && e.status === 'Completed' && (e.error.status !== 'Completed')) {
+        return e.fiscalYear;
+      }
+      if (isAnalyst_DCR && e.status !== 'Completed' && (e.error.status === 'Completed')) {
         return e.fiscalYear;
       }
       if ((isQA_DV || isCompanyRep_DR || isClientRep_DR) && e.error && e.error.errorStatus !== 'Completed') {
@@ -119,6 +121,21 @@ const DataSheetMain = (props) => {
     })).filter((e) => (e !== null));
     return nonSavedYears;
   };
+
+  const getUnsavedHistoricalYears = () => {
+    const nonSavedYears = (reqHistoricalData.map((e) => {
+      if (e.status !== 'Completed') {
+        return e.fiscalYear;
+      }
+      return null;
+    })).filter((e) => (e !== null));
+    return nonSavedYears;
+  };
+
+  const reqDataCheckBeforeSave = () => ({
+    currentData: getUnsavedCurrentYears(),
+    historicalData: getUnsavedHistoricalYears(),
+  });
 
   return (
     <React.Fragment>
@@ -139,7 +156,7 @@ const DataSheetMain = (props) => {
                   reqErrorList={reqErrorList}
                   openSourcePanel={openSourcePanel}
                   onClickSave={saveReqHistoricalData}
-                  dummyDataCheck={dataCheckBeforeSave}
+                  dummyDataCheck={reqDataCheckBeforeSave}
                 />
               </Tabs.TabPane>))}
           </Tabs>
@@ -169,7 +186,7 @@ const DataSheetMain = (props) => {
                   reqErrorList={reqErrorList}
                   openSourcePanel={openSourcePanel}
                   onClickSave={saveReqCurrentData}
-                  dummyDataCheck={dataCheckBeforeSave}
+                  dummyDataCheck={reqDataCheckBeforeSave}
                 />
               </Tabs.TabPane>))}
           </Tabs>
@@ -216,7 +233,7 @@ const DataPage = (props) => {
 
   // FUNC THAT UPDATES SRC STATE FOR EVERY SRC THAT ARE UPLOADED FROM SRC PANEL
   const onUploadAddSource = (value) => {
-    const filteredData = srcList.filter((src) => (value.sourceName !== src.sourceName));
+    const filteredData = sourceApiData.filter((src) => (value.sourceName !== src.sourceName));
     setSourceApiData([...filteredData, { ...value }]);
   };
 

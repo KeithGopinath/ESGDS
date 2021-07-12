@@ -2,33 +2,20 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-
 import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 
 
 const PendingTaskTable = (props) => {
   // TABLE DATA
   const tablePopulate = (data) => data.map(({
-    taskId, pillar, company, fiscalYear, status,
+    taskId, pillar, company, fiscalYear, status, taskStatus,
   }) => ({
-    taskId,
-    pillar,
-    company,
-    fiscalYear,
-    status,
-    action:
-  <Link
-    href
-    to={{
-      pathname: `/task/${taskId}`,
-      state: { taskId },
-    }}
-  >Enter
-  </Link>,
+    taskId, pillar, company, fiscalYear, status: status || taskStatus, action: <Link href to={{ pathname: `/task/${taskId}`, state: { taskId } }}>Enter</Link>,
   }));
 
   const PENDING_TASK_DATA = {
@@ -57,7 +44,7 @@ const PendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={PENDING_TASK_DATA} />
+    <CustomTable tableData={PENDING_TASK_DATA} isLoading={props.isLoading} />
   );
 };
 
@@ -65,34 +52,23 @@ const ControversyPendingTaskTable = (props) => {
   // TABLE DATA
   console.log(props);
   const tablePopulate = (data) => data.map(({
-    dpCode, company, fiscalYear, status,
+    taskId, company, status,
+    // to={{
+    //   pathname: `/controversy/${dpCode}`,
+    //   state: { dpCode },
+    // }}
   }) => ({
-    dpCode,
-    company,
-    fiscalYear,
-    status,
-    action:
-  <Link
-    href
-    to={{
-      pathname: `/controversy/${dpCode}`,
-      state: { dpCode },
-    }}
-  >Enter
-  </Link>,
+    taskId, company, status, action: <Link href to={{ pathname: `/task/${taskId}`, state: { taskId } }}>Enter</Link>,
   }));
 
   const CONTROVERSY_PENDING_TASK_DATA = {
     rowsData: tablePopulate(props.data),
     columnsHeadData: [
       {
-        id: 'dpCode', label: 'Dp Code', align: 'left', dataType: 'string',
+        id: 'taskId', label: 'Task Id', align: 'left', dataType: 'string',
       },
       {
         id: 'company', label: 'Company', align: 'left', dataType: 'string',
-      },
-      {
-        id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
       },
       {
         id: 'status', label: 'Status', align: 'left', dataType: 'string',
@@ -101,15 +77,27 @@ const ControversyPendingTaskTable = (props) => {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
       },
     ],
-    tableLabel: 'Pending Controveries',
+    tableLabel: 'Pending Task',
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} />
+    <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} isLoading={props.isLoading} />
   );
 };
 
 const PendingTasks = () => {
+  // DISPATCH
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: 'PENDING_TASKS_GET_REQUEST' });
+  }, []);
+
+  const pendingTasksAPIData = useSelector((state) => state.pendingTasks);
+
+  console.log(useSelector((state) => state.pendingTasks));
+
+
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
@@ -121,18 +109,21 @@ const PendingTasks = () => {
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
-  const getReqTabs = () => {
+  const getReqTabs = (e) => {
     if (isAnalyst) {
-      return [{ label: 'Data Collection', data: PENDING_TASK.ANALYST_DC }, { label: 'Data Correction', data: PENDING_TASK.ANALYST_DCR },
-        { label: 'Controversy Collection', data: PENDING_TASK.ANALYST_CC }];
+      return [
+        { label: 'Data Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DC : (e.pendingTasksList.data.rows).concat(PENDING_TASK.ANALYST_DC) },
+        { label: 'Data Correction', data: PENDING_TASK.ANALYST_DCR },
+        { label: 'Controversy Collection', data: PENDING_TASK.ANALYST_CC },
+      ];
     }
-    if (isQA) { return [{ label: 'Data Verification', data: PENDING_TASK.QA_DV }]; }
+    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.rows).concat(PENDING_TASK.QA_DV) }]; }
     if (isCompanyRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
     if (isClientRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
     return [];
   };
 
-  const tabs = getReqTabs();
+  const tabs = getReqTabs(pendingTasksAPIData);
 
   const tabsRef = useRef(tabs.map(() => React.createRef()));
 
@@ -162,7 +153,7 @@ const PendingTasks = () => {
 
   useEffect(() => {
     setDefaultTab();
-  }, []);
+  }, [pendingTasksAPIData]);
 
   return (
     <div className="main">
@@ -182,7 +173,7 @@ const PendingTasks = () => {
                 </div>
               </div>))}
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable data={reqAPIData.data} /> : <ControversyPendingTaskTable data={reqAPIData.data} />}
+          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>
