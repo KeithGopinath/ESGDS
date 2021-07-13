@@ -62,7 +62,7 @@ const ControversyPage = (props) => {
                           }}
                         >{eachCmt.content}
                         </p>}
-                      datetime={<React.Fragment>{`${moment(eachCmt.datetime).fromNow()}, `}<Tag color={eachCmt.prevResponse.color} style={{ margin: 0 }}>{eachCmt.prevResponse.value}</Tag><SwapRightOutlined style={{ fontSize: '20px' }} /><Tag color={eachCmt.latestResponse.color} style={{ margin: 0 }}>{eachCmt.latestResponse.value}</Tag></React.Fragment>}
+                      datetime={<React.Fragment>{`${moment(eachCmt.dateTime).fromNow()}, `}<Tag color={eachCmt.prevResponse.color} style={{ margin: 0 }}>{eachCmt.prevResponse.value}</Tag><SwapRightOutlined style={{ fontSize: '20px' }} /><Tag color={eachCmt.latestResponse.color} style={{ margin: 0 }}>{eachCmt.latestResponse.value}</Tag></React.Fragment>}
                     />)}
                 />
               </DataAccordian>

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -17,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
-import { DatePicker, Space, Result, Button } from 'antd';
+import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
 import PageLoader from '../../components/PageLoader';
 
@@ -71,7 +70,9 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
+const CustomTable = ({
+  tableData, showDatePicker, isLoading, message, icon,
+}) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
   // CONSTANTS
@@ -120,6 +121,14 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
   );
 
   const descendingComparator = (a, b, ofOrderBy) => {
+    if (sortDataType === 'stringSearchSortElement') {
+      if (b[ofOrderBy].value < a[ofOrderBy].value) {
+        return -1;
+      }
+      if (b[ofOrderBy].value > a[ofOrderBy].value) {
+        return 1;
+      }
+    }
     if (sortDataType === 'date') {
       if (new Date(b[ofOrderBy]) < new Date(a[ofOrderBy])) {
         return -1;
@@ -161,13 +170,16 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
   };
 
   const searcher = (rowdata, coldata, searchedQuery, searchedDate) => {
-    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'date') ? ({ id: eachColData.id, dataType: eachColData.dataType }) : (null)))).filter((eachColData) => (eachColData !== null));
+    const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'stringSearchSortElement' || eachColData.dataType === 'date') ? ({ id: eachColData.id, dataType: eachColData.dataType }) : (null)))).filter((eachColData) => (eachColData !== null));
     // const dateOnlyColumnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'date') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
     let rowDataToBeReturned;
     if (searchedQuery && searchedDate) {
       const filteredData = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if ((eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if (columnsList[i].dataType === 'stringSearchSortElement' && (eachRowData[columnsList[i].id].value.toLowerCase()).includes(searchedQuery.toLowerCase())) {
+            return true;
+          }
+          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
@@ -193,7 +205,10 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
     } else if (searchedQuery) {
       rowDataToBeReturned = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if (columnsList[i].dataType === 'stringSearchSortElement' && (eachRowData[columnsList[i].id].value.toLowerCase()).includes(searchedQuery.toLowerCase())) {
+            return true;
+          }
+          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
@@ -256,10 +271,15 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
             <TableBody>
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                .map((eachRow, rowIndex) => {
-                  const cellArray = Object.keys(eachRow).map((data, index) => {
-                    let cellColumnData;
-                    [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
+                .map((eachRow) => {
+                  const rowsDataKeyList = Object.keys(eachRow);
+                  const cellArray = rowsDataKeyList.map((data) => {
+                    const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
+                    if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {
+                      return (
+                        <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data].content}</TableCell>
+                      );
+                    }
                     return (
                       <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
                     );
@@ -267,7 +287,7 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
                   return (
                     <TableRow
                       hover={false}
-                      key={`table cell data ${rowIndex}`}
+                      key={`table row data of ${eachRow[rowsDataKeyList[0]]}`}
                       onClick={null}
                     >
                       {cellArray}
@@ -294,8 +314,8 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
                     {isLoading ?
                       <PageLoader /> :
                       <Result
-                        icon={<InboxOutlined />}
-                        title="All Done!"
+                        icon={icon || <InboxOutlined />}
+                        title={message || 'All Done!'}
                       />
                     }
                   </TableCell>
@@ -320,6 +340,41 @@ const CustomTable = ({ tableData, showDatePicker, isLoading }) => {
 CustomTable.propTypes = {
   tableData: PropTypes.object.isRequired,
   showDatePicker: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  message: PropTypes.string,
+  icon: PropTypes.element,
 };
 
 export default CustomTable;
+
+//   tableData: is a Object which should contain rowData, columnsHeadData, tableLabel.
+//   Eg: {
+//   rowsData: [
+//      {
+//        taskId: '01', date: 'Tue Jul 13 2021', pillar: { value: 'Envi', content: <div>Envi</div> }, action: <a>Enter</a>,
+//      }
+//    ],
+//   columnsHeadData: [
+//     {
+//       id: 'taskId', label: 'Task Id', align: 'left', dataType: 'string',
+//     },
+//     {
+//       id: 'date', label: 'Date', align: 'left', dataType: 'date',
+//     },
+//     {
+//       id: 'pillar', label: 'pillar', align: 'left', dataType: 'stringSearchSortElement',
+//     },
+//     {
+//       id: 'action', label: 'Action', align: 'right', dataType: 'element',
+//     },
+//   ],
+//   tableLabel: 'Table Name',
+// };
+//   showDatePicker: true || false,
+//   isLoading: true || false,
+//   messageAndIcon: is a Object which should contain show, message, icon,
+//   Eg: {
+//         show: true || false,
+//         message: 'Hello',
+//         icon: <Smile />,
+//       }

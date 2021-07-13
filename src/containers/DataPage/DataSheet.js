@@ -301,8 +301,12 @@ export const DataSheetComponent = (props) => {
   };
 
   const saveAndCloseClickHandler = () => {
-    console.log(props.dummyDataCheck(), 'LIST OF NUMS');
-    if ((props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
+    if (isAnalyst_CC && defaultData.status === 'Completed') {
+      history.goBack();
+    } else if (isAnalyst_CC) {
+      message.error('Please make sure the required data is entered and saved.', 8);
+    }
+    if (!isAnalyst_CC && (props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
       console.log('saveAndCloseClickHandler');
       console.log('Details To Be Saved: ');
       console.log('DP CODE: ', formDpCode);
@@ -885,7 +889,7 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="success" onClick={saveAndNextClickHandler}>Save And Next</Button>}
 
         {/* SAVE&CLOSE Button */}
-        { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex) &&
+        { (((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex)) || (isAnalyst_CC)) &&
         <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
 
         {/* HISTORY UNFREEZE Button */}
