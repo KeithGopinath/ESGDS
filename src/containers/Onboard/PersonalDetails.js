@@ -121,8 +121,8 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const onBankIfscChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-      setBankIFSCCode(e.target.value);
-      onBankIfsc(e.target.value);
+      setBankIFSCCode(e.target.value.toUpperCase());
+      onBankIfsc(e.target.value.toUpperCase());
     }
   };
 
@@ -137,6 +137,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     const valid = validatingSpaces(email);
     const re = /^[6-9]{1}[0-9]{9}$/;
     const pancardRe = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$/;
+    const ifscCode= /^[A-Za-z]{4}[0-9]{7}$/
     if (role === 'client' || role === 'company') {
       if (!phoneNumber && valid === false) {
         message.error('Please fill all required fields');
@@ -164,13 +165,22 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
         setValidate('border-danger');
       } else if (phoneNumber && !re.test(phoneNumber)) {
         message.error('Please enter valid mobile number');
-        setValidate('border-danger');
+        setValidate("mobile");
       } else if (adharCard.length < 12) {
         message.error('Should aadhar number have 12 digits');
         setValidate('border-danger');
       } else if (pancardNumber && !pancardRe.test(pancardNumber)) {
         message.error('Please enter valid pancard number');
         setValidate(true);
+      } else if (bankAccountNumber && bankAccountNumber.length < 11) { 
+        message.error('Account number has minmum 11 digits & maximum 16 digits');
+        setValidate('border-danger');
+      } else if(bankIFSCCode && bankIFSCCode.length !== 11) { 
+        message.error('IFSC code has 11 characters');
+        setValidate('ifsc');
+      } else if(bankIFSCCode && !ifscCode.test(bankIFSCCode)) { 
+        message.error('Please enter proper iFSC code');
+        setValidate('ifsc');
       } else {
         nextStep();
         setValidate('');
@@ -270,7 +280,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Form.Group>
                 <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
                 <Form.Control
-                  className={(!phoneNumber || phoneNumber) && validate}
+                  className={!phoneNumber && validate || phoneNumber && validate === 'mobile'? 'border-danger': '' }
                   type="tel"
                   name="phone"
                   id="phone"
@@ -388,10 +398,11 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   <Form.Group>
                     <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
                     <Form.Control
-                      className={!bankIFSCCode && validate}
+                      className={!bankIFSCCode && validate || bankIFSCCode && validate ? 'border-danger': ''}
                       type="text"
                       name="bankIFSC"
                       id="bankIFSC"
+                      maxLength={11}
                       value={bankIFSCCode}
                       placeholder="Enter your IFSC code"
                       onChange={onBankIfscChange}

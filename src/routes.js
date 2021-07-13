@@ -23,6 +23,7 @@ import UserProfile from './containers/UserProfile';
 import Controversy from './containers/Controversy';
 import ControversyPage from './containers/Controversy/ControversyPage';
 import TaskList from './containers/TaskList';
+import Reports from './containers/Reports';
 
 export const history = createBrowserHistory();
 
@@ -52,6 +53,7 @@ const Routes = () => (
         <Route path="/dpcode" component={DataPage} />
         <Route path="/createtask" component={TaskCreate} />
         <Route path="/tasklist" component={TaskList} />
+        <Route path="/reports" component={Reports} />
       </Switch>
     </React.Fragment>
   </Router >

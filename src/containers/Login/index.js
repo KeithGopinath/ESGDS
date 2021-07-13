@@ -7,6 +7,7 @@ import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
+import { message } from 'antd';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -22,6 +23,8 @@ const Login = () => {
   const [forgotemail, setForgotemail] = useState('');
   const [forgotPasswordAlert, setforgotPasswordAlert] = useState('');
   const [forgotPasswordvalidate, setforgotPasswordvalidate] = useState('');
+  const [start, setStart] = useState(false);
+  const [seconds, setSeconds] = useState(30);
 
   const dispatch = useDispatch();
   // login
@@ -70,6 +73,18 @@ const Login = () => {
       setforgotPasswordvalidate('border-danger');
     }
   }, [validPasswordChange, InvalidPasswordChange]);
+
+  // resend timer
+  useEffect(() => {
+    if (start) {
+      if (seconds > 0) {
+        setTimeout(() => setSeconds(seconds - 1), 1000);
+      } else {
+        setStart(false);
+        setOtpAlert('');
+      }
+    }
+  });
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -137,13 +152,22 @@ const Login = () => {
       const otpDetails = {
         login: user
       }
-  
+
       dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
 
+  // resend otp 
   const resendOtp = () => {
-    window.alert("OTP resend to your mail ID");
+    setOtpAlert("OTP sent successfully");
+    setStart(true);
+    const login = { email, password }
+    let objJsonStr = JSON.stringify(login);
+    let user = Buffer.from(objJsonStr).toString("base64");
+    const loginDetails = {
+      login: user
+    }
+    dispatch({ type: 'LOGIN_REQUEST', loginDetails });
   }
 
   const otpHandleChange = (value) => {
@@ -231,6 +255,7 @@ const Login = () => {
           </Card>
           <OtpScreen
             show={showOtp}
+            start={start}
             handleClose={handleClose}
             onSubmitOtp={onSubmitOtp}
             resendOtp={resendOtp}
@@ -239,6 +264,7 @@ const Login = () => {
             validateOtp={validate}
             alert={otpAlert}
             email={email}
+            seconds={seconds}
           />
           <ForgotPassword
             show={showForgotPassword}
