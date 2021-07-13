@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList, faChartBar } from '@fortawesome/free-solid-svg-icons';
 
 const ButtonList = [
   {
@@ -35,6 +35,9 @@ const ButtonList = [
   {
     id: 10, label: 'Task List', icon: faList, address: 'tasklist',
   },
+  {
+    id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
+  }
 ];
 
 const TaxonomySubMenu = [

@@ -18,8 +18,9 @@ const Overlay = ({
     <Modal.Header className="no-border" closeButton={onHide}>
       <Modal.Title>{title}</Modal.Title>
     </Modal.Header>
-    <Modal.Body className="justify-content-center">{body}</Modal.Body>
     {isLoading ? <div className="overlay-pageloader" > <PageLoader /> </div> :
+      <React.Fragment>
+    <Modal.Body className="justify-content-center">{body}</Modal.Body>
       <Modal.Footer className="no-border">
         {alert && <span className={`w-100 text-center text-${alertClass}`}><p>{alert}</p></span>}
         <div className="mx-auto">
@@ -28,6 +29,7 @@ const Overlay = ({
         </div>
         {footer}
       </Modal.Footer>
+      </React.Fragment>
     }
   </Modal>
 

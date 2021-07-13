@@ -1,11 +1,11 @@
 /* eslint-disable*/
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import OtpInput from 'react-otp-input';
 import Overlay from '../../components/Overlay';
 
-const OtpScreen = ({ 
-  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email,
+const OtpScreen = ({
+  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start, resendOtpClass,
 }) => {
 
   const OtpBody = () => (
@@ -22,11 +22,10 @@ const OtpScreen = ({
         focusStyle="otp-focus"
       />
     </div>);
-
   const Resend = () => (
-    <p className="text-secondary w-100 text-center">Didn't receive the OTP ?
-      <span className="text-primary btn otp-resend" onClick={resendOtp}>Resend OTP</span>
-    </p>);
+    <p className="text-secondary w-100 text-center">Didn't receive the OTP ?<span className="text-primary btn otp-resend" onClick={resendOtp}>{!start ? "Resend OTP" : `00:${seconds}`}</span></p>
+
+  );
 
   return (
     <Overlay
@@ -41,7 +40,7 @@ const OtpScreen = ({
       title="Authentication Required"
       body={OtpBody()}
       alert={alert}
-      alertClass='danger'
+      alertClass={start ? 'success' : 'danger'}
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
       footer={<Resend />}
