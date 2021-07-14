@@ -118,6 +118,7 @@ const Login = () => {
     } else {
       setLoginAlert('');
       setLoginRole(true);
+      setStart(true);
 
       const login = { email, password }
       let objJsonStr = JSON.stringify(login);
@@ -159,7 +160,7 @@ const Login = () => {
 
   // resend otp 
   const resendOtp = () => {
-    setOtpAlert("OTP sent successfully");
+    setSeconds(30);
     setStart(true);
     const login = { email, password }
     let objJsonStr = JSON.stringify(login);

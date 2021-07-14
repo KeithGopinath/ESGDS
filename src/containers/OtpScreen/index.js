@@ -1,13 +1,11 @@
 /* eslint-disable*/
-import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React from 'react';
 import OtpInput from 'react-otp-input';
 import Overlay from '../../components/Overlay';
 
 const OtpScreen = ({
-  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start, resendOtpClass,
+  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start,
 }) => {
-
   const OtpBody = () => (
     <div><p>We've sent a one time password to the email <span>{email}</span></p>
       <OtpInput
@@ -21,11 +19,8 @@ const OtpScreen = ({
         isInputNum
         focusStyle="otp-focus"
       />
+      {start ? <p className="otp-resend-text">Resend code in 00:{seconds.toString().length === 1 ? `0${seconds}` : seconds}</p> : seconds === 0 ? <span className="text-primary otp-resend" onClick={resendOtp}>Resend OTP</span> : ''}
     </div>);
-  const Resend = () => (
-    <p className="text-secondary w-100 text-center">Didn't receive the OTP ?<span className="text-primary btn otp-resend" onClick={resendOtp}>{!start ? "Resend OTP" : `00:${seconds}`}</span></p>
-
-  );
 
   return (
     <Overlay
@@ -43,7 +38,6 @@ const OtpScreen = ({
       alertClass={start ? 'success' : 'danger'}
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
-      footer={<Resend />}
     />
   );
 };
