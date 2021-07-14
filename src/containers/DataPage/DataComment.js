@@ -28,7 +28,7 @@ const DataComment = (props) => {
               }}
             >{eachCmt.content}
             </p>}
-          datetime={`${moment(eachCmt.datetime).fromNow()}, (${eachCmt.fiscalYear})`}
+          datetime={`${moment(eachCmt.dateTime).fromNow()}, (${eachCmt.fiscalYear})`}
         />)}
     />
   );

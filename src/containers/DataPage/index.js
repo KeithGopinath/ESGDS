@@ -6,7 +6,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExclamationCircleTwoTone } from '@ant-design/icons';
-import { Drawer, Tabs } from 'antd';
+import { Drawer, Tabs, Spin } from 'antd';
 import moment from 'moment';
 
 import Header from '../../components/Header';
@@ -17,6 +17,7 @@ import { DataSheetComponent } from './DataSheet';
 import DataAccordian from './DataAccordian';
 
 import DataComment from './DataComment';
+import PageLoader from '../../components/PageLoader';
 
 
 const DataSheetMain = (props) => {
@@ -54,11 +55,14 @@ const DataSheetMain = (props) => {
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
   const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData);
 
+  const [loaderMock, setLoaderMock] = useState(true);
+
   const reqCommentsList = reqDpCodeData.comments;
 
   useEffect(() => {
     setReqCurrentData(reqDpCodeData.currentData);
     setReqHistoricalData(reqDpCodeData.historicalData);
+    setLoaderMock(true);
   }, [locationData]);
 
   const saveReqCurrentData = (data) => {
@@ -137,69 +141,74 @@ const DataSheetMain = (props) => {
     historicalData: getUnsavedHistoricalYears(),
   });
 
+  setTimeout(() => { setLoaderMock(false); }, 3000);
+
   return (
     <React.Fragment>
+      <Spin spinning={loaderMock} indicator={<PageLoader />}>
+        <React.Fragment>
+          {/* HISTORICAL TABS */}
+          <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+            <DataAccordian header="History">
+              <Tabs defaultActiveKey={reqHistoricalData[0].fiscalYear} >
+                {reqHistoricalData.map((e) => (
+                  <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
+                    <DataSheetComponent
+                      isHistoryType
+                      reqData={e}
+                      reqTask={reqTask}
+                      reqIndexes={reqIndexes}
+                      locationData={locationData}
+                      reqSourceData={reqSourceData}
+                      reqErrorList={reqErrorList}
+                      openSourcePanel={openSourcePanel}
+                      onClickSave={saveReqHistoricalData}
+                      dummyDataCheck={reqDataCheckBeforeSave}
+                    />
+                  </Tabs.TabPane>))}
+              </Tabs>
+            </DataAccordian>
+          </Col>
 
-      {/* HISTORICAL TABS */}
-      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-        <DataAccordian header="History">
-          <Tabs defaultActiveKey={reqHistoricalData[0].fiscalYear} >
-            {reqHistoricalData.map((e) => (
-              <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
-                <DataSheetComponent
-                  isHistoryType
-                  reqData={e}
-                  reqTask={reqTask}
-                  reqIndexes={reqIndexes}
-                  locationData={locationData}
-                  reqSourceData={reqSourceData}
-                  reqErrorList={reqErrorList}
-                  openSourcePanel={openSourcePanel}
-                  onClickSave={saveReqHistoricalData}
-                  dummyDataCheck={reqDataCheckBeforeSave}
-                />
-              </Tabs.TabPane>))}
-          </Tabs>
-        </DataAccordian>
-      </Col>
+          {/* CURRENT TABS */}
+          <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+            <DataAccordian header="Current" isActive >
+              <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear}>
+                {reqCurrentData.map((e) => (
+                  <Tabs.TabPane
+                    tab={
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {e.fiscalYear}
+                        {e.error && e.error.isErrorRaised && <ExclamationCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#FF0000" />}
+                      </div>
+                    }
+                    key={e.fiscalYear}
+                  >
+                    <DataSheetComponent
+                      reqData={e}
+                      reqTask={reqTask}
+                      reqIndexes={reqIndexes}
+                      locationData={locationData}
+                      reqSourceData={reqSourceData}
+                      reqErrorList={reqErrorList}
+                      openSourcePanel={openSourcePanel}
+                      onClickSave={saveReqCurrentData}
+                      dummyDataCheck={reqDataCheckBeforeSave}
+                    />
+                  </Tabs.TabPane>))}
+              </Tabs>
+            </DataAccordian>
+          </Col>
 
-      {/* CURRENT TABS */}
-      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-        <DataAccordian header="Current" isActive >
-          <Tabs defaultActiveKey={reqCurrentData[0].fiscalYear}>
-            {reqCurrentData.map((e) => (
-              <Tabs.TabPane
-                tab={
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {e.fiscalYear}
-                    {e.error && e.error.isErrorRaised && <ExclamationCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#FF0000" />}
-                  </div>
-                }
-                key={e.fiscalYear}
-              >
-                <DataSheetComponent
-                  reqData={e}
-                  reqTask={reqTask}
-                  reqIndexes={reqIndexes}
-                  locationData={locationData}
-                  reqSourceData={reqSourceData}
-                  reqErrorList={reqErrorList}
-                  openSourcePanel={openSourcePanel}
-                  onClickSave={saveReqCurrentData}
-                  dummyDataCheck={reqDataCheckBeforeSave}
-                />
-              </Tabs.TabPane>))}
-          </Tabs>
-        </DataAccordian>
-      </Col>
+          {reqCommentsList &&
+          <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+            <DataAccordian header="Comments" isActive >
+              <DataComment reqCommentsList={reqCommentsList} />
+            </DataAccordian>
+          </Col>}
 
-      {reqCommentsList &&
-      <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-        <DataAccordian header="Comments" isActive >
-          <DataComment reqCommentsList={reqCommentsList} />
-        </DataAccordian>
-      </Col>}
-
+        </React.Fragment>
+      </Spin>
     </React.Fragment>
   );
 };
