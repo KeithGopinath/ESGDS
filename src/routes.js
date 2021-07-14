@@ -22,6 +22,7 @@ import UserView from './containers/UserView';
 import UserProfile from './containers/UserProfile';
 import Controversy from './containers/Controversy';
 import ControversyPage from './containers/Controversy/ControversyPage';
+import PillarAssignment from './containers/PillarAssignment';
 import TaskList from './containers/TaskList';
 import Reports from './containers/Reports';
 
@@ -54,6 +55,7 @@ const Routes = () => (
         <Route path="/createtask" component={TaskCreate} />
         <Route path="/tasklist" component={TaskList} />
         <Route path="/reports" component={Reports} />
+        <Route path="/pillarassignment" component={PillarAssignment} />
       </Switch>
     </React.Fragment>
   </Router >

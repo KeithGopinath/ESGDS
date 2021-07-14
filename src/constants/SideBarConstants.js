@@ -37,7 +37,10 @@ const ButtonList = [
   },
   {
     id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
-  }
+  },
+  {
+    id: 12, label: 'Pillar Assignment', icon: faTasks, address: 'pillarassignment',
+  },
 ];
 
 const TaxonomySubMenu = [
