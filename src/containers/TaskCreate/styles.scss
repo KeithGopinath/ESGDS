@@ -246,6 +246,7 @@
 }
 
 }
+.task-pillar-select{
 .ant-radio-wrapper{
     color: #04385a !important;
     font-size: 1.2rem !important;
@@ -255,6 +256,13 @@
 .ant-radio-group {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
+}
+}
+.grp-batch-name{
+    background-color: #04385a;
+    padding: 8% 10% 10% 15%;
+    font-size: 1.2rem;
+    color:white;
 }
 .detail-task-tab{
 .ant-tabs-tab-btn{
@@ -266,4 +274,14 @@ font-size: 1rem !important;
     border: 1px solid #88888861 !important;
     border-radius: 10px !important;
     
+}
+.tab-select{
+.ant-tabs-nav{
+    margin-bottom: 2rem;
+}
+}
+.companylist-task{
+    .react-bs-table-container{
+        width:100% !important;
+    }
 }

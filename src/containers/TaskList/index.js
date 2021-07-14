@@ -1,13 +1,22 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Col, Row, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
+import EditTask from './TaskEdit';
 
 const TaskList = () => {
+  const [show, setShow] = useState(false);
+  const [rowValue, setrowValue] = useState('');
   const sideBarRef = useRef();
+  const handleShow = (arg) => {
+    setrowValue(arg);
+    setShow(true);
+  };
   const data = [
     {
+      taskid: 'task001',
+      group: 'first group',
       batch: 'Batch1',
       company: 'Ambuja',
       pillar: 'Environment',
@@ -17,6 +26,8 @@ const TaskList = () => {
       qaSla: '12-07-2021',
     },
     {
+      taskid: 'task002',
+      group: 'first group',
       batch: 'Batch2',
       company: 'Oil and Gas',
       pillar: 'Social',
@@ -26,6 +37,8 @@ const TaskList = () => {
       qaSla: '20-07-2021',
     },
     {
+      taskid: 'task003',
+      group: 'second group',
       batch: 'Batch3',
       company: 'Bank of baroda',
       pillar: 'Governance',
@@ -35,6 +48,8 @@ const TaskList = () => {
       qaSla: '15-07-2021',
     },
     {
+      taskid: 'task004',
+      group: 'third group',
       batch: 'batch1',
       company: 'Ambuja',
       pillar: 'Social',
@@ -46,7 +61,8 @@ const TaskList = () => {
   ];
   const totalTaskList = (props) => {
     const tableRowData = (obj) => obj.map((e) => ({
-      id: e.key,
+      taskid: e.taskid,
+      group: e.group,
       batch: e.batch,
       company: e.company,
       pillar: e.pillar,
@@ -54,12 +70,24 @@ const TaskList = () => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <div><button className="btn btn-info">Edit</button></div>,
+      action: <div><button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button></div>,
 
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task id',
+          dataType: 'string',
+        },
+        {
+          id: 'group',
+          align: 'center',
+          label: 'Group',
+          dataType: 'string',
+        },
         {
           id: 'batch',
           align: 'center',
@@ -131,6 +159,7 @@ const TaskList = () => {
           </div>
         </div>
       </div>
+      <EditTask setShow={setShow} show={show} rowValue={rowValue} setrowValue={setrowValue} />
     </React.Fragment>
   );
 };
