@@ -124,24 +124,12 @@
     color: #ffffff;
 }
 
-.user-status-active-button {
-    background-color: green !important;
-    border-color: green !important;
-    color: #fffaf0 !important;
-
-    &.hover,
-    &:hover {
-        text-decoration: none !important;
-    }
+.user-active-icon {
+    cursor: pointer;
+    color: green;
 }
 
-.user-status-inactive-button {
-    background-color: red !important;
-    border-color:red !important;
-    color: #fffaf0 !important;
-
-    &.hover,
-    &:hover {
-        text-decoration: none !important;
-    }
+.user-inactive-icon {
+    cursor: pointer;
+    color: red;
 }
