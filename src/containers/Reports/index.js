@@ -42,20 +42,29 @@ const Reports = (props) => {
   //   XLSX.writeFile(workBook, (tabFlag === 'Completed Companies' ? 'Completed Companies List.xlsx' : 'Pending Companies List.xlsx'));
   // };
 
-  const onDownloadCompanyReport = (id) => {
-    const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
-    const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
-    let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
-    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, `${companyName}.xlsx`);
-  };
+  // const downloadReports = () => {
+  //   const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
+  //   const workBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
+  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+  //   XLSX.writeFile(workBook, `${companyName}.xlsx`);
+  // };
+
+  // const onDownloadCompanyReport = (id) => {
+  //   const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
+  //   const workBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
+  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+  //   XLSX.writeFile(workBook, `${companyName}.xlsx`);
+  // };
 
   // completed company table
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
       companyName: data.companyName,
-      CompletedDate: new Date().toDateString(),
+      completedDate: new Date().toDateString(),
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
       viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
@@ -113,7 +122,7 @@ const Reports = (props) => {
       columnsHeadData: [
         {
           id: 'companyName',
-          align: 'left',
+          align: 'center',
           label: 'Company Name',
           dataType: 'string',
         },
@@ -225,13 +234,10 @@ const Reports = (props) => {
 
   const [viewCompanyData, setViewCompanyData] = useState([]);
   const [companyName, setCompanyName] = useState('');
-// report task table
-// const reportTaskTab = reportTaskTableData(viewCompanyData);
+
   // View the pendong reports
   const onView = (companyName,id) => {
-    // setReportsFlow(1);
     setCompanyName(companyName);
-    // const viewCompany = pendingCompanyStatus && pendingCompanyStatus.filter(data=> data.companyName == companyName);
     history.push({ pathname:'/tasklist', state:companyName });
   };
 

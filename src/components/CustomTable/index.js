@@ -260,7 +260,6 @@ const CustomTable = ({
                   ),
                 }}
               />
-            {enableButton && <FontAwesomeIcon className="view-icon" size="lg"icon={faDownload} onClick={() => onView() } />}
             </ThemeProvider>
           </div>
           <Table className="users-table">
