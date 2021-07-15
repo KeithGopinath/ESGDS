@@ -21,6 +21,7 @@ import uploadTaxonomy from './UploadTaxonomy';
 import getRoleAssignment from './GetRoleAssignment';
 import pendingTasks from './PendingTasks';
 import matrixMember from './MatrixMember';
+import task from './Task';
 
 const rootReducer = combineReducers({
   login,
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   getRoleAssignment,
   pendingTasks,
   matrixMember,
+  task,
 });
 
 export default rootReducer;
