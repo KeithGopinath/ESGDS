@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -70,7 +72,7 @@ const TaskList = () => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <div><button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button></div>,
+      action: <div><FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon></div>,
 
     }));
     return {

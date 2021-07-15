@@ -28,10 +28,12 @@ const Groups = () => {
   const [creategrplist, setcreateGrpList] = useState([]);
   const [inputValidate, setInputValidate] = useState(false);
   const [usertargetKeys, setuserTargetKeys] = React.useState([]);
+  const [isdisableduser, setisdisableduser] = useState(true);
   const sideBarRef = useRef();
   const { Step } = Steps;
 
   const dispatch = useDispatch();
+ 
   const steps = [
     {
       title:'Create group',
@@ -59,19 +61,14 @@ const Groups = () => {
     { taxonomy: 'acute2', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch13', batchId: 'id13', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
   ];
 
-  const tax = [
-    { taxName: 'acute1', pillars: [{ value: 'env_id', label: 'environment' }, { value: 'social_id', label: 'social' }, { value: 'gov_id', label: 'governance' }] },
-    { taxName: 'acute2', pillars: [{ value: 'pillar_env', label: 'environment' }, { value: 'social_id', label: 'social' }, { value: 'gov_id', label: 'governance' }, { value: 'x_id', label: 'pillarX' }, { value: 'y_id', label: 'pillarY' }] },
-    { taxName: 'acute3', pillars: [{ value: 'z_id', label: 'pillarZ' }] },
-  ];
   // create group json
-  const groupAdminOptions = [
-    { value: 'Praveen', label: 'Praveen' },
-    { value: 'Vaijanthi', label: 'Vaijanthi' },
-    { value: 'Gopi', label: 'Gopi' },
-    { value: 'Rajesh', label: 'Rajesh' },
-    { value: 'Balaji', label: 'Balaji' },
-  ];
+  // const groupAdminOptions = [
+  //   { value: 'Praveen', label: 'Praveen' },
+  //   { value: 'Vaijanthi', label: 'Vaijanthi' },
+  //   { value: 'Gopi', label: 'Gopi' },
+  //   { value: 'Rajesh', label: 'Rajesh' },
+  //   { value: 'Balaji', label: 'Balaji' },
+  // ];
 
   const userwithRoles = [
     {
@@ -116,8 +113,41 @@ const Groups = () => {
         
       ] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
-  })
-   
+  },[])
+  const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
+  const batchAssignment = batchData && batchData.rows;
+  console.log(batchAssignment, 'batchesListAssignment');
+  
+  const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
+  const isData = userData && userData.data;
+  const grpAdminlist = [];
+  const userList = [];
+  isData && isData.map((e)=>{
+    e.roleDetails.role.map((arg)=>{
+      if(arg.label === "GroupAdmin"){
+        grpAdminlist.push(e);
+      }
+    })
+  });
+  console.log(grpAdminlist, 'grpAdminlist');
+  const groupAdminOptions = [];
+  grpAdminlist.map((obj)=>{
+    groupAdminOptions.push(obj.userDetails);
+  });
+  console.log(groupAdminOptions, 'groupAdminOptions');
+  if(isData){
+  for (const i of isData) {
+    for (const j of i.roleDetails.role) {
+      if(j.label === 'Analyst' || j.label === 'QA'){
+        userList.push(i);
+        break;
+      }
+    }
+  }
+}
+ 
+  console.log(userList, 'userList');
+  console.log(userData, 'userData');
   // *** batch assignments starts ***
  
   const onChangebatchTransfer = (newTargetKeys) => {
@@ -126,6 +156,7 @@ const Groups = () => {
   };
 
   const next = () => {
+   
     const batcharr = [];
     if ((targetKeys.length) > 0) {
       for (const i of targetKeys) {
@@ -198,6 +229,8 @@ const onChangeTransfer = (newTargetKeys) => {
         // setGrpCount(grplist.length + 1);
         message.success('Group created sucessfully');
         setCurrent(current + 1);
+        dispatch({ type: 'BATCH_REQUEST' });
+       
       
       } else {
         message.error('Fill all the required fields');
@@ -261,8 +294,8 @@ const onChangeTransfer = (newTargetKeys) => {
   );
 
 
-  const mockData = userwithRoles.map((obj) => {
-    const dumArr = { key: obj.userDetail.value, title: obj.userDetail.label, PRoles: obj.roleDetails.primaryRole.label, SecRole: obj.roleDetails.secRole };
+  const mockData = userList && userList.map((obj) => {
+    const dumArr = { key: obj.userDetails.value, title: obj.userDetails.label, SecRole: {primary: obj.roleDetails.primaryRole.label, role: obj.roleDetails.role} };
     return dumArr;
   });
 
@@ -271,15 +304,15 @@ const onChangeTransfer = (newTargetKeys) => {
       dataIndex: 'title',
       title: 'Name',
     },
-    {
-      dataIndex: 'PRoles',
-      title: 'Primary',
-      render: (Primary) => <Tag color="blue">{Primary}</Tag>,
-    },
+    // {
+    //   dataIndex: 'PRoles',
+    //   title: 'Primary',
+    //   render: (Primary) => <Tag color="blue">{Primary}</Tag>,
+    // },
     {
       dataIndex: 'SecRole',
       title: 'Roles',
-      render: (Roles) => Roles.map((e) => (<Tag color="cyan">{e.label}</Tag>)),
+      render: (Roles) => Roles.role.map((e) => (<Tag color={(e.label === Roles.primary)?"blue":"cyan"}>{e.label}</Tag>)),
     },
   ];
   const rightTableColumns = [
@@ -289,9 +322,17 @@ const onChangeTransfer = (newTargetKeys) => {
     },
   ];
 
- 
+  // const batchlistwise = batches && batches.map((b) => {
+  //   const batchDetail = { key: b.batchId, title: b.batchName, taxonomy:b.taxonomy };
+  //   return batchDetail;
+  // });
+  // console.log(batchlistwise, 'batchlistwise')
   
-
+  const batchlistwise = batchAssignment && batchAssignment.map((b) => {
+    const batchDetail = { key: b._id, title: b.batchName, taxonomy:b.taxonomy.label };
+    return batchDetail;
+  });
+  console.log(batchlistwise, 'batchlistwise_bala')
   // batch transfer 
   const TableTransferbatch = ({ leftColumnsbatch, rightColumnsbatch, ...restProps }) => (
     <Transfer {...restProps} showSelectAll={false} titles={['Unassigned batches', 'Assigned batches']}>
@@ -358,10 +399,7 @@ const onChangeTransfer = (newTargetKeys) => {
       title: 'Name',
     },
   ];
-  const batchlistwise = batches.map((b) => {
-    const batchDetail = { key: b.batchId, title: b.batchName, taxonomy:b.taxonomy };
-    return batchDetail;
-  });
+ 
 
   const onhandelgrpName = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
@@ -370,6 +408,7 @@ const onChangeTransfer = (newTargetKeys) => {
   };
   const onhandlegrpAdmin = (groupAdmin) => {
     setcreateGrpAdmin(groupAdmin);
+    setisdisableduser(false);
   };
 
 
@@ -406,8 +445,9 @@ const onChangeTransfer = (newTargetKeys) => {
           <div className="group-content">Add members to your group <span className="mandatory-color">*</span></div>
           <div className="add-batches">
             <TableTransfer
-              dataSource={mockData}
+              dataSource={mockData.filter((e)=>( creategrpAdmin.label !== e.title))}
               targetKeys={usertargetKeys}
+              disabled={isdisableduser}
               onChange={onChangeTransfer}
               leftColumns={leftTableColumns}
               rightColumns={rightTableColumns}
@@ -429,7 +469,7 @@ const onChangeTransfer = (newTargetKeys) => {
       <div className="group-content">Add batches to your groups</div>
       <div className="add-member">
         <TableTransferbatch
-              dataSource={batchlistwise}
+              dataSource={(batchlistwise) ? batchlistwise: []}
               targetKeys={targetKeys}
               onChange={onChangebatchTransfer}
               leftColumnsbatch={LeftTableColumns}
@@ -460,7 +500,7 @@ const onChangeTransfer = (newTargetKeys) => {
               <Card className="grp-pad">
                 <Container>
                   <Row>
-                    <Col lg={3} sm={12}>
+                    <Col lg={2} sm={12}>
                       { grpNamedisplay && 
                       <div className="display-grpname"> 
                         <Tag className="grpname-prop" icon={<IdcardFilled />} >
@@ -476,7 +516,7 @@ const onChangeTransfer = (newTargetKeys) => {
                         </Steps>
                       </div>
                     </Col>
-                    <Col lg={9} sm={12} className="assignment-box">
+                    <Col lg={10} sm={12} className="assignment-box">
                       <Row>
                         <Col lg={12} sm={12} >
                           {current ===0 && GroupCreation()}

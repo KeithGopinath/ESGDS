@@ -611,7 +611,7 @@ const GroupView = () => {
 
   };
   const onhandeleGrpPage = () => {
-    history.push("/groups");
+    history.push("/group-assignment");
   }
   const searchfilter = (search, card) => {
     const filteredData = card.filter((e) => {

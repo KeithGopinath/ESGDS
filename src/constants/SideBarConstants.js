@@ -21,28 +21,31 @@ const ButtonList = [
     id: 5, label: 'Role Assignment', icon: faUserTag, address: '',
   },
   {
-    id: 6, label: 'Groups', icon: faUsers, address: 'groupshead',
+    id: 6, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 7, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
+    id: 7, label: 'Groups', icon: faUsers, address: 'groupshead',
   },
   {
-    id: 8, label: 'Task', icon: faUserTag, address: 'createtask',
+    id: 8, label: 'Task', icon: faUsers, address: 'taskhead',
   },
   {
     id: 9, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
   {
-    id: 10, label: 'Task List', icon: faList, address: 'tasklist',
+    id: 10, label: 'Reports', icon: faChartBar, address: 'reports',
   },
-  {
-    id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
-  },
-  {
-    id: 12, label: 'Pillar Assignment', icon: faTasks, address: 'pillarassignment',
-  },
+  
 ];
 
+const TaskSubMenu = [
+  {
+    id: 0, label: 'Create Task', icon: faUserTag, address: 'createtask',
+  },
+  {
+    id: 1, label: 'Task List', icon: faList, address: 'tasklist',
+  }
+]
 const TaxonomySubMenu = [
   {
     id: 0, label: 'Master Taxonomy', icon: faNetworkWired, address: 'taxonomy'
@@ -68,6 +71,9 @@ const GroupsSubMenu = [
   {
     id: 1, label: 'Group List', icon: faList, address: 'group-list'
   },
+  {
+    id: 2, label: 'Pillar Assignment', icon: faTasks, address: 'pillarassignment',
+  },
 ]
 
 const UsersSubMenu = [
@@ -79,4 +85,4 @@ const UsersSubMenu = [
   },
 ]
 
-export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu };
+export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu };
