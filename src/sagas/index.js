@@ -21,6 +21,7 @@ import { uploadTaxonomyWatchers } from './UploadTaxonomy';
 import { roleAssignmentWatchers } from './GetRoleAssignment';
 import { getPendingTasksWatchers } from './PendingTask';
 import { matrixMemberWatchers } from './MatrixMember';
+import { taskWatchers } from './Task';
 import { getTaskDetailsWatchers } from './TaskDetails';
 
 export default function* rootWatchers() {
@@ -47,6 +48,7 @@ export default function* rootWatchers() {
     roleAssignmentWatchers(),
     getPendingTasksWatchers(),
     matrixMemberWatchers(),
+    taskWatchers(),
     getTaskDetailsWatchers(),
   ]);
 }

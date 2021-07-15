@@ -20,6 +20,7 @@ export default {
     uploadTaxonomy: 'datapoints/upload',
     getPendingTasksList: 'taskAssignments/my-tasks',
     putMatrixMember: '/companies/add/member',
+    getTask: 'datapoints/list',
     gettaskDetails: '/taskAssignments/getGroupAndBatches',
   },
   apiBaseUrl: {

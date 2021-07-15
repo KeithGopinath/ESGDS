@@ -22,6 +22,7 @@ import uploadTaxonomy from './UploadTaxonomy';
 import getRoleAssignment from './GetRoleAssignment';
 import pendingTasks from './PendingTasks';
 import matrixMember from './MatrixMember';
+import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
 
@@ -48,6 +49,7 @@ const combinedReducer = combineReducers({
   getRoleAssignment,
   pendingTasks,
   matrixMember,
+  task,
   taskDetail,
   roleChange,
 });

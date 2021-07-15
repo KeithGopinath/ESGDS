@@ -277,7 +277,7 @@ export const DataSheetComponent = (props) => {
       const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
-        state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
+        state: { dpCode: nextDpCode.dpCode },
       });
     } else {
       const msgCurrent = props.dummyDataCheck().currentData;
@@ -873,9 +873,8 @@ export const DataSheetComponent = (props) => {
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-
+      <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
       <Col lg={12} className="datapage-button-wrap">
-
         {/* BACK Button */}
         { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
         <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
