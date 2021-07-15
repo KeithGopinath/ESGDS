@@ -2,13 +2,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'antd/dist/antd.css';
 import XLSX from "xlsx";
 import FileSaver from "file-saver";
 import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import { history } from '../../routes';
 
 const Reports = (props) => {
   const sideBarRef = useRef();
@@ -31,13 +32,23 @@ const Reports = (props) => {
 
   // download the table data into excel
 
-  const onDownload = (id) => {
-    const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Completed Companies' ? completedCompanyStatus : pendingCompanyStatus);
+
+  // const onDownload = (id) => {
+  //   const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Completed Companies' ? completedCompanyStatus : pendingCompanyStatus);
+  //   const workBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workBook, workSheet, (tabFlag === 'Completed Companies' ? 'Completed Companies List' : 'Pending Companies List'));
+  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+  //   XLSX.writeFile(workBook, (tabFlag === 'Completed Companies' ? 'Completed Companies List.xlsx' : 'Pending Companies List.xlsx'));
+  // };
+
+  const onDownloadCompanyReport = (id) => {
+    const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
     const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, (tabFlag === 'Completed Companies' ? 'Completed Companies List' : 'Pending Companies List'));
+    XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, (tabFlag === 'Completed Companies' ? 'Completed Companies List.xlsx' : 'Pending Companies List.xlsx'));
+    XLSX.writeFile(workBook, `${companyName}.xlsx`);
   };
 
   // completed company table
@@ -69,7 +80,7 @@ const Reports = (props) => {
           dataType: 'date',
         }
       ],
-      tableLabel: <span>Completed Companies</span>,
+      tableLabel: <span>Completed Companies </span>,
     };
   };
 
@@ -77,8 +88,10 @@ const Reports = (props) => {
   const PendingCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
       companyName: data.companyName,
-      completedDate: data.completedDate,
-      download: <FontAwesomeIcon className="download-icon" size="lg" key={id} icon={faDownload} onClick={() => onDownload(id)} />
+      // completedDate: data.completedDate,
+      download: <FontAwesomeIcon className="download-icon" size="lg" key={id} icon={faDownload} onClick={() => onDownload(id)} />,
+      viewStatus: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
+
     }));
     return {
       rowsData: tableRowData(props),
@@ -89,6 +102,64 @@ const Reports = (props) => {
           label: 'Company Name',
           dataType: 'string',
         },
+        // {
+        //   id: 'completedDate',
+        //   align: 'center',
+        //   label: 'Completed Date',
+        //   dataType: 'date',
+        // },
+        {
+          id: 'download',
+          align: 'center',
+          label: 'Download',
+          dataType: 'date',
+        },
+        {
+          id: 'viewStatus',
+          align: 'center',
+          label: 'View Status',
+          dataType: 'date',
+        }
+      ],
+      tableLabel: <span>Pending Companies
+        {/* <FontAwesomeIcon className="download-icon" icon={faDownload} onClick={onDownload} /> */}
+      </span>,
+    };
+  };
+
+  const onViewTaskList = (id) => {
+    history.push({ pathname:'/tasklist', state:companyName });
+  };
+  
+  // Reports View
+  const reportTaskTableData = (props) => {
+    console.log("props data :", props);
+    const tableRowData = (data) => {
+    console.log("props data :", data);
+    }
+    // const tableRowData = (data) => data.map((data,id) => ({
+    //   // companyName: data.companyName,
+    //   pillar:data.pillar,
+    //   completedDate: data.completedDate,
+    //   QA:data.QA,
+    //   analyst:data.analyst,
+    //   viewStatus: <FontAwesomeIcon className="view-icon text-success" size="lg" key={id} icon={faEye} onClick={() => onViewTaskList(data.companyName,id)} />
+    // }));
+    return {
+      rowsData: tableRowData(props),
+      columnsHeadData: [
+        // {
+        //   id: 'companyName',
+        //   align: 'left',
+        //   label: 'Company Name',
+        //   dataType: 'string',
+        // },
+        {
+          id: 'pillar',
+          align: 'left',
+          label: 'Pillar',
+          dataType: 'string',
+        },
         {
           id: 'completedDate',
           align: 'center',
@@ -96,14 +167,26 @@ const Reports = (props) => {
           dataType: 'date',
         },
         {
-          id: 'download',
+          id: 'QA',
           align: 'center',
-          label: 'Download',
+          label: 'QA',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'viewStatus',
+          align: 'center',
+          label: 'View Status',
           dataType: 'date',
         }
       ],
-      tableLabel: <span>Pending Companies
-        {/* <FontAwesomeIcon className="download-icon" icon={faDownload} onClick={onDownload} /> */}
+      tableLabel: <span>{companyName} 
+      {/* <FontAwesomeIcon className="download-icon" size="lg" icon={faDownload} onClick={onDownloadCompanyReport} />  */}
       </span>,
     };
   };
@@ -125,12 +208,10 @@ const Reports = (props) => {
     setTabFlag(label)
   };
 
-  // const tableData = userData ? (tabFlag == "Completed Companies" ? CompletedCompanyTableData(filteredUsers) : tabFlag == "Pending Companies" ? PendingCompanyTableData(filteredUsers) : CompletedCompanyTableData([])) : CompletedCompanyTableData([])
-
   const userData = [
     {
       pillar: 'Social',
-      companyName: 'Reliance Ind.',
+      companyName: 'Reliance ltd.',
       completedDate: '10-07-2021',
       status: 'Completed',
       analyst: 'Rajesh',
@@ -166,7 +247,33 @@ const Reports = (props) => {
       analyst: 'Jerin',
       QA: 'Balaji',
       companyRepresentative: 'Praveen',
-      clientRrepresentative: 'Gopi'
+      clientRrepresentative: 'Gopi',
+      pillars:[
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Social',
+          analyst: 'Rajesh',
+          QA: 'Balaji',
+          companyRepresentative: 'Praveen',
+          clientRrepresentative: 'Gopi',
+        },
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Environment',
+          analyst: 'Jerin',
+          QA: 'Gopi',
+          companyRepresentative: 'Rajesh',
+          clientRrepresentative: 'Praveen',
+        },
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Governance',
+          analyst: 'Balaji',
+          QA: 'Praveen',
+          companyRepresentative: 'Gopi',
+          clientRrepresentative: 'Jerin',
+        }
+      ]
     },
     {
       pillar: 'Governance',
@@ -176,7 +283,33 @@ const Reports = (props) => {
       analyst: 'Balaji',
       QA: 'Rajesh',
       companyRepresentative: 'Gopi',
-      clientRrepresentative: 'Praveen'
+      clientRrepresentative: 'Praveen',
+      pillars:[
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Governance',
+          analyst: 'Rajesh',
+          QA: 'Balaji',
+          companyRepresentative: 'Praveen',
+          clientRrepresentative: 'Gopi',
+        },
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Social',
+          analyst: 'Jerin',
+          QA: 'Gopi',
+          companyRepresentative: 'Rajesh',
+          clientRrepresentative: 'Praveen',
+        },
+        { 
+          completedDate: '10-07-2021',
+          pillar: 'Environment',
+          analyst: 'Balaji',
+          QA: 'Praveen',
+          companyRepresentative: 'Gopi',
+          clientRrepresentative: 'Jerin',
+        }
+      ]
     },
   ];
 
@@ -185,12 +318,38 @@ const Reports = (props) => {
 
   const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanyStatus) : CompletedCompanyTableData(completedCompanyStatus);
 
+
+  const ReportsTitle = ['Reports', 'Task Reports'];
+  const [reportsFlow, setReportsFlow] = useState(0);
+  const [viewCompanyData, setViewCompanyData] = useState({});
+  const [companyName, setCompanyName] = useState('');
+// report task table
+const reportTaskTab = reportTaskTableData(viewCompanyData);
+  // View the pendong reports
+  const onView = (companyName,id) => {
+    setReportsFlow(1);
+    setCompanyName(companyName);
+    const viewCompany = pendingCompanyStatus && pendingCompanyStatus.filter(data=> data.companyName == companyName);
+    setViewCompanyData(viewCompany);
+    // console.log("pendingCompanyStatus :",pendingCompanyStatus);
+    // console.log("view company status :",viewCompany);
+  };
+  // console.log("view company data :",viewCompanyData);
+
+  // back button
+  const onBackButton = () => {
+    setReportsFlow(0);
+  };
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Reports" show />
+        {/* <Header title="Reports" /> */}
+        <Header sideBarRef={sideBarRef} title={ReportsTitle[reportsFlow]} />
         <div className="container-main">
+          { reportsFlow===0 && 
+          <React.Fragment>
           <div className="reports-tabs-stack">
             {tabLabelSets.map(({ label }, index) => (
               <div key={label} ref={tabsRefs.current[index]} onClick={(event) => (tabsClickHandler(event, label))} className="tabs-label-count-wrap">
@@ -203,6 +362,11 @@ const Reports = (props) => {
           <div>
             <CustomTable tableData={selecteTab} showDatePicker />
           </div>
+          </React.Fragment>
+          }
+          {reportsFlow === 1 && 
+            <CustomTable tableData={reportTaskTab} onBackButton={onBackButton} enableButton={true}  />
+            }
         </div>
       </div>
     </div>

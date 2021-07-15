@@ -1,13 +1,25 @@
+// import React, { useRef, useState } from 'react';
+/* eslint-disable */
 import React, { useRef, useState } from 'react';
 import { Col, Row, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
+import { history } from './../../routes';
 
-const TaskList = () => {
+// const TaskList = () => {
+//   const [show, setShow] = useState(false);
+//   const [rowValue, setrowValue] = useState('');
+// import { history } from './../../routes';
+
+const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
+
+  const companyName=props.location.state;
+
+  console.log("companyName : ", props.location.state);
   const sideBarRef = useRef();
   const handleShow = (arg) => {
     setrowValue(arg);
@@ -70,7 +82,8 @@ const TaskList = () => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <div><button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button></div>,
+      // action: <div><button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button></div>,
+      action: <div>{companyName ? '' :<button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button>}</div>,
 
     }));
     return {
@@ -138,9 +151,15 @@ const TaskList = () => {
         },
 
       ],
-      tableLabel: 'Tasks',
+      tableLabel: <span>{companyName ? companyName : 'Tasks'}</span>,
     };
   };
+
+  const onBackButton = () => {
+    // window.history.back();
+    history.push('/reports');
+  };
+
   const tasklist = totalTaskList(data);
   return (
     <React.Fragment>
@@ -152,7 +171,7 @@ const TaskList = () => {
             <Row>
               <Col lg={12} sm={12}>
                 <Card >
-                  <CustomTable tableData={tasklist} />
+                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false}/>
                 </Card>
               </Col>
             </Row>

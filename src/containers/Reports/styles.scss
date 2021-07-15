@@ -8,9 +8,17 @@
   justify-content: space-evenly;
 }
 
-.download-icon {
-  color: #2da68a;
+.download-icon,
+.view-icon {
   cursor: pointer;
 }
+
+.reports-view-btn {
+    align-items: center;
+    background-color: #2199c8 !important;
+    border-color: #2199c8 !important;
+    padding: 2px 14px 2px 13px !important;
+}
+
 
 
