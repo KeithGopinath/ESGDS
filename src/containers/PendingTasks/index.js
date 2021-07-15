@@ -120,7 +120,9 @@ const PendingTasks = () => {
     if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.rows).concat(PENDING_TASK.QA_DV) }]; }
     if (isCompanyRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
     if (isClientRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
-    return [];
+    return [{
+      label: '', data: [],
+    }];
   };
 
   const tabs = getReqTabs(pendingTasksAPIData);

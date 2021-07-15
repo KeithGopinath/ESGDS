@@ -3,6 +3,9 @@ import React, { useState, useRef } from 'react';
 import { Col, Row, Container, Card, Button, Accordion } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
+import {
+  ExceptionOutlined
+} from '@ant-design/icons';
 import { DatePicker, Radio, message, notification, Tag, Divider, Tabs} from 'antd';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,6 +17,7 @@ import SideMenuBar from '../../components/SideMenuBar';
 
 const TaskCreate = () => {
   const [taskFlow, settaskFlow] = useState(0);
+  
   const [companyInfo, setcompanyInfo] = useState([]);
   const [batchInfo, setbatchInfo] = useState([]);
   const [companyinfo, setcompanyinfo] = useState([]);
@@ -449,7 +453,7 @@ const TaskCreate = () => {
     {
       key: '2',
       name: 'Jim Green',
-      pillar: 'Social',
+      pillar: 'social',
       role: 'Qa',
       assignedTask:'5'
     },
@@ -457,25 +461,24 @@ const TaskCreate = () => {
       key: '3',
       name: 'Joe Black',
       pillar: 'governance',
-      role: 'analyst',
+      role: 'Analyst',
       assignedTask:'8'
     },
     {
       key: '4',
       name: 'Tom',
-      pillar: 'Social',
-      role: 'analyst',
+      pillar: 'social',
+      role: 'Qa',
       assignedTask:'0'
     },
   ]; // rowSelection object indicates the need for row selection
   
   const analystTableData = (props) => {
     const tableRowData = (data) => data.map((obj) => ({
-      id: obj.Analystkey,
       select:<div><Radio value={obj.key} onChange={()=>onhandleAnalyst(obj)} checked={(obj.key ===radioEle)?true:false}></Radio></div>,
       name:obj.name,
-      pillar:<Tag color="cyan">{obj.pillar}</Tag>,
-      role:obj.role,
+      pillar:{value:(obj.pillar === pillar.label)? "Primary" : "Secondary" , content:<Tag color={(obj.pillar === pillar.label)? "blue" : "cyan"}>{(obj.pillar === pillar.label)? "Primary" : "Secondary"}</Tag>},
+      role:{ value:(obj.role === "Analyst")? "Primary" : "Secondary" , content:<Tag color={(obj.role === "Analyst")? "blue" : "cyan"}>{(obj.role === "Analyst")? "Primary" : "Secondary"}</Tag>},
       assignedTask:obj.assignedTask
       
     }));
@@ -498,14 +501,14 @@ const TaskCreate = () => {
       {
         id: 'pillar',
         align: 'center',
-        label: 'Pillar',
-        dataType: 'element',
+        label: 'Pillar type',
+        dataType: 'stringSearchSortElement',
       },
       {
         id: 'role',
         align: 'center',
-        label: 'Role',
-        dataType: 'string',
+        label: 'Role type',
+        dataType: 'stringSearchSortElement',
       },
       {
         id: 'assignedTask',
@@ -520,11 +523,10 @@ const TaskCreate = () => {
   };
   const qaTableData = (props) => {
     const tableRowData = (data) => data.filter((i)=> selectedAnalyst.key !== i.key).map((e) => ({
-      id: e.key,
       select:<div><Radio value={e.key} onChange={()=>onhandleQa(e)} checked={(e.key ===radioEleqa)?true:false} disabled={statusRole}></Radio></div>,
       name:e.name,
-      pillar:<Tag color="cyan">{e.pillar}</Tag>,
-      role:e.role,
+      pillar:{value:(e.pillar === pillar.label)? "Primary" : "secondary" ,content:<Tag color={(e.pillar === pillar.label)? "blue" : "cyan"}>{(e.pillar === pillar.label)? "Primary" : "secondary"}</Tag>},
+      role:{value : (e.role === "Qa")? "Primary" : "secondary" ,content:<Tag color={(e.role === "Qa")? "blue" : "cyan"}>{(e.role === "Qa")? "Primary" : "secondary"}</Tag>},
       assignedTask:e.assignedTask,
       
     }));
@@ -548,13 +550,13 @@ const TaskCreate = () => {
         id: 'pillar',
         align: 'center',
         label: 'Pillar',
-        dataType: 'element',
+        dataType: 'stringSearchSortElement',
       },
       {
         id: 'role',
         align: 'center',
         label: 'Role',
-        dataType: 'string',
+        dataType: 'stringSearchSortElement',
       },
       {
         id: 'assignedTask',
@@ -578,14 +580,7 @@ const TaskCreate = () => {
         <Col lg={12} sm={12}>
           <div className="batch-view-header">
             <div className="mar-right">
-              <TextField
-                disabled
-                id="outlined-disabled"
-                label="Batch Name"
-                defaultValue={batchInfo.Batchname}
-                variant="outlined"
-                size="small"
-              />
+              <Tag className="grp-batch-name">{batchInfo.Batchname}</Tag>
             </div>
             <div className="align-chip">
               <div className="batch-year-head">Year :</div>
@@ -601,30 +596,42 @@ const TaskCreate = () => {
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{marginBottom:'2rem'}}>
         <div className="radio-select">
-            <div className="task-role">Select pillar for task*</div>
+            <div className="task-role">Select pillar for task <span className="mandatory-color">*</span></div>
+            <div className="task-pillar-select">
             <Radio.Group  onChange={handleChangePillar}  value={pillar.value}>
                 {pillaRadio}
             </Radio.Group>
+            </div>
           </div>
           
         </Col>
         <Col lg={12} sm={12} style={{marginBottom:'2rem'}}>
           <div className="detail-task-tab"> 
         <Tabs defaultActiveKey="1" className="tab-select" size="medium" tabPosition="top" >
-   
+  
           <TabPane tab={<span style={{ color: '#3690ffd4'}}  >Choose company</span>} key="1">
-            
+          {(pillar)?
+                <div className="companylist-task">
                 <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
                   <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
                   <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
                 </BootstrapTable>
+                </div>
+         : <div className= "not-batch-assign-screen">
+         <div className = "not-batch-assign-screen-inner">
+           <div className="info-icon-batch"><ExceptionOutlined /></div>
+           <div className="info-text-batch">Pillar not assigned!</div>
+         </div>
+         
+       </div> }
             
           </TabPane>
-    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Analyst</span>} key="2" >
+    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Analyst </span>} key="2" >
     
-       
+      {(pillar) ?
+      <div>
           <div className="date-picker-analyst">
-              <div className="task-role-analystsla" > SLA Date</div>
+              <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
               <div >
                 <DatePicker
                   className="date-picker"
@@ -635,16 +642,25 @@ const TaskCreate = () => {
                 />
               </div>
             </div>
-          <div className="task-role-analyst">Select Analyst for task</div>  
+          <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>  
           <div className="analystQa-table">
           <CustomTable tableData={tableDataanalyst} />
-      </div>
-         
+        </div>
+        </div>
+   : <div className= "not-batch-assign-screen">
+   <div className = "not-batch-assign-screen-inner">
+     <div className="info-icon-batch"><ExceptionOutlined /></div>
+     <div className="info-text-batch">Pillar not assigned!</div>
+   </div>
+   
+ </div> }
         
     </TabPane>
-    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Qa</span>} key="3">
+    <TabPane tab={<span style={{ color:'#3690ffd4'}}  >Assign Quality analyst</span>} key="3">
+      {(pillar) ?
+      <div>
           <div className="date-picker-analyst">
-              <div className="task-role-analystsla" > SLA Date</div>
+              <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
               <div >
                 <DatePicker
                   className="date-picker"
@@ -657,11 +673,18 @@ const TaskCreate = () => {
                 />
               </div>
             </div>
-          <div className="task-role-analyst">Select Qa for task</div>  
+          <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>  
           <div className="analystQa-table">
           <CustomTable tableData={tableDataqa} />
         </div>
-        
+        </div>
+      : <div className= "not-batch-assign-screen">
+      <div className = "not-batch-assign-screen-inner">
+        <div className="info-icon-batch"><ExceptionOutlined /></div>
+        <div className="info-text-batch">Pillar not assigned!</div>
+      </div>
+      
+    </div>}
     </TabPane>
   </Tabs>
   </div>
@@ -700,20 +723,14 @@ const TaskCreate = () => {
           <Col lg={12} sm={12}>
             <div className="view-header">
               <div className="mar-right">
-                <TextField
-                  disabled
-                  id="outlined-disabled"
-                  label="Group Name"
-                  defaultValue={companyInfo.grpName}
-                  variant="outlined"
-                  size="small"
-                />
+              <Tag className="grp-batch-name">{companyInfo.grpName}</Tag>
               </div>
               <div>
               </div>
             </div>
           </Col>
         </Row>
+        <Divider style={{borderTop:'3px solid rgba(0, 0, 0, 0.06)'}}></Divider>
         <Row>
           {companyInfo && companyInfo.batches.map(({ batchName, batchID }) =>
             (
@@ -737,7 +754,7 @@ const TaskCreate = () => {
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
-                <Card style={{ minHeight: '30rem' }}>
+                <Card style={{ minHeight: '30rem', margin:'0px auto', width:'80%' }}>
                   <div className="card-head">
                     {taskFlow > 0 &&
                       <div>

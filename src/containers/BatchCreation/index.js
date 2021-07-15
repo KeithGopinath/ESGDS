@@ -193,18 +193,18 @@ const BatchCreation = ({ show, setShow }) => {
           {/* <div className="batch-detail">
             <div >Batch Details</div>
           </div> */}
-          <div className="batch-year">Select Taxonomy*</div>
+          <div className="batch-year">Select Taxonomy <span className="mandatory-color">*</span></div>
           <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert' }`}>
             <Select
               options={taxOptions}
               onChange={onHandleTax}
             />
           </div>
-          <div className="batch-name">Batch name*</div>
+          <div className="batch-name">Batch name <span className="mandatory-color">*</span></div>
           <div className="form-group batch-input-width " >
             <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
-          <div className="batch-year">Select Year*</div>
+          <div className="batch-year">Select Year <span className="mandatory-color">*</span></div>
           <div className={`batch-input-width dp-min-height ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
             <Select
               isMulti
