@@ -223,10 +223,12 @@ const BatchCreation = ({ show, setShow }) => {
           </div> */}
         </Col>
         <Col lg={6} sm={12}>
-          <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
-            <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-            <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
-          </BootstrapTable>
+          <div className="batch-create-companies">
+            <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+              <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+              <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
+            </BootstrapTable>
+          </div>
         </Col>
       </Row>
     </div>
