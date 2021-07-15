@@ -7,14 +7,15 @@ import Avatar from 'react-avatar';
 
 const Dashboard = () => {
   // CURRENT ROLE
-  const currentRole = "SuperAdmin";
+  const currentRole = sessionStorage.role;
 
   // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst, isQA, isSuperAdmin, isGroupAdmin] = [
+  const [isAnalyst, isQA, isSuperAdmin, isGroupAdmin, noRole] = [
     currentRole === 'Analyst',
     currentRole === 'QA',
-    currentRole === 'SuperAdmin' || currentRole === 'esg',
+    currentRole === 'SuperAdmin',
     currentRole === 'GroupAdmin',
+    currentRole === 'null'
   ];
 
   const sideBarRef = useRef();
@@ -115,17 +116,20 @@ const Dashboard = () => {
   ];
 
   const getCardsBasedOnRole = () => {
-    if(isAnalyst){
+    if (isAnalyst) {
       return analystCardsList;
     }
-    if(isQA){
+    if (isQA) {
       return qualityAnalystCardsList;
     }
-    if(isSuperAdmin){
+    if (isSuperAdmin) {
       return superAdminCardsList;
     }
-    if(isGroupAdmin){
+    if (isGroupAdmin) {
       return groupAdminCardsList;
+    }
+    if (noRole) {
+      return analystCardsList;
     }
   }
 
