@@ -2,10 +2,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import 'antd/dist/antd.css';
-import XLSX from "xlsx";
-import FileSaver from "file-saver";
 import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -29,36 +27,6 @@ const Reports = (props) => {
       setTabFlag('Pending Companies');
     }
   }, []);
-
-  // download the table data into excel
-
-
-  // const onDownload = (id) => {
-  //   const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Completed Companies' ? completedCompanyStatus : pendingCompanyStatus);
-  //   const workBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workBook, workSheet, (tabFlag === 'Completed Companies' ? 'Completed Companies List' : 'Pending Companies List'));
-  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
-  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-  //   XLSX.writeFile(workBook, (tabFlag === 'Completed Companies' ? 'Completed Companies List.xlsx' : 'Pending Companies List.xlsx'));
-  // };
-
-  // const downloadReports = () => {
-  //   const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
-  //   const workBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
-  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
-  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-  //   XLSX.writeFile(workBook, `${companyName}.xlsx`);
-  // };
-
-  // const onDownloadCompanyReport = (id) => {
-  //   const workSheet = XLSX.utils.json_to_sheet(viewCompanyData);
-  //   const workBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
-  //   let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
-  //   XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-  //   XLSX.writeFile(workBook, `${companyName}.xlsx`);
-  // };
 
   // completed company table
   const CompletedCompanyTableData = (props) => {
@@ -151,8 +119,7 @@ const Reports = (props) => {
           dataType: 'string',
         }
       ],
-      tableLabel: <span>Pending Companies
-      </span>,
+      tableLabel: <span>Pending Companies</span>,
     };
   };
 
@@ -231,13 +198,8 @@ const Reports = (props) => {
 
   const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanyStatus) : CompletedCompanyTableData(completedCompanyStatus);
 
-
-  const [viewCompanyData, setViewCompanyData] = useState([]);
-  const [companyName, setCompanyName] = useState('');
-
   // View the pendong reports
   const onView = (companyName,id) => {
-    setCompanyName(companyName);
     history.push({ pathname:'/tasklist', state:companyName });
   };
 
@@ -246,7 +208,6 @@ const Reports = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Reports" />
-        {/* <Header sideBarRef={sideBarRef} title={ReportsTitle[reportsFlow]} /> */}
         <div className="container-main">
           <div className="reports-tabs-stack">
             {tabLabelSets.map(({ label }, index) => (
