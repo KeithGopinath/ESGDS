@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import CustomTable from '../../components/CustomTable';
@@ -98,14 +98,13 @@ const Users = (props) => {
     const tableRowData = (data) => data.map((data) => ({
       name: data.userDetails.label,
       email: data.email,
-      primaryRole: data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA",
       type: data.userType,
+      primaryRole: data.userType == 'Employee' ? (data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA") : "NA",
+      roleAssigned: data.userType == 'Employee' ? (data.isRoleAssigned ? 'Assigned' : 'Unassigned') : "NA",
+      groupAssigned: data.userType == 'Employee' ? (data.isAssignedToGroup ? 'Assigned' : 'Unassigned') : "NA",
       registeredDate: new Date(data.createdAt).toDateString(),
-      roleAssigned: data.isRoleAssigned ? 'Assigned' : 'Unassigned',
-      groupAssigned: data.isAssignedToGroup ? 'Assigned' : 'Unassigned',
-      status: <Button onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }}
-        className={data.isUserActive ? 'user-status-active-button' : 'user-status-inactive-button'}>
-        {data.isUserActive ? 'Active' : 'Inactive'}</Button>
+      status: data.isUserActive ? "Active" : "Inactive",
+      action: <FontAwesomeIcon icon={faUser} size="lg" onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }} className={data.isUserActive ? "user-active-icon" : "user-inactive-icon"} />
     }));
     return {
       rowsData: tableRowData(props),
@@ -122,22 +121,16 @@ const Users = (props) => {
         dataType: 'string',
       },
       {
-        id: 'primaryRole',
-        align: 'center',
-        label: 'Primary Role',
-        dataType: 'string',
-      },
-      {
         id: 'type',
         align: 'center',
         label: 'Type',
         dataType: 'string',
       },
       {
-        id: 'registeredDate',
+        id: 'primaryRole',
         align: 'center',
-        label: 'Registered Date',
-        dataType: 'date',
+        label: 'Primary Role',
+        dataType: 'string',
       },
       {
         id: 'roleAssigned',
@@ -152,9 +145,21 @@ const Users = (props) => {
         dataType: 'string',
       },
       {
+        id: 'registeredDate',
+        align: 'center',
+        label: 'Registered Date',
+        dataType: 'date',
+      },
+      {
         id: 'status',
         align: 'center',
         label: 'Status',
+        dataType: 'string',
+      },
+      {
+        id: 'action',
+        align: 'center',
+        label: 'Action',
         dataType: 'element',
       },
       ],
@@ -239,7 +244,7 @@ const Users = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Users" show />
+        <Header title="Users"/>
         <div className="container-main">
           <div className="users-tabs-stack">
             {tabLabelSets.map(({ label }, index) => (

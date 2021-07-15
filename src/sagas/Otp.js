@@ -8,6 +8,7 @@ export function* getOtp(data) {
     const response = yield doPost(envConfig.apiEndPoints.getOtp, data.otpDetails);
     yield put(actionCreators.getOtpSuccess(response));
     sessionStorage.access = response.token;
+    sessionStorage.role = response.user.roleDetails.primaryRole.label;
   } catch (error) {
     yield put(actionCreators.getOtpFailure(error));
   }

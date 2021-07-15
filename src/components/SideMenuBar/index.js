@@ -14,20 +14,27 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const usersBtnRefs = useRef(UsersSubMenu.map(() => React.createRef()));
   const taskBtnRefs = useRef(TaskSubMenu.map(() => React.createRef()));
 
-  const role = useSelector((state) => state.login.login);
-  const userRole = role && role.user.name || sessionStorage.role;
+  // checking user type and role
+  const userDetails = useSelector((state) => state.login.login);
+  const otpDetails = useSelector((state) => state.otp.otp);
+  const roleChange = useSelector((state) => state.roleChange.roleChange);
+
+  const role = (otpDetails && otpDetails.user.roleDetails.primaryRole.label) || (userDetails && userDetails.user && userDetails.user.roleDetails.primaryRole.label)
+  const userRole = roleChange && roleChange.label || role || sessionStorage.role;
 
   // Buttonlist modified based on roles
   const modifiedButtonList = ButtonList.filter(val => (
     userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 9 :
-      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 6 || val.id == 7 || val.id == 8 || val.id == 9 :
-        userRole == 'CompanyRep' || userRole == 'ClientRep' ? val.id == 4 || val.id == 9 :
-          val.id == val.id)).map((data) => ({
-            id: data.id,
-            label: data.label,
-            icon: data.icon,
-            address: data.address,
-          }))
+      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 6 || val.id == 7 || val.id == 8 || val.id == 9 || val.id == 4 :
+        userRole == 'Company Representative' || userRole == 'Client Representative' ? val.id == 4 || val.id == 9 :
+          userRole == 'SuperAdmin' ? val.id !== 4 :
+            val.id == 0 || val.id == 4))
+    .map((data) => ({
+      id: data.id,
+      label: data.label,
+      icon: data.icon,
+      address: data.address,
+    }))
 
   const sideMenuBtnRefs = useRef(modifiedButtonList.map(() => React.createRef()));
 
