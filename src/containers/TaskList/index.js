@@ -14,15 +14,16 @@ const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
 
-  const companyName=props.location.state;
+  const companyName = props.location.state;
 
-    const downloadReports = () => {
-    const workSheet = XLSX.utils.json_to_sheet(tasklist);
+  // export data in excel file
+  const downloadReports = () => {
+    const workSheet = XLSX.utils.json_to_sheet(data);
     const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, 'company report');
+    XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, "company report.xlsx");
+    XLSX.writeFile(workBook, `${companyName}.xlsx`);
   };
 
   const sideBarRef = useRef();
@@ -87,7 +88,7 @@ const TaskList = (props) => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+      action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
     }));
 
     const reportsTaskRowData = (obj) => obj.map((e) => ({
@@ -151,7 +152,7 @@ const TaskList = (props) => {
           label: 'Sla date',
           dataType: 'string',
         },
-      ] :[
+      ] : [
         {
           id: 'taskid',
           align: 'center',
@@ -212,14 +213,12 @@ const TaskList = (props) => {
           label: 'Action',
           dataType: 'element',
         },
-
       ],
-      tableLabel: <span>{companyName ? <span>{companyName} <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={()=> downloadReports()} /></span>  : 'Tasks'}</span>,
+      tableLabel: <span>{companyName ? <span>{companyName} <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={() => downloadReports()} /> </span> : 'Tasks'}</span>,
     };
   };
 
   const onBackButton = () => {
-    // window.history.back();
     history.push('/reports');
   };
 
@@ -234,7 +233,7 @@ const TaskList = (props) => {
             <Row>
               <Col lg={12} sm={12}>
                 <Card >
-                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false}/>
+                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false} />
                 </Card>
               </Col>
             </Row>
