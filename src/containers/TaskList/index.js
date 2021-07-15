@@ -1,15 +1,30 @@
+/* eslint-disable */
 import React, { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
+import XLSX from "xlsx";
+import { history } from './../../routes';
 
-const TaskList = () => {
+const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
+
+  const companyName=props.location.state;
+
+    const downloadReports = () => {
+    const workSheet = XLSX.utils.json_to_sheet(tasklist);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'company report');
+    let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFile(workBook, "company report.xlsx");
+  };
+
   const sideBarRef = useRef();
   const handleShow = (arg) => {
     setrowValue(arg);
@@ -72,12 +87,71 @@ const TaskList = () => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <div><FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon></div>,
+      action: <FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+    }));
 
+    const reportsTaskRowData = (obj) => obj.map((e) => ({
+      taskid: e.taskid,
+      group: e.group,
+      batch: e.batch,
+      pillar: e.pillar,
+      analyst: e.analyst,
+      analystSla: e.analystSla,
+      qa: e.qa,
+      qaSla: e.qaSla,
     }));
     return {
-      rowsData: tableRowData(props),
-      columnsHeadData: [
+      rowsData: companyName ? reportsTaskRowData(props) : tableRowData(props),
+      columnsHeadData: companyName ? [
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task id',
+          dataType: 'string',
+        },
+        {
+          id: 'group',
+          align: 'center',
+          label: 'Group',
+          dataType: 'string',
+        },
+        {
+          id: 'batch',
+          align: 'center',
+          label: 'Batch',
+          dataType: 'string',
+        },
+        {
+          id: 'pillar',
+          align: 'center',
+          label: 'Pillar',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'analystSla',
+          align: 'center',
+          label: 'Sla date',
+          dataType: 'string',
+        },
+        {
+          id: 'qa',
+          align: 'center',
+          label: 'Qa',
+          dataType: 'string',
+        },
+        {
+          id: 'qaSla',
+          align: 'center',
+          label: 'Sla date',
+          dataType: 'string',
+        },
+      ] :[
         {
           id: 'taskid',
           align: 'center',
@@ -140,9 +214,15 @@ const TaskList = () => {
         },
 
       ],
-      tableLabel: 'Tasks',
+      tableLabel: <span>{companyName ? <span>{companyName} <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={()=> downloadReports()} /></span>  : 'Tasks'}</span>,
     };
   };
+
+  const onBackButton = () => {
+    // window.history.back();
+    history.push('/reports');
+  };
+
   const tasklist = totalTaskList(data);
   return (
     <React.Fragment>
@@ -154,7 +234,7 @@ const TaskList = () => {
             <Row>
               <Col lg={12} sm={12}>
                 <Card >
-                  <CustomTable tableData={tasklist} />
+                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false}/>
                 </Card>
               </Col>
             </Row>

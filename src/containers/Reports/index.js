@@ -2,13 +2,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import 'antd/dist/antd.css';
-import XLSX from "xlsx";
-import FileSaver from "file-saver";
 import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import { history } from '../../routes';
 
 const Reports = (props) => {
   const sideBarRef = useRef();
@@ -29,23 +28,14 @@ const Reports = (props) => {
     }
   }, []);
 
-  // download the table data into excel
-
-  const onDownload = (id) => {
-    const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Completed Companies' ? completedCompanyStatus : pendingCompanyStatus);
-    const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, (tabFlag === 'Completed Companies' ? 'Completed Companies List' : 'Pending Companies List'));
-    let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
-    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, (tabFlag === 'Completed Companies' ? 'Completed Companies List.xlsx' : 'Pending Companies List.xlsx'));
-  };
-
   // completed company table
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
       companyName: data.companyName,
       completedDate: new Date().toDateString(),
-      download: <FontAwesomeIcon className="download-icon" size="lg" key={id} icon={faDownload} onClick={() => onDownload(id)} />
+      clientRep: data.clientRrepresentative,
+      companyRep: data.companyRepresentative,
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
     }));
     return {
       rowsData: tableRowData(props),
@@ -63,13 +53,25 @@ const Reports = (props) => {
           dataType: 'date',
         },
         {
-          id: 'download',
+          id: 'clientRep',
           align: 'center',
-          label: 'Download',
-          dataType: 'date',
+          label: 'Client Representative',
+          dataType: 'string',
+        },
+        {
+          id: 'companyRep',
+          align: 'center',
+          label: 'Company Representative',
+          dataType: 'string',
+        },
+        {
+          id: 'viewTask',
+          align: 'center',
+          label: 'View Task',
+          dataType: 'string',
         }
       ],
-      tableLabel: <span>Completed Companies</span>,
+      tableLabel: <span>Completed Companies </span>,
     };
   };
 
@@ -77,34 +79,47 @@ const Reports = (props) => {
   const PendingCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
       companyName: data.companyName,
-      completedDate: data.completedDate,
-      download: <FontAwesomeIcon className="download-icon" size="lg" key={id} icon={faDownload} onClick={() => onDownload(id)} />
+      startedDate: data.completedDate,
+      clientRep: data.clientRrepresentative,
+      companyRep: data.companyRepresentative,
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
+
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
           id: 'companyName',
-          align: 'left',
+          align: 'center',
           label: 'Company Name',
           dataType: 'string',
         },
         {
-          id: 'completedDate',
+          id: 'startedDate',
           align: 'center',
-          label: 'Completed Date',
+          label: 'Started Date',
           dataType: 'date',
         },
         {
-          id: 'download',
+          id: 'clientRep',
           align: 'center',
-          label: 'Download',
-          dataType: 'date',
+          label: 'Client Representative',
+          dataType: 'string',
+        },
+        {
+          id: 'companyRep',
+          align: 'center',
+          label: 'Company Representative',
+          dataType: 'string',
+        },
+        {
+          id: 'viewTask',
+          align: 'center',
+          label: 'View Task',
+          dataType: 'string',
         }
       ],
-      tableLabel: <span>Pending Companies
-        {/* <FontAwesomeIcon className="download-icon" icon={faDownload} onClick={onDownload} /> */}
-      </span>,
+      tableLabel: <span>Pending Companies</span>,
     };
   };
 
@@ -125,12 +140,10 @@ const Reports = (props) => {
     setTabFlag(label)
   };
 
-  // const tableData = userData ? (tabFlag == "Completed Companies" ? CompletedCompanyTableData(filteredUsers) : tabFlag == "Pending Companies" ? PendingCompanyTableData(filteredUsers) : CompletedCompanyTableData([])) : CompletedCompanyTableData([])
-
   const userData = [
     {
       pillar: 'Social',
-      companyName: 'Reliance Ind.',
+      companyName: 'Reliance ltd.',
       completedDate: '10-07-2021',
       status: 'Completed',
       analyst: 'Rajesh',
@@ -166,7 +179,7 @@ const Reports = (props) => {
       analyst: 'Jerin',
       QA: 'Balaji',
       companyRepresentative: 'Praveen',
-      clientRrepresentative: 'Gopi'
+      clientRrepresentative: 'Gopi',
     },
     {
       pillar: 'Governance',
@@ -176,7 +189,7 @@ const Reports = (props) => {
       analyst: 'Balaji',
       QA: 'Rajesh',
       companyRepresentative: 'Gopi',
-      clientRrepresentative: 'Praveen'
+      clientRrepresentative: 'Praveen',
     },
   ];
 
@@ -185,11 +198,16 @@ const Reports = (props) => {
 
   const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanyStatus) : CompletedCompanyTableData(completedCompanyStatus);
 
+  // View the pendong reports
+  const onView = (companyName,id) => {
+    history.push({ pathname:'/tasklist', state:companyName });
+  };
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Reports" show />
+        <Header title="Reports" />
         <div className="container-main">
           <div className="reports-tabs-stack">
             {tabLabelSets.map(({ label }, index) => (
