@@ -7,7 +7,7 @@ import Avatar from 'react-avatar';
 
 const Dashboard = () => {
   // CURRENT ROLE
-  const currentRole = sessionStorage.role;
+  const currentRole = "SuperAdmin";
 
   // GET REQ ROLE BASED BOOLEANS
   const [isAnalyst, isQA, isSuperAdmin, isGroupAdmin] = [

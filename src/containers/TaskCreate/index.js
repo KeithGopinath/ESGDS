@@ -1,6 +1,6 @@
 /* eslint-disable*/
-import React, { useState, useRef } from 'react';
-import { Col, Row, Container, Card, Button, Accordion } from 'react-bootstrap';
+import React, { useState, useRef, useEffect } from 'react';
+import { Col, Row, Container, Card, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { Chip } from '@material-ui/core';
 import {
@@ -9,8 +9,8 @@ import {
 import { DatePicker, Radio, message, notification, Tag, Divider, Tabs} from 'antd';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from '../../components/CustomTable';
-import TextField from '@material-ui/core/TextField';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -35,7 +35,14 @@ const TaskCreate = () => {
   const optionsForPagination = {
     sizePerPage: 10,
   };
+  const dispatch = useDispatch();
   const { TabPane } = Tabs;
+  useEffect(() => {
+    dispatch({ type: 'TASKDETAILS_REQUEST'});
+  },[]);
+  const apidata = useSelector((tasklist)=>tasklist.taskDetail.taskdata);
+  const groupData = apidata && apidata.groups;
+  console.log(groupData, 'groupData');
   const onSelectRow = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { id: row.id, selectedCompany: row.companyName };
@@ -97,193 +104,185 @@ const TaskCreate = () => {
     onSelect: onSelectRow,
     onSelectAll: onSelectAllRow,
   };
-  const groupDetails = [
-    {
-      groupName: 'Group1',
-      groupID: 'GRP001',
-      groupAdmin: 'Vj',
-      assignedQa: [{ QAname: 'praveen' }, { QAname: 'balaji' }],
-      assignedAnalyst: [{ Analyst: 'rajesh' }, { Analyst: 'sam' }],
-      assignedBatches: [
-        {
-          batchName: 'batch1',
-          batchID: 'ID001',
-          taxonomy:{value:'08796858979', label:'Acute110'},
-          batchSLA:"2021-06-24",
-          batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
-          companies: [
-            { id: 0, companyName: 'oil and gas' },
-            { id: 1, companyName: 'bank of baroda' },
-            { id: 2, companyName: 'Hindustan' },
-            { id: 3, companyName: 'CUB' },
-            { id: 4, companyName: 'Ambuja' },
-          ],
-        },
-        {
-          batchName: 'batch2',
-          batchID: 'ID002',
-          taxonomy:{value:'08796858979', label:'Acute111'},
-          batchSLA:"2021-06-24",
-          batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
-          companies: [
-            { id: 0, companyName: 'ABFRL' },
-            { id: 1, companyName: 'Relaince' },
-            { id: 2, companyName: 'TATA' },
-            { id: 3, companyName: 'Axis' },
-            { id: 4, companyName: 'Indian cements' },
-          ],
-        },
-        {
-          batchName: 'batch3',
-          batchID: 'ID003',
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-      ],
-    },
-    {
-      groupName: 'Group2',
-      groupID: 'GRP002',
-      groupAdmin: 'Gopi',
-      assignedQa: [{ QAname: 'Rohit' }, { QAname: 'Virat' }],
-      assignedAnalyst: [{ Analyst: 'Dhoni' }, { Analyst: 'Sachin' }],
-      assignedBatches: [
-        {
-          batchName: 'batch4',
-          batchID: 'ID004',
-          taxonomy:{value:'08796858979', label:'Acute1'},
-          batchSLA:"2021-06-24",
-          batchYear: [{ year: '2019-2020' }, { year: '2020-2021' }],
-          companies: [
-            { id: 0, companyName: 'NTPC Limited' },
-            { id: 1, companyName: 'bank of baroda' },
-            { id: 2, companyName: 'Punjab National Bank' },
-            { id: 3, companyName: 'CUB' },
-            { id: 4, companyName: 'Ambuja' },
-          ],
-        },
-        {
-          batchName: 'batch5',
-          batchID: 'ID005',
-          taxonomy:{value:'087968534523', label:'Acute2'},
-          batchSLA:"2021-06-25",
-          batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
-          companies: [
-            { id: 0, companyName: 'ABFRL' },
-            { id: 1, companyName: 'Relaince' },
-            { id: 2, companyName: 'TATA' },
-            { id: 3, companyName: 'Axis' },
-            { id: 4, companyName: 'Indian cements' },
-          ],
-        },
-        {
-          batchName: 'batch6',
-          batchID: 'ID006',
-          taxonomy:{value:'087getg58979', label:'Acute3'},
-          batchSLA:"2021-06-28",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-        {
-          batchName: 'batch7',
-          batchID: 'ID007',
-          taxonomy:{value:'345h35j6', label:'Acute4'},
-          batchSLA:"2021-06-27",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-        {
-          batchName: 'batch8',
-          batchID: 'ID008',
-          taxonomy:{value:'kjh796', label:'Acute5'},
-          batchSLA:"2021-06-17",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-        {
-          batchName: 'batch9',
-          batchID: 'ID009',
-          taxonomy:{value:'08796858979', label:'Acute6'},
-          batchSLA:"2021-06-27",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-        {
-          batchName: 'batch10',
-          batchID: 'ID010',
-          taxonomy:{value:'777dgh7', label:'Acute7'},
-          batchSLA:"2021-06-30",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
-        {
-          batchName: 'batch11',
-          batchID: 'ID011',
-          taxonomy:{value:'08796858979', label:'Acute8'},
-          batchSLA:"2021-06-20",
-          batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
-          companies: [
-            { id: 0, companyName: 'UCO Bank' },
-            { id: 1, companyName: 'Yes Bank of India' },
-            { id: 2, companyName: 'Bajaj Finance' },
-            { id: 3, companyName: 'REC Limited' },
-            { id: 4, companyName: 'State Bank of India' },
-          ],
-        },
+  // const groupDetails = [
+  //   {
+  //     groupName: 'Group1',
+  //     groupID: 'GRP001',
+  //     groupAdmin: 'Vj',
+  //     assignedQa: [{ QAname: 'praveen' }, { QAname: 'balaji' }],
+  //     assignedAnalyst: [{ Analyst: 'rajesh' }, { Analyst: 'sam' }],
+  //     assignedBatches: [
+  //       {
+  //         batchName: 'batch1',
+  //         batchID: 'ID001',
+  //         taxonomy:{value:'08796858979', label:'Acute110'},
+  //         batchSLA:"2021-06-24",
+  //         batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
+  //         companies: [
+  //           { id: 0, companyName: 'oil and gas' },
+  //           { id: 1, companyName: 'bank of baroda' },
+  //           { id: 2, companyName: 'Hindustan' },
+  //           { id: 3, companyName: 'CUB' },
+  //           { id: 4, companyName: 'Ambuja' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch2',
+  //         batchID: 'ID002',
+  //         taxonomy:{value:'08796858979', label:'Acute111'},
+  //         batchSLA:"2021-06-24",
+  //         batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
+  //         companies: [
+  //           { id: 0, companyName: 'ABFRL' },
+  //           { id: 1, companyName: 'Relaince' },
+  //           { id: 2, companyName: 'TATA' },
+  //           { id: 3, companyName: 'Axis' },
+  //           { id: 4, companyName: 'Indian cements' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch3',
+  //         batchID: 'ID003',
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     groupName: 'Group2',
+  //     groupID: 'GRP002',
+  //     groupAdmin: 'Gopi',
+  //     assignedQa: [{ QAname: 'Rohit' }, { QAname: 'Virat' }],
+  //     assignedAnalyst: [{ Analyst: 'Dhoni' }, { Analyst: 'Sachin' }],
+  //     assignedBatches: [
+  //       {
+  //         batchName: 'batch4',
+  //         batchID: 'ID004',
+  //         taxonomy:{value:'08796858979', label:'Acute1'},
+  //         batchSLA:"2021-06-24",
+  //         batchYear: [{ year: '2019-2020' }, { year: '2020-2021' }],
+  //         companies: [
+  //           { id: 0, companyName: 'NTPC Limited' },
+  //           { id: 1, companyName: 'bank of baroda' },
+  //           { id: 2, companyName: 'Punjab National Bank' },
+  //           { id: 3, companyName: 'CUB' },
+  //           { id: 4, companyName: 'Ambuja' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch5',
+  //         batchID: 'ID005',
+  //         taxonomy:{value:'087968534523', label:'Acute2'},
+  //         batchSLA:"2021-06-25",
+  //         batchYear: [{ year: '2015-2016' }, { year: '2016-2017' }],
+  //         companies: [
+  //           { id: 0, companyName: 'ABFRL' },
+  //           { id: 1, companyName: 'Relaince' },
+  //           { id: 2, companyName: 'TATA' },
+  //           { id: 3, companyName: 'Axis' },
+  //           { id: 4, companyName: 'Indian cements' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch6',
+  //         batchID: 'ID006',
+  //         taxonomy:{value:'087getg58979', label:'Acute3'},
+  //         batchSLA:"2021-06-28",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch7',
+  //         batchID: 'ID007',
+  //         taxonomy:{value:'345h35j6', label:'Acute4'},
+  //         batchSLA:"2021-06-27",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch8',
+  //         batchID: 'ID008',
+  //         taxonomy:{value:'kjh796', label:'Acute5'},
+  //         batchSLA:"2021-06-17",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch9',
+  //         batchID: 'ID009',
+  //         taxonomy:{value:'08796858979', label:'Acute6'},
+  //         batchSLA:"2021-06-27",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch10',
+  //         batchID: 'ID010',
+  //         taxonomy:{value:'777dgh7', label:'Acute7'},
+  //         batchSLA:"2021-06-30",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
+  //       {
+  //         batchName: 'batch11',
+  //         batchID: 'ID011',
+  //         taxonomy:{value:'08796858979', label:'Acute8'},
+  //         batchSLA:"2021-06-20",
+  //         batchYear: [{ year: '2017-2018' }, { year: '2018-2019' }],
+  //         companies: [
+  //           { id: 0, companyName: 'UCO Bank' },
+  //           { id: 1, companyName: 'Yes Bank of India' },
+  //           { id: 2, companyName: 'Bajaj Finance' },
+  //           { id: 3, companyName: 'REC Limited' },
+  //           { id: 4, companyName: 'State Bank of India' },
+  //         ],
+  //       },
 
-      ],
-    },
-  ];
+  //     ],
+  //   },
+  // ];
   
  
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
     return date
   }
-  const openNotificationWithIcon = type => {
-    notification[type]({
-      message: 'Detail',
-      description:
-        'name : Rajesh, Pillar : Enviroment, Role: Analyst',
-        duration:0
-    });
-  };
   const analystdisabledDate = (current) => {
     const yourDate = new Date();
     const date= getFormatDate(yourDate);
@@ -300,22 +299,22 @@ const TaskCreate = () => {
   const taskTitle = ['Groups', 'Batches', 'Assign Task'];
 
   const onselectGroup = (matchgrp) => {
-    groupDetails.map((args) => {
+    groupData && groupData.map((args) => {
       if (args.groupID === matchgrp) {
         console.log(args, 'args');
-        const modifiedQA = args.assignedQa.map((qa) => {
-          const qaArray = { value: qa.QAname, label: qa.QAname };
-          return qaArray;
-        });
-        const modifiedAnalyst = args.assignedAnalyst.map((analyst) => {
-          const analystArray = { value: analyst.Analyst, label: analyst.Analyst };
-          return analystArray;
-        });
+        // const modifiedQA = args.assignedQa.map((qa) => {
+        //   const qaArray = { value: qa.QAname, label: qa.QAname };
+        //   return qaArray;
+        // });
+        // const modifiedAnalyst = args.assignedAnalyst.map((analyst) => {
+        //   const analystArray = { value: analyst.Analyst, label: analyst.Analyst };
+        //   return analystArray;
+        // });
         const currentGrpinfo = {
-          grpAdmin: args.groupAdmin, grpName: args.groupName, grpId: args.groupID, analyst: modifiedAnalyst, Qa: modifiedQA, batches: args.assignedBatches,
+          grpAdmin: args.groupAdmin, grpName: args.groupName, grpId: args.groupID, batches: args.assignedBatches,
         };
         console.log(currentGrpinfo, 'currentGrpinfo');
-        console.log(modifiedQA, 'modifiedQA');
+        // console.log(modifiedQA, 'modifiedQA');
         setcompanyInfo(currentGrpinfo);
         settaskFlow(1);
       }
@@ -328,14 +327,16 @@ const TaskCreate = () => {
       if (batchdetails.batchID === batchid) {
         console.log(batchdetails, 'batchList');
         const modifiedYear = batchdetails.batchYear.map((args) => {
-          const yearArray = { name: args.year, label: args.year };
+          console.log(args, 'check')
+          const yearArray = { name: args, label: args };
           return yearArray;
         });
+        console.log(batchdetails.pillars, 'batchdetails.pillars')
         const currentBatchinfo = {
-          Batchname: batchdetails.batchName, Batchid: batchdetails.batchID, Batchyear: modifiedYear, companies: batchdetails.companies,
+          Batchname: batchdetails.batchName, Batchid: batchdetails.batchID, Batchyear: modifiedYear, Pillars:batchdetails.pillars,
         };
         setbatchInfo(currentBatchinfo);
-        setcompanyinfo(batchdetails.companies);
+        // setcompanyinfo(batchdetails.companies);
         settaskFlow(2);
       }
       return [];
@@ -344,7 +345,7 @@ const TaskCreate = () => {
   const handleChangePillar = (checkedValues) => {
     const val = checkedValues.target.value;
     const selectedPillar = [];
-    pillarOptions.map((e)=>{
+    batchInfo.Pillars && batchInfo.Pillars.map((e)=>{
       if(e.value === val){
         selectedPillar.push(e);
       }
@@ -352,14 +353,11 @@ const TaskCreate = () => {
     setPillar(selectedPillar[0]);
     console.log(selectedPillar, 'selectedPillar');
   };
-  const pillaRadio = pillarOptions.map((e)=>(
-    <Radio key={e.label} value={e.value}>{e.label}</Radio>
-    
-  ));
-  const grpDetail = groupDetails.map((element) => (
+  
+  const grpDetail = groupData && groupData.map((element) => (
     <Col lg={3} md={6} sm={12} key={element.groupID}>
       <Card className="card-view groupbox" onClick={() => onselectGroup(element.groupID)} >
-        <ListItemText primary={element.groupName} secondary={element.groupID} />
+        <ListItemText primary={element.groupName} />
       </Card>
     </Col>
   ));
@@ -430,7 +428,7 @@ const TaskCreate = () => {
           
           console.log(taskPayload, 'taskPayload');
 
-          message.success("group created successfully");
+          message.success("Task created successfully");
       }
         else {
           message.error("fill all the required fields");
@@ -446,28 +444,28 @@ const TaskCreate = () => {
     {
       key: '1',
       name: 'John Brown',
-      pillar: 'Environment',
+      pillar: 'Environmental',
       role: 'Analyst',
       assignedTask:'2'
     },
     {
       key: '2',
       name: 'Jim Green',
-      pillar: 'social',
+      pillar: 'Social',
       role: 'Qa',
       assignedTask:'5'
     },
     {
       key: '3',
       name: 'Joe Black',
-      pillar: 'governance',
+      pillar: 'Governance',
       role: 'Analyst',
       assignedTask:'8'
     },
     {
       key: '4',
       name: 'Tom',
-      pillar: 'social',
+      pillar: 'Social',
       role: 'Qa',
       assignedTask:'0'
     },
@@ -573,7 +571,10 @@ const TaskCreate = () => {
  
   const tableDataanalyst = analystTableData(data);
   const tableDataqa = qaTableData(data);
-
+  const pillaRadio =batchInfo.Pillars && batchInfo.Pillars.map((e)=>(
+    <Radio key={e.value} value={e.value}>{e.label}</Radio>
+    
+  ));
   const batchInfoTab = () => (
     <Container>
       <Row className="task-row">
@@ -584,9 +585,12 @@ const TaskCreate = () => {
             </div>
             <div className="align-chip">
               <div className="batch-year-head">Year :</div>
-              {batchInfo.Batchyear.map(({ label }, index) => (
-                <Chip key={label[index]} label={label} className="chip-space-bwt" />
-              ))}
+              {batchInfo.Batchyear.map((e) => {
+                console.log(e, 'Tag');
+                return (
+                <Tag>{e.label}</Tag>
+                )
+                })}
             </div>
           </div>
         </Col>
@@ -598,7 +602,7 @@ const TaskCreate = () => {
         <div className="radio-select">
             <div className="task-role">Select pillar for task <span className="mandatory-color">*</span></div>
             <div className="task-pillar-select">
-            <Radio.Group  onChange={handleChangePillar}  value={pillar.value}>
+            <Radio.Group  onChange={handleChangePillar} >
                 {pillaRadio}
             </Radio.Group>
             </div>
@@ -612,7 +616,7 @@ const TaskCreate = () => {
           <TabPane tab={<span style={{ color: '#3690ffd4'}}  >Choose company</span>} key="1">
           {(pillar)?
                 <div className="companylist-task">
-                <BootstrapTable data={batchInfo.companies} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+                <BootstrapTable data={[]} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
                   <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
                   <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
                 </BootstrapTable>
@@ -736,7 +740,7 @@ const TaskCreate = () => {
             (
               <Col lg={3} md={6} sm={12} key={batchID}>
                 <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
-                  <ListItemText primary={batchName} secondary={batchID} />
+                  <ListItemText primary={batchName} />
                 </Card>
               </Col>
             ))

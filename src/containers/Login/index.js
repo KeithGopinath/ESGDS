@@ -34,27 +34,44 @@ const Login = () => {
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
   const invalidOtp = useSelector((state) => state.otp.error);
+
   // forgot password screen
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
 
-  const role = login && login.user.name || sessionStorage.role;
+  // checking user role
+  const role = login && login.user && login.user.roleDetails.primaryRole.label;
 
   useEffect(() => {
+    // for users who have a primary role
     if (loginRole && role) {
       setLoginRole(false);
-      if (role == 'CompanyRep' || role == 'ClientRep') {
+      if (role == 'Company Representative' || role == 'Client Representative') {
         history.push("/user-profile");
-      } else if (role == 'GroupAdmin' || role == 'QA' || role == 'Analyst') {
+      } else if (role == 'QA' || role == 'Analyst' || role == 'GroupAdmin') {
         history.push("/dashboard");
-      } else {
-        setShowOtp(true);
       }
-    } else if (invalidLogin) {
-      setValidate('border-danger');
-      setLoginAlert('Please enter the valid credentials');
     }
-  });
+    // for users who do not have primary role
+    else if (loginRole && login.user) {
+      history.push("/dashboard");
+      setLoginRole(false);
+    }
+    // for SuperAdmin
+    else if (loginRole && login) {
+      setShowOtp(true);
+      setLoginRole(false);
+    }
+  }, [login]);
+
+  useEffect(() => {
+    if (loginRole && login && role) {
+      message.success(login.message)
+    }
+    else if (loginRole && invalidLogin) {
+      message.error(invalidLogin.message)
+    }
+  }, [login, invalidLogin]);
 
   useEffect(() => {
     if (validOtp && otpLogin) {
@@ -108,13 +125,13 @@ const Login = () => {
     const valid = validateEmail(email);
     if (!email && !password && valid === false) {
       setValidate('border-danger');
-      setLoginAlert('Please enter the valid credentials');
+      message.error('Please enter the valid credentials')
     } else if (valid === false) {
       setValidate('border-danger');
-      setLoginAlert('Please enter the vaild email');
+      message.error('Please enter the vaild email')
     } else if (!password) {
       setValidate('border-danger');
-      setLoginAlert('Please enter the vaild password');
+      message.error('Please enter the vaild password')
     } else {
       setLoginAlert('');
       setLoginRole(true);
@@ -126,7 +143,6 @@ const Login = () => {
       const loginDetails = {
         login: user
       }
-
       dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
   };

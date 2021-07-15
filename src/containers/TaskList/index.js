@@ -76,15 +76,13 @@ const TaskList = (props) => {
       taskid: e.taskid,
       group: e.group,
       batch: e.batch,
-      company: e.company,
+      company: <p>{companyName? '' :e.company}</p>,
       pillar: e.pillar,
       analyst: e.analyst,
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      // action: <div><button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button></div>,
-      action: <div>{companyName ? '' :<button className="btn btn-info" onClick={() => { handleShow(e); }}>Edit</button>}</div>,
-
+      action: <div>{companyName ? '' :<FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>}</div>,
     }));
     return {
       rowsData: tableRowData(props),
@@ -110,7 +108,7 @@ const TaskList = (props) => {
         {
           id: 'company',
           align: 'center',
-          label: 'Company',
+          label: `${companyName ? '':'Company'}`,
           dataType: 'string',
         },
         {
@@ -146,7 +144,7 @@ const TaskList = (props) => {
         {
           id: 'action',
           align: 'center',
-          label: 'Action',
+          label: `${companyName? '':'Action'}`,
           dataType: 'element',
         },
 
