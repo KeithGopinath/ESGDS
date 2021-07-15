@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { combineReducers } from 'redux';
 import login from './Login';
 import otp from './Otp';
@@ -22,8 +23,10 @@ import getRoleAssignment from './GetRoleAssignment';
 import pendingTasks from './PendingTasks';
 import matrixMember from './MatrixMember';
 import task from './Task';
+import taskDetail from './TaskDetails';
+import roleChange from './RoleChange';
 
-const rootReducer = combineReducers({
+const combinedReducer = combineReducers({
   login,
   otp,
   forgotPassword,
@@ -47,6 +50,15 @@ const rootReducer = combineReducers({
   pendingTasks,
   matrixMember,
   task,
+  taskDetail,
+  roleChange,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'RESET') {
+    state = undefined
+  }
+  return combinedReducer(state, action)
+}
 
 export default rootReducer;

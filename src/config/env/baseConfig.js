@@ -21,6 +21,7 @@ export default {
     getPendingTasksList: 'taskAssignments/my-tasks',
     putMatrixMember: '/companies/add/member',
     getTask: 'datapoints/list',
+    gettaskDetails: '/taskAssignments/getGroupAndBatches',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
