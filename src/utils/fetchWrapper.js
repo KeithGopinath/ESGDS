@@ -40,7 +40,7 @@ export const doGet = (url, urlPrefix = baseUrl) => timeoutPromise(fetch(
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYTI1MTBlMzU2ZDM2NjYwNWIwNDUzMyIsImlhdCI6MTYyNDYzOTQ4NH0.W60O7jay-RA4MVcJ_dswPJ8a_n51iRKiXL87UyxNTLw',
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
   }),
 ), TIMEOUT, 504)
@@ -69,7 +69,7 @@ export const doPost = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
       'Content-Type': 'application/json; charset=UTF-8',
       Accept: 'application/json; charset=UTF-8',
       'Access-Control-Allow-Origin': '*',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYTI1MTBlMzU2ZDM2NjYwNWIwNDUzMyIsImlhdCI6MTYyNDYzOTQ4NH0.W60O7jay-RA4MVcJ_dswPJ8a_n51iRKiXL87UyxNTLw',
+      Authorization: `Bearer ${sessionStorage.access}`,
     },
     body: JSON.stringify(body),
   }),
