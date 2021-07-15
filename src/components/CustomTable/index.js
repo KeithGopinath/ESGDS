@@ -14,7 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { DatePicker, Space, Result } from 'antd';
@@ -260,6 +260,7 @@ const CustomTable = ({
                   ),
                 }}
               />
+            {enableButton && <FontAwesomeIcon className="view-icon" size="lg"icon={faDownload} onClick={() => onView() } />}
             </ThemeProvider>
           </div>
           <Table className="users-table">

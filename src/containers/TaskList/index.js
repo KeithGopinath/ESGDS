@@ -3,6 +3,8 @@
 import React, { useRef, useState } from 'react';
 import { Col, Row, Card } from 'react-bootstrap';
 import Header from '../../components/Header';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
@@ -82,7 +84,7 @@ const TaskList = (props) => {
       analystSla: e.analystSla,
       qa: e.qa,
       qaSla: e.qaSla,
-      action: <div>{companyName ? '' :<FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>}</div>,
+      action: <div>{companyName ? '' : <FontAwesomeIcon className="tasklist-edit-icon"icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>}</div>,
     }));
     return {
       rowsData: tableRowData(props),
@@ -144,7 +146,7 @@ const TaskList = (props) => {
         {
           id: 'action',
           align: 'center',
-          label: `${companyName? '':'Action'}`,
+          label: `${companyName ? '':'Action'}`,
           dataType: 'element',
         },
 
