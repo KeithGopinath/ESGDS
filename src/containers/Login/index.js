@@ -56,6 +56,7 @@ const Login = () => {
     else if (loginRole && login.user) {
       history.push("/dashboard");
       setLoginRole(false);
+      message.success(otp.message);
     }
     // for SuperAdmin
     else if (loginRole && login) {
@@ -137,7 +138,7 @@ const Login = () => {
       setLoginAlert('');
       setLoginRole(true);
       setStart(true);
-
+      setSeconds(30);
       const login = { email, password }
       let objJsonStr = JSON.stringify(login);
       let user = Buffer.from(objJsonStr).toString("base64");
@@ -151,6 +152,7 @@ const Login = () => {
   // Otp screen
   const handleClose = () => {
     setShowOtp(false);
+    setSeconds(0);
     setOtpAlert('');
     setOtp('');
     sessionStorage.clear();

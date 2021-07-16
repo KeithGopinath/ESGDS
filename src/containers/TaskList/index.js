@@ -78,7 +78,18 @@ const TaskList = (props) => {
     },
   ];
   const totalTaskList = (props) => {
-    const tableRowData = (obj) => obj.map((e) => ({
+    const tableRowData = (obj) => companyName ?  
+    obj.map((e) => ({
+      taskid: e.taskid,
+      group: e.group,
+      batch: e.batch,
+      pillar: e.pillar,
+      analyst: e.analyst,
+      analystSla: e.analystSla,
+      qa: e.qa,
+      qaSla: e.qaSla,
+    }))
+    : obj.map((e) => ({
       taskid: e.taskid,
       group: e.group,
       batch: e.batch,
@@ -91,18 +102,8 @@ const TaskList = (props) => {
       action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
     }));
 
-    const reportsTaskRowData = (obj) => obj.map((e) => ({
-      taskid: e.taskid,
-      group: e.group,
-      batch: e.batch,
-      pillar: e.pillar,
-      analyst: e.analyst,
-      analystSla: e.analystSla,
-      qa: e.qa,
-      qaSla: e.qaSla,
-    }));
     return {
-      rowsData: companyName ? reportsTaskRowData(props) : tableRowData(props),
+      rowsData: tableRowData(props),
       columnsHeadData: companyName ? [
         {
           id: 'taskid',
@@ -137,26 +138,26 @@ const TaskList = (props) => {
         {
           id: 'analystSla',
           align: 'center',
-          label: 'Sla date',
+          label: 'Sla Date',
           dataType: 'string',
         },
         {
           id: 'qa',
           align: 'center',
-          label: 'Qa',
+          label: 'QA',
           dataType: 'string',
         },
         {
           id: 'qaSla',
           align: 'center',
-          label: 'Sla date',
+          label: 'Sla Date',
           dataType: 'string',
         },
       ] : [
         {
           id: 'taskid',
           align: 'center',
-          label: 'Task id',
+          label: 'Task Id',
           dataType: 'string',
         },
         {
@@ -214,7 +215,7 @@ const TaskList = (props) => {
           dataType: 'element',
         },
       ],
-      tableLabel: <span>{companyName ? <span>{companyName} <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={() => downloadReports()} /> </span> : 'Tasks'}</span>,
+      tableLabel: <span>{companyName ? <span>{companyName}</span> : 'Tasks'}</span>,
     };
   };
 
@@ -233,7 +234,7 @@ const TaskList = (props) => {
             <Row>
               <Col lg={12} sm={12}>
                 <Card >
-                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false} />
+                  <CustomTable tableData={tasklist} onBackButton={onBackButton} enableButton={companyName ? true : false} downloadReports={downloadReports} />
                 </Card>
               </Col>
             </Row>
