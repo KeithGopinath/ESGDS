@@ -193,19 +193,19 @@ const TaskList = (props) => {
         {
           id: 'analystSla',
           align: 'center',
-          label: 'Sla date',
+          label: 'Sla Date',
           dataType: 'string',
         },
         {
           id: 'qa',
           align: 'center',
-          label: 'Qa',
+          label: 'QA',
           dataType: 'string',
         },
         {
           id: 'qaSla',
           align: 'center',
-          label: 'Sla date',
+          label: 'Sla Date',
           dataType: 'string',
         },
         {
@@ -215,7 +215,7 @@ const TaskList = (props) => {
           dataType: 'element',
         },
       ],
-      tableLabel: <span>{companyName ? <span>{companyName}</span> : 'Tasks'}</span>,
+      tableLabel: <span>{ companyName ? <span>{companyName}</span> : 'Tasks'}</span>,
     };
   };
 
