@@ -77,8 +77,9 @@ const Login = () => {
     if (validOtp && otpLogin) {
       setOtpLogin(false);
       history.push("/dashboard");
+      message.success(validOtp.message)
     } else if (invalidOtp) {
-      setOtpAlert('Please enter valid OTP');
+      setOtpAlert(invalidOtp.message);
     }
   }, [invalidOtp, validOtp]);
 
