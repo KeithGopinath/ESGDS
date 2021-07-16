@@ -60,7 +60,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       setGroupsSubMenu(true);
     } else if (url.pathname.includes('users')) {
       setUsersSubMenu(true);
-    } else if (url.pathname.includes('task')) {
+    } else if (url.pathname.includes('createtask') || url.pathname.includes('tasklist')) {
       setTaskSubMenu(true);
     } else {
       setTaxonomySubMenu(false);
@@ -169,8 +169,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       setHandler(false);
     }
     else {
-      target.classList.remove('sideMenuMini-main-responsive');
-      target.classList.add('sideMenu-main-responsive');
+      target && target.classList.remove('sideMenuMini-main-responsive');
+      target && target.classList.add('sideMenu-main-responsive');
       setHandler(true);
     }
   };
