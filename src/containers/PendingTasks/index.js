@@ -15,7 +15,28 @@ const PendingTaskTable = (props) => {
   const tablePopulate = (data) => data.map(({
     taskId, pillar, company, fiscalYear, status, taskStatus,
   }) => ({
-    taskId, pillar, company, fiscalYear, status: status || taskStatus, action: <Link href to={{ pathname: `/task/${taskId}`, state: { taskId } }}>Enter</Link>,
+    taskId,
+    pillar,
+    company,
+    fiscalYear,
+    status: status || taskStatus,
+    action:
+  <Link
+    href
+    to={{
+      pathname: `/task/${taskId}`,
+      state: {
+        taskId,
+        taskDetails: {
+          pillar,
+          fiscalYear,
+          company,
+          taskId,
+        },
+      },
+    }}
+  >Enter
+  </Link>,
   }));
 
   const PENDING_TASK_DATA = {
@@ -112,14 +133,14 @@ const PendingTasks = () => {
   const getReqTabs = (e) => {
     if (isAnalyst) {
       return [
-        { label: 'Data Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DC : (e.pendingTasksList.data.rows).concat(PENDING_TASK.ANALYST_DC) },
-        { label: 'Data Correction', data: PENDING_TASK.ANALYST_DCR },
+        { label: 'Data Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DC : (e.pendingTasksList.data.analystCollectionTaskList).concat(PENDING_TASK.ANALYST_DC) },
+        { label: 'Data Correction', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DCR : (e.pendingTasksList.data.analystCorrectionTaskList).concat(PENDING_TASK.ANALYST_DCR) },
         { label: 'Controversy Collection', data: PENDING_TASK.ANALYST_CC },
       ];
     }
-    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.rows).concat(PENDING_TASK.QA_DV) }]; }
-    if (isCompanyRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
-    if (isClientRep) { return [{ label: 'Data Review', data: PENDING_TASK.COMPANY_REP_DR }]; }
+    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.qaTaskList).concat(PENDING_TASK.QA_DV) }]; }
+    if (isCompanyRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? PENDING_TASK.COMPANY_REP_DR : (e.pendingTasksList.data.companyRepTaskList).concat(PENDING_TASK.COMPANY_REP_DR) }]; }
+    if (isClientRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? PENDING_TASK.COMPANY_REP_DR : (e.pendingTasksList.data.clientRepTaskList).concat(PENDING_TASK.COMPANY_REP_DR) }]; }
     return [{
       label: '', data: [],
     }];
