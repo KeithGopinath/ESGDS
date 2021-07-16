@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Col, Row, Card, Container } from 'react-bootstrap';
 import Select from 'react-select';
+import { useSelector, useDispatch } from 'react-redux';
 import { Transfer, Divider, message } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -15,12 +16,30 @@ const PillarAssignment = () => {
   const [primaryPillar, setprimaryPillar] = React.useState('');
   const [secPillar, setsecPillar] = React.useState('');
   const [inputValidate, setInputValidate] = React.useState('');
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: 'ClientTaxonomy_REQUEST' });
+  }, []);
+  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
+  const modTax = taxonomyData && taxonomyData.rows;
+  const taxOptions = modTax && modTax.map((e) => (
+    // eslint-disable-next-line no-underscore-dangle
+    { value: e._id, label: e.taxonomyName }
+  ));
   const onHandleTaxonomy = (arg) => {
+    dispatch({ type: 'PILLARTAXANOMY_REQUEST', payload: arg.value });
     settaxanomy(arg);
     console.log(taxonomy);
     setisDisabledPrimary(false);
   };
+  const apiData = useSelector((pillarlist) => pillarlist.pillarlist.pillardata);
+  const pillarData = apiData && apiData.rows;
+  console.log(pillarData, 'pillarData');
+  const pillarOptions = pillarData && pillarData.map((e) => {
+    const value = { value: e.id, label: e.categoryName };
+    return value;
+  });
+  console.log(apiData, 'apiData');
   const onChange = (newTargetKeys, direction, moveKeys) => {
     console.log(newTargetKeys, direction, moveKeys);
     setTargetKeys(newTargetKeys);
@@ -55,16 +74,7 @@ const PillarAssignment = () => {
       message.error('Fill all the required fields');
     }
   };
-  const taxOptions = [
-    { value: 'dgsf3', label: 'acute1' },
-    { value: 'sdsf3', label: 'acute2' },
-    { value: '35sf3', label: 'acute3' },
-  ];
-  const pillarOptions = [
-    { value: 'dgsd3', label: 'Environment' },
-    { value: 'wdsf3', label: 'Social' },
-    { value: '35jgf3', label: 'Governance' },
-  ];
+
   const mockData = [
     {
       key: '1',
@@ -140,7 +150,7 @@ const PillarAssignment = () => {
                             <Select
                               isMulti
                               onChange={onsecPillarChange}
-                              options={pillarOptions.filter((e) => e.label !== primaryPillar.label)}
+                              options={pillarOptions && pillarOptions.filter((e) => e.label !== primaryPillar.label)}
                               placeholder="Secondary pillar"
                               isDisabled={isDisabledSec}
                               value={secPillar}

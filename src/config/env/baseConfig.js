@@ -22,6 +22,10 @@ export default {
     putMatrixMember: '/companies/add/member',
     getTask: 'datapoints/list',
     gettaskDetails: '/taskAssignments/getGroupAndBatches',
+    getpillarTaxonomy: 'categories/taxonomy-pillars',
+    unassignedBatches: 'batches/all/unassigned',
+    createGroup: 'groups/create',
+    getGroupList: 'groups',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
