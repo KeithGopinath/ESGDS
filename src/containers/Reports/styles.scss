@@ -22,11 +22,10 @@
 
 .reports-download-icon {
   cursor: pointer;
-
+  position: absolute;
+  right:0;
+  margin: 0vw 1vw 0vw 0vw;
   &:hover {
     color: #2199c8;
   }
 }
-
-
-

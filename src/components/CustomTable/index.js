@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, onBackButton, enableButton
+  tableData, showDatePicker, isLoading, message, icon, onBackButton, enableButton, downloadReports,
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
@@ -260,6 +260,7 @@ const CustomTable = ({
                   ),
                 }}
               />
+              {enableButton && <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={downloadReports} />}
             </ThemeProvider>
           </div>
           <Table className="users-table">
