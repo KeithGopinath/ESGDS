@@ -25,7 +25,11 @@ import matrixMember from './MatrixMember';
 import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
-
+import pillarlist from './GetPillarTaxanomy';
+import assignpillar from './PillarAssignment';
+import unassignedBatch from './GetUnassignedBatch';
+import creategroup from './CreateGroup';
+import getgrouplist from './GetGroupList';
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -52,6 +56,11 @@ const combinedReducer = combineReducers({
   task,
   taskDetail,
   roleChange,
+  pillarlist,
+  assignpillar,
+  unassignedBatch,
+  creategroup,
+  getgrouplist,
 });
 
 const rootReducer = (state, action) => {

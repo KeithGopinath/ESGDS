@@ -23,6 +23,11 @@ import { getPendingTasksWatchers } from './PendingTask';
 import { matrixMemberWatchers } from './MatrixMember';
 import { taskWatchers } from './Task';
 import { getTaskDetailsWatchers } from './TaskDetails';
+import { getpillarWatchers } from './GetPillarTaxanomy';
+import { getPillarassignWatchers } from './PillarAssignment';
+import { getunassignedBatchWatchers } from './GetUnassignedBatch';
+import { getCreateGroupWatchers } from './CreateGroup';
+import { getGrouplistWatchers } from './GetGroupList';
 
 export default function* rootWatchers() {
   yield all([
@@ -50,5 +55,11 @@ export default function* rootWatchers() {
     matrixMemberWatchers(),
     taskWatchers(),
     getTaskDetailsWatchers(),
+    getpillarWatchers(),
+    getPillarassignWatchers(),
+    getunassignedBatchWatchers(),
+    getCreateGroupWatchers(),
+    getGrouplistWatchers(),
+
   ]);
 }
