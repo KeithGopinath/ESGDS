@@ -51,9 +51,10 @@ const Groups = () => {
     const payload = { 
       filters: [
         { filterWith: "isUserApproved", value: true },
-        // { filterWith: "isAssignedToGroup", value: false },
+        { filterWith: "isAssignedToGroup", value: false },
         { filterWith: "isRoleAssigned", value: true },
-        { filterWith: "isUserActive", value: true }
+        { filterWith: "isUserActive", value: true },
+        { filterWith: "userType", value: "Employee" }
         
       ] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
@@ -283,11 +284,7 @@ const onChangeTransfer = (newTargetKeys) => {
     },
   ];
 
-  // const batchlistwise = batches && batches.map((b) => {
-  //   const batchDetail = { key: b.batchId, title: b.batchName, taxonomy:b.taxonomy };
-  //   return batchDetail;
-  // });
-  // console.log(batchlistwise, 'batchlistwise')
+
   
   const batchlistwise = batchAssignment && batchAssignment.map((b) => {
     const batchDetail = { key: b._id, title: b.batchName, taxonomy:b.taxonomy.label };
