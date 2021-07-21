@@ -5,6 +5,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Select, { components } from 'react-select';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,8 @@ const FieldWrapper = (props) => {
 
 const TaskTable = (props) => {
   console.log(props);
-  const tablePopulate = ({ taskId, dpCodesData }) => dpCodesData.map((x) => ({
+  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x, index) => ({
+    key: `${x.dpCodeId}${x.memberName}${x.dpCode}index${index}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
@@ -45,14 +47,15 @@ const TaskTable = (props) => {
   <Link
     to={{
       pathname: `/dpcode/${x.dpCode}`,
-      state: { taskId, dpCode: x.dpCode },
+      // state: { taskId, dpCode: x.dpCode, dpCodeId: x.dpCodeId },
+      state: { taskDetails, dpCodeDetails: x },
     }}
   >Enter Data
   </Link>,
   }));
 
   const TASK_DATA = {
-    rowsData: tablePopulate(props.data),
+    rowsData: tablePopulate(props),
     columnsHeadData: [
       {
         id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
@@ -77,21 +80,21 @@ const TaskTable = (props) => {
 
 const ControversyTaskTable = (props) => {
   console.log(props);
-  const tablePopulate = ({ taskId, dpCodesData }) => dpCodesData.map((x) => ({
+  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     dpCode: x.dpCode,
     keyIssue: x.keyIssue,
     action:
   <Link
     to={{
       pathname: `/controversydpcode/${x.dpCode}`,
-      state: { taskId, dpCode: x.dpCode },
+      state: { taskDetails, dpCodeDetails: x },
     }}
   >Enter Data
   </Link>,
   }));
 
   const CONTROVERSY_TASK_DATA = {
-    rowsData: tablePopulate(props.data),
+    rowsData: tablePopulate(props),
     columnsHeadData: [
       {
         id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
@@ -112,8 +115,18 @@ const ControversyTaskTable = (props) => {
 };
 
 const Task = (props) => {
+  // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
+  const { taskDetails } = props.location.state;
+
+  // DECLARING DISPATCH
+  const dispatch = useDispatch();
+
+  // USESELECTOR TO GET reqTASK From Store
+  const reqTASK = (useSelector((state) => state.task));
+
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
+
   // CURRENT TAB
   const currentTab = sessionStorage.tab;
 
@@ -129,17 +142,6 @@ const Task = (props) => {
 
   const sideBarRef = useRef();
 
-  const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
-
-  const tabsRef = useRef(tabs.map(() => React.createRef()));
-
-  const defaultActiveTab = () => {
-    const defaultTab = tabsRef.current[0].current;
-    if (defaultTab) {
-      defaultTab.classList.add('active');
-    }
-  };
-
   const getReqAPIData = () => {
     if (isClientRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
     if (isCompanyRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
@@ -151,42 +153,80 @@ const Task = (props) => {
   };
 
   const extractReqTask = (data) => {
-    const { taskId } = props.location.state;
-    const [filteredTask] = data.filter((e) => (e.taskId === taskId));
-    return filteredTask;
+    let returnableTask;
+
+    if (isAnalyst_DCR || isAnalyst_CC || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
+      [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
+    }
+    if (isAnalyst_DC) {
+      [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : data.filter((e) => (e.taskId === taskDetails.taskId));
+    }
+
+    console.log(returnableTask, 'RERRRR');
+    return { ...returnableTask, ...taskDetails };
   };
 
-  const [reqTaskData, setReqTaskData] = useState(extractReqTask(getReqAPIData()));
+  const reqTaskData = extractReqTask(getReqAPIData());
+  console.log(reqTaskData, '////REQTASK DATA');
   const [dpCodeType, setDpCodeType] = useState('Standalone');
+  const [reqKeyIssue, setReqKeyIssue] = useState('');
   const [reqBoardMember, setReqBoardMember] = useState(null);
   const [reqKmpMember, setReqKmpMember] = useState(null);
 
   const [isAddNewBoardVisible, setIsAddNewBoardVisible] = useState(false);
   const [isAddNewKMPVisible, setIsAddNewKMPVisible] = useState(false);
 
+  const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
+
+  const tabsRef = useRef(tabs.map(() => React.createRef()));
+
+  const defaultActiveTab = () => {
+    const defaultTab = tabsRef.current[0].current;
+    if (defaultTab) {
+      defaultTab.classList.add('active');
+    }
+  };
+
   useEffect(() => {
     defaultActiveTab();
-    setReqTaskData(extractReqTask(getReqAPIData()));
     setDpCodeType('Standalone');
   }, []);
+
+  useEffect(() => {
+    dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
+  }, []);
+
+  useState(() => {
+    setReqKeyIssue('');
+  }, [dpCodeType]);
 
 
   const getReqDpCodesList = () => {
     if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
       if (dpCodeType === 'Standalone') {
+        if (reqKeyIssue) {
+          console.log(reqKeyIssue);
+          return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId && e.keyIssueId === reqKeyIssue.value));
+        }
         return reqTaskList.dpCodesData;
       }
       if (dpCodeType === 'Board Matrix') {
-        if (reqBoardMember) {
-          return reqTaskList.dpCodesData.filter((e) => (e.boardMember && e.boardMember === reqBoardMember.value));
+        if (reqBoardMember && reqKeyIssue) {
+          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqBoardMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
         }
-        return reqTaskList.dpCodesData;
+        if (reqBoardMember && !reqKeyIssue) {
+          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqBoardMember.value));
+        }
+        return [];
       }
       if (dpCodeType === 'Kmp Matrix') {
-        if (reqKmpMember) {
-          return reqTaskList.dpCodesData.filter((e) => (e.kmpMember && e.kmpMember === reqKmpMember.value));
+        if (reqKmpMember && reqKeyIssue) {
+          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqKmpMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
         }
-        return reqTaskList.dpCodesData;
+        if (reqKmpMember && !reqKeyIssue) {
+          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqKmpMember.value));
+        }
+        return [];
       }
     }
     if (isAnalyst_CC) {
@@ -197,31 +237,34 @@ const Task = (props) => {
 
   const getReqTaskList = () => {
     if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
-      if (dpCodeType === 'Standalone') {
-        return reqTaskData.STANDALONE;
+      if (dpCodeType === 'Standalone' && reqTaskData.standalone) {
+        return reqTaskData.standalone;
       }
-      if (dpCodeType === 'Board Matrix') {
-        return reqTaskData.BOARDMATRIX;
+      if (dpCodeType === 'Board Matrix' && reqTaskData.boardMatrix) {
+        return reqTaskData.boardMatrix;
       }
-      if (dpCodeType === 'Kmp Matrix') {
-        return reqTaskData.KMPMATRIX;
+      if (dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix) {
+        return reqTaskData.kmpMatrix;
       }
     }
     if (isAnalyst_CC) {
-      return reqTaskData;
+      return reqTaskData.controversy;
     }
-    return {};
+    return { dpCodesData: [] };
   };
 
   const reqTaskList = getReqTaskList();
-  const boardMembersList = dpCodeType === 'Board Matrix' ? (reqTaskData.BOARDMATRIX.boardMembersList) : [];
-  const kmpMembersList = dpCodeType === 'Kmp Matrix' ? (reqTaskData.KMPMATRIX.kmpMembersList) : [];
+  const boardMembersList = dpCodeType === 'Board Matrix' && reqTaskData.boardMatrix ? (reqTaskData.boardMatrix.boardMemberList) : [];
+  const kmpMembersList = dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix ? (reqTaskData.kmpMatrix.kmpMemberList) : [];
   const reqDpCodesData = getReqDpCodesList();
+
+  console.log(reqDpCodesData);
 
   const taskToNextPage = {
     taskId: reqTaskData.taskId,
     pillar: reqTaskData.pillar,
     company: reqTaskData.company,
+    taskNumber: reqTaskData.taskNumber,
     dpCodesData: reqDpCodesData,
   };
 
@@ -237,6 +280,10 @@ const Task = (props) => {
     if (currentTarget.innerHTML) {
       setDpCodeType(currentTarget.innerHTML);
     }
+  };
+
+  const onChangeKeyIssue = (event) => {
+    setReqKeyIssue(event);
   };
 
   const onChangeReqBoardMember = (event) => {
@@ -281,16 +328,30 @@ const Task = (props) => {
             <div className="task-id-year-wrap">
               {!isAnalyst_CC && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
               {isAnalyst_CC && <div className="task-pillar">{reqTaskData.company}</div>}
-              <div className="task-id">{`Task Id: ${reqTaskData.taskId}`}</div>
+              <div className="task-id">{`Task No: ${reqTaskData.taskNumber}`}</div>
             </div>
-            {reqTaskData.pillar === 'Governance' &&
+            {(reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') &&
             <div className="task-tabs-wrap">
               {tabs.map((tab, index) => (<div ref={tabsRef.current[index]} id={tab} key={tab[index]} onClick={onClickTabChanger} className="task-tabs">{tab}</div>))}
             </div>}
             <div className="task-keyissue">
               <Row>
+                <FieldWrapper
+                  label="Key Issues*"
+                  visible
+                  body={
+                    <Select
+                      name="userRole"
+                      onChange={onChangeKeyIssue}
+                      options={reqTASK.task && (reqTASK.task.keyIssuesList)}
+                      value={reqKeyIssue}
+                      isSearchable
+                      isClearable
+                      maxLength={30}
+                    />}
+                />
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqTaskData.pillar === 'Governance' && dpCodeType === 'Board Matrix' && boardMembersList.length > 0 &&
+                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Board Matrix' && boardMembersList.length > 0 &&
                 <FieldWrapper
                   label="Board Members*"
                   visible
@@ -307,7 +368,7 @@ const Task = (props) => {
                     />}
                 />}
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { reqTaskData.pillar === 'Governance' && dpCodeType === 'Kmp Matrix' && kmpMembersList.length > 0 &&
+                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Kmp Matrix' && kmpMembersList.length > 0 &&
                 <FieldWrapper
                   label="KMP*"
                   visible
@@ -325,8 +386,8 @@ const Task = (props) => {
                 />}
               </Row>
             </div>
-            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
-            {isAnalyst_CC && <ControversyTaskTable data={{ taskId: reqTaskData.taskId, dpCodesData: reqDpCodesData }} />}
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
+            {isAnalyst_CC && <ControversyTaskTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
 
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}

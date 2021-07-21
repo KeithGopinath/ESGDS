@@ -154,10 +154,19 @@ export const DataSheetComponent = (props) => {
       case 'TEXT':
         setFormResponse(event.value);
         break;
+      case 'BOOLEAN':
+        setFormResponse(event.value);
+        break;
+      case 'GENDER':
+        setFormResponse(event.value);
+        break;
       case 'DATE':
         setFormResponse(event);
         break;
       case 'NUMBER':
+        setFormResponse(event.currentTarget.value);
+        break;
+      case 'STRING':
         setFormResponse(event.currentTarget.value);
         break;
       default:
@@ -242,8 +251,15 @@ export const DataSheetComponent = (props) => {
   const backClickHandler = () => {
     console.log('backClickHandler');
     history.push({
-      pathname: `/task/${reqTask.taskId}`,
-      state: { taskId: reqTask.taskId },
+      pathname: `/task/${reqTask.taskNumber}`,
+      state: {
+        taskDetails: {
+          taskId: reqTask.taskId,
+          pillar: reqTask.pillar,
+          company: reqTask.company,
+          taskNumber: reqTask.taskNumber,
+        },
+      },
     });
   };
 
@@ -252,7 +268,7 @@ export const DataSheetComponent = (props) => {
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: reqTask.taskId, dpCode: nextDpCode.dpCode, filteredData: reqTask.dpCodesData },
+      state: { taskId: reqTask.taskId, dpCodeDetails: nextDpCode, filteredData: reqTask.dpCodesData },
     });
   };
 
@@ -277,7 +293,7 @@ export const DataSheetComponent = (props) => {
       const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
-        state: { dpCode: nextDpCode.dpCode },
+        state: { dpCodeDetails: nextDpCode },
       });
     } else {
       const msgCurrent = props.dummyDataCheck().currentData;
@@ -323,8 +339,15 @@ export const DataSheetComponent = (props) => {
       console.log('ERROR TYPE: ', formErrorType);
       console.log('COMMENTS: ', formComment);
       history.push({
-        pathname: `/task/${reqTask.taskId}`,
-        state: { taskId: reqTask.taskId },
+        pathname: `/task/${reqTask.taskNumber}`,
+        state: {
+          taskDetails: {
+            taskId: reqTask.taskId,
+            pillar: reqTask.pillar,
+            company: reqTask.company,
+            taskNumber: reqTask.taskNumber,
+          },
+        },
       });
     } else {
       const msgCurrent = props.dummyDataCheck().currentData;
@@ -635,6 +658,23 @@ export const DataSheetComponent = (props) => {
         visible
         body={
           <Form.Control
+            type="number"
+            name="response"
+            placeholder="Response"
+            onChange={onChangeFormResponse}
+            value={formResponse}
+            disabled={disableField}
+          />
+        }
+      />}
+
+      {/* RESPONSE Field */}
+      { formDataType === 'STRING' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Form.Control
             type="text"
             name="response"
             placeholder="Response"
@@ -671,6 +711,38 @@ export const DataSheetComponent = (props) => {
           <Select
             name="response"
             options={textResponse.map((e) => ({ label: e, value: e }))}
+            onChange={onChangeFormResponse}
+            value={formResponse && { label: formResponse, value: formResponse }}
+            placeholder="Choose Response"
+            isDisabled={disableField}
+          />
+        }
+      />}
+
+      { formDataType === 'BOOLEAN' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Select
+            name="response"
+            options={['Yes', 'No'].map((e) => ({ label: e, value: e }))}
+            onChange={onChangeFormResponse}
+            value={formResponse && { label: formResponse, value: formResponse }}
+            placeholder="Choose Response"
+            isDisabled={disableField}
+          />
+        }
+      />}
+
+      { formDataType === 'GENDER' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Select
+            name="response"
+            options={['M', 'F', 'NA'].map((e) => ({ label: e, value: e }))}
             onChange={onChangeFormResponse}
             value={formResponse && { label: formResponse, value: formResponse }}
             placeholder="Choose Response"
@@ -873,7 +945,7 @@ export const DataSheetComponent = (props) => {
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-      <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
+      { !isAnalyst_CC && <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>}
       <Col lg={12} className="datapage-button-wrap">
         {/* BACK Button */}
         { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&

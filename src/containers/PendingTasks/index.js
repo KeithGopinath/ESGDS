@@ -12,27 +12,19 @@ import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 
 const PendingTaskTable = (props) => {
   // TABLE DATA
-  const tablePopulate = (data) => data.map(({
-    taskId, pillar, company, fiscalYear, status, taskStatus,
-  }) => ({
-    taskId,
-    pillar,
-    company,
-    fiscalYear,
-    status: status || taskStatus,
+  const tablePopulate = (data) => data.map((ePendingTask) => ({
+    taskNumber: ePendingTask.taskNumber,
+    pillar: ePendingTask.pillar,
+    company: ePendingTask.company,
+    fiscalYear: ePendingTask.fiscalYear,
+    status: ePendingTask.status || ePendingTask.taskStatus,
     action:
   <Link
     href
     to={{
-      pathname: `/task/${taskId}`,
+      pathname: `/task/${ePendingTask.taskNumber}`,
       state: {
-        taskId,
-        taskDetails: {
-          pillar,
-          fiscalYear,
-          company,
-          taskId,
-        },
+        taskDetails: ePendingTask, // passing Whole task data
       },
     }}
   >Enter
@@ -43,7 +35,7 @@ const PendingTaskTable = (props) => {
     rowsData: tablePopulate(props.data),
     columnsHeadData: [
       {
-        id: 'taskId', label: 'Task Id', align: 'left', dataType: 'string',
+        id: 'taskNumber', label: 'Task No', align: 'left', dataType: 'string',
       },
       {
         id: 'pillar', label: 'Pillar', align: 'left', dataType: 'string',
@@ -72,21 +64,18 @@ const PendingTaskTable = (props) => {
 const ControversyPendingTaskTable = (props) => {
   // TABLE DATA
   console.log(props);
-  const tablePopulate = (data) => data.map(({
-    taskId, company, status,
-    // to={{
-    //   pathname: `/controversy/${dpCode}`,
-    //   state: { dpCode },
-    // }}
-  }) => ({
-    taskId, company, status, action: <Link href to={{ pathname: `/task/${taskId}`, state: { taskId } }}>Enter</Link>,
+  const tablePopulate = (data) => data.map((ePendingTask) => ({
+    taskNumber: ePendingTask.taskNumber,
+    company: ePendingTask.company,
+    status: ePendingTask.taskStatus || ePendingTask.status,
+    action: <Link href to={{ pathname: `/task/${ePendingTask.taskNumber}`, state: { taskDetails: ePendingTask } }}>Enter</Link>,
   }));
 
   const CONTROVERSY_PENDING_TASK_DATA = {
     rowsData: tablePopulate(props.data),
     columnsHeadData: [
       {
-        id: 'taskId', label: 'Task Id', align: 'left', dataType: 'string',
+        id: 'taskNumber', label: 'Task No', align: 'left', dataType: 'string',
       },
       {
         id: 'company', label: 'Company', align: 'left', dataType: 'string',
@@ -135,7 +124,7 @@ const PendingTasks = () => {
       return [
         { label: 'Data Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DC : (e.pendingTasksList.data.analystCollectionTaskList).concat(PENDING_TASK.ANALYST_DC) },
         { label: 'Data Correction', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DCR : (e.pendingTasksList.data.analystCorrectionTaskList).concat(PENDING_TASK.ANALYST_DCR) },
-        { label: 'Controversy Collection', data: PENDING_TASK.ANALYST_CC },
+        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DCR : (e.pendingTasksList.data.controversyTaskList).concat(PENDING_TASK.ANALYST_CC) },
       ];
     }
     if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.qaTaskList).concat(PENDING_TASK.QA_DV) }]; }
@@ -156,6 +145,10 @@ const PendingTasks = () => {
 
 
   const setDefaultTab = () => {
+    tabsRef.current.forEach((element) => {
+      const btn = element.current;
+      btn.classList.remove('tabs-label-count-wrap-active');
+    });
     const defaultTab = tabsRef.current[0] && tabsRef.current[0].current;
     if (defaultTab) { defaultTab.classList.add('tabs-label-count-wrap-active'); }
     setReqAPIData(tabs[0]);

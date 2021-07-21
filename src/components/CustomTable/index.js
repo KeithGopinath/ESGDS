@@ -280,17 +280,17 @@ const CustomTable = ({
                     const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {
                       return (
-                        <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data].content}</TableCell>
+                        <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data].content}</TableCell>
                       );
                     }
                     return (
-                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
+                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
                     );
                   });
                   return (
                     <TableRow
                       hover={false}
-                      key={`table row data of ${eachRow[rowsDataKeyList[0]]}`}
+                      key={`table row data of ${eachRow.key || eachRow[rowsDataKeyList[0]]}`}
                       onClick={null}
                     >
                       {cellArray}

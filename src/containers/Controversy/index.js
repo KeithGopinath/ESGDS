@@ -75,10 +75,10 @@ const ControversyPendingTaskTable = (props) => {
 
 const Controversy = (props) => {
   const sideBarRef = useRef();
-  const { taskId } = props.location.state;
+  const { taskDetails } = props.location.state;
   const extractReqDpCode = (data) => {
-    const { dpCode } = props.location.state;
-    return data.filter((e) => (e.dpCode === dpCode));
+    const { dpCodeDetails } = props.location.state;
+    return data.filter((e) => (e.dpCode === dpCodeDetails.dpCode));
   };
   const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
   const [reqDpCodeData] = extractReqDpCode(reqDpCodesData);
@@ -148,7 +148,7 @@ const Controversy = (props) => {
                 variant="danger"
                 onClick={() => {
                   history.push({
-                    pathname: `/task/${taskId}`, state: { taskId },
+                    pathname: `/task/${taskDetails.taskId}`, state: { taskDetails },
                   });
                 }}
               >Back
