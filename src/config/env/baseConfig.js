@@ -22,6 +22,7 @@ export default {
     putMatrixMember: '/companies/add/member',
     getTask: 'datapoints/list',
     gettaskDetails: '/taskAssignments/getGroupAndBatches',
+    getDpCodeData: 'datapoints/dpDetails',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

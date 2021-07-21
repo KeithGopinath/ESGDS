@@ -23,6 +23,7 @@ import { getPendingTasksWatchers } from './PendingTask';
 import { matrixMemberWatchers } from './MatrixMember';
 import { taskWatchers } from './Task';
 import { getTaskDetailsWatchers } from './TaskDetails';
+import { getDpCodeDataWatchers } from './DpCodeData';
 
 export default function* rootWatchers() {
   yield all([
@@ -50,5 +51,6 @@ export default function* rootWatchers() {
     matrixMemberWatchers(),
     taskWatchers(),
     getTaskDetailsWatchers(),
+    getDpCodeDataWatchers(),
   ]);
 }
