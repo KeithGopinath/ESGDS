@@ -30,6 +30,10 @@ import assignpillar from './PillarAssignment';
 import unassignedBatch from './GetUnassignedBatch';
 import creategroup from './CreateGroup';
 import getgrouplist from './GetGroupList';
+import groupbtid from './GetGroupById';
+import taskpillar from './OnSelectPillar';
+import taxonomyCompany from './TaxonomyCompanies';
+import createTask from './CreateTasks';
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -61,6 +65,10 @@ const combinedReducer = combineReducers({
   unassignedBatch,
   creategroup,
   getgrouplist,
+  groupbtid,
+  taskpillar,
+  taxonomyCompany,
+  createTask,
 });
 
 const rootReducer = (state, action) => {
