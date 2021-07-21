@@ -23,6 +23,7 @@ import { getPendingTasksWatchers } from './PendingTask';
 import { matrixMemberWatchers } from './MatrixMember';
 import { taskWatchers } from './Task';
 import { getTaskDetailsWatchers } from './TaskDetails';
+import { getDpCodeDataWatchers } from './DpCodeData';
 import { getpillarWatchers } from './GetPillarTaxanomy';
 import { getPillarassignWatchers } from './PillarAssignment';
 import { getunassignedBatchWatchers } from './GetUnassignedBatch';
@@ -59,6 +60,7 @@ export default function* rootWatchers() {
     matrixMemberWatchers(),
     taskWatchers(),
     getTaskDetailsWatchers(),
+    getDpCodeDataWatchers(),
     getpillarWatchers(),
     getPillarassignWatchers(),
     getunassignedBatchWatchers(),

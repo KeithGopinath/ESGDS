@@ -25,6 +25,8 @@ import matrixMember from './MatrixMember';
 import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
+import dpCodeData from './DpCodeData';
+
 import pillarlist from './GetPillarTaxanomy';
 import assignpillar from './PillarAssignment';
 import unassignedBatch from './GetUnassignedBatch';
@@ -60,6 +62,7 @@ const combinedReducer = combineReducers({
   task,
   taskDetail,
   roleChange,
+  dpCodeData,
   pillarlist,
   assignpillar,
   unassignedBatch,

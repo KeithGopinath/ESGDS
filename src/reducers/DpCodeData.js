@@ -2,25 +2,25 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'TASK_GET_REQUEST':
+    case 'DPCODEDATA_GET_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        task: false,
+        dpCodeData: false,
       };
-    case 'TASK_GET_SUCCESS':
+    case 'DPCODEDATA_GET_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        task: action.task,
+        dpCodeData: action.dpCodeData,
       };
-    case 'TASK_GET_FAILURE':
+    case 'DPCODEDATA_GET_FAILURE':
       return {
         ...state,
         isLoading: false,
         error: action.error,
-        task: false,
+        dpCodeData: false,
       };
     default:
       return state;

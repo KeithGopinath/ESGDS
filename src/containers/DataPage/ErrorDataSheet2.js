@@ -85,10 +85,19 @@ const ErrorDataSheetTwo = (props) => {
       case 'TEXT':
         setFormResponse(event.value);
         break;
+      case 'BOOLEAN':
+        setFormResponse(event.value);
+        break;
+      case 'GENDER':
+        setFormResponse(event.value);
+        break;
       case 'DATE':
         setFormResponse(event);
         break;
       case 'NUMBER':
+        setFormResponse(event.currentTarget.value);
+        break;
+      case 'STRING':
         setFormResponse(event.currentTarget.value);
         break;
       default:
@@ -215,7 +224,7 @@ const ErrorDataSheetTwo = (props) => {
           visible={isErrorCommentType || isError}
           body={
             <Form.Control
-              type="text"
+              type="number"
               name="response"
               placeholder="Response"
               onChange={onChangeFormResponse}
@@ -224,6 +233,23 @@ const ErrorDataSheetTwo = (props) => {
             />
           }
         />}
+
+      {/* RESPONSE Field */}
+      { formDataType === 'STRING' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Form.Control
+            type="text"
+            name="response"
+            placeholder="Response"
+            onChange={onChangeFormResponse}
+            value={formResponse}
+            disabled={disableField}
+          />
+        }
+      />}
 
       {/* RESPONSE Field */}
       { formDataType === 'DATE' &&
@@ -258,6 +284,38 @@ const ErrorDataSheetTwo = (props) => {
             />
           }
         />}
+
+      { formDataType === 'BOOLEAN' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Select
+            name="response"
+            options={['Yes', 'No'].map((e) => ({ label: e, value: e }))}
+            onChange={onChangeFormResponse}
+            value={formResponse && { label: formResponse, value: formResponse }}
+            placeholder="Choose Response"
+            isDisabled={disableField}
+          />
+        }
+      />}
+
+      { formDataType === 'GENDER' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Select
+            name="response"
+            options={['M', 'F', 'NA'].map((e) => ({ label: e, value: e }))}
+            onChange={onChangeFormResponse}
+            value={formResponse && { label: formResponse, value: formResponse }}
+            placeholder="Choose Response"
+            isDisabled={disableField}
+          />
+        }
+      />}
 
       {/* SOURCE Field */}
       <FieldWrapper
