@@ -24,6 +24,15 @@ import { matrixMemberWatchers } from './MatrixMember';
 import { taskWatchers } from './Task';
 import { getTaskDetailsWatchers } from './TaskDetails';
 import { getDpCodeDataWatchers } from './DpCodeData';
+import { getpillarWatchers } from './GetPillarTaxanomy';
+import { getPillarassignWatchers } from './PillarAssignment';
+import { getunassignedBatchWatchers } from './GetUnassignedBatch';
+import { getCreateGroupWatchers } from './CreateGroup';
+import { getGrouplistWatchers } from './GetGroupList';
+import { getGroupbyidWatchers } from './GetGroupById';
+import { gettaskpillatWatchers } from './OnSelectPillar';
+import { getTaxnomycompanyWatchers } from './TaxonomyCompanies';
+import { getCreateTaskWatchers } from './CreateTasks';
 
 export default function* rootWatchers() {
   yield all([
@@ -52,5 +61,14 @@ export default function* rootWatchers() {
     taskWatchers(),
     getTaskDetailsWatchers(),
     getDpCodeDataWatchers(),
+    getpillarWatchers(),
+    getPillarassignWatchers(),
+    getunassignedBatchWatchers(),
+    getCreateGroupWatchers(),
+    getGrouplistWatchers(),
+    getGroupbyidWatchers(),
+    gettaskpillatWatchers(),
+    getTaxnomycompanyWatchers(),
+    getCreateTaskWatchers(),
   ]);
 }

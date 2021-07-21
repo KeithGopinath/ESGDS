@@ -36,9 +36,9 @@ const BatchCreation = ({ show, setShow }) => {
   const dispatch = useDispatch();
   const [validBorder, setValidBorder] = useState(false);
   const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
-  console.log(taxonomyData, 'taxonomyData');
-  const companyData = useSelector((companylist) => companylist.companylist.companydata);
-  const fullList = companyData && companyData.rows;
+  const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany.taxonomycompany);
+  console.log(companyTaxData, 'companyTaxData');
+  const fullList = companyTaxData && companyTaxData.rows;
 
   const rowArray = fullList && fullList.map((args) => ({
     id: args.id, companydata: args.companyName,
@@ -127,11 +127,6 @@ const BatchCreation = ({ show, setShow }) => {
     { value: '2018 - 2019', label: '2018 - 2019' },
     { value: '2019 - 2020', label: '2019 - 2020' },
   ];
-  // const taxOptions = [
-  //   { value: 'TAX001', label: 'TAX001' },
-  //   { value: 'TAX002', label: 'TAX002' },
-  //   { value: 'TAX03', label: 'TAX03' },
-  // ];
   const onHandleYear = (selectedyear) => {
     console.log(selectedyear, 'selectedyear');
     setYear(selectedyear);
@@ -139,6 +134,8 @@ const BatchCreation = ({ show, setShow }) => {
   const onHandleTax = (selectedtax) => {
     console.log(selectedtax, 'selectedtax');
     setsubsetTax(selectedtax);
+
+    dispatch({ type: 'TAXANOMYCOMPANY_REQUEST', payload: selectedtax.value });
     console.log(subsetTax, 'subsetTax');
   };
   const onHandleInput = (batchname) => {

@@ -25,7 +25,6 @@ const BatchView = () => {
     
   },[]);
   const handleShow = () => {
-    dispatch({ type: 'COMPANY_LIST_REQUEST' });
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
     setShow(true);
   };

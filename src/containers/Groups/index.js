@@ -45,63 +45,7 @@ const Groups = () => {
       title: 'Status',
     },
   ];
-  const batches = [
-    { taxonomy: 'acute1', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch1', batchId: 'id1', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute2', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch2', batchId: 'id2', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute3', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch3', batchId: 'id3', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute1', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch4', batchId: 'id4', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute2', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch5', batchId: 'id5', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute3', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch6', batchId: 'id6', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute3', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch7', batchId: 'id7', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute1', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch8', batchId: 'id8', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute2', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch9', batchId: 'id9', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute3', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch10', batchId: 'id10', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute1', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch11', batchId: 'id11', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute3', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch12', batchId: 'id12', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-    { taxonomy: 'acute2', years: [{ value: '2015-2016', label: '2016-2017' }], batchName: 'batch13', batchId: 'id13', companies: [{ id: '453d', selectedCompany: 'oiland gas' }] },
-  ];
 
-  // create group json
-  // const groupAdminOptions = [
-  //   { value: 'Praveen', label: 'Praveen' },
-  //   { value: 'Vaijanthi', label: 'Vaijanthi' },
-  //   { value: 'Gopi', label: 'Gopi' },
-  //   { value: 'Rajesh', label: 'Rajesh' },
-  //   { value: 'Balaji', label: 'Balaji' },
-  // ];
-
-  const userwithRoles = [
-    {
-      userDetail: { value: '24dgdsf4', label: 'user1' },
-      roleDetails: {
-        primaryRole: { value: 'dfgvsf4', label: 'analyst' },
-        secRole: [
-          { value: 'dfgvsf4', label: 'qa' },
-          { value: 'dfgvsf4', label: 'emp' },
-        ],
-      },
-    },
-    {
-      userDetail: { value: '24dgdsfse', label: 'user2' },
-      roleDetails: {
-        primaryRole: { value: 'dfgvsf4', label: 'analyst' },
-        secRole: [
-          { value: 'dfgvsf4', label: 'qa' },
-          { value: 'dfgvsf4', label: 'emp' },
-        ],
-      },
-    },
-    {
-      userDetail: { value: '24dgdsfasdeg', label: 'user3' },
-      roleDetails: {
-        primaryRole: { value: 'dfgvsf4', label: 'analyst' },
-        secRole: [
-          { value: 'dfgvsf4', label: 'qa' },
-          { value: 'dfgvsf4', label: 'emp' },
-        ],
-      },
-    },
-  ];
   // *** API call *** ***
   useEffect(()=>{
     const payload = { 
@@ -109,17 +53,25 @@ const Groups = () => {
         { filterWith: "isUserApproved", value: true },
         { filterWith: "isAssignedToGroup", value: false },
         { filterWith: "isRoleAssigned", value: true },
-        { filterWith: "isUserActive", value: true }
+        { filterWith: "isUserActive", value: true },
+        { filterWith: "userType", value: "Employee" }
         
       ] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
   },[])
-  const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
+  const isGroupCreated = useSelector((creategroup) => creategroup.creategroup.grouppost);
+  useEffect(() => {
+    if (isGroupCreated && userData) {
+      message.success(isGroupCreated.message);
+      setCurrent(current + 1);
+    }
+  }, [isGroupCreated]);
+  const batchData = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.unassignedbatchdata);
   const batchAssignment = batchData && batchData.rows;
-  console.log(batchAssignment, 'batchesListAssignment');
   
   const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
   const isData = userData && userData.data;
+ 
   const grpAdminlist = [];
   const userList = [];
   isData && isData.map((e)=>{
@@ -160,8 +112,8 @@ const Groups = () => {
     const batcharr = [];
     if ((targetKeys.length) > 0) {
       for (const i of targetKeys) {
-        for (const j of batches) {
-          if (i === j.batchId) {
+        for (const j of batchAssignment) {
+          if (i === j._id) {
             batcharr.push(j, ...j);
           }
         }
@@ -169,13 +121,22 @@ const Groups = () => {
       
   const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
       setassignment(finalArr);
-      setCurrent(current + 1);
-      
+      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
     }
     else{
       const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: [] };
+      
+      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
+      const payload = { 
+        filters: [
+          { filterWith: "isUserApproved", value: true },
+          // { filterWith: "isAssignedToGroup", value: false },
+          { filterWith: "isRoleAssigned", value: true },
+          { filterWith: "isUserActive", value: true }
+          
+        ] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
       setassignment(finalArr);
-      setCurrent(current + 1);
     }
   };
 
@@ -186,13 +147,14 @@ const Groups = () => {
     setCurrent(current - 1);
   };
   const onHandledone = () => {
-    console.log(assignment, 'payLoad');
+    
     setcreateGrpAdmin('');
     setcreateGrpName('');
     setuserTargetKeys([]);
     setgrpName(null);
     setTargetKeys([]);
-    setCurrent(0);
+   setisdisableduser(true);
+   setCurrent(0);
   }
  
 
@@ -211,9 +173,9 @@ const onChangeTransfer = (newTargetKeys) => {
       setInputValidate(true);
       
     }
-    for (const i of userwithRoles) {
+    for (const i of userList) {
       for (const j of usertargetKeys) {
-        if(i.userDetail.value === j){
+        if(i.userDetails.value === j){
           memobj.push(i);
         }
       }
@@ -229,7 +191,7 @@ const onChangeTransfer = (newTargetKeys) => {
         // setGrpCount(grplist.length + 1);
         message.success('Group created sucessfully');
         setCurrent(current + 1);
-        dispatch({ type: 'BATCH_REQUEST' });
+        dispatch({ type: 'UNASSIGNEDBATCH_REQUEST' });
        
       
       } else {
@@ -322,17 +284,13 @@ const onChangeTransfer = (newTargetKeys) => {
     },
   ];
 
-  // const batchlistwise = batches && batches.map((b) => {
-  //   const batchDetail = { key: b.batchId, title: b.batchName, taxonomy:b.taxonomy };
-  //   return batchDetail;
-  // });
-  // console.log(batchlistwise, 'batchlistwise')
+
   
   const batchlistwise = batchAssignment && batchAssignment.map((b) => {
     const batchDetail = { key: b._id, title: b.batchName, taxonomy:b.taxonomy.label };
     return batchDetail;
   });
-  console.log(batchlistwise, 'batchlistwise_bala')
+  // console.log(batchlistwise, 'batchlistwise_bala')
   // batch transfer 
   const TableTransferbatch = ({ leftColumnsbatch, rightColumnsbatch, ...restProps }) => (
     <Transfer {...restProps} showSelectAll={false} titles={['Unassigned batches', 'Assigned batches']}>
@@ -469,7 +427,7 @@ const onChangeTransfer = (newTargetKeys) => {
       <div className="group-content">Add batches to your groups</div>
       <div className="add-member">
         <TableTransferbatch
-              dataSource={(batchlistwise) ? batchlistwise: []}
+              dataSource={(batchlistwise)? batchlistwise : []}
               targetKeys={targetKeys}
               onChange={onChangebatchTransfer}
               leftColumnsbatch={LeftTableColumns}

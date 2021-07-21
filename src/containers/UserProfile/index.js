@@ -30,10 +30,20 @@ const UserProfile = () => {
   const [alertMsg, setAlertMsg] = useState('');
   const [errorAlert, setErrorAlert] = useState('');
 
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.login.login);
+  const otpDetails = useSelector((state) => state.otp.otp);
+  const userData = useSelector((state) => state.getUserById.userById);
 
-  const role = 'employee'
-  // const role = 'client'
-  // const role = 'company'
+  const sessionRole = (sessionStorage.role == 'Company Representative' || sessionStorage.role == 'Client Representative') ? sessionStorage.role : 'Employee';
+  const role = otpDetails && otpDetails.user.userType || login && login.user && login.user.userType || sessionRole;
+  const userId = otpDetails && otpDetails.user._id || login && login.user._id;
+  const userDetails = userData && userData.user;
+
+  useEffect(() => {
+    dispatch({ type: 'USER_BY_ID_REQUEST', userId });
+  }, []);
+
 
   // email validation
   const validateEmail = (emailmsg) => {
@@ -377,6 +387,10 @@ const UserProfile = () => {
     setFlag(false)
   }
 
+  const imageOne = userDetails && userDetails.documents.authenticationLetterForClientUrl || userDetails && userDetails.documents.aadhaarUrl || userDetails && userDetails.documents.authenticationLetterForCompanyUrl;
+  const imageTwo = userDetails && userDetails.documents.companyIdForClient || userDetails && userDetails.documents.companyIdForCompany || userDetails && userDetails.documents.cancelledChequeUrl;
+  const imageThree = userDetails && userDetails.documents.pancardUrl;
+
   const alertClassName = 'danger';
 
   return (
@@ -391,12 +405,13 @@ const UserProfile = () => {
                 <Row className='d-flex ml-2 mr-2'>
                   <Col lg={6} sm={6} md={6}>
                     <Form.Group>
-                      {(role === 'client' || role === 'company') && <Form.Label>Representative ID</Form.Label>}
-                      {role === 'employee' && <Form.Label>Employee ID</Form.Label>}
+                      {(role === 'Company Representative' || role === 'Client Representative') && <Form.Label>Representative ID</Form.Label>}
+                      {role === 'Employee' && <Form.Label>Employee ID</Form.Label>}
                       <Input
                         size="large"
                         type="text"
                         disabled
+                        value={userDetails && userDetails._id}
                       />
                     </Form.Group>
                   </Col>
@@ -407,6 +422,7 @@ const UserProfile = () => {
                         size="large"
                         type="text"
                         disabled
+                        value={role === 'Employee' ? `${userDetails && userDetails.firstName} ${userDetails && `${userDetails.middleName} `}${userDetails && userDetails.lastName}` : userDetails && userDetails.name}
                       />
                     </Form.Group>
                   </Col>
@@ -416,8 +432,9 @@ const UserProfile = () => {
                       <Input
                         size="large"
                         type="email"
-                        suffix={role == 'employee' ? null : <EditFilled onClick={() => { updateHandler('email') }} />}
+                        suffix={role == 'Employee' ? null : <EditFilled onClick={() => { updateHandler('email') }} />}
                         disabled
+                        value={userDetails && userDetails.email}
                       />
                     </Form.Group>
                   </Col>
@@ -430,28 +447,31 @@ const UserProfile = () => {
                         maxLength={10}
                         suffix={<EditFilled onClick={() => { updateHandler('phone') }} />}
                         disabled
+                        value={userDetails && userDetails.phoneNumber}
                       />
                     </Form.Group>
                   </Col>
-                  {(role === 'company' || role === 'client') &&
+                  {(role === 'Company Representative' || role === 'Client Representative') &&
                     <Col lg={6} sm={6} md={6}>
                       <Form.Group>
                         <Form.Label>Company Name</Form.Label>
-                        {role === 'company' ?
+                        {role === 'Company Representative' ?
                           <Select
                             isMulti
                             isDisabled
                             className="company-select-list"
+                            value={userDetails && userDetails.companies}
                           /> :
                           <Input
                             size="large"
                             type="tel"
                             disabled
+                            value={userDetails && userDetails.companyName}
                           />}
                       </Form.Group>
                     </Col>
                   }
-                  {role === 'employee' &&
+                  {role === 'Employee' &&
                     <React.Fragment>
                       <Col lg={6} sm={6} md={6}>
                         <Form.Group>
@@ -485,6 +505,7 @@ const UserProfile = () => {
                             maxLength={16}
                             suffix={<EditFilled onClick={() => { updateHandler('accountnumber') }} />}
                             disabled
+                            value={userDetails && userDetails.bankAccountNumber}
                           />
                         </Form.Group>
                       </Col>
@@ -497,6 +518,7 @@ const UserProfile = () => {
                             maxLength={11}
                             suffix={<EditFilled onClick={() => { updateHandler('bankifsc') }} />}
                             disabled
+                            value={userDetails && userDetails.bankIFSCCode}
                           />
                         </Form.Group>
                       </Col>
@@ -507,6 +529,7 @@ const UserProfile = () => {
                             size="large"
                             type="text"
                             disabled
+                            value={userDetails && userDetails.panNumber}
                           />
                         </Form.Group>
                       </Col>
@@ -528,31 +551,31 @@ const UserProfile = () => {
                   <Row className='d-flex ml-2 mr-2'>
                     <Col lg={4} sm={4} md={4} className="profile-image">
                       <Form.Group>
-                        <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}</Form.Label><br></br>
+                        <Form.Label>{role == 'Employee' ? 'Aadhar Card ' : 'Letter of authentication '}</Form.Label><br></br>
                         <Image
                           width={200}
-                          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                          src={imageOne}
                           alt='image'
                         />
                       </Form.Group>
                     </Col>
                     <Col lg={4} sm={4} md={4} className="profile-image">
                       <Form.Group>
-                        <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}</Form.Label><br></br>
+                        <Form.Label>{role == 'Employee' ? 'Cancelled Cheque ' : role == 'Company Representative' ? 'Company ID Proof ' : 'Employee ID Proof '}</Form.Label><br></br>
                         <Image
                           width={200}
-                          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                          src={imageTwo}
                           alt='image'
                         />
                       </Form.Group>
                     </Col>
-                    {role == 'employee' &&
+                    {role == 'Employee' &&
                       <Col lg={4} sm={4} md={4} className="profile-image">
                         <Form.Group>
                           <Form.Label>Pan Card</Form.Label><br></br>
                           <Image
                             width={200}
-                            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                            src={imageThree}
                             alt='image'
                           />
                         </Form.Group>
