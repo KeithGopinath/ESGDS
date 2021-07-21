@@ -25,6 +25,7 @@ import ControversyPage from './containers/Controversy/ControversyPage';
 import PillarAssignment from './containers/PillarAssignment';
 import TaskList from './containers/TaskList';
 import Reports from './containers/Reports';
+import UploadData from './containers/UploadData';
 
 export const history = createBrowserHistory();
 
@@ -56,6 +57,7 @@ const Routes = () => (
         <Route path="/tasklist" component={TaskList} />
         <Route path="/reports" component={Reports} />
         <Route path="/pillarassignment" component={PillarAssignment} />
+        <Route path="/upload" component={UploadData} />
       </Switch>
     </React.Fragment>
   </Router >
