@@ -26,7 +26,7 @@ const ForgotPassword = ({
 
     const Redirect = () => (
         <p className="text-secondary w-100 text-center">Or return to
-            <span className="text-primary btn otp-resend" onClick={handleClose}>Log In</span>
+            <span className="text-primary btn forgot-password-resend" onClick={handleClose}>Log In</span>
         </p>);
 
     return (

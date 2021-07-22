@@ -27,7 +27,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 9 :
       userRole == 'GroupAdmin' ? val.id == 0 || val.id == 6 || val.id == 7 || val.id == 8 || val.id == 9 || val.id == 4 :
         userRole == 'Company Representative' || userRole == 'Client Representative' ? val.id == 4 || val.id == 9 :
-          userRole == 'SuperAdmin' ? val.id !== 4 :
+          userRole == 'SuperAdmin' ? val.id !== 4 && val.id !== 9 :
             val.id == 0 || val.id == 4))
     .map((data) => ({
       id: data.id,
