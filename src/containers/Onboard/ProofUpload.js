@@ -70,9 +70,15 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
   // save and continue
   const goToLoginCredentials = () => {
     if (role === 'client' || role === 'company') {
-      if (!fileName || !empID) {
+      if (!fileName && !empID) {
         message.error('Should upload all files');
         setAuthValidate(true);
+        setIdProofValidate(true);
+      } else if (!fileName) {
+        message.error('Should upload all files');
+        setAuthValidate(true);
+      } else if (!empID) {
+        message.error('Should upload all files');
         setIdProofValidate(true);
       } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728)) {
         message.error('File size should not be more than 3 MB');
@@ -93,11 +99,20 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         setActiveStep(activeStep + 1);
       }
     } else if (role === 'employee') {
-      if (!fileName || !empID || !cancelledCheque) {
+      if (!fileName && !empID && !cancelledCheque) {
         message.error('Should upload all files');
         setAuthValidate(true);
         setIdProofValidate(true);
         setChequeValidate(true);
+      } else if (!fileName) {
+        message.error('Should upload all files');
+        setAuthValidate(true);
+      } else if (!cancelledCheque) {
+        message.error('Should upload all files');
+        setChequeValidate(true);
+      } else if (!empID) {
+        message.error('Should upload all files');
+        setIdProofValidate(true);
       } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728) && (cancelledCheque && fileSize.cancelCheque > 3145728)) {
         message.error('File size should not be more than 3 MB');
         setAuthValidate(true);
@@ -165,7 +180,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                     </OverlayTrigger>
                   </span>
                 </Form.Label>}
-                {role === 'employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">*</sup>
+                {role === 'employee' && <Form.Label>Upload your Pan Card <sup className="text-danger">* </sup>
                   <span>
                     <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                       <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
@@ -185,21 +200,21 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
             </Col>
             <Col sm={6} md={6} lg={6}>
               <Form.Group>
-                {role === 'company' && <Form.Label className="company-proof-upload">Upload your employee ID proof <sup className="text-danger">*</sup>
+                {role === 'company' && <Form.Label className="company-proof-upload">Upload your employee ID proof <sup className="text-danger">* </sup>
                   <span>
                     <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                       <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                     </OverlayTrigger>
                   </span>
                 </Form.Label>}
-                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof <sup className="text-danger">*</sup>
+                {role === 'client' && <Form.Label className="client-proof-upload">Upload your company ID proof <sup className="text-danger">* </sup>
                   <span>
                     <OverlayTrigger placement="top" overlay={renderTooltip} className="proof-upload-tooltip">
                       <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                     </OverlayTrigger>
                   </span>
                 </Form.Label>}
-                {role === 'employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">*</sup>
+                {role === 'employee' && <Form.Label>Upload your Aadhar <sup className="text-danger">* </sup>
                   <span>
                     <OverlayTrigger placement="right-start" overlay={renderTooltip} className="proof-upload-tooltip">
                       <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />

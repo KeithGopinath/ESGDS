@@ -89,14 +89,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const onPancardNoChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-      setPancardNumber(e.target.value.toUpperCase());
+        setPancardNumber(e.target.value.toUpperCase());
       onPancard(e.target.value.toUpperCase());
     }
   };
 
   const onAadharNoChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
-      setAdharCard(e.target.value);
+        setAdharCard(e.target.value);
       onAadhar(e.target.value);
     }
   };
@@ -114,14 +114,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const onAccountNumberChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
-      setBankAccountNumber(e.target.value);
+        setBankAccountNumber(e.target.value);
       onBankAccount(e.target.value);
     }
   };
 
   const onBankIfscChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-      setBankIFSCCode(e.target.value.toUpperCase());
+        setBankIFSCCode(e.target.value.toUpperCase());
       onBankIfsc(e.target.value.toUpperCase());
     }
   };
@@ -132,6 +132,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       Pancard number format RAJES9876H
     </Tooltip>
   );
+
+// ifsc tooltip
+  const ifscTooltip = (props) => (
+    <Tooltip className="password-tooltip" {...props}>
+      IFSC code format SBIN0001111
+    </Tooltip>
+  );
+
   // save & continue button
   const gotoProofUpload = () => {
     const valid = validatingSpaces(email);
@@ -146,13 +154,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
         message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (phoneNumber && !re.test(phoneNumber)) {
-        message.error('Please enter correct mobile number');
-        setValidate('border-danger');
+        message.error('Please enter valid mobile number');
+        setValidate("mobile");
       } else if (!companyName) {
         setValidate(true);
         message.error('Please choose company name');
       } else if ((firstName.length && phoneNumber.length && (companyName.length || companyName.value.length)) > 0) {
         nextStep();
+        setValidate('');
         setActiveStep(activeStep + 1);
       }
     }
@@ -179,7 +188,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
         message.error('IFSC code has 11 characters');
         setValidate('ifsc');
       } else if(bankIFSCCode && !ifscCode.test(bankIFSCCode)) { 
-        message.error('Please enter proper iFSC code');
+        message.error('Please enter proper IFSC code');
         setValidate('ifsc');
       } else {
         nextStep();
@@ -285,6 +294,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   name="phone"
                   id="phone"
                   value={phoneNumber}
+                  maxLength={10}
                   placeholder="Enter your valid phone number"
                   onChange={onPhoneChange}
                   disabled={flag}
@@ -295,7 +305,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
                   <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
-                  <div className={(companyName && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
+                  <div className={((!companyName || companyName) && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
                     {flag ?
                       <React.Fragment>
                         {role === 'company' ?
@@ -328,9 +338,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <React.Fragment>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Pan Card Number <sup className="text-danger">*</sup>
+                    <Form.Label>Pan Card Number <sup className="text-danger">* </sup>
                       {!flag ? <span>
-                        <OverlayTrigger placement="auto-end" overlay={renderTooltip} className="password-tooltip">
+                        <OverlayTrigger placement="right" overlay={renderTooltip} className="password-tooltip">
                           <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                         </OverlayTrigger>
                       </span> : ''}
@@ -396,9 +406,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Bank IFSC <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Bank IFSC <sup className="text-danger">* </sup>{!flag ? <span>
+                        <OverlayTrigger placement="right" overlay={ifscTooltip} className="password-tooltip">
+                          <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                        </OverlayTrigger>
+                      </span> : ''}</Form.Label>
                     <Form.Control
-                      className={!bankIFSCCode && validate || bankIFSCCode && validate ? 'border-danger': ''}
+                      className={!bankIFSCCode && validate || bankIFSCCode && validate==='ifsc' ? 'border-danger': ''}
                       type="text"
                       name="bankIFSC"
                       id="bankIFSC"
