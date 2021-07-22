@@ -36,7 +36,7 @@ const ButtonList = [
     id: 10, label: 'Reports', icon: faChartBar, address: 'reports',
   },
   {
-    id: 11, label: 'Upload Data', icon: faUpload, address: 'upload',
+    id: 11, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
   },
 ];
 
