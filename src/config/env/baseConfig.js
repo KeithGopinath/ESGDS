@@ -31,8 +31,9 @@ export default {
     onSelectpillar: 'taskAssignments/getAllAssignedUsers',
     pillarAssignment: 'user_pillar_assignments/create',
     taxonomyCompanies: 'companies/all/unassigned',
-    createTask: 'taskAssignments',
     uploadCompanies: 'companies/upload-companies-file',
+    createTask: 'taskAssignments/create',
+    getTaskList: 'taskAssignments',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

@@ -34,6 +34,13 @@ const GroupView = () => {
   
   dispatch({ type: 'GROUPLIST_REQUEST' });
  },[]);
+ const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
+ const grpDtetail = isGroupByid && isGroupByid.data;
+ useEffect(()=>{
+if(grpDtetail){
+  history.push("/group-assignment");
+}
+ },[grpDtetail])
  const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
  const groupList = isGroupCreated && isGroupCreated.rows;
   const groupCount = groupList && groupList.length;
@@ -51,6 +58,9 @@ const GroupView = () => {
     setSearchQuery(searchData);
 
   };
+  const onhandlegrpid = (grpid) => {
+    dispatch({ type: 'GROUPBYID_REQUEST', groupid: grpid });
+  };
   const onhandeleGrpPage = () => {
     history.push("/group-assignment");
   }
@@ -67,7 +77,7 @@ const GroupView = () => {
   const totalCount = Math.ceil(calculateCount);
   const batchlist = groupList && (searchQuery ? searchfilter(searchQuery, groupList) : groupList).slice(min, max).map(({ _id, groupName, assignBatch }) => (
     <Col lg={3} md={6} key={_id}>
-      <Card className="batch-card batchbox">
+      <Card className="batch-card batchbox" onClick={()=>{onhandlegrpid(_id)}}>
         <ListItemText primary={groupName} secondary={`batches(${assignBatch.length})`} />
       </Card>
     </Col>

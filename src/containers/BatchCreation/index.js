@@ -186,7 +186,7 @@ const BatchCreation = ({ show, setShow }) => {
   const BatchBody = () => (
     <div className="modal-batch-body">
       <Row>
-        <Col lg={6} sm={12}>
+        <Col lg={6} sm={12} style={{ paddingRight: '0px' }}>
           {/* <div className="batch-detail">
             <div >Batch Details</div>
           </div> */}
@@ -219,7 +219,7 @@ const BatchCreation = ({ show, setShow }) => {
             />
           </div> */}
         </Col>
-        <Col lg={6} sm={12}>
+        <Col lg={6} sm={12} style={{ paddingLeft: '0px' }}>
           <div className="batch-create-companies">
             <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
               <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
