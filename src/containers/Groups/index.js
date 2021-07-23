@@ -22,6 +22,7 @@ const Groups = () => {
   const [current, setCurrent] = React.useState(0);
   const [assignment, setassignment] = useState(null);
   const [grpNamedisplay, setgrpName]= useState(null);
+  const [result, setresult]=useState('');
   // create group states
   const [creategrpName, setcreateGrpName] = useState('');
   const [creategrpAdmin, setcreateGrpAdmin] = useState('');
@@ -60,18 +61,19 @@ const Groups = () => {
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
   },[])
   const isGroupCreated = useSelector((creategroup) => creategroup.creategroup.grouppost);
-  useEffect(() => {
-    if (isGroupCreated && userData) {
-      message.success(isGroupCreated.message);
-      setCurrent(current + 1);
-    }
-  }, [isGroupCreated]);
+ 
   const batchData = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.unassignedbatchdata);
   const batchAssignment = batchData && batchData.rows;
   
   const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
   const isData = userData && userData.data;
- 
+  useEffect(() => {
+    if (isGroupCreated) {
+      message.success(isGroupCreated.message);
+      setCurrent(current + 1);
+    }
+    
+  }, [isGroupCreated]);
   const grpAdminlist = [];
   const userList = [];
   isData && isData.map((e)=>{
@@ -122,15 +124,26 @@ const Groups = () => {
   const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
       setassignment(finalArr);
       dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
+      const payload = { 
+        filters: [
+          { filterWith: "isUserApproved", value: true },
+          { filterWith: "isAssignedToGroup", value: false },
+          { filterWith: "isRoleAssigned", value: true },
+          { filterWith: "isUserActive", value: true }
+          
+        ] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+      setresult('Group has been created with batches');
     }
     else{
+      setresult('Group has been created without batches');
       const finalArr = creategrplist && { grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: [] };
       
       dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
       const payload = { 
         filters: [
           { filterWith: "isUserApproved", value: true },
-          // { filterWith: "isAssignedToGroup", value: false },
+          { filterWith: "isAssignedToGroup", value: false },
           { filterWith: "isRoleAssigned", value: true },
           { filterWith: "isUserActive", value: true }
           
@@ -147,14 +160,14 @@ const Groups = () => {
     setCurrent(current - 1);
   };
   const onHandledone = () => {
-    
+    dispatch({type:"GROUP_RESET"});
     setcreateGrpAdmin('');
     setcreateGrpName('');
     setuserTargetKeys([]);
     setgrpName(null);
     setTargetKeys([]);
    setisdisableduser(true);
-   setCurrent(0);
+  setCurrent(0);
   }
  
 
@@ -189,7 +202,7 @@ const onChangeTransfer = (newTargetKeys) => {
         setcreateGrpList(grpDetails);
         setgrpName(creategrpName);
         // setGrpCount(grplist.length + 1);
-        message.success('Group created sucessfully');
+  
         setCurrent(current + 1);
         dispatch({ type: 'UNASSIGNEDBATCH_REQUEST' });
        
@@ -274,7 +287,7 @@ const onChangeTransfer = (newTargetKeys) => {
     {
       dataIndex: 'SecRole',
       title: 'Roles',
-      render: (Roles) => Roles.role.map((e) => (<Tag color={(e.label === Roles.primary)?"blue":"cyan"}>{e.label}</Tag>)),
+      render: (Roles) => Roles.role.map((e) => (<Tag color={(e.label === Roles.primary)?"cyan":"blue"} style={{margin:'0.2rem'}}>{e.label}</Tag>)),
     },
   ];
   const rightTableColumns = [
@@ -403,7 +416,7 @@ const onChangeTransfer = (newTargetKeys) => {
           <div className="group-content">Add members to your group <span className="mandatory-color">*</span></div>
           <div className="add-batches">
             <TableTransfer
-              dataSource={mockData.filter((e)=>( creategrpAdmin.label !== e.title))}
+              dataSource={mockData.filter((e)=>( creategrpAdmin.value !== e.key))}
               targetKeys={usertargetKeys}
               disabled={isdisableduser}
               onChange={onChangeTransfer}
@@ -443,7 +456,7 @@ const onChangeTransfer = (newTargetKeys) => {
     <div className="status-assign">
       <Result
         status="success"
-        title="Assigned Successfully!"
+        title= {result}
       />
     </div>
   );
@@ -458,7 +471,7 @@ const onChangeTransfer = (newTargetKeys) => {
               <Card className="grp-pad">
                 <Container>
                   <Row>
-                    <Col lg={2} sm={12}>
+                    <Col lg={3} sm={12}>
                       { grpNamedisplay && 
                       <div className="display-grpname"> 
                         <Tag className="grpname-prop" icon={<IdcardFilled />} >
@@ -474,7 +487,7 @@ const onChangeTransfer = (newTargetKeys) => {
                         </Steps>
                       </div>
                     </Col>
-                    <Col lg={10} sm={12} className="assignment-box">
+                    <Col lg={9} sm={12} className="assignment-box">
                       <Row>
                         <Col lg={12} sm={12} >
                           {current ===0 && GroupCreation()}
@@ -497,7 +510,7 @@ const onChangeTransfer = (newTargetKeys) => {
                             )}
                             {current === 1 && (
                               <Button type="primary" onClick={() => next()}>
-                                Next
+                                Submit
                               </Button>
                             )}
                             {current === 2 && (

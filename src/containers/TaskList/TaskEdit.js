@@ -16,6 +16,7 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
     setrowValue('');
   };
   const baseFormat="DD-MM-YYYY";
+  console.log(rowValue.analystSla,'rowValue.analystSla');
   const editBody = () => (
     <React.Fragment>
       <Row>
@@ -36,8 +37,8 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
                     <DatePicker
                         className="date-picker"
                         size="middle"
-                        format="YYYY-MM-DD"
-                        defaultValue={moment(rowValue.analystSla, baseFormat)}
+                        format="DD-MM-YYYY"
+                        defaultValue={moment(rowValue.analystSLA, baseFormat)}
                     />
                 </div>
             </div>
@@ -61,8 +62,8 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
                     <DatePicker
                         className="date-picker"
                         size="middle"
-                        format="YYYY-MM-DD"
-                        defaultValue={moment(rowValue.qaSla, baseFormat)}
+                        format="DD-MM-YYYY"
+                        defaultValue={moment(rowValue.qaSLA, baseFormat)}
                     />
                 </div>
           </div>
@@ -86,7 +87,7 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
       animation
       centered
       size="lg"
-      title={`Task id : ${rowValue.taskid}`}
+      title={rowValue.taskNumber}
       body={editBody()}
       // onSubmitPrimary={onCreatebBatch}
       footer={editFooter()}
