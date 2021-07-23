@@ -4,62 +4,167 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { DatePicker, Upload, Button as AntButton, Radio } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import Select from 'react-select';
-// import Select from 'react-select';
 import moment from 'moment';
+
+const uploadPDFCheck = () => false;
+
 const sourceTypeData = [
-  { sourceTypeName: 'Annual Report', isMultiyear: false, IsMultisource: false },
-  { sourceTypeName: 'Integrated Report', isMultiyear: false, IsMultisource: false },
-  { sourceTypeName: 'Sustainability Report', isMultiyear: false, IsMultisource: false },
   {
-    sourceTypeName: 'Policy documents',
-    isMultiyear: true,
-    IsMultisource: true,
+    value: '60f9268d290387754929342b',
+    label: 'Annual Report',
+    isMultiYear: false,
+    isMultiSource: false,
+    subSourceTypes: [],
+  },
+  {
+    value: '60f926a1290387754929342c',
+    label: 'Integrated Report',
+    isMultiYear: false,
+    isMultiSource: false,
+    subSourceTypes: [],
+  },
+  {
+    value: '60f926b6290387754929342d',
+    label: 'Sustainability Report',
+    isMultiYear: false,
+    isMultiSource: false,
+    subSourceTypes: [],
+  },
+  {
+    value: '60f926d3290387754929342e',
+    label: 'Policy documents',
+    isMultiYear: true,
+    isMultiSource: true,
     subSourceTypes: [
-      'Health and Safety Policy',
-      'Environment Policy',
-      'Modern Slavery Statement',
-      'Code of conduct/Code of Ethics',
-      'Supplier Code of conduct',
-      'Whistleblower',
-      'Corporate Governance Guidelines/Report',
-      'Others',
+      {
+        value: '60f927ca2903877549293436',
+        label: 'Health and Safety Policy',
+      },
+      {
+        value: '60f928172903877549293437',
+        label: 'Environment Policy',
+      },
+      {
+        value: '60f928222903877549293438',
+        label: 'Modern Slavery Statement',
+      },
+      {
+        value: '60f928312903877549293439',
+        label: 'Code of conduct/Code of Ethics',
+      },
+      {
+        value: '60f9283f290387754929343a',
+        label: 'Supplier Code of conduct',
+      },
+      {
+        value: '60f92855290387754929343b',
+        label: 'Whistleblower',
+      },
+      {
+        value: '60f92863290387754929343c',
+        label: 'Corporate Governance Guidelines/Report',
+      },
+      {
+        value: '60f92871290387754929343d',
+        label: 'Others',
+      },
     ],
   },
   {
-    sourceTypeName: 'Webpages',
-    isMultiyear: true,
-    IsMultisource: true,
-    subSourceTypes: ['Others'],
+    value: '60f926f2290387754929342f',
+    label: 'Webpages',
+    isMultiYear: true,
+    isMultiSource: true,
+    subSourceTypes: [
+      {
+        value: '60f92871290387754929343d',
+        label: 'Others',
+      },
+    ],
   },
   {
-    sourceTypeName: 'News', isMultiyear: false, IsMultisource: true, subSourceTypes: ['Others'],
+    value: '60f9270d2903877549293430',
+    label: 'News',
+    isMultiYear: false,
+    isMultiSource: true,
+    subSourceTypes: [
+      {
+        value: '60f92871290387754929343d',
+        label: 'Others',
+      },
+    ],
   },
   {
-    sourceTypeName: 'Press release', isMultiyear: true, IsMultisource: true, subSourceTypes: ['Others'],
+    value: '60f927342903877549293431',
+    label: 'Press release',
+    isMultiYear: true,
+    isMultiSource: true,
+    subSourceTypes: [
+      {
+        value: '60f92871290387754929343d',
+        label: 'Others',
+      },
+    ],
   },
   {
-    sourceTypeName: 'Meeting Notice & Vote results', isMultiyear: false, IsMultisource: true, subSourceTypes: ['Others'],
+    value: '60f9274c2903877549293432',
+    label: 'Meeting Notice & Vote results',
+    isMultiYear: false,
+    isMultiSource: true,
+    subSourceTypes: [
+      {
+        value: '60f92871290387754929343d',
+        label: 'Others',
+      },
+    ],
   },
   {
-    sourceTypeName: 'Others', isMultiyear: 'true/false', IsMultisource: false,
+    value: '60f927632903877549293435',
+    label: 'Others',
+    isMultiYear: false,
+    isMultiSource: false,
+    subSourceTypes: [],
   },
 ];
-const uploadPDFCheck = () => false;
+// Field Wrapper ::
+// A function which wraps the fields with bootstrap's row and col tags
+
+const FieldWrapper = (props) => {
+  if (props.visible) {
+    return (
+      <Col lg={12}>
+        <Form.Group as={Row} >
+          <Form.Label column sm={12}>
+            {props.label}
+          </Form.Label>
+          <Col sm={12}>
+            {props.body}
+          </Col>
+        </Form.Group>
+      </Col>
+    );
+  }
+  return null;
+};
+
 const AddSource = (props) => {
   // CONTROLLED STATES
   const [currentSourceType, setCurrentSourceType] = useState(null);
   const [currentSubSourceType, setCurrentSubSourceType] = useState(null);
   const [sourceName, setSourceName] = useState('');
-  const [isMultiyear, setIsMultiyear] = useState(false);
+  const [isMultiYear, setIsMultiYear] = useState(false);
+  const [isMultiSource, setIsMultiSource] = useState(false);
   const [sourceURL, setSourceURL] = useState('');
   const [publicationDate, setPublicationDate] = useState(null);
   const [sourcePDF, setSourcePDF] = useState(null);
 
+  // STATE FOR ERRORS
   const [errors, setErrors] = useState({
     sourceType: null,
     subSourceType: null,
     sourceName: null,
-    isMultiyear: null,
+    isMultiYear: null,
+    isMultiSource: null,
     sourceURL: null,
     publicationDate: null,
     sourcePDF: null,
@@ -74,26 +179,26 @@ const AddSource = (props) => {
     setSourceURL('');
     setPublicationDate(null);
     setSourcePDF(null);
+    setErrors({
+      sourceType: null,
+      subSourceType: null,
+      sourceName: null,
+      isMultiYear: null,
+      isMultiSource: null,
+      sourceURL: null,
+      publicationDate: null,
+      sourcePDF: null,
+    });
   };
 
   const onChangeSourceType = (event) => {
-    setCurrentSourceType(event.currentTarget.value);
-    console.log(event.currentTarget.value.value.isMultiyear);
-    setIsMultiyear(event.currentTarget.value.value.isMultiyear);
-    if (event.currentTarget.value.label !== 'Others') {
-      setSourceName(event.currentTarget.value.label);
-    } else {
-      setSourceName('');
-    }
+    setCurrentSourceType(event);
+    setIsMultiYear(event.isMultiYear);
+    setIsMultiSource(event.isMultiSource);
   };
 
   const onChangeSubSourceType = (event) => {
-    setCurrentSubSourceType(event.currentTarget.value);
-    if (event.currentTarget.value.label !== 'Others') {
-      setSourceName(event.currentTarget.value.label);
-    } else {
-      setSourceName('');
-    }
+    setCurrentSubSourceType(event);
   };
 
   const onChangeSourceName = (event) => {
@@ -101,7 +206,11 @@ const AddSource = (props) => {
   };
 
   const onChangeIsMultiyear = (event) => {
-    setIsMultiyear(event.target.value);
+    setIsMultiYear(event.target.value);
+  };
+
+  const onChangeIsMultiSource = (event) => {
+    setIsMultiSource(event.target.value);
   };
 
   const onChangeSourceURL = (event) => {
@@ -109,7 +218,7 @@ const AddSource = (props) => {
   };
 
   const onChangePublicationDate = (event) => {
-    setPublicationDate(event.currentTarget.value);
+    setPublicationDate(event);
   };
 
   const onChangeSourcePDFUpload = (event) => {
@@ -120,7 +229,8 @@ const AddSource = (props) => {
     const sourceTypeCheck = (currentSourceType !== null);
     const subSourceTypeCheck = (currentSubSourceType !== null);
     const sourceNameCheck = (sourceName.length > 0);
-    const isMultiyearCheck = (isMultiyear === true || isMultiyear === false);
+    const isMultiYearCheck = (isMultiYear === true || isMultiYear === false);
+    const isMultiSourceCheck = (isMultiSource === true || isMultiSource === false);
     const sourceURLCheck = (sourceURL.length > 0);
     const publicationDateCheck = (publicationDate !== null);
     const sourcePDFCheck = (sourcePDF !== null);
@@ -128,7 +238,8 @@ const AddSource = (props) => {
       sourceType: !sourceTypeCheck,
       subSourceType: !subSourceTypeCheck,
       sourceName: !sourceNameCheck,
-      isMultiyear: !isMultiyearCheck,
+      isMultiYear: !isMultiYearCheck,
+      isMultiSource: !isMultiSourceCheck,
       sourceURL: !sourceURLCheck,
       publicationDate: !publicationDateCheck,
       sourcePDF: !sourcePDFCheck,
@@ -136,14 +247,14 @@ const AddSource = (props) => {
 
     if (currentSourceType) {
       if (currentSourceType.label === 'Others') {
-        if (sourceTypeCheck && sourceNameCheck && isMultiyearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+        if (sourceTypeCheck && sourceNameCheck && isMultiYearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
           return true;
         }
         return false;
       }
-      if (currentSourceType.value.IsMultisource && currentSubSourceType) {
+      if (currentSourceType.isMultiSource && currentSubSourceType) {
         if (currentSubSourceType.label === 'Others') {
-          if (sourceTypeCheck && subSourceTypeCheck && sourceNameCheck && isMultiyearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
+          if (sourceTypeCheck && subSourceTypeCheck && sourceNameCheck && isMultiYearCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
             return true;
           }
           return false;
@@ -155,7 +266,7 @@ const AddSource = (props) => {
           return false;
         }
       }
-      if (!currentSourceType.value.IsMultisource) {
+      if (!currentSourceType.isMultiSource) {
         if (sourceTypeCheck && sourceURLCheck && publicationDateCheck && sourcePDFCheck) {
           return true;
         }
@@ -164,11 +275,37 @@ const AddSource = (props) => {
     }
     return false;
   };
-  console.log(currentSourceType, currentSubSourceType, sourcePDF, sourceURL, sourceName, isMultiyear, publicationDate, errors);
   const onClickUpload = () => {
+    console.log({
+      data: {
+        currentSourceType,
+        isMultiYear,
+        isMultiSource,
+        currentSubSourceType,
+        sourceURL,
+        publicationDate,
+        sourcePDF,
+        sourceTypeName: currentSourceType && currentSourceType.label === 'Others' && sourceName,
+        subSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
+        errors,
+      },
+    });
     if (validate()) {
-      console.log(isMultiyear);
-      const newSourceName = !isMultiyear ? (`${sourceName} 2018-2019`) : sourceName;
+      console.log({
+        data: {
+          currentSourceType,
+          isMultiYear,
+          isMultiSource,
+          currentSubSourceType,
+          sourceURL,
+          publicationDate,
+          sourcePDF,
+          sourceTypeName: currentSourceType.label === 'Others' && sourceName,
+          subSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
+          errors,
+        },
+      });
+      const newSourceName = !isMultiYear ? (`${sourceName} 2018-2019`) : sourceName;
       const uploadSourceData = { sourceName: newSourceName, url: sourceURL, publicationDate };
       props.onUploadAddSource(uploadSourceData);
       props.closeAddSourcePanel();
@@ -177,58 +314,55 @@ const AddSource = (props) => {
 
   return (
     <Row>
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Source*
-          </Form.Label>
-          <Col sm={12}>
+
+      {/* SOURCE TYPE  */}
+      <FieldWrapper
+        visible
+        label="Source*"
+        body={
+          <React.Fragment>
             <Select
               name="sourceType"
-              // isDisabled={isFieldDisabled}
-              onChange={(e) => onChangeSourceType({ currentTarget: { name: 'sourceType', id: 'sourceType', value: e } })}
+              onChange={onChangeSourceType}
               value={currentSourceType}
-              // onChange={}
-              options={sourceTypeData.map((sourceType) => ({ label: sourceType.sourceTypeName, value: sourceType }))}
-              // isSearchable={}
-              // className={}
+              options={sourceTypeData.map((sourceType) => sourceType)}
+              isSearchable
               placeholder="Choose source type"
               maxLength={30}
             />
             {errors.sourceType && <small className="addsource-validate-text">*Required</small>}
-          </Col>
-        </Form.Group>
-      </Col>
-      { currentSourceType && currentSourceType.value.IsMultisource &&
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Sub Source Type*
-          </Form.Label>
-          <Col sm={12}>
+          </React.Fragment>
+        }
+      />
+
+      {/* SUB SOURCE TYPE */}
+      {currentSourceType && currentSourceType.isMultiSource && currentSourceType.isMultiSource !== 'true/false' &&
+      <FieldWrapper
+        visible
+        label="Sub Source Type*"
+        body={
+          <React.Fragment>
             <Select
               name="subSourceType"
-              // isDisabled={isFieldDisabled}
-              onChange={(e) => onChangeSubSourceType({ currentTarget: { name: 'subSourceType', id: 'subSourceType', value: e } })}
+              onChange={onChangeSubSourceType}
               value={currentSubSourceType}
-              // onChange={}
-              options={currentSourceType.value.subSourceTypes.map((sourceType) => ({ label: sourceType, value: sourceType }))}
-              // isSearchable={}
-              // className={}
+              options={currentSourceType.subSourceTypes.map((sourceType) => sourceType)}
+              isSearchable
               placeholder="Choose sub-source type"
               maxLength={30}
             />
             {errors.subSourceType && <small className="addsource-validate-text">*Required</small>}
-          </Col>
-        </Form.Group>
-      </Col> }
-      { ((currentSourceType && currentSourceType.label === 'Others') || (currentSubSourceType && currentSubSourceType.label === 'Others')) &&
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Name*
-          </Form.Label>
-          <Col sm={12}>
+          </React.Fragment>
+        }
+      />}
+
+      {/* SOURCE NAME */}
+      {((currentSourceType && currentSourceType.label === 'Others') || (currentSubSourceType && currentSubSourceType.label === 'Others')) &&
+      <FieldWrapper
+        visible
+        label="Name*"
+        body={
+          <React.Fragment>
             <Form.Control
               type="text"
               // id="response"
@@ -238,47 +372,63 @@ const AddSource = (props) => {
               placeholder="Enter Source Name"
             />
             {errors.sourceName && <small className="addsource-validate-text">*Should have atleast one character</small>}
-          </Col>
-        </Form.Group>
-      </Col> }
-      { currentSourceType && currentSourceType.label === 'Others' &&
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Is MultiYear*
-          </Form.Label>
-          <Col sm={12}>
-            <Radio.Group onChange={onChangeIsMultiyear} value={isMultiyear}>
+          </React.Fragment>
+        }
+      />}
+
+      {/* IS MULTIYEAR */}
+      {currentSourceType && currentSourceType.label === 'Others' &&
+      <FieldWrapper
+        visible
+        label="Is MultiYear*"
+        body={
+          <React.Fragment>
+            <Radio.Group onChange={onChangeIsMultiyear} value={isMultiYear}>
               <Radio value>Yes</Radio>
               <Radio value={false}>No</Radio>
             </Radio.Group>
-          </Col>
-        </Form.Group>
-      </Col> }
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Url*
-          </Form.Label>
-          <Col sm={12}>
+          </React.Fragment>
+        }
+      />}
+
+      {/* ISMULTISOURCE */}
+      {currentSourceType && currentSourceType.label === 'Others' &&
+      <FieldWrapper
+        visible
+        label="Is MultiSource*"
+        body={
+          <React.Fragment>
+            <Radio.Group onChange={onChangeIsMultiSource} value={isMultiSource}>
+              <Radio value>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </Radio.Group>
+          </React.Fragment>
+        }
+      />}
+
+      {/* SOURCE URL */}
+      <FieldWrapper
+        visible
+        label="Url*"
+        body={
+          <React.Fragment>
             <Form.Control
               type="text"
-              // id="response"
-              //   readOnly={historyDpCodeData && !historyEdit}
               onChange={onChangeSourceURL}
               value={sourceURL}
               placeholder="Enter Url"
             />
             {errors.sourceURL && <small className="addsource-validate-text">*Should have atleast one character</small>}
-          </Col>
-        </Form.Group>
-      </Col>
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Upload*
-          </Form.Label>
-          <Col sm={12}>
+          </React.Fragment>
+        }
+      />
+
+      {/* UPLOAD BUTTON */}
+      <FieldWrapper
+        visible
+        label="Upload*"
+        body={
+          <React.Fragment>
             <Upload style={{ width: '100%' }} multiple beforeUpload={uploadPDFCheck} onChange={onChangeSourcePDFUpload}>
               <AntButton
               // disabled={isFieldDisabled}
@@ -290,27 +440,26 @@ const AddSource = (props) => {
               </AntButton>
             </Upload>
             {errors.sourcePDF && <small className="addsource-validate-text">*Required</small>}
-          </Col>
-        </Form.Group>
-      </Col>
-      <Col lg={12}>
-        <Form.Group as={Row} >
-          <Form.Label column sm={12}>
-            Publication Date*
-          </Form.Label>
-          <Col sm={12}>
+          </React.Fragment>
+        }
+      />
+
+      {/* PUBLICATION DATE */}
+      <FieldWrapper
+        visible
+        label="Publication Date*"
+        body={
+          <React.Fragment>
             <DatePicker
               className="datapage-datepicker"
-              // id="publicationDate"
-              // disabled={historyDpCodeData && !historyEdit}
-              onChange={(e) => onChangePublicationDate({ currentTarget: { id: 'publicationDate', value: e } })}
+              onChange={onChangePublicationDate}
               value={publicationDate && moment(publicationDate)}
               size="large"
             />
             {errors.publicationDate && <small className="addsource-validate-text">*Required</small>}
-          </Col>
-        </Form.Group>
-      </Col>
+          </React.Fragment>
+        }
+      />
       <Col lg={12} className="datapage-horizontalLine"></Col>
       <Col lg={12} className="datapage-button-wrap">
         <Button variant="success" onClick={onClickUpload} type="submit">Upload</Button>
