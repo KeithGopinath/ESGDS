@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExclamationCircleTwoTone } from '@ant-design/icons';
@@ -50,16 +51,16 @@ const DataSheetMain = (props) => {
   console.log('////DATAPAGE INDEX PROPS', props);
 
   // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
-  const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData);
+  const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData || []);
 
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
-  const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData);
+  const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData || []);
 
   const reqCommentsList = reqDpCodeData.comments;
 
   useEffect(() => {
-    setReqCurrentData(reqDpCodeData.currentData);
-    setReqHistoricalData(reqDpCodeData.historicalData);
+    setReqCurrentData(reqDpCodeData.currentData || []);
+    setReqHistoricalData(reqDpCodeData.historicalData || []);
   }, [locationData]);
 
   const saveReqCurrentData = (data) => {
@@ -207,6 +208,11 @@ const DataSheetMain = (props) => {
 
 const DataPage = (props) => {
   // DISPATCH TO FETCH EACH DPCODE
+  const { dpCodeDetails, taskDetails } = props.location.state;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: 'DPCODEDATA_GET_REQUEST', taskId: taskDetails.taskId, dpCodeId: dpCodeDetails.dpCodeId });
+  }, [props.location]);
 
   const sideBarRef = useRef();
 
@@ -252,7 +258,7 @@ const DataPage = (props) => {
   // A * FUNCTION THAT TAKES defaultApiData AS PARAMS, AND ALSO GRABS VALUES SUCH AS taskID, dpCode FROM props.location.state,
   // AND BY HAVING ALL ABOVE DATA IT FILTER RETURNS reqDpcodeData, reqTask, reqIndexes.
   const getReqData = () => {
-    const { dpCodeDetails } = props.location.state;
+    // const { dpCodeDetails } = props.location.state;
     const reqTask = JSON.parse(sessionStorage.filteredData);
     const reqMaxIndex = reqTask.dpCodesData.length - 1;
     const reqMinIndex = 0; // CONSTANT
