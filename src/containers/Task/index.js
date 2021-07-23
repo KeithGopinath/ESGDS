@@ -10,12 +10,14 @@ import Select, { components } from 'react-select';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomTable from '../../components/CustomTable/index';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
 import AddNewBoardMember from './AddNewBoardMember';
-// import AddNewKMPMember from './AddNewKMPMember';
+import AddNewKMPMember from './AddNewKMPMember';
 
 
 const FieldWrapper = (props) => {
@@ -175,6 +177,8 @@ const Task = (props) => {
 
   const [isAddNewBoardVisible, setIsAddNewBoardVisible] = useState(false);
   const [isAddNewKMPVisible, setIsAddNewKMPVisible] = useState(false);
+  const [isTerminateBoardVisible, setIsTerminateBoardVisible] = useState(false);
+  const [isTerminateKmpVisible, setIsTerminateKmpVisible] = useState(false);
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
 
@@ -254,6 +258,7 @@ const Task = (props) => {
   };
 
   const reqTaskList = getReqTaskList();
+  const reqKeyIssuesList = dpCodeType === 'Standalone' && reqTaskData.keyIssuesList ? reqTaskData.keyIssuesList : [];
   const boardMembersList = dpCodeType === 'Board Matrix' && reqTaskData.boardMatrix ? (reqTaskData.boardMatrix.boardMemberList) : [];
   const kmpMembersList = dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix ? (reqTaskData.kmpMatrix.kmpMemberList) : [];
   const reqDpCodesData = getReqDpCodesList();
@@ -306,14 +311,20 @@ const Task = (props) => {
 
   const KMPMenuList = (e) => (
     <components.MenuList {...e}>
-      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewKMPVisible(true)}>Add New Member</Button></div>
+      <div>
+        <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewKMPVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
+        <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateKmpVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
+      </div>
       {e.children}
     </components.MenuList>
   );
 
   const BoardMemMenuList = (e) => (
     <components.MenuList {...e}>
-      <div><Button style={{ width: '100%' }} onClick={() => setIsAddNewBoardVisible(true)}>Add New Member</Button></div>
+      <div>
+        <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewBoardVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
+        <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateBoardVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
+      </div>
       {e.children}
     </components.MenuList>
   );
@@ -336,6 +347,8 @@ const Task = (props) => {
             </div>}
             <div className="task-keyissue">
               <Row>
+                {/* ONLY FOR STANDALONE */}
+                {dpCodeType === 'Standalone' &&
                 <FieldWrapper
                   label="Key Issues*"
                   visible
@@ -343,15 +356,16 @@ const Task = (props) => {
                     <Select
                       name="userRole"
                       onChange={onChangeKeyIssue}
-                      options={reqTASK.task && (reqTASK.task.keyIssuesList)}
+                      options={reqKeyIssuesList}
                       value={reqKeyIssue}
                       isSearchable
                       isClearable
                       maxLength={30}
                     />}
-                />
+                />}
+
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Board Matrix' && boardMembersList.length > 0 &&
+                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Board Matrix' &&
                 <FieldWrapper
                   label="Board Members*"
                   visible
@@ -368,7 +382,7 @@ const Task = (props) => {
                     />}
                 />}
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
-                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Kmp Matrix' && kmpMembersList.length > 0 &&
+                { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Kmp Matrix' &&
                 <FieldWrapper
                   label="KMP*"
                   visible
@@ -396,12 +410,21 @@ const Task = (props) => {
             </Col>
 
             <Modal title="Add New Board Member" width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
-              {isAddNewBoardVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
+              {isAddNewBoardVisible && false && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
+              {isAddNewBoardVisible && <AddNewKMPMember modalType="AddNewBoardType" closeModal={() => setIsAddNewBoardVisible(false)} />}
             </Modal>
 
             <Modal title="Add New Kmp Member" width="80%" visible={isAddNewKMPVisible} footer={null} onCancel={() => setIsAddNewKMPVisible(false)}>
-              {/* <AddNewKMPMember /> */}
-              {isAddNewKMPVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="kmpMatrix" onCloseAddNewMemberModal={() => setIsAddNewKMPVisible(false)} />}
+              {isAddNewKMPVisible && <AddNewKMPMember modalType="AddNewKmpType" closeModal={() => setIsAddNewKMPVisible(false)} />}
+              {/* {isAddNewKMPVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="kmpMatrix" onCloseAddNewMemberModal={() => setIsAddNewKMPVisible(false)} />} */}
+            </Modal>
+
+            <Modal title="terminate Board Member" width="80%" visible={isTerminateBoardVisible} footer={null} onCancel={() => setIsTerminateBoardVisible(false)}>
+              {isTerminateBoardVisible && <AddNewKMPMember modalType="TerminateBoardType" closeModal={() => setIsTerminateBoardVisible(false)} />}
+            </Modal>
+
+            <Modal title="Terminate Kmp Member" width="80%" visible={isTerminateKmpVisible} footer={null} onCancel={() => setIsTerminateKmpVisible(false)}>
+              {isTerminateKmpVisible && <AddNewKMPMember modalType="TerminateKmpType" closeModal={() => setIsTerminateKmpVisible(false)} />}
             </Modal>
           </div>
         </div>

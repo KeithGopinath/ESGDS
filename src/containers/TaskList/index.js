@@ -1,15 +1,16 @@
 /* eslint-disable */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faDownload, faBackward } from '@fortawesome/free-solid-svg-icons';
 import { Col, Row, Card } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
 import XLSX from "xlsx";
 import { history } from './../../routes';
-
+import moment from 'moment';
 const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
@@ -174,7 +175,7 @@ const TaskList = (props) => {
           qa: 'Rajesh',
           qaSla: '20-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
         {
           taskid: 'task003',
@@ -186,7 +187,7 @@ const TaskList = (props) => {
           qa: 'Tom',
           qaSla: '15-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
         {
           taskid: 'task004',
@@ -198,7 +199,7 @@ const TaskList = (props) => {
           qa: 'Jerin',
           qaSla: '15-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
       ]
     },
@@ -216,7 +217,7 @@ const TaskList = (props) => {
           qa: 'Rajesh',
           qaSla: '20-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
         {
           taskid: 'task003',
@@ -228,7 +229,7 @@ const TaskList = (props) => {
           qa: 'Tom',
           qaSla: '15-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
       ]
     },
@@ -246,7 +247,7 @@ const TaskList = (props) => {
           qa: 'Rajesh',
           qaSla: '20-07-2021',
           stage: 'Yet To Start',
-          status:'Breached',
+          status: 'Breached',
         },
         {
           taskid: 'task003',
@@ -258,7 +259,7 @@ const TaskList = (props) => {
           qa: 'Gopi',
           qaSla: '15-07-2021',
           stage: 'Yet To Start',
-          status:'Breached',
+          status: 'Breached',
         },
         {
           taskid: 'task004',
@@ -270,7 +271,7 @@ const TaskList = (props) => {
           qa: 'Jerin',
           qaSla: '15-07-2021',
           stage: 'Yet To Start',
-          status:'OnTrack',
+          status: 'OnTrack',
         },
       ]
     },
@@ -298,52 +299,16 @@ const TaskList = (props) => {
     setrowValue(arg);
     setShow(true);
   };
-  const data = [
-    {
-      taskid: 'task001',
-      group: 'first group',
-      batch: 'Batch1',
-      company: 'Ambuja',
-      pillar: 'Environment',
-      analyst: 'Balaji',
-      analystSla: '10-07-2021',
-      qa: 'Praveen',
-      qaSla: '12-07-2021',
-    },
-    {
-      taskid: 'task002',
-      group: 'first group',
-      batch: 'Batch2',
-      company: 'Oil and Gas',
-      pillar: 'Social',
-      analyst: 'Jerin',
-      analystSla: '15-07-2021',
-      qa: 'Rajesh',
-      qaSla: '20-07-2021',
-    },
-    {
-      taskid: 'task003',
-      group: 'second group',
-      batch: 'Batch3',
-      company: 'Bank of baroda',
-      pillar: 'Governance',
-      analyst: 'Gopi',
-      analystSla: '13-07-2021',
-      qa: 'Tom',
-      qaSla: '15-07-2021',
-    },
-    {
-      taskid: 'task004',
-      group: 'third group',
-      batch: 'batch1',
-      company: 'Ambuja',
-      pillar: 'Social',
-      analyst: 'Sam',
-      analystSla: '16-07-2021',
-      qa: 'George',
-      qaSla: '22-07-2021',
-    },
-  ];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: "GETTASKLIST_REQUEST" });
+  }, [])
+
+  const isData = useSelector((tasklist) => tasklist.taskList.data);
+  const isList = isData && isData.data.rows;
+  console.log(isData, 'tasklist');
+  console.log(isList, 'isList');
+
   const totalTaskList = (props) => {
     const tableRowData = (obj) => companyName ?
       obj.map((e) => ({
@@ -351,12 +316,12 @@ const TaskList = (props) => {
         group: e.group,
         batch: e.batch,
         pillar: e.pillar,
-        analyst: e.status==='Breached'? <td className="text-danger text-center">{e.analyst}</td> : <td className="text-success text-center">{e.analyst}</td>,
+        analyst: e.status === 'Breached' ? <td className="text-danger text-center">{e.analyst}</td> : <td className="text-success text-center">{e.analyst}</td>,
         analystStatus: e.analystSla,
-        qa: e.status==='Breached'? <td className="text-danger text-center">{e.qa}</td> : <td className="text-success text-center">{e.qa}</td>,
+        qa: e.status === 'Breached' ? <td className="text-danger text-center">{e.qa}</td> : <td className="text-success text-center">{e.qa}</td>,
         qaStatus: e.qaSla,
-        stage:e.stage,
-        status: e.status==='Breached'? <td className="text-danger text-center">{e.status}</td> : <td className="text-success text-center">{e.status}</td>,
+        stage: e.stage,
+        status: e.status === 'Breached' ? <td className="text-danger text-center">{e.status}</td> : <td className="text-success text-center">{e.status}</td>,
       }))
       :
       obj.map((e) => ({
@@ -366,9 +331,9 @@ const TaskList = (props) => {
         company: e.company,
         pillar: e.pillar,
         analyst: e.analyst,
-        analystSla: e.analystSla,
+        analystSla: moment(e.analystSLA).format('DD-MM-YYYY'),
         qa: e.qa,
-        qaSla: e.qaSla,
+        qaSla: moment(e.qaSLA).format('DD-MM-YYYY'),
         action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
       }));
 
@@ -436,70 +401,70 @@ const TaskList = (props) => {
           dataType: 'string',
         },
       ] : [
-          {
-            id: 'taskid',
-            align: 'center',
-            label: 'Task Id',
-            dataType: 'string',
-          },
-          {
-            id: 'group',
-            align: 'center',
-            label: 'Group',
-            dataType: 'string',
-          },
-          {
-            id: 'batch',
-            align: 'center',
-            label: 'Batch',
-            dataType: 'string',
-          },
-          {
-            id: 'company',
-            align: 'center',
-            label: 'Company',
-            dataType: 'string',
-          },
-          {
-            id: 'pillar',
-            align: 'center',
-            label: 'Pillar',
-            dataType: 'string',
-          },
-          {
-            id: 'analyst',
-            align: 'center',
-            label: 'Analyst',
-            dataType: 'string',
-          },
-          {
-            id: 'analystSla',
-            align: 'center',
-            label: 'Sla Date',
-            dataType: 'string',
-          },
-          {
-            id: 'qa',
-            align: 'center',
-            label: 'QA',
-            dataType: 'string',
-          },
-          {
-            id: 'qaSla',
-            align: 'center',
-            label: 'Sla Date',
-            dataType: 'string',
-          },
-          {
-            id: 'action',
-            align: 'center',
-            label: 'Action',
-            dataType: 'element',
-          },
-        ],
-      tableLabel: <span>{taxonomyName && companyName ? <span>{taxonomyName} 
-      <FontAwesomeIcon className="reports-download-icon ml-2" size="md" icon={faDownload} onClick={downloadReports} />
-       </span> : 'Tasks'}</span>,
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task Id',
+          dataType: 'string',
+        },
+        {
+          id: 'group',
+          align: 'center',
+          label: 'Group',
+          dataType: 'string',
+        },
+        {
+          id: 'batch',
+          align: 'center',
+          label: 'Batch',
+          dataType: 'string',
+        },
+        {
+          id: 'company',
+          align: 'center',
+          label: 'Company',
+          dataType: 'string',
+        },
+        {
+          id: 'pillar',
+          align: 'center',
+          label: 'Pillar',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'analystSla',
+          align: 'center',
+          label: 'Sla Date',
+          dataType: 'string',
+        },
+        {
+          id: 'qa',
+          align: 'center',
+          label: 'QA',
+          dataType: 'string',
+        },
+        {
+          id: 'qaSla',
+          align: 'center',
+          label: 'Sla Date',
+          dataType: 'string',
+        },
+        {
+          id: 'action',
+          align: 'center',
+          label: 'Action',
+          dataType: 'element',
+        },
+      ],
+      tableLabel: <span>{taxonomyName && companyName ? <span>{taxonomyName}
+        <FontAwesomeIcon className="reports-download-icon ml-2" size="md" icon={faDownload} onClick={downloadReports} />
+      </span> : 'Tasks'}</span>,
     };
   };
 
@@ -507,22 +472,21 @@ const TaskList = (props) => {
     history.push('/reports');
   };
 
-  const tasklist = totalTaskList(companyName ? companyDetails : data);
-  console.log("tasklist :", tasklist);
+  const tasklist = totalTaskList(companyName ? companyDetails : (isList) ? isList : []);
 
   return (
     <React.Fragment>
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title= {companyName?'Company Task List': ''}/>
+          <Header sideBarRef={sideBarRef} title={companyName ? 'Company Task List' : ''} />
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
-              {companyName &&
-                <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} /> }
+                {companyName &&
+                  <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
                 <Card >
-                    <CustomTable tableData={tasklist} enableButton={companyName ? true : false} />
+                  <CustomTable tableData={tasklist} enableButton={companyName ? true : false} />
                 </Card>
               </Col>
             </Row>

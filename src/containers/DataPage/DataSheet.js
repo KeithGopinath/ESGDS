@@ -268,7 +268,16 @@ export const DataSheetComponent = (props) => {
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: { taskId: reqTask.taskId, dpCodeDetails: nextDpCode, filteredData: reqTask.dpCodesData },
+      state: {
+        taskDetails: {
+          taskId: reqTask.taskId,
+          pillar: reqTask.pillar,
+          company: reqTask.company,
+          taskNumber: reqTask.taskNumber,
+        },
+        dpCodeDetails: nextDpCode,
+        filteredData: reqTask.dpCodesData,
+      },
     });
   };
 
@@ -293,7 +302,15 @@ export const DataSheetComponent = (props) => {
       const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
-        state: { dpCodeDetails: nextDpCode },
+        state: {
+          dpCodeDetails: nextDpCode,
+          taskDetails: {
+            taskId: reqTask.taskId,
+            pillar: reqTask.pillar,
+            company: reqTask.company,
+            taskNumber: reqTask.taskNumber,
+          },
+        },
       });
     } else {
       const msgCurrent = props.dummyDataCheck().currentData;

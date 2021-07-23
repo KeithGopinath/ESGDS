@@ -37,6 +37,7 @@ import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
 import uploadCompanies from './UploadCompanies';
 
+import taskList from './GetTaskList';
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -74,6 +75,7 @@ const combinedReducer = combineReducers({
   taxonomyCompany,
   createTask,
   uploadCompanies,
+  taskList,
 });
 
 const rootReducer = (state, action) => {
