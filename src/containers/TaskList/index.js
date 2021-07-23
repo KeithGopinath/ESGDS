@@ -135,7 +135,7 @@ const TaskList = (props) => {
           analystSla: '15-07-2021',
           qa: 'Rajesh',
           qaSla: '20-07-2021',
-          stage: 'Completed',
+          status: 'Completed',
         },
         {
           taskid: 'task002',
@@ -146,7 +146,7 @@ const TaskList = (props) => {
           analystSla: '10-07-2021',
           qa: 'Praveen',
           qaSla: '12-07-2021',
-          stage: 'Completed',
+          status: 'Completed',
         },
         {
           taskid: 'task003',
@@ -157,7 +157,7 @@ const TaskList = (props) => {
           analystSla: '13-07-2021',
           qa: 'Tom',
           qaSla: '15-07-2021',
-          stage: 'Completed',
+          status: 'Completed',
         },
       ]
     },
@@ -317,9 +317,9 @@ const TaskList = (props) => {
       batch: e.batch,
       pillar: e.pillar,
       analyst: e.analyst,
-      analystStatus: e.analystSla,
+      analystSla: e.analystSla,
       qa: e.qa,
-      qaStatus: e.qaSla,
+      qaSla: e.qaSla,
       status: e.status,
     })) :
       obj.map((e) => ({
@@ -328,9 +328,9 @@ const TaskList = (props) => {
         batch: e.batch,
         pillar: e.pillar,
         analyst: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
-        analystStatus: e.analystSla,
+        analystSla: e.analystSla,
         qa: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
-        qaStatus: e.qaSla,
+        qaSla: e.qaSla,
         stage:e.stage,
         status: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
       }))
@@ -401,7 +401,7 @@ const TaskList = (props) => {
           dataType: 'string',
         },
         {
-          id: 'Status',
+          id: 'status',
           align: 'center',
           label: 'Status',
           dataType: 'string',
@@ -463,7 +463,7 @@ const TaskList = (props) => {
           dataType: 'string',
         },
         {
-          id: 'Status',
+          id: 'status',
           align: 'center',
           label: 'Status',
           dataType: 'string',
