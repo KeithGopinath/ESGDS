@@ -1,20 +1,20 @@
 const initialState = {};
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GETTASKLIST_REQUEST':
+    case 'GET_TASKLIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
         data: false,
       };
-    case 'GETTASKLIST_SUCCESS':
+    case 'GET_TASKLIST_SUCCESS':
       return {
         ...state,
         isLoading: true,
         data: action.tasklist,
       };
-    case 'GETTASKLIST_FAILURE':
+    case 'GET_TASKLIST_FAILURE':
       return {
         ...state,
         isLoading: true,

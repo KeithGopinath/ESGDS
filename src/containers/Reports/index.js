@@ -36,7 +36,7 @@ const Reports = (props) => {
       completedDate: new Date().toDateString(),
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data)} />
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
     return {
       rowsData: tableRowData(props),
@@ -90,7 +90,7 @@ const Reports = (props) => {
       startedDate: data.completedDate,
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data)} />
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
     return {
       rowsData: tableRowData(props),
@@ -205,8 +205,8 @@ const Reports = (props) => {
   const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(companyData.pending) : CompletedCompanyTableData(companyData.completed);
 
   // View the pendong reports
-  const onView = (data) => {
-    history.push({ pathname: '/tasklist', state: data });
+  const onView = (data,tabFlag) => {
+    history.push({ pathname: '/tasklist', state: data,tabFlag:tabFlag });
   };
 
   return (

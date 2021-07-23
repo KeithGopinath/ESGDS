@@ -14,6 +14,6 @@ export function* getGetTaskListRequest() {
 
 export function* getGettasklistWatchers() {
   yield [
-    takeLatest('GETTASKLIST_REQUEST', getGetTaskListRequest),
+    takeLatest('GET_TASKLIST_REQUEST', getGetTaskListRequest),
   ];
 }

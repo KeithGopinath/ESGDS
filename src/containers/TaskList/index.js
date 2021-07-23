@@ -279,6 +279,7 @@ const TaskList = (props) => {
 
   const companyName = props.location.state && props.location.state.companyName;
   const taxonomyName = props.location.state && props.location.state.taxonomy;
+  const tabFlag = props.location.tabFlag && props.location.tabFlag;
 
   const getCompanyDetails = companiesTaskList.filter((data) => (data.companyName === companyName && data.taxonomy === taxonomyName)).map(data => data.listofCompanyTask);
   const companyDetails = getCompanyDetails[0];
@@ -301,7 +302,7 @@ const TaskList = (props) => {
   };
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({ type: "GETTASKLIST_REQUEST" });
+    dispatch({ type: "GET_TASKLIST_REQUEST" });
   }, [])
 
   const isData = useSelector((tasklist) => tasklist.taskList.data);
@@ -310,18 +311,28 @@ const TaskList = (props) => {
   console.log(isList, 'isList');
 
   const totalTaskList = (props) => {
-    const tableRowData = (obj) => companyName ?
+    const tableRowData = (obj) => companyName ? tabFlag==='Completed Companies' ?  obj.map((e) => ({
+      taskid: e.taskid,
+      group: e.group,
+      batch: e.batch,
+      pillar: e.pillar,
+      analyst: e.analyst,
+      analystStatus: e.analystSla,
+      qa: e.qa,
+      qaStatus: e.qaSla,
+      status: e.status,
+    })) :
       obj.map((e) => ({
         taskid: e.taskid,
         group: e.group,
         batch: e.batch,
         pillar: e.pillar,
-        analyst: e.status === 'Breached' ? <td className="text-danger text-center">{e.analyst}</td> : <td className="text-success text-center">{e.analyst}</td>,
+        analyst: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
         analystStatus: e.analystSla,
-        qa: e.status === 'Breached' ? <td className="text-danger text-center">{e.qa}</td> : <td className="text-success text-center">{e.qa}</td>,
+        qa: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
         qaStatus: e.qaSla,
-        stage: e.stage,
-        status: e.status === 'Breached' ? <td className="text-danger text-center">{e.status}</td> : <td className="text-success text-center">{e.status}</td>,
+        stage:e.stage,
+        status: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
       }))
       :
       obj.map((e) => ({
@@ -339,7 +350,64 @@ const TaskList = (props) => {
 
     return {
       rowsData: tableRowData(props),
-      columnsHeadData: companyName ? [
+      columnsHeadData: companyName ? tabFlag==='Completed Companies' ? 
+      [
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task id',
+          dataType: 'string',
+        },
+        {
+          id: 'group',
+          align: 'center',
+          label: 'Group',
+          dataType: 'string',
+        },
+        {
+          id: 'batch',
+          align: 'center',
+          label: 'Batch',
+          dataType: 'string',
+        },
+        {
+          id: 'pillar',
+          align: 'center',
+          label: 'Pillar',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'analystSla',
+          align: 'center',
+          label: 'Sla Date',
+          dataType: 'string',
+        },
+        {
+          id: 'qa',
+          align: 'center',
+          label: 'QA',
+          dataType: 'string',
+        },
+        {
+          id: 'qaSla',
+          align: 'center',
+          label: 'Sla Date',
+          dataType: 'string',
+        },
+        {
+          id: 'Status',
+          align: 'center',
+          label: 'Status',
+          dataType: 'string',
+        },
+      ]
+      : [
         {
           id: 'taskid',
           align: 'center',
