@@ -93,7 +93,11 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
         setOnboardAlert("Please fill all the fields");
         return;
       }
-      const roleOnboardingData = { emailList: listOfData };
+      const roleOnboardingData = { emailList: listOfData.map(details => (
+        { email:details.email,
+          onboardingtype:details.onboardingtype.value,
+          link:details.link,
+        }))};
       dispatch({ type: 'ROLE_ONBOARDING_REQUEST', roleOnboardingData });
     } else if (chooseOption === 'excel') {
       setEmailFiledsValidation(false);
@@ -115,7 +119,6 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     list[index][name] = value;
     setListOfData(list);
   };
-
 
   // Role Choose
   const onRoleChange = (e, index) => {

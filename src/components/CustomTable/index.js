@@ -14,7 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { DatePicker, Space, Result } from 'antd';
@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, onBackButton, enableButton, downloadReports,
+  tableData, showDatePicker, isLoading, message, icon,
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
@@ -226,7 +226,6 @@ const CustomTable = ({
   return (
     <div>
       <Paper className="users-table-paper">
-        {enableButton && <button className="imp-btn btn btn-primary" onClick={onBackButton}>Back</button> }
         <TableContainer>
           <div className="users-table-label-datepicker-search-wrap">
             <div className="users-table-label">
@@ -260,7 +259,6 @@ const CustomTable = ({
                   ),
                 }}
               />
-              {enableButton && <FontAwesomeIcon className="reports-download-icon" size="md" icon={faDownload} onClick={downloadReports} />}
             </ThemeProvider>
           </div>
           <Table className="users-table">

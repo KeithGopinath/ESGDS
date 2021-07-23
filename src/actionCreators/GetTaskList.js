@@ -1,13 +1,13 @@
 export const getGetTaskListRequest = () => ({
-  type: 'GETTASKLIST_REQUEST',
+  type: 'GET_TASKLIST_REQUEST',
 });
 
 export const getGetTaskListSuccess = (tasklist) => ({
-  type: 'GETTASKLIST_SUCCESS',
+  type: 'GET_TASKLIST_SUCCESS',
   tasklist,
 });
 
 export const getGetTaskListFailure = (error) => ({
-  type: 'GETTASKLIST_FAILURE',
+  type: 'GET_TASKLIST_FAILURE',
   error,
 });
