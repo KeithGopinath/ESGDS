@@ -26,7 +26,6 @@ import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
 import dpCodeData from './DpCodeData';
-
 import pillarlist from './GetPillarTaxanomy';
 import assignpillar from './PillarAssignment';
 import unassignedBatch from './GetUnassignedBatch';
@@ -36,6 +35,8 @@ import groupbtid from './GetGroupById';
 import taskpillar from './OnSelectPillar';
 import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
+import uploadCompanies from './UploadCompanies';
+
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -72,6 +73,7 @@ const combinedReducer = combineReducers({
   taskpillar,
   taxonomyCompany,
   createTask,
+  uploadCompanies,
 });
 
 const rootReducer = (state, action) => {

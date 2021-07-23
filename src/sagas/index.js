@@ -33,6 +33,7 @@ import { getGroupbyidWatchers } from './GetGroupById';
 import { gettaskpillatWatchers } from './OnSelectPillar';
 import { getTaxnomycompanyWatchers } from './TaxonomyCompanies';
 import { getCreateTaskWatchers } from './CreateTasks';
+import { uploadCompaniesWatchers } from './UploadCompanies';
 
 export default function* rootWatchers() {
   yield all([
@@ -70,5 +71,6 @@ export default function* rootWatchers() {
     gettaskpillatWatchers(),
     getTaxnomycompanyWatchers(),
     getCreateTaskWatchers(),
+    uploadCompaniesWatchers(),
   ]);
 }
