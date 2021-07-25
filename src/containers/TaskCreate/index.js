@@ -151,7 +151,7 @@ const TaskCreate = () => {
         console.log(batchdetails, 'batchList');
         const modifiedYear = batchdetails.batchYear.map((args) => {
           console.log(args, 'check')
-          const yearArray = { name: args, label: args };
+          const yearArray = { value: args, label: args };
           return yearArray;
         });
         console.log(batchdetails.pillars, 'batchdetails.pillars')
@@ -255,13 +255,13 @@ const TaskCreate = () => {
         if((rowDetail.length && pillar.value.length  && selectedAnalyst.name.length &&  selectedQa.name.length &&  analystSla.length && qaSla.length) > 0)
           {
           const taskPayload =  {
-            
-              bachid: batchInfo.Batchid,
+              groupId: companyInfo.grpId,
+              batchId: batchInfo.Batchid,
               year: batchInfo.Batchyear,
               pillar: pillar,
               company: rowDetail,
-              analyst: selectedAnalyst,
-              qa: selectedQa,
+              analyst: { value:selectedAnalyst.id, label:selectedAnalyst.name },
+              qa: { value:selectedQa.id, label:selectedQa.name },
               analystSla: analystSla,
               qaSla: qaSla
         

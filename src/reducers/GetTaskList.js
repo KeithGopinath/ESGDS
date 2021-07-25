@@ -1,28 +1,20 @@
 const initialState = {};
-
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GROUP_CREATE_REQUEST':
+    case 'GET_TASKLIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        grouppost: false,
+        data: false,
       };
-    case 'GROUP_CREATE_SUCCESS':
+    case 'GET_TASKLIST_SUCCESS':
       return {
         ...state,
         isLoading: true,
-        grouppost: action.creategroup,
+        data: action.tasklist,
       };
-    case 'GROUP_RESET':
-      return {
-        ...state,
-        isLoading: true,
-        error: false,
-        grouppost: false,
-      };
-    case 'GROUP_CREATE_FAILURE':
+    case 'GET_TASKLIST_FAILURE':
       return {
         ...state,
         isLoading: true,

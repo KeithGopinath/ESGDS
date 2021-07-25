@@ -21,25 +21,32 @@ const Reports = (props) => {
   useEffect(() => {
     if (tabsRefs.current[0]) {
       tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
-      setTabFlag('Completed Companies');
+      setTabFlag('Pending Companies');
     } else {
       tabsRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
-      setTabFlag('Pending Companies');
+      setTabFlag('Completed Companies');
     }
   }, []);
 
   // completed company table
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
+      taxonomy: data.taxonomy,
       companyName: data.companyName,
       completedDate: new Date().toDateString(),
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
+        {
+          id: 'taxonomy',
+          align: 'center',
+          label: 'Taxonomy',
+          dataType: 'string',
+        },
         {
           id: 'companyName',
           align: 'center',
@@ -68,7 +75,7 @@ const Reports = (props) => {
           id: 'viewTask',
           align: 'center',
           label: 'View Task',
-          dataType: 'string',
+          dataType: 'element',
         }
       ],
       tableLabel: <span>Completed Companies </span>,
@@ -78,16 +85,22 @@ const Reports = (props) => {
   // pending company table
   const PendingCompanyTableData = (props) => {
     const tableRowData = (data) => data.map((data, id) => ({
+      taxonomy: data.taxonomy,
       companyName: data.companyName,
       startedDate: data.completedDate,
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data.companyName,id)} />
-
+      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
+        {
+          id: 'taxonomy',
+          align: 'center',
+          label: 'Taxonomy',
+          dataType: 'string',
+        },
         {
           id: 'companyName',
           align: 'center',
@@ -116,7 +129,7 @@ const Reports = (props) => {
           id: 'viewTask',
           align: 'center',
           label: 'View Task',
-          dataType: 'string',
+          dataType: 'element',
         }
       ],
       tableLabel: <span>Pending Companies</span>,
@@ -124,8 +137,8 @@ const Reports = (props) => {
   };
 
   const tabLabelSets = [
-    { label: 'Completed Companies' },
     { label: 'Pending Companies' },
+    { label: 'Completed Companies' },
   ];
 
   const tabsRefs = useRef(tabLabelSets.map(() => React.createRef()));
@@ -140,67 +153,60 @@ const Reports = (props) => {
     setTabFlag(label)
   };
 
-  const userData = [
-    {
-      pillar: 'Social',
-      companyName: 'Reliance ltd.',
-      completedDate: '10-07-2021',
-      status: 'Completed',
-      analyst: 'Rajesh',
-      QA: 'Gopi',
-      companyRepresentative: 'Praveen',
-      clientRrepresentative: 'Balaji'
-    },
-    {
-      pillar: 'Governance',
-      companyName: 'Reliance Oils',
-      completedDate: '10-07-2021',
-      status: 'Completed',
-      analyst: 'Jerin',
-      QA: 'Gopi',
-      companyRepresentative: 'Balaji',
-      clientRrepresentative: 'Praveen'
-    },
-    {
-      pillar: 'Environment',
-      companyName: 'Indian Oils',
-      completedDate: '10-07-2021',
-      status: 'Completed',
-      analyst: 'Balaji',
-      QA: 'Rajesh',
-      companyRepresentative: 'Praveen',
-      clientRrepresentative: 'Jerin'
-    },
-    {
-      pillar: 'Social',
-      companyName: 'Indian Gas',
-      completedDate: '10-07-2021',
-      status: 'Pending',
-      analyst: 'Jerin',
-      QA: 'Balaji',
-      companyRepresentative: 'Praveen',
-      clientRrepresentative: 'Gopi',
-    },
-    {
-      pillar: 'Governance',
-      companyName: 'Hindustan Oils',
-      completedDate: '10-07-2021',
-      status: 'Pending',
-      analyst: 'Balaji',
-      QA: 'Rajesh',
-      companyRepresentative: 'Gopi',
-      clientRrepresentative: 'Praveen',
-    },
-  ];
+  const companyData = {
+    completed: [
+      {
+        taxonomy: 'Rel Acute',
+        companyName: 'Reliance ltd.',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Balaji',
+      },
+      {
+        taxonomy: 'Rel Acute1',
+        companyName: 'Reliance ltd.',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Balaji',
+      },
+      {
+        taxonomy: 'HPCL Acute',
+        companyName: 'HPCL',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Balaji',
+        clientRrepresentative: 'Praveen',
+      }
+    ],
+    pending: [
+      {
+        taxonomy: 'IDEA Acute',
+        companyName: 'IDEA Ltd.',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Jerin'
+      },
+      {
+        taxonomy: 'ONGC Acute',
+        companyName: 'ONGC',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Balaji',
+        clientRrepresentative: 'Praveen',
+      },
+      {
+        taxonomy: 'Indian Acute',
+        companyName: 'Indian Gas',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Rajesh',
+        clientRrepresentative: 'Gopi',
+      }
+    ]
+  }
 
-  const pendingCompanyStatus = userData.filter((data) => (data.status === 'Pending'));
-  const completedCompanyStatus = userData.filter((data) => (data.status === 'Completed'));
-
-  const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanyStatus) : CompletedCompanyTableData(completedCompanyStatus);
+  const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(companyData.pending) : CompletedCompanyTableData(companyData.completed);
 
   // View the pendong reports
-  const onView = (companyName,id) => {
-    history.push({ pathname:'/tasklist', state:companyName });
+  const onView = (data,tabFlag) => {
+    history.push({ pathname: '/tasklist', state: data,tabFlag:tabFlag });
   };
 
   return (
