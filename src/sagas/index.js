@@ -35,6 +35,7 @@ import { getTaxnomycompanyWatchers } from './TaxonomyCompanies';
 import { getCreateTaskWatchers } from './CreateTasks';
 import { uploadCompaniesWatchers } from './UploadCompanies';
 import { getGettasklistWatchers } from './GetTaskList';
+import { sourceTypeWatchers } from './SourceType';
 
 export default function* rootWatchers() {
   yield all([
@@ -74,5 +75,6 @@ export default function* rootWatchers() {
     getCreateTaskWatchers(),
     uploadCompaniesWatchers(),
     getGettasklistWatchers(),
+    sourceTypeWatchers(),
   ]);
 }

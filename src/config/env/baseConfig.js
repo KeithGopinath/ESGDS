@@ -34,6 +34,8 @@ export default {
     uploadCompanies: 'companies/upload-companies-file',
     createTask: 'taskAssignments/create',
     getTaskList: 'taskAssignments',
+    getSourceType: 'sourceTypes',
+    postSourceType: 'companySources/uploadCompanySource',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

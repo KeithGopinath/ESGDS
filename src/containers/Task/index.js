@@ -72,7 +72,7 @@ const TaskTable = (props) => {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
       },
     ],
-    tableLabel: 'Pending Tasks',
+    tableLabel: 'Pending DpCodes',
   };
 
   return (
@@ -216,19 +216,19 @@ const Task = (props) => {
       }
       if (dpCodeType === 'Board Matrix') {
         if (reqBoardMember && reqKeyIssue) {
-          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqBoardMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
+          return reqTaskList.dpCodesData.filter((e) => (e.memberId && e.memberId === reqBoardMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
         }
         if (reqBoardMember && !reqKeyIssue) {
-          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqBoardMember.value));
+          return reqTaskList.dpCodesData.filter((e) => (e.memberId && e.memberId === reqBoardMember.value));
         }
         return [];
       }
       if (dpCodeType === 'Kmp Matrix') {
         if (reqKmpMember && reqKeyIssue) {
-          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqKmpMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
+          return reqTaskList.dpCodesData.filter((e) => (e.memberId && e.memberId === reqKmpMember.value && (e.keyIssueId && e.keyIssueId === reqKeyIssue.value)));
         }
         if (reqKmpMember && !reqKeyIssue) {
-          return reqTaskList.dpCodesData.filter((e) => (e.memberName && e.memberName === reqKmpMember.value));
+          return reqTaskList.dpCodesData.filter((e) => (e.memberId && e.memberId === reqKmpMember.value));
         }
         return [];
       }

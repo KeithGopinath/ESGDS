@@ -4,12 +4,14 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, Drawer } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
 import { history } from '../../routes';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
 import ErrorPanel from './ErrorPanel';
+
+import AddSource from './AddSource';
 
 let temporaryData;
 
@@ -112,6 +114,9 @@ export const DataSheetComponent = (props) => {
   // CONTROVERSY COLLECTION COMMENT
   const [formControversyComment, setFormControversyComment] = useState(defaultData.comment || '');
 
+  // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
+  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+
   // USEEFFECTS
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -132,6 +137,8 @@ export const DataSheetComponent = (props) => {
     });
     setIsErrorPanelVisible(false);
     setFormControversyComment(defaultData.comment || '');
+
+    setIsSrcPanelOpened(false);
   }, [props.reqData]);
 
   // Onchange Functions
@@ -589,6 +596,17 @@ export const DataSheetComponent = (props) => {
     openNotificationWithIcon('success', 'rejected');
   };
 
+
+  // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
+  const onClickOpenAddSource = () => {
+    setIsSrcPanelOpened(true);
+  };
+
+  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
+  const onClickCloseAddSource = () => {
+    setIsSrcPanelOpened(false);
+  };
+
   return (
     <Row>
 
@@ -655,7 +673,7 @@ export const DataSheetComponent = (props) => {
       {/* ADD SOURCE Button */}
       {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
       <Col lg={6}>
-        <Button onClick={props.openSourcePanel}>Add Source</Button>
+        <Button onClick={onClickOpenAddSource}>Add Source</Button>
       </Col>}
 
       {/* HORIZONTAL Line */}
@@ -942,7 +960,7 @@ export const DataSheetComponent = (props) => {
         reqSourceData={sourceList}
         textResponse={textResponse}
         locationData={props.locationData}
-        openSourcePanel={props.openSourcePanel}
+        openSourcePanel={onClickOpenAddSource}
         onClickSave={props.onClickSave}
       />}
 
@@ -990,6 +1008,20 @@ export const DataSheetComponent = (props) => {
 
 
       </Col>
+
+      {/* ADD SOURCE PANEL */}
+      <Drawer
+        title="Add Source"
+        placement="right"
+        closable={false}
+        onClose={onClickCloseAddSource}
+        visible={isSrcPanelOpened}
+        key="right"
+        width={300}
+        headerStyle={{ backgroundColor: '#2199c8' }}
+      >
+        {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} companyId={defaultData.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
+      </Drawer>
 
       <Modal
         title="Error Panel"

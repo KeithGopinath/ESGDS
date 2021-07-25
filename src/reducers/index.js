@@ -36,6 +36,7 @@ import taskpillar from './OnSelectPillar';
 import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
 import uploadCompanies from './UploadCompanies';
+import { sourceTypeGet, sourceTypePost } from './SourceType';
 
 import taskList from './GetTaskList';
 const combinedReducer = combineReducers({
@@ -76,6 +77,8 @@ const combinedReducer = combineReducers({
   createTask,
   uploadCompanies,
   taskList,
+  sourceTypeGet,
+  sourceTypePost,
 });
 
 const rootReducer = (state, action) => {
