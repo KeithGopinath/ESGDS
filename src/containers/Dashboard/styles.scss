@@ -1,4 +1,3 @@
-
 .dashboard-main {
     display: flex;
     padding: 30px 5%;
@@ -62,6 +61,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin: 20px 0;
-    justify-content: space-between;
+    margin-bottom: 2%;
+    justify-content: space-evenly;
+    height: 2em;
+}
+
+.dashboard-tabs-stack .tabs-label-count-wrap {
+    min-width: 10px !important;
+    width: auto !important;
 }

@@ -56,9 +56,8 @@ const Login = () => {
     else if (loginRole && login.user) {
       history.push("/dashboard");
       setLoginRole(false);
-      message.success(otp.message);
     }
-    // for SuperAdmin
+    // for Admin and SuperAdmin
     else if (loginRole && login) {
       setShowOtp(true);
       setLoginRole(false);
