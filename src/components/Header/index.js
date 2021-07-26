@@ -64,12 +64,12 @@ const Header = ({ title }) => {
       <div className="header-content-three content-head">
         <NotificationPanel />
       </div>
-      {(userRole.label == "SuperAdmin" || userRole.label == "GroupAdmin" || userRole.label == "QA" || userRole.label == "Analyst") &&
+      {(userRole.label == "Admin" || userRole.label == "GroupAdmin" || userRole.label == "QA" || userRole.label == "Analyst") &&
         <div className="header-content-one content-head">
           <Select options={roleOptions} onChange={onroleChange} value={userRole} />
         </div>
       }
-      {userRole.label == "SuperAdmin" &&
+      {(userRole.label == "SuperAdmin" || userRole.label == "Admin") &&
         <div className="header-content-four content-head">
           <div className="users-back-label-onboardlink-container">
             <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
