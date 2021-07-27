@@ -36,6 +36,10 @@ export default {
     getTaskList: 'taskAssignments',
     getSourceType: 'sourceTypes',
     postSourceType: 'companySources/uploadCompanySource',
+    getControversyTask: 'controversy_tasks',
+    getControversyDpCodeData: 'controversies/fetch',
+    postControversyDpCodeData: 'controversies/add/new-controversy',
+    updateControversyDpCodeData: 'controversies/update',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

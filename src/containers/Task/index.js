@@ -84,7 +84,7 @@ const ControversyTaskTable = (props) => {
   console.log(props);
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     dpCode: x.dpCode,
-    keyIssue: x.keyIssue,
+    keyIssue: x.keyIssue || x.keyIssueName,
     action:
   <Link
     to={{
@@ -157,11 +157,15 @@ const Task = (props) => {
   const extractReqTask = (data) => {
     let returnableTask;
 
-    if (isAnalyst_DCR || isAnalyst_CC || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
+    if (isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
       [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
     }
     if (isAnalyst_DC) {
       [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : data.filter((e) => (e.taskId === taskDetails.taskId));
+    }
+    if (isAnalyst_CC) {
+      // KEY NAMES CHANGES REQ FROM SHIVA !
+      [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : data.filter((e) => (e.taskId === taskDetails.taskId));
     }
 
     console.log(returnableTask, 'RERRRR');
@@ -197,7 +201,12 @@ const Task = (props) => {
   }, []);
 
   useEffect(() => {
-    dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    if (!isAnalyst_CC) {
+      dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    }
+    if (isAnalyst_CC) {
+      dispatch({ type: 'CONTROVERSY_TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    }
   }, []);
 
   useState(() => {
@@ -251,7 +260,7 @@ const Task = (props) => {
         return reqTaskData.kmpMatrix;
       }
     }
-    if (isAnalyst_CC) {
+    if (isAnalyst_CC && reqTaskData.controversy) {
       return reqTaskData.controversy;
     }
     return { dpCodesData: [] };
@@ -348,7 +357,7 @@ const Task = (props) => {
             <div className="task-keyissue">
               <Row>
                 {/* ONLY FOR STANDALONE */}
-                {dpCodeType === 'Standalone' &&
+                {isAnalyst_DC && isAnalyst_DCR && isQA_DV && isCompanyRep_DR && isClientRep_DR && dpCodeType === 'Standalone' &&
                 <FieldWrapper
                   label="Key Issues*"
                   visible
