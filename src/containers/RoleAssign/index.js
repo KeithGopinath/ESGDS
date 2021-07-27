@@ -21,6 +21,9 @@ const RoleAssignment = ({ show, setShow }) => {
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
 
+  const otpDetails = useSelector((state) => state.otp.otp);
+  const userType = otpDetails && otpDetails.user.userType;
+
   useEffect(() => {
     if (show) {
       const payload = {
@@ -46,8 +49,9 @@ const RoleAssignment = ({ show, setShow }) => {
     }
   }, [roleAssignmentEdit, roleAssignmentEditError]);
 
-  const roleOptions = roleData && roleData.rows.filter(val => val.roleName == 'GroupAdmin' ||
-    val.roleName == 'Analyst' || val.roleName == 'QA' || val.roleName == 'SuperAdmin').map((data) => ({
+  const roleOptions = roleData && roleData.rows.filter(val => userType == "SuperAdmin" ? (val.roleName == 'GroupAdmin' ||
+    val.roleName == 'Analyst' || val.roleName == 'QA' || val.roleName == 'Admin') : (val.roleName == 'GroupAdmin' ||
+    val.roleName == 'Analyst' || val.roleName == 'QA') ).map((data) => ({
       value: data.id,
       label: data.roleName
     }))

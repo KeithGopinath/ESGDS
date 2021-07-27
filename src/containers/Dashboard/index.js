@@ -1,25 +1,18 @@
 /* eslint-disable*/
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { Card, Row, Col } from 'react-bootstrap';
 import Avatar from 'react-avatar';
 
 const Dashboard = () => {
-  // CURRENT ROLE
-  const currentRole = sessionStorage.role;
-
-  // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst, isQA, isSuperAdmin, isGroupAdmin, noRole] = [
-    currentRole === 'Analyst',
-    currentRole === 'QA',
-    currentRole === 'SuperAdmin',
-    currentRole === 'GroupAdmin',
-    currentRole === 'null'
-  ];
-
-  const sideBarRef = useRef();
   const [activeTab, setActiveTab] = useState([]);
+  const sideBarRef = useRef();
+
+  const userDetails = useSelector((state) => state.login.login);
+  const otpDetails = useSelector((state) => state.otp.otp);
+  const roleChange = useSelector((state) => state.roleChange.roleChange);
 
   useEffect(() => {
     const defaultTab = dashboardTabsRef.current[0].current;
@@ -27,29 +20,33 @@ const Dashboard = () => {
     setActiveTab([cardsList[0]]);
   }, []);
 
+  const currentRole = roleChange && roleChange.label || otpDetails && otpDetails.user.roleDetails.primaryRole.label ||
+  userDetails && userDetails.user.roleDetails.primaryRole.label || sessionStorage.role
+
   const superAdminCardsList = [
     {
       Clabel: 'Companies',
-      cards: [{ label: 'Companies WIP', value: 67 }, { label: 'Companies Submitted', value: 140 }, { label: 'Pending Companies with QA/Analysts', value: 71 }, { label: "SLA's Due", value: 30 }],
+      cards: [{ label: 'Pending', value: 67 }, { label: 'Submitted', value: 140 }],
     },
     {
       Clabel: 'Errors',
-      cards: [{ label: 'Internal Errors', value: 67 }, { label: 'Client Errors - Accepted', value: 140 }, { label: 'Company rep Errors - Accepted', value: 71 }, { label: "SLA's Request", value: 30 }],
+      cards: [{ label: 'Internal Errors', value: 67 }, { label: 'External Errors-Client Representatives', value: 140 }, { label: 'External Errors-Client Representatives(Accepted)', value: 71 }, { label: "External Errors-Company Representatives", value: 30 }, { label: "External Errors-Company Representatives(Accepted)", value: 30 }, { label: "Average quality % (external errors only)", value: '30%' }],
     },
     {
-      Clabel: 'Employees - By Role',
-      cards: [{ label: 'Compant Reps', value: 67 }, { label: 'Client Reps', value: 140 }, { label: 'Analysts', value: 71 }, { label: 'QA', value: 30 }],
+      Clabel: 'SLA',
+      cards: [{ label: 'Breaches(Analyst)', value: 67 }, { label: 'Breaches(QA)', value: 140 }, { label: 'Change requests(Analyst)', value: 71 }, { label: 'Change requests(QA)', value: 30 }, { label: 'Reassignments requests(Analyst)', value: 67 }, { label: 'Reassignments requests(QA)', value: 67 }],
     },
     {
-      Clabel: 'Employees - By Pillar',
-      cards: [{ label: 'Environmental', value: 67 }, { label: 'Social', value: 140 }, { label: 'Governance', value: 71 }],
+      Clabel: 'Batch',
+      cards: [{ label: 'SLA extensions', value: 67 }, { label: 'SLA breaches', value: 140 }],
     },
     {
-      Clabel: 'Misc',
-      cards: [{ label: 'Idle Employees', value: 67 }, { label: 'Fill Rate', value: 140 }, { label: 'Aging Analysis', value: 71 },
-      { label: 'Serviceablity', value: 71 }, { label: 'SLA Breaches By Analysts', value: 71 }, { label: 'SLA Change Requests By Analysts And QAs', value: 71 },
-      { label: 'SLA Extensions For Batches', value: 71 }, { label: 'SLA Breaches For Batches', value: 71 }, { label: 'Reassignments Requests By Analysts and QAs', value: 71 }, { label: 'SLA Breahes For Controversies', value: 71 }, { label: 'Average Quality', value: 71 },
-      { label: 'New Errors By Company Rep', value: 71 }, { label: 'New Errors By Clients', value: 71 },
+      Clabel: 'Employees',
+      cards: [{ label: 'Analysts', value: 71 }, { label: 'QA', value: 30 }, { label: 'Group Admin', value: 67 }, { label: 'Super Admin', value: 67 }, { label: 'Idle employees', value: 67 }, { label: 'Company Representatives', value: 67 }, { label: 'Client Representatives', value: 140 }, { label: 'Environmental', value: 67 }, { label: 'Social', value: 140 }, { label: 'Governance', value: 71 }],
+    },
+    {
+      Clabel: 'Services',
+      cards: [{ label: 'Serviceability', value: '67%' }, { label: 'Fill Rate', value: '87%' }, { label: 'Aging Analysis', value: 71 },
       ],
     },
   ];
@@ -57,43 +54,27 @@ const Dashboard = () => {
   const groupAdminCardsList = [
     {
       Clabel: 'Companies',
-      cards: [{ label: 'Companies WIP', value: 67 }, { label: 'Companies Submitted', value: 140 }, { label: 'Pending Companies with QA/Analysts', value: 71 }],
+      cards: [{ label: 'Pending', value: 67 }, { label: 'Submitted', value: 140 }],
     },
     {
       Clabel: 'Errors',
-      cards: [{ label: 'Internal Errors', value: 67 }, { label: 'External Errors Raised By Clients', value: 67 }, { label: 'External Errors Raised By Company Rep', value: 67 }, { label: 'Client External Errors - Accepted', value: 140 }, { label: 'Company rep External Errors - Accepted', value: 71 }],
+      cards: [{ label: 'Internal Errors', value: 67 }, { label: 'External Errors(Clients)', value: 140 }, { label: 'External Errors accepted(Clients)', value: 71 }, { label: "External Errors(Company Representatives)", value: 30 }, { label: "External Errors accepted(Company Representatives)", value: 30 }, { label: "Average quality % (external errors only)", value: '30%' }],
     },
     {
-      Clabel: 'Employees - By Role',
-      cards: [{ label: 'Compant Reps', value: 67 }, { label: 'Client Reps', value: 140 }, { label: 'Analysts', value: 71 }, { label: 'QA', value: 30 }],
+      Clabel: 'SLA',
+      cards: [{ label: 'Breaches(Analyst)', value: 67 }, { label: 'Breaches(QA)', value: 140 }, { label: 'Change requests(Analyst)', value: 71 }, { label: 'Change requests(QA)', value: 30 }, { label: 'Reassignments requests(Analyst)', value: 67 }, { label: 'Reassignments requests(QA)', value: 67 }],
     },
     {
-      Clabel: 'Employees - By Pillar',
-      cards: [{ label: 'Environmental', value: 67 }, { label: 'Social', value: 140 }, { label: 'Governance', value: 71 }],
+      Clabel: 'Batch',
+      cards: [{ label: 'SLA extensions', value: 67 }, { label: 'SLA breaches', value: 140 }],
     },
     {
-      Clabel: 'Misc',
-      cards: [{ label: 'Idle Employees', value: 67 }, { label: 'Fill Rate', value: 140 }, { label: 'Aging Analysis', value: 71 },
-      { label: 'Serviceablity', value: 71 }, { label: 'SLA Breaches', value: 71 }, { label: 'SLA Change Requests By Analysts And QAs', value: 71 },
-      { label: 'SLA Extensions For Batches', value: 71 }, { label: 'SLA Breaches For Batches', value: 71 }, { label: 'Reassignments Requests By Analysts and QAs', value: 71 }, { label: 'SLA Breahes For Controversies', value: 71 }, { label: 'Average Quality', value: 71 },
-      ],
-    },
-  ];
-
-  const qualityAnalystCardsList = [
-    {
-      Clabel: 'Companies',
-      cards: [{ label: 'Companies WIP', value: 67 }, { label: 'Companies Submitted', value: 140 }, { label: 'Pending Companies For Data Check', value: 71 },
-      { label: 'Total Companies For Analyst Revison', value: 71 }],
+      Clabel: 'Employees',
+      cards: [{ label: 'Analysts', value: 71 }, { label: 'QA', value: 30 }, { label: 'Group Admin', value: 67 }, { label: 'Super Admin', value: 67 }, { label: 'Idle employees', value: 67 }, { label: 'Company Representatives', value: 67 }, { label: 'Client Representatives', value: 140 }, { label: 'Environmental', value: 67 }, { label: 'Social', value: 140 }, { label: 'Governance', value: 71 }],
     },
     {
-      Clabel: 'Errors',
-      cards: [{ label: 'Errors', value: 67 }],
-    },
-    {
-      Clabel: 'Misc',
-      cards: [{ label: 'Serviceablity', value: 71 }, { label: 'SLA Breaches For Data Check', value: 71 }, { label: 'SLA Change Requests By QAs', value: 71 },
-      { label: 'Reassignments Requests By QAs', value: 71 }, { label: 'Average Quality', value: 71 },
+      Clabel: 'Services',
+      cards: [{ label: 'Serviceability', value: '67%' }, { label: 'Fill Rate', value: '72%' }, { label: 'Aging Analysis', value: 71 },
       ],
     },
   ];
@@ -101,40 +82,48 @@ const Dashboard = () => {
   const analystCardsList = [
     {
       Clabel: 'Companies',
-      cards: [{ label: 'Companies WIP', value: 67 }, { label: 'Companies Submitted', value: 140 }, { label: 'Pending Companies For Data Collection', value: 71 }],
+      cards: [{ label: 'Pending', value: 67 }, { label: 'Submitted', value: 140 }],
     },
     {
       Clabel: 'Errors',
       cards: [{ label: 'Internal Errors', value: 67 }],
     },
     {
-      Clabel: 'Misc',
-      cards: [{ label: 'Serviceablity', value: 71 }, { label: 'SLA Breaches For Data Collection', value: 71 }, { label: 'SLA Breaches For Controversies', value: 71 }, { label: 'SLA Change Requests By Analysts', value: 71 },
-      { label: 'Reassignments Requests By Analysts', value: 71 }, { label: 'Average Quality', value: 71 },
-      ],
+      Clabel: 'SLA',
+      cards: [{ label: 'Breaches', value: 67 }, { label: 'Change requests', value: 71 }, { label: 'Reassignments requests', value: 67 }],
+    },
+    {
+      Clabel: 'Services',
+      cards: [{ label: 'Quality %', value: '67%' }, { label: 'Serviceability %', value: '72%' }],
     },
   ];
 
-  const getCardsBasedOnRole = () => {
-    if (isAnalyst) {
-      return analystCardsList;
-    }
-    if (isQA) {
-      return qualityAnalystCardsList;
-    }
-    if (isSuperAdmin) {
-      return superAdminCardsList;
-    }
-    if (isGroupAdmin) {
-      return groupAdminCardsList;
-    }
-    if (noRole) {
-      return analystCardsList;
-    }
-  }
+  const qualityAnalystCardsList = [
+    {
+      Clabel: 'Companies',
+      cards: [{ label: 'Pending', value: 67 }, { label: 'Submitted', value: 140 }, { label: 'Sent back', value: 10 }],
+    },
+    {
+      Clabel: 'Errors',
+      cards: [{ label: 'Internal Errors', value: 67 }],
+    },
+    {
+      Clabel: 'SLA',
+      cards: [{ label: 'Breaches', value: 67 }, { label: 'Change requests', value: 71 }, { label: 'Reassignments requests', value: 67 }],
+    },
+    {
+      Clabel: 'Services',
+      cards: [{ label: 'Quality %', value: '67%' }, { label: 'Serviceability %', value: '72%' }],
+    },
+  ];
 
-  const cardsList = getCardsBasedOnRole();
-  const dashboardTabsRef = useRef(cardsList.map(() => React.createRef()));
+  const cardsList = currentRole == 'SuperAdmin' || currentRole == 'Admin' ? superAdminCardsList : currentRole == 'GroupAdmin' ? groupAdminCardsList :
+    currentRole == 'Analyst' ? analystCardsList :  currentRole == 'QA' ? qualityAnalystCardsList : analystCardsList;
+
+  console.log('card',cardsList);
+  const dashboardTabsRef =  useRef(cardsList.map(() => React.createRef()));
+  
+  console.log('tabrefs',dashboardTabsRef);
 
   const tabsClickHandler = (event, data) => {
     setActiveTab([data])
@@ -152,16 +141,16 @@ const Dashboard = () => {
       <div className="rightsidepane">
         <Header title="Dashboard" />
         <div className="container-main">
-          <div className="users-tabs-stack">
+          <div className="dashboard-tabs-stack">
             {cardsList.map((card, index) =>
               <div key={card.Clabel} ref={dashboardTabsRef.current[index]} onClick={(event) => (tabsClickHandler(event, card))} className="tabs-label-count-wrap">
                 <div className="tabs-label">
                   {card.Clabel}
                 </div>
-                <div title={card.cards.length} className="tabs-count-wrap">
+                {/* <div title={card.cards.length} className="tabs-count-wrap">
                   <div className="tabs-count">{card.cards.length}
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
@@ -173,9 +162,9 @@ const Dashboard = () => {
                     <Col key={label} className="dashboard-card-wrapper" xs={12} sm={6} md={6} lg={4} xl={3}>
                       <Card as={Col} className="dashboard-card" >
                         <div className="dashboard-card-avatar">
-                          <Avatar size="50" color="#f0f0f0" round name={label} />
+                          <Avatar size="50" color="#2199c8" round name={label} />
                         </div>
-                        <div className="dashboard-card-labelset" >
+                        <div className="dashboard-card-labelset">
                           <div className="dashboard-card-labelvalue">{value}</div>
                           <div className="dashboard-card-labeltext">{label}</div>
                         </div>
