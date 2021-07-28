@@ -1,8 +1,7 @@
 /* eslint-disable */
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { Checkbox, Select } from 'antd';
 import 'antd/dist/antd.css';
 import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
@@ -12,12 +11,73 @@ import { history } from '../../routes';
 const Reports = (props) => {
   const sideBarRef = useRef();
   const [tabFlag, setTabFlag] = useState();
+  const [completedCompanies, setCompletedCompanies] = useState([]);
+  const [pendingCompanies, setPendingCompanies] = useState([]);
+  const [selectItem, setSelectItem] = useState(false);
+  const [taxonomy, setTaxonomy] = useState('');
+  const { Option } = Select;
 
   const dispatch = useDispatch();
   // const userData = useSelector((state) => state.filterUsers.filterUsers);
   // const loading = useSelector((state) => state.filterUsers.isLoading);
   // const filteredUsers = userData && userData.data;
 
+  const companyData = {
+    completed: [
+      {
+        taxonomy: 'Rel Acute',
+        companyName: 'Reliance ltd.',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Balaji',
+        isChecked: false,
+      },
+      {
+        taxonomy: 'Rel Acute1',
+        companyName: 'Reliance',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Balaji',
+        isChecked: false,
+      },
+      {
+        taxonomy: 'HPCL Acute',
+        companyName: 'HPCL',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Balaji',
+        clientRrepresentative: 'Praveen',
+        isChecked: false,
+      }
+    ],
+    pending: [
+      {
+        taxonomy: 'IDEA Acute',
+        companyName: 'IDEA Ltd.',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Praveen',
+        clientRrepresentative: 'Jerin',
+        isChecked: false,
+      },
+      {
+        taxonomy: 'ONGC Acute',
+        companyName: 'ONGC',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Balaji',
+        clientRrepresentative: 'Praveen',
+        isChecked: false,
+      },
+      {
+        taxonomy: 'Indian Acute',
+        companyName: 'Indian Gas',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Rajesh',
+        clientRrepresentative: 'Gopi',
+        isChecked: false,
+      }
+    ]
+  }
+
+  // tabs activate
   useEffect(() => {
     if (tabsRefs.current[0]) {
       tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
@@ -28,30 +88,38 @@ const Reports = (props) => {
     }
   }, []);
 
+  // shifted the tabs checking data empty
+  useEffect(() => {
+    if (tabFlag === 'Pending Companies') {
+      setPendingCompanies(companyData.pending);
+      setSelectItem(false);
+    } else if (tabFlag === 'Completed Companies') {
+      setCompletedCompanies(companyData.completed);
+      setSelectItem(false);
+    }
+  }, [tabFlag]);
+
+  // taxonomy filter
+  const onTaxonomyChange = (e) => {
+    setTaxonomy(e);
+  };
+
   // completed company table
   const CompletedCompanyTableData = (props) => {
-    const tableRowData = (data) => data.map((data, id) => ({
-      taxonomy: data.taxonomy,
-      companyName: data.companyName,
+    const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data, id) => ({
+      companyName: data.companyName ? <Checkbox value={data.companyName} isChecked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> : '',
       completedDate: new Date().toDateString(),
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
-          id: 'taxonomy',
-          align: 'center',
-          label: 'Taxonomy',
-          dataType: 'string',
-        },
-        {
           id: 'companyName',
-          align: 'center',
+          align: 'left',
           label: 'Company Name',
-          dataType: 'string',
+          dataType: 'element',
         },
         {
           id: 'completedDate',
@@ -71,46 +139,65 @@ const Reports = (props) => {
           label: 'Company Representative',
           dataType: 'string',
         },
-        {
-          id: 'viewTask',
-          align: 'center',
-          label: 'View Task',
-          dataType: 'element',
-        }
       ],
-      tableLabel: <span>Completed Companies </span>,
+      tableLabel: <div className="w-100">
+        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompanies.map((data) => (
+          <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
+        ))}</Select>
+      </div>,
     };
   };
 
+  // checked companies list
+  const onCompanyCheck = (data, status) => {
+    if (status === "pending") {
+      const newCompanies = [...pendingCompanies]
+      const itemIndex = newCompanies.findIndex(item => item.companyName === data.companyName);
+      newCompanies[itemIndex].isChecked = !newCompanies[itemIndex].isChecked;
+      setPendingCompanies(newCompanies);
+      setSelectItem(newCompanies.filter(company => company.isChecked === true).length !== 0);
+    } else if (status === "complete") {
+      const newCompanies = [...completedCompanies]
+      const itemIndex = newCompanies.findIndex(item => item.companyName === data.companyName);
+      newCompanies[itemIndex].isChecked = !newCompanies[itemIndex].isChecked;
+      setPendingCompanies(newCompanies);
+      setSelectItem(newCompanies.filter(company => company.isChecked === true).length !== 0);
+    }
+  };
+
+  // view multiple companies task
+  const viewCheckedCompanies = () => {
+    if (tabFlag === 'Pending Companies') {
+      const selectedCompanies = pendingCompanies.filter(company => company.isChecked === true);
+      history.push({ pathname: '/tasklist', state: selectedCompanies, tabFlag: tabFlag, multiSelect: true });
+    } else if (tabFlag === 'Completed Companies') {
+      const selectedCompanies = completedCompanies.filter(company => company.isChecked === true);
+      history.push({ pathname: '/tasklist', state: selectedCompanies, tabFlag: tabFlag, multiSelect: true });
+    }
+  }
+
   // pending company table
   const PendingCompanyTableData = (props) => {
-    const tableRowData = (data) => data.map((data, id) => ({
-      taxonomy: data.taxonomy,
-      companyName: data.companyName,
-      startedDate: data.completedDate,
+    const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data, id) => ({
+      companyName: data.companyName ? <Checkbox value={data.companyName} isChecked={data.isChecked} onChange={() => onCompanyCheck(data, "pending")}>{data.companyName}</Checkbox> : '',
+      allocatedDate: data.completedDate,
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
-      viewTask: <FontAwesomeIcon className="view-icon" size="lg" key={id} icon={faEye} onClick={() => onView(data,tabFlag)} />
     }));
+
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
-          id: 'taxonomy',
-          align: 'center',
-          label: 'Taxonomy',
-          dataType: 'string',
-        },
-        {
           id: 'companyName',
-          align: 'center',
+          align: 'left',
           label: 'Company Name',
-          dataType: 'string',
+          dataType: 'element',
         },
         {
-          id: 'startedDate',
+          id: 'allocatedDate',
           align: 'center',
-          label: 'Started Date',
+          label: 'Allocated Date',
           dataType: 'date',
         },
         {
@@ -125,14 +212,13 @@ const Reports = (props) => {
           label: 'Company Representative',
           dataType: 'string',
         },
-        {
-          id: 'viewTask',
-          align: 'center',
-          label: 'View Task',
-          dataType: 'element',
-        }
       ],
-      tableLabel: <span>Pending Companies</span>,
+      tableLabel: <div className="w-100">
+        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >
+          {pendingCompanies.map((data) => (
+            <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
+          ))}</Select>
+      </div>,
     };
   };
 
@@ -150,64 +236,11 @@ const Reports = (props) => {
     });
     const target = event.currentTarget;
     target.classList.add('tabs-label-count-wrap-active');
-    setTabFlag(label)
+    setTabFlag(label);
   };
 
-  const companyData = {
-    completed: [
-      {
-        taxonomy: 'Rel Acute',
-        companyName: 'Reliance ltd.',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Balaji',
-      },
-      {
-        taxonomy: 'Rel Acute1',
-        companyName: 'Reliance ltd.',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Balaji',
-      },
-      {
-        taxonomy: 'HPCL Acute',
-        companyName: 'HPCL',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Balaji',
-        clientRrepresentative: 'Praveen',
-      }
-    ],
-    pending: [
-      {
-        taxonomy: 'IDEA Acute',
-        companyName: 'IDEA Ltd.',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Jerin'
-      },
-      {
-        taxonomy: 'ONGC Acute',
-        companyName: 'ONGC',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Balaji',
-        clientRrepresentative: 'Praveen',
-      },
-      {
-        taxonomy: 'Indian Acute',
-        companyName: 'Indian Gas',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Rajesh',
-        clientRrepresentative: 'Gopi',
-      }
-    ]
-  }
 
-  const selecteTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(companyData.pending) : CompletedCompanyTableData(companyData.completed);
-
-  // View the pendong reports
-  const onView = (data,tabFlag) => {
-    history.push({ pathname: '/tasklist', state: data,tabFlag:tabFlag });
-  };
+  const selectTab = tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanies) : CompletedCompanyTableData(completedCompanies);
 
   return (
     <div className="main">
@@ -225,7 +258,7 @@ const Reports = (props) => {
             ))}
           </div>
           <div>
-            <CustomTable tableData={selecteTab} showDatePicker />
+            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} />
           </div>
         </div>
       </div>

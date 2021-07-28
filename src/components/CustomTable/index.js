@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon,
+  tableData, showDatePicker, isLoading, message, icon, selectItem, viewCheckedCompanies
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
@@ -324,7 +324,9 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
+        {selectItem && <button className="view-checked-company-reports btn btn-primary" onClick={viewCheckedCompanies}>View Companies Task</button>}
         <TablePagination
+          className={selectItem ? 'w-auto d-flex align-items-end flex-column' : ''}
           rowsPerPageOptions={[5, 10, 15]}
           component="div"
           count={rowsData.length}
