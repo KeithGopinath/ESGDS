@@ -1,15 +1,20 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, Drawer } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
 import { history } from '../../routes';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
 import ErrorPanel from './ErrorPanel';
+
+import validateReqFields from './validateReqFields';
+
+import AddSource from './AddSource';
 
 let temporaryData;
 
@@ -74,7 +79,7 @@ export const DataSheetComponent = (props) => {
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
-  const formDataType = defaultData.dataType.toUpperCase();
+  const formDataType = defaultData.dataType === 'String' && isAnalyst_CC ? 'CONSTRING' : defaultData.dataType.toUpperCase();
   // *TEXT SNIPPET*
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   // *PAGE NO*
@@ -112,6 +117,9 @@ export const DataSheetComponent = (props) => {
   // CONTROVERSY COLLECTION COMMENT
   const [formControversyComment, setFormControversyComment] = useState(defaultData.comment || '');
 
+  // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
+  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+
   // USEEFFECTS
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -132,6 +140,8 @@ export const DataSheetComponent = (props) => {
     });
     setIsErrorPanelVisible(false);
     setFormControversyComment(defaultData.comment || '');
+
+    setIsSrcPanelOpened(false);
   }, [props.reqData]);
 
   // Onchange Functions
@@ -144,9 +154,18 @@ export const DataSheetComponent = (props) => {
     setFormPageNo(event.currentTarget.value);
   };
 
+  const getBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    }
+  });
+
   const onChangeFormScreenShotPath = (event) => {
     setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    setFormScreenShotFile(event);
+    getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
   };
 
   const onChangeFormResponse = (event) => {
@@ -169,6 +188,9 @@ export const DataSheetComponent = (props) => {
       case 'STRING':
         setFormResponse(event.currentTarget.value);
         break;
+      case 'CONSTRING':
+        setFormResponse(event.value);
+        break;
       default:
         break;
     }
@@ -176,10 +198,7 @@ export const DataSheetComponent = (props) => {
 
   const onChangeFormSource = (event) => {
     if (isAnalyst_CC) {
-      setFormSource({
-        ...formSource,
-        sourceName: event.target.value,
-      });
+      setFormSource({ ...formSource, sourceName: event.target.value });
     } else {
       setFormSource(event.value);
       setFormURL(event.value.url);
@@ -201,7 +220,7 @@ export const DataSheetComponent = (props) => {
     if (isAnalyst_CC) {
       setFormSource({
         ...formSource,
-        publicationDate: event.target.value,
+        publicationDate: event,
       });
     }
     setFormPublicDate(event);
@@ -435,12 +454,19 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          comment: formComment,
+          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          comment: formControversyComment,
         };
       }
     }
-    props.onClickSave(saveData);
-    message.success('Saved Successfully');
+
+    const roleScreenType = [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType];
+    if (validateReqFields(saveData, roleScreenType)) {
+      props.onClickSave(saveData);
+      // message.success('Saved Successfully');
+    } else {
+      message.error('Please Fill Required fields !');
+    }
   };
 
   const dummyEditClickHandler = () => {
@@ -589,6 +615,17 @@ export const DataSheetComponent = (props) => {
     openNotificationWithIcon('success', 'rejected');
   };
 
+
+  // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
+  const onClickOpenAddSource = () => {
+    setIsSrcPanelOpened(true);
+  };
+
+  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
+  const onClickCloseAddSource = () => {
+    setIsSrcPanelOpened(false);
+  };
+
   return (
     <Row>
 
@@ -629,8 +666,8 @@ export const DataSheetComponent = (props) => {
             type="text"
             name="response"
             placeholder="Response"
-            onChange={null}
-            value={formSource.sourceName}
+            value={formSource && formSource.sourceName}
+            onChange={onChangeFormSource}
             disabled={disableField}
           />
         }
@@ -655,7 +692,7 @@ export const DataSheetComponent = (props) => {
       {/* ADD SOURCE Button */}
       {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
       <Col lg={6}>
-        <Button onClick={props.openSourcePanel}>Add Source</Button>
+        <Button onClick={onClickOpenAddSource}>Add Source</Button>
       </Col>}
 
       {/* HORIZONTAL Line */}
@@ -681,6 +718,23 @@ export const DataSheetComponent = (props) => {
             onChange={onChangeFormResponse}
             value={formResponse}
             disabled={disableField}
+          />
+        }
+      />}
+
+      {/* RESPONSE Field */}
+      { formDataType === 'CONSTRING' &&
+      <FieldWrapper
+        label="Response*"
+        visible
+        body={
+          <Select
+            name="response"
+            options={defaultData.controversyResponseList && defaultData.controversyResponseList.map((e) => ({ label: e, value: e }))}
+            onChange={onChangeFormResponse}
+            value={formResponse && { label: formResponse, value: formResponse }}
+            placeholder="Choose Response"
+            isDisabled={disableField}
           />
         }
       />}
@@ -942,7 +996,7 @@ export const DataSheetComponent = (props) => {
         reqSourceData={sourceList}
         textResponse={textResponse}
         locationData={props.locationData}
-        openSourcePanel={props.openSourcePanel}
+        openSourcePanel={onClickOpenAddSource}
         onClickSave={props.onClickSave}
       />}
 
@@ -977,7 +1031,7 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="success" onClick={saveAndNextClickHandler}>Save And Next</Button>}
 
         {/* SAVE&CLOSE Button */}
-        { (((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex)) || (isAnalyst_CC)) &&
+        { ((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex)) &&
         <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
 
         {/* HISTORY UNFREEZE Button */}
@@ -990,6 +1044,20 @@ export const DataSheetComponent = (props) => {
 
 
       </Col>
+
+      {/* ADD SOURCE PANEL */}
+      <Drawer
+        title="Add Source"
+        placement="right"
+        closable={false}
+        onClose={onClickCloseAddSource}
+        visible={isSrcPanelOpened}
+        key="right"
+        width={300}
+        headerStyle={{ backgroundColor: '#2199c8' }}
+      >
+        {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} companyId={defaultData.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
+      </Drawer>
 
       <Modal
         title="Error Panel"

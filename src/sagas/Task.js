@@ -12,8 +12,18 @@ export function* taskGetRequest(data) {
   }
 }
 
+export function* controversyTaskGetRequest(data) {
+  try {
+    const response = yield doGet(`${envConfig.apiEndPoints.getControversyTask}/${data.taskId}`);
+    yield put(actionCreators.controversyTaskGetSuccess(response));
+  } catch (error) {
+    yield put(actionCreators.controversyTaskGetFailure(error));
+  }
+}
+
 export function* taskWatchers() {
   yield [
     takeLatest('TASK_GET_REQUEST', taskGetRequest),
+    takeLatest('CONTROVERSY_TASK_GET_REQUEST', controversyTaskGetRequest),
   ];
 }
