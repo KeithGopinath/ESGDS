@@ -316,7 +316,7 @@ const CustomTable = ({
                       <PageLoader /> :
                       <Result
                         icon={icon || <InboxOutlined />}
-                        title={message || 'All Done!'}
+                        title={message || 'No Data Found!'}
                       />
                     }
                   </TableCell>

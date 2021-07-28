@@ -49,9 +49,7 @@ const AddSource = (props) => {
     setStatusAlert(true);
   }, []);
 
-  const getSourceTypeFromStore = useSelector((state) => state.sourceTypeGet);
-
-  const postSourceTypeFromStore = useSelector((state) => state.sourceTypePost);
+  const [getSourceTypeFromStore, postSourceTypeFromStore] = useSelector((state) => [state.sourceType, state.sourceTypeCreate]);
 
   const sourceListAPIData = (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.data ? getSourceTypeFromStore.source.data : []);
 

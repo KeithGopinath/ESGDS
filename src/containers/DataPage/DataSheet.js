@@ -12,6 +12,8 @@ import { history } from '../../routes';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
 import ErrorPanel from './ErrorPanel';
 
+import validateReqFields from './validateReqFields';
+
 import AddSource from './AddSource';
 
 let temporaryData;
@@ -457,8 +459,14 @@ export const DataSheetComponent = (props) => {
         };
       }
     }
-    props.onClickSave(saveData);
-    message.success('Saved Successfully');
+
+    const roleScreenType = [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType];
+    if (validateReqFields(saveData, roleScreenType)) {
+      props.onClickSave(saveData);
+      // message.success('Saved Successfully');
+    } else {
+      message.error('Please Fill Required fields !');
+    }
   };
 
   const dummyEditClickHandler = () => {

@@ -1,6 +1,6 @@
 const initialState = { isLoading: false };
 
-export const sourceTypeGet = (state = initialState, action) => {
+export const sourceType = (state = initialState, action) => {
   switch (action.type) {
     case 'SOURCE_TYPE_GET_REQUEST':
       return {
@@ -26,7 +26,7 @@ export const sourceTypeGet = (state = initialState, action) => {
   }
 };
 
-export const sourceTypePost = (state = initialState, action) => {
+export const sourceTypeCreate = (state = initialState, action) => {
   switch (action.type) {
     case 'SOURCE_TYPE_POST_REQUEST':
       return {

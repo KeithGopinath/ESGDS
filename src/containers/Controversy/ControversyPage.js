@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button } from 'react-bootstrap';
-import { Comment, List, Avatar, Tag, message } from 'antd';
+import { Comment, List, Avatar, Tag, message, Spin } from 'antd';
 import { SwapRightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -11,6 +11,7 @@ import Header from '../../components/Header';
 import DataAccordian from '../DataPage/DataAccordian';
 import { DataSheetComponent } from '../DataPage/DataSheet';
 import { history } from '../../routes';
+import PageLoader from '../../components/PageLoader';
 
 
 const ControversyPage = (props) => {
@@ -22,7 +23,7 @@ const ControversyPage = (props) => {
   const [reqCurrentData, setReqCurrentData] = useState(dpCodeData);
   const [statusAlert, setStatusAlert] = useState(false);
 
-  const [dpCodeDataPostFromStore, dpCodeDataUpdateFromStore] = useSelector((state) => [state.dpCodeDataPost, state.dpCodeDataUpdate]);
+  const [dpCodeDataPostFromStore, dpCodeDataUpdateFromStore] = useSelector((state) => [state.dpCodeDataCreate, state.dpCodeDataEdit]);
 
   useEffect(() => {
     if (dpCodeDataPostFromStore && dpCodeDataPostFromStore.dpCodeData && dpCodeDataPostFromStore.dpCodeData.status && statusAlert) {
@@ -30,8 +31,8 @@ const ControversyPage = (props) => {
       setStatusAlert(false);
       history.goBack();
     }
-    if (dpCodeDataPostFromStore && dpCodeDataPostFromStore.dpCodeData && dpCodeDataPostFromStore.dpCodeData.error && statusAlert) {
-      message.error(dpCodeDataPostFromStore.dpCodeData.error.message ? dpCodeDataPostFromStore.dpCodeData.error.message : 'Something went wrong, Try again later !');
+    if (dpCodeDataPostFromStore && dpCodeDataPostFromStore.error && statusAlert) {
+      message.error(dpCodeDataPostFromStore.error.message ? dpCodeDataPostFromStore.error.message : 'Something went wrong, Try again later !');
       setStatusAlert(false);
     }
   }, [dpCodeDataPostFromStore]);
@@ -42,8 +43,8 @@ const ControversyPage = (props) => {
       setStatusAlert(false);
       history.goBack();
     }
-    if (dpCodeDataUpdateFromStore && dpCodeDataUpdateFromStore.dpCodeData && dpCodeDataUpdateFromStore.dpCodeData.error && statusAlert) {
-      message.error(dpCodeDataUpdateFromStore.dpCodeData.error.message ? dpCodeDataUpdateFromStore.dpCodeData.error.message : 'Something went wrong, Try again later !');
+    if (dpCodeDataUpdateFromStore && dpCodeDataUpdateFromStore.error && statusAlert) {
+      message.error(dpCodeDataUpdateFromStore.error.message ? dpCodeDataUpdateFromStore.error.message : 'Something went wrong, Try again later !');
       setStatusAlert(false);
     }
   }, [dpCodeDataUpdateFromStore]);
@@ -126,6 +127,8 @@ const ControversyPage = (props) => {
   const onClickBack = () => {
     history.goBack();
   };
+
+  console.log(dpCodeDataPostFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading);
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -135,14 +138,16 @@ const ControversyPage = (props) => {
           <div className="datapage-info-group">
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Controversy" isActive >
-                <DataSheetComponent
-                  reqData={reqCurrentData}
-                  onClickSave={saveReqCurrentData}
-                />
-                <Col lg={12} className="datapage-button-wrap">
-                  {reqCurrentData.status === 'Completed' && <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
-                  <Button className="datapage-button" variant="success" onClick={submitAndCloseClickHandler}>Sumbit</Button>
-                </Col>
+                <Spin indicator={<PageLoader />} spinning={false} >
+                  <DataSheetComponent
+                    reqData={reqCurrentData}
+                    onClickSave={saveReqCurrentData}
+                  />
+                  <Col lg={12} className="datapage-button-wrap">
+                    {reqCurrentData.status === 'Completed' && <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
+                    <Button className="datapage-button" variant="success" onClick={submitAndCloseClickHandler}>Sumbit</Button>
+                  </Col>
+                </Spin>
               </DataAccordian>
             </Col>
             {dpCodeData.comments &&

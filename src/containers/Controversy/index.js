@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { Divider } from 'antd';
 import { Link } from 'react-router-dom';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleFilled } from '@ant-design/icons';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable';
@@ -164,7 +164,14 @@ const Controversy = (props) => {
               </Row>
             </div>
             <div style={{ padding: '20px 2%' }}>
-              <ControversyPendingTaskTable controversyList={reqDpCodeData.controversyList ? reqDpCodeData.controversyList : []} isLoading={reqConDpCodeDataFromStore.isLoading} message={reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error && (reqConDpCodeDataFromStore.error.message || 'Something went wrong !')} icon={reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error && <CloseCircleOutlined />} taskDetails={taskDetails} controversyResponseList={reqDpCodeData.responseList} />
+              <ControversyPendingTaskTable
+                controversyList={reqDpCodeData.controversyList ? reqDpCodeData.controversyList : []}
+                isLoading={reqConDpCodeDataFromStore.isLoading}
+                message={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? (reqConDpCodeDataFromStore.error.message || 'Something went wrong !') : null}
+                icon={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? <CloseCircleFilled /> : null}
+                taskDetails={taskDetails}
+                controversyResponseList={reqDpCodeData.responseList}
+              />
             </div>
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}

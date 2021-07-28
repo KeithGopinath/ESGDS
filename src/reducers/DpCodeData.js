@@ -47,7 +47,7 @@ export const dpCodeData = (state = initialState, action) => {
   }
 };
 
-export const dpCodeDataPost = (state = initialState, action) => {
+export const dpCodeDataCreate = (state = initialState, action) => {
   switch (action.type) {
     case 'CONTROVERSY_DPCODEDATA_POST_REQUEST':
       return {
@@ -74,7 +74,7 @@ export const dpCodeDataPost = (state = initialState, action) => {
   }
 };
 
-export const dpCodeDataUpdate = (state = initialState, action) => {
+export const dpCodeDataEdit = (state = initialState, action) => {
   switch (action.type) {
     case 'CONTROVERSY_DPCODEDATA_UPDATE_REQUEST':
       return {
