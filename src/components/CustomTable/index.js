@@ -80,7 +80,7 @@ const CustomTable = ({
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
   const DEFAULT_PAGE = 0;
-  const DEFAULT_ROWS_PER_PAGE = 5;
+  const DEFAULT_ROWS_PER_PAGE = 10;
   const { RangePicker } = DatePicker;
 
   // STATES
