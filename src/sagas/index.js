@@ -38,6 +38,8 @@ import { getGettasklistWatchers } from './GetTaskList';
 import { sourceTypeWatchers } from './SourceType';
 import { taskEditDetailsWatchers } from './TaskEditDetails';
 import { taskUpdateWatchers } from './UpdateTask';
+import { getControversyTaskDataWatchers } from './GetControversyTaskData';
+import { createControversyTaskWatchers } from './CreateControversyTask';
 
 export default function* rootWatchers() {
   yield all([
@@ -80,5 +82,7 @@ export default function* rootWatchers() {
     sourceTypeWatchers(),
     taskEditDetailsWatchers(),
     taskUpdateWatchers(),
+    getControversyTaskDataWatchers(),
+    createControversyTaskWatchers(),
   ]);
 }

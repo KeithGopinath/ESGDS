@@ -42,6 +42,8 @@ export default {
     updateControversyDpCodeData: 'controversies/update',
     taskEditDetails: 'taskAssignments/getQaAndAnalyst',
     updateTask: 'taskAssignments/updateSlaDates',
+    getControversyTaskData: 'controversy_tasks/fetch_new_task_data',
+    createControversyTask: 'controversy_tasks/new-task',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
