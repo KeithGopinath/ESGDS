@@ -14,6 +14,8 @@ import moment from 'moment';
 const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
+  const [analystDetail, setanalystDetail] = useState('');
+  const [qaDetail, setqaDetail] = useState('');
 
   const companiesTaskList = [
     {
@@ -271,6 +273,8 @@ const TaskList = (props) => {
   // filter companies taskList
   const getCompanyDetails = companyNameList.map((comp) => companiesTaskList.filter((data) => (data.companyName === comp)));
   const companyDetails = [].concat.apply([], getCompanyDetails);
+  const [analystsla, setanalystsla] = useState(null);
+  const [qasla, setqasla] = useState(null);
 
   // export data in excel file
   const downloadReports = () => {
@@ -281,9 +285,21 @@ const TaskList = (props) => {
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workBook, `${companyNameList.join()}.xlsx`);
   };
-
+ 
   const sideBarRef = useRef();
+  const getFormatDate=(arg)=>{
+    const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
+    return date
+  }
   const handleShow = (arg) => {
+console.log(arg);
+    const editDetails = { groupId: arg.groupId, batchId: arg.batchId }; 
+    dispatch({type:"TASKEDITDETAILS_REQUEST", payload: editDetails });
+    setanalystDetail({value:arg.analystId, label: arg.analyst});
+    setqaDetail({value:arg.qaId, label: arg.qa});
+    setanalystsla(getFormatDate(arg.analystSLA));
+    setqasla(getFormatDate(arg.qaSLA));
+
     setrowValue(arg);
     setShow(true);
   };
@@ -302,7 +318,7 @@ const TaskList = (props) => {
       (tabFlag === 'Completed Companies') ?
         obj.map((e) => ({
           company: e.companyName,
-          taskid: e.taskid,
+          taskid: e.taskNumber,
           group: e.group,
           batch: e.batch,
           pillar: e.pillar,
@@ -314,7 +330,7 @@ const TaskList = (props) => {
         })) :
         obj.map((e) => ({
           company: e.companyName,
-          taskid: e.taskid,
+          taskid: e.taskNumber,
           group: e.group,
           batch: e.batch,
           pillar: e.pillar,
@@ -327,7 +343,7 @@ const TaskList = (props) => {
         }))
       :
       obj.map((e) => ({
-        taskid: e.taskid,
+        taskid: e.taskNumber,
         group: e.group,
         batch: e.batch,
         company: e.company,
@@ -565,7 +581,7 @@ const TaskList = (props) => {
           </div>
         </div>
       </div>
-      <EditTask setShow={setShow} show={show} rowValue={rowValue} setrowValue={setrowValue} />
+      <EditTask setShow={setShow} show={show} rowValue={rowValue} qasla={qasla} setqasla={setqasla} analystsla={analystsla} analystDetail={analystDetail} setanalystDetail={setanalystDetail} qaDetail={qaDetail} setqaDetail={setqaDetail} setanalystsla={setanalystsla} setqaDetailsetrowValue={setrowValue} />
     </React.Fragment>
   );
 };

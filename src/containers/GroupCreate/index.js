@@ -33,14 +33,15 @@ const GroupView = () => {
  useEffect(()=>{
   
   dispatch({ type: 'GROUPLIST_REQUEST' });
+  dispatch({type: "GROUPBYID_RESET"});
  },[]);
  const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
  const grpDtetail = isGroupByid && isGroupByid.data;
- useEffect(()=>{
-if(grpDtetail){
-  history.push("/group-assignment");
-}
- },[grpDtetail])
+//  useEffect(()=>{
+// if(grpDtetail){
+//   history.push("/group-assignment");
+// }
+//  },[grpDtetail])
  const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
  const groupList = isGroupCreated && isGroupCreated.rows;
   const groupCount = groupList && groupList.length;
@@ -59,7 +60,12 @@ if(grpDtetail){
 
   };
   const onhandlegrpid = (grpid) => {
-    dispatch({ type: 'GROUPBYID_REQUEST', groupid: grpid });
+    //dispatch({ type: 'GROUPBYID_REQUEST', groupid: grpid });
+    history.push({
+      pathname: '/group-assignment',
+      state: grpid,
+    })
+    // history.push("/group-assignment");
   };
   const onhandeleGrpPage = () => {
     history.push("/group-assignment");

@@ -50,7 +50,24 @@ const TaskCreate = () => {
   const ispillarData = onpillarclick && onpillarclick.data;
   console.log(ispillarData, 'onpillarclick');
 
-  
+  const aftertaskcreated = useSelector((taskresponse)=>taskresponse.createTask.taskpost);
+  // console.log(aftertaskcreated,'aftertaskcreated');
+  useEffect(()=>{
+    if(aftertaskcreated){
+      setanalystSla('');
+      setqaSla('');
+      setPillar('');
+      setRadioEle('');
+      setRadioEleqa('');
+      setqacheckdate('');
+      setstatusRole(true);
+      setisDisabledQA(true);
+      onSelectAllRow(false);
+      message.success(aftertaskcreated.message);
+    }
+
+  },[aftertaskcreated]);
+  // message.success("Task created successfully");
   const onSelectRow = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { id: row.id, selectedCompany: row.companyName };
@@ -271,7 +288,7 @@ const TaskCreate = () => {
           
           console.log(taskPayload, 'taskPayload');
           dispatch({ type: 'CREATE_TASK_REQUEST', payload: taskPayload });
-          message.success("Task created successfully");
+         
       }
         else {
           message.error("fill all the required fields");
@@ -395,10 +412,13 @@ const TaskCreate = () => {
  
   const tableDataanalyst = analystTableData((ispillarData)? ispillarData.analystData : []);
   const tableDataqa = qaTableData((ispillarData)? ispillarData.qaData : []);
-  const pillaRadio =batchInfo.Pillars && batchInfo.Pillars.map((e)=>(
-    <Radio key={e.value} value={e.value}>{e.label}</Radio>
+  const pillaRadio =batchInfo.Pillars && batchInfo.Pillars.map((e)=>{
+    console.log(pillar.value, e.value, 'pillar.value ,e.value')
+    return(
+    <Radio  value={e.value} >{e.labelF}</Radio>
     
-  ));
+  )
+  });
   const batchInfoTab = () => (
     <Container>
       <Row className="task-row">
@@ -426,7 +446,7 @@ const TaskCreate = () => {
         <div className="radio-select">
             <div className="task-role">Select pillar for task <span className="mandatory-color">*</span></div>
             <div className="task-pillar-select">
-            <Radio.Group  onChange={handleChangePillar} >
+            <Radio.Group value={pillar.value} onChange={handleChangePillar} >
                 {pillaRadio}
             </Radio.Group>
             </div>
@@ -559,14 +579,22 @@ const TaskCreate = () => {
         </Row>
         <Divider style={{borderTop:'3px solid rgba(0, 0, 0, 0.06)'}}></Divider>
         <Row>
-          {companyInfo && companyInfo.batches.map(({ batchName, batchID }) =>
+          { ( companyInfo && companyInfo.batches.length > 0) ? companyInfo.batches.map(({ batchName, batchID }) =>
             (
               <Col lg={3} md={6} sm={12} key={batchID}>
                 <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
                   <ListItemText primary={batchName} />
                 </Card>
               </Col>
-            ))
+            )) :
+            <Col>
+             <div className= "not-batch-assign-screen">
+            <div className = "not-batch-assign-screen-inner">
+              <div className="info-icon-batch"><ExceptionOutlined /></div>
+              <div className="info-text-batch">Batches not assigned!</div>
+            </div>
+            </div>
+          </Col>
           }
         </Row>
       </Container>

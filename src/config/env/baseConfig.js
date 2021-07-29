@@ -21,7 +21,7 @@ export default {
     getPendingTasksList: 'taskAssignments/my-tasks',
     putMatrixMember: '/companies/add/member',
     getTask: 'datapoints/list',
-    gettaskDetails: '/taskAssignments/getGroupAndBatches',
+    gettaskDetails: 'taskAssignments/getGroupAndBatches',
     getDpCodeData: 'datapoints/dpDetails',
     getpillarTaxonomy: 'categories/taxonomy-pillars',
     unassignedBatches: 'batches/all/unassigned',
@@ -40,6 +40,8 @@ export default {
     getControversyDpCodeData: 'controversies/fetch',
     postControversyDpCodeData: 'controversies/add/new-controversy',
     updateControversyDpCodeData: 'controversies/update',
+    taskEditDetails: 'taskAssignments/getQaAndAnalyst',
+    updateTask: 'taskAssignments/updateSlaDates',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

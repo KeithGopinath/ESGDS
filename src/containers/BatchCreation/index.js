@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+// import { message } from 'antd';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 // import * as XLSX from 'xlsx';
@@ -56,9 +57,16 @@ const BatchCreation = ({ show, setShow }) => {
   console.log(isbatchCreated, 'isbatchCreated');
   useEffect(() => {
     if (isbatchCreated) {
+      setAlert(1);
       setTimeout(() => {
         setAlert(0);
-      }, 2000);
+      }, 3000);
+      setBatch('');
+      setYear('');
+      setsubsetTax('');
+      setRowDetails([]);
+      setValidBorder(false);
+      dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
       dispatch({ type: 'BATCH_REQUEST' });
     } else {
       console.log('fail');
@@ -174,10 +182,6 @@ const BatchCreation = ({ show, setShow }) => {
         taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail,
       };
       dispatch({ type: 'BATCH_CREATE_REQUEST', payload: data });
-      setTimeout(() => {
-        setAlert(0);
-      }, 2000);
-      setAlert(1);
     } else {
       setAlert(2);
     }
@@ -195,6 +199,7 @@ const BatchCreation = ({ show, setShow }) => {
             <Select
               options={taxOptions}
               onChange={onHandleTax}
+              value={subsetTax}
             />
           </div>
           <div className="batch-name">Batch name <span className="mandatory-color">*</span></div>
@@ -207,6 +212,7 @@ const BatchCreation = ({ show, setShow }) => {
               isMulti
               options={yearOptions}
               onChange={onHandleYear}
+              value={year}
             />
           </div>
           {/* <div className="batch-sla">Batch SLA*</div>

@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: true,
         groupById: action.getgroupbyid,
       };
+    case 'GROUPBYID_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        groupById: false,
+      };
     case 'GROUPBYID_FAILURE':
       return {
         ...state,

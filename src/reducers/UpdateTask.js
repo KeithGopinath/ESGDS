@@ -2,27 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'TAXANOMYCOMPANY_REQUEST':
+    case 'UPDATETASK_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        taxonomycompany: false,
+        taskUpdate: false,
       };
-    case 'TAXANOMYCOMPANY_SUCCESS':
+    case 'UPDATETASK_SUCCESS':
       return {
         ...state,
         isLoading: true,
-        taxonomycompany: action.taxcompany,
+        taskUpdate: action.taskupdate,
       };
-    case 'TAXANOMYCOMPANY_RESET':
-      return {
-        ...state,
-        isLoading: true,
-        error: false,
-        taxonomycompany: false,
-      };
-    case 'TAXANOMYCOMPANY_FAILURE':
+    case 'UPDATETASK_FAILURE':
       return {
         ...state,
         isLoading: true,

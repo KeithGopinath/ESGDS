@@ -37,6 +37,8 @@ import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
 import uploadCompanies from './UploadCompanies';
 import { sourceType, sourceTypeCreate } from './SourceType';
+import taskEditDetails from './TaskEditDetails';
+import taskUpdate from './UpdateTask';
 
 import taskList from './GetTaskList';
 const combinedReducer = combineReducers({
@@ -81,6 +83,8 @@ const combinedReducer = combineReducers({
   sourceTypeCreate,
   dpCodeDataCreate,
   dpCodeDataEdit,
+  taskEditDetails,
+  taskUpdate,
 });
 
 const rootReducer = (state, action) => {
