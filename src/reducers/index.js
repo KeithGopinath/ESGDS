@@ -25,7 +25,7 @@ import matrixMember from './MatrixMember';
 import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
-import dpCodeData from './DpCodeData';
+import { dpCodeData, dpCodeDataCreate, dpCodeDataEdit } from './DpCodeData';
 import pillarlist from './GetPillarTaxanomy';
 import assignpillar from './PillarAssignment';
 import unassignedBatch from './GetUnassignedBatch';
@@ -36,6 +36,7 @@ import taskpillar from './OnSelectPillar';
 import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
 import uploadCompanies from './UploadCompanies';
+import { sourceType, sourceTypeCreate } from './SourceType';
 
 import taskList from './GetTaskList';
 const combinedReducer = combineReducers({
@@ -76,6 +77,10 @@ const combinedReducer = combineReducers({
   createTask,
   uploadCompanies,
   taskList,
+  sourceType,
+  sourceTypeCreate,
+  dpCodeDataCreate,
+  dpCodeDataEdit,
 });
 
 const rootReducer = (state, action) => {

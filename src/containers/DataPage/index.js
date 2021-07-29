@@ -7,12 +7,12 @@ import { useDispatch } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExclamationCircleTwoTone } from '@ant-design/icons';
-import { Drawer, Tabs, Spin } from 'antd';
+import { Tabs, Spin } from 'antd';
 import moment from 'moment';
 
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import AddSource from './AddSource';
+// import AddSource from './AddSource';
 
 import { DataSheetComponent } from './DataSheet';
 import DataAccordian from './DataAccordian';
@@ -45,7 +45,7 @@ const DataSheetMain = (props) => {
     locationData,
     reqSourceData,
     reqErrorList,
-    openSourcePanel,
+    // openSourcePanel,
   } = props;
 
   console.log('////DATAPAGE INDEX PROPS', props);
@@ -155,7 +155,7 @@ const DataSheetMain = (props) => {
                   locationData={locationData}
                   reqSourceData={reqSourceData}
                   reqErrorList={reqErrorList}
-                  openSourcePanel={openSourcePanel}
+                  // openSourcePanel={openSourcePanel}
                   onClickSave={saveReqHistoricalData}
                   dummyDataCheck={reqDataCheckBeforeSave}
                 />
@@ -185,7 +185,7 @@ const DataSheetMain = (props) => {
                   locationData={locationData}
                   reqSourceData={reqSourceData}
                   reqErrorList={reqErrorList}
-                  openSourcePanel={openSourcePanel}
+                  // openSourcePanel={openSourcePanel}
                   onClickSave={saveReqCurrentData}
                   dummyDataCheck={reqDataCheckBeforeSave}
                 />
@@ -234,26 +234,27 @@ const DataPage = (props) => {
 
 
   // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
-  const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+  // const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
 
   // TEMP SRC STATE TO STORE ALL SRC THAT ARE UPLODED FROM SOURCE PANEL
-  const [sourceApiData, setSourceApiData] = useState(srcList);
+  // const [sourceApiData, setSourceApiData] = useState(srcList);
+  const sourceApiData = (srcList);
 
   // FUNC THAT UPDATES SRC STATE FOR EVERY SRC THAT ARE UPLOADED FROM SRC PANEL
-  const onUploadAddSource = (value) => {
-    const filteredData = sourceApiData.filter((src) => (value.sourceName !== src.sourceName));
-    setSourceApiData([...filteredData, { ...value }]);
-  };
+  // const onUploadAddSource = (value) => {
+  //   const filteredData = sourceApiData.filter((src) => (value.sourceName !== src.sourceName));
+  //   setSourceApiData([...filteredData, { ...value }]);
+  // };
 
   // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
-  const onClickOpenAddSource = () => {
-    setIsSrcPanelOpened(true);
-  };
+  // const onClickOpenAddSource = () => {
+  //   setIsSrcPanelOpened(true);
+  // };
 
-  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
-  const onClickCloseAddSource = () => {
-    setIsSrcPanelOpened(false);
-  };
+  // // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
+  // const onClickCloseAddSource = () => {
+  //   setIsSrcPanelOpened(false);
+  // };
 
   // A * FUNCTION THAT TAKES defaultApiData AS PARAMS, AND ALSO GRABS VALUES SUCH AS taskID, dpCode FROM props.location.state,
   // AND BY HAVING ALL ABOVE DATA IT FILTER RETURNS reqDpcodeData, reqTask, reqIndexes.
@@ -288,7 +289,7 @@ const DataPage = (props) => {
           <div className="datapage-info-group">
 
             {/* ADD SOURCE PANEL */}
-            <Drawer
+            {/* <Drawer
               title="Add Source"
               placement="right"
               closable={false}
@@ -299,7 +300,7 @@ const DataPage = (props) => {
               headerStyle={{ backgroundColor: '#2199c8' }}
             >
               {isSrcPanelOpened && <AddSource onUploadAddSource={onUploadAddSource} closeAddSourcePanel={onClickCloseAddSource} />}
-            </Drawer>
+            </Drawer> */}
             <Spin spinning={false} indicator={<PageLoader />}>
               {/* DATASHEETMAIN COMPONENT  */}
               <DataSheetMain
@@ -309,7 +310,7 @@ const DataPage = (props) => {
                 locationData={props.location}
                 reqSourceData={sourceApiData}
                 reqErrorList={errorList}
-                openSourcePanel={onClickOpenAddSource}
+                // openSourcePanel={onClickOpenAddSource}
               />
             </Spin>
 

@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { Divider } from 'antd';
 import { Link } from 'react-router-dom';
+import { CloseCircleFilled } from '@ant-design/icons';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable';
 import { history } from '../../routes';
+
+
+// Field Wrapper Components Wrap Up The Fields With Boostrap Rows And Colums With Props as {visible}, {body}, {label}
 const FieldWrapper = (props) => {
   if (props.visible) {
     return (
@@ -26,37 +32,37 @@ const FieldWrapper = (props) => {
   return null;
 };
 
-
+// CONTROVERSY PENDING TASK TABLE GETS {controversyList}, {taskDetails}, {isLoading} & {controversyResponseList} AS PROPS AND RETURN A TABLE WITH ALL DETAILS TABULATED
 const ControversyPendingTaskTable = (props) => {
-  // TABLE DATA
-  console.log(props);
+  // TABLE POPULATE FUNC POPULATES ROWS DATA THAT REQUIRESD FOR TABLE
   const tablePopulate = (data) => data.map((e) => ({
-    conId: e.id,
+    key: e.controversyNumber,
+    controversyNumber: e.controversyNumber,
     srcName: e.source.sourceName,
-    publicationDate: e.source.publicationDate,
+    publicationDate: moment(e.source.publicationDate).format('ddd MMM DD Y'),
     response: e.response,
     action:
   <Link
     href
     to={{
       pathname: '/controversypage',
-      state: { dpCodeData: e },
+      state: { dpCodeData: { ...e, status: 'Completed', controversyResponseList: props.controversyResponseList }, type: 'UPDATE', taskDetails: props.taskDetails },
     }}
   >View
   </Link>,
   }));
 
   const CONTROVERSY_PENDING_TASK_DATA = {
-    rowsData: tablePopulate(props.data),
+    rowsData: tablePopulate(props.controversyList),
     columnsHeadData: [
       {
-        id: 'conId', label: 'Id', align: 'center', dataType: 'string',
+        id: 'controversyNumber', label: 'No', align: 'center', dataType: 'string',
       },
       {
         id: 'srcName', label: 'Source Name', align: 'center', dataType: 'string',
       },
       {
-        id: 'publicationDate', label: 'Publication Date', align: 'center', dataType: 'string',
+        id: 'publicationDate', label: 'Publication Date', align: 'center', dataType: 'date',
       },
       {
         id: 'response', label: 'Response', align: 'center', dataType: 'string',
@@ -69,20 +75,50 @@ const ControversyPendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} />
+    <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} isLoading={props.isLoading} message={props.message} icon={props.icon} />
   );
 };
 
 const Controversy = (props) => {
+  // PROPS { taskDetails, dpCodeDetails }
+  const { taskDetails, dpCodeDetails } = props.location.state;
+
+  // DISPATCH DECLARATION
+  const dispatch = useDispatch();
+
+  // COMPONENT DID MOUNT LIKE USEEFFECT HOOKS TO CALL API
+  useEffect(() => {
+    dispatch({ type: 'CONTROVERSY_DPCODEDATA_GET_REQUEST', companyId: taskDetails.companyId, dpCodeId: dpCodeDetails.dpCodeId });
+  }, []);
+
+
+  const reqConDpCodeDataFromStore = useSelector((state) => state.dpCodeData);
+  const reqConDpCodeData = reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.dpCodeData;
+
   const sideBarRef = useRef();
-  const { taskDetails } = props.location.state;
-  const extractReqDpCode = (data) => {
-    const { dpCodeDetails } = props.location.state;
-    return data.filter((e) => (e.dpCode === dpCodeDetails.dpCode));
-  };
+
+  // EXTRACT DPCODE DATA
+  const extractReqDpCode = (data) => data.filter((e) => (e.dpCode === dpCodeDetails.dpCode));
+
   const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
-  const [reqDpCodeData] = extractReqDpCode(reqDpCodesData);
+
+  const [reqDpCodeData] = reqConDpCodeData && reqConDpCodeData.data ? [reqConDpCodeData.data] : extractReqDpCode(reqDpCodesData);
   console.log(reqDpCodeData);
+
+  const onClickAddNewControversy = () => history.push({
+    pathname: '/controversypage',
+    state: {
+      dpCodeData:
+      {
+        ...reqDpCodeData,
+        controversyResponseList: reqDpCodeData.responseList,
+        status: 'Add New',
+      },
+      type: 'NEW',
+      taskDetails,
+    },
+  });
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -102,43 +138,40 @@ const Controversy = (props) => {
                 /> */}
                 <FieldWrapper
                   label="Indicator*"
-                  visible
+                  visible={reqDpCodeData.indicator}
                   body={reqDpCodeData.indicator}
                 />
                 <FieldWrapper
                   label="KeyIssue*"
-                  visible
+                  visible={reqDpCodeData.keyIssue}
                   body={reqDpCodeData.keyIssue}
                 />
                 <FieldWrapper
                   label="Response*"
-                  visible
+                  visible={reqDpCodeData.avgResponse}
                   body={reqDpCodeData.avgResponse}
                 />
-                <Divider />
+                { (!reqConDpCodeDataFromStore.error && !reqConDpCodeDataFromStore.isLoading) && <Divider /> }
                 <Col lg={12} style={{ justifyContent: 'flex-end', alignItems: 'center', display: 'flex' }}>
+                  { (!reqConDpCodeDataFromStore.error && !reqConDpCodeDataFromStore.isLoading) &&
                   <Button
                     variant="light"
                     style={{ color: '#007bff' }}
-                    onClick={() => history.push({
-                      pathname: '/controversypage',
-                      state: {
-                        dpCodeData:
-                        {
-                          dpCode: reqDpCodeData.dpCode,
-                          status: 'Add New',
-                          description: reqDpCodeData.description,
-                          dataType: reqDpCodeData.dataType,
-                        },
-                      },
-                    })}
+                    onClick={onClickAddNewControversy}
                   >Add New +
-                  </Button>
+                  </Button>}
                 </Col>
               </Row>
             </div>
             <div style={{ padding: '20px 2%' }}>
-              <ControversyPendingTaskTable data={reqDpCodeData.controversyList} />
+              <ControversyPendingTaskTable
+                controversyList={reqDpCodeData.controversyList ? reqDpCodeData.controversyList : []}
+                isLoading={reqConDpCodeDataFromStore.isLoading}
+                message={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? (reqConDpCodeDataFromStore.error.message || 'Something went wrong !') : null}
+                icon={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? <CloseCircleFilled /> : null}
+                taskDetails={taskDetails}
+                controversyResponseList={reqDpCodeData.responseList}
+              />
             </div>
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
