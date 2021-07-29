@@ -12,11 +12,11 @@ const PillarAssignment = () => {
   const sideBarRef = useRef();
   const [targetKeys, setTargetKeys] = React.useState([]);
   const [assignedMember, setassignedMember] = React.useState([]);
-  const [taxonomy, settaxanomy] = React.useState('');
+  // const [taxonomy, settaxanomy] = React.useState('');
   const [mockData, setmockData ] = React.useState([]);
   const [isDisabledPrimary, setisDisabledPrimary] = React.useState(true);
   const [isDisabledSec, setisDisabledSec] = React.useState(true);
-  const [isDisabledtax, setisDisabledtax] = React.useState(true);
+  // const [isDisabledtax, setisDisabledtax] = React.useState(true);
   const [primaryPillar, setprimaryPillar] = React.useState('');
   const [secPillar, setsecPillar] = React.useState('');
   const [inputValidate, setInputValidate] = React.useState('');
@@ -24,6 +24,16 @@ const PillarAssignment = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({ type: 'GROUPLIST_REQUEST' });
+    // setgroup('');
+    // setprimaryPillar('');
+    // setsecPillar('')
+    // setisDisabledPrimary(true)
+    // setisDisabledSec(true);
+    // setTargetKeys([]);
+    // setmockData([]);
+    // setInputValidate('');
+    dispatch({type:"GROUPBYID_RESET"});
+    
   }, []);
   const isGroup = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
   const groupList = isGroup && isGroup.rows;
@@ -33,105 +43,96 @@ const PillarAssignment = () => {
  
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
   const grpDtetail = isGroupByid && isGroupByid.data;
+  
+  useEffect(()=>{
+    if(grpDtetail){
+      if(grpDtetail.memberForPillar.length === 0){
+      setisDisabledPrimary(true);
+      }
+      const pillarassigned = [];
+      const unassigned = [];
+      const pillarenable = [];
+      for (const e of grpDtetail.memberForPillar) {
+        if(e.isPillarAssigned === true){
+          pillarassigned.push(e.value);
+        }
+        unassigned.push({ key: e.value, title: e.label, disabled:e.isPillarAssigned});
+      }
+      console.log(pillarassigned, 'pillarassigned');
+      setmockData(unassigned);
+      setTargetKeys(pillarassigned);
+      for (const obj of grpDtetail.memberForPillar) {
+        if(obj.isPillarAssigned === false){
+          pillarenable.push(obj);
+      }
+      }
+      if(pillarenable.length > 0){
+      setisDisabledPrimary(false);
+      } else{
+        setisDisabledPrimary(true);
+      }
+    } else {
+      setisDisabledPrimary(true);
+      setTargetKeys([]);
+      setmockData([]);
+    }
+  },[grpDtetail]);
+  
  
 
-  const taxOptions = grpDtetail && grpDtetail.taxonomyList;
-  const pillarassigned = [];
-  const unassigned = [];
 
 
- 
-  // const mockDatagroup = grpDtetail && grpDtetail.assignMembers.map((e) => {
-  //   const val = { key: e.value, title: e.label };
-  //   return val;
-  // });
-  const apiData = useSelector((pillarlist) => pillarlist.pillarlist.pillardata);
-  const pillarData = apiData && apiData.categories;
-  const userData = apiData && apiData.members;
-
-  const onHandleTaxonomy = (arg) => {
-    const apidata = { clientTaxonomyId: arg.value, groupId: group.value };
-    dispatch({ type: 'PILLARTAXANOMY_REQUEST', payload: apidata});
-    settaxanomy(arg);
-    console.log(taxonomy);
-  };
 
   // *** on Select groups *** //
   const onHandleGroups = (args) => {
     
     dispatch({ type: 'GROUPBYID_REQUEST', groupid: args.value });
-    settaxanomy('');
+    // settaxanomy('');
     setprimaryPillar('');
     setsecPillar('')
     setisDisabledSec(true);
-    setisDisabledPrimary(true);
     setTargetKeys([]);
     setmockData([]);
-    setisDisabledtax(false);
+    // setisDisabledtax(false);
     setInputValidate('');
     setgroup(args);
 
   };
 
-useEffect(()=>{
-  if(userData){
-    const pillarenable = [];
-  for (const e of userData) {
-    if(e.isPillarAssigned === true){
-      pillarassigned.push(e.value);
-    }
-    unassigned.push({ key: e.value, title: e.label, disabled:e.isPillarAssigned});
-  }
-  setmockData(unassigned);
-  setTargetKeys(pillarassigned);
-  for (const obj of userData) {
-    if(obj.isPillarAssigned === false){
-      pillarenable.push(obj);
-  }
-  }
-  if(pillarenable.length > 0){
-  setisDisabledPrimary(false);
-  } else{
-    setisDisabledPrimary(true);
-  }
 
-  
-}
-
-
-},[userData]);
 
 const assignPillar = useSelector((assignpillar)=> assignpillar.assignpillar.pillarAssign);
 useEffect(()=>{
   if(assignPillar){
     message.success(assignPillar.message);
     setgroup('');
-    settaxanomy('');
+    // settaxanomy('');
     setprimaryPillar('');
     setsecPillar('')
     setisDisabledSec(true);
     setisDisabledPrimary(true);
     setTargetKeys([]);
     setmockData([]);
-    setisDisabledtax(false);
+    // setisDisabledtax(false);
     setInputValidate('');
+    dispatch({type:"PILLARASSIGN_RESET"});
 }
 },[assignPillar])
 
  //  console.log(pillarData, 'pillarData');
-  const pillarOptions = pillarData && pillarData.map((e) => {
-    const value = { value: e.id, label: e.categoryName };
-    return value;
-  });
+  // const pillarOptions = grpDtetail && grpDtetail.pillarList.map((e) => {
+  //   const value = { value: e.id, label: e.categoryName };
+  //   return value;
+  // });
   const onChange = (newTargetKeys, direction, moveKeys) => {
     
     console.log(newTargetKeys, direction, moveKeys);
     setTargetKeys(newTargetKeys);
     const unassignedmember = [];
-    console.log(targetKeys, 'targetKeys');
-    if ((targetKeys.length) > 0) {
+    console.log(newTargetKeys, 'targetKeys');
+    if ((newTargetKeys.length) > 0) {
       for (const i of newTargetKeys) {
-        for (const j of userData) {
+        for (const j of grpDtetail.memberForPillar) {
           if (i === j.value) {
             console.log(j,'matched');
             if(j.isPillarAssigned === false){
@@ -154,21 +155,21 @@ useEffect(()=>{
     setsecPillar(arg);
   };
   const onhandlesubmit = () => {
-    if (!taxonomy || !primaryPillar || !group) {
+    if ( !primaryPillar || !group) {
       setInputValidate(true);
     }
-    if (taxonomy && primaryPillar && group) {
+    if ( primaryPillar && group) {
       console.log(assignedMember, 'assignedMember.length');
-      if ((taxonomy.label.length && primaryPillar.label.length && assignedMember.length && group.label.length) > 0) {
+      if (( primaryPillar.label.length && assignedMember.length && group.label.length) > 0) {
         const payload = {
-          taxonomy: taxonomy,
+         // taxonomy: taxonomy,
           primary: primaryPillar,
           secondary: secPillar,
           user: assignedMember,
 
         };
         dispatch({type:"PILLARASSIGN_REQUEST", payload:payload})
-        console.log(payload);
+        console.log(payload, 'pillar payload');
         
       } else {
         message.error('Fill all the required fields');
@@ -191,7 +192,7 @@ useEffect(()=>{
                 <Card className="grp-pad">
                   <Container>
                     <Row>
-                      <Col lg={6}>
+                      <Col lg={4}>
                         <div className="inner-pillar-content-mar-bot">
                           <div className="pillar-content">Select Groups <span className="mandatory-color">*</span></div>
                           <div className={(group.length === 0 && inputValidate) ? 'pillar-dropdown-alert' : ''}>
@@ -203,7 +204,7 @@ useEffect(()=>{
                           </div>
                         </div>
                       </Col>
-                      <Col lg={6}>
+                      {/* <Col lg={6}>
                         <div className="inner-pillar-content-mar-bot">
                           <div className="pillar-content">Select Taxanomy <span className="mandatory-color">*</span></div>
                           <div className={(taxonomy.length === 0 && inputValidate) ? 'pillar-dropdown-alert' : ''}>
@@ -216,16 +217,16 @@ useEffect(()=>{
                             />
                           </div>
                         </div>
-                      </Col>
-                      </Row>
-                      <Row>
-                      <Col lg={6}>
+                      </Col> */}
+                     
+                     
+                      <Col lg={4}>
                         <div className="inner-pillar-content-mar-bot">
                           <div className="pillar-content">primary pillar <span className="mandatory-color">*</span></div>
                           <div className={(primaryPillar.length === 0 && inputValidate) ? 'pillar-dropdown-alert' : ''} >
                             <Select
                               onChange={onPrimaryPillarChange}
-                              options={pillarOptions}
+                              options={grpDtetail && grpDtetail.pillarList}
                               placeholder="primary"
                               isDisabled={isDisabledPrimary}
                               value={primaryPillar}
@@ -233,14 +234,14 @@ useEffect(()=>{
                           </div>
                         </div>
                       </Col>
-                      <Col lg={6}>
+                      <Col lg={4}>
                         <div className="inner-pillar-content-mar-bot">
                           <div className="pillar-content">Secondary pillar</div>
                           <div>
                             <Select
                               isMulti
                               onChange={onsecPillarChange}
-                              options={pillarOptions && pillarOptions.filter((e) => e.label !== primaryPillar.label)}
+                              options={grpDtetail && grpDtetail.pillarList.filter((e) => e.label !== primaryPillar.label)}
                               placeholder="Secondary"
                               isDisabled={isDisabledSec}
                               value={secPillar}

@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: true,
         pillarAssign: action.assignpillar,
       };
+    case 'PILLARASSIGN_RESET':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        pillarAssign: false,
+      };
     case 'PILLARASSIGN_FAILURE':
       return {
         ...state,

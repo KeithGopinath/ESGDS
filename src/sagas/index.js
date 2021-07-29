@@ -36,6 +36,8 @@ import { getCreateTaskWatchers } from './CreateTasks';
 import { uploadCompaniesWatchers } from './UploadCompanies';
 import { getGettasklistWatchers } from './GetTaskList';
 import { sourceTypeWatchers } from './SourceType';
+import { taskEditDetailsWatchers } from './TaskEditDetails';
+import { taskUpdateWatchers } from './UpdateTask';
 
 export default function* rootWatchers() {
   yield all([
@@ -76,5 +78,7 @@ export default function* rootWatchers() {
     uploadCompaniesWatchers(),
     getGettasklistWatchers(),
     sourceTypeWatchers(),
+    taskEditDetailsWatchers(),
+    taskUpdateWatchers(),
   ]);
 }

@@ -1,6 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
-import * as actionCreators from '../actionCreators/BatchCreate';
+import * as actionCreators from '../actionCreators/CreateTasks';
 import { doPost } from '../utils/fetchWrapper';
 
 export function* CreateTaskRequest(data) {

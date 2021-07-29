@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: true,
         unassignedbatchdata: action.unassignedbatchlist,
       };
+    case 'UNASSIGNEDBATCH_RESET':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        unassignedbatchdata: false,
+      };
     case 'UNASSIGNEDBATCH_FAILURE':
       return {
         ...state,

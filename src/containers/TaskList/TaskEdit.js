@@ -1,22 +1,139 @@
 /* eslint-disable */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { DatePicker } from 'antd';
+import { DatePicker, message } from 'antd';
 import moment from 'moment';
 import Select from 'react-select';
 import Overlay from '../../components/Overlay';
+import { useDispatch, useSelector } from 'react-redux';
 
 
-const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
+const TaskEdit = ({ show, setShow, rowValue, setrowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     console.log(rowValue, 'rowValue');
-    const assignedAnalyst = { value: rowValue.analyst, label: rowValue.analyst };
-    const assignedQa = { value: rowValue.qa, label: rowValue.qa }
+    const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
+    const editAnalystOption = isEditData && isEditData.data.analyst;
+    const editQaOption = isEditData && isEditData.data.qa;
+    const [alert, setAlert] = useState(0);
+    const dispatch = useDispatch();
   const handleClose = () => {
     setShow(false);
-    setrowValue('');
+    // setrowValue('');
+    setanalystDetail('');
+    setqaDetail('');
+    setqasla(null);
+    setanalystsla(null);
+    setAlert(0);
   };
-  const baseFormat="DD-MM-YYYY";
-  console.log(rowValue.analystSla,'rowValue.analystSla');
+  const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
+  useEffect(()=>{
+if(isDataEdited){
+  dispatch({type:"GETTASKLIST_REQUEST"});
+}
+  },[isDataEdited]);
+  const isData = useSelector((tasklist) => tasklist.taskList.data);
+  const isList = isData && isData.data.rows;
+  useEffect(()=>{
+  if(isList){
+    handleClose();
+  }
+  },[isList])
+  console.log(isDataEdited, 'isDataEdited');
+  const getFormatDate=(arg)=>{
+    const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
+    return date
+  }
+  const baseFormat="YYYY-MM-DD";
+  // console.log(rowValue.analystSla,'rowValue.analystSla');
+  const onHandleEditanalyst = (arg) => {
+    if(qaDetail.value  === arg.value){
+      setqaDetail('');
+    }
+    setanalystDetail(arg);
+  };
+
+
+  const onHandleEditQa = (arg) => {
+      
+        if(analystDetail.value  === arg.value){
+          setqaDetail('');
+
+        } else {setqaDetail(arg); }
+      
+    // setqaDetail(arg);
+  };
+
+
+  const onEditanalystDate = (e) => {
+    if(e !== null){
+      const date = getFormatDate(e._d);
+     // setconvertanalystSla(date);
+     setanalystsla(date)
+      if(qasla){
+      if(moment(date).isAfter(qasla, 'date')){
+        setAlert(3);
+        setTimeout(() => {
+          setAlert(0);
+        }, 4000);
+        setqasla(null);
+      }
+     }
+    
+    }
+     else {
+      // setconvertanalystSla();
+      setanalystsla(e);
+     }
+  
+  }
+  const onEditqaDate = (arg) => {
+    
+    if(arg !== null){
+      const date = getFormatDate(arg._d);
+      setqasla(date);
+    }
+     else { 
+      setqasla(arg);
+     }
+  
+  }
+  const qadisabledDate = (current) =>{
+    const analystEnddate = analystsla;
+    if(analystEnddate){
+      return current && current < moment(analystEnddate, 'YYYY-MM-DD').add(1, 'days');
+    }
+  }
+  const editTaskBtn = () => {
+    if(analystsla && qasla && analystDetail && qaDetail ){
+      // const editTaskData = {
+
+      //   taskId : rowValue.taskNumber,
+      //   analyst : analystDetail.value,
+      //   qa :  qaDetail.value,
+      //   analystSla : analystsla,
+      //   qaSla : qasla
+      // };
+    
+      const editTaskData = {
+        taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value },
+        taskId: rowValue.taskId,
+
+      }
+      dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
+      console.log(editTaskData, 'final payload');
+      setAlert(1);
+      setTimeout(() => {
+        setAlert(0);
+      }, 2000);
+    } else {
+      setAlert(2);
+    }
+  }
+  const analystdisabledDate = (current) => {
+    const yourDate = new Date();
+    const date= getFormatDate(yourDate);
+    const customDate = date;
+    return current && current < moment(customDate, 'YYYY-MM-DD');
+  }
   const editBody = () => (
     <React.Fragment>
       <Row>
@@ -25,7 +142,11 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
                 <div className="edittask-content">Analyst <span className="mandatory-color">*</span></div>
                 <div>
                     <Select
-                        value={assignedAnalyst}
+                      
+                        value ={analystDetail && analystDetail }
+                        
+                        options={editAnalystOption}
+                        onChange={onHandleEditanalyst}
                     />
                 </div>
             </div>
@@ -38,7 +159,10 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
                         className="date-picker"
                         size="middle"
                         format="DD-MM-YYYY"
-                        defaultValue={moment(rowValue.analystSLA, baseFormat)}
+                        value={(analystsla)? moment(analystsla, baseFormat):null} 
+                        onChange={onEditanalystDate}
+                        disabledDate={analystdisabledDate}
+                        
                     />
                 </div>
             </div>
@@ -50,7 +174,11 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
             <div className="edittask-content" >Quality Analyst <span className="mandatory-color">*</span></div>
             <div>
                 <Select
-                    value={assignedQa }
+                  
+                    value={qaDetail && qaDetail}
+                    options={editQaOption && editQaOption.filter((e)=>e.value !== (analystDetail.value) )}
+                    onChange={onHandleEditQa}
+                    
                 />
             </div>
           </div>
@@ -63,7 +191,9 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
                         className="date-picker"
                         size="middle"
                         format="DD-MM-YYYY"
-                        defaultValue={moment(rowValue.qaSLA, baseFormat)}
+                        value={(qasla)? moment(qasla, baseFormat): null}
+                        onChange={onEditqaDate}
+                        disabledDate={qadisabledDate}
                     />
                 </div>
           </div>
@@ -72,8 +202,21 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
     </React.Fragment>
   );
   const editFooter = () => (
+    <div style={{width: '100%' }}>
+    <div className=" batch-status-minheight">
+    {alert === 1 &&
+    <div className="alert alert-success" role="alert" >Task Edited Successfully !!</div>
+    }
+    {alert === 3 &&
+    <div className="alert alert-warning" role="alert" >Analyst Sla Exceeds Qa Sla </div>
+    }
+    {alert === 2 &&
+      <div className="fill-alert" >Fill all the required fields !</div>
+    }
+  </div>
     <div className="edittask-submit-btn">
-      <div className="edittask-btn"><button type="button" className="btn btn-outline-primary" >Update</button></div>
+      <div className="edittask-btn"><button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button></div>
+    </div>
     </div>
   );
 
@@ -89,7 +232,7 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue }) => {
       size="lg"
       title={rowValue.taskNumber}
       body={editBody()}
-      // onSubmitPrimary={onCreatebBatch}
+      onSubmitPrimary={editTaskBtn}
       footer={editFooter()}
     />
   );
