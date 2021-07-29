@@ -19,285 +19,271 @@ const TaskList = (props) => {
 
   const companiesTaskList = [
     {
-      taxonomy: 'Rel Acute',
       companyName: 'Reliance ltd.',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task003',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Tom',
-          qaSla: '15-07-2021',
-          status: 'Completed',
-        },
-      ]
+      taskid: 'task002',
+      group: 'first group',
+      batch: 'Batch2',
+      pillar: 'Social',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      status: 'Completed',
     },
     {
-      taxonomy: 'Rel Acute1',
       companyName: 'Reliance ltd.',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task003',
-          group: 'first group',
-          batch: 'Batch1',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task004',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Tom',
-          qaSla: '15-07-2021',
-          status: 'Completed',
-        },
-      ]
+      taskid: 'task003',
+      group: 'second group',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Gopi',
+      analystSla: '13-07-2021',
+      qa: 'Tom',
+      qaSla: '15-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      status: 'Completed',
     },
     {
-      taxonomy: 'Acute2',
       companyName: 'Reliance ltd.',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task003',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Balaji',
-          qaSla: '15-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task005',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Ravi',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-      ]
+      taskid: 'task003',
+      group: 'second group',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Gopi',
+      analystSla: '13-07-2021',
+      qa: 'Tom',
+      qaSla: '15-07-2021',
+      analystStatus: "OnTrack",
+      qaStatus: "Breached",
+      status: 'Completed',
     },
     {
-      taxonomy: 'HPCL Acute',
-      companyName: 'HPCL',
-      listofCompanyTask: [
-        {
-          taskid: 'task001',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch1',
-          pillar: 'Environment',
-          analyst: 'Balaji',
-          analystSla: '10-07-2021',
-          qa: 'Praveen',
-          qaSla: '12-07-2021',
-          status: 'Completed',
-        },
-        {
-          taskid: 'task003',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Tom',
-          qaSla: '15-07-2021',
-          status: 'Completed',
-        },
-      ]
+      companyName: 'Reliance',
+      taskid: 'task002',
+      group: 'first group',
+      batch: 'Batch2',
+      pillar: 'Social',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      status: 'Completed',
     },
     {
-      taxonomy: 'IDEA Acute',
-      companyName: 'IDEA Ltd.',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-        {
-          taskid: 'task003',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Tom',
-          qaSla: '15-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-        {
-          taskid: 'task004',
-          group: 'gorup3',
-          batch: 'Batch4',
-          pillar: 'Environment',
-          analyst: 'Rajesh',
-          analystSla: '13-07-2021',
-          qa: 'Jerin',
-          qaSla: '15-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-      ]
+      companyName: 'Reliance',
+      taskid: 'task003',
+      group: 'first group',
+      batch: 'Batch1',
+      pillar: 'Social',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      status: 'Completed',
     },
     {
-      taxonomy: 'ONGC Acute',
-      companyName: 'ONGC',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'first group',
-          batch: 'Batch2',
-          pillar: 'Environment',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-        {
-          taskid: 'task003',
-          group: 'second group',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Gopi',
-          analystSla: '13-07-2021',
-          qa: 'Tom',
-          qaSla: '15-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-      ]
+      companyName: 'Reliance',
+      taskid: 'task004',
+      group: 'second group',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Gopi',
+      analystSla: '13-07-2021',
+      qa: 'Tom',
+      qaSla: '15-07-2021',
+      analystStatus: "onTrack",
+      qaStatus: "OnTrack",
+      status: 'Completed',
     },
     {
-      taxonomy: 'Indian Acute',
-      companyName: 'Indian Gas',
-      listofCompanyTask: [
-        {
-          taskid: 'task002',
-          group: 'Group1',
-          batch: 'Batch2',
-          pillar: 'Social',
-          analyst: 'Jerin',
-          analystSla: '15-07-2021',
-          qa: 'Rajesh',
-          qaSla: '20-07-2021',
-          stage: 'Yet To Start',
-          status: 'Breached',
-        },
-        {
-          taskid: 'task003',
-          group: 'Group2',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Jerin',
-          analystSla: '13-07-2021',
-          qa: 'Gopi',
-          qaSla: '15-07-2021',
-          stage: 'Yet To Start',
-          status: 'Breached',
-        },
-        {
-          taskid: 'task004',
-          group: 'Group 3',
-          batch: 'Batch3',
-          pillar: 'Governance',
-          analyst: 'Balaji',
-          analystSla: '13-07-2021',
-          qa: 'Jerin',
-          qaSla: '15-07-2021',
-          stage: 'Yet To Start',
-          status: 'OnTrack',
-        },
-      ]
+      companyName: "HPCL",
+      taskid: 'task001',
+      group: 'first group',
+      batch: 'Batch2',
+      pillar: 'Social',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      status: 'Completed',
+    },
+    {
+      companyName: "HPCL",
+      taskid: 'task002',
+      group: 'first group',
+      batch: 'Batch1',
+      pillar: 'Environment',
+      analyst: 'Balaji',
+      analystSla: '10-07-2021',
+      qa: 'Praveen',
+      qaSla: '12-07-2021',
+      analystStatus: "OnTrack",
+      qaStatus: "Breached",
+      status: 'Completed',
+    },
+    {
+      companyName: "IDEA Ltd.",
+      taskid: "task002",
+      group: "first group",
+      batch: "Batch2",
+      pillar: "Social",
+      analyst: "Praveen",
+      analystSla: "15-07-2021",
+      qa: "Gopi",
+      qaSla: "20-07-2021",
+      analystStatus: "Breached",
+      qaStatus: "OnTrack",
+      stage: "Yet to complete",
+      status: "OnTrack",
+    },
+    {
+      companyName: "IDEA Ltd.",
+      taskid: 'task003',
+      group: 'second group',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Gopi',
+      analystSla: '13-07-2021',
+      qa: 'Tom',
+      qaSla: '15-07-2021',
+      qaSla: "20-07-2021",
+      analystStatus: "onTrack",
+      qaStatus: "Breached",
+      stage: "Yet to complete",
+      status: "OnTrack",
+    },
+    {
+      companyName: "IDEA Ltd.",
+      taskid: 'task004',
+      group: 'gorup3',
+      batch: 'Batch4',
+      pillar: 'Environment',
+      analyst: 'Rajesh',
+      analystSla: '13-07-2021',
+      qa: 'Jerin',
+      qaSla: "20-07-2021",
+      analystStatus: "Breached",
+      qaStatus: "onTrack",
+      stage: "Yet to complete",
+      status: "OnTrack",
+    },
+    {
+      companyName: "ONGC",
+      taskid: 'task002',
+      group: 'first group',
+      batch: 'Batch2',
+      pillar: 'Environment',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "onTrack",
+      qaStatus: "onTrack",
+      stage: "Yet to complete",
+      status: "OnTrack",
+    },
+    {
+      companyName: "ONGC",
+      taskid: 'task003',
+      group: 'second group',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Gopi',
+      analystSla: '13-07-2021',
+      qa: 'Tom',
+      qaSla: "20-07-2021",
+      analystStatus: "onTrack",
+      qaStatus: "onTrack",
+      stage: "Yet to complete",
+      status: "OnTrack",
+    },
+    {
+      companyName: "Indian Gas",
+      taskid: 'task002',
+      group: 'Group1',
+      batch: 'Batch2',
+      pillar: 'Social',
+      analyst: 'Jerin',
+      analystSla: '15-07-2021',
+      qa: 'Rajesh',
+      qaSla: '20-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "onTrack",
+      stage: "Yet to complete",
+      status: 'Breached',
+    },
+    {
+      companyName: "Indian Gas",
+      taskid: 'task003',
+      group: 'Group2',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Jerin',
+      analystSla: '13-07-2021',
+      qa: 'Gopi',
+      qaSla: '15-07-2021',
+      analystStatus: "Breached",
+      qaStatus: "onTrack",
+      stage: "Yet to complete",
+      status: 'Breached',
+    },
+    {
+      companyName: "Indian Gas",
+      taskid: 'task004',
+      group: 'Group 3',
+      batch: 'Batch3',
+      pillar: 'Governance',
+      analyst: 'Balaji',
+      analystSla: '13-07-2021',
+      qa: 'Jerin',
+      qaSla: "20-07-2021",
+      analystStatus: "Breached",
+      qaStatus: "Breached",
+      stage: "Yet to complete",
+      status: 'Breached',
     },
   ];
 
-  const companyName = props.location.state && props.location.state.companyName;
-  const taxonomyName = props.location.state && props.location.state.taxonomy;
-  const tabFlag = props.location.tabFlag && props.location.tabFlag;
+  const [companyNameList, setCompanyNameList] = useState([]);
+  console.log("companyNameList :", companyNameList);
 
-  const getCompanyDetails = companiesTaskList.filter((data) => (data.companyName === companyName && data.taxonomy === taxonomyName)).map(data => data.listofCompanyTask);
-  const companyDetails = getCompanyDetails[0];
+  useEffect(() => {
+    if (props.location.multiSelect) {
+      const propsData = props.location.state;
+      const companyNames = propsData.map((data) => {
+        return data.companyName;
+      });
+      setCompanyNameList(companyNames);
+    }
+  }, [])
+
+  // const taxonomyName = props.location.state && props.location.state.taxonomy;
+  const tabFlag = props.location.tabFlag && props.location.tabFlag;
+  const multiCompanies = props.location.multiSelect && props.location.multiSelect;
+
+  // filter companies taskList
+  const getCompanyDetails = companyNameList.map((comp) => companiesTaskList.filter((data) => (data.companyName === comp)));
+  const companyDetails = [].concat.apply([], getCompanyDetails);
   const [analystsla, setanalystsla] = useState(null);
   const [qasla, setqasla] = useState(null);
-  const companyName = props.location.state;
 
   // export data in excel file
   const downloadReports = () => {
     const workSheet = XLSX.utils.json_to_sheet(companyDetails);
     const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, `${companyName}`);
-    // XLSX.utils.book_append_sheet(workBook, workSheet, `${taxonomyName} ${companyName}`);
+    XLSX.utils.book_append_sheet(workBook, workSheet, `${companyNameList.join()}`);
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, `${companyName}.xlsx`);
+    XLSX.writeFile(workBook, `${companyNameList.join()}.xlsx`);
   };
  
   const sideBarRef = useRef();
@@ -328,32 +314,36 @@ console.log(arg);
   console.log(isList, 'isList');
 
   const totalTaskList = (props) => {
-    const tableRowData = (obj) => companyName ? tabFlag==='Completed Companies' ?  obj.map((e) => ({
-      taskid: e.taskid,
-      group: e.group,
-      batch: e.batch,
-      pillar: e.pillar,
-      analyst: e.analyst,
-      analystSla: e.analystSla,
-      qa: e.qa,
-      qaSla: e.qaSla,
-      status: e.status,
-    })) :
-      obj.map((e) => ({
-        taskid: e.taskid,
-        group: e.group,
-        batch: e.batch,
-        pillar: e.pillar,
-        analyst: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
-        analystSla: e.analystSla,
-        qa: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
-        qaSla: e.qaSla,
-        stage:e.stage,
-        status: e.status==='Breached'? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
-      }))
+    const tableRowData = (obj) => multiCompanies ?
+      (tabFlag === 'Completed Companies') ?
+        obj.map((e) => ({
+          company: e.companyName,
+          taskid: e.taskNumber,
+          group: e.group,
+          batch: e.batch,
+          pillar: e.pillar,
+          analyst: e.analyst,
+          analystSla: e.analystSla,
+          qa: e.qa,
+          qaSla: e.qaSla,
+          status: e.status,
+        })) :
+        obj.map((e) => ({
+          company: e.companyName,
+          taskid: e.taskNumber,
+          group: e.group,
+          batch: e.batch,
+          pillar: e.pillar,
+          analyst: e.analystStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
+          analystSla: e.analystSla,
+          qa: e.qaStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
+          qaSla: e.qaSla,
+          stage: e.stage,
+          status: e.status === 'Breached' ? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
+        }))
       :
       obj.map((e) => ({
-        taskid: e.taskid,
+        taskid: e.taskNumber,
         group: e.group,
         batch: e.batch,
         company: e.company,
@@ -367,125 +357,137 @@ console.log(arg);
 
     return {
       rowsData: tableRowData(props),
-      columnsHeadData: companyName ? tabFlag==='Completed Companies' ? 
-      [
-        {
-          id: 'taskid',
-          align: 'center',
-          label: 'Task id',
-          dataType: 'string',
-        },
-        {
-          id: 'group',
-          align: 'center',
-          label: 'Group',
-          dataType: 'string',
-        },
-        {
-          id: 'batch',
-          align: 'center',
-          label: 'Batch',
-          dataType: 'string',
-        },
-        {
-          id: 'pillar',
-          align: 'center',
-          label: 'Pillar',
-          dataType: 'string',
-        },
-        {
-          id: 'analyst',
-          align: 'center',
-          label: 'Analyst',
-          dataType: 'string',
-        },
-        {
-          id: 'analystSla',
-          align: 'center',
-          label: 'Sla Date',
-          dataType: 'string',
-        },
-        {
-          id: 'qa',
-          align: 'center',
-          label: 'QA',
-          dataType: 'string',
-        },
-        {
-          id: 'qaSla',
-          align: 'center',
-          label: 'Sla Date',
-          dataType: 'string',
-        },
-        {
-          id: 'status',
-          align: 'center',
-          label: 'Status',
-          dataType: 'string',
-        },
-      ]
-      : [
-        {
-          id: 'taskid',
-          align: 'center',
-          label: 'Task id',
-          dataType: 'string',
-        },
-        {
-          id: 'group',
-          align: 'center',
-          label: 'Group',
-          dataType: 'string',
-        },
-        {
-          id: 'batch',
-          align: 'center',
-          label: 'Batch',
-          dataType: 'string',
-        },
-        {
-          id: 'pillar',
-          align: 'center',
-          label: 'Pillar',
-          dataType: 'string',
-        },
-        {
-          id: 'analyst',
-          align: 'center',
-          label: 'Analyst',
-          dataType: 'string',
-        },
-        {
-          id: 'analystSla',
-          align: 'center',
-          label: 'Sla Date',
-          dataType: 'string',
-        },
-        {
-          id: 'qa',
-          align: 'center',
-          label: 'QA',
-          dataType: 'string',
-        },
-        {
-          id: 'qaSla',
-          align: 'center',
-          label: 'Sla Date',
-          dataType: 'string',
-        },
-        {
-          id: 'stage',
-          align: 'center',
-          label: 'Stage',
-          dataType: 'string',
-        },
-        {
-          id: 'status',
-          align: 'center',
-          label: 'Status',
-          dataType: 'string',
-        },
-      ] : [
+      columnsHeadData: multiCompanies ? (tabFlag === 'Completed Companies') ?
+        [
+          {
+            id: 'company',
+            align: 'center',
+            label: 'Company',
+            dataType: 'string',
+          },
+          {
+            id: 'taskid',
+            align: 'center',
+            label: 'Task id',
+            dataType: 'string',
+          },
+          {
+            id: 'group',
+            align: 'center',
+            label: 'Group',
+            dataType: 'string',
+          },
+          {
+            id: 'batch',
+            align: 'center',
+            label: 'Batch',
+            dataType: 'string',
+          },
+          {
+            id: 'pillar',
+            align: 'center',
+            label: 'Pillar',
+            dataType: 'string',
+          },
+          {
+            id: 'analyst',
+            align: 'center',
+            label: 'Analyst',
+            dataType: 'string',
+          },
+          {
+            id: 'analystSla',
+            align: 'center',
+            label: 'Sla Date',
+            dataType: 'string',
+          },
+          {
+            id: 'qa',
+            align: 'center',
+            label: 'QA',
+            dataType: 'string',
+          },
+          {
+            id: 'qaSla',
+            align: 'center',
+            label: 'Sla Date',
+            dataType: 'string',
+          },
+          {
+            id: 'status',
+            align: 'center',
+            label: 'Status',
+            dataType: 'string',
+          },
+        ]
+        : [
+          {
+            id: 'company',
+            align: 'center',
+            label: 'Company',
+            dataType: 'string',
+          },
+          {
+            id: 'taskid',
+            align: 'center',
+            label: 'Task id',
+            dataType: 'string',
+          },
+          {
+            id: 'group',
+            align: 'center',
+            label: 'Group',
+            dataType: 'string',
+          },
+          {
+            id: 'batch',
+            align: 'center',
+            label: 'Batch',
+            dataType: 'string',
+          },
+          {
+            id: 'pillar',
+            align: 'center',
+            label: 'Pillar',
+            dataType: 'string',
+          },
+          {
+            id: 'analyst',
+            align: 'center',
+            label: 'Analyst',
+            dataType: 'string',
+          },
+          {
+            id: 'analystSla',
+            align: 'center',
+            label: 'Sla Date',
+            dataType: 'string',
+          },
+          {
+            id: 'qa',
+            align: 'center',
+            label: 'QA',
+            dataType: 'string',
+          },
+          {
+            id: 'qaSla',
+            align: 'center',
+            label: 'Sla Date',
+            dataType: 'string',
+          },
+          {
+            id: 'stage',
+            align: 'center',
+            label: 'Stage',
+            dataType: 'string',
+          },
+          {
+            id: 'status',
+            align: 'center',
+            label: 'Status',
+            dataType: 'string',
+          },
+        ] : [
         {
           id: 'taskid',
           align: 'center',
@@ -547,9 +549,10 @@ console.log(arg);
           dataType: 'element',
         },
       ],
-      tableLabel: <span>{taxonomyName && companyName ? <span>{taxonomyName}
-        <FontAwesomeIcon className="reports-download-icon ml-2" size="md" icon={faDownload} onClick={downloadReports} />
-      </span> : 'Tasks'}</span>,
+      tableLabel: <span>{multiCompanies ?
+        <span>{companyNameList.length <= 2 ? `${companyNameList.join()}` : 'Companies Tasks'}
+          <FontAwesomeIcon className="reports-download-icon ml-2" size="md" icon={faDownload} onClick={downloadReports} />
+        </span> : 'Tasks'}</span>,
     };
   };
 
@@ -557,21 +560,21 @@ console.log(arg);
     history.push('/reports');
   };
 
-  const tasklist = totalTaskList(companyName ? companyDetails : (isList) ? isList : []);
+  const tasklist = totalTaskList(multiCompanies && multiCompanies ? companyDetails : (isList) ? isList : []);
 
   return (
     <React.Fragment>
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title={companyName ? 'Company Task List' : ''} />
+          <Header sideBarRef={sideBarRef} title={multiCompanies ? 'Company Task List' : ''} />
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
-                {companyName &&
+                {multiCompanies &&
                   <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
                 <Card >
-                  <CustomTable tableData={tasklist} enableButton={companyName ? true : false} />
+                  <CustomTable tableData={tasklist} />
                 </Card>
               </Col>
             </Row>

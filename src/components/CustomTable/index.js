@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultPagination,
+  tableData, showDatePicker, isLoading, message, icon, defaultPagination, selectItem, viewCheckedCompanies
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
 
@@ -87,7 +87,7 @@ const CustomTable = ({
   const [sortDataType, setSortDataType] = useState('string');
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
-  const [page, setPage] = useState( defaultPagination || DEFAULT_PAGE);
+  const [page, setPage] = useState(defaultPagination || DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
@@ -324,7 +324,9 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
+        {selectItem && <button className="view-checked-company-reports btn btn-primary" onClick={viewCheckedCompanies}>View Companies Task</button>}
         <TablePagination
+          className={selectItem ? 'w-auto d-flex align-items-end flex-column' : ''}
           rowsPerPageOptions={[5, 10, 15]}
           component="div"
           count={rowsData.length}
