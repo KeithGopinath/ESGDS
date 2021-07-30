@@ -11,11 +11,13 @@ import EditTask from './TaskEdit';
 import XLSX from "xlsx";
 import { history } from './../../routes';
 import moment from 'moment';
+
 const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
   const [analystDetail, setanalystDetail] = useState('');
   const [qaDetail, setqaDetail] = useState('');
+  const [companyNameList, setCompanyNameList] = useState([]);
 
   const companiesTaskList = [
     {
@@ -253,10 +255,9 @@ const TaskList = (props) => {
     },
   ];
 
-  const [companyNameList, setCompanyNameList] = useState([]);
-
   useEffect(() => {
     if (props.location.multiSelect) {
+      dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST" });
       const propsData = props.location.state;
       const companyNames = propsData.map((data) => {
         return data.companyName;
@@ -265,7 +266,6 @@ const TaskList = (props) => {
     }
   }, [])
 
- 
   const tabFlag = props.location.tabFlag && props.location.tabFlag;
   const multiCompanies = props.location.multiSelect && props.location.multiSelect;
 
@@ -284,27 +284,31 @@ const TaskList = (props) => {
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workBook, `${companyNameList.join()}.xlsx`);
   };
- 
+
   const sideBarRef = useRef();
-  const getFormatDate=(arg)=>{
+
+  const getFormatDate = (arg) => {
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
-  }
+  };
+
   const handleShow = (arg) => {
-    const editDetails = { groupId: arg.groupId, batchId: arg.batchId }; 
-    dispatch({type:"TASKEDITDETAILS_REQUEST", payload: editDetails });
-    setanalystDetail({value:arg.analystId, label: arg.analyst});
-    setqaDetail({value:arg.qaId, label: arg.qa});
+    const editDetails = { groupId: arg.groupId, batchId: arg.batchId };
+    dispatch({ type: "TASKEDITDETAILS_REQUEST", payload: editDetails });
+    setanalystDetail({ value: arg.analystId, label: arg.analyst });
+    setqaDetail({ value: arg.qaId, label: arg.qa });
     setanalystsla(getFormatDate(arg.analystSLA));
     setqasla(getFormatDate(arg.qaSLA));
 
     setrowValue(arg);
     setShow(true);
   };
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({ type: "GET_TASKLIST_REQUEST" });
-  }, [])
+  }, []);
 
   const isData = useSelector((tasklist) => tasklist.taskList.data);
   const isList = isData && isData.data.rows;
@@ -581,4 +585,5 @@ const TaskList = (props) => {
     </React.Fragment>
   );
 };
+
 export default TaskList;

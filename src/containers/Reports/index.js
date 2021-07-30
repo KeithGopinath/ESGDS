@@ -18,9 +18,12 @@ const Reports = (props) => {
   const { Option } = Select;
 
   const dispatch = useDispatch();
-  // const userData = useSelector((state) => state.filterUsers.filterUsers);
-  // const loading = useSelector((state) => state.filterUsers.isLoading);
-  // const filteredUsers = userData && userData.data;
+ 
+  useEffect(()=>{
+    dispatch({type:'GET_REPORTS_REQUEST'});
+  },[]);
+
+  // const compantData = useSelector((reports) => reports.reports); 
 
   const companyData = {
     completed: [
@@ -73,7 +76,15 @@ const Reports = (props) => {
         companyRepresentative: 'Rajesh',
         clientRrepresentative: 'Gopi',
         isChecked: false,
-      }
+      },
+      {
+        taxonomy: 'Indian Acute',
+        companyName: 'Indian Oil',
+        completedDate: '10-07-2021',
+        companyRepresentative: 'Rajesh',
+        clientRrepresentative: 'Gopi',
+        isChecked: false,
+      },
     ]
   }
 
@@ -92,22 +103,20 @@ const Reports = (props) => {
   useEffect(() => {
     if (tabFlag === 'Pending Companies') {
       setPendingCompanies(companyData.pending);
-      setSelectItem(false);
     } else if (tabFlag === 'Completed Companies') {
       setCompletedCompanies(companyData.completed);
-      setSelectItem(false);
     }
+    setSelectItem(false);
   }, [tabFlag]);
 
-  // taxonomy filter
-  const onTaxonomyChange = (e) => {
-    setTaxonomy(e);
-  };
+  const pendingCompaniesFilter = pendingCompanies.map(e => e.taxonomy).filter((val,id,array) => array.indexOf(val) == id);
+  const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val,id,array) => array.indexOf(val) == id);
 
   // completed company table
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data, id) => ({
-      companyName: data.companyName ? <Checkbox value={data.companyName} isChecked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> : '',
+      key:data.companyName+id,
+      companyName: data.companyName ? <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> : '',
       completedDate: new Date().toDateString(),
       clientRep: data.clientRrepresentative,
       companyRep: data.companyRepresentative,
@@ -141,14 +150,15 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompanies.map((data) => (
-          <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
+        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data,id) => (
+          <Option value={data} key={data[id]}>{data}</Option>
         ))}</Select>
       </div>,
     };
   };
 
   // checked companies list
+
   const onCompanyCheck = (data, status) => {
     if (status === "pending") {
       const newCompanies = [...pendingCompanies]
@@ -165,6 +175,11 @@ const Reports = (props) => {
     }
   };
 
+   // taxonomy filter
+   const onTaxonomyChange = (e) => {
+    setTaxonomy(e);
+  };
+
   // view multiple companies task
   const viewCheckedCompanies = () => {
     if (tabFlag === 'Pending Companies') {
@@ -178,12 +193,14 @@ const Reports = (props) => {
 
   // pending company table
   const PendingCompanyTableData = (props) => {
-    const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data, id) => ({
-      companyName: data.companyName ? <Checkbox value={data.companyName} isChecked={data.isChecked} onChange={() => onCompanyCheck(data, "pending")}>{data.companyName}</Checkbox> : '',
-      allocatedDate: data.completedDate,
-      clientRep: data.clientRrepresentative,
-      companyRep: data.companyRepresentative,
-    }));
+    
+    const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((dataTaxonomy,id) => ({
+            key:dataTaxonomy.companyName+dataTaxonomy.taxonomy,
+            companyName: dataTaxonomy.companyName ? <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}>{dataTaxonomy.companyName}</Checkbox> : '',
+            allocatedDate: dataTaxonomy.completedDate,
+            clientRep: dataTaxonomy.clientRrepresentative,
+            companyRep: dataTaxonomy.companyRepresentative,
+        }))
 
     return {
       rowsData: tableRowData(props),
@@ -215,8 +232,8 @@ const Reports = (props) => {
       ],
       tableLabel: <div className="w-100">
         <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >
-          {pendingCompanies.map((data) => (
-            <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
+          {pendingCompaniesFilter.map((data,id) => (
+            <Option value={data} key={data[id]}>{data}</Option>
           ))}</Select>
       </div>,
     };
