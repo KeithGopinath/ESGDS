@@ -8,7 +8,7 @@ import Overlay from '../../components/Overlay';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-const TaskEdit = ({ show, setShow, rowValue, setrowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
+const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     console.log(rowValue, 'rowValue');
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
     const editAnalystOption = isEditData && isEditData.data.analyst;
@@ -17,7 +17,6 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue, analystDetail, setanal
     const dispatch = useDispatch();
   const handleClose = () => {
     setShow(false);
-    // setrowValue('');
     setanalystDetail('');
     setqaDetail('');
     setqasla(null);
@@ -25,9 +24,13 @@ const TaskEdit = ({ show, setShow, rowValue, setrowValue, analystDetail, setanal
     setAlert(0);
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
+  console.log(isDataEdited, 'isDataEdited');
   useEffect(()=>{
 if(isDataEdited){
-  dispatch({type:"GETTASKLIST_REQUEST"});
+  dispatch({type:"GET_TASKLIST_REQUEST"});
+  
+  dispatch({type:"TASKEDITDETAILS_RESET"});
+  
 }
   },[isDataEdited]);
   const isData = useSelector((tasklist) => tasklist.taskList.data);
@@ -37,13 +40,12 @@ if(isDataEdited){
     handleClose();
   }
   },[isList])
-  console.log(isDataEdited, 'isDataEdited');
+
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
   }
   const baseFormat="YYYY-MM-DD";
-  // console.log(rowValue.analystSla,'rowValue.analystSla');
   const onHandleEditanalyst = (arg) => {
     if(qaDetail.value  === arg.value){
       setqaDetail('');
@@ -59,14 +61,12 @@ if(isDataEdited){
 
         } else {setqaDetail(arg); }
       
-    // setqaDetail(arg);
   };
 
 
   const onEditanalystDate = (e) => {
     if(e !== null){
       const date = getFormatDate(e._d);
-     // setconvertanalystSla(date);
      setanalystsla(date)
       if(qasla){
       if(moment(date).isAfter(qasla, 'date')){
@@ -80,7 +80,6 @@ if(isDataEdited){
     
     }
      else {
-      // setconvertanalystSla();
       setanalystsla(e);
      }
   
@@ -104,14 +103,6 @@ if(isDataEdited){
   }
   const editTaskBtn = () => {
     if(analystsla && qasla && analystDetail && qaDetail ){
-      // const editTaskData = {
-
-      //   taskId : rowValue.taskNumber,
-      //   analyst : analystDetail.value,
-      //   qa :  qaDetail.value,
-      //   analystSla : analystsla,
-      //   qaSla : qasla
-      // };
     
       const editTaskData = {
         taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value },
@@ -119,7 +110,6 @@ if(isDataEdited){
 
       }
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
-      console.log(editTaskData, 'final payload');
       setAlert(1);
       setTimeout(() => {
         setAlert(0);
