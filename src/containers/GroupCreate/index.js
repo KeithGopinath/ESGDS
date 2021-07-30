@@ -35,13 +35,6 @@ const GroupView = () => {
   dispatch({ type: 'GROUPLIST_REQUEST' });
   dispatch({type: "GROUPBYID_RESET"});
  },[]);
- const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
- const grpDtetail = isGroupByid && isGroupByid.data;
-//  useEffect(()=>{
-// if(grpDtetail){
-//   history.push("/group-assignment");
-// }
-//  },[grpDtetail])
  const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
  const groupList = isGroupCreated && isGroupCreated.rows;
   const groupCount = groupList && groupList.length;
@@ -50,7 +43,6 @@ const GroupView = () => {
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
     const maxValue = page * cardPerPage;
-    console.log(minValue, maxValue, 'min max cal val');
     setmin(minValue);
     setmax(maxValue);
   };
@@ -60,12 +52,10 @@ const GroupView = () => {
 
   };
   const onhandlegrpid = (grpid) => {
-    //dispatch({ type: 'GROUPBYID_REQUEST', groupid: grpid });
     history.push({
       pathname: '/group-assignment',
       state: grpid,
     })
-    // history.push("/group-assignment");
   };
   const onhandeleGrpPage = () => {
     history.push("/group-assignment");

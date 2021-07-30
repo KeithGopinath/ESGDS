@@ -41,13 +41,11 @@ const BatchView = () => {
   const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
   const batchCount = batchData && batchData.count;
   const batches = batchData && batchData.rows;
-  console.log(batches, 'batches');
 
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
     const maxValue = page * cardPerPage;
-    console.log(minValue, maxValue, 'min max cal val');
     setmin(minValue);
     setmax(maxValue);
   };

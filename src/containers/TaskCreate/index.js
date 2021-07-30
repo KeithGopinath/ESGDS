@@ -63,28 +63,32 @@ const TaskCreate = ({ flag }) => {
   }, [taxonomy]);
 
   useEffect(() => {
-    if (createControversyTask && submitFlag) {
+    if (createControversyTask && submitFlag && flag) {
       message.success(createControversyTask.message)
     }
-    else if (createControversyTaskError && submitFlag) {
+    else if (createControversyTaskError && submitFlag && flag) {
       message.error(createControversyTaskError.message)
     }
   }, [createControversyTask, createControversyTaskError]);
 
   useEffect(() => {
     if (aftertaskcreated && submitFlag) {
-      setanalystSla('');
-      setqaSla('');
-      setPillar('');
-      setRadioEle('');
-      setRadioEleqa('');
-      setqacheckdate('');
-      setstatusRole(true);
-      setisDisabledQA(true);
-      onSelectAllRow(false);
-      message.success(aftertaskcreated.message);
+    setanalystSla('');
+    setqaSla('');
+    setPillar('');
+    setRadioEle('');
+    setRadioEleqa('');
+    setqacheckdate('');
+    setstatusRole(true);
+    setisDisabledQA(true);
+    onSelectAllRow(false);
+    message.success(aftertaskcreated.message);
+    // dispatch({type:"CREATE_TASK_RESET"});
     }
-  }, [aftertaskcreated]);
+    }, [aftertaskcreated]);
+ 
+  
+
 
   const groupData = apidata && apidata.groups;
   const ispillarData = onpillarclick && onpillarclick.data;
@@ -112,7 +116,6 @@ const TaskCreate = ({ flag }) => {
         }
         return [];
       });
-      console.log(rowDetail, 'onSelectRow');
     }
     // removing rows from an array
     if (isSelected === false) {
@@ -129,7 +132,6 @@ const TaskCreate = ({ flag }) => {
 
   // eslint-disable-next-line consistent-return
   const onSelectAllRow = (isSelected) => {
-    console.log(isSelected, 'isSelected');
     if (isSelected) {
       const dummy = [...rowDetail];
       rowDetail.splice(0, rowDetail.length);
@@ -138,9 +140,7 @@ const TaskCreate = ({ flag }) => {
         dummy.push(rowDetails);
         return dummy;
       });
-      console.log(finalAll[0], 'finalAll');
       setRowDetails(finalAll[0]);
-      console.log(rowDetail, 'last');
       return ispillarData.companies.map((e) => e.id);
     }
     if (!isSelected) {
@@ -171,7 +171,7 @@ const TaskCreate = ({ flag }) => {
 
   const qadisabledDate = (current) => {
     const analystEnddate = analystSla;
-    if (analystEnddate) {
+    if(analystEnddate){
       return current && current < moment(analystEnddate, 'YYYY-MM-DD').add(1, 'days');
     }
   }
@@ -181,12 +181,10 @@ const TaskCreate = ({ flag }) => {
   const onselectGroup = (matchgrp) => {
     groupData && groupData.map((args) => {
       if (args.groupID === matchgrp) {
-        console.log(args, 'args');
+
         const currentGrpinfo = {
           grpAdmin: args.groupAdmin, grpName: args.groupName, grpId: args.groupID, batches: args.assignedBatches,
         };
-        console.log(currentGrpinfo, 'currentGrpinfo');
-        // console.log(modifiedQA, 'modifiedQA');
         setcompanyInfo(currentGrpinfo);
         settaskFlow(1);
       }
@@ -198,13 +196,12 @@ const TaskCreate = ({ flag }) => {
     const batchList = companyInfo.batches;
     batchList.map((batchdetails) => {
       if (batchdetails.batchID === batchid) {
-        console.log(batchdetails, 'batchList');
         const modifiedYear = batchdetails.batchYear.map((args) => {
-          console.log(args, 'check')
+
           const yearArray = { value: args, label: args };
           return yearArray;
         });
-        console.log(batchdetails.pillars, 'batchdetails.pillars')
+
         const currentBatchinfo = {
           Batchname: batchdetails.batchName, Batchid: batchdetails.batchID, Batchyear: modifiedYear, Pillars: batchdetails.pillars,
         };
@@ -234,10 +231,8 @@ const TaskCreate = ({ flag }) => {
     setstatusRole(true);
     setisDisabledQA(true);
     onSelectAllRow(false);
-    console.log(selectedPillar, 'selectedPillar');
-    const getData = { batchId: batchInfo.Batchid, groupId: companyInfo.grpId, categoryId: selectedPillar[0].value };
-    console.log(getData, 'payload for pillar click');
-    dispatch({ type: 'ONSELECTPILLAR_REQUEST', payload: getData });
+    const getData = { batchId:batchInfo.Batchid ,groupId: companyInfo.grpId , categoryId: selectedPillar[0].value };
+    dispatch({ type: 'ONSELECTPILLAR_REQUEST' , payload: getData });
   };
 
   const grpDetail = groupData && groupData.map((element) => (
@@ -256,7 +251,6 @@ const TaskCreate = ({ flag }) => {
       setanalystcheckdate(e);
       setqaSla('');
       setqacheckdate('');
-      console.log(date, 'analystDate');
     } else {
       setanalystSla('');
       setqaSla('');
@@ -279,12 +273,11 @@ const TaskCreate = ({ flag }) => {
   };
 
   const onhandleAnalyst = (arg) => {
-    console.log(arg, 'analyst');
-    if (arg) {
-      setselectedAnalyst(arg);
-      setRadioEle(arg.id);
-      setstatusRole(false);
-      setselectedQa('');
+    if(arg){
+    setselectedAnalyst(arg);
+    setRadioEle(arg.id);
+    setstatusRole(false);
+    setselectedQa('');
     }
     else {
       setstatusRole(true);
@@ -292,7 +285,6 @@ const TaskCreate = ({ flag }) => {
   };
 
   const onhandleQa = (arg) => {
-    console.log(arg, 'qa');
     setselectedQa(arg);
     setRadioEleqa(arg.id);
   };

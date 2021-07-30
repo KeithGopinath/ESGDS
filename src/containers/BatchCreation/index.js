@@ -22,13 +22,10 @@ const BatchCreation = ({ show, setShow }) => {
   const [rowDetail, setRowDetails] = useState([]);
   const [alert, setAlert] = useState(0);
   const [subsetTax, setsubsetTax] = useState('');
-  // const [batchsla, Setbatchsla] = useState('');
-  // const [companies, setCompanies] = useState([]);
   const handleClose = () => {
     setBatch('');
     setYear('');
     setsubsetTax('');
-    // Setbatchsla('');
     setRowDetails([]);
     setAlert(0);
     setValidBorder(false);
@@ -38,14 +35,12 @@ const BatchCreation = ({ show, setShow }) => {
   const [validBorder, setValidBorder] = useState(false);
   const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
   const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany.taxonomycompany);
-  console.log(companyTaxData, 'companyTaxData');
   const fullList = companyTaxData && companyTaxData.rows;
 
   const rowArray = fullList && fullList.map((args) => ({
     id: args.id, companydata: args.companyName,
   }));
   const modTax = taxonomyData && taxonomyData.rows;
-  console.log(modTax, 'modTax');
   const taxOptions = modTax && modTax.map((e) => (
     { value: e._id, label: e.taxonomyName }
   ));
@@ -54,7 +49,6 @@ const BatchCreation = ({ show, setShow }) => {
     sizePerPage: 10,
   };
   const isbatchCreated = useSelector((createbatch) => createbatch.createBatch.batchpost);
-  console.log(isbatchCreated, 'isbatchCreated');
   useEffect(() => {
     if (isbatchCreated) {
       setAlert(1);
@@ -68,12 +62,9 @@ const BatchCreation = ({ show, setShow }) => {
       setValidBorder(false);
       dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
       dispatch({ type: 'BATCH_REQUEST' });
-    } else {
-      console.log('fail');
     }
   }, [isbatchCreated]);
   const onRowSelect = (row, isSelected) => {
-    console.log(row, 'row');
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { value: row.id, selectedCompany: row.companydata };
       const selectedRow = [rowDetails, ...rowDetail];
@@ -87,7 +78,6 @@ const BatchCreation = ({ show, setShow }) => {
         }
         return [];
       });
-      console.log(rowDetail, 'onSelectRow');
     }
     // removing rows from an array
     if (isSelected === false) {
@@ -111,9 +101,7 @@ const BatchCreation = ({ show, setShow }) => {
         dummy.push(rowDetails);
         return dummy;
       });
-      console.log(finalAll[0], 'finalAll');
       setRowDetails(finalAll[0]);
-      console.log(rowDetail, 'last');
       return rowArray.map((e) => e.id);
     }
     if (!isSelected) {
@@ -136,47 +124,25 @@ const BatchCreation = ({ show, setShow }) => {
     { value: '2019 - 2020', label: '2019 - 2020' },
   ];
   const onHandleYear = (selectedyear) => {
-    console.log(selectedyear, 'selectedyear');
     setYear(selectedyear);
   };
   const onHandleTax = (selectedtax) => {
-    console.log(selectedtax, 'selectedtax');
     setsubsetTax(selectedtax);
-
     dispatch({ type: 'TAXANOMYCOMPANY_REQUEST', payload: selectedtax.value });
-    console.log(subsetTax, 'subsetTax');
   };
   const onHandleInput = (batchname) => {
-    if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
-      setBatch(batchname.target.value);
-    }
+    // if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+    setBatch(batchname.target.value);
+    // }
   };
-  // const getFormatDate = (arg) => {
-  //   const date = moment(arg, 'YYY-MM-DD').format('YYYY-MM-DD');
-  //   return date;
-  // };
-  // const batchEndData = (e) => {
-  //   console.log(e, 'batch end date');
-  //   if (e !== null) {
-  //     const date = getFormatDate(e._d);
-  //     console.log(date, 'analystDate');
-  //     Setbatchsla(date);
-  //   } else {
-  //     Setbatchsla('');
-  //   }
-  // };
+
   const onCreatebBatch = () => {
-    console.log(validBorder, 'validBorder');
-    console.log(subsetTax, 'subsetTax');
     // Conditions for validating input fields with red border
     if (!batch) {
       setValidBorder('border-danger');
     } else if (!year || !subsetTax) {
       setValidBorder(true);
     }
-    // else if (!batchSLA) {
-    //   setValidBorder('sla');
-    // }
     if ((batch.length && year.length && rowDetail.length && subsetTax.value.length) > 0) {
       const data = {
         taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail,
@@ -191,9 +157,6 @@ const BatchCreation = ({ show, setShow }) => {
     <div className="modal-batch-body">
       <Row>
         <Col lg={6} sm={12} style={{ paddingRight: '0px' }}>
-          {/* <div className="batch-detail">
-            <div >Batch Details</div>
-          </div> */}
           <div className="batch-year">Select Taxonomy <span className="mandatory-color">*</span></div>
           <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert' }`}>
             <Select
@@ -215,15 +178,6 @@ const BatchCreation = ({ show, setShow }) => {
               value={year}
             />
           </div>
-          {/* <div className="batch-sla">Batch SLA*</div>
-          <div className={`batch-input-width ${batchsla === '' && validBorder && 'dropdown-alert-sla' }`}>
-            <DatePicker
-              className="date-picker"
-              size="middle"
-              format="YYYY-MM-DD"
-              onChange={batchEndData}
-            />
-          </div> */}
         </Col>
         <Col lg={6} sm={12} style={{ paddingLeft: '0px' }}>
           <div className="batch-create-companies">
@@ -250,17 +204,12 @@ const BatchCreation = ({ show, setShow }) => {
       </div>
       <div className="batch-submit-btn">
         <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
-        {/* <div className="imp-btn-company">
-          <input type="file" id="actual-btn" hidden onChange={getCompanyData} />
-          <FontAwesomeIcon className="import-icon" icon={faFileImport} />
-          <label htmlFor="actual-btn" className="label-imp" >Import Companies</label>
-        </div> */}
       </div>
     </div>
 
   );
 
-
+  // *** import companies from excel ***
   // const getCompanyData = (e) => {
   //   const file = e.target.files[0];
   //   const promise = new Promise((resolve, reject) => {
