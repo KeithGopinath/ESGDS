@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: false,
         filterUsers: action.filterUsers,
       };
+    case 'FILTER_USERS_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        filterUsers: false,
+      };
     case 'FILTER_USERS_FAILURE':
       return {
         ...state,

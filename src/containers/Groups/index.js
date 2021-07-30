@@ -56,7 +56,6 @@ const Groups = () => {
   // *** API call *** ***
   useEffect(()=>{
     if(location && !location.state){
-      console.log("location");
     const payload = { 
       filters: [
         { filterWith: "isUserApproved", value: true },
@@ -68,6 +67,7 @@ const Groups = () => {
       ] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else {
+      dispatch({type:"FILTER_USERS_RESET"});
       dispatch({ type: 'GROUPBYID_REQUEST', groupid: location.state });
       dispatch({type:"UNASSIGNEDBATCH_RESET"});
     }
@@ -76,7 +76,6 @@ const Groups = () => {
   },[]);
   
   useEffect(() => {
-    console.log(location.state, 'history params'); 
     if(grpDetail){
      
       setcreateGrpName(grpDetail && grpDetail.groupName);
@@ -122,8 +121,21 @@ const Groups = () => {
   const isData = userData && userData.data;
   useEffect(() => {
     if (isGroupCreated) {
-      message.success(isGroupCreated.message);
+      // message.success(isGroupCreated.message);
+      setresult(isGroupCreated.message);
       setCurrent(current + 1);
+      dispatch({type:"GROUP_RESET"});
+      dispatch({type:"GROUPBYID_RESET"});
+      const payload = { 
+        filters: [
+          { filterWith: "isUserApproved", value: true },
+          { filterWith: "isAssignedToGroup", value: false },
+          { filterWith: "isRoleAssigned", value: true },
+          { filterWith: "isUserActive", value: true },
+          { filterWith: "userType", value: "Employee" }
+          
+        ] }
+        dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     }
     
   }, [isGroupCreated]);
@@ -137,6 +149,41 @@ const Groups = () => {
         grpAdminlist.push(grpDetail.admin);
       }
     });
+    const filteredData = []
+    for(const obj1 of editunassigned){
+       const istest = usertargetKeys.filter((e)=> e === obj1.key);
+       if(istest.length === 0){
+        filteredData.push(obj1);
+       }
+  
+    }
+
+   
+    if(editunassigned){
+      
+      for(const i of filteredData){
+        for(const j of i.SecRole.role){
+          if(j.label === 'GroupAdmin'){
+            const ischeck = grpAdminlist.filter((e)=>e.userDetails.value === i.key);
+            if(grpAdminlist.length === 1){
+            if(ischeck.length !== 1){
+            grpAdminlist.push({ userDetails:{ value:i.key, label:i.title }});
+            }
+          } else {
+            grpAdminlist.push({ userDetails:{ value:i.key, label:i.title }});
+          }
+          }
+        }
+      }
+    }
+  // *** unassign member / batches ***
+  //   if(grpDetail){
+  //   for (const grpobj of unassignedobj){
+  //     if( grpobj.SecRole.role)
+  //     grpAdminlist.push(grpobj.);
+  //   }
+  // }
+    
   //     if(grpDetail){
   //   for (const i of grpDetail.admin.roleDetails.role) {
   //       if(i.label === 'Analyst' || i.label === 'QA'){
@@ -165,12 +212,10 @@ const Groups = () => {
       }
     })
   });
-  console.log(grpAdminlist, 'grpAdminlist');
   const groupAdminOptions = [];
   grpAdminlist.map((obj)=>{
     groupAdminOptions.push(obj.userDetails);
   });
-  console.log(groupAdminOptions, 'groupAdminOptions');
   if(isData){
   for (const i of isData) {
     for (const j of i.roleDetails.role) {
@@ -182,17 +227,15 @@ const Groups = () => {
   }
 }
  
-  console.log(userList, 'userList');
-  console.log(userData, 'userData');
   // *** batch assignments starts ***
 
   const onChangebatchTransfer = (newTargetKeys) => {
-    console.log(newTargetKeys, 'newTargetKeys')
     setTargetKeys(newTargetKeys);
   };
 
   const next = () => {
-   
+    
+   if(batchAssignment){
     const batcharr = [];
     if ((targetKeys.length) > 0) {
       for (const i of targetKeys) {
@@ -202,56 +245,35 @@ const Groups = () => {
           }
         }
       }
+      const finalArr = creategrplist && { groupId: "" && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
+      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
+    }
+    else {
+      const finalArr = creategrplist && { groupId: "" && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: [] };
+      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
+    }
+  }
+    
     if(grpDetail){
-      const finalArr = creategrplist && { groupId: grpDetail && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
-      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
-      console.log(finalArr, 'with grpid');
-    }  else {
-      const finalArr = creategrplist && { groupId: "" && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
-      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
-      console.log(finalArr, 'with grpid');
+      const editbatcharr = [];
+if ((targetKeys.length) > 0) {
+  for (const i of targetKeys) {
+    for (const j of batchmock) {
+      if(i === j.key){
+        editbatcharr.push({...j, _id: j.key});
+      }
     }
-  
+
+  }
+   const finalArr = creategrplist && { groupId: grpDetail && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: editbatcharr };
+      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
+    }   
+    else {
       
-     
-      
-      const payload = { 
-        filters: [
-          { filterWith: "isUserApproved", value: true },
-          { filterWith: "isAssignedToGroup", value: false },
-          { filterWith: "isRoleAssigned", value: true },
-          { filterWith: "isUserActive", value: true }
-          
-        ] }
-      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
-     // dispatch({type:"GROUPBYID_RESET"});
-      setresult('Group has been created with batches');
-    }
-    else{
-      
-      setresult('Group has been created without batches');
-     // const finalArr = creategrplist && { groupId:"" , grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: [] };
-     if(grpDetail){
-      const finalArr = creategrplist && { groupId: grpDetail && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
+      const finalArr = creategrplist && { groupId: grpDetail && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: [] };
       dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
-      console.log(finalArr, 'with grpid');
-    }  else {
-      const finalArr = creategrplist && { groupId: "" && grpDetail._id, grpName: creategrplist.groupName, grpAdmin: creategrplist.groupAdmin, grpMembers: creategrplist.members, assignedBatches: batcharr };
-      dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
-      console.log(finalArr, 'without grpid');
     }
-    //  dispatch({ type:"GROUP_CREATE_REQUEST", payload : finalArr });
-      const payload = { 
-        filters: [
-          { filterWith: "isUserApproved", value: true },
-          { filterWith: "isAssignedToGroup", value: false },
-          { filterWith: "isRoleAssigned", value: true },
-          { filterWith: "isUserActive", value: true }
-          
-        ] }
-        //dispatch({type:"GROUPBYID_RESET"});
-      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
-    }
+  }
   };
 
  // batch assignments ends **** 
@@ -261,27 +283,21 @@ const Groups = () => {
     setCurrent(current - 1);
   };
   const onHandledone = () => {
-    dispatch({type:"GROUP_RESET"});
+    
     setcreateGrpAdmin('');
     setcreateGrpName('');
     setuserTargetKeys([]);
     setgrpName(null);
     setTargetKeys([]);
+    setresult('');
    setisdisableduser(true);
-  setCurrent(0);
+   setCurrent(0);
+   setdisablegrpName(false);
   }
  
 
 // *** create group starts here ***
 const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
-    console.log(newTargetKeys,direction,moveKeys, 'newTargetKeys');
-    // if(grpDetail){
-    // if(direction === "left"){
-    //   for(const i of grpDetail.memberforgrpEdit){
-    //     for(const j of )
-    //   }
-    // }
-    //}
     setuserTargetKeys(newTargetKeys);
   };
 
@@ -294,6 +310,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
       setInputValidate(true);
       
     }
+    if(isData){
     for (const i of userList) {
       for (const j of usertargetKeys) {
         if(i.userDetails.value === j){
@@ -301,15 +318,25 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
         }
       }
     }
-    console.log(memobj, 'memobj');
+  } 
+  if(grpDetail){
+    for (const i of grpDetail.memberforgrpEdit) {
+      for( const j of usertargetKeys){
+        if(i.userDetails.value === j){
+          memobj.push(i);
+        }
+      }
+  }
+}
+  
     if(creategrpAdmin){
 
       if ((creategrpName.length && usertargetKeys.length && creategrpAdmin.value.length) > 0) {
         const grpDetails = { groupName: creategrpName, groupAdmin: creategrpAdmin, members: memobj };
-        // const updatedgrplist = [grpDetails, ...grplist];
+       
         setcreateGrpList(grpDetails);
         setgrpName(creategrpName);
-        // setGrpCount(grplist.length + 1);
+        
   
         setCurrent(current + 1);
         if(!grpDetail){
@@ -325,7 +352,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
     else{
       message.error('Fill all the required fields');
     }  
-    console.log(creategrplist, 'grplist');
+  
   };
 
   // Add user transfer
@@ -390,11 +417,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
       dataIndex: 'title',
       title: 'Name',
     },
-    // {
-    //   dataIndex: 'PRoles',
-    //   title: 'Primary',
-    //   render: (Primary) => <Tag color="blue">{Primary}</Tag>,
-    // },
+   
     {
       dataIndex: 'SecRole',
       title: 'Roles',
@@ -419,7 +442,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
     const batchDetail = { key: b._id, title: b.batchName, taxonomy:b.taxonomy.label, disabled:false };
     return batchDetail;
   });
-   console.log(batchlistwise, 'batchlistwise_bala')
   // batch transfer 
   const TableTransferbatch = ({ leftColumnsbatch, rightColumnsbatch, ...restProps }) => (
     <Transfer {...restProps} showSelectAll={false} titles={['Unassigned batches', 'Assigned batches']}>
@@ -494,9 +516,9 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
  
 
   const onhandelgrpName = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+    //if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
       setcreateGrpName(e.target.value);
-    }
+    // }
   };
   const onhandlegrpAdmin = (groupAdmin) => {
     setcreateGrpAdmin(groupAdmin);
@@ -506,13 +528,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
 
  const GroupCreation = () =>(
     <Container>
-      {/* <Row >
-        <Col lg={12}>
-          <div className="group-detail">
-            <div>Group Details</div>
-          </div>
-        </Col>
-      </Row> */}
       <Row>
         <Col lg={6} sm={12}>
           <div className="group-content">Group name <span className="mandatory-color">*</span></div>
@@ -618,11 +633,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
                         </Col>
                         <Col lg={12}>
                        
-                          {/* { alert &&
-                            <div style={{ display: 'flex', justifyContent: 'center', color: 'red', marginTop: '2rem' }}>
-                              <div>{alert}</div>
-                            </div>
-                          } */}
                           <div className="btn-assignment">
                             {current === 0 && (
                               <Button type="primary" onClick={() => createGroup()}>

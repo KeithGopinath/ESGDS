@@ -17,21 +17,21 @@ import roleOnboarding from './RoleOnboarding';
 import newClientTaxonomy from './NewClientTaxonomy';
 import filterUsers from './FilterUsers';
 import userUpdate from './UserUpdate';
-import getUserById from './GetUserById';
+import getUserById from './UserById';
 import uploadTaxonomy from './UploadTaxonomy';
-import getRoleAssignment from './GetRoleAssignment';
+import getRoleAssignment from './RoleAssignment';
 import pendingTasks from './PendingTasks';
 import matrixMember from './MatrixMember';
 import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
 import { dpCodeData, dpCodeDataCreate, dpCodeDataEdit } from './DpCodeData';
-import pillarlist from './GetPillarTaxanomy';
+import pillarlist from './PillarTaxanomy';
 import assignpillar from './PillarAssignment';
-import unassignedBatch from './GetUnassignedBatch';
+import unassignedBatch from './UnassignedBatch';
 import creategroup from './CreateGroup';
-import getgrouplist from './GetGroupList';
-import groupbtid from './GetGroupById';
+import getgrouplist from './GroupList';
+import groupbtid from './GroupById';
 import taskpillar from './OnSelectPillar';
 import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
@@ -39,10 +39,11 @@ import uploadCompanies from './UploadCompanies';
 import { sourceType, sourceTypeCreate } from './SourceType';
 import taskEditDetails from './TaskEditDetails';
 import taskUpdate from './UpdateTask';
-import taskList from './GetTaskList';
 import controversyTaskData from './GetControversyTaskData';
 import createControversyTask from './CreateControversyTask';
 
+
+import taskList from './TaskList';
 const combinedReducer = combineReducers({
   login,
   otp,

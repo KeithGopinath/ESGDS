@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: true,
         taskpost: action.taskresponse,
       };
+    case 'CREATE_TASK_RESET':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        taskpost: false,
+      };
     case 'CREATE_TASK_FAILURE':
       return {
         ...state,

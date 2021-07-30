@@ -254,7 +254,6 @@ const TaskList = (props) => {
   ];
 
   const [companyNameList, setCompanyNameList] = useState([]);
-  console.log("companyNameList :", companyNameList);
 
   useEffect(() => {
     if (props.location.multiSelect) {
@@ -266,7 +265,7 @@ const TaskList = (props) => {
     }
   }, [])
 
-  // const taxonomyName = props.location.state && props.location.state.taxonomy;
+ 
   const tabFlag = props.location.tabFlag && props.location.tabFlag;
   const multiCompanies = props.location.multiSelect && props.location.multiSelect;
 
@@ -292,7 +291,6 @@ const TaskList = (props) => {
     return date
   }
   const handleShow = (arg) => {
-console.log(arg);
     const editDetails = { groupId: arg.groupId, batchId: arg.batchId }; 
     dispatch({type:"TASKEDITDETAILS_REQUEST", payload: editDetails });
     setanalystDetail({value:arg.analystId, label: arg.analyst});
@@ -310,8 +308,6 @@ console.log(arg);
 
   const isData = useSelector((tasklist) => tasklist.taskList.data);
   const isList = isData && isData.data.rows;
-  console.log(isData, 'tasklist');
-  console.log(isList, 'isList');
 
   const totalTaskList = (props) => {
     const tableRowData = (obj) => multiCompanies ?

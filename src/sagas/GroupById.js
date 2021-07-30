@@ -1,6 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
-import * as actionCreators from '../actionCreators/GetGroupById';
+import * as actionCreators from '../actionCreators/GroupById';
 import { doGet } from '../utils/fetchWrapper';
 
 export function* getGroupByIdRequest(data) {
