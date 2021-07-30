@@ -26,6 +26,7 @@ import PillarAssignment from './containers/PillarAssignment';
 import TaskList from './containers/TaskList';
 import Reports from './containers/Reports';
 import UploadCompanies from './containers/UploadCompanies';
+import ControversyTaskCreate from './containers/ControversyTaskCreate';
 
 export const history = createBrowserHistory();
 
@@ -54,6 +55,7 @@ const Routes = () => (
         <Route path="/controversypage" component={ControversyPage} />
         <Route path="/dpcode" component={DataPage} />
         <Route path="/createtask" component={TaskCreate} />
+        <Route path="/create-controversy-task" component={ControversyTaskCreate} />
         <Route path="/tasklist" component={TaskList} />
         <Route path="/reports" component={Reports} />
         <Route path="/pillarassignment" component={PillarAssignment} />

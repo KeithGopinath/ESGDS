@@ -39,8 +39,10 @@ import uploadCompanies from './UploadCompanies';
 import { sourceType, sourceTypeCreate } from './SourceType';
 import taskEditDetails from './TaskEditDetails';
 import taskUpdate from './UpdateTask';
-
 import taskList from './GetTaskList';
+import controversyTaskData from './GetControversyTaskData';
+import createControversyTask from './CreateControversyTask';
+
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -85,6 +87,8 @@ const combinedReducer = combineReducers({
   dpCodeDataEdit,
   taskEditDetails,
   taskUpdate,
+  controversyTaskData,
+  createControversyTask,
 });
 
 const rootReducer = (state, action) => {
