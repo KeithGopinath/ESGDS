@@ -131,9 +131,9 @@ const BatchCreation = ({ show, setShow }) => {
     dispatch({ type: 'TAXANOMYCOMPANY_REQUEST', payload: selectedtax.value });
   };
   const onHandleInput = (batchname) => {
-    // if (batchname.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
-    setBatch(batchname.target.value);
-    // }
+    if (batchname.target.value.match('^([a-zA-Z]{1,}[ ]{0,})+$')) {
+      setBatch(batchname.target.value);
+    }
   };
 
   const onCreatebBatch = () => {
