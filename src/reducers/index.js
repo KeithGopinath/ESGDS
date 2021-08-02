@@ -43,9 +43,8 @@ import controversyTaskData from './GetControversyTaskData';
 import createControversyTask from './CreateControversyTask';
 import reports from './Reports';
 import reportsTaskList from './ReportsTaskList';
-
-
 import taskList from './TaskList';
+
 const combinedReducer = combineReducers({
   login,
   otp,
