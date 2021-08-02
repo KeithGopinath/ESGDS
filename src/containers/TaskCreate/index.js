@@ -533,7 +533,7 @@ const TaskCreate = ({ flag }) => {
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           <div className="detail-task-tab">
             <Tabs defaultActiveKey="1" className="tab-select" size="medium" tabPosition="top" >
-              <TabPane tab={<span style={{ color: '#3690ffd4' }}  >Choose company</span>} key="1">
+              <TabPane tab={<span style={{ color: '#3690ffd4' }}  >Choose Company</span>} key="1">
                 {(pillar || flag) ?
                   <div className="companylist-task">
                     <BootstrapTable data={flag ? (taxonomy && controversyTaskData && controversyTaskData.companies || []) : (ispillarData && ispillarData.companies || [])} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
@@ -579,7 +579,7 @@ const TaskCreate = ({ flag }) => {
                   </div>}
               </TabPane>
               {!flag &&
-                <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Quality analyst</span>} key="3">
+                <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Quality Analyst</span>} key="3">
                   {(pillar) ?
                     <div>
                       <div className="date-picker-analyst">
