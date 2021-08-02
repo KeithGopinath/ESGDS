@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: true,
         taskeditData: action.taskedit,
       };
+    case 'TASKEDITDETAILS_RESET':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        taskeditData: false,
+      };
     case 'TASKEDITDETAILS_FAILURE':
       return {
         ...state,

@@ -516,9 +516,9 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
  
 
   const onhandelgrpName = (e) => {
-    //if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+    if (e.target.value.match('^([a-zA-Z]{1,}[ ]{0,})+$')) { 
       setcreateGrpName(e.target.value);
-    // }
+    }
   };
   const onhandlegrpAdmin = (groupAdmin) => {
     setcreateGrpAdmin(groupAdmin);
