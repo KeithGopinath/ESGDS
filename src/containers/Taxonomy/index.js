@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Card, Button, Container, Form } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import { faSearch, faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faCheckCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
@@ -48,6 +48,19 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
       setNewTaxonomy(e.target.value)
     }
   }
+
+  const addNewTaxonomy = () => {
+    const temp = [...taxonomyData];
+    temp.push({ name: '' })
+    setTaxonomyData(temp)
+  }
+
+  // const deleteTaxonomy = (item) => {
+  //   const temp = [...taxonomyData];
+  //   const index = temp.indexOf(item)
+  //   temp.splice(index, 1);
+  //   setTaxonomyData(temp)
+  // };
 
   const editTaxonomy = (item) => {
     const temp = [...taxonomyData];
@@ -193,12 +206,17 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
           {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
             : null}
           {!showList &&
-            <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+            <div>
+              <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+              {/* <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} /> */}
+            </div>
           }
         </Row>
       </Card>
     </Col>
   ));
+
+  console.log(subsetData);
 
   return (
     <div className="main">
@@ -225,11 +243,13 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
                   />
                 </ThemeProvider>
               </div>
-              {showList &&
-                <div className="taxonomy-button-container">
+              <div className="taxonomy-button-container">
+                {showList ?
                   <Button variant="primary" className="taxonomy-btn" onClick={handleListClose}>Back</Button>
-                </div>
-              }
+                  :
+                  <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>
+                }
+              </div>
             </div>
             <div className="view-min-height">
               {loading && <PageLoader />}
