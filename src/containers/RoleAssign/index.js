@@ -20,8 +20,8 @@ const RoleAssignment = ({ show, setShow }) => {
   const userData = useSelector((state) => state.getRoleAssignment.getRoleAssignment);
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
-
   const otpDetails = useSelector((state) => state.otp.otp);
+
   const userType = otpDetails && otpDetails.user.userType;
 
   useEffect(() => {
@@ -51,10 +51,10 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const roleOptions = roleData && roleData.rows.filter(val => userType == "SuperAdmin" ? (val.roleName == 'GroupAdmin' ||
     val.roleName == 'Analyst' || val.roleName == 'QA' || val.roleName == 'Admin') : (val.roleName == 'GroupAdmin' ||
-    val.roleName == 'Analyst' || val.roleName == 'QA') ).map((data) => ({
-      value: data.id,
-      label: data.roleName
-    }))
+      val.roleName == 'Analyst' || val.roleName == 'QA')).map((data) => ({
+        value: data.id,
+        label: data.roleName
+      }))
 
   const nameOptions = userData && userData.data.map((data) => {
     return (
@@ -78,6 +78,7 @@ const RoleAssignment = ({ show, setShow }) => {
 
   const onNameChange = (name) => {
     setName(name);
+    setFlag(false);
     userData && userData.data.filter(val => val.userDetails.value == name.value).map((data) => {
       setRole(data.roleDetails.role)
       setPrimaryRole(data.roleDetails.primaryRole)
@@ -156,7 +157,7 @@ const RoleAssignment = ({ show, setShow }) => {
               name="Roles"
               options={roleOptions}
               onChange={onRoleChange}
-              isDisabled={!flag}
+              isDisabled={name ? (primaryRole.value ? !flag : false) : true}
             />
           </div>
         </Col>
@@ -164,7 +165,7 @@ const RoleAssignment = ({ show, setShow }) => {
       <Row>
         <Col lg={12} sm={12} className="modal-content">
           <div className="head-dp">Primary Role</div>
-          <Dropdown overlay={roleMenu} placement="bottomCenter" arrow disabled={!flag} >
+          <Dropdown overlay={roleMenu} placement="bottomCenter" arrow disabled={name ? (primaryRole.value ? !flag : false) : true} >
             <AntButton className={!primaryRole.value && errorAlert}>{primaryRole && primaryRole.label ? primaryRole.label : "Select"}</AntButton>
           </Dropdown>
         </Col>
@@ -193,7 +194,7 @@ const RoleAssignment = ({ show, setShow }) => {
       size="md"
       title="Role Assignment"
       body={<RoleAssignBody />}
-      primary="Edit"
+      primary={primaryRole.value ? 'Edit' : ''}
       alert={alertMsg}
       alertClass={alertClassName}
       onSubmitPrimary={onEditPrimary}
