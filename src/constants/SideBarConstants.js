@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList, faChartBar, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList, faChartBar, faUpload, faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 const ButtonList = [
   {
@@ -33,10 +33,13 @@ const ButtonList = [
     id: 9, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
   {
-    id: 10, label: 'Reports', icon: faChartBar, address: 'reports',
+    id: 10, label: 'Calculations', icon: faCalculator, address: 'calculationhead',
   },
   {
-    id: 11, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
+    id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
+  },
+  {
+    id: 12, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
   },
 ];
 
@@ -91,4 +94,13 @@ const UsersSubMenu = [
   },
 ]
 
-export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu };
+const CalculationSubMenu = [
+  {
+    id: 0, label: 'Actuals', icon: faList, address: 'calculate-actuals'
+  },
+  {
+    id: 1, label: 'Percentile', icon: faTasks, address: 'calculate-percentile'
+  },
+]
+
+export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu, CalculationSubMenu };

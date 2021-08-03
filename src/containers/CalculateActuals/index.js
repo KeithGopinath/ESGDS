@@ -1,0 +1,126 @@
+/* eslint-disable*/
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Header from '../../components/Header';
+import SideMenuBar from '../../components/SideMenuBar';
+import { Card, Row, Col, Container, Form, Button } from 'react-bootstrap';
+import Select from 'react-select';
+import { message } from 'antd';
+import moment from 'moment';
+
+const CalculateActuals = () => {
+  const sideBarRef = useRef();
+  const [taxonomy, setTaxonomy] = useState();
+  const [NIC, setNIC] = useState();
+  const [year, setYear] = useState();
+  const [errorAlert, setErrorAlert] = useState('');
+
+  const dispatch = useDispatch();
+  const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+
+  useEffect(() => {
+    dispatch({ type: 'ClientTaxonomy_REQUEST' });
+  }, []);
+
+  const onSubmit = () => {
+    if (!taxonomy || !NIC || !year) {
+      message.error('Please select required fields')
+      setErrorAlert('border-danger dropdown-alert');
+    } else {
+      const payload = {
+        taxonomy: taxonomy.value,
+        nicCode: NIC.value,
+        year: year.label,
+      }
+      console.log(payload);
+      // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
+    }
+  }
+
+  const onTaxonomyChange = (taxonomy) => {
+    setTaxonomy(taxonomy)
+    setNIC('')
+  }
+
+  const onNICChangeChange = (NIC) => {
+    setNIC(NIC)
+  }
+
+  const onYearChange = (year) => {
+    setYear(year)
+  }
+
+  const currentYear = moment().year();
+  const yearOptions = [
+    { value: currentYear, label: `${currentYear - 1}-${currentYear}` },
+    { value: currentYear - 1, label: `${currentYear - 2}-${currentYear - 1}` },
+    { value: currentYear - 2, label: `${currentYear - 3}-${currentYear - 2}` },
+    { value: currentYear - 3, label: `${currentYear - 4}-${currentYear - 3}` },
+    { value: currentYear - 4, label: `${currentYear - 5}-${currentYear - 4}` },
+  ]
+
+  const nicData = taxonomyData && taxonomyData.rows.filter((val => taxonomy && taxonomy.value == val._id));
+  const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data) => ({
+    value: data._id,
+    label: data.taxonomyName
+  }));
+  const nicOptions = nicData && nicData[0] && nicData[0].nicList;
+
+  return (
+    <div className="main">
+      <SideMenuBar ref={sideBarRef} />
+      <div className="rightsidepane">
+        <Header title="Calculate Actuals" />
+        <div className="container-main">
+          <Container>
+            <Card className="upload-container">
+              <Row>
+                <Col lg={4} sm={4} md={4}>
+                  <Form.Group>
+                    <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
+                    <Select
+                      options={taxonomyOptions}
+                      name="taxonomy"
+                      value={taxonomy}
+                      onChange={onTaxonomyChange}
+                      className={!taxonomy && errorAlert}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col lg={4} sm={4} md={4}>
+                  <Form.Group>
+                    <Form.Label>Select NIC <sup className="text-danger">*</sup></Form.Label>
+                    <Select
+                      options={nicOptions}
+                      name="taxonomy"
+                      value={NIC}
+                      onChange={onNICChangeChange}
+                      className={!NIC && errorAlert}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col lg={4} sm={4} md={4}>
+                  <Form.Group>
+                    <Form.Label>Select Years <sup className="text-danger">*</sup></Form.Label>
+                    <Select
+                      options={yearOptions}
+                      name="taxonomy"
+                      value={year}
+                      onChange={onYearChange}
+                      className={!year && errorAlert}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="upload-button-container">
+                <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Calculate Actuals</Button>
+              </Row>
+            </Card>
+          </Container>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CalculateActuals;

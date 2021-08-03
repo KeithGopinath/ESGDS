@@ -27,6 +27,8 @@ import TaskList from './containers/TaskList';
 import Reports from './containers/Reports';
 import UploadCompanies from './containers/UploadCompanies';
 import ControversyTaskCreate from './containers/ControversyTaskCreate';
+import CalculateActuals from './containers/CalculateActuals';
+import CalculatePercentile from './containers/CalculatePercentile';
 
 export const history = createBrowserHistory();
 
@@ -60,6 +62,8 @@ const Routes = () => (
         <Route path="/reports" component={Reports} />
         <Route path="/pillarassignment" component={PillarAssignment} />
         <Route path="/upload-companies" component={UploadCompanies} />
+        <Route path="/calculate-actuals" component={CalculateActuals} />
+        <Route path="/calculate-percentile" component={CalculatePercentile} />
       </Switch>
     </React.Fragment>
   </Router >
