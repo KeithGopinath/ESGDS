@@ -75,19 +75,19 @@ const CustomTable = ({
   tableData, showDatePicker, isLoading, message, icon, defaultPagination, selectItem, viewCheckedCompanies
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
-
+  console.log(defaultPagination);
   // CONSTANTS
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
   const DEFAULT_PAGE = 0;
-  const DEFAULT_ROWS_PER_PAGE = 10;
+  const DEFAULT_ROWS_PER_PAGE = defaultPagination || 10;
   const { RangePicker } = DatePicker;
 
   // STATES
   const [sortDataType, setSortDataType] = useState('string');
   const [sortOrder, setSortOrder] = useState(DEFAULT_SORT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
-  const [page, setPage] = useState(defaultPagination || DEFAULT_PAGE);
+  const [page, setPage] = useState(DEFAULT_PAGE);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
@@ -302,8 +302,9 @@ const CustomTable = ({
               )}
               {(mainData.length === 0) && (searchQuery || searchDate) &&
                 <TableRow>
-                  <TableCell colSpan={columnsHeadData.length}>
+                  <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
                     <Result
+                      className="custom-table-result"
                       icon={<InboxOutlined />}
                       title="No Data Found!"
                     />
@@ -315,6 +316,7 @@ const CustomTable = ({
                     {isLoading ?
                       <PageLoader /> :
                       <Result
+                        className="custom-table-result"
                         icon={icon || <InboxOutlined />}
                         title={message || 'No Data Found!'}
                       />

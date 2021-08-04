@@ -78,3 +78,59 @@
     justify-content: space-between;
     min-width: 600px;
 }
+
+.task-modal {
+    .ant-modal-header{
+        background:rgb(33, 153, 200);
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+    }
+    .ant-modal-close-x, .ant-modal-title{
+        color: rgb(255, 255, 255);
+    }
+    .ant-modal-content{
+        border-radius: 7px;
+    }
+}
+
+
+// ADD NEW || TERMINATE KMP || BOARD MEMBER STYLES
+.addNewMember-red-asterik{
+    color: red;
+}
+
+.addNewMember-member-name-group{
+    display: flex;
+    justify-content: space-between;
+}
+
+.addNewMember-title {
+    width: 18% !important;
+}
+.addNewMember-memberName {
+    width: 26% !important;
+}
+.terminateMember-memberList {
+    width: 100%;
+}
+.addNewMember-dob, .addNewMember-start-date, .terminateMember-end-date{
+    width: 100%;
+}
+.addNewTerminate-button-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.addNewMember-red-border{
+    border: 1px solid red;
+    border-radius: inherit;
+}
+
+.addNewMember-select-red-border{
+    .ant-select-selector{
+        border: 1px solid red !important;
+    }
+    .css-yk16xz-control{
+        border: 1px solid red;
+    }
+}
