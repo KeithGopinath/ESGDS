@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Row, Card, Button, Container, Form } from 'react-bootstrap';
+import { Card, Form, Row, Col, Container, Button, } from 'react-bootstrap';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { faSearch, faEdit, faCheckCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -12,15 +12,23 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
 import NewTaxonomySubset from '../../containers/NewTaxonomySubset';
 import PageLoader from '../../components/PageLoader';
+import Overlay from '../../components/Overlay';
+import Select from 'react-select';
 
 const Taxonomy = ({ subsetList, showList, handleListClose }) => {
+  const sideBarRef = useRef();
   const [showSubset, setShowSubset] = useState(false);
+  const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(20);
-  const [newTaxonomy, setNewTaxonomy] = useState('');
   const [taxonomyData, setTaxonomyData] = useState()
   const [subsetData, setSubsetData] = useState([])
+  const [label, setLabel] = useState('');
+  const [applicable, setApplicable] = useState('');
+  const [labelType, setLabelType] = useState('');
+  const [labelValues, setLabelValues] = useState('');
+  const [display, setDisplay] = useState('');
 
   const dispatch = useDispatch();
   const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
@@ -40,12 +48,118 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
       dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
   }, []);
 
-  const sideBarRef = useRef();
-  const flag = subsetData.length > 0 ? true : false;
+  const onhidePopUp = () => {
+    setShow(false);
+  }
+
+  const applicableOptions = [
+    { value: 'Collection', label: 'Collection' },
+    { value: 'Controversy', label: 'Controversy' },
+    { value: 'Both', label: 'Both' }
+  ]
+
+  const labelTypeOptions = [
+    { value: 'Static', label: 'Static' },
+    { value: 'Text input', label: 'Text input' },
+    { value: 'Text area', label: 'Text area' },
+    { value: 'Select', label: 'Select' }
+  ]
+
+  const displayOptions = [
+    { value: 'Yes', label: 'Yes' },
+    { value: 'No', label: 'No' },
+  ]
+
+  const onLabelChange = (e) => {
+    setLabel(e.target.value)
+  }
+
+  const onApplicableChange = (applicable) => {
+    setApplicable(applicable)
+  }
+
+  const onLabelTypeChange = (labelType) => {
+    setLabelType(labelType)
+  }
+
+  const onDisplayChange = (display) => {
+    setDisplay(display)
+  }
+
+  const onLabelValuesChange = (e) => {
+    setLabelValues(e.target.value)
+  }
+
+  const labelValueDisabled = labelType && labelType.value.includes('Text') ? false : true;
+
+  const popUpBody = () => (
+    <React.Fragment>
+      <Form.Group>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label <sup className="text-danger">*</sup></Form.Label>
+            <Form.Control
+              size="large"
+              type="text"
+              onChange={onLabelChange}
+              value={label}
+            // className={!currentPassword && errorAlert}
+            />
+          </Col>
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Applicable <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              value={applicable}
+              name="applicable"
+              options={applicableOptions}
+              onChange={onApplicableChange}
+            // className={role.length == 0 && errorAlert}
+            />
+          </Col>
+        </Row>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label type <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              value={labelType}
+              name="labeltype"
+              options={labelTypeOptions}
+              onChange={onLabelTypeChange}
+            // className={role.length == 0 && errorAlert}
+            />
+          </Col>
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label values <sup className="text-danger">*</sup></Form.Label>
+            <Form.Control
+              as="textarea"
+              size="large"
+              type="text"
+              onChange={onLabelValuesChange}
+              value={labelValues}
+              disabled={labelValueDisabled}
+            // className={!currentPassword && errorAlert}
+            />
+          </Col>
+        </Row>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Display <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              value={display}
+              name="display"
+              options={displayOptions}
+              onChange={onDisplayChange}
+            // className={role.length == 0 && errorAlert}
+            />
+          </Col>
+        </Row>
+      </Form.Group>
+    </React.Fragment>
+  )
 
   const onTaxonomyChange = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
-      setNewTaxonomy(e.target.value)
+      setFieldName(e.target.value)
     }
   }
 
@@ -55,40 +169,34 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     setTaxonomyData(temp)
   }
 
-  // const deleteTaxonomy = (item) => {
-  //   const temp = [...taxonomyData];
-  //   const index = temp.indexOf(item)
-  //   temp.splice(index, 1);
-  //   setTaxonomyData(temp)
-  // };
-
   const editTaxonomy = (item) => {
-    const temp = [...taxonomyData];
-    const index1 = temp.indexOf(item)
-    var result = temp.map((el, index) => {
-      if (index1 == index) {
-        var o = Object.assign({}, el);
-        o.isActive = true;
-        return o;
-      }
-      else {
-        return el
-      }
-    })
-    setTaxonomyData(result)
+    // const temp = [...taxonomyData];
+    // const index1 = temp.indexOf(item)
+    // var result = temp.map((el, index) => {
+    //   if (index1 == index) {
+    //     var o = Object.assign({}, el);
+    //     o.isActive = true;
+    //     return o;
+    //   }
+    //   else {
+    //     return el
+    //   }
+    // })
+    // setTaxonomyData(result)
+    setShow(true);
   };
 
   const updateTaxonomy = (item) => {
     const updated = [...taxonomyData];
     const index = updated.indexOf(item)
-    const updatedObj = { ...updated[index], name: newTaxonomy, isActive: false };
+    const updatedObj = { ...updated[index], name: label, isActive: false };
     const temp = [
       ...updated.slice(0, index),
       updatedObj,
       ...updated.slice(index + 1),
     ];
     setTaxonomyData(temp);
-    setNewTaxonomy('')
+    setFieldName('')
   }
 
   const createSubset = (item, e) => {
@@ -198,7 +306,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
           className="input-taxonomy"
           type="text"
           name="taxonomy"
-          value={item.isActive ? newTaxonomy : item.name}
+          value={item.isActive ? label : item.name}
           disabled={item.isActive ? false : true}
           onChange={onTaxonomyChange}
         />
@@ -208,15 +316,12 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
           {!showList &&
             <div>
               <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-              {/* <FontAwesomeIcon icon={faTrashAlt} className="taxonomy-icon" onClick={() => { deleteTaxonomy(item) }} /> */}
             </div>
           }
         </Row>
       </Card>
     </Col>
   ));
-
-  console.log(subsetData);
 
   return (
     <div className="main">
@@ -270,6 +375,22 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
               </Col>
             </Row>
             <NewTaxonomySubset show={showSubset} handleClose={subsetHandleClose} subsetData={subsetData} />
+            <Overlay
+              className="text-center otp-modal"
+              show={show}
+              onHide={onhidePopUp}
+              backdrop="static"
+              keyboard={false}
+              animation
+              centered
+              size="lg"
+              title="Edit header"
+              body={popUpBody()}
+              // alert={alertMsg}
+              primary="submit"
+            // onSubmitPrimary={onSubmitSubset}
+            // alertClass={alertClassName}
+            />
           </Container>
         </div>
       </div>

@@ -62,8 +62,17 @@
     background: white;
 }
 
-.container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
-    padding: 0!important;
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl {
+    padding: 0 !important;
     margin: 0 !important;
-    max-width: 100% !important;  
+    max-width: 100% !important;
+}
+
+.taxonomy-popup-row {
+    margin-top: 10px !important;
 }
