@@ -5,7 +5,7 @@ import { doGet, doPost, doPut } from '../utils/fetchWrapper';
 
 export function* dpCodeDataGetRequest(data) {
   try {
-    const response = yield doGet(`${envConfig.apiEndPoints.getDpCodeData}/${data.taskId}/${data.dpCodeId}`);
+    const response = yield doPost(`${envConfig.apiEndPoints.getDpCodeData}`, data.payload);
     yield put(actionCreators.dpCodeDataGetSuccess(response));
   } catch (error) {
     yield put(actionCreators.dpCodeDataGetFailure(error));

@@ -276,6 +276,7 @@ export const DataSheetComponent = (props) => {
           taskId: reqTask.taskId,
           pillar: reqTask.pillar,
           company: reqTask.company,
+          companyId: reqTask.companyId,
           taskNumber: reqTask.taskNumber,
         },
       },
@@ -293,6 +294,7 @@ export const DataSheetComponent = (props) => {
           pillar: reqTask.pillar,
           company: reqTask.company,
           taskNumber: reqTask.taskNumber,
+          memberType: reqTask.memberType,
         },
         dpCodeDetails: nextDpCode,
         filteredData: reqTask.dpCodesData,
@@ -328,6 +330,7 @@ export const DataSheetComponent = (props) => {
             pillar: reqTask.pillar,
             company: reqTask.company,
             taskNumber: reqTask.taskNumber,
+            memberType: reqTask.memberType,
           },
         },
       });
@@ -382,6 +385,7 @@ export const DataSheetComponent = (props) => {
             pillar: reqTask.pillar,
             company: reqTask.company,
             taskNumber: reqTask.taskNumber,
+            memberType: reqTask.memberType,
           },
         },
       });

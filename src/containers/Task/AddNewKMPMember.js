@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { Input, Select as AntSelect, Divider, DatePicker } from 'antd';
+import { Input, Select as AntSelect, Divider, DatePicker, message, Spin } from 'antd';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import PageLoader from '../../components/PageLoader';
 
 
 const FieldWrapper = (props) => {
@@ -27,7 +29,19 @@ const FieldWrapper = (props) => {
 };
 
 const AddNewKMPMember = (props) => {
-  const { modalType } = props;
+  const dispatch = useDispatch();
+
+  // USESELECTOR TO GET reqTASK From Store
+  const reqTASK = (useSelector((state) => state.task));
+  const activeMembersFromStore = useSelector((state) => state.activeMembers);
+  const activeBoardMembersList = (activeMembersFromStore.activeMembers && activeMembersFromStore.activeMembers.BoardMembersList) || [];
+  const activeKmpMembersList = (activeMembersFromStore.activeMembers && activeMembersFromStore.activeMembers.KMPList) || [];
+
+  const addNewMemberFromStore = useSelector((state) => state.addNewMember);
+  const terminateMembersFromStore = useSelector((state) => state.terminateMembers);
+
+  const { modalType, taskDetails, closeModal } = props;
+
   const [isAddNewKmp, isAddNewBoard, isTerminateKmp, isTerminateBoard] = [
     modalType === 'AddNewKmpType',
     modalType === 'AddNewBoardType',
@@ -35,13 +49,20 @@ const AddNewKMPMember = (props) => {
     modalType === 'TerminateBoardType',
   ];
 
+  const getMemberType = () => {
+    if (isAddNewBoard || isTerminateBoard) return 'Board';
+    if (isTerminateKmp || isAddNewKmp) return 'Kmp';
+    return null;
+  };
+  const memberType = getMemberType();
+
   const [title, setTitle] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [middleName, setMiddleName] = useState(null);
-  const [lastName, setLastName] = useState(null);
+  const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
 
   const [gender, setGender] = useState(null);
-  const [nationality, setNationality] = useState(null);
+  const [nationality, setNationality] = useState('');
   const [financialExp, setFinancialExp] = useState(null);
   const [industrialExp, setIndustrialExp] = useState(null);
 
@@ -49,15 +70,121 @@ const AddNewKMPMember = (props) => {
   const [startDate, setStartDate] = useState(null);
   const [isExecutiveType, setIsExecutiveType] = useState(false);
 
-  const [boardMembersToTeminate, setBoardMembersToTerminate] = useState([]);
+  const [boardMembersToTerminate, setBoardMembersToTerminate] = useState([]);
   const [kmpMembersToTerminate, setKmpMembersToTerminate] = useState([]);
   const [endDate, setEndDate] = useState(null);
 
-  const tempMembersLists = [
-    { label: 'Gopi', value: 'gopi001' },
-    { label: 'balaji', value: 'balaji001' },
-    { label: 'praveen', value: 'praveen007' },
-  ];
+  const [statusAlert, setStatusAlert] = useState(false);
+
+  const [hasError, setHasError] = useState({
+    title: false,
+    firstName: false,
+    middlename: false,
+    lastName: false,
+    gender: false,
+    nationality: false,
+    financialExp: false,
+    industrialExp: false,
+    dob: false,
+    startDate: false,
+    isExecutiveType: false,
+    boardMembersToTerminate: false,
+    kmpMembersToTerminate: false,
+    endDate: false,
+  });
+
+  useEffect(() => {
+    setTitle(null);
+    setFirstName('');
+    setMiddleName('');
+    setLastName('');
+
+    setGender(null);
+    setNationality('');
+    setFinancialExp(null);
+    setIndustrialExp(null);
+
+    setDob(null);
+    setStartDate(null);
+    setIsExecutiveType(false);
+
+    setBoardMembersToTerminate([]);
+    setKmpMembersToTerminate([]);
+    setEndDate(null);
+
+    // setStatusAlert(false);
+
+    setHasError({
+      title: false,
+      firstName: false,
+      middlename: false,
+      lastName: false,
+      gender: false,
+      nationality: false,
+      financialExp: false,
+      industrialExp: false,
+      dob: false,
+      startDate: false,
+      isExecutiveType: false,
+      boardMembersToTerminate: false,
+      kmpMembersToTerminate: false,
+      endDate: false,
+    });
+
+    if (isTerminateKmp || isTerminateBoard) {
+      dispatch({ type: 'ACTIVE_MEMBERS_GET_REQUEST', companyId: taskDetails.companyId, memberType });
+      setStatusAlert(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeMembersFromStore.error && statusAlert) {
+      message.error(activeMembersFromStore.error.message || 'Something went wrong!');
+      setStatusAlert(false);
+    }
+  }, [activeMembersFromStore]);
+
+  useEffect(() => {
+    if (addNewMemberFromStore.error && statusAlert) {
+      message.error(addNewMemberFromStore.error.message || 'Something went wrong!');
+      setStatusAlert(false);
+    }
+    if (addNewMemberFromStore.newMember && statusAlert) {
+      dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    }
+  }, [addNewMemberFromStore]);
+
+  useEffect(() => {
+    if (addNewMemberFromStore.newMember && reqTASK.task && reqTASK.task.status === '200' && statusAlert) {
+      message.success(addNewMemberFromStore.newMember.message);
+      setStatusAlert(false);
+      dispatch({ type: 'ADD_NEW_MEMBER_SET_DEFAULT' });
+      closeModal();
+    }
+    if (terminateMembersFromStore.terminateMembers && reqTASK.task && reqTASK.task.status === '200' && statusAlert) {
+      message.success(terminateMembersFromStore.terminateMembers.message);
+      setStatusAlert(false);
+      dispatch({ type: 'TERMINATE_MEMBERS_SET_DEFAULT' });
+      closeModal();
+    }
+  }, [reqTASK]);
+
+  useEffect(() => {
+    if (terminateMembersFromStore.error && statusAlert) {
+      message.error(terminateMembersFromStore.error.message || 'Something went wrong!');
+      setStatusAlert(false);
+    }
+    if (terminateMembersFromStore.terminateMembers && statusAlert) {
+      dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    }
+  }, [terminateMembersFromStore]);
+
+
+  // const tempMembersLists = [
+  //   { label: 'Gopi', value: 'gopi001' },
+  //   { label: 'balaji', value: 'balaji001' },
+  //   { label: 'praveen', value: 'praveen007' },
+  // ];
 
   const tempSalutationList = [
     { label: 'Dr.', value: 'Dr.' },
@@ -82,7 +209,7 @@ const AddNewKMPMember = (props) => {
     setGender(event);
   };
   const onChangeNationality = (event) => {
-    setNationality(event);
+    setNationality(event.currentTarget.value);
   };
   const onChangeFinancialExp = (event) => {
     setFinancialExp(event);
@@ -112,217 +239,314 @@ const AddNewKMPMember = (props) => {
     setEndDate(event);
   };
 
+  const doValidate = () => {
+    const error = {
+      title: !title,
+      firstName: !(firstName && (/^([a-zA-Z]{1,}[ ]{0,})+$/.test(firstName))),
+      middleName: false,
+      lastName: false,
+      gender: !gender,
+      nationality: !(nationality && (/^([a-zA-Z]{1,}[ ]{0,})+$/.test(nationality))),
+      financialExp: !financialExp,
+      industrialExp: !industrialExp,
+      dob: !dob,
+      startDate: !startDate,
+      isExecutiveType: !isExecutiveType,
+      boardMembersToTerminate: !(boardMembersToTerminate && boardMembersToTerminate.length > 0),
+      kmpMembersToTerminate: !(kmpMembersToTerminate && kmpMembersToTerminate.length > 0),
+      endDate: !endDate,
+    };
+    setHasError({ ...hasError, ...error });
+    console.log(error);
+    if (isAddNewKmp) {
+      return (error.title || error.firstName || error.middleName || error.lastName || error.gender || error.dob || error.startDate);
+    }
+    if (isAddNewBoard) {
+      return (error.title || error.firstName || error.middleName || error.lastName || error.gender || error.nationality
+        || error.financialExp || error.industrialExp || error.dob || error.startDate || error.isExecutiveType);
+    }
+    if (isTerminateKmp) {
+      return (error.kmpMembersToTerminate || error.endDate);
+    }
+    if (isTerminateBoard) {
+      return (error.boardMembersToTerminate || error.endDate);
+    }
+
+    return true;
+  };
+
   const onSubmitClick = () => {
-    props.closeModal();
+    let postableData;
+    if (!doValidate()) {
+      if (isAddNewKmp) {
+        postableData = {
+          companyId: taskDetails.companyId,
+          clientTaxonomyId: taskDetails.clientTaxonomyId,
+          memberName: `${title} ${firstName}${middleName && ` ${middleName}`}${lastName && ` ${lastName}`}`,
+          gender: gender.value,
+          dob,
+          startDate,
+          endDate: '', // NO FRONT END VALUE
+        };
+      }
+      if (isAddNewBoard) {
+        postableData = {
+          companyId: taskDetails.companyId,
+          clientTaxonomyId: taskDetails.clientTaxonomyId,
+          memberName: `${title} ${firstName}${middleName && ` ${middleName}`}${lastName && ` ${lastName}`}`,
+          gender: gender.value,
+          nationality,
+          financialExp: financialExp.value,
+          industrialExp: industrialExp.value,
+          dob,
+          startDate,
+          isExecutiveType: isExecutiveType.value,
+          endDate: '', // NO FRONT END VALUE
+        };
+      }
+      console.log(postableData);
+      dispatch({ type: 'ADD_NEW_MEMBER_POST_REQUEST', memberType, payload: postableData });
+      setStatusAlert(true);
+    } else {
+      message.error('Please Enter Required Fields !');
+    }
   };
 
   const onTerminateClick = () => {
-    props.closeModal();
+    let postableData;
+    if (!doValidate()) {
+      if (isTerminateKmp) {
+        postableData = {
+          companyId: taskDetails.companyId,
+          kmpMembersToTerminate,
+          endDate,
+        };
+      }
+      if (isTerminateBoard) {
+        postableData = {
+          companyId: taskDetails.companyId,
+          boardMembersToTerminate,
+          endDate,
+        };
+      }
+      console.log(postableData);
+      dispatch({ type: 'TERMINATE_MEMBERS_POST_REQUEST', memberType, payload: postableData });
+      setStatusAlert(true);
+    } else {
+      message.error('Please Enter Required Fields !');
+    }
   };
   return (
-    <Row>
-      {/* --------------------------------------------------------------------------------------------- DPCODE */}
-      {/* KMP && BOARD MEMBER NAME */}
-      <FieldWrapper
-        visible={isAddNewBoard || isAddNewKmp}
-        size={[12, 2, 10]}
-        label={
-          <React.Fragment>
-            <div>Full Name<span style={{ color: 'red' }}> * </span></div>
-            <div>{isAddNewBoard && '(MASP003)'}{isAddNewKmp && '(BOSP004)'}{isExecutiveType.value && '/(BOSP004)'}</div>
-          </React.Fragment>
-        }
-        body={
-          <Input.Group style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <AntSelect size="large" style={{ width: '18%' }} placeholder="Title" value={title} onChange={onChangetitle}>
-              {tempSalutationList.map((e) => <AntSelect.Option value={e.value}>{e.label}</AntSelect.Option>)}
+    <Spin indicator={<PageLoader />} spinning={activeMembersFromStore.isLoading || addNewMemberFromStore.isLoading || terminateMembersFromStore.isLoading || reqTASK.isLoading} >
+      <Row>
+        {/* --------------------------------------------------------------------------------------------- DPCODE */}
+        {/* KMP && BOARD MEMBER NAME */}
+        <FieldWrapper
+          visible={isAddNewBoard || isAddNewKmp}
+          size={[12, 2, 10]}
+          label={
+            <React.Fragment>
+              <div>Full Name<span className="addNewMember-red-asterik"> * </span></div>
+              <div>{isAddNewBoard && '(MASP003)'}{isAddNewKmp && '(BOSP004)'}{isExecutiveType.value && '/(BOSP004)'}</div>
+            </React.Fragment>
+          }
+          body={
+            <Input.Group className="addNewMember-member-name-group">
+              <AntSelect size="large" className={hasError.title ? 'addNewMember-title addNewMember-select-red-border' : 'addNewMember-title'} placeholder="Title" value={title} onChange={onChangetitle}>
+                {tempSalutationList.map((e) => <AntSelect.Option key={e.value} value={e.value}>{e.label}</AntSelect.Option>)}
+              </AntSelect>
+              <Input size="large" className={hasError.firstName ? 'addNewMember-memberName addNewMember-red-border' : 'addNewMember-memberName'} placeholder="First Name" value={firstName} onChange={onChangeFirstName} />
+              <Input size="large" className="addNewMember-memberName" placeholder="Middle Name (Optional)" value={middleName} onChange={onChangeMiddleName} />
+              <Input size="large" className="addNewMember-memberName" placeholder="Last Name (Optional)" value={lastName} onChange={onChangeLastName} />
+            </Input.Group>
+          }
+        />
+
+        {(isAddNewBoard || isAddNewKmp) && <Divider />}
+
+        {/* KMP && BOARD MEMBER GENDER */}
+        <FieldWrapper
+          visible={isAddNewBoard || isAddNewKmp}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              <div>Gender<span className="addNewMember-red-asterik"> * </span></div>
+              <div>{isAddNewBoard && '(MASR008)'}{isAddNewKmp && '(BODR005)'}{isExecutiveType.value && '/(BODR005)'}</div>
+            </React.Fragment>
+          }
+          body={
+            <Select
+              value={gender}
+              onChange={onChangeGender}
+              className={hasError.gender ? 'addNewMember-select-red-border' : ''}
+              options={[{ label: 'Male', value: 'M' }, { label: 'Female', value: 'F' }, { label: 'NA', value: 'Na' }]}
+              maxLength={30}
+            />
+          }
+        />
+
+        {/* BOARD MEMBER BOSP006 */}
+        <FieldWrapper
+          visible={isAddNewBoard}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              <div>Does the board member have financial expertise?<span className="addNewMember-red-asterik"> * </span></div>
+              <div>(BOSP006)</div>
+            </React.Fragment>
+          }
+          body={
+            <Select
+              value={financialExp}
+              onChange={onChangeFinancialExp}
+              className={hasError.financialExp ? 'addNewMember-select-red-border' : ''}
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
+              maxLength={30}
+            />
+          }
+        />
+
+        {/* BOARD MEMBER BOSP005 */}
+        <FieldWrapper
+          visible={isAddNewBoard}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              <div>Does the board member have industry experience?<span className="addNewMember-red-asterik"> * </span></div>
+              <div>(BOSP005)</div>
+            </React.Fragment>
+          }
+          body={
+            <Select
+              value={industrialExp}
+              onChange={onChangeIndustrialExp}
+              className={hasError.industrialExp ? 'addNewMember-select-red-border' : ''}
+              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
+              maxLength={30}
+            />
+          }
+        />
+
+        {/* BOARD MEMBER BODP001 */}
+        <FieldWrapper
+          visible={isAddNewBoard}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              <div>Board member ethnicity/culture/nationality<span className="addNewMember-red-asterik"> * </span></div>
+              <div>(BODP001)</div>
+            </React.Fragment>
+          }
+          body={
+            <Form.Control
+              type="text"
+              className={hasError.nationality ? 'addNewMember-red-border' : ''}
+              onChange={onChangeNationality}
+              value={nationality}
+            />
+          }
+        />
+
+        {/* KMP && BOARD MEMBER DOB */}
+        <FieldWrapper
+          visible={isAddNewBoard || isAddNewKmp}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              DOB<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <DatePicker size="large" value={dob && moment(dob)} onChange={onChangeDob} className={hasError.dob ? 'addNewMember-dob addNewMember-red-border' : 'addNewMember-dob'} />
+          }
+        />
+
+        {/* EXECUTIVE */}
+        <FieldWrapper
+          visible={isAddNewBoard}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              Is also a executive member ?<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <Select
+              value={isExecutiveType}
+              className={hasError.isExecutiveType ? 'addNewMember-select-red-border' : ''}
+              onChange={onChangeIsExecutiveType}
+              options={[{ label: 'Yes', value: true }, { label: 'No', value: false }]}
+              maxLength={30}
+            />
+          }
+        />
+
+        {/* KMP && BOARD MEMBER START DATE */}
+        <FieldWrapper
+          visible={isAddNewBoard || isAddNewKmp}
+          size={[6, 6, 6]}
+          label={
+            <React.Fragment>
+              Start Date<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <DatePicker size="large" value={startDate && moment(startDate)} onChange={onChangeStartDate} className={hasError.startDate ? 'addNewMember-start-date addNewMember-red-border' : 'addNewMember-start-date'} />
+          }
+        />
+
+        <FieldWrapper
+          visible={isTerminateBoard}
+          size={[12, 6, 6]}
+          label={
+            <React.Fragment>
+              Members List<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <AntSelect maxTagCount="responsive" mode="multiple" size="large" className={hasError.boardMembersToTerminate ? 'terminateMember-memberList addNewMember-red-border' : 'terminateMember-memberList'} placeholder="Choose" value={boardMembersToTerminate} onChange={onChangeBoardMembersToTerminate}>
+              {activeBoardMembersList.map((e) => <AntSelect.Option key={e.value} value={e.value}>{e.label}</AntSelect.Option>)}
             </AntSelect>
-            <Input size="large" style={{ width: '26%' }} placeholder="First Name" value={firstName} onChange={onChangeFirstName} />
-            <Input size="large" style={{ width: '26%' }} placeholder="Middle Name" value={middleName} onChange={onChangeMiddleName} />
-            <Input size="large" style={{ width: '26%' }} placeholder="Last Name" value={lastName} onChange={onChangeLastName} />
-          </Input.Group>
-        }
-      />
+          }
+        />
 
-      {(isAddNewBoard || isAddNewKmp) && <Divider />}
+        <FieldWrapper
+          visible={isTerminateKmp}
+          size={[12, 6, 6]}
+          label={
+            <React.Fragment>
+              Members List<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <AntSelect maxTagCount="responsive" mode="multiple" size="large" className={hasError.kmpMembersToTerminate ? 'terminateMember-memberList addNewMember-red-border' : 'terminateMember-memberList'} placeholder="Choose" value={kmpMembersToTerminate} onChange={onChangeKmpMembersToTerminate}>
+              {activeKmpMembersList.map((e) => <AntSelect.Option key={e.value} value={e.value}>{e.label}</AntSelect.Option>)}
+            </AntSelect>
+          }
+        />
 
-      {/* KMP && BOARD MEMBER GENDER */}
-      <FieldWrapper
-        visible={isAddNewBoard || isAddNewKmp}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            <div>Gender<span style={{ color: 'red' }}> * </span></div>
-            <div>{isAddNewBoard && '(MASR008)'}{isAddNewKmp && '(BODR005)'}{isExecutiveType.value && '/(BODR005)'}</div>
-          </React.Fragment>
-        }
-        body={
-          <Select
-            value={gender}
-            onChange={onChangeGender}
-            options={[{ label: 'Male', value: 'M' }, { label: 'Female', value: 'F' }, { label: 'NA', value: 'Na' }]}
-            maxLength={30}
-          />
-        }
-      />
-
-      {/* BOARD MEMBER BOSP006 */}
-      <FieldWrapper
-        visible={isAddNewBoard}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            <div>Does the board member have financial expertise?<span style={{ color: 'red' }}> * </span></div>
-            <div>(BOSP006)</div>
-          </React.Fragment>
-        }
-        body={
-          <Select
-            value={financialExp}
-            onChange={onChangeFinancialExp}
-            options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-            maxLength={30}
-          />
-        }
-      />
-
-      {/* BOARD MEMBER BOSP005 */}
-      <FieldWrapper
-        visible={isAddNewBoard}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            <div>Does the board member have industry experience?<span style={{ color: 'red' }}> * </span></div>
-            <div>(BOSP005)</div>
-          </React.Fragment>
-        }
-        body={
-          <Select
-            value={industrialExp}
-            onChange={onChangeIndustrialExp}
-            options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-            maxLength={30}
-          />
-        }
-      />
-
-      {/* BOARD MEMBER BODP001 */}
-      <FieldWrapper
-        visible={isAddNewBoard}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            <div>Board member ethnicity/culture/nationality<span style={{ color: 'red' }}> * </span></div>
-            <div>(BODP001)</div>
-          </React.Fragment>
-        }
-        body={
-          <Select
-            value={nationality}
-            onChange={onChangeNationality}
-            options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-            maxLength={30}
-          />
-        }
-      />
-
-      {/* KMP && BOARD MEMBER DOB */}
-      <FieldWrapper
-        visible={isAddNewBoard || isAddNewKmp}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            DOB<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <DatePicker size="large" value={dob && moment(dob)} onChange={onChangeDob} style={{ width: '100%' }} />
-        }
-      />
-
-      {/* EXECUTIVE */}
-      <FieldWrapper
-        visible={isAddNewBoard}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            Is also a executive member ?<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <Select
-            value={isExecutiveType}
-            onChange={onChangeIsExecutiveType}
-            options={[{ label: 'Yes', value: true }, { label: 'No', value: false }]}
-            maxLength={30}
-          />
-        }
-      />
-
-      {/* KMP && BOARD MEMBER START DATE */}
-      <FieldWrapper
-        visible={isAddNewBoard || isAddNewKmp}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            Start Date<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <DatePicker size="large" value={startDate && moment(startDate)} onChange={onChangeStartDate} style={{ width: '100%' }} />
-        }
-      />
-
-      <FieldWrapper
-        visible={isTerminateBoard}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            Members List<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <AntSelect mode="multiple" size="large" style={{ width: '100%' }} placeholder="Choose" value={boardMembersToTeminate} onChange={onChangeBoardMembersToTerminate}>
-            {tempMembersLists.map((e) => <AntSelect.Option value={e.value}>{e.label}</AntSelect.Option>)}
-          </AntSelect>
-        }
-      />
-
-      <FieldWrapper
-        visible={isTerminateKmp}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            Members List<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <AntSelect mode="multiple" size="large" style={{ width: '100%' }} placeholder="Choose" value={kmpMembersToTerminate} onChange={onChangeKmpMembersToTerminate}>
-            {tempMembersLists.map((e) => <AntSelect.Option value={e.value}>{e.label}</AntSelect.Option>)}
-          </AntSelect>
-        }
-      />
-
-      <FieldWrapper
-        visible={isTerminateBoard || isTerminateKmp}
-        size={[6, 6, 6]}
-        label={
-          <React.Fragment>
-            End Date<span style={{ color: 'red' }}> * </span>
-          </React.Fragment>
-        }
-        body={
-          <DatePicker size="large" value={endDate && moment(endDate)} onChange={onChangeEndDate} style={{ width: '100%' }} />
-        }
-      />
+        <FieldWrapper
+          visible={isTerminateBoard || isTerminateKmp}
+          size={[12, 6, 6]}
+          label={
+            <React.Fragment>
+              End Date<span className="addNewMember-red-asterik"> * </span>
+            </React.Fragment>
+          }
+          body={
+            <DatePicker size="large" value={endDate && moment(endDate)} onChange={onChangeEndDate} className={hasError.endDate ? 'terminateMember-end-date addNewMember-red-border' : 'terminateMember-end-date'} />
+          }
+        />
 
 
-      <Divider />
+        <Divider />
 
-      {(isAddNewBoard || isAddNewKmp) && <Col lg={12} style={{ display: 'flex', justifyContent: 'center' }}><Button onClick={onSubmitClick} variant="success">Submit</Button></Col>}
-      {(isTerminateKmp || isTerminateBoard) && <Col lg={12} style={{ display: 'flex', justifyContent: 'center' }}><Button onClick={onTerminateClick} variant="danger">Terminate</Button></Col>}
-    </Row>
-  );
+        <Col lg={12} className="addNewTerminate-button-wrap">
+          {(isAddNewBoard || isAddNewKmp) && <Button onClick={onSubmitClick} variant="success">Submit</Button>}
+          {(isTerminateKmp || isTerminateBoard) && <Button onClick={onTerminateClick} variant="danger">Terminate</Button>}
+        </Col>
+      </Row>
+    </Spin>);
 };
 
 export default AddNewKMPMember;

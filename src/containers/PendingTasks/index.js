@@ -177,7 +177,7 @@ const PendingTasks = () => {
       <div className="rightsidepane">
         <Header title="Pending Tasks" />
         <div className="container-main" >
-          <div className="users-tabs-stack">
+          <div className="pendingtasks-tabs-stack">
             {tabs.map((tab, index) => (
               <div key={tab.label} ref={tabsRef.current[index]} data-id={tab.label} onClick={(event) => onClickChangeTab(event, tab)} className="tabs-label-count-wrap">
                 <div className="tabs-label">

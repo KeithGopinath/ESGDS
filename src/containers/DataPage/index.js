@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExclamationCircleTwoTone } from '@ant-design/icons';
@@ -61,7 +61,7 @@ const DataSheetMain = (props) => {
   useEffect(() => {
     setReqCurrentData(reqDpCodeData.currentData || []);
     setReqHistoricalData(reqDpCodeData.historicalData || []);
-  }, [locationData]);
+  }, [reqDpCodeData]);
 
   const saveReqCurrentData = (data) => {
     console.log(data, 'Incoming');
@@ -211,8 +211,18 @@ const DataPage = (props) => {
   const { dpCodeDetails, taskDetails } = props.location.state;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({ type: 'DPCODEDATA_GET_REQUEST', taskId: taskDetails.taskId, dpCodeId: dpCodeDetails.dpCodeId });
+    dispatch({
+      type: 'DPCODEDATA_GET_REQUEST',
+      payload: {
+        taskId: taskDetails.taskId,
+        datapointId: dpCodeDetails.dpCodeId,
+        memberType: taskDetails.memberType,
+        memberName: dpCodeDetails.memberName || '',
+      },
+    });
   }, [props.location]);
+
+  const dpCodeDataFromStore = useSelector((state) => state.dpCodeData);
 
   const sideBarRef = useRef();
 
@@ -277,9 +287,17 @@ const DataPage = (props) => {
 
   // reqIndexes, reqDpCodeData, reqTask are returned from getReqData FUNC
   const [{
-    reqIndexes, reqDpCodeData, reqTask,
+    reqIndexes, reqTask,
   }] = getReqData();
 
+  const [reqDpCodeData, setReqDpCodeData] = useState(getReqData()[0].reqDpCodeData);
+  useEffect(() => {
+    setReqDpCodeData(getReqData()[0].reqDpCodeData);
+  }, [props.location]);
+
+  useEffect(() => {
+    setReqDpCodeData(dpCodeDataFromStore.dpCodeData ? dpCodeDataFromStore.dpCodeData.standdpCodeDataalone : {});
+  }, [dpCodeDataFromStore]);
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />

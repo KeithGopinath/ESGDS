@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/* eslint-disable*/
 import { combineReducers } from 'redux';
 import login from './Login';
 import otp from './Otp';
@@ -21,7 +21,7 @@ import getUserById from './UserById';
 import uploadTaxonomy from './UploadTaxonomy';
 import getRoleAssignment from './RoleAssignment';
 import pendingTasks from './PendingTasks';
-import matrixMember from './MatrixMember';
+import { addNewMember, activeMembers, terminateMembers } from './MatrixMember';
 import task from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
@@ -43,6 +43,9 @@ import controversyTaskData from './GetControversyTaskData';
 import createControversyTask from './CreateControversyTask';
 import reports from './Reports';
 import reportsTaskList from './ReportsTaskList';
+
+
+
 import taskList from './TaskList';
 
 const combinedReducer = combineReducers({
@@ -67,7 +70,6 @@ const combinedReducer = combineReducers({
   uploadTaxonomy,
   getRoleAssignment,
   pendingTasks,
-  matrixMember,
   task,
   taskDetail,
   roleChange,
@@ -93,13 +95,16 @@ const combinedReducer = combineReducers({
   createControversyTask,
   reports,
   reportsTaskList,
+  addNewMember,
+  activeMembers,
+  terminateMembers,
 });
 
 const rootReducer = (state, action) => {
   if (action.type === 'RESET') {
-    state = undefined
+    state = undefined;
   }
-  return combinedReducer(state, action)
-}
+  return combinedReducer(state, action);
+};
 
 export default rootReducer;

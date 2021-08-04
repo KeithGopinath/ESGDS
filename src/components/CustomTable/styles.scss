@@ -138,3 +138,13 @@
     position: relative;
     left: 12px;
 }
+
+.custom-table-result {
+    background-color: #00000005;
+    border-radius: 20px;
+    height: inherit;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+}

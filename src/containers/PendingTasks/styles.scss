@@ -20,6 +20,15 @@
     margin: 30px 0;
 }
 
+.pendingtasks-tabs-stack {
+    background-color: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 2%;
+    justify-content: space-evenly;
+}
+
 .pendingtasks-tabs{
     padding: 5px;
     min-width: 170px;

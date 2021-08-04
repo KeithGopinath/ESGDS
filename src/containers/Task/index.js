@@ -5,12 +5,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
+import { CloseCircleFilled, UserOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Select, { components } from 'react-select';
-import { Modal } from 'antd';
+import { Modal, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faUserTimes, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CustomTable from '../../components/CustomTable/index';
 import Header from '../../components/Header';
@@ -18,6 +19,8 @@ import SideMenuBar from '../../components/SideMenuBar';
 import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
 import AddNewBoardMember from './AddNewBoardMember';
 import AddNewKMPMember from './AddNewKMPMember';
+import Overlay from '../../components/Overlay';
+import { history } from '../../routes';
 
 
 const FieldWrapper = (props) => {
@@ -76,7 +79,7 @@ const TaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={TASK_DATA} />
+    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultPagination={5} message={props.message} icon={props.icon} />
   );
 };
 
@@ -112,14 +115,96 @@ const ControversyTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_TASK_DATA} />
+    <CustomTable tableData={CONTROVERSY_TASK_DATA} isLoading={props.isLoading} icon={props.icon} message={props.message} />
+  );
+};
+
+const ValidationTable = (props) => {
+  const [desModal, setDesModal] = useState(false);
+  console.log(props);
+  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+    dpCode: x.dpCode,
+    fiscalYear: x.fiscalYear,
+    description:
+  <div>Validation Failed Descript...
+    <Tooltip
+      placement="top"
+      color="#fff"
+      title={
+        <div style={{ padding: '10px', color: 'black' }}>
+          <div>Validation Failed Description 1</div>
+          <div>Validation Failed Description 2</div>
+          <div>Validation Failed Description 3</div>
+        </div>
+      }
+    ><span style={{ cursor: 'pointer' }}>View more</span>
+    </Tooltip>
+  </div>,
+    validationstatus: <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}><div style={{ color: '#dc3545' }}>Failed</div><div title="Add Comments" onClick={() => { setDesModal(true); }} style={{ cursor: 'pointer', color: 'dodgerblue' }}><FontAwesomeIcon icon={faCommentAlt} /></div></div>,
+    action:
+  <Link
+    to={{
+      pathname: `/dpcode/${x.dpCode}`,
+      state: { taskDetails, dpCodeDetails: x },
+    }}
+  >Enter Data
+  </Link>,
+  }));
+
+  const VALIDATION_DATA = {
+    rowsData: tablePopulate(props),
+    columnsHeadData: [
+      {
+        id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'description', label: 'Description', align: 'center', dataType: 'element',
+      },
+      {
+        id: 'validationstatus', label: 'Status', align: 'center', dataType: 'element',
+      },
+      {
+        id: 'action', label: 'Action', align: 'right', dataType: 'element',
+      },
+    ],
+    tableLabel: 'Validation Status',
+  };
+
+  return (
+    <React.Fragment>
+      <CustomTable tableData={VALIDATION_DATA} />
+      <Overlay
+        className="desModal"
+        show={desModal}
+        onHide={() => setDesModal(false)}
+        backdrop="static"
+        keyboard={false}
+        animation
+        centered
+        size="lg"
+        title="Add comments"
+        body={
+          <React.Fragment>
+            <Form.Control
+              as="textarea"
+              disabled={false}
+              aria-label="With textarea"
+              placeholder="Comments"
+              onChange={null}
+            />
+          </React.Fragment>
+        }
+        onSubmitPrimary={null}
+        footer={<div style={{ display: 'flex', justifyContent: 'center' }}><Button variant="success">Sumbit</Button></div>}
+      />
+    </React.Fragment>
   );
 };
 
 const Task = (props) => {
-  // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
-  const { taskDetails } = props.location.state;
-
   // DECLARING DISPATCH
   const dispatch = useDispatch();
 
@@ -142,6 +227,9 @@ const Task = (props) => {
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
+  // TEMP VALIDATION VARIABLE
+  const { isValidationCalled } = props.location.state;
+
   const sideBarRef = useRef();
 
   const getReqAPIData = () => {
@@ -153,10 +241,14 @@ const Task = (props) => {
     if (isAnalyst_CC) { return TASK_API_DATA.ANALYST_CC; }
     return [];
   };
+  const [dpCodeType, setDpCodeType] = useState('Standalone');
+
+  // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
+  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType };
 
   const extractReqTask = (data) => {
     let returnableTask;
-
+    console.log(reqTASK, taskDetails, data);
     if (isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
       [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
     }
@@ -174,7 +266,6 @@ const Task = (props) => {
 
   const reqTaskData = extractReqTask(getReqAPIData());
   console.log(reqTaskData, '////REQTASK DATA');
-  const [dpCodeType, setDpCodeType] = useState('Standalone');
   const [reqKeyIssue, setReqKeyIssue] = useState('');
   const [reqBoardMember, setReqBoardMember] = useState(null);
   const [reqKmpMember, setReqKmpMember] = useState(null);
@@ -278,7 +369,9 @@ const Task = (props) => {
     taskId: reqTaskData.taskId,
     pillar: reqTaskData.pillar,
     company: reqTaskData.company,
+    companyId: reqTaskData.companyId,
     taskNumber: reqTaskData.taskNumber,
+    memberType: reqTaskData.memberType,
     dpCodesData: reqDpCodesData,
   };
 
@@ -357,7 +450,7 @@ const Task = (props) => {
             <div className="task-keyissue">
               <Row>
                 {/* ONLY FOR STANDALONE */}
-                {isAnalyst_DC && isAnalyst_DCR && isQA_DV && isCompanyRep_DR && isClientRep_DR && dpCodeType === 'Standalone' &&
+                {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeType === 'Standalone' &&
                 <FieldWrapper
                   label="Key Issues*"
                   visible
@@ -409,8 +502,69 @@ const Task = (props) => {
                 />}
               </Row>
             </div>
-            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
-            {isAnalyst_CC && <ControversyTaskTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable
+              taskDetails={taskDetails}
+              dpCodesData={reqDpCodesData}
+              isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : reqTASK.isLoading}
+              message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
+              icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
+            />}
+            {isAnalyst_CC && <ControversyTaskTable
+              taskDetails={taskDetails}
+              dpCodesData={reqDpCodesData}
+              isLoading={reqTASK.isLoading}
+              message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : null}
+              icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : null}
+            />}
+
+            {isAnalyst_DC && isValidationCalled && <ValidationTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
+
+            <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
+              {/* Button */}
+              { false &&
+              <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
+              { isValidationCalled && isAnalyst_DC && false &&
+              <Button
+                className="datapage-button"
+                variant="success"
+                onClick={() => {
+                  alert('Calculation Finished !');
+                }
+                }
+              >Calculate Derived Data
+              </Button>}
+              { !isValidationCalled && isAnalyst_DC && false &&
+              <Button
+                className="datapage-button"
+                variant="info"
+                onClick={() => {
+                  history.push({
+                    pathName: `/task/${props.location.state.taskId}`,
+                    state: {
+                      taskId: props.location.state.taskId,
+                      taskDetails,
+                      isValidationCalled: true,
+                    },
+                  });
+                }}
+              >Validate
+              </Button>}
+              { isValidationCalled && isAnalyst_DC && false &&
+              <Button
+                className="datapage-button"
+                variant="danger"
+                onClick={() => {
+                  history.push({
+                    pathName: `/task/${props.location.state.taskId}`,
+                    state: {
+                      taskId: props.location.state.taskId,
+                      taskDetails,
+                    },
+                  });
+                }}
+              >Back
+              </Button>}
+            </Col>
 
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
@@ -418,23 +572,27 @@ const Task = (props) => {
               <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
             </Col>
 
-            <Modal title="Add New Board Member" width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
+            {isAddNewBoardVisible &&
+            <Modal title="Add New Board Member" className="task-modal" maskClosable={false} width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
               {isAddNewBoardVisible && false && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
-              {isAddNewBoardVisible && <AddNewKMPMember modalType="AddNewBoardType" closeModal={() => setIsAddNewBoardVisible(false)} />}
-            </Modal>
+              {isAddNewBoardVisible && <AddNewKMPMember modalType="AddNewBoardType" taskDetails={taskDetails} closeModal={() => setIsAddNewBoardVisible(false)} />}
+            </Modal>}
 
-            <Modal title="Add New Kmp Member" width="80%" visible={isAddNewKMPVisible} footer={null} onCancel={() => setIsAddNewKMPVisible(false)}>
-              {isAddNewKMPVisible && <AddNewKMPMember modalType="AddNewKmpType" closeModal={() => setIsAddNewKMPVisible(false)} />}
+            {isAddNewKMPVisible &&
+            <Modal title="Add New Kmp Member" className="task-modal" maskClosable={false} width="80%" visible={isAddNewKMPVisible} footer={null} onCancel={() => setIsAddNewKMPVisible(false)}>
+              {isAddNewKMPVisible && <AddNewKMPMember modalType="AddNewKmpType" taskDetails={taskDetails} closeModal={() => setIsAddNewKMPVisible(false)} />}
               {/* {isAddNewKMPVisible && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="kmpMatrix" onCloseAddNewMemberModal={() => setIsAddNewKMPVisible(false)} />} */}
-            </Modal>
+            </Modal>}
 
-            <Modal title="terminate Board Member" width="80%" visible={isTerminateBoardVisible} footer={null} onCancel={() => setIsTerminateBoardVisible(false)}>
-              {isTerminateBoardVisible && <AddNewKMPMember modalType="TerminateBoardType" closeModal={() => setIsTerminateBoardVisible(false)} />}
-            </Modal>
+            {isTerminateBoardVisible &&
+            <Modal title="Terminate Board Member" className="task-modal" maskClosable={false} width="80%" style={{ maxWidth: '700px' }} visible={isTerminateBoardVisible} footer={null} onCancel={() => setIsTerminateBoardVisible(false)}>
+              {isTerminateBoardVisible && <AddNewKMPMember modalType="TerminateBoardType" taskDetails={taskDetails} closeModal={() => setIsTerminateBoardVisible(false)} />}
+            </Modal>}
 
-            <Modal title="Terminate Kmp Member" width="80%" visible={isTerminateKmpVisible} footer={null} onCancel={() => setIsTerminateKmpVisible(false)}>
-              {isTerminateKmpVisible && <AddNewKMPMember modalType="TerminateKmpType" closeModal={() => setIsTerminateKmpVisible(false)} />}
-            </Modal>
+            {isTerminateKmpVisible &&
+            <Modal title="Terminate Kmp Member" className="task-modal" maskClosable={false} width="80%" style={{ maxWidth: '700px' }} visible={isTerminateKmpVisible} footer={null} onCancel={() => setIsTerminateKmpVisible(false)}>
+              {isTerminateKmpVisible && <AddNewKMPMember modalType="TerminateKmpType" taskDetails={taskDetails} closeModal={() => setIsTerminateKmpVisible(false)} />}
+            </Modal>}
           </div>
         </div>
       </div>

@@ -43,6 +43,7 @@ import { createControversyTaskWatchers } from './CreateControversyTask';
 import { getReportsWatchers } from './Reports';
 import { getReportsTaskListWatchers } from './ReportsTaskList';
 
+
 export default function* rootWatchers() {
   yield all([
     loginWatchers(),
