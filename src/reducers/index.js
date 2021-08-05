@@ -43,9 +43,7 @@ import controversyTaskData from './GetControversyTaskData';
 import createControversyTask from './CreateControversyTask';
 import reports from './Reports';
 import reportsTaskList from './ReportsTaskList';
-
-
-
+import calculateActuals from './CalculateActuals';
 import taskList from './TaskList';
 
 const combinedReducer = combineReducers({
@@ -98,6 +96,7 @@ const combinedReducer = combineReducers({
   addNewMember,
   activeMembers,
   terminateMembers,
+  calculateActuals,
 });
 
 const rootReducer = (state, action) => {
