@@ -75,7 +75,6 @@ const CustomTable = ({
   tableData, showDatePicker, isLoading, message, icon, defaultPagination, selectItem, viewCheckedCompanies
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
-  console.log(defaultPagination);
   // CONSTANTS
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
