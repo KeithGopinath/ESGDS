@@ -15,15 +15,18 @@ const CalculatePercentile = () => {
   const [NIC, setNIC] = useState();
   const [pillar, setPillar] = useState();
   const [errorAlert, setErrorAlert] = useState('');
-  const [averageData, setAverageData] = useState([]);
-  const [sdData, setSdData] = useState([]);
+  const [percentileData, setPercentileData] = useState([]);
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
 
   useEffect(() => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
+    setPercentileData(dummyData)
   }, []);
+
+  const currentYear = moment().year();
+  const years = [`${currentYear - 6}-${currentYear - 5}`, `${currentYear - 5}-${currentYear - 4}`, `${currentYear - 4}-${currentYear - 3}`, `${currentYear - 3}-${currentYear - 2}`, `${currentYear - 2}-${currentYear - 1}`];
 
   const onSubmit = () => {
     if (!taxonomy || !NIC || !pillar) {
@@ -34,6 +37,8 @@ const CalculatePercentile = () => {
         taxonomy: taxonomy.value,
         nicCode: NIC.value,
         pillar: pillar.value,
+        years: years,
+        currentYear: `${currentYear - 1}-${currentYear}`
       }
       console.log(payload);
       // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
@@ -41,30 +46,41 @@ const CalculatePercentile = () => {
   }
 
   const onSubmitTableData = () => {
-    if (!taxonomy || !NIC || !pillar) {
-      message.error('Please select required fields')
-      setErrorAlert('border-danger dropdown-alert');
-    } else {
-      const percentileData = [];
-      const updatedAvg = averageData.slice().reverse().filter((v, i, a) => a.findIndex(t => (t.dpCode === v.dpCode)) === i).reverse();
-      const updatedSd = sdData.slice().reverse().filter((v, i, a) => a.findIndex(t => (t.dpCode === v.dpCode)) === i).reverse()
+    const test = percentileData.map((data) => {
+      if (data.projectedAvg == '' || data.projectedSd == '') {
+        return 'empty'
+      }
+      else if (((!isNaN(data.projectedAvg) || data.projectedAvg.includes('NA')) && (!isNaN(data.projectedSd) || data.projectedSd.includes('NA')))) {
+        return 'ok'
+      }
+      else if ((isNaN(data.projectedAvg) || isNaN(data.projectedSd))) {
+        if (!data.projectedAvg.includes('NA') || !data.projectedSd.includes('NA')) {
+          return 'na'
+        }
+      }
+    })
 
-      updatedAvg.map((data) => {
-        updatedSd.filter(val => data.dpCode == val.dpCode).map((value) => {
-          var obj = {
-            dpCode: value.dpCode,
-            percentileAvg: data.percentileAvg,
-            percentileSd: value.percentileSd
-          }
-          percentileData.push(obj)
-        })
-      })
+    if (test.find(val => val == 'empty')) {
+      message.error('Please fill all the fields')
+      setErrorAlert('border-danger')
+    }
+    else if (test.find(val => val == 'na')) {
+      message.error('If the values are not available , please fill the field as NA')
+      setErrorAlert('border-danger')
+    }
+    else if (test.find(val => val == 'ok')) {
+      const data = percentileData.map((data) => ({
+        dpCodeId: data.dpCodeId,
+        dpCode: data.dpCode,
+        projectedAvg: data.projectedAvg,
+        projectedSd: data.projectedSd
+      }));
       const payload = {
         taxonomy: taxonomy.value,
         nicCode: NIC.value,
         pillar: pillar.value,
-        currentYear:`${currentYear - 1}-${currentYear}`,
-        data: percentileData
+        currentYear: `${currentYear - 1}-${currentYear}`,
+        data: data
       }
       console.log('payload', payload);
       // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
@@ -86,22 +102,44 @@ const CalculatePercentile = () => {
   }
 
   const onAverageChange = (e, data) => {
-    const temp = [...averageData];
-    const obj = { dpCode: data, percentileAvg: e.target.value }
-    temp.push(obj);
-    setAverageData(temp)
+    if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+      const temp = [...percentileData];
+      const index = temp.findIndex(val => val.dpCode === data.dpCode);
+      const updatedObj = { ...temp[index], projectedAvg: e.target.value.toUpperCase() };
+      const current = [
+        ...temp.slice(0, index),
+        updatedObj,
+        ...temp.slice(index + 1),
+      ];
+      setPercentileData(current)
+    }
   }
 
   const onSDChange = (e, data) => {
-    const temp = [...sdData];
-    const obj = { dpCode: data, percentileSd: e.target.value }
-    temp.push(obj);
-    setSdData(temp)
+    if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+      const temp = [...percentileData];
+      const index = temp.findIndex(val => val.dpCode === data.dpCode);
+      const updatedObj = { ...temp[index], projectedSd: e.target.value.toUpperCase() };
+      const current = [
+        ...temp.slice(0, index),
+        updatedObj,
+        ...temp.slice(index + 1),
+      ];
+      setPercentileData(current)
+    }
   }
 
-  const currentYear = moment().year();
-  const optionsData = taxonomyData && taxonomyData.rows.filter((val => taxonomy && taxonomy.value == val._id));
+  const classNamefinder = (data) => {
+    if (!data) {
+      return true
+    }
+    else if ((!isNaN(data) || data.includes('NA'))) {
+      return false
+    }
+    else return true;
+  }
 
+  const optionsData = taxonomyData && taxonomyData.rows.filter((val => taxonomy && taxonomy.value == val._id));
   const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data) => ({
     value: data._id,
     label: data.taxonomyName
@@ -112,18 +150,30 @@ const CalculatePercentile = () => {
   const calculatePercentileTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
       dpCode: data.dpCode,
+      fiveYearsBackAvg: data.fiveYearsBackAvg,
       fourYearsBackAvg: data.fourYearsBackAvg,
       threeYearsBackAvg: data.threeYearsBackAvg,
       twoYerasBackAvg: data.twoYerasBackAvg,
       oneYearBackAvg: data.oneYearBackAvg,
-      currentYearAvg: data.currentYearAvg,
-      percentileAvg: <Form.Control type="text" name="projectileAvg" onChange={(e) => { onAverageChange(e, data.dpCode) }} />,
-      fourYearsBackSD: data.fourYearsBackSD,
-      threeYearsBackSD: data.threeYearsBackSD,
-      twoYearsBackSD: data.twoYearsBackSD,
-      oneYearBackSD: data.oneYearBackSD,
-      currentYearSD: data.currentYearSD,
-      percentileSD: <Form.Control type="text" name="projectileSD" onChange={(e) => { onSDChange(e, data.dpCode) }} />,
+      projectedAvg: <Form.Control
+        type="text"
+        name="projectedAvg"
+        value={data.projectedAvg}
+        onChange={(e) => { onAverageChange(e, data) }}
+        maxLength={2}
+        className={classNamefinder(data.projectedAvg) ? errorAlert : ''} />,
+      fiveYearsBackSD: data.fiveYearsBackSd,
+      fourYearsBackSD: data.fourYearsBackSd,
+      threeYearsBackSD: data.threeYearsBackSd,
+      twoYearsBackSD: data.twoYearsBackSd,
+      oneYearBackSD: data.oneYearBackSd,
+      projectedSD: <Form.Control
+        type="text"
+        name="projectedSD"
+        value={data.projectedSd}
+        onChange={(e) => { onSDChange(e, data) }}
+        maxLength={2}
+        className={classNamefinder(data.projectedSd) ? errorAlert : ''} />,
     }));
 
     return {
@@ -132,6 +182,12 @@ const CalculatePercentile = () => {
         id: 'dpCode',
         align: 'center',
         label: 'DP Code',
+        dataType: 'string',
+      },
+      {
+        id: 'fiveYearsBackAvg',
+        align: 'center',
+        label: `${currentYear - 6}-${currentYear - 5} Actual Avg`,
         dataType: 'string',
       },
       {
@@ -159,19 +215,17 @@ const CalculatePercentile = () => {
         dataType: 'string',
       },
       {
-        id: 'currentYearAvg',
+        id: 'projectedAvg',
         align: 'center',
-        label: `${currentYear - 1}-${currentYear} Actual Avg`,
-        dataType: 'string',
-      },
-      {
-        id: 'percentileAvg',
-        align: 'center',
-        label: 'Percentile Avg',
+        label: 'Projected Avg',
         dataType: 'element',
       },
-
-
+      {
+        id: 'fiveYearsBackSD',
+        align: 'center',
+        label: `${currentYear - 6}-${currentYear - 5} Actual S.D`,
+        dataType: 'string',
+      },
       {
         id: 'fourYearsBackSD',
         align: 'center',
@@ -197,15 +251,9 @@ const CalculatePercentile = () => {
         dataType: 'string',
       },
       {
-        id: 'currentYearSD',
+        id: 'projectedSD',
         align: 'center',
-        label: `${currentYear - 1}-${currentYear} Actual S.D`,
-        dataType: 'string',
-      },
-      {
-        id: 'percentileSD',
-        align: 'center',
-        label: 'Percentile S.D',
+        label: 'Projected S.D',
         dataType: 'element',
       },
       ],
@@ -214,35 +262,40 @@ const CalculatePercentile = () => {
 
   const dummyData = [
     {
+      'dpCodeId': '101',
       'dpCode': '00567',
+      'fiveYearsBackAvg': '21',
       'fourYearsBackAvg': '32',
       'threeYearsBackAvg': '36',
       'twoYerasBackAvg': '40',
       'oneYearBackAvg': '33',
-      'currentYearAvg': '36',
-      'fourYearsBackSD': '21',
-      'threeYearsBackSD': '19',
-      'twoYearsBackSD': '17',
-      'oneYearBackSD': '18',
-      'currentYearSD': '21',
+      'projectedAvg': '',
+      'fiveYearsBackSd': '21',
+      'fourYearsBackSd': '21',
+      'threeYearsBackSd': '19',
+      'twoYearsBackSd': '17',
+      'oneYearBackSd': '18',
+      'projectedSd': ''
     },
     {
+      'dpCodeId': '102',
       'dpCode': '11345',
+      'fiveYearsBackAvg': '21',
       'fourYearsBackAvg': '32',
       'threeYearsBackAvg': '36',
       'twoYerasBackAvg': '40',
       'oneYearBackAvg': '33',
-      'currentYearAvg': '36',
-      'fourYearsBackSD': '21',
-      'threeYearsBackSD': '19',
-      'twoYearsBackSD': '17',
-      'oneYearBackSD': '18',
-      'currentYearSD': '21',
+      'projectedAvg': '',
+      'fiveYearsBackSd': '21',
+      'fourYearsBackSd': '21',
+      'threeYearsBackSd': '19',
+      'twoYearsBackSd': '17',
+      'oneYearBackSd': '18',
+      'projectedSd': ''
     }
   ]
 
-  const tableData = calculatePercentileTableData(dummyData)
-
+  const tableData = calculatePercentileTableData(percentileData)
 
   return (
     <div className="main">
@@ -298,7 +351,7 @@ const CalculatePercentile = () => {
               <Card className="upload-container">
                 <CustomTable tableData={tableData} />
                 <Row className="upload-button-container">
-                  <Button variant="primary" className="upload-data-button" onClick={onSubmitTableData}>Calculate Percentile</Button>
+                  {percentileData && <Button variant="primary" className="upload-data-button" onClick={onSubmitTableData}>Calculate Percentile</Button>}
                 </Row>
               </Card>
             </div>

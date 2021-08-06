@@ -42,7 +42,7 @@ import { getControversyTaskDataWatchers } from './GetControversyTaskData';
 import { createControversyTaskWatchers } from './CreateControversyTask';
 import { getReportsWatchers } from './Reports';
 import { getReportsTaskListWatchers } from './ReportsTaskList';
-
+import { calculateActualsWatchers } from './CalculateActuals';
 
 export default function* rootWatchers() {
   yield all([
@@ -89,5 +89,6 @@ export default function* rootWatchers() {
     createControversyTaskWatchers(),
     getReportsWatchers(),
     getReportsTaskListWatchers(),
+    calculateActualsWatchers(),
   ]);
 }

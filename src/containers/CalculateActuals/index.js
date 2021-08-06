@@ -7,6 +7,7 @@ import { Card, Row, Col, Container, Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import { message } from 'antd';
 import moment from 'moment';
+import PageLoader from '../../components/PageLoader';
 
 const CalculateActuals = () => {
   const sideBarRef = useRef();
@@ -14,13 +15,28 @@ const CalculateActuals = () => {
   const [NIC, setNIC] = useState();
   const [year, setYear] = useState();
   const [errorAlert, setErrorAlert] = useState('');
+  const [flag, setFlag] = useState(false);
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const calculateActuals = useSelector((state) => state.calculateActuals.calculateActuals);
+  const calculateActualsError = useSelector((state) => state.calculateActuals.error);
+  const loading = useSelector((state) => state.calculateActuals.isLoading);
 
   useEffect(() => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
   }, []);
+
+  useEffect(() => {
+    if (calculateActuals && flag) {
+      message.success(calculateActuals.message);
+      setTaxonomy('');
+      setNIC('');
+      setYear('');
+    } else if (calculateActualsError && flag) {
+      message.error(calculateActualsError.message)
+    }
+  }, [calculateActuals, calculateActualsError]);
 
   const onSubmit = () => {
     if (!taxonomy || !NIC || !year) {
@@ -28,12 +44,12 @@ const CalculateActuals = () => {
       setErrorAlert('border-danger dropdown-alert');
     } else {
       const payload = {
-        taxonomy: taxonomy.value,
-        nicCode: NIC.value,
+        clientTaxonomyId: taxonomy.value,
+        nic: NIC.value,
         year: year.label,
       }
-      console.log(payload);
-      // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
+      dispatch({ type: 'CALCULATE_ACTUALS_REQUEST', payload });
+      setFlag(true);
     }
   }
 
@@ -115,6 +131,7 @@ const CalculateActuals = () => {
               <Row className="upload-button-container">
                 <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Calculate Actuals</Button>
               </Row>
+              {loading && <PageLoader />}
             </Card>
           </Container>
         </div>

@@ -49,6 +49,7 @@ export default {
     postAddNewKmpMatrixMember: 'kmp',
     postTerminateBoardMatrixMembers: 'boardMembers/deleteBoardMember',
     postTerminateKmpMatrixMembers: 'kmp/deleteKmpMembers',
+    calculateActuals: 'projected_values/calculate_actuals',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
