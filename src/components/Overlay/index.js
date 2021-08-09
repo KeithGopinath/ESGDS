@@ -25,7 +25,7 @@ const Overlay = ({
         {alert && <span className={`w-100 text-center text-${alertClass}`}><p>{alert}</p></span>}
         <div className="mx-auto">
           {secondary && <Button variant="primary secondary-button" onClick={onSubmitSecondary}>{secondary}</Button>}
-          {primary && <Button variant="primary primary-button" onClick={onSubmitPrimary} >{primary}</Button>}
+          {primary && <Button variant="primary primary-button" onClick={onSubmitPrimary}>{primary}</Button>}
         </div>
         {footer}
       </Modal.Footer>

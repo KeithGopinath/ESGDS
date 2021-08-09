@@ -80,7 +80,7 @@ const NewTaxonomySubset = ({ show, handleClose, subsetData }) => {
             animation
             centered
             size="md"
-            title="Create Subset Taxonomy"
+            title="Create New Taxonomy"
             body={subsetBody()}
             alert={alertMsg}
             primary="submit"

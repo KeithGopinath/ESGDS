@@ -50,6 +50,7 @@ export default {
     postTerminateBoardMatrixMembers: 'boardMembers/deleteBoardMember',
     postTerminateKmpMatrixMembers: 'kmp/deleteKmpMembers',
     calculateActuals: 'projected_values/calculate_actuals',
+    getMasterTaxonomyHeader: 'taxonomies',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

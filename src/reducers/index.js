@@ -9,7 +9,7 @@ import updatePassword from './UpdatePassword';
 import createBatch from './BatchCreate';
 import batchList from './Batch';
 import keyIssues from './KeyIssues';
-import masterTaxonomy from './MasterTaxonomy';
+import {masterTaxonomy, masterTaxonomyHeader} from './MasterTaxonomy';
 import clientTaxonomy from './ClientTaxonomy';
 import roles from './Roles';
 import roleAssignmentEdit from './RoleAssignmentEdit';
@@ -57,6 +57,7 @@ const combinedReducer = combineReducers({
   batchList,
   keyIssues,
   masterTaxonomy,
+  masterTaxonomyHeader,
   clientTaxonomy,
   roles,
   roleAssignmentEdit,

@@ -73,7 +73,7 @@ export const doPost = (url, body, urlPrefix = baseUrl) => timeoutPromise(fetch(
     },
     body: JSON.stringify(body),
   }),
-), TIMEOUT, 501)
+), TIMEOUT, 504)
   .then((res) => {
     let response = null;
     response = res.json();

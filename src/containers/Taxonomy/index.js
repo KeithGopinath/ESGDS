@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Form, Row, Col, Container, Button, } from 'react-bootstrap';
+import { message } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { faSearch, faEdit, faCheckCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -29,9 +30,13 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   const [labelType, setLabelType] = useState('');
   const [labelValues, setLabelValues] = useState('');
   const [display, setDisplay] = useState('');
+  const [header, setHeader] = useState('');
+  const [errorAlert, setErrorAlert] = useState('');
+  const [alertMsg, setAlertMsg] = useState('');
 
   const dispatch = useDispatch();
   const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
+  const taxonomyHeader = useSelector((state) => state.masterTaxonomyHeader.masterTaxonomyHeader);
   const loading = useSelector((state) => state.masterTaxonomy.isLoading);
   const masterTaxonomy = taxonomy && taxonomy.rows;
 
@@ -44,17 +49,44 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   }, [taxonomy]);
 
   useEffect(() => {
+    if (taxonomyHeader && taxonomyHeader.status === '200') {
+      dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
+      setShow(false)
+      message.success(`${taxonomyHeader.message}`)
+    }
+  }, [taxonomyHeader]);
+
+  useEffect(() => {
+    setAlertMsg('')
     !showList &&
       dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
   }, []);
 
+  useEffect(() => {
+    if (header.name) {
+      setLabel(header.name);
+      setApplicable({ value: header.applicableFor, label: header.applicableFor });
+      setLabelType({ value: header.inputType, label: header.inputType });
+      setLabelValues(header.inputValues);
+      setDisplay({ value: header.toDisplay, label: header.toDisplay ? 'Yes' : 'No' });
+    } else {
+      setLabel('');
+      setApplicable('');
+      setLabelType('');
+      setLabelValues('');
+      setDisplay('');
+    }
+  }, [header, show])
+
   const onhidePopUp = () => {
+    setErrorAlert('')
+    setAlertMsg('')
     setShow(false);
   }
 
   const applicableOptions = [
-    { value: 'Collection', label: 'Collection' },
-    { value: 'Controversy', label: 'Controversy' },
+    { value: 'Only Collection', label: 'Only Collection' },
+    { value: 'Only Controversy', label: 'Only Controversy' },
     { value: 'Both', label: 'Both' }
   ]
 
@@ -66,11 +98,11 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   ]
 
   const displayOptions = [
-    { value: 'Yes', label: 'Yes' },
-    { value: 'No', label: 'No' },
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' },
   ]
 
-  const onLabelChange = (e) => {
+  const onLabelChange = (e, i) => {
     setLabel(e.target.value)
   }
 
@@ -82,91 +114,12 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     setLabelType(labelType)
   }
 
-  const onDisplayChange = (display) => {
-    setDisplay(display)
-  }
-
   const onLabelValuesChange = (e) => {
     setLabelValues(e.target.value)
   }
 
-  const labelValueDisabled = labelType && labelType.value.includes('Text') ? false : true;
-
-  const popUpBody = () => (
-    <React.Fragment>
-      <Form.Group>
-        <Row className="taxonomy-popup-row">
-          <Col lg={6} sm={6} md={6}>
-            <Form.Label>Label <sup className="text-danger">*</sup></Form.Label>
-            <Form.Control
-              size="large"
-              type="text"
-              onChange={onLabelChange}
-              value={label}
-            // className={!currentPassword && errorAlert}
-            />
-          </Col>
-          <Col lg={6} sm={6} md={6}>
-            <Form.Label>Applicable <sup className="text-danger">*</sup></Form.Label>
-            <Select
-              value={applicable}
-              name="applicable"
-              options={applicableOptions}
-              onChange={onApplicableChange}
-            // className={role.length == 0 && errorAlert}
-            />
-          </Col>
-        </Row>
-        <Row className="taxonomy-popup-row">
-          <Col lg={6} sm={6} md={6}>
-            <Form.Label>Label type <sup className="text-danger">*</sup></Form.Label>
-            <Select
-              value={labelType}
-              name="labeltype"
-              options={labelTypeOptions}
-              onChange={onLabelTypeChange}
-            // className={role.length == 0 && errorAlert}
-            />
-          </Col>
-          <Col lg={6} sm={6} md={6}>
-            <Form.Label>Label values <sup className="text-danger">*</sup></Form.Label>
-            <Form.Control
-              as="textarea"
-              size="large"
-              type="text"
-              onChange={onLabelValuesChange}
-              value={labelValues}
-              disabled={labelValueDisabled}
-            // className={!currentPassword && errorAlert}
-            />
-          </Col>
-        </Row>
-        <Row className="taxonomy-popup-row">
-          <Col lg={6} sm={6} md={6}>
-            <Form.Label>Display <sup className="text-danger">*</sup></Form.Label>
-            <Select
-              value={display}
-              name="display"
-              options={displayOptions}
-              onChange={onDisplayChange}
-            // className={role.length == 0 && errorAlert}
-            />
-          </Col>
-        </Row>
-      </Form.Group>
-    </React.Fragment>
-  )
-
-  const onTaxonomyChange = (e) => {
-    if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
-      setFieldName(e.target.value)
-    }
-  }
-
-  const addNewTaxonomy = () => {
-    const temp = [...taxonomyData];
-    temp.push({ name: '' })
-    setTaxonomyData(temp)
+  const onDisplayChange = (display) => {
+    setDisplay(display)
   }
 
   const editTaxonomy = (item) => {
@@ -183,8 +136,51 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     //   }
     // })
     // setTaxonomyData(result)
+    setErrorAlert('')
+    setAlertMsg('')
+    console.log('item', item)
+    setHeader(item)
     setShow(true);
   };
+
+  const onSubmitHeader = () => {
+    console.log('header', header)
+    if (!label || !applicable.label || !labelType.label || (!labelValues && !labelValueDisabled) || !display.label) {
+      setErrorAlert('error-alert')
+      setAlertMsg('Please enter all the fields')
+    }
+    else {
+      // console.log('header', header)
+      // const edit = header.name
+      const column = {
+        name: label,
+        fieldName: edit.fieldName || label.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()),
+        applicableFor: applicable.value,
+        inputType: labelType.value,
+        inputValues: labelValues,
+        toDisplay: display.value
+      }
+      console.log('column', column)
+      dispatch({ type: 'MASTER_TAXONOMY_HEADER_REQUEST', column, header });
+    }
+  }
+
+  // disabled conditions 
+  const labelValueDisabled = !labelType.value || labelType && labelType.value.includes('Text') ? true : false;
+  const headerValueDisabled = header.isRequired ? true : false;
+
+
+  const onTaxonomyChange = (e) => {
+    if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
+      setFieldName(e.target.value)
+    }
+  }
+
+  const addNewTaxonomy = () => {
+    const temp = [...taxonomyData];
+    temp.push({ name: '' })
+    setTaxonomyData(temp)
+  }
 
   const updateTaxonomy = (item) => {
     const updated = [...taxonomyData];
@@ -323,6 +319,75 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     </Col>
   ));
 
+  const popUpBody = () => (
+    <React.Fragment>
+      <Form.Group>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label <sup className="text-danger">*</sup></Form.Label>
+            <Form.Control
+              // size="large"
+              type="text"
+              onChange={onLabelChange}
+              value={label}
+              className={!label && errorAlert}
+            />
+          </Col>
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Applicable <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              name="applicable"
+              options={applicableOptions}
+              onChange={onApplicableChange}
+              value={applicable}
+              isDisabled={headerValueDisabled}
+              className={!applicable.label && errorAlert}
+            // className={role.length == 0 && errorAlert}
+            />
+          </Col>
+        </Row>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label type <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              name="labeltype"
+              options={labelTypeOptions}
+              onChange={onLabelTypeChange}
+              value={labelType}
+              isDisabled={headerValueDisabled}
+              className={!labelType.label && errorAlert}
+            />
+          </Col>
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Label values <sup className="text-danger">*</sup></Form.Label>
+            <Form.Control
+              as="textarea"
+              // size="large"
+              type="text"
+              onChange={onLabelValuesChange}
+              value={labelValues}
+              disabled={headerValueDisabled || labelValueDisabled}
+              className={!labelValues && !labelValueDisabled && errorAlert}
+            />
+          </Col>
+        </Row>
+        <Row className="taxonomy-popup-row">
+          <Col lg={6} sm={6} md={6}>
+            <Form.Label>Display <sup className="text-danger">*</sup></Form.Label>
+            <Select
+              name="display"
+              options={displayOptions}
+              onChange={onDisplayChange}
+              value={display}
+              isDisabled={headerValueDisabled}
+              className={!display.label && errorAlert}
+            />
+          </Col>
+        </Row>
+      </Form.Group>
+    </React.Fragment>
+  )
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -367,7 +432,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
                 <div className="taxonomy-footer">
                   <div className="taxonomy-submit">
                     {!showList &&
-                      <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Create New Subset</Button>
+                      <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Create New Taxonomy</Button>
                     }
                   </div>
                   <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
@@ -384,12 +449,12 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
               animation
               centered
               size="lg"
-              title="Edit header"
+              title="Header"
               body={popUpBody()}
-              // alert={alertMsg}
+              alert={alertMsg}
               primary="submit"
-            // onSubmitPrimary={onSubmitSubset}
-            // alertClass={alertClassName}
+              onSubmitPrimary={onSubmitHeader}
+              alertClass='danger'
             />
           </Container>
         </div>
