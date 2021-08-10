@@ -51,6 +51,9 @@ export default {
     postTerminateKmpMatrixMembers: 'kmp/deleteKmpMembers',
     calculateActuals: 'projected_values/calculate_actuals',
     getMasterTaxonomyHeader: 'taxonomies',
+    getReports: 'taskAssignments/task/reports',
+    getReportsTaskList: 'taskAssignments/taskListWithStatus',
+    getControversyReports: 'taskAssignments/task/controversyReports',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',
