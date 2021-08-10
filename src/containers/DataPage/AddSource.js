@@ -12,7 +12,6 @@ import PageLoader from '../../components/PageLoader';
 
 
 const uploadPDFCheck = (file) => {
-  console.log(file.type);
   if (!(file.type).includes('application/pdf')) {
     message.error(`${file.name} is not a pdf file`);
     return Upload.LIST_IGNORE;
@@ -52,10 +51,6 @@ const AddSource = (props) => {
   const [getSourceTypeFromStore, postSourceTypeFromStore] = useSelector((state) => [state.sourceType, state.sourceTypeCreate]);
 
   const sourceListAPIData = (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.data ? getSourceTypeFromStore.source.data : []);
-
-  console.log(sourceListAPIData);
-
-  console.log(sourcePDF);
 
   useEffect(() => {
     if (postSourceTypeFromStore && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
@@ -158,7 +153,6 @@ const AddSource = (props) => {
   };
 
   const onChangeSourcePDFUpload = (event) => {
-    console.log(event);
     setSourcePDF(event.fileList.length > 0 ? event : null);
     getBase64(event.fileList.length > 0 ? event.fileList[0].originFileObj : null).then((e) => setSourcePDF64(e));
   };
@@ -214,21 +208,6 @@ const AddSource = (props) => {
     return false;
   };
   const onClickUpload = () => {
-    console.log({
-      data: {
-        currentSourceType,
-        isMultiYear,
-        isMultiSource,
-        currentSubSourceType,
-        sourceURL,
-        publicationDate,
-        sourcePDF,
-        sourcePDFBase64,
-        sourceTypeName: currentSourceType && currentSourceType.label === 'Others' && sourceName,
-        subSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
-        errors,
-      },
-    });
     if (validate()) {
       const postableData = {
         companyId: props.companyId, // THIS DATA IS DEPENDENT ON EACH DPCODE FETCH API
@@ -243,9 +222,6 @@ const AddSource = (props) => {
         newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' && sourceName,
         newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
       };
-      console.log({
-        postableData,
-      });
       dispatch({ type: 'SOURCE_TYPE_POST_REQUEST', sourceTypeData: postableData });
       setStatusAlert(true);
       // const newSourceName = !isMultiYear ? (`${sourceName} 2018-2019`) : sourceName;
@@ -263,8 +239,6 @@ const AddSource = (props) => {
       reader.onerror = (error) => reject(error);
     }
   });
-
-  console.log(getSourceTypeFromStore.isLoading || postSourceTypeFromStore.isLoading);
 
   return (
     <Spin indicator={<PageLoader />} spinning={getSourceTypeFromStore.isLoading || postSourceTypeFromStore.isLoading}>

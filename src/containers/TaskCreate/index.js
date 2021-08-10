@@ -493,7 +493,6 @@ const TaskCreate = ({ flag }) => {
               <div className="align-chip">
                 <div className="batch-year-head">Year :</div>
                 {batchInfo.Batchyear.map((e) => {
-                  console.log(e, 'Tag');
                   return (
                     <Tag>{e.label}</Tag>
                   )

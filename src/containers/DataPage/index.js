@@ -48,7 +48,6 @@ const DataSheetMain = (props) => {
     // openSourcePanel,
   } = props;
 
-  console.log('////DATAPAGE INDEX PROPS', props);
 
   // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
   const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData || []);
@@ -64,15 +63,7 @@ const DataSheetMain = (props) => {
   }, [reqDpCodeData]);
 
   const saveReqCurrentData = (data) => {
-    console.log(data, 'Incoming');
     setReqCurrentData(reqCurrentData.map((e) => {
-      if (e.fiscalYear === data.fiscalYear) {
-        const returnableData = { ...e, ...data };
-        return returnableData;
-      }
-      return e;
-    }));
-    console.log(reqCurrentData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
         return returnableData;
@@ -82,15 +73,7 @@ const DataSheetMain = (props) => {
   };
 
   const saveReqHistoricalData = (data) => {
-    console.log(data, 'Incoming');
     setReqHistoricalData(reqHistoricalData.map((e) => {
-      if (e.fiscalYear === data.fiscalYear) {
-        const returnableData = { ...e, ...data };
-        return returnableData;
-      }
-      return e;
-    }));
-    console.log(reqHistoricalData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
         return returnableData;

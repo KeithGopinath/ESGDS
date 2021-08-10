@@ -138,13 +138,11 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     // setTaxonomyData(result)
     setErrorAlert('')
     setAlertMsg('')
-    console.log('item', item)
     setHeader(item)
     setShow(true);
   };
 
   const onSubmitHeader = () => {
-    console.log('header', header)
     if (!label || !applicable.label || !labelType.label || (!labelValues && !labelValueDisabled) || !display.label) {
       setErrorAlert('error-alert')
       setAlertMsg('Please enter all the fields')
@@ -160,7 +158,6 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
         inputValues: labelValues,
         toDisplay: display.value
       }
-      console.log('column', column)
       dispatch({ type: 'MASTER_TAXONOMY_HEADER_REQUEST', column, header });
     }
   }

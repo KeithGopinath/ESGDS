@@ -42,7 +42,6 @@ const FieldWrapper = (props) => {
 };
 
 const TaskTable = (props) => {
-  console.log(props);
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x, index) => ({
     key: `${x.dpCodeId}${x.memberName}${x.dpCode}index${index}`,
     dpCode: x.dpCode,
@@ -84,7 +83,6 @@ const TaskTable = (props) => {
 };
 
 const ControversyTaskTable = (props) => {
-  console.log(props);
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
@@ -121,7 +119,6 @@ const ControversyTaskTable = (props) => {
 
 const ValidationTable = (props) => {
   const [desModal, setDesModal] = useState(false);
-  console.log(props);
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
@@ -248,7 +245,6 @@ const Task = (props) => {
 
   const extractReqTask = (data) => {
     let returnableTask;
-    console.log(reqTASK, taskDetails, data);
     if (isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
       [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
     }
@@ -259,13 +255,10 @@ const Task = (props) => {
       // KEY NAMES CHANGES REQ FROM SHIVA !
       [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : data.filter((e) => (e.taskId === taskDetails.taskId));
     }
-
-    console.log(returnableTask, 'RERRRR');
     return { ...returnableTask, ...taskDetails };
   };
 
   const reqTaskData = extractReqTask(getReqAPIData());
-  console.log(reqTaskData, '////REQTASK DATA');
   const [reqKeyIssue, setReqKeyIssue] = useState('');
   const [reqBoardMember, setReqBoardMember] = useState(null);
   const [reqKmpMember, setReqKmpMember] = useState(null);
@@ -309,7 +302,6 @@ const Task = (props) => {
     if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
       if (dpCodeType === 'Standalone') {
         if (reqKeyIssue) {
-          console.log(reqKeyIssue);
           return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId && e.keyIssueId === reqKeyIssue.value));
         }
         return reqTaskList.dpCodesData;
@@ -362,8 +354,6 @@ const Task = (props) => {
   const boardMembersList = dpCodeType === 'Board Matrix' && reqTaskData.boardMatrix ? (reqTaskData.boardMatrix.boardMemberList) : [];
   const kmpMembersList = dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix ? (reqTaskData.kmpMatrix.kmpMemberList) : [];
   const reqDpCodesData = getReqDpCodesList();
-
-  console.log(reqDpCodesData);
 
   const taskToNextPage = {
     taskId: reqTaskData.taskId,
@@ -528,7 +518,7 @@ const Task = (props) => {
                 className="datapage-button"
                 variant="success"
                 onClick={() => {
-                  alert('Calculation Finished !');
+                  // alert('Calculation Finished !');
                 }
                 }
               >Calculate Derived Data

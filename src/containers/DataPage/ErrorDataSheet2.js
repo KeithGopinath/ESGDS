@@ -35,7 +35,6 @@ const ErrorDataSheetTwo = (props) => {
   ];
 
   const defaultData = props.reqData;
-  console.log(defaultData, '---------');
   const formDescription = defaultData.description;
   const formDataType = defaultData.dataType.toUpperCase();
 

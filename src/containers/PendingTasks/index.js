@@ -63,7 +63,6 @@ const PendingTaskTable = (props) => {
 
 const ControversyPendingTaskTable = (props) => {
   // TABLE DATA
-  console.log(props);
   const tablePopulate = (data) => data.map((ePendingTask) => ({
     taskNumber: ePendingTask.taskNumber,
     company: ePendingTask.company,
@@ -104,9 +103,6 @@ const PendingTasks = () => {
   }, []);
 
   const pendingTasksAPIData = useSelector((state) => state.pendingTasks);
-
-  console.log(useSelector((state) => state.pendingTasks));
-
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
@@ -153,7 +149,6 @@ const PendingTasks = () => {
     if (defaultTab) { defaultTab.classList.add('tabs-label-count-wrap-active'); }
     setReqAPIData(tabs[0]);
     sessionStorage.tab = tabs[0].label;
-    console.log(`GET REQUEST FOR ${currentRole} ${defaultTab.getAttribute('data-id')}`);
   };
 
   const onClickChangeTab = (event, data) => {

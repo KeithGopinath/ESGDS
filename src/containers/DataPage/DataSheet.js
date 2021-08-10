@@ -258,17 +258,14 @@ export const DataSheetComponent = (props) => {
   // BUTTON HANDLERS
 
   const saveClickHandler = () => {
-    console.log('HISTORICAL SAVE');
     dummySaveClickHandler();
   };
 
   const unFreezeClickHandler = () => {
-    console.log('UNFREEZE');
     dummyEditClickHandler();
   };
 
   const backClickHandler = () => {
-    console.log('backClickHandler');
     history.push({
       pathname: `/task/${reqTask.taskNumber}`,
       state: {
@@ -284,7 +281,6 @@ export const DataSheetComponent = (props) => {
   };
 
   const previousClickHandler = () => {
-    console.log('previousClickHandler');
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
@@ -303,23 +299,7 @@ export const DataSheetComponent = (props) => {
   };
 
   const saveAndNextClickHandler = () => {
-    console.log(props.dummyDataCheck(), 'LIST OF NUMS');
     if ((props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
-      console.log('saveAndNextClickHandler');
-      console.log('Details To Be Saved: ');
-      console.log('DP CODE: ', formDpCode);
-      console.log('DESCRIPTION: ', formDescription);
-      console.log('DATA TYPE: ', formDataType);
-      console.log('TEXT SNIPPET: ', formTextSnippet);
-      console.log('PAGE NO: ', formPageNo);
-      console.log('SCREENSHOT PATH: ', formScreenShotPath);
-      console.log('RESPONSE: ', formResponse);
-      console.log('SOURCE: ', formSource);
-      console.log('URL: ', formURL);
-      console.log('PUBLICATION DATE: ', formPublicDate);
-      console.log('SCREENSHOT FILE: ', formScreenShotFile);
-      console.log('ERROR TYPE: ', formErrorType);
-      console.log('COMMENTS: ', formComment);
       const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
@@ -362,21 +342,6 @@ export const DataSheetComponent = (props) => {
       message.error('Please make sure the required data is entered and saved.', 8);
     }
     if (!isAnalyst_CC && (props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
-      console.log('saveAndCloseClickHandler');
-      console.log('Details To Be Saved: ');
-      console.log('DP CODE: ', formDpCode);
-      console.log('DESCRIPTION: ', formDescription);
-      console.log('DATA TYPE: ', formDataType);
-      console.log('TEXT SNIPPET: ', formTextSnippet);
-      console.log('PAGE NO: ', formPageNo);
-      console.log('SCREENSHOT PATH: ', formScreenShotPath);
-      console.log('RESPONSE: ', formResponse);
-      console.log('SOURCE: ', formSource);
-      console.log('URL: ', formURL);
-      console.log('PUBLICATION DATE: ', formPublicDate);
-      console.log('SCREENSHOT FILE: ', formScreenShotFile);
-      console.log('ERROR TYPE: ', formErrorType);
-      console.log('COMMENTS: ', formComment);
       history.push({
         pathname: `/task/${reqTask.taskNumber}`,
         state: {
@@ -551,7 +516,6 @@ export const DataSheetComponent = (props) => {
 
   const onCloseErrorPanel = () => {
     temporaryData = defaultData;
-    console.log('sdfsadsfdfdsfdsafsdf', temporaryData, defaultData);
     setIsErrorPanelVisible(false);
   };
 
@@ -593,7 +557,6 @@ export const DataSheetComponent = (props) => {
   };
 
   const onRevert = () => {
-    console.log(temporaryData);
     props.onClickSave(temporaryData);
     setIsErrorAccepted(null);
     openNotificationWithIcon('info', 'revert');
