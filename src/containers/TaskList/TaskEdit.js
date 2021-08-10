@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
-    console.log(rowValue, 'rowValue');
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
@@ -24,7 +23,6 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     setAlert(0);
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
-  console.log(isDataEdited, 'isDataEdited');
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});

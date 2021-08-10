@@ -257,7 +257,6 @@ const AddNewKMPMember = (props) => {
       endDate: !endDate,
     };
     setHasError({ ...hasError, ...error });
-    console.log(error);
     if (isAddNewKmp) {
       return (error.title || error.firstName || error.middleName || error.lastName || error.gender || error.dob || error.startDate);
     }
@@ -304,7 +303,6 @@ const AddNewKMPMember = (props) => {
           endDate: '', // NO FRONT END VALUE
         };
       }
-      console.log(postableData);
       dispatch({ type: 'ADD_NEW_MEMBER_POST_REQUEST', memberType, payload: postableData });
       setStatusAlert(true);
     } else {
@@ -329,7 +327,6 @@ const AddNewKMPMember = (props) => {
           endDate,
         };
       }
-      console.log(postableData);
       dispatch({ type: 'TERMINATE_MEMBERS_POST_REQUEST', memberType, payload: postableData });
       setStatusAlert(true);
     } else {

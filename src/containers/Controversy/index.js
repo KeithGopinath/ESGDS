@@ -103,7 +103,6 @@ const Controversy = (props) => {
   const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
 
   const [reqDpCodeData] = reqConDpCodeData && reqConDpCodeData.data ? [reqConDpCodeData.data] : extractReqDpCode(reqDpCodesData);
-  console.log(reqDpCodeData);
 
   const onClickAddNewControversy = () => history.push({
     pathname: '/controversypage',

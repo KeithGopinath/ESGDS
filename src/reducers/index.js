@@ -46,6 +46,8 @@ import reportsTaskList from './ReportsTaskList';
 import calculateActuals from './CalculateActuals';
 import controversyReports from './ControversyReports';
 import taskList from './TaskList';
+import pillarWisePercentile from './PillarWisePercentile';
+import calculatePercentile from './CalculatePercentile';
 
 const combinedReducer = combineReducers({
   login,
@@ -99,6 +101,8 @@ const combinedReducer = combineReducers({
   activeMembers,
   terminateMembers,
   calculateActuals,
+  pillarWisePercentile,
+  calculatePercentile,
   controversyReports,
 });
 

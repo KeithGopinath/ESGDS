@@ -54,7 +54,6 @@ const ControversyPage = (props) => {
   }, [props.location]);
 
   const saveReqCurrentData = (data) => {
-    console.log(data, 'Incoming');
     setReqCurrentData({ ...reqCurrentData, ...data });
   };
 
@@ -110,7 +109,6 @@ const ControversyPage = (props) => {
           ...reqCurrentData.comments,
         ],
       };
-      console.log(postableData);
       if (type === 'NEW') {
         dispatch({ type: 'CONTROVERSY_DPCODEDATA_POST_REQUEST', payload: postableData });
         setStatusAlert(true);
@@ -128,7 +126,6 @@ const ControversyPage = (props) => {
     history.goBack();
   };
 
-  console.log(dpCodeDataPostFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading);
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
