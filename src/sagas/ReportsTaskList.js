@@ -1,12 +1,17 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/ReportsTaskList';
-import { doGet } from '../utils/fetchWrapper';
+import { doPost } from '../utils/fetchWrapper';
 
-export function* getReportsTaskListRequest() {
+export function* getReportsTaskListRequest(data) {
   try {
-    const response = yield doGet(envConfig.apiEndPoints.getReportsTaskList);
-    yield put(actionCreators.getReportsTaskListSuccess(response));
+    if (data.companyTaskReports) {
+      const response = yield doPost(envConfig.apiEndPoints.getReportsTaskList, data);
+      yield put(actionCreators.getReportsTaskListSuccess(response));
+    } else if (data.controversyTaskReports) {
+      const response = yield doPost(envConfig.apiEndPoints.controversyTaskReports, data);
+      yield put(actionCreators.getReportsTaskListSuccess(response));
+    }
   } catch (error) {
     yield put(actionCreators.getReportsTaskListFailure(error));
   }

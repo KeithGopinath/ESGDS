@@ -45,6 +45,7 @@ import { getReportsTaskListWatchers } from './ReportsTaskList';
 import { calculateActualsWatchers } from './CalculateActuals';
 import { pillarWisePercentileWatchers } from './PillarWisePercentile';
 import { calculatePercentileWatchers } from './CalculatePercentile';
+import { getControversyReportsWatchers } from './ControversyReports';
 
 export default function* rootWatchers() {
   yield all([
@@ -94,5 +95,6 @@ export default function* rootWatchers() {
     calculateActualsWatchers(),
     pillarWisePercentileWatchers(),
     calculatePercentileWatchers(),
+    getControversyReportsWatchers(),
   ]);
 }

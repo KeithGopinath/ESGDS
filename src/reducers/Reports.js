@@ -6,13 +6,13 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: true,
         error: false,
-        data: false,
+        reports: false,
       };
     case 'GET_REPORTS_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        data: action.reports,
+        reports: action.reports,
       };
     case 'GET_REPORTS_FAILURE':
       return {
