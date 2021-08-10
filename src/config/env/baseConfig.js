@@ -51,6 +51,8 @@ export default {
     postTerminateKmpMatrixMembers: 'kmp/deleteKmpMembers',
     calculateActuals: 'projected_values/calculate_actuals',
     getMasterTaxonomyHeader: 'taxonomies',
+    pillarWisePercentile: 'projected_values/pillar_wise_percentile',
+    calculatePercentile: 'projected_values/save_projected_value',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

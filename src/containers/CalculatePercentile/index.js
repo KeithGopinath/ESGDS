@@ -15,15 +15,40 @@ const CalculatePercentile = () => {
   const [NIC, setNIC] = useState();
   const [pillar, setPillar] = useState();
   const [errorAlert, setErrorAlert] = useState('');
+  const [dropDownErrorAlert, setDropDownErrorAlert] = useState('');
   const [percentileData, setPercentileData] = useState([]);
+  const [flag, setFlag] = useState(false);
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const loading = useSelector((state) => state.pillarWisePercentile.isLoading);
+  const pillarWisePercentile = useSelector((state) => state.pillarWisePercentile.pillarWisePercentile);
+  const calculatePercentile = useSelector((state) => state.calculatePercentile.calculatePercentile);
+  const calculatePercentileError = useSelector((state) => state.calculatePercentile.error);
+
+  const responseData = pillarWisePercentile && pillarWisePercentile.response;
 
   useEffect(() => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
-    setPercentileData(dummyData)
+    dispatch({ type: 'PILLAR_WISE_PERCENTILE_RESET' });
   }, []);
+
+  useEffect(() => {
+    setPercentileData(responseData)
+  }, [pillarWisePercentile]);
+
+  useEffect(() => {
+    if (calculatePercentile && flag) {
+      message.success(calculatePercentile.message);
+      setNIC('');
+      setTaxonomy('');
+      setPillar('');
+      setPercentileData([]);
+    }
+    else if (calculatePercentileError && flag) {
+      message.error(calculatePercentileError.message)
+    }
+  }, [calculatePercentile, calculatePercentileError]);
 
   const currentYear = moment().year();
   const years = [`${currentYear - 6}-${currentYear - 5}`, `${currentYear - 5}-${currentYear - 4}`, `${currentYear - 4}-${currentYear - 3}`, `${currentYear - 3}-${currentYear - 2}`, `${currentYear - 2}-${currentYear - 1}`];
@@ -31,7 +56,7 @@ const CalculatePercentile = () => {
   const onSubmit = () => {
     if (!taxonomy || !NIC || !pillar) {
       message.error('Please select required fields')
-      setErrorAlert('border-danger dropdown-alert');
+      setDropDownErrorAlert('border-danger dropdown-alert');
     } else {
       const payload = {
         taxonomy: taxonomy.value,
@@ -40,8 +65,7 @@ const CalculatePercentile = () => {
         years: years,
         currentYear: `${currentYear - 1}-${currentYear}`
       }
-      console.log(payload);
-      // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
+      dispatch({ type: 'PILLAR_WISE_PERCENTILE_REQUEST', payload });
     }
   }
 
@@ -82,8 +106,8 @@ const CalculatePercentile = () => {
         currentYear: `${currentYear - 1}-${currentYear}`,
         data: data
       }
-      console.log('payload', payload);
-      // dispatch({ type: 'UPLOAD_COMPANIES_REQUEST', payload });
+      dispatch({ type: 'CALCULATE_PERCENTILE_REQUEST', payload });
+      setFlag(true);
     }
   }
 
@@ -102,7 +126,7 @@ const CalculatePercentile = () => {
   }
 
   const onAverageChange = (e, data) => {
-    if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+    if (e.target.value.match('^[a-zA-Z0-9-.]*$')) {
       const temp = [...percentileData];
       const index = temp.findIndex(val => val.dpCode === data.dpCode);
       const updatedObj = { ...temp[index], projectedAvg: e.target.value.toUpperCase() };
@@ -116,7 +140,7 @@ const CalculatePercentile = () => {
   }
 
   const onSDChange = (e, data) => {
-    if (e.target.value.match('^[a-zA-Z0-9]*$')) {
+    if (e.target.value.match('^[a-zA-Z0-9-.]*$')) {
       const temp = [...percentileData];
       const index = temp.findIndex(val => val.dpCode === data.dpCode);
       const updatedObj = { ...temp[index], projectedSd: e.target.value.toUpperCase() };
@@ -150,29 +174,29 @@ const CalculatePercentile = () => {
   const calculatePercentileTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
       dpCode: data.dpCode,
-      fiveYearsBackAvg: data.fiveYearsBackAvg,
-      fourYearsBackAvg: data.fourYearsBackAvg,
-      threeYearsBackAvg: data.threeYearsBackAvg,
-      twoYerasBackAvg: data.twoYerasBackAvg,
-      oneYearBackAvg: data.oneYearBackAvg,
+      fiveYearsBackAvg: data.fiveYearsBackAvg ? data.fiveYearsBackAvg : '--',
+      fourYearsBackAvg: data.fourYearsBackAvg ? data.fourYearsBackAvg : '--',
+      threeYearsBackAvg: data.threeYearsBackAvg ? data.threeYearsBackAvg : '--',
+      twoYerasBackAvg: data.twoYearsBackAvg ? data.twoYearsBackAvg : '--',
+      oneYearBackAvg: data.oneYearBackAvg ? data.oneYearBackAvg : '--',
       projectedAvg: <Form.Control
         type="text"
         name="projectedAvg"
         value={data.projectedAvg}
         onChange={(e) => { onAverageChange(e, data) }}
-        maxLength={2}
+        maxLength={isNaN(data.projectedAvg) ? 2 : ''}
         className={classNamefinder(data.projectedAvg) ? errorAlert : ''} />,
-      fiveYearsBackSD: data.fiveYearsBackSd,
-      fourYearsBackSD: data.fourYearsBackSd,
-      threeYearsBackSD: data.threeYearsBackSd,
-      twoYearsBackSD: data.twoYearsBackSd,
-      oneYearBackSD: data.oneYearBackSd,
+      fiveYearsBackSD: data.fiveYearsBackSd ? data.fiveYearsBackSd : '--',
+      fourYearsBackSD: data.fourYearsBackSd ? data.fourYearsBackSd : '--',
+      threeYearsBackSD: data.threeYearsBackSd ? data.threeYearsBackSd : '--',
+      twoYearsBackSD: data.twoYearsBackSd ? data.twoYearsBackSd : '--',
+      oneYearBackSD: data.oneYearBackSd ? data.oneYearBackSd : '--',
       projectedSD: <Form.Control
         type="text"
         name="projectedSD"
         value={data.projectedSd}
         onChange={(e) => { onSDChange(e, data) }}
-        maxLength={2}
+        maxLength={isNaN(data.projectedSd) ? 2 : ''}
         className={classNamefinder(data.projectedSd) ? errorAlert : ''} />,
     }));
 
@@ -260,42 +284,7 @@ const CalculatePercentile = () => {
     };
   };
 
-  const dummyData = [
-    {
-      'dpCodeId': '101',
-      'dpCode': '00567',
-      'fiveYearsBackAvg': '21',
-      'fourYearsBackAvg': '32',
-      'threeYearsBackAvg': '36',
-      'twoYerasBackAvg': '40',
-      'oneYearBackAvg': '33',
-      'projectedAvg': '',
-      'fiveYearsBackSd': '21',
-      'fourYearsBackSd': '21',
-      'threeYearsBackSd': '19',
-      'twoYearsBackSd': '17',
-      'oneYearBackSd': '18',
-      'projectedSd': ''
-    },
-    {
-      'dpCodeId': '102',
-      'dpCode': '11345',
-      'fiveYearsBackAvg': '21',
-      'fourYearsBackAvg': '32',
-      'threeYearsBackAvg': '36',
-      'twoYerasBackAvg': '40',
-      'oneYearBackAvg': '33',
-      'projectedAvg': '',
-      'fiveYearsBackSd': '21',
-      'fourYearsBackSd': '21',
-      'threeYearsBackSd': '19',
-      'twoYearsBackSd': '17',
-      'oneYearBackSd': '18',
-      'projectedSd': ''
-    }
-  ]
-
-  const tableData = calculatePercentileTableData(percentileData)
+  const tableData = calculatePercentileTableData(percentileData || [])
 
   return (
     <div className="main">
@@ -314,7 +303,7 @@ const CalculatePercentile = () => {
                       name="taxonomy"
                       value={taxonomy}
                       onChange={onTaxonomyChange}
-                      className={!taxonomy && errorAlert}
+                      className={!taxonomy && dropDownErrorAlert}
                     />
                   </Form.Group>
                 </Col>
@@ -326,7 +315,7 @@ const CalculatePercentile = () => {
                       name="nic"
                       value={NIC}
                       onChange={onNICChangeChange}
-                      className={!NIC && errorAlert}
+                      className={!NIC && dropDownErrorAlert}
                     />
                   </Form.Group>
                 </Col>
@@ -338,7 +327,7 @@ const CalculatePercentile = () => {
                       name="pillar"
                       value={pillar}
                       onChange={onPillarChange}
-                      className={!pillar && errorAlert}
+                      className={!pillar && dropDownErrorAlert}
                     />
                   </Form.Group>
                 </Col>
@@ -349,7 +338,7 @@ const CalculatePercentile = () => {
             </Card>
             <div className="calculate-projectile-table">
               <Card className="upload-container">
-                <CustomTable tableData={tableData} />
+                <CustomTable tableData={tableData} isLoading={loading} />
                 <Row className="upload-button-container">
                   {percentileData && <Button variant="primary" className="upload-data-button" onClick={onSubmitTableData}>Calculate Percentile</Button>}
                 </Row>
