@@ -55,7 +55,6 @@ export default {
     calculatePercentile: 'projected_values/save_projected_value',
     getReports: 'taskAssignments/task/reports',
     getReportsTaskList: 'taskAssignments/taskListWithStatus',
-    getControversyReports: 'taskAssignments/task/controversyReports',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

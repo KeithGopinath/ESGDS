@@ -9,7 +9,7 @@ import updatePassword from './UpdatePassword';
 import createBatch from './BatchCreate';
 import batchList from './Batch';
 import keyIssues from './KeyIssues';
-import {masterTaxonomy, masterTaxonomyHeader} from './MasterTaxonomy';
+import { masterTaxonomy, masterTaxonomyHeader } from './MasterTaxonomy';
 import clientTaxonomy from './ClientTaxonomy';
 import roles from './Roles';
 import roleAssignmentEdit from './RoleAssignmentEdit';
@@ -44,7 +44,6 @@ import createControversyTask from './CreateControversyTask';
 import reports from './Reports';
 import reportsTaskList from './ReportsTaskList';
 import calculateActuals from './CalculateActuals';
-import controversyReports from './ControversyReports';
 import taskList from './TaskList';
 import pillarWisePercentile from './PillarWisePercentile';
 import calculatePercentile from './CalculatePercentile';
@@ -103,7 +102,6 @@ const combinedReducer = combineReducers({
   calculateActuals,
   pillarWisePercentile,
   calculatePercentile,
-  controversyReports,
 });
 
 const rootReducer = (state, action) => {

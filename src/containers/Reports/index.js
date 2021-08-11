@@ -20,35 +20,48 @@ const Reports = (props) => {
   const { Option } = Select;
 
   const dispatch = useDispatch();
-  
-  const compData = useSelector((state) => state.reports.reports); 
+
+  const compData = useSelector((state) => state.reports.reports);
   const loading = useSelector((state) => state.reports.isLoading);
   const pendingComp = compData && compData.pending;
   const completedComp = compData && compData.completed;
-  const controversyReports = useSelector(state => state.controversyReports.reportsControversy);
-  const reportsControversyLoading = useSelector((state) => state.controversyReports.isLoading);
+  const controversyData = compData && compData.controversy;
 
-  const controversyData = controversyReports && controversyReports.controversy;
- 
-  useEffect(()=>{
-    dispatch({type:'GET_REPORTS_REQUEST'});
-  },[]);
+  // const controversyData = controversyReports && controversyReports.controversy;
 
-  useEffect(()=>{
-    tabFlag === 'Controversy' ? dispatch({ type: 'GET_CONTROVERSY_REPORTS_REQUEST'}) : '';
-  },[tabFlag]);
-  
+  useEffect(() => {
+    dispatch({ type: 'GET_REPORTS_REQUEST' });
+  }, []);
+
+  useEffect(() => {
+    tabFlag === 'Controversy' ? dispatch({ type: 'GET_CONTROVERSY_REPORTS_REQUEST' }) : '';
+  }, [tabFlag]);
+
   // tabs activate
   useEffect(() => {
-    if (tabsRefs.current[0]) {
-      tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
-      setTabFlag('Pending Companies');
-    } else if(tabsRefs.current[1]) {
-      tabsRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
-      setTabFlag('Completed Companies');
-    } else if (tabsRefs.current[2]) {
-      tabsRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
-      setTabFlag('Controversy');
+    const tabLabel = props.location.tabFlag && props.location.tabFlag;
+    if (tabLabel) {
+      if (tabLabel === 'Pending Companies') {
+        tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Pending Companies');
+      } else if (tabLabel === 'Completed Companies') {
+        tabsRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Completed Companies');
+      } else if (tabLabel === 'Controversy') {
+        tabsRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Controversy');
+      }
+    } else {
+      if (tabsRefs.current[0]) {
+        tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Pending Companies');
+      } else if (tabsRefs.current[1]) {
+        tabsRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Completed Companies');
+      } else if (tabsRefs.current[2]) {
+        tabsRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
+        setTabFlag('Controversy');
+      }
     }
   }, []);
 
@@ -62,7 +75,7 @@ const Reports = (props) => {
       setContorversy(controversyData);
     }
     setSelectItem(false);
-  }, [tabFlag, compData, controversyReports]);
+  }, [tabFlag, compData]);
 
   const companyData = {
     completed: [
@@ -128,32 +141,32 @@ const Reports = (props) => {
     controversy: [
       {
         taxonomy: 'Bharath',
-        companyId:'60b86c83b09656fa36dc7874',
+        companyId: '60b86c83b09656fa36dc7874',
         companyName: 'Bharat Petroleum Corporation Limited',
         allocatedDate: '10-07-2021',
-        taskId:'002',
+        taskId: '002',
         isChecked: false,
       },
       {
         taxonomy: 'JWS',
         companyName: 'JSW Steel Limited',
-        taskId:'001',
-        companyId:'60b86d88b09656fa36dc84ab',
+        taskId: '001',
+        companyId: '60b86d88b09656fa36dc84ab',
         allocatedDate: '10-07-2021',
         isChecked: false,
       },
     ]
   }
 
-  const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val,id,array) => array.indexOf(val) == id);
-  const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val,id,array) => array.indexOf(val) == id);
-  const controversyTaxonomyFilter = controversy.map(e => e.taxonomy).filter((val,id,array) => array.indexOf(val) == id);
+  const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
+  const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
+  const controversyTaxonomyFilter = controversy.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
 
   // completed company table
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data) => ({
-      key:data.companyId,
-      companyName: data.companyName ? {value: data.companyName, content: <div> <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> </div>} : {value:'', content: ''},
+      key: data.companyId,
+      companyName: data.companyName ? { value: data.companyName, content: <div> <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> </div> } : { value: '', content: '' },
       completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '-',
       clientRep: data.clientRrepresentative ? data.clientRrepresentative : '-',
       companyRep: data.companyRepresentative ? data.companyRepresentative : '-',
@@ -187,7 +200,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data,id) => (
+        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
           <Option value={data} key={data[id]}>{data}</Option>
         ))}</Select>
       </div>,
@@ -218,8 +231,8 @@ const Reports = (props) => {
     }
   };
 
-   // taxonomy filter
-   const onTaxonomyChange = (e) => {
+  // taxonomy filter
+  const onTaxonomyChange = (e) => {
     setTaxonomy(e);
   };
 
@@ -240,12 +253,12 @@ const Reports = (props) => {
   // pending company table
   const PendingCompanyTableData = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((dataTaxonomy) => ({
-            key:dataTaxonomy.companyId+dataTaxonomy.companyName,
-            companyName: dataTaxonomy.companyName ? {value: dataTaxonomy.companyName, content: <div> <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}>{dataTaxonomy.companyName}</Checkbox> </div>} : {value:'', content: ''},
-            allocatedDate:  dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '-',
-            clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '-',
-            companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '-',
-        }))
+      key: dataTaxonomy.companyId + dataTaxonomy.companyName,
+      companyName: dataTaxonomy.companyName ? { value: dataTaxonomy.companyName, content: <div> <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}>{dataTaxonomy.companyName}</Checkbox> </div> } : { value: '', content: '' },
+      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '-',
+      clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '-',
+      companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '-',
+    }))
 
     return {
       rowsData: tableRowData(props),
@@ -277,7 +290,7 @@ const Reports = (props) => {
       ],
       tableLabel: <div className="w-100">
         <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >
-          {pendingCompaniesFilter && pendingCompaniesFilter.map((data,id) => (
+          {pendingCompaniesFilter && pendingCompaniesFilter.map((data, id) => (
             <Option value={data} key={data[id]}>{data}</Option>
           ))}</Select>
       </div>,
@@ -287,46 +300,39 @@ const Reports = (props) => {
   // Controversy
   const ControversyTable = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((e) => ({
-      key: e.companyId+e.taskId,
-      companyName: e.companyName ? {value: e.companyName, content: <div> <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}>{e.companyName}</Checkbox> </div>} : {value:'', content: ''},
-      // taskId:e.taskId,
-      allocatedDate:  e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '-',
-  }))
+      key: e.companyId + e.taskId,
+      companyName: e.companyName ? { value: e.companyName, content: <div> <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}>{e.companyName}</Checkbox> </div> } : { value: '', content: '' },
+      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '-',
+    }))
 
-return {
-rowsData: tableRowData(props),
-columnsHeadData: [
-  {
-    id: 'companyName',
-    align: 'left',
-    label: 'Company Name',
-    dataType: 'stringSearchSortElement',
-  },
-  // {
-  //   id: 'taskId',
-  //   align: 'center',
-  //   label: 'Task Id',
-  //   dataType: 'string',
-  // },
-  {
-    id: 'allocatedDate',
-    align: 'center',
-    label: 'Allocated Date',
-    dataType: 'date',
-  },
-],
-tableLabel: <div className="w-100"> Taxonomy Dropdown
-{/* <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter.map((data)=> (
-  <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
-))}</Select> */}
-</div>,
-};
+    return {
+      rowsData: tableRowData(props),
+      columnsHeadData: [
+        {
+          id: 'companyName',
+          align: 'left',
+          label: 'Company Name',
+          dataType: 'stringSearchSortElement',
+        },
+        {
+          id: 'allocatedDate',
+          align: 'center',
+          label: 'Allocated Date',
+          dataType: 'date',
+        },
+      ],
+      tableLabel: <div className="w-100">
+        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
+          <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
+        ))}</Select>
+      </div>,
+    };
   }
 
   const tabLabelSets = [
     { label: 'Pending Companies' },
     { label: 'Completed Companies' },
-    { label: 'Controversy'},
+    { label: 'Controversy' },
   ];
 
   const tabsRefs = useRef(tabLabelSets.map(() => React.createRef()));
@@ -359,7 +365,7 @@ tableLabel: <div className="w-100"> Taxonomy Dropdown
             ))}
           </div>
           <div>
-            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} isLoading={loading || reportsControversyLoading}/>
+            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} isLoading={loading} />
           </div>
         </div>
       </div>
