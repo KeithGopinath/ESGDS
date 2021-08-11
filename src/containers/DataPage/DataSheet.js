@@ -1,35 +1,34 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, Drawer } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, Drawer, Input } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
-import { history } from '../../routes';
 import ErrorDataSheetTwo from './ErrorDataSheet2';
 import ErrorPanel from './ErrorPanel';
 
 import validateReqFields from './validateReqFields';
 
 import AddSource from './AddSource';
-
-let temporaryData;
+// import dynamicThings from '../../constants/DynamicConstants';
 
 // Field Wrapper ::
 // A function which wraps the datasheet fields with bootstrap's row and col tags
 
+let temporaryData;
+
 const FieldWrapper = (props) => {
+  // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
   if (props.visible) {
     return (
-      <Col lg={6}>
+      <Col lg={props.size[0]}>
         <Form.Group as={Row} >
-          <Form.Label column sm={5}>
+          <Form.Label column sm={props.size[1]}>
             {props.label}
           </Form.Label>
-          <Col sm={7}>
+          <Col sm={props.size[2]}>
             {props.body}
           </Col>
         </Form.Group>
@@ -39,8 +38,128 @@ const FieldWrapper = (props) => {
   return null;
 };
 
-// DataSheetComponent ::
-// A Main DataSheet Component Which Renders All Fields And Buttons That Are Required For DataCollection, Correction, Verification, Review Screens
+FieldWrapper.propTypes = {
+  visible: PropTypes.bool,
+  size: PropTypes.array.isRequired,
+  label: PropTypes.string,
+  body: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+  ]),
+};
+
+const onChangeDynamiceFieldsValue = (event, dynamicDataList, eachField, setDynamicData) => {
+  let latestValue = null;
+  const { inputType } = eachField;
+
+  switch (inputType) {
+    case 'Text':
+      latestValue = event.target.value;
+      break;
+    case 'TextArea':
+      latestValue = event.target.value;
+      break;
+    case 'Number':
+      latestValue = event.target.value;
+      break;
+    case 'Date':
+      latestValue = event;
+      break;
+    case 'Select':
+      latestValue = event;
+      break;
+    case 'Image':
+      latestValue = event.target.value;
+      break;
+    default:
+      break;
+  }
+
+  const filteredData = dynamicDataList.map((e) => {
+    if (e.fieldName === eachField.fieldName) return { ...e, value: latestValue };
+    return e;
+  });
+
+  setDynamicData(filteredData);
+};
+
+const getReqFields = ({
+  eachData, dynamicFields, setDynamicFields, disableField,
+}) => {
+  const {
+    inputType, name, value, inputValues,
+  } = eachData;
+
+  switch (inputType) {
+    case 'Text':
+      return (
+        <Input
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          size="large"
+          disabled={disableField}
+        />
+      );
+    case 'TextArea':
+      return (
+
+        <Input.TextArea
+          rows={1}
+          size="large"
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          disabled={disableField}
+        />
+      );
+    case 'Number':
+      return (
+        <Input
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          type="number"
+          value={value}
+          size="large"
+          disabled={disableField}
+        />
+      );
+    case 'Date':
+      return (
+        <DatePicker
+          size="large"
+          style={{ width: '100%' }}
+          placeholder={`Select ${name}`}
+          value={value && moment(value)}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          className=""
+          disabled={disableField}
+        />
+      );
+    case 'Select':
+      return (
+        <Select
+          name={name}
+          options={inputValues}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          placeholder={`Select ${name}`}
+          isDisabled={disableField}
+        />);
+    case 'Image':
+      return (
+        <Image
+          width="50%"
+          src={value}
+        />
+      );
+    case 'Static':
+      return value;
+    default:
+      break;
+  }
+  return null;
+};
 
 export const DataSheetComponent = (props) => {
   // CURRENT ROLE
@@ -48,6 +167,8 @@ export const DataSheetComponent = (props) => {
 
   // CURRENT TAB
   const currentTab = sessionStorage.tab;
+  // REQUIRED CONSOLE:
+  console.log(props);
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
@@ -60,7 +181,7 @@ export const DataSheetComponent = (props) => {
   ];
 
   const {
-    isHistoryType, reqTask, reqIndexes,
+    isHistoryType,
   } = props;
 
   const sourceList = props.reqSourceData;
@@ -73,13 +194,15 @@ export const DataSheetComponent = (props) => {
   const defaultData = props.reqData;
 
   // DATASHEET FORM DATA
-
   // *DPCODE*
   const formDpCode = defaultData.dpCode;
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
   const formDataType = defaultData.dataType === 'String' && isAnalyst_CC ? 'CONSTRING' : defaultData.dataType.toUpperCase();
+
+  // *STATES*
+
   // *TEXT SNIPPET*
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   // *PAGE NO*
@@ -109,6 +232,9 @@ export const DataSheetComponent = (props) => {
   // *QA || CR FOUNDS HAS ERROR *
   const [formIsError, setFormIsError] = useState((defaultData.error && defaultData.error.isThere) || false);
 
+  // ANALYST ERROR COMMENT
+  const [errorComment, setErrorComment] = useState('');
+
   // *ANALYST DCR ERROR ACCEPTION OR REJECTION BOOLEAN*
   const [isErrorAccepted, setIsErrorAccepted] = useState(null);
   // *ANALYST DCR ERROR PANEL BOOLEAN*
@@ -117,8 +243,14 @@ export const DataSheetComponent = (props) => {
   // CONTROVERSY COLLECTION COMMENT
   const [formControversyComment, setFormControversyComment] = useState(defaultData.comment || '');
 
+  // CONTROVERSY COLLECTION NEXT REVIEW DATE
+  const [formNextReviewDate, setFormNextReviewDate] = useState(defaultData.nextReviewDate || '');
+
   // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
   const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
+
+  // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
+  const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
 
   // USEEFFECTS
   useEffect(() => {
@@ -140,12 +272,17 @@ export const DataSheetComponent = (props) => {
     });
     setIsErrorPanelVisible(false);
     setFormControversyComment(defaultData.comment || '');
+    setFormNextReviewDate(defaultData.nextReviewDate || '');
 
     setIsSrcPanelOpened(false);
+    setDynamicFields(defaultData.additionalDetails || []);
   }, [props.reqData]);
 
-  // Onchange Functions
+  useEffect(() => {
+    setErrorComment('');
+  }, [isErrorAccepted]);
 
+  // Onchange Functions
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
   };
@@ -238,6 +375,10 @@ export const DataSheetComponent = (props) => {
     setFormControversyComment(event.target.value);
   };
 
+  const onChangeFormNextReviewDate = (event) => {
+    setFormNextReviewDate(event);
+  };
+
   const onChangeFormIsError = (event) => {
     setFormIsError(event.target.value);
   };
@@ -250,131 +391,7 @@ export const DataSheetComponent = (props) => {
     return false;
   };
 
-
-  const onClickViewError = () => {
-    setIsErrorPanelVisible(true);
-  };
-
-  // BUTTON HANDLERS
-
-  const saveClickHandler = () => {
-    dummySaveClickHandler();
-  };
-
-  const unFreezeClickHandler = () => {
-    dummyEditClickHandler();
-  };
-
-  const backClickHandler = () => {
-    history.push({
-      pathname: `/task/${reqTask.taskNumber}`,
-      state: {
-        taskDetails: {
-          taskId: reqTask.taskId,
-          pillar: reqTask.pillar,
-          company: reqTask.company,
-          companyId: reqTask.companyId,
-          taskNumber: reqTask.taskNumber,
-        },
-      },
-    });
-  };
-
-  const previousClickHandler = () => {
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
-    history.push({
-      pathname: `/dpcode/${nextDpCode.dpCode}`,
-      state: {
-        taskDetails: {
-          taskId: reqTask.taskId,
-          pillar: reqTask.pillar,
-          company: reqTask.company,
-          taskNumber: reqTask.taskNumber,
-          memberType: reqTask.memberType,
-        },
-        dpCodeDetails: nextDpCode,
-        filteredData: reqTask.dpCodesData,
-      },
-    });
-  };
-
-  const saveAndNextClickHandler = () => {
-    if ((props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
-      const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
-      history.push({
-        pathname: `/dpcode/${nextDpCode.dpCode}`,
-        state: {
-          dpCodeDetails: nextDpCode,
-          taskDetails: {
-            taskId: reqTask.taskId,
-            pillar: reqTask.pillar,
-            company: reqTask.company,
-            taskNumber: reqTask.taskNumber,
-            memberType: reqTask.memberType,
-          },
-        },
-      });
-    } else {
-      const msgCurrent = props.dummyDataCheck().currentData;
-      const msgHistorical = props.dummyDataCheck().historicalData;
-      if (isAnalyst_DC) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isAnalyst_DCR) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
-      }
-      if (isAnalyst_CC) {
-        message.error(`Please make sure the current data for ${msgCurrent} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isQA_DV) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isClientRep_DR || isCompanyRep_DR) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-    }
-  };
-
-  const saveAndCloseClickHandler = () => {
-    if (isAnalyst_CC && defaultData.status === 'Completed') {
-      history.goBack();
-    } else if (isAnalyst_CC) {
-      message.error('Please make sure the required data is entered and saved.', 8);
-    }
-    if (!isAnalyst_CC && (props.dummyDataCheck().currentData).length === 0 && (props.dummyDataCheck().historicalData).length === 0) {
-      history.push({
-        pathname: `/task/${reqTask.taskNumber}`,
-        state: {
-          taskDetails: {
-            taskId: reqTask.taskId,
-            pillar: reqTask.pillar,
-            company: reqTask.company,
-            taskNumber: reqTask.taskNumber,
-            memberType: reqTask.memberType,
-          },
-        },
-      });
-    } else {
-      const msgCurrent = props.dummyDataCheck().currentData;
-      const msgHistorical = props.dummyDataCheck().historicalData;
-      if (isAnalyst_DC) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isAnalyst_DCR) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
-      }
-      if (isAnalyst_CC) {
-        message.error(`Please make sure the current data for ${msgCurrent} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isQA_DV) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-      if (isClientRep_DR || isCompanyRep_DR) {
-        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
-      }
-    }
-  };
-
+  // ONCLICK HANDLERS
   const dummySaveClickHandler = () => {
     let saveData;
 
@@ -387,6 +404,7 @@ export const DataSheetComponent = (props) => {
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
         screenShot: formScreenShotPath,
+        additionalDetails: dynamicFields,
       };
     } else {
       if (isAnalyst_DC) {
@@ -398,10 +416,23 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
+          additionalDetails: dynamicFields,
         };
       }
       if (isAnalyst_DCR) {
-        saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, status: 'Completed' } };
+        saveData = {
+          ...defaultData,
+          source: formSource,
+          response: formResponse,
+          textSnippet: formTextSnippet,
+          pageNo: formPageNo,
+          screenShot: formScreenShotPath,
+          additionalDetails: dynamicFields,
+          isAccepted: isErrorAccepted,
+          rejectComment: errorComment,
+          status: 'Completed',
+          error: { ...defaultData.error, status: 'Completed' },
+        };
       }
       if (isQA_DV) {
         saveData = {
@@ -425,6 +456,8 @@ export const DataSheetComponent = (props) => {
           screenShot: formScreenShotPath,
           screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
           comment: formControversyComment,
+          nextReviewDate: formNextReviewDate,
+          additionalDetails: dynamicFields,
         };
       }
     }
@@ -432,7 +465,6 @@ export const DataSheetComponent = (props) => {
     const roleScreenType = [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType];
     if (validateReqFields(saveData, roleScreenType)) {
       props.onClickSave(saveData);
-      // message.success('Saved Successfully');
     } else {
       message.error('Please Fill Required fields !');
     }
@@ -468,6 +500,66 @@ export const DataSheetComponent = (props) => {
     props.onClickSave(saveData);
   };
 
+  const onClickViewError = () => {
+    setIsErrorPanelVisible(true);
+  };
+
+  const onCloseErrorPanel = () => {
+    temporaryData = defaultData;
+    setIsErrorPanelVisible(false);
+  };
+
+  const onAccept = () => {
+    let saveData;
+    if (isAnalyst_DCR) {
+      saveData = { ...defaultData, status: 'Editable', error: { ...defaultData.error, status: 'Incomplete' } };
+    }
+    props.onClickSave(saveData);
+    setIsErrorAccepted(true);
+    message.success('Error Accepted Successfully, Please make required changes and, Click "Save" button to update changes !');
+    onCloseErrorPanel();
+  };
+
+  const onReject = () => {
+    setIsErrorAccepted(false);
+  };
+
+  const onRevert = () => {
+    props.onClickSave(temporaryData);
+    setIsErrorAccepted(null);
+    message.info('Reverted Successfully, Please click "View Error" button to Accept or Reject the error, again!', 8);
+  };
+
+  const onRejectSubmit = () => {
+    const dummyData = {
+      dpCode: formDpCode,
+      fiscalYear: defaultData.fiscalYear,
+      status: 'Completed',
+      textSnippet: formTextSnippet,
+      pageNo: formPageNo,
+      screenShot: formScreenShotPath,
+      response: formResponse,
+      source: formSource,
+    };
+    let saveData;
+    if (isAnalyst_DCR) {
+      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
+    }
+    props.onClickSave(saveData);
+    message.error('Error Rejected Successfully, And your response has been recorded!', 8);
+    onCloseErrorPanel();
+  };
+
+  // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
+  const onClickOpenAddSource = () => {
+    setIsSrcPanelOpened(true);
+  };
+
+  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
+  const onClickCloseAddSource = () => {
+    setIsSrcPanelOpened(false);
+  };
+
   const getIsDisableOrNot = () => {
     if (isHistoryType) {
       if (isAnalyst_DC) {
@@ -476,7 +568,12 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }
-      if (isAnalyst_DCR) { return true; }
+      if (isAnalyst_DCR) {
+        if (defaultData.status === 'Completed') {
+          return true;
+        }
+        return false;
+      }
       if (isQA_DV) {
         if (defaultData.status === 'Completed') {
           return true;
@@ -514,83 +611,15 @@ export const DataSheetComponent = (props) => {
 
   const disableField = getIsDisableOrNot();
 
-  const onCloseErrorPanel = () => {
-    temporaryData = defaultData;
-    setIsErrorPanelVisible(false);
+
+  const saveClickHandler = () => {
+    console.log('HISTORICAL SAVE');
+    dummySaveClickHandler();
   };
 
-  const openNotificationWithIcon = (type, subType) => {
-    if (subType === 'accepted') {
-      message.success('Error Accepted Successfully, Please make required changes and, Click "Save" button to update changes !');
-    }
-    if (subType === 'revert') {
-      message.info('Reverted Successfully, Please click "View Error" button to Accept or Reject the error, again!', 8);
-    }
-    if (subType === 'rejected') {
-      message.error('Error Rejected Successfully, And your response has been recorded!', 8);
-    }
-  };
-
-  const onAccept = () => {
-    const dummyData = {
-      dpCode: formDpCode,
-      fiscalYear: defaultData.fiscalYear,
-      status: 'unknown',
-      textSnippet: formTextSnippet,
-      pageNo: formPageNo,
-      screenShot: formScreenShotPath,
-      response: formResponse,
-      source: formSource,
-    };
-    let saveData;
-    if (isAnalyst_DCR) {
-      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Incomplete' } };
-    }
-    props.onClickSave(saveData);
-    setIsErrorAccepted(true);
-    onCloseErrorPanel();
-    openNotificationWithIcon('success', 'accepted');
-  };
-
-  const onReject = () => {
-    setIsErrorAccepted(false);
-  };
-
-  const onRevert = () => {
-    props.onClickSave(temporaryData);
-    setIsErrorAccepted(null);
-    openNotificationWithIcon('info', 'revert');
-  };
-
-  const onRejectSubmit = () => {
-    const dummyData = {
-      dpCode: formDpCode,
-      fiscalYear: defaultData.fiscalYear,
-      status: 'Completed',
-      textSnippet: formTextSnippet,
-      pageNo: formPageNo,
-      screenShot: formScreenShotPath,
-      response: formResponse,
-      source: formSource,
-    };
-    let saveData;
-    if (isAnalyst_DCR) {
-      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
-    }
-    props.onClickSave(saveData);
-    onCloseErrorPanel();
-    openNotificationWithIcon('success', 'rejected');
-  };
-
-
-  // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
-  const onClickOpenAddSource = () => {
-    setIsSrcPanelOpened(true);
-  };
-
-  // FUNC THAT MAKE SRC PANEL TO CLOSE ON CALL
-  const onClickCloseAddSource = () => {
-    setIsSrcPanelOpened(false);
+  const unFreezeClickHandler = () => {
+    console.log('UNFREEZE');
+    dummyEditClickHandler();
   };
 
   return (
@@ -600,6 +629,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Dp Code*"
         visible
+        size={[6, 5, 7]}
         body={
           <Form.Control
             name="dpCode"
@@ -614,6 +644,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Year"
         visible={!isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <Form.Control
             name="year"
@@ -628,6 +659,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Source Name*"
         visible={isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <Form.Control
             type="text"
@@ -644,6 +676,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Source*"
         visible={!isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <Select
             name="source"
@@ -669,6 +702,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Description*"
         visible
+        size={[6, 5, 7]}
         body={formDescription}
       />
 
@@ -677,6 +711,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Form.Control
             type="number"
@@ -694,6 +729,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Select
             name="response"
@@ -711,6 +747,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Form.Control
             type="text"
@@ -728,6 +765,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <DatePicker
             className="datapage-datepicker"
@@ -745,6 +783,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Select
             name="response"
@@ -761,6 +800,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Select
             name="response"
@@ -777,6 +817,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Response*"
         visible
+        size={[6, 5, 7]}
         body={
           <Select
             name="response"
@@ -793,6 +834,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Text Snippet*"
         visible
+        size={[6, 5, 7]}
         body={
           <Form.Control
             as="textarea"
@@ -809,6 +851,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Page No*"
         visible
+        size={[6, 5, 7]}
         body={
           <Form.Control
             type="number"
@@ -824,6 +867,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="URL*"
         visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR || isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <Form.Control
             type="text"
@@ -840,6 +884,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="PublicationDate*"
         visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR || isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <DatePicker
             className="datapage-datepicker"
@@ -856,6 +901,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Upload Screenshot*"
         visible
+        size={[6, 5, 7]}
         body={
           <Upload
             className="datapage-ant-upload"
@@ -878,6 +924,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Screenshot*"
         visible
+        size={[6, 5, 7]}
         body={
           <Image
             width="50%"
@@ -886,31 +933,48 @@ export const DataSheetComponent = (props) => {
         }
       />
 
+      {/* DYNAMIC FIELDS COMES HERE */}
+      {dynamicFields.map((eachData) => (
+        <FieldWrapper
+          visible
+          label={eachData.name}
+          size={[6, 5, 7]}
+          body={getReqFields({
+            eachData, dynamicFields, setDynamicFields, disableField,
+          })}
+        />
+      ))}
+
       {/* IS ERORR Field */}
       {(isCompanyRep_DR || isClientRep_DR || isQA_DV) && !isHistoryType &&
-      <React.Fragment>
-        <FieldWrapper
-          label="Error*"
-          visible
-          body={
-            <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
-              <Radio value>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </Radio.Group>
-          }
-        />
-        <FieldWrapper
+      <Col lg={12}>
+        <Row>
+          <FieldWrapper
+            label="Error*"
+            visible
+            size={[6, 5, 7]}
+            body={
+              <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
+                <Radio value>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </Radio.Group>
+            }
+          />
+          {/* <FieldWrapper
           label={null}
           visible
+          size={[6, 5, 7]}
           body={null}
-        />
-      </React.Fragment>
+        /> */}
+        </Row>
+      </Col>
       }
 
       {/* ERROR TYPE Field */}
       <FieldWrapper
         label="Error Type*"
         visible={isQA_DV && !isHistoryType && formIsError}
+        size={[6, 5, 7]}
         body={
           <Select
             name="errorType"
@@ -927,6 +991,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Comments*"
         visible={(isQA_DV && !isHistoryType && formIsError)}
+        size={[6, 5, 7]}
         body={
           <Form.Control
             as="textarea"
@@ -943,6 +1008,7 @@ export const DataSheetComponent = (props) => {
       <FieldWrapper
         label="Comments*"
         visible={isAnalyst_CC}
+        size={[6, 5, 7]}
         body={
           <Form.Control
             as="textarea"
@@ -951,6 +1017,23 @@ export const DataSheetComponent = (props) => {
             placeholder="Comments"
             onChange={onChangeFormControversyComment}
             value={formControversyComment}
+          />
+        }
+      />
+
+      {/* Controversy Next Review Date Field */}
+      <FieldWrapper
+        label="Next review date*"
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className="datapage-datepicker"
+            name="response"
+            size="large"
+            onChange={onChangeFormNextReviewDate}
+            value={formNextReviewDate && moment(formNextReviewDate)}
+            disabled={disableField}
           />
         }
       />
@@ -983,23 +1066,8 @@ export const DataSheetComponent = (props) => {
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-      { !isAnalyst_CC && <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>}
+
       <Col lg={12} className="datapage-button-wrap">
-        {/* BACK Button */}
-        { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
-        <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
-
-        {/* PREVIOUS Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
-        <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
-
-        {/* SAVE&NEXT Button */}
-        { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
-        <Button className="datapage-button" variant="success" onClick={saveAndNextClickHandler}>Save And Next</Button>}
-
-        {/* SAVE&CLOSE Button */}
-        { ((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isHistoryType && (reqIndexes.currentIndex === reqIndexes.maxIndex)) &&
-        <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
 
         {/* HISTORY UNFREEZE Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
@@ -1042,9 +1110,21 @@ export const DataSheetComponent = (props) => {
         }
         onCancel={onCloseErrorPanel}
       >
-        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} />
+        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} errorComment={errorComment} setErrorComment={setErrorComment} />
       </Modal>
 
     </Row>
   );
+};
+
+DataSheetComponent.propTypes = {
+  isHistoryType: PropTypes.bool,
+  // reqTask: PropTypes.object,
+  // reqIndexes: PropTypes.object,
+  reqData: PropTypes.object,
+  reqErrorList: PropTypes.array,
+  locationData: PropTypes.object,
+  onClickSave: PropTypes.func,
+  reqSourceData: PropTypes.array,
+  // dummyDataCheck: PropTypes.func,
 };

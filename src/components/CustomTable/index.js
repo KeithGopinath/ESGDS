@@ -72,14 +72,14 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultPagination, selectItem, viewCheckedCompanies
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, selectItem, viewCheckedCompanies
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
   const DEFAULT_SORT_ORDER = 'asc';
   const DEFAULT_ORDER_BY = null;
   const DEFAULT_PAGE = 0;
-  const DEFAULT_ROWS_PER_PAGE = defaultPagination || 10;
+  const DEFAULT_ROWS_PER_PAGE = defaultNoOfRows || 10;
   const { RangePicker } = DatePicker;
 
   // STATES
@@ -121,11 +121,11 @@ const CustomTable = ({
   );
 
   const descendingComparator = (a, b, ofOrderBy) => {
-    if (sortDataType === 'stringSearchSortElement') {
-      if (b[ofOrderBy].value < a[ofOrderBy].value) {
+    if (sortDataType === 'stringSearchSortElement' && b[ofOrderBy].value && a[ofOrderBy].value) {
+      if ((b[ofOrderBy].value).toLowerCase() < (a[ofOrderBy].value).toLowerCase()) {
         return -1;
       }
-      if (b[ofOrderBy].value > a[ofOrderBy].value) {
+      if ((b[ofOrderBy].value).toLowerCase() > (a[ofOrderBy].value).toLowerCase()) {
         return 1;
       }
     }
@@ -136,11 +136,12 @@ const CustomTable = ({
       if (new Date(b[ofOrderBy]) > new Date(a[ofOrderBy])) {
         return 1;
       }
-    } else {
-      if (b[ofOrderBy] < a[ofOrderBy]) {
+    } 
+    if (sortDataType === 'string' && b[ofOrderBy] && a[ofOrderBy]){
+      if ((b[ofOrderBy]).toLowerCase() < (a[ofOrderBy]).toLowerCase()) {
         return -1;
       }
-      if (b[ofOrderBy] > a[ofOrderBy]) {
+      if ((b[ofOrderBy]).toLowerCase() > (a[ofOrderBy]).toLowerCase()) {
         return 1;
       }
     }
@@ -219,6 +220,7 @@ const CustomTable = ({
   };
 
   const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
+  
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
 
@@ -376,7 +378,7 @@ export default CustomTable;
 // };
 //   showDatePicker: true || false,
 //   isLoading: true || false,
-//   defaultpagination: 5 || 10 || 20
+//   defaultNoOfRows: 5 || 10 || 20
 //   messageAndIcon: is a Object which should contain show, message, icon,
 //   Eg: {
 //         show: true || false,

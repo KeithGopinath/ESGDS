@@ -1,25 +1,147 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
-import { DatePicker, Button as AntButton, Image, Upload, message } from 'antd';
+import { DatePicker, Button as AntButton, Image, Upload, message, Input } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import dynamicThings from '../../constants/DynamicConstants';
 
 const FieldWrapper = (props) => {
+  // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
   if (props.visible) {
     return (
-      <Col lg={6}>
+      <Col lg={props.size[0]}>
         <Form.Group as={Row} >
-          <Form.Label column sm={5}>
+          <Form.Label column sm={props.size[1]}>
             {props.label}
           </Form.Label>
-          <Col sm={7}>
+          <Col sm={props.size[2]}>
             {props.body}
           </Col>
         </Form.Group>
       </Col>
     );
+  }
+  return null;
+};
+
+FieldWrapper.propTypes = {
+  visible: PropTypes.bool,
+  size: PropTypes.array.isRequired,
+  label: PropTypes.string,
+  body: PropTypes.element,
+};
+
+const onChangeDynamiceFieldsValue = (event, dynamicDataList, eachField, setDynamicData) => {
+  let latestValue = null;
+  const { inputType } = eachField;
+
+  switch (inputType) {
+    case 'Text':
+      latestValue = event.target.value;
+      break;
+    case 'TextArea':
+      latestValue = event.target.value;
+      break;
+    case 'Number':
+      latestValue = event.target.value;
+      break;
+    case 'Date':
+      latestValue = event;
+      break;
+    case 'Select':
+      latestValue = event;
+      break;
+    case 'Image':
+      latestValue = event.target.value;
+      break;
+    default:
+      break;
+  }
+
+  const filteredData = dynamicDataList.map((e) => {
+    if (e.fieldName === eachField.fieldName) return { ...e, value: latestValue };
+    return e;
+  });
+
+  setDynamicData(filteredData);
+};
+
+const getReqFields = ({
+  eachData, dynamicFields, setDynamicFields, disableField,
+}) => {
+  const {
+    inputType, name, value, inputValues,
+  } = eachData;
+
+  switch (inputType) {
+    case 'Text':
+      return (
+        <Input
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          size="large"
+          disabled={disableField}
+        />
+      );
+    case 'TextArea':
+      return (
+
+        <Input.TextArea
+          rows={1}
+          size="large"
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          disabled={disableField}
+        />
+      );
+    case 'Number':
+      return (
+        <Input
+          placeholder={`Enter ${name}`}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          type="number"
+          value={value}
+          size="large"
+          disabled={disableField}
+        />
+      );
+    case 'Date':
+      return (
+        <DatePicker
+          size="large"
+          style={{ width: '100%' }}
+          placeholder={`Select ${name}`}
+          value={value && moment(value)}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          className=""
+          disabled={disableField}
+        />
+      );
+    case 'Select':
+      return (
+        <Select
+          name={name}
+          options={inputValues}
+          onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
+          value={value}
+          placeholder={`Select ${name}`}
+          isDisabled={disableField}
+        />);
+    case 'Image':
+      return (
+        <Image
+          width="50%"
+          src={value}
+        />
+      );
+    case 'Static':
+      return value;
+    default:
+      break;
   }
   return null;
 };
@@ -48,6 +170,9 @@ const ErrorDataSheetTwo = (props) => {
   const [formScreenShotFile, setFormScreenShotFile] = useState(null);
   const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
 
+  // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
+  const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
+
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
@@ -58,6 +183,8 @@ const ErrorDataSheetTwo = (props) => {
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
     setFormScreenShotFile(null);
     setFormComment((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+
+    setDynamicFields(defaultData.additionalDetails || dynamicThings.dynamicFields);
   }, [defaultData]);
 
   const sourceList = props.reqSourceData;
@@ -160,7 +287,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const onClickSave = () => {
     const dummyDataReps = {
-      fiscalYear: defaultData.fiscalYear,
+      fiscalYear: defaultData.fiscalYear, // NEEDS AS UNIQUE KEY TO SAVE
       error: {
         isThere: isError,
         refData: {
@@ -176,11 +303,11 @@ const ErrorDataSheetTwo = (props) => {
         errorStatus: 'Completed',
       },
     };
-
     props.onClickSave(dummyDataReps);
   };
 
   const onClickEdit = () => {
+    console.log(defaultData);
     const dummyDataReps = {
       fiscalYear: defaultData.fiscalYear,
       error: {
@@ -212,6 +339,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* DESCRIPTION Field */}
       <FieldWrapper
         label="Description*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={formDescription}
       />
@@ -220,6 +348,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'NUMBER' &&
         <FieldWrapper
           label="Response*"
+          size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
             <Form.Control
@@ -237,6 +366,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'STRING' &&
       <FieldWrapper
         label="Response*"
+        size={[6, 5, 7]}
         visible
         body={
           <Form.Control
@@ -254,6 +384,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'DATE' &&
         <FieldWrapper
           label="Response*"
+          size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
             <DatePicker
@@ -271,6 +402,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'TEXT' &&
         <FieldWrapper
           label="Response*"
+          size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
             <Select
@@ -287,6 +419,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'BOOLEAN' &&
       <FieldWrapper
         label="Response*"
+        size={[6, 5, 7]}
         visible
         body={
           <Select
@@ -303,6 +436,7 @@ const ErrorDataSheetTwo = (props) => {
       { formDataType === 'GENDER' &&
       <FieldWrapper
         label="Response*"
+        size={[6, 5, 7]}
         visible
         body={
           <Select
@@ -319,6 +453,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* SOURCE Field */}
       <FieldWrapper
         label="Source*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Select
@@ -341,6 +476,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
         label="Text Snippet*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Form.Control
@@ -357,6 +493,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* PAGE NO Field */}
       <FieldWrapper
         label="Page No*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Form.Control
@@ -372,6 +509,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* URL Field */}
       <FieldWrapper
         label="URL*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Form.Control
@@ -388,6 +526,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label="PublicationDate*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <DatePicker
@@ -404,6 +543,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* UPLOAD Field */}
       <FieldWrapper
         label="Upload Screenshot*"
+        size={[6, 5, 7]}
         visible={!isErrorCommentType && isError}
         body={
           <Upload
@@ -426,6 +566,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* ScreenShot Field */}
       <FieldWrapper
         label="Screenshot*"
+        size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Image
@@ -435,10 +576,23 @@ const ErrorDataSheetTwo = (props) => {
         }
       />
 
+      {/* DYNAMIC FIELDS COMES HERE */}
+      {dynamicFields.map((eachData) => (
+        <FieldWrapper
+          visible={isErrorCommentType || isError}
+          label={eachData.name}
+          size={[6, 5, 7]}
+          body={getReqFields({
+            eachData, dynamicFields, setDynamicFields, disableField,
+          })}
+        />
+      ))}
+
 
       {/* Comments Field */}
       <FieldWrapper
         label="Comments*"
+        size={[6, 5, 7]}
         visible={!isErrorCommentType && isError}
         body={
           <Form.Control
@@ -461,6 +615,17 @@ const ErrorDataSheetTwo = (props) => {
 
     </React.Fragment>
   );
+};
+
+ErrorDataSheetTwo.propTypes = {
+  reqData: PropTypes.object,
+  reqSourceData: PropTypes.array,
+  textResponse: PropTypes.array,
+  isError: PropTypes.bool,
+  isErrorCommentType: PropTypes.string,
+  openSourcePanel: PropTypes.func,
+  onClickSave: PropTypes.func,
+  isDataCorrection: PropTypes.bool,
 };
 
 export default ErrorDataSheetTwo;
