@@ -84,9 +84,9 @@ const Reports = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data) => ({
       key: data.companyId,
       companyName: data.companyName ? { value: data.companyName, content: <div> <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> </div> } : { value: '', content: '' },
-      completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '-',
-      clientRep: data.clientRrepresentative ? data.clientRrepresentative : '-',
-      companyRep: data.companyRepresentative ? data.companyRepresentative : '-',
+      completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '--',
+      clientRep: data.clientRrepresentative ? data.clientRrepresentative : '--',
+      companyRep: data.companyRepresentative ? data.companyRepresentative : '--',
     }));
     return {
       rowsData: tableRowData(props),
@@ -171,9 +171,9 @@ const Reports = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((dataTaxonomy) => ({
       key: dataTaxonomy.companyId + dataTaxonomy.companyName,
       companyName: dataTaxonomy.companyName ? { value: dataTaxonomy.companyName, content: <div> <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}>{dataTaxonomy.companyName}</Checkbox> </div> } : { value: '', content: '' },
-      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '-',
-      clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '-',
-      companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '-',
+      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '--',
+      clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '--',
+      companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '--',
     }))
 
     return {
@@ -218,8 +218,8 @@ const Reports = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((e) => ({
       key: e.companyId + e.taskId,
       companyName: e.companyName ? { value: e.companyName, content: <div> <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}>{e.companyName}</Checkbox> </div> } : { value: '', content: '' },
-      taskid: e.taskId ? e.taskId : '-',
-      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '-',
+      taskid: e.taskId ? e.taskId : '--',
+      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '--',
     }))
 
     return {
