@@ -22,17 +22,19 @@ const TaskList = (props) => {
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
 
+  const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
+  const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
+  const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
+
   useEffect(() => {
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;
       if (tabLabel === 'Controversy') {
         const controversyId = propsData.map((data) => {
-          return data.companyId;
-          // return data.id;
+          return data.id;
         });
-        dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports: controversyId });
-        // dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", controversyTaskReports: controversyId });
+        dispatch({ type: "CONTROVERSY_TASK_LIST_REQUEST", controversyTaskReports: controversyId });
       } else {
         const companiesId = propsData.map((data) => {
           return data.companyId;
@@ -47,22 +49,18 @@ const TaskList = (props) => {
 
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
+  const controversyDetails = controversyTaskList && controversyTaskList;
   const [analystsla, setanalystsla] = useState(null);
   const [qasla, setqasla] = useState(null);
 
-  // getting company names & unique comp names
-  const companyNameData = getCompanyDetails && getCompanyDetails.map(e => {
-    return e.companyName;
-  });
-
   // export data in excel file
   const downloadReports = () => {
-    const workSheet = XLSX.utils.json_to_sheet(getCompanyDetails && getCompanyDetails);
+    const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Controversy' ? controversyDetails && controversyDetails : getCompanyDetails && getCompanyDetails);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Reports");
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, "Reports Tasklist.xlsx");
+    XLSX.writeFile(workBook, tabFlag === 'Controversy' ? 'Controversy Tasklist.xlsx' : 'Reports Tasklist.xlsx');
   };
 
   const sideBarRef = useRef();
@@ -127,9 +125,9 @@ const TaskList = (props) => {
           obj.map((e) => ({
             key: e.taskid,
             company: e.companyName ? e.companyName : '-',
-            taskid: e.taskid ? e.taskid : '-',
+            controversyId: e.controversyId ? e.controversyId : '-',
             analyst: e.analyst,
-            analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '-',
+            createdDate: e.createdDate ? moment(e.createdDate).format('DD-MM-YYYY') : '-',
           }))
       )
       :
@@ -288,9 +286,9 @@ const TaskList = (props) => {
               dataType: 'string',
             },
             {
-              id: 'taskid',
+              id: 'controversyId',
               align: 'center',
-              label: 'Task ID',
+              label: 'Controversy ID',
               dataType: 'string',
             },
             {
@@ -300,7 +298,7 @@ const TaskList = (props) => {
               dataType: 'string',
             },
             {
-              id: 'analystSla',
+              id: 'createdDate',
               align: 'center',
               label: 'Created Date',
               dataType: 'string',
@@ -378,7 +376,7 @@ const TaskList = (props) => {
     history.push({ pathname: '/reports', tabFlag: tabFlag });
   };
 
-  const tasklist = totalTaskList(multiCompanies ? (getCompanyDetails ? getCompanyDetails : []) : isList ? isList : []);
+  const tasklist = totalTaskList(multiCompanies ? tabFlag === 'Controversy' ? (controversyDetails ? controversyDetails : []) : (getCompanyDetails ? getCompanyDetails : []) : isList ? isList : []);
 
   return (
     <React.Fragment>
@@ -392,7 +390,7 @@ const TaskList = (props) => {
                 {multiCompanies &&
                   <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
                 <Card >
-                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading} />
+                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} />
                 </Card>
               </Col>
             </Row>

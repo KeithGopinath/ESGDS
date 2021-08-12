@@ -27,8 +27,6 @@ const Reports = (props) => {
   const completedComp = compData && compData.completed;
   const controversyData = compData && compData.controversy;
 
-  // const controversyData = controversyReports && controversyReports.controversy;
-
   useEffect(() => {
     dispatch({ type: 'GET_REPORTS_REQUEST' });
   }, []);
@@ -76,87 +74,6 @@ const Reports = (props) => {
     }
     setSelectItem(false);
   }, [tabFlag, compData]);
-
-  const companyData = {
-    completed: [
-      {
-        taxonomy: 'Rel Acute',
-        companyName: 'Reliance ltd.',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Balaji',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'Rel Acute1',
-        companyName: 'Reliance',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Balaji',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'HPCL Acute',
-        companyName: 'HPCL',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Balaji',
-        clientRrepresentative: 'Praveen',
-        isChecked: false,
-      }
-    ],
-    pending: [
-      {
-        taxonomy: 'IDEA Acute',
-        companyName: 'IDEA Ltd.',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Praveen',
-        clientRrepresentative: 'Jerin',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'ONGC Acute',
-        companyName: 'ONGC',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Balaji',
-        clientRrepresentative: 'Praveen',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'Indian Acute',
-        companyName: 'Indian Gas',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Rajesh',
-        clientRrepresentative: 'Gopi',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'Indian Acute',
-        companyName: 'Indian Oil',
-        completedDate: '10-07-2021',
-        companyRepresentative: 'Rajesh',
-        clientRrepresentative: 'Gopi',
-        isChecked: false,
-      },
-    ],
-    controversy: [
-      {
-        taxonomy: 'Bharath',
-        companyId: '60b86c83b09656fa36dc7874',
-        companyName: 'Bharat Petroleum Corporation Limited',
-        allocatedDate: '10-07-2021',
-        taskId: '002',
-        isChecked: false,
-      },
-      {
-        taxonomy: 'JWS',
-        companyName: 'JSW Steel Limited',
-        taskId: '001',
-        companyId: '60b86d88b09656fa36dc84ab',
-        allocatedDate: '10-07-2021',
-        isChecked: false,
-      },
-    ]
-  }
 
   const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
@@ -208,7 +125,6 @@ const Reports = (props) => {
   };
 
   // checked companies list
-
   const onCompanyCheck = (data, status) => {
     if (status === "pending") {
       const newCompanies = [...pendingCompanies]
@@ -302,6 +218,7 @@ const Reports = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((e) => ({
       key: e.companyId + e.taskId,
       companyName: e.companyName ? { value: e.companyName, content: <div> <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}>{e.companyName}</Checkbox> </div> } : { value: '', content: '' },
+      taskid: e.taskId ? e.taskId : '-',
       allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '-',
     }))
 
@@ -313,6 +230,12 @@ const Reports = (props) => {
           align: 'left',
           label: 'Company Name',
           dataType: 'stringSearchSortElement',
+        },
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task ID',
+          dataType: 'string',
         },
         {
           id: 'allocatedDate',
@@ -365,7 +288,7 @@ const Reports = (props) => {
             ))}
           </div>
           <div>
-            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} isLoading={loading} />
+            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} tabFlag={tabFlag} isLoading={loading} />
           </div>
         </div>
       </div>
