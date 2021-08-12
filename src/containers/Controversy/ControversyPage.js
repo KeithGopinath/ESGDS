@@ -78,7 +78,7 @@ const ControversyPage = (props) => {
   const getAdditionalDetails = () => {
     let additionalDetails = {};
     for (let i = 0; i < reqCurrentData.additionalDetails.length; i += 1) {
-      additionalDetails = { ...additionalDetails, [`${reqCurrentData.additionalDetails[i].fieldName}`]: reqCurrentData.additionalDetails[i].value };
+      additionalDetails = { ...additionalDetails, [`${reqCurrentData.additionalDetails[i].fieldName}`]: reqCurrentData.additionalDetails[i].inputType === 'Select' ? reqCurrentData.additionalDetails[i].value.value : reqCurrentData.additionalDetails[i].value };
     }
     return additionalDetails;
   };

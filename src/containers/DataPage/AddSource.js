@@ -238,8 +238,8 @@ const AddSource = (props) => {
         publicationDate,
         fiscalYear: props.fiscalYear,
         sourcePDF: sourcePDFBase64,
-        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' && sourceName,
-        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
+        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' ? sourceName : '',
+        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' ? sourceName : '',
         name: !isMultiYear ? `${sourceName}_${props.fiscalYear}` : `${sourceName}`,
       };
       dispatch({ type: 'SOURCE_TYPE_POST_REQUEST', sourceTypeData: postableData });

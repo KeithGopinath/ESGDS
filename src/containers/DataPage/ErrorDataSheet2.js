@@ -127,7 +127,7 @@ const getReqFields = ({
           name={name}
           options={inputValues}
           onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
-          value={value}
+          value={value.value && value.label ? value : null}
           placeholder={`Select ${name}`}
           isDisabled={disableField}
         />);
@@ -139,7 +139,7 @@ const getReqFields = ({
         />
       );
     case 'Static':
-      return value;
+      return inputValues;
     default:
       break;
   }
@@ -208,22 +208,22 @@ const ErrorDataSheetTwo = (props) => {
 
   const onChangeFormResponse = (event) => {
     switch (formDataType) {
-      case 'TEXT':
+      case 'SELECT':
         setFormResponse(event.value);
         break;
-      case 'BOOLEAN':
-        setFormResponse(event.value);
-        break;
-      case 'GENDER':
-        setFormResponse(event.value);
-        break;
+      // case 'BOOLEAN':
+      //   setFormResponse(event.value);
+      //   break;
+      // case 'GENDER':
+      //   setFormResponse(event.value);
+      //   break;
       case 'DATE':
         setFormResponse(event);
         break;
       case 'NUMBER':
         setFormResponse(event.currentTarget.value);
         break;
-      case 'STRING':
+      case 'TEXT':
         setFormResponse(event.currentTarget.value);
         break;
       default:
@@ -319,7 +319,6 @@ const ErrorDataSheetTwo = (props) => {
           response: formResponse,
           source: formSource,
           url: formURL,
-          publicationDate: formPublicDate,
         },
         comment: formComment,
         errorStatus: 'Editable',
@@ -363,11 +362,11 @@ const ErrorDataSheetTwo = (props) => {
         />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'STRING' &&
+      { formDataType === 'TEXT' &&
       <FieldWrapper
         label="Response*"
         size={[6, 5, 7]}
-        visible
+        visible={isErrorCommentType || isError}
         body={
           <Form.Control
             type="text"
@@ -399,7 +398,7 @@ const ErrorDataSheetTwo = (props) => {
         />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'TEXT' &&
+      { formDataType === 'SELECT' &&
         <FieldWrapper
           label="Response*"
           size={[6, 5, 7]}
@@ -580,7 +579,7 @@ const ErrorDataSheetTwo = (props) => {
       {dynamicFields.map((eachData) => (
         <FieldWrapper
           visible={isErrorCommentType || isError}
-          label={eachData.name}
+          label={`${eachData.name}*`}
           size={[6, 5, 7]}
           body={getReqFields({
             eachData, dynamicFields, setDynamicFields, disableField,

@@ -14,11 +14,9 @@ import validateReqFields from './validateReqFields';
 import AddSource from './AddSource';
 // import dynamicThings from '../../constants/DynamicConstants';
 
+let temporaryData;
 // Field Wrapper ::
 // A function which wraps the datasheet fields with bootstrap's row and col tags
-
-let temporaryData;
-
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
   if (props.visible) {
@@ -142,7 +140,7 @@ const getReqFields = ({
           name={name}
           options={inputValues}
           onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
-          value={value}
+          value={value.value && value.label ? value : null}
           placeholder={`Select ${name}`}
           isDisabled={disableField}
         />);
@@ -154,7 +152,7 @@ const getReqFields = ({
         />
       );
     case 'Static':
-      return value;
+      return inputValues;
     default:
       break;
   }
@@ -167,8 +165,9 @@ export const DataSheetComponent = (props) => {
 
   // CURRENT TAB
   const currentTab = sessionStorage.tab;
+
   // REQUIRED CONSOLE:
-  console.log(props);
+  // console.log('******DATA SHEET PROPS******', props);
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
@@ -184,25 +183,26 @@ export const DataSheetComponent = (props) => {
     isHistoryType,
   } = props;
 
-  const sourceList = props.reqSourceData;
-
-  const textResponse = isAnalyst_CC ? ['Very High', 'High', 'Medium', 'Low', 'No'] : ['Yes', 'No', 'M', 'F', 'NA'];
-
-  const errorTypeList = props.reqErrorList;
 
   // DEFAULT DATA
   const defaultData = props.reqData;
 
-  // DATASHEET FORM DATA
+  // TEMPORANY DATAS
+  const sourceList = defaultData.sourceList || [];
+
+  const textResponse = defaultData.inputValues || [];
+
+  const errorTypeList = props.reqErrorList;
+
+  // DATASHEET FORM DATA +
   // *DPCODE*
   const formDpCode = defaultData.dpCode;
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
-  const formDataType = defaultData.dataType === 'String' && isAnalyst_CC ? 'CONSTRING' : defaultData.dataType.toUpperCase();
+  const formDataType = defaultData.dataType.toUpperCase();
 
-  // *STATES*
-
+  // *STATES* +
   // *TEXT SNIPPET*
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   // *PAGE NO*
@@ -307,26 +307,23 @@ export const DataSheetComponent = (props) => {
 
   const onChangeFormResponse = (event) => {
     switch (formDataType) {
-      case 'TEXT':
+      case 'SELECT':
         setFormResponse(event.value);
         break;
-      case 'BOOLEAN':
-        setFormResponse(event.value);
-        break;
-      case 'GENDER':
-        setFormResponse(event.value);
-        break;
+      // case 'BOOLEAN':
+      //   setFormResponse(event.value);
+      //   break;
+      // case 'GENDER':
+      //   setFormResponse(event.value);
+      //   break;
       case 'DATE':
         setFormResponse(event);
         break;
       case 'NUMBER':
         setFormResponse(event.currentTarget.value);
         break;
-      case 'STRING':
+      case 'TEXT':
         setFormResponse(event.currentTarget.value);
-        break;
-      case 'CONSTRING':
-        setFormResponse(event.value);
         break;
       default:
         break;
@@ -540,6 +537,8 @@ export const DataSheetComponent = (props) => {
       screenShot: formScreenShotPath,
       response: formResponse,
       source: formSource,
+      rejectComment: errorComment,
+      isAccepted: isErrorAccepted,
     };
     let saveData;
     if (isAnalyst_DCR) {
@@ -724,26 +723,9 @@ export const DataSheetComponent = (props) => {
         }
       />}
 
-      {/* RESPONSE Field */}
-      { formDataType === 'CONSTRING' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Select
-            name="response"
-            options={defaultData.controversyResponseList && defaultData.controversyResponseList.map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-            isDisabled={disableField}
-          />
-        }
-      />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'STRING' &&
+      { formDataType === 'TEXT' &&
       <FieldWrapper
         label="Response*"
         visible
@@ -779,7 +761,7 @@ export const DataSheetComponent = (props) => {
       />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'TEXT' &&
+      { formDataType === 'SELECT' &&
       <FieldWrapper
         label="Response*"
         visible
@@ -787,7 +769,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Select
             name="response"
-            options={textResponse.map((e) => ({ label: e, value: e }))}
+            options={textResponse}
             onChange={onChangeFormResponse}
             value={formResponse && { label: formResponse, value: formResponse }}
             placeholder="Choose Response"
@@ -796,7 +778,7 @@ export const DataSheetComponent = (props) => {
         }
       />}
 
-      { formDataType === 'BOOLEAN' &&
+      {/* { formDataType === 'BOOLEAN' &&
       <FieldWrapper
         label="Response*"
         visible
@@ -828,7 +810,7 @@ export const DataSheetComponent = (props) => {
             isDisabled={disableField}
           />
         }
-      />}
+      />} */}
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
@@ -937,7 +919,7 @@ export const DataSheetComponent = (props) => {
       {dynamicFields.map((eachData) => (
         <FieldWrapper
           visible
-          label={eachData.name}
+          label={`${eachData.name}*`}
           size={[6, 5, 7]}
           body={getReqFields({
             eachData, dynamicFields, setDynamicFields, disableField,
@@ -1125,6 +1107,6 @@ DataSheetComponent.propTypes = {
   reqErrorList: PropTypes.array,
   locationData: PropTypes.object,
   onClickSave: PropTypes.func,
-  reqSourceData: PropTypes.array,
+  // reqSourceData: PropTypes.array,
   // dummyDataCheck: PropTypes.func,
 };

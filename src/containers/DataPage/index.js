@@ -51,10 +51,10 @@ const DataSheetMain = (props) => {
 
 
   // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
-  const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData || []);
+  const [reqCurrentData, setReqCurrentData] = useState((reqDpCodeData && reqDpCodeData.currentData) || []);
 
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
-  const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData || []);
+  const [reqHistoricalData, setReqHistoricalData] = useState((reqDpCodeData && reqDpCodeData.historicalData) || []);
 
   const reqCommentsList = reqDpCodeData.comments;
 
@@ -162,7 +162,7 @@ const DataSheetMain = (props) => {
     let additionalDetails = {};
     if (dpCodeObj.additionalDetails) {
       for (let i = 0; i < dpCodeObj.additionalDetails.length; i += 1) {
-        additionalDetails = { ...additionalDetails, [`${dpCodeObj.additionalDetails[i].fieldName}`]: dpCodeObj.additionalDetails[i].value };
+        additionalDetails = { ...additionalDetails, [`${dpCodeObj.additionalDetails[i].fieldName}`]: dpCodeObj.additionalDetails[i].inputType === 'Select' ? dpCodeObj.additionalDetails[i].value.value : dpCodeObj.additionalDetails[i].value };
       }
     }
     return additionalDetails || [];
@@ -187,7 +187,12 @@ const DataSheetMain = (props) => {
       returnableData = { ...returnableData, error: e.error };
     }
     if (isCompanyRep_DR || isClientRep_DR) {
-      returnableData = { ...returnableData, error: e.error };
+      console.log(e);
+      returnableData = {
+        dpCode: e.dpCode,
+        fiscalYear: e.fiscalYear,
+        error: { ...e.error, refData: { ...e.error.refData, additionalDetails: additionalDetailsMapper(e.error.refData) } },
+      };
     }
     return returnableData;
   });
@@ -200,8 +205,11 @@ const DataSheetMain = (props) => {
       dpCodeId: reqDpcodeData.dpCodeId,
       companyId: reqDpcodeData.companyId,
       pillarId: reqDpcodeData.pillarId,
+      memberId: reqDpcodeData.memberId,
+      memberName: reqDpcodeData.memberName,
+      memberType: reqTask.memberType === 'Kmp Matrix' ? 'KMP Matrix' : reqTask.memberType,
       currentData: getReqDetails(reqCurrentData),
-      historicalData: getReqDetails(reqHistoricalData),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqDetails(reqHistoricalData),
     };
     return postableData;
   };
@@ -211,6 +219,7 @@ const DataSheetMain = (props) => {
     if ((reqDataCheckBeforeSave().currentData).length === 0 && (reqDataCheckBeforeSave().historicalData).length === 0) {
       console.log('saveAndNextClickHandler');
       console.log(getPostableData());
+      console.log(reqTask.dpCodesData[reqIndexes.currentIndex]);
       const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
@@ -426,7 +435,7 @@ const DataPage = (props) => {
     const returnbaleData = (reqTask.dpCodesData.map((dpData, index) => {
       if (dpData.dpCode === dpCodeDetails.dpCode) {
         return ({
-          reqIndexes: { maxIndex: reqMaxIndex, currentIndex: index, minIndex: reqMinIndex }, reqDpCodeData: dpCodeDataFromStore.dpCodeData ? dpCodeDataFromStore.dpCodeData.dpCodeData : (dpData || {}), reqTask,
+          reqIndexes: { maxIndex: reqMaxIndex, currentIndex: index, minIndex: reqMinIndex }, reqDpCodeData: dpCodeDataFromStore.dpCodeData ? dpCodeDataFromStore.dpCodeData.dpCodeData : dpData, reqTask,
         });
       }
       return null;
