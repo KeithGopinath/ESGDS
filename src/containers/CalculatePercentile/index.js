@@ -340,7 +340,7 @@ const CalculatePercentile = () => {
               <Card className="upload-container">
                 <CustomTable tableData={tableData} isLoading={loading} />
                 <Row className="upload-button-container">
-                  {percentileData && <Button variant="primary" className="upload-data-button" onClick={onSubmitTableData}>Calculate Percentile</Button>}
+                  {percentileData && <Button variant="primary" className="upload-data-button" onClick={onSubmitTableData}>Save</Button>}
                 </Row>
               </Card>
             </div>

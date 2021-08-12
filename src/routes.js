@@ -29,6 +29,8 @@ import UploadCompanies from './containers/UploadCompanies';
 import ControversyTaskCreate from './containers/ControversyTaskCreate';
 import CalculateActuals from './containers/CalculateActuals';
 import CalculatePercentile from './containers/CalculatePercentile';
+import DataJson from './containers/DataJson';
+import ControversyJson from './containers/ControversyJson';
 
 export const history = createBrowserHistory();
 
@@ -64,6 +66,8 @@ const Routes = () => (
         <Route path="/upload-companies" component={UploadCompanies} />
         <Route path="/calculate-actuals" component={CalculateActuals} />
         <Route path="/calculate-percentile" component={CalculatePercentile} />
+        <Route path="/data-json" component={DataJson} />
+        <Route path="/controversy-json" component={ControversyJson} />
       </Switch>
     </React.Fragment>
   </Router >
