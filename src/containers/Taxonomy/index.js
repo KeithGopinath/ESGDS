@@ -152,7 +152,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
       // const edit = header.name
       const column = {
         name: label,
-        fieldName: edit.fieldName || label.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()),
+        fieldName: label.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()),
         applicableFor: applicable.value,
         inputType: labelType.value,
         inputValues: labelValues,
