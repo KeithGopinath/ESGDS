@@ -105,6 +105,22 @@ const AddSource = (props) => {
     resetFields();
   }, [currentSourceType]);
 
+  useEffect(() => {
+    setSourceURL('');
+    setPublicationDate(null);
+    setSourcePDF(null);
+    setErrors({
+      sourceType: null,
+      subSourceType: null,
+      sourceName: null,
+      isMultiYear: null,
+      isMultiSource: null,
+      sourceURL: null,
+      publicationDate: null,
+      sourcePDF: null,
+    });
+  }, [setCurrentSubSourceType]);
+
   const resetFields = () => {
     setCurrentSubSourceType(null);
     setSourceURL('');
@@ -126,10 +142,12 @@ const AddSource = (props) => {
     setCurrentSourceType(event);
     setIsMultiYear(event.isMultiYear);
     setIsMultiSource(event.isMultiSource);
+    setSourceName(event.label === 'Others' ? '' : event.label);
   };
 
   const onChangeSubSourceType = (event) => {
     setCurrentSubSourceType(event);
+    setSourceName(event.label === 'Others' ? '' : event.label);
   };
 
   const onChangeSourceName = (event) => {
@@ -207,6 +225,7 @@ const AddSource = (props) => {
     }
     return false;
   };
+
   const onClickUpload = () => {
     if (validate()) {
       const postableData = {
@@ -216,11 +235,12 @@ const AddSource = (props) => {
         isMultiSource,
         sourceSubTypeId: currentSubSourceType && currentSubSourceType.value,
         url: sourceURL,
-        publicationDate: publicationDate._d.toDateString(),
+        publicationDate,
         fiscalYear: props.fiscalYear,
         sourcePDF: sourcePDFBase64,
-        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' && sourceName,
-        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' && sourceName,
+        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' ? sourceName : '',
+        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' ? sourceName : '',
+        name: !isMultiYear ? `${sourceName}_${props.fiscalYear}` : `${sourceName}`,
       };
       dispatch({ type: 'SOURCE_TYPE_POST_REQUEST', sourceTypeData: postableData });
       setStatusAlert(true);

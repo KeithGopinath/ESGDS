@@ -2,38 +2,39 @@
 export default (dataToValidate, roleScreenType) => {
   const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType] = roleScreenType;
   if (isAnalyst_DC) {
-    if (
-      dataToValidate.source && (dataToValidate.source.url && dataToValidate.source.sourceName && dataToValidate.source.publicationDate) && dataToValidate.response && dataToValidate.screenShot && dataToValidate.pageNo &&
-      dataToValidate.textSnippet
-    ) {
-      return true;
-    }
+    // if (
+    //   dataToValidate.source && (dataToValidate.source.url && dataToValidate.source.sourceName && dataToValidate.source.publicationDate) && dataToValidate.response && dataToValidate.screenShot && dataToValidate.pageNo &&
+    //   dataToValidate.textSnippet
+    // ) {
+    //   return true;
+    // }
+    return true;
   }
   if (isAnalyst_DCR) {
-    // NONE
+    return true;
   }
   if (isAnalyst_CC) {
     if (
       dataToValidate.source && (dataToValidate.source.url && dataToValidate.source.sourceName && dataToValidate.source.publicationDate) && dataToValidate.response && dataToValidate.screenShot && dataToValidate.pageNo &&
-        dataToValidate.textSnippet && dataToValidate.comment
+        dataToValidate.textSnippet && dataToValidate.comment && dataToValidate.nextReviewDate
     ) {
       return true;
     }
   }
   if (isQA_DV) {
-    // NONE
+    return true;
   }
   if (isCompanyRep_DR) {
-    // NONE
+    return true;
   }
   if (isCompanyRep_DR) {
-    // NONE
+    return true;
   }
   if (isClientRep_DR) {
-    // NONE
+    return true;
   }
   if (isHistoryType) {
-    // NONE
+    return true;
   }
   return false;
 };

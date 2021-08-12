@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
-
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { Input, Select as AntSelect, Divider, DatePicker, message, Spin } from 'antd';
@@ -28,20 +28,31 @@ const FieldWrapper = (props) => {
   return null;
 };
 
+FieldWrapper.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  size: PropTypes.array.isRequired,
+  label: PropTypes.string,
+  body: PropTypes.element,
+};
+
 const AddNewKMPMember = (props) => {
+  // DISPATCH
   const dispatch = useDispatch();
 
-  // USESELECTOR TO GET reqTASK From Store
+  // USESELECTOR
   const reqTASK = (useSelector((state) => state.task));
   const activeMembersFromStore = useSelector((state) => state.activeMembers);
   const activeBoardMembersList = (activeMembersFromStore.activeMembers && activeMembersFromStore.activeMembers.BoardMembersList) || [];
   const activeKmpMembersList = (activeMembersFromStore.activeMembers && activeMembersFromStore.activeMembers.KMPList) || [];
 
+
   const addNewMemberFromStore = useSelector((state) => state.addNewMember);
   const terminateMembersFromStore = useSelector((state) => state.terminateMembers);
 
+  // PROPS
   const { modalType, taskDetails, closeModal } = props;
 
+  // FLAGS
   const [isAddNewKmp, isAddNewBoard, isTerminateKmp, isTerminateBoard] = [
     modalType === 'AddNewKmpType',
     modalType === 'AddNewBoardType',
@@ -56,6 +67,7 @@ const AddNewKMPMember = (props) => {
   };
   const memberType = getMemberType();
 
+  // STATES
   const [title, setTitle] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
@@ -112,7 +124,7 @@ const AddNewKMPMember = (props) => {
     setKmpMembersToTerminate([]);
     setEndDate(null);
 
-    // setStatusAlert(false);
+    setStatusAlert(false);
 
     setHasError({
       title: false,
@@ -131,6 +143,7 @@ const AddNewKMPMember = (props) => {
       endDate: false,
     });
 
+    // DISPATCH ACTION
     if (isTerminateKmp || isTerminateBoard) {
       dispatch({ type: 'ACTIVE_MEMBERS_GET_REQUEST', companyId: taskDetails.companyId, memberType });
       setStatusAlert(true);
@@ -179,13 +192,7 @@ const AddNewKMPMember = (props) => {
     }
   }, [terminateMembersFromStore]);
 
-
-  // const tempMembersLists = [
-  //   { label: 'Gopi', value: 'gopi001' },
-  //   { label: 'balaji', value: 'balaji001' },
-  //   { label: 'praveen', value: 'praveen007' },
-  // ];
-
+  // SALUTATIONS
   const tempSalutationList = [
     { label: 'Dr.', value: 'Dr.' },
     { label: 'Mr.', value: 'Mr.' },
@@ -193,36 +200,47 @@ const AddNewKMPMember = (props) => {
     { label: 'Ms.', value: 'Ms.' },
   ];
 
+  // ONCHANGE FUNCS
   const onChangetitle = (event) => {
     setTitle(event);
   };
+
   const onChangeFirstName = (event) => {
     setFirstName(event.currentTarget.value);
   };
+
   const onChangeMiddleName = (event) => {
     setMiddleName(event.currentTarget.value);
   };
+
   const onChangeLastName = (event) => {
     setLastName(event.currentTarget.value);
   };
+
   const onChangeGender = (event) => {
     setGender(event);
   };
+
   const onChangeNationality = (event) => {
     setNationality(event.currentTarget.value);
   };
+
   const onChangeFinancialExp = (event) => {
     setFinancialExp(event);
   };
+
   const onChangeIndustrialExp = (event) => {
     setIndustrialExp(event);
   };
+
   const onChangeDob = (event) => {
     setDob(event);
   };
+
   const onChangeStartDate = (event) => {
     setStartDate(event);
   };
+
   const onChangeIsExecutiveType = (event) => {
     setIsExecutiveType(event);
   };
@@ -239,6 +257,7 @@ const AddNewKMPMember = (props) => {
     setEndDate(event);
   };
 
+  // doValidate Function does the validation based on the flags and return boolean
   const doValidate = () => {
     const error = {
       title: !title,
@@ -256,6 +275,7 @@ const AddNewKMPMember = (props) => {
       kmpMembersToTerminate: !(kmpMembersToTerminate && kmpMembersToTerminate.length > 0),
       endDate: !endDate,
     };
+
     setHasError({ ...hasError, ...error });
     if (isAddNewKmp) {
       return (error.title || error.firstName || error.middleName || error.lastName || error.gender || error.dob || error.startDate);
@@ -270,12 +290,14 @@ const AddNewKMPMember = (props) => {
     if (isTerminateBoard) {
       return (error.boardMembersToTerminate || error.endDate);
     }
-
     return true;
   };
 
+  // ONCLICK FUNCS
   const onSubmitClick = () => {
+    // postableData aka req payload that sent via api, based on flags
     let postableData;
+
     if (!doValidate()) {
       if (isAddNewKmp) {
         postableData = {
@@ -303,6 +325,8 @@ const AddNewKMPMember = (props) => {
           endDate: '', // NO FRONT END VALUE
         };
       }
+
+      // DISPATCH ACTION
       dispatch({ type: 'ADD_NEW_MEMBER_POST_REQUEST', memberType, payload: postableData });
       setStatusAlert(true);
     } else {
@@ -311,7 +335,9 @@ const AddNewKMPMember = (props) => {
   };
 
   const onTerminateClick = () => {
+    // postableData aka req payload that sent via api, based on flags
     let postableData;
+
     if (!doValidate()) {
       if (isTerminateKmp) {
         postableData = {
@@ -327,6 +353,7 @@ const AddNewKMPMember = (props) => {
           endDate,
         };
       }
+      // DISPATCH ACTION
       dispatch({ type: 'TERMINATE_MEMBERS_POST_REQUEST', memberType, payload: postableData });
       setStatusAlert(true);
     } else {
@@ -344,7 +371,7 @@ const AddNewKMPMember = (props) => {
           label={
             <React.Fragment>
               <div>Full Name<span className="addNewMember-red-asterik"> * </span></div>
-              <div>{isAddNewBoard && '(MASP003)'}{isAddNewKmp && '(BOSP004)'}{isExecutiveType.value && '/(BOSP004)'}</div>
+              <div>{isAddNewBoard && '(BOSP004)'}{isAddNewKmp && '(MASP003)'}{isExecutiveType.value && '/(MASP003)'}</div>
             </React.Fragment>
           }
           body={
@@ -368,7 +395,7 @@ const AddNewKMPMember = (props) => {
           label={
             <React.Fragment>
               <div>Gender<span className="addNewMember-red-asterik"> * </span></div>
-              <div>{isAddNewBoard && '(MASR008)'}{isAddNewKmp && '(BODR005)'}{isExecutiveType.value && '/(BODR005)'}</div>
+              <div>{isAddNewBoard && '(BODR005)'}{isAddNewKmp && '(MASR008)'}{isExecutiveType.value && '/(MASR008)'}</div>
             </React.Fragment>
           }
           body={
@@ -539,11 +566,24 @@ const AddNewKMPMember = (props) => {
         <Divider />
 
         <Col lg={12} className="addNewTerminate-button-wrap">
-          {(isAddNewBoard || isAddNewKmp) && <Button onClick={onSubmitClick} variant="success">Submit</Button>}
-          {(isTerminateKmp || isTerminateBoard) && <Button onClick={onTerminateClick} variant="danger">Terminate</Button>}
+          {/* {(isAddNewBoard || isAddNewKmp) && <Button onClick={onSubmitClick} variant="success">Submit</Button>}
+          {(isTerminateKmp || isTerminateBoard) && <Button onClick={onTerminateClick} variant="danger">Terminate</Button>} */}
+          { (isAddNewBoard || isAddNewKmp || isTerminateKmp || isTerminateBoard) &&
+            <Button
+              onClick={(isAddNewBoard || isAddNewKmp) ? onSubmitClick : (isTerminateKmp || isTerminateBoard) ? onTerminateClick : null}
+              variant={(isAddNewBoard || isAddNewKmp) ? 'success' : (isTerminateKmp || isTerminateBoard) ? 'danger' : null}
+            >{(isAddNewBoard || isAddNewKmp) ? 'Submit' : (isTerminateKmp || isTerminateBoard) ? 'Terminate' : null}
+            </Button>
+          }
         </Col>
       </Row>
     </Spin>);
+};
+
+AddNewKMPMember.propTypes = {
+  modalType: PropTypes.string.isRequired,
+  taskDetails: PropTypes.object.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default AddNewKMPMember;
