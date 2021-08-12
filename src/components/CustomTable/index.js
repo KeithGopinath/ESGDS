@@ -235,7 +235,7 @@ const CustomTable = ({
             <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
               <RangePicker
                 // showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD HH:mm"
+                format="YYYY-MM-DD"
                 onChange={(x) => {
                   if (x) {
                     setSearchDate({ startDate: x[0], endDate: x[1] });

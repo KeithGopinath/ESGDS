@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu, CalculationSubMenu } from '../../constants/SideBarConstants';
+import { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu, CalculationSubMenu, JsonGenerationSubMenu } from '../../constants/SideBarConstants';
 import { history } from '../../routes';
 import RoleAssignment from '../../containers/RoleAssign';
 import { faBars, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const usersBtnRefs = useRef(UsersSubMenu.map(() => React.createRef()));
   const taskBtnRefs = useRef(TaskSubMenu.map(() => React.createRef()));
   const calculationBtnRefs = useRef(CalculationSubMenu.map(() => React.createRef()));
+  const jsonBtnRefs = useRef(JsonGenerationSubMenu.map(() => React.createRef()));
 
   // checking user type and role
   const userDetails = useSelector((state) => state.login.login);
@@ -47,6 +48,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const [showUsersSubMenu, setUsersSubMenu] = useState(false);
   const [showTaskSubMenu, setTaskSubMenu] = useState(false);
   const [showCalculationSubMenu, setCalculationSubMenu] = useState(false);
+  const [showJsonSubMenu, setJsonSubMenu] = useState(false);
 
   useEffect(() => {
     onRenderButtonHighter();
@@ -66,6 +68,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       setTaskSubMenu(true);
     } else if (url.pathname.includes('calculate')) {
       setCalculationSubMenu(true);
+    } else if (url.pathname.includes('json')) {
+      setJsonSubMenu(true);
     } else {
       setTaxonomySubMenu(false);
       setValidationSubMenu(false);
@@ -73,6 +77,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       setUsersSubMenu(false);
       setTaskSubMenu(false);
       setCalculationSubMenu(false);
+      setJsonSubMenu(false);
     }
     window.addEventListener('resize', sideMenuResponsive);
     const target = ref.current;
@@ -80,16 +85,15 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     target.classList.add('sideMenu-main-responsive');
   }, []);
 
-
   // Mapping of sideBar Menu and subMenu
   const sideMenuBtns = modifiedButtonList.map(({ id, label, icon, address, }, index) => {
-    const subMenuShow = label == 'Taxonomy' ? showTaxonomySubMenu : label == 'Validation' ? showValidationSubMenu : label == 'Groups' ? showGroupsSubMenu : label == 'Users' ? showUsersSubMenu : label == 'Task' ? showTaskSubMenu : label == 'Calculations' ? showCalculationSubMenu : false;
-    const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : label == 'Users' ? UsersSubMenu : label == 'Task' ? TaskSubMenu : label == 'Calculations' ? CalculationSubMenu : false;
-    const subMenuRef = label == 'Taxonomy' ? taxonomyBtnRefs : label == 'Validation' ? validationBtnRefs : label == 'Groups' ? groupsBtnRefs : label == 'Users' ? usersBtnRefs : label == 'Task' ? taskBtnRefs : label == 'Calculations' ? calculationBtnRefs : false;
+    const subMenuShow = label == 'Taxonomy' ? showTaxonomySubMenu : label == 'Validation' ? showValidationSubMenu : label == 'Groups' ? showGroupsSubMenu : label == 'Users' ? showUsersSubMenu : label == 'Task' ? showTaskSubMenu : label == 'Calculations' ? showCalculationSubMenu : label == 'JSON Generation' ? showJsonSubMenu : false;
+    const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : label == 'Users' ? UsersSubMenu : label == 'Task' ? TaskSubMenu : label == 'Calculations' ? CalculationSubMenu : label == 'JSON Generation' ? JsonGenerationSubMenu : false;
+    const subMenuRef = label == 'Taxonomy' ? taxonomyBtnRefs : label == 'Validation' ? validationBtnRefs : label == 'Groups' ? groupsBtnRefs : label == 'Users' ? usersBtnRefs : label == 'Task' ? taskBtnRefs : label == 'Calculations' ? calculationBtnRefs : label == 'JSON Generation' ? jsonBtnRefs : false;
 
     return (
       <div>
-        {id == 1 || id == 2 || id == 3 || id == 7 || id == 8 || id == 10 ?
+        {id == 1 || id == 2 || id == 3 || id == 7 || id == 8 || id == 10 || id == 11 ?
           <div ref={sideMenuBtnRefs.current[index]} className={handler ? (subMenuShow ? 'submenu' : 'submenu-button') : (subMenuShow ? 'submenu-mini-button' : 'sideMenuMini-btn')}
             key={id} onClick={(event) => buttonClickHandler(event, address)}>
             <div className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
@@ -135,6 +139,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       setTaskSubMenu(!showTaskSubMenu)
     } else if (address == 'calculationhead') {
       setCalculationSubMenu(!showCalculationSubMenu)
+    } else if (address == 'jsonhead') {
+      setJsonSubMenu(!showJsonSubMenu)
     } else if (address !== '') {
       history.push(`/${address}`);
     } else {
@@ -144,9 +150,9 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
-    const BtnRefs = showValidationSubMenu && !show ? validationBtnRefs : showTaxonomySubMenu && !show ? taxonomyBtnRefs : showGroupsSubMenu && !show ? groupsBtnRefs : showUsersSubMenu && !show ? usersBtnRefs : showTaskSubMenu && !show ? taskBtnRefs : showCalculationSubMenu && !show ? calculationBtnRefs : sideMenuBtnRefs;
-    const MenuButton = showValidationSubMenu && !show ? ValidationSubMenu : showTaxonomySubMenu && !show ? TaxonomySubMenu : showGroupsSubMenu && !show ? GroupsSubMenu : showUsersSubMenu && !show ? UsersSubMenu : showTaskSubMenu && !show ? TaskSubMenu : showCalculationSubMenu && !show ? CalculationSubMenu : modifiedButtonList;
-    const subMenuRefs = showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : showTaskSubMenu ? taskBtnRefs : showCalculationSubMenu ? calculationBtnRefs : false;
+    const BtnRefs = showValidationSubMenu && !show ? validationBtnRefs : showTaxonomySubMenu && !show ? taxonomyBtnRefs : showGroupsSubMenu && !show ? groupsBtnRefs : showUsersSubMenu && !show ? usersBtnRefs : showTaskSubMenu && !show ? taskBtnRefs : showCalculationSubMenu && !show ? calculationBtnRefs : showJsonSubMenu && !show ? jsonBtnRefs : sideMenuBtnRefs;
+    const MenuButton = showValidationSubMenu && !show ? ValidationSubMenu : showTaxonomySubMenu && !show ? TaxonomySubMenu : showGroupsSubMenu && !show ? GroupsSubMenu : showUsersSubMenu && !show ? UsersSubMenu : showTaskSubMenu && !show ? TaskSubMenu : showCalculationSubMenu && !show ? CalculationSubMenu : showJsonSubMenu && !show ? JsonGenerationSubMenu : modifiedButtonList;
+    const subMenuRefs = showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : showTaskSubMenu ? taskBtnRefs : showCalculationSubMenu ? calculationBtnRefs : showJsonSubMenu ? jsonBtnRefs : false;
 
     subMenuRefs && subMenuRefs.current.forEach((element) => {
       const btn = element.current;

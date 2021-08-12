@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { faCog, faHome, faUser, faUsers, faBuilding, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList, faChartBar, faUpload, faCalculator } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faHome, faUser, faUsers, faTasks, faFolderPlus, faUserTag, faCodeBranch, faNetworkWired, faProjectDiagram, faCheckDouble, faList, faChartBar, faUpload, faCalculator, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const ButtonList = [
   {
@@ -36,10 +36,13 @@ const ButtonList = [
     id: 10, label: 'Calculations', icon: faCalculator, address: 'calculationhead',
   },
   {
-    id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
+    id: 11, label: 'JSON Generation', icon: faEdit, address: 'jsonhead',
   },
   {
-    id: 12, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
+    id: 12, label: 'Reports', icon: faChartBar, address: 'reports',
+  },
+  {
+    id: 13, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
   },
 ];
 
@@ -82,7 +85,7 @@ const GroupsSubMenu = [
   {
     id: 2, label: 'Group List', icon: faList, address: 'group-list'
   },
- 
+
 ]
 
 const UsersSubMenu = [
@@ -103,4 +106,13 @@ const CalculationSubMenu = [
   },
 ]
 
-export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu, CalculationSubMenu };
+const JsonGenerationSubMenu = [
+  {
+    id: 0, label: 'Data', icon: faList, address: 'data-json'
+  },
+  {
+    id: 1, label: 'Controversy', icon: faTasks, address: 'controversy-json'
+  },
+]
+
+export { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSubMenu, TaskSubMenu, CalculationSubMenu, JsonGenerationSubMenu };
