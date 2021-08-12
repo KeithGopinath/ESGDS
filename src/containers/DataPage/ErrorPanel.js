@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import moment from 'moment';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Col, Row, Form } from 'react-bootstrap';
@@ -32,10 +32,7 @@ const ErrorPanel = (props) => {
     defaultError.raisedBy === 'ClientRep',
   ];
 
-  const [errorComment, setErrorComment] = useState('');
-  useEffect(() => {
-    setErrorComment('');
-  }, [props.isAccepted]);
+  const { errorComment, setErrorComment } = props;
   return (
     <React.Fragment>
       { isQARaisedError &&

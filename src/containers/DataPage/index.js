@@ -4,11 +4,12 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExclamationCircleTwoTone } from '@ant-design/icons';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, message } from 'antd';
 import moment from 'moment';
+import { history } from '../../routes';
 
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -50,10 +51,10 @@ const DataSheetMain = (props) => {
 
 
   // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
-  const [reqCurrentData, setReqCurrentData] = useState(reqDpCodeData.currentData || []);
+  const [reqCurrentData, setReqCurrentData] = useState((reqDpCodeData && reqDpCodeData.currentData) || []);
 
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
-  const [reqHistoricalData, setReqHistoricalData] = useState(reqDpCodeData.historicalData || []);
+  const [reqHistoricalData, setReqHistoricalData] = useState((reqDpCodeData && reqDpCodeData.historicalData) || []);
 
   const reqCommentsList = reqDpCodeData.comments;
 
@@ -122,6 +123,169 @@ const DataSheetMain = (props) => {
     historicalData: getUnsavedHistoricalYears(),
   });
 
+  const backClickHandler = () => {
+    console.log('backClickHandler');
+    history.push({
+      pathname: `/task/${reqTask.taskNumber}`,
+      state: {
+        taskDetails: {
+          taskId: reqTask.taskId,
+          pillar: reqTask.pillar,
+          company: reqTask.company,
+          companyId: reqTask.companyId,
+          taskNumber: reqTask.taskNumber,
+        },
+      },
+    });
+  };
+
+  const previousClickHandler = () => {
+    console.log('previousClickHandler');
+    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
+    history.push({
+      pathname: `/dpcode/${nextDpCode.dpCode}`,
+      state: {
+        taskDetails: {
+          taskId: reqTask.taskId,
+          pillar: reqTask.pillar,
+          company: reqTask.company,
+          taskNumber: reqTask.taskNumber,
+          memberType: reqTask.memberType,
+        },
+        dpCodeDetails: nextDpCode,
+        filteredData: reqTask.dpCodesData,
+      },
+    });
+  };
+
+  const additionalDetailsMapper = (dpCodeObj) => {
+    let additionalDetails = {};
+    if (dpCodeObj.additionalDetails) {
+      for (let i = 0; i < dpCodeObj.additionalDetails.length; i += 1) {
+        additionalDetails = { ...additionalDetails, [`${dpCodeObj.additionalDetails[i].fieldName}`]: dpCodeObj.additionalDetails[i].inputType === 'Select' ? dpCodeObj.additionalDetails[i].value.value : dpCodeObj.additionalDetails[i].value };
+      }
+    }
+    return additionalDetails || [];
+  };
+
+  const getReqDetails = (dataList) => dataList.map((e) => {
+    let returnableData = {
+      dpCode: e.dpCode,
+      fiscalYear: e.fiscalYear,
+      textSnippet: e.textSnippet,
+      pageNo: e.pageNo,
+      screenShot: e.screenShot,
+      response: e.response,
+      source: e.source,
+      additionalDetails: additionalDetailsMapper(e),
+    };
+
+    if (isAnalyst_DCR) {
+      returnableData = { ...returnableData, rejectComment: e.rejectComment, isAccepted: e.isAccepted };
+    }
+    if (isQA_DV) {
+      returnableData = { ...returnableData, error: e.error };
+    }
+    if (isCompanyRep_DR || isClientRep_DR) {
+      console.log(e);
+      returnableData = {
+        dpCode: e.dpCode,
+        fiscalYear: e.fiscalYear,
+        error: { ...e.error, refData: { ...e.error.refData, additionalDetails: additionalDetailsMapper(e.error.refData) } },
+      };
+    }
+    return returnableData;
+  });
+
+  const getPostableData = () => {
+    const reqDpcodeData = reqTask.dpCodesData[reqIndexes.currentIndex];
+    const postableData = {
+      taskId: reqTask.taskId,
+      taskNumber: reqTask.taskNumber,
+      dpCodeId: reqDpcodeData.dpCodeId,
+      companyId: reqDpcodeData.companyId,
+      pillarId: reqDpcodeData.pillarId,
+      memberId: reqDpcodeData.memberId,
+      memberName: reqDpcodeData.memberName,
+      memberType: reqTask.memberType === 'Kmp Matrix' ? 'KMP Matrix' : reqTask.memberType,
+      currentData: getReqDetails(reqCurrentData),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqDetails(reqHistoricalData),
+    };
+    return postableData;
+  };
+
+  const saveAndNextClickHandler = () => {
+    console.log(reqDataCheckBeforeSave(), 'LIST OF NUMS');
+    if ((reqDataCheckBeforeSave().currentData).length === 0 && (reqDataCheckBeforeSave().historicalData).length === 0) {
+      console.log('saveAndNextClickHandler');
+      console.log(getPostableData());
+      console.log(reqTask.dpCodesData[reqIndexes.currentIndex]);
+      const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+      history.push({
+        pathname: `/dpcode/${nextDpCode.dpCode}`,
+        state: {
+          dpCodeDetails: nextDpCode,
+          taskDetails: {
+            taskId: reqTask.taskId,
+            pillar: reqTask.pillar,
+            company: reqTask.company,
+            taskNumber: reqTask.taskNumber,
+            memberType: reqTask.memberType,
+          },
+        },
+      });
+    } else {
+      const msgCurrent = reqDataCheckBeforeSave().currentData;
+      const msgHistorical = reqDataCheckBeforeSave().historicalData;
+      if (isAnalyst_DC) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+      if (isAnalyst_DCR) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
+      }
+      if (isQA_DV) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+      if (isClientRep_DR || isCompanyRep_DR) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+    }
+  };
+
+  const saveAndCloseClickHandler = () => {
+    if ((reqDataCheckBeforeSave().currentData).length === 0 && (reqDataCheckBeforeSave().historicalData).length === 0) {
+      console.log('saveAndCloseClickHandler');
+      console.log(getPostableData());
+      history.push({
+        pathname: `/task/${reqTask.taskNumber}`,
+        state: {
+          taskDetails: {
+            taskId: reqTask.taskId,
+            pillar: reqTask.pillar,
+            company: reqTask.company,
+            taskNumber: reqTask.taskNumber,
+            memberType: reqTask.memberType,
+          },
+        },
+      });
+    } else {
+      const msgCurrent = reqDataCheckBeforeSave().currentData;
+      const msgHistorical = reqDataCheckBeforeSave().historicalData;
+      if (isAnalyst_DC) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `current data for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+      if (isAnalyst_DCR) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is accepted or rejected.`, 8);
+      }
+      if (isQA_DV) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+      if (isClientRep_DR || isCompanyRep_DR) {
+        message.error(`Please make sure the ${msgCurrent.length !== 0 ? `error(s) for ${msgCurrent}` : `historical data for ${msgHistorical}`} fiscal year(s) is entered and saved.`, 8);
+      }
+    }
+  };
+
   return (
     <React.Fragment>
       {/* HISTORICAL TABS */}
@@ -133,14 +297,11 @@ const DataSheetMain = (props) => {
                 <DataSheetComponent
                   isHistoryType
                   reqData={e}
-                  reqTask={reqTask}
-                  reqIndexes={reqIndexes}
                   locationData={locationData}
                   reqSourceData={reqSourceData}
                   reqErrorList={reqErrorList}
                   // openSourcePanel={openSourcePanel}
                   onClickSave={saveReqHistoricalData}
-                  dummyDataCheck={reqDataCheckBeforeSave}
                 />
               </Tabs.TabPane>))}
           </Tabs>
@@ -163,15 +324,30 @@ const DataSheetMain = (props) => {
               >
                 <DataSheetComponent
                   reqData={e}
-                  reqTask={reqTask}
-                  reqIndexes={reqIndexes}
                   locationData={locationData}
                   reqSourceData={reqSourceData}
                   reqErrorList={reqErrorList}
                   // openSourcePanel={openSourcePanel}
                   onClickSave={saveReqCurrentData}
-                  dummyDataCheck={reqDataCheckBeforeSave}
                 />
+                <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
+                <Col lg={12} className="datapage-button-wrap">
+                  {/* BACK Button */}
+                  { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
+                  <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
+
+                  {/* PREVIOUS Button */}
+                  { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
+                  <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
+
+                  {/* SAVE&NEXT Button */}
+                  { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
+                  <Button className="datapage-button" variant="success" onClick={saveAndNextClickHandler}>Save And Next</Button>}
+
+                  {/* SAVE&CLOSE Button */}
+                  { ((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex === reqIndexes.maxIndex)) &&
+                  <Button className="datapage-button" variant="danger" onClick={saveAndCloseClickHandler}>Save And Close</Button>}
+                </Col>
               </Tabs.TabPane>))}
           </Tabs>
         </DataAccordian>
@@ -199,7 +375,7 @@ const DataPage = (props) => {
       payload: {
         taskId: taskDetails.taskId,
         datapointId: dpCodeDetails.dpCodeId,
-        memberType: taskDetails.memberType,
+        memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
         memberName: dpCodeDetails.memberName || '',
       },
     });
@@ -259,7 +435,7 @@ const DataPage = (props) => {
     const returnbaleData = (reqTask.dpCodesData.map((dpData, index) => {
       if (dpData.dpCode === dpCodeDetails.dpCode) {
         return ({
-          reqIndexes: { maxIndex: reqMaxIndex, currentIndex: index, minIndex: reqMinIndex }, reqDpCodeData: dpData, reqTask,
+          reqIndexes: { maxIndex: reqMaxIndex, currentIndex: index, minIndex: reqMinIndex }, reqDpCodeData: dpCodeDataFromStore.dpCodeData ? dpCodeDataFromStore.dpCodeData.dpCodeData : dpData, reqTask,
         });
       }
       return null;
@@ -279,7 +455,7 @@ const DataPage = (props) => {
   }, [props.location]);
 
   useEffect(() => {
-    setReqDpCodeData(dpCodeDataFromStore.dpCodeData ? dpCodeDataFromStore.dpCodeData.standdpCodeDataalone : {});
+    setReqDpCodeData(getReqData()[0].reqDpCodeData);
   }, [dpCodeDataFromStore]);
   return (
     <div className="main">

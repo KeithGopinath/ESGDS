@@ -75,6 +75,14 @@ const ControversyPage = (props) => {
     return 'default';
   };
 
+  const getAdditionalDetails = () => {
+    let additionalDetails = {};
+    for (let i = 0; i < reqCurrentData.additionalDetails.length; i += 1) {
+      additionalDetails = { ...additionalDetails, [`${reqCurrentData.additionalDetails[i].fieldName}`]: reqCurrentData.additionalDetails[i].inputType === 'Select' ? reqCurrentData.additionalDetails[i].value.value : reqCurrentData.additionalDetails[i].value };
+    }
+    return additionalDetails;
+  };
+
   const submitAndCloseClickHandler = () => {
     if (reqCurrentData.status === 'Completed') {
       const postableData = {
@@ -86,6 +94,8 @@ const ControversyPage = (props) => {
         textSnippet: reqCurrentData.textSnippet,
         pageNo: reqCurrentData.pageNo,
         screenShot: reqCurrentData.screenShotBase64,
+        nextReviewDate: reqCurrentData.nextReviewDate,
+        additionalDetails: getAdditionalDetails(),
         comments: type === 'NEW' ? [
           {
             author: sessionStorage.role,

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { faUserPlus, faUserTimes, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CustomTable from '../../components/CustomTable/index';
+import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
@@ -42,8 +42,9 @@ const FieldWrapper = (props) => {
 };
 
 const TaskTable = (props) => {
-  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x, index) => ({
-    key: `${x.dpCodeId}${x.memberName}${x.dpCode}index${index}`,
+  console.log(props); // REQ
+  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+    key: `${x.dpCodeId}${x.memberName}${x.dpCode}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
@@ -51,7 +52,6 @@ const TaskTable = (props) => {
   <Link
     to={{
       pathname: `/dpcode/${x.dpCode}`,
-      // state: { taskId, dpCode: x.dpCode, dpCodeId: x.dpCodeId },
       state: { taskDetails, dpCodeDetails: x },
     }}
   >Enter Data
@@ -78,7 +78,7 @@ const TaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultPagination={5} message={props.message} icon={props.icon} />
+    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultNoOfRows={5} message={props.message} icon={props.icon} />
   );
 };
 
@@ -492,7 +492,7 @@ const Task = (props) => {
                 />}
               </Row>
             </div>
-            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <TaskTable
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isValidationCalled && <TaskTable
               taskDetails={taskDetails}
               dpCodesData={reqDpCodesData}
               isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : reqTASK.isLoading}
