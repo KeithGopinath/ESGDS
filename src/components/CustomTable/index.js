@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, selectItem, viewCheckedCompanies
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination, selectItem, viewCheckedCompanies, tabFlag,
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -327,7 +327,7 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        {selectItem && <button className="view-checked-company-reports btn btn-primary" onClick={viewCheckedCompanies}>View Companies Task</button>}
+        {selectItem && <button className="view-checked-company-reports btn btn-primary" onClick={viewCheckedCompanies}>{ tabFlag === 'Controversy' ? 'View Controversy Task':'View Companies Task'}</button>}
         <TablePagination
           className={selectItem ? 'w-auto d-flex align-items-end flex-column' : ''}
           rowsPerPageOptions={[5, 10, 15]}

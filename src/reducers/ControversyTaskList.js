@@ -1,20 +1,21 @@
 const initialState = {};
+
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_CONTROVERSY_REPORTS_REQUEST':
+    case 'CONTROVERSY_TASK_LIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        reportsControversy: false,
+        controversyTaskList: false,
       };
-    case 'GET_CONTROVERSY_REPORTS_SUCCESS':
+    case 'CONTROVERSY_TASK_LIST_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        reportsControversy: action.reportsControversy,
+        controversyTaskList: action.controversyTaskList,
       };
-    case 'GET_CONTROVERSY_REPORTS_FAILURE':
+    case 'CONTROVERSY_TASK_LIST_FAILURE':
       return {
         ...state,
         isLoading: false,

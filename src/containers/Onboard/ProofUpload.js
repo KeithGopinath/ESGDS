@@ -11,9 +11,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
   const [empID, setEmpID] = useState('');
   const [cancelledCheque, setCancelledCheque] = useState('');
   const [fileSize, setFileSize] = useState({ authentication: '', idProof: '', cancelCheque: '' });
-  const [authValidate, setAuthValidate] = useState(false);
-  const [idProofValidate, setIdProofValidate] = useState(false);
-  const [chequeValidate, setChequeValidate] = useState(false);
+  const [uploadFile, setUploadFile] = useState(false);
 
   // file upload base64 format
   const onChangeCompRep = (e) => {
@@ -72,72 +70,28 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
     if (role === 'client' || role === 'company') {
       if (!fileName && !empID) {
         message.error('Should upload all files');
-        setAuthValidate(true);
-        setIdProofValidate(true);
-      } else if (!fileName) {
+        setUploadFile(true);
+      } else if (!fileName || !empID) {
         message.error('Should upload all files');
-        setAuthValidate(true);
-      } else if (!empID) {
-        message.error('Should upload all files');
-        setIdProofValidate(true);
-      } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728)) {
+        setUploadFile(true);
+      } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728) || (fileName && fileSize.authentication > 3145728) || (empID && fileSize.idProof > 3145728)) {
         message.error('File size should not be more than 3 MB');
-        setAuthValidate(true);
-        setIdProofValidate(true);
-      } else if (fileName && fileSize.authentication > 3145728) {
-        message.error('File size should not be more than 3 MB');
-        setAuthValidate(true);
-        setIdProofValidate(false);
-      } else if (empID && fileSize.idProof > 3145728) {
-        message.error('File size should not be more than 3 MB');
-        setAuthValidate(false);
-        setIdProofValidate(true);
+        setUploadFile(true);
       } else {
         nextStep();
-        setAuthValidate(false);
-        setIdProofValidate(false);
+        setUploadFile(false);
         setActiveStep(activeStep + 1);
       }
     } else if (role === 'employee') {
-      if (!fileName && !empID && !cancelledCheque) {
+      if (!fileName && !empID && !cancelledCheque || !fileName || !empID || !cancelledCheque) {
         message.error('Should upload all files');
-        setAuthValidate(true);
-        setIdProofValidate(true);
-        setChequeValidate(true);
-      } else if (!fileName) {
-        message.error('Should upload all files');
-        setAuthValidate(true);
-      } else if (!cancelledCheque) {
-        message.error('Should upload all files');
-        setChequeValidate(true);
-      } else if (!empID) {
-        message.error('Should upload all files');
-        setIdProofValidate(true);
-      } else if ((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728) && (cancelledCheque && fileSize.cancelCheque > 3145728)) {
+        setUploadFile(true);
+      } else if (((fileName && fileSize.authentication > 3145728) && (empID && fileSize.idProof > 3145728) && (cancelledCheque && fileSize.cancelCheque > 3145728)) || (fileName && fileSize.authentication > 3145728) || (empID && fileSize.idProof > 3145728) || (cancelledCheque && fileSize.cancelCheque > 3145728)) {
         message.error('File size should not be more than 3 MB');
-        setAuthValidate(true);
-        setIdProofValidate(true);
-        setChequeValidate(true);
-      } else if (fileName && fileSize.authentication > 3145728) {
-        message.error('File size should not be more than 3 MB');
-        setAuthValidate(true);
-        setIdProofValidate(false);
-        setChequeValidate(false);
-      } else if (empID && fileSize.idProof > 3145728) {
-        message.error('File size should not be more than 3 MB');
-        setAuthValidate(false);
-        setIdProofValidate(true);
-        setChequeValidate(false);
-      } else if (cancelledCheque && fileSize.cancelCheque > 3145728) {
-        message.error('File size should not be more than 3 MB');
-        setAuthValidate(false);
-        setIdProofValidate(false);
-        setChequeValidate(true);
+        setUploadFile(true);
       } else {
         nextStep();
-        setChequeValidate(false);
-        setAuthValidate(false);
-        setIdProofValidate(false);
+        setUploadFile(false);
         setActiveStep(activeStep + 1);
       }
     }
@@ -190,7 +144,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                 <Form.File
                   type="file"
                   accept="image/*"
-                  className={authValidate && 'file-not-upload'}
+                  className={!fileName ? uploadFile && 'file-not-upload' : ''}
                   id="choose-file"
                   label={fileName === '' ? 'Drag and drop a file or click' : fileName}
                   onChange={onChangeCompRep}
@@ -224,7 +178,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                 <Form.File
                   type="file"
                   accept="image/*"
-                  className={idProofValidate && 'file-not-upload'}
+                  className={!empID ? uploadFile && 'file-not-upload' : ''}
                   id=""
                   label={empID === '' ? 'Drag and drop a file or click' : empID}
                   onChange={onChangeEmpId}
@@ -243,7 +197,7 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
                 <Form.File
                   type="file"
                   accept="image/*"
-                  className={chequeValidate && 'file-not-upload'}
+                  className={!cancelledCheque ? uploadFile && 'file-not-upload' : ''}
                   id=""
                   label={cancelledCheque === '' ? 'Drag and drop a file or click' : cancelledCheque}
                   onChange={onChangeCancelledCheque}

@@ -22,20 +22,25 @@ const TaskList = (props) => {
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
 
+  const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
+  const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
+  const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
 
   useEffect(() => {
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;
-      const companiesId = propsData.map((data) => {
-        return data.companyId;
-      });
       if (tabLabel === 'Controversy') {
-      dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports : companiesId});
+        const controversyId = propsData.map((data) => {
+          return data.id;
+        });
+        dispatch({ type: "CONTROVERSY_TASK_LIST_REQUEST", controversyTaskReports: controversyId });
       } else {
-      dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports: companiesId });
+        const companiesId = propsData.map((data) => {
+          return data.companyId;
+        });
+        dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports: companiesId });
       }
-      // setCompanyNameList(companiesId);
     }
   }, []);
 
@@ -44,22 +49,18 @@ const TaskList = (props) => {
 
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
+  const controversyDetails = controversyTaskList && controversyTaskList;
   const [analystsla, setanalystsla] = useState(null);
   const [qasla, setqasla] = useState(null);
 
-  // getting company names & unique comp names
-  const companyNameData = getCompanyDetails && getCompanyDetails.map(e => {
-    return e.companyName;
-  });
-
   // export data in excel file
   const downloadReports = () => {
-    const workSheet = XLSX.utils.json_to_sheet(getCompanyDetails && getCompanyDetails);
+    const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Controversy' ? controversyDetails && controversyDetails : getCompanyDetails && getCompanyDetails);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Reports");
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workBook, "Reports Tasklist.xlsx");
+    XLSX.writeFile(workBook, tabFlag === 'Controversy' ? 'Controversy Tasklist.xlsx' : 'Reports Tasklist.xlsx');
   };
 
   const sideBarRef = useRef();
@@ -109,26 +110,26 @@ const TaskList = (props) => {
         })) :
         (tabFlag === 'Pending Companies') ? obj.map((e) => ({
           key: e.taskid,
-          company: e.companyName ? e.companyName : '-' ,
+          company: e.companyName ? e.companyName : '-',
           taskid: e.taskid ? e.taskid : '-',
-          group: e.group ? e.group  : '-',
+          group: e.group ? e.group : '-',
           batch: e.batch ? e.batch : '-',
           pillar: e.pillar ? e.pillar : '-',
           analyst: e.analystStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
-          analystSla:e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '-',
+          analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '-',
           qa: e.qaStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
           qaSla: e.qaSla ? moment(e.qaSla).format('DD-MM-YYYY') : '-',
           stage: e.stage ? e.stage : '-',
           status: e.status === 'Breached' ? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
-        })) : 
-        obj.map((e) => ({
-          key: e.taskid,
-          company: e.companyName ? e.companyName : '-' ,
-          taskid: e.taskid ? e.taskid : '-',
-          analyst: e.analyst,
-          analystSla:e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '-',
-        }))
-        )
+        })) :
+          obj.map((e) => ({
+            key: e.taskid,
+            company: e.companyName ? e.companyName : '-',
+            controversyId: e.controversyId ? e.controversyId : '-',
+            analyst: e.analyst,
+            createdDate: e.createdDate ? moment(e.createdDate).format('DD-MM-YYYY') : '-',
+          }))
+      )
       :
       obj.map((e) => ({
         key: e.taskNumber,
@@ -157,7 +158,7 @@ const TaskList = (props) => {
           {
             id: 'taskid',
             align: 'center',
-            label: 'Task id',
+            label: 'Task ID',
             dataType: 'string',
           },
           {
@@ -187,7 +188,7 @@ const TaskList = (props) => {
           {
             id: 'analystSla',
             align: 'center',
-            label: 'Sla Date',
+            label: 'SLA Date',
             dataType: 'string',
           },
           {
@@ -199,7 +200,7 @@ const TaskList = (props) => {
           {
             id: 'qaSla',
             align: 'center',
-            label: 'Sla Date',
+            label: 'SLA Date',
             dataType: 'string',
           },
           {
@@ -209,104 +210,104 @@ const TaskList = (props) => {
             dataType: 'string',
           },
         ]
-        :  (tabFlag === 'Pending Companies') ? 
-        [
-          {
-            id: 'company',
-            align: 'center',
-            label: 'Company',
-            dataType: 'string',
-          },
-          {
-            id: 'taskid',
-            align: 'center',
-            label: 'Task id',
-            dataType: 'string',
-          },
-          {
-            id: 'group',
-            align: 'center',
-            label: 'Group',
-            dataType: 'string',
-          },
-          {
-            id: 'batch',
-            align: 'center',
-            label: 'Batch',
-            dataType: 'string',
-          },
-          {
-            id: 'pillar',
-            align: 'center',
-            label: 'Pillar',
-            dataType: 'string',
-          },
-          {
-            id: 'analyst',
-            align: 'center',
-            label: 'Analyst',
-            dataType: 'string',
-          },
-          {
-            id: 'analystSla',
-            align: 'center',
-            label: 'Sla Date',
-            dataType: 'string',
-          },
-          {
-            id: 'qa',
-            align: 'center',
-            label: 'QA',
-            dataType: 'string',
-          },
-          {
-            id: 'qaSla',
-            align: 'center',
-            label: 'Sla Date',
-            dataType: 'string',
-          },
-          {
-            id: 'stage',
-            align: 'center',
-            label: 'Stage',
-            dataType: 'string',
-          },
-          {
-            id: 'status',
-            align: 'center',
-            label: 'Status',
-            dataType: 'string',
-          },
-        ] : [
-          {
-            id: 'company',
-            align: 'left',
-            label: 'Company',
-            dataType: 'string',
-          },
-          {
-            id: 'taskid',
-            align: 'center',
-            label: 'Task Id',
-            dataType: 'string',
-          },
-          {
-            id: 'analyst',
-            align: 'center',
-            label: 'Analyst',
-            dataType: 'string',
-          },
-          {
-            id: 'analystSla',
-            align: 'center',
-            label: 'Created Date',
-            dataType: 'string',
-          },
-        ] : [
+        : (tabFlag === 'Pending Companies') ?
+          [
+            {
+              id: 'company',
+              align: 'center',
+              label: 'Company',
+              dataType: 'string',
+            },
+            {
+              id: 'taskid',
+              align: 'center',
+              label: 'Task ID',
+              dataType: 'string',
+            },
+            {
+              id: 'group',
+              align: 'center',
+              label: 'Group',
+              dataType: 'string',
+            },
+            {
+              id: 'batch',
+              align: 'center',
+              label: 'Batch',
+              dataType: 'string',
+            },
+            {
+              id: 'pillar',
+              align: 'center',
+              label: 'Pillar',
+              dataType: 'string',
+            },
+            {
+              id: 'analyst',
+              align: 'center',
+              label: 'Analyst',
+              dataType: 'string',
+            },
+            {
+              id: 'analystSla',
+              align: 'center',
+              label: 'SLA Date',
+              dataType: 'string',
+            },
+            {
+              id: 'qa',
+              align: 'center',
+              label: 'QA',
+              dataType: 'string',
+            },
+            {
+              id: 'qaSla',
+              align: 'center',
+              label: 'SLA Date',
+              dataType: 'string',
+            },
+            {
+              id: 'stage',
+              align: 'center',
+              label: 'Stage',
+              dataType: 'string',
+            },
+            {
+              id: 'status',
+              align: 'center',
+              label: 'Status',
+              dataType: 'string',
+            },
+          ] : [
+            {
+              id: 'company',
+              align: 'left',
+              label: 'Company',
+              dataType: 'string',
+            },
+            {
+              id: 'controversyId',
+              align: 'center',
+              label: 'Controversy ID',
+              dataType: 'string',
+            },
+            {
+              id: 'analyst',
+              align: 'center',
+              label: 'Analyst',
+              dataType: 'string',
+            },
+            {
+              id: 'createdDate',
+              align: 'center',
+              label: 'Created Date',
+              dataType: 'string',
+            },
+          ] : [
         {
           id: 'taskid',
           align: 'center',
-          label: 'Task Id',
+          label: 'Task ID',
           dataType: 'string',
         },
         {
@@ -342,7 +343,7 @@ const TaskList = (props) => {
         {
           id: 'analystSla',
           align: 'center',
-          label: 'Sla Date',
+          label: 'SLA Date',
           dataType: 'string',
         },
         {
@@ -354,7 +355,7 @@ const TaskList = (props) => {
         {
           id: 'qaSla',
           align: 'center',
-          label: 'Sla Date',
+          label: 'SLA Date',
           dataType: 'string',
         },
         {
@@ -365,17 +366,17 @@ const TaskList = (props) => {
         },
       ],
       tableLabel: <span>{multiCompanies ?
-        <span>{tabFlag === 'Controversy' ? 'Controversy List' :'Task List'}
+        <span>{tabFlag === 'Controversy' ? 'Controversy List' : 'Task List'}
           <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadReports} />
         </span> : 'Tasks'}</span>,
     };
   };
 
   const onBackButton = () => {
-    history.push('/reports');
+    history.push({ pathname: '/reports', tabFlag: tabFlag });
   };
 
-  const tasklist = totalTaskList(multiCompanies ? (getCompanyDetails ? getCompanyDetails : []) : isList ? isList : []);
+  const tasklist = totalTaskList(multiCompanies ? tabFlag === 'Controversy' ? (controversyDetails ? controversyDetails : []) : (getCompanyDetails ? getCompanyDetails : []) : isList ? isList : []);
 
   return (
     <React.Fragment>
@@ -389,7 +390,7 @@ const TaskList = (props) => {
                 {multiCompanies &&
                   <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
                 <Card >
-                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading} />
+                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} />
                 </Card>
               </Col>
             </Row>

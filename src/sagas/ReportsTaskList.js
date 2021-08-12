@@ -5,13 +5,8 @@ import { doPost } from '../utils/fetchWrapper';
 
 export function* getReportsTaskListRequest(data) {
   try {
-    if (data.companyTaskReports) {
-      const response = yield doPost(envConfig.apiEndPoints.getReportsTaskList, data);
-      yield put(actionCreators.getReportsTaskListSuccess(response));
-    } else if (data.controversyTaskReports) {
-      const response = yield doPost(envConfig.apiEndPoints.controversyTaskReports, data);
-      yield put(actionCreators.getReportsTaskListSuccess(response));
-    }
+    const response = yield doPost(envConfig.apiEndPoints.getReportsTaskList, data);
+    yield put(actionCreators.getReportsTaskListSuccess(response));
   } catch (error) {
     yield put(actionCreators.getReportsTaskListFailure(error));
   }
