@@ -5,9 +5,9 @@ import { Card, Form, Row, Col, Container, Button, } from 'react-bootstrap';
 import { message } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
-import { faSearch, faEdit, faCheckCircle, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faEdit, faCheckCircle, faBackward } from '@fortawesome/free-solid-svg-icons';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
@@ -123,19 +123,6 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
   }
 
   const editTaxonomy = (item) => {
-    // const temp = [...taxonomyData];
-    // const index1 = temp.indexOf(item)
-    // var result = temp.map((el, index) => {
-    //   if (index1 == index) {
-    //     var o = Object.assign({}, el);
-    //     o.isActive = true;
-    //     return o;
-    //   }
-    //   else {
-    //     return el
-    //   }
-    // })
-    // setTaxonomyData(result)
     setErrorAlert('')
     setAlertMsg('')
     setHeader(item)
@@ -148,8 +135,6 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
       setAlertMsg('Please enter all the fields')
     }
     else {
-      // console.log('header', header)
-      // const edit = header.name
       const column = {
         name: label,
         fieldName: label.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase()),
@@ -391,6 +376,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} title={showList ? "Subset" : "Master Taxonomy"} />
         <div className="container-main">
+        {showList && <FontAwesomeIcon size="lg" className="taxonomy-backward-icon" icon={faBackward} onClick={handleListClose} />}
           <Container className="wrapper">
             <div className="head-tab">
               <div>
@@ -411,11 +397,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
                 </ThemeProvider>
               </div>
               <div className="taxonomy-button-container">
-                {showList ?
-                  <Button variant="primary" className="taxonomy-btn" onClick={handleListClose}>Back</Button>
-                  :
-                  <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>
-                }
+                {!showList && <Button variant="primary" className="taxonomy-btn" onClick={addNewTaxonomy}>Add New</Button>}
               </div>
             </div>
             <div className="view-min-height">

@@ -7,7 +7,8 @@ import Overlay from '../../components/Overlay';
 const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
     const [file, setFile] = useState('');
     const [alertMsg, setAlertMsg] = useState('');
-    const [alertFlag, setAlertFlag] = useState(false);
+    const [fileErrorAlert, setFileErrorAlert] = useState('');
+    const [fileLabel, setFileLabel] = useState('');
 
     const dispatch = useDispatch();
     const taxonomyUpload = useSelector((state) => state.uploadTaxonomy.uploadTaxonomy);
@@ -15,23 +16,27 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
 
     useEffect(() => {
         setAlertMsg('');
+        setFile('');
+        setFileErrorAlert('');
+        setFileLabel('');
     }, [show]);
 
     useEffect(() => {
         if (taxonomyUpload) {
-            setAlertMsg(taxonomyUpload.message)
+            setAlertMsg(taxonomyUpload.message);
         } else if (taxonomyUploadError) {
-            setAlertMsg(taxonomyUploadError.message)
+            setAlertMsg(taxonomyUploadError.message);
         }
     }, [taxonomyUpload, taxonomyUploadError]);
 
     const fileHandler = (e) => {
-        setFile(e.target.files[0])
+        let file = e.target.files[0];
+        setFile(file);
+        setFileLabel(file.name);
     };
 
     const closeButton = () => {
         handleClose();
-        setAlertMsg('');
     }
 
     const onSubmit = () => {
@@ -41,11 +46,11 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
 
         if (!file) {
             setAlertMsg('Please choose a file to upload');
-            setAlertFlag(true);
+            setFileErrorAlert('file-not-upload');
         }
         else {
             dispatch({ type: 'UPLOAD_TAXONOMY_REQUEST', payload });
-            setAlertFlag(false);
+            setFileErrorAlert('');
         }
     };
 
@@ -53,12 +58,13 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
         <div>
             <Row className="upload-taxonomy-container">
                 <Col md={12}>
-                    <Form.Control
+                    <Form.File
                         type="file"
-                        name="uploadTaxonomy"
+                        accept="*/.xlxs,*/.xls"
+                        className={!file && fileErrorAlert}
+                        label={fileLabel === '' ? 'Drag and drop a file or click' : fileLabel}
                         onChange={fileHandler}
-                        className="upload-taxonomy-file"
-                        accept=".xlsx, .xls, .csv"
+                        custom
                     />
                 </Col>
             </Row>
@@ -66,7 +72,7 @@ const UploadTaxonomy = ({ show, handleClose, subsetName, subsetId }) => {
     )
 
     // condition for alertClassName
-    const alertClassName = alertFlag ? 'danger' : taxonomyUpload ? 'success' : 'danger';
+    const alertClassName = fileErrorAlert ? 'danger' : (taxonomyUpload ? 'success' : 'danger');
 
     return (
         <Overlay
