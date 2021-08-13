@@ -78,6 +78,7 @@ const TaxonomySubset = () => {
 
   const subsetTaxonomyTableData = (props) => {
     const tableRowData = (data) => data.map(({ name, id }) => ({
+      key: id,
       name,
       viewTaxonomy: <FontAwesomeIcon key={id} icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
       downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id) }} />,
