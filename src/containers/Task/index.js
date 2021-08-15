@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CloseCircleFilled, UserOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Select, { components } from 'react-select';
-import { Modal, Tooltip } from 'antd';
+import { Modal, Tooltip, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { faUserPlus, faUserTimes, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
@@ -44,7 +44,7 @@ const FieldWrapper = (props) => {
 const TaskTable = (props) => {
   console.log(props); // REQ
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
-    key: `${x.dpCodeId}${x.memberName}${x.dpCode}`,
+    key: `${x.dpCodeId}${x.memberName}${x.dpCode}${x.fiscalYear}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
@@ -172,7 +172,7 @@ const ValidationTable = (props) => {
 
   return (
     <React.Fragment>
-      <CustomTable tableData={VALIDATION_DATA} />
+      <CustomTable tableData={VALIDATION_DATA} defaultNoOfRows={5} />
       <Overlay
         className="desModal"
         show={desModal}
@@ -207,6 +207,9 @@ const Task = (props) => {
 
   // USESELECTOR TO GET reqTASK From Store
   const reqTASK = (useSelector((state) => state.task));
+  const taskSubmitFromStore = useSelector((state) => state.taskSubmit);
+
+  const [statusAlert, setStatusAlert] = useState(false);
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
@@ -227,6 +230,8 @@ const Task = (props) => {
   // TEMP VALIDATION VARIABLE
   const { isValidationCalled } = props.location.state;
 
+  const [isPercentileCalculated, setIsPercentileCalculated] = useState(false);
+
   const sideBarRef = useRef();
 
   const getReqAPIData = () => {
@@ -241,14 +246,14 @@ const Task = (props) => {
   const [dpCodeType, setDpCodeType] = useState('Standalone');
 
   // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
-  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType };
+  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
 
   const extractReqTask = (data) => {
     let returnableTask;
-    if (isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR) {
+    if (isClientRep_DR || isCompanyRep_DR) {
       [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
     }
-    if (isAnalyst_DC) {
+    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR) {
       [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : data.filter((e) => (e.taskId === taskDetails.taskId));
     }
     if (isAnalyst_CC) {
@@ -293,9 +298,22 @@ const Task = (props) => {
     }
   }, []);
 
-  useState(() => {
+  useEffect(() => {
     setReqKeyIssue('');
   }, [dpCodeType]);
+
+  useEffect(() => {
+    if (taskSubmitFromStore.task && taskSubmitFromStore.task && statusAlert) {
+      message.success(taskSubmitFromStore.task.message);
+      history.push('/pendingtasks');
+      setStatusAlert(false);
+    }
+
+    if (taskSubmitFromStore.error && statusAlert) {
+      message.error(taskSubmitFromStore.error.message);
+      setStatusAlert(false);
+    }
+  });
 
 
   const getReqDpCodesList = () => {
@@ -401,6 +419,61 @@ const Task = (props) => {
     }
   };
 
+  const onSubmitTask = () => {
+    let postableData = {
+      companyId: taskDetails.companyId,
+      year: taskDetails.fiscalYear,
+      clientTaxonomyId: taskDetails.clientTaxonomyId,
+      taskStatus: '',
+      taskId: taskDetails.taskId,
+    };
+    if (isAnalyst_DC) {
+      postableData = { ...postableData, taskStatus: 'Collection Completed' };
+    }
+    if (isAnalyst_DCR) {
+      postableData = { ...postableData, taskStatus: 'Correction Completed' };
+    }
+    if (isQA_DV) {
+      postableData = { ...postableData, taskStatus: 'Correction Pending' };
+    }
+    if (isClientRep_DR) {
+      postableData = { ...postableData, taskStatus: '' };
+    }
+    if (isCompanyRep_DR) {
+      postableData = { ...postableData, taskStatus: '' };
+    }
+
+    dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
+    setStatusAlert(true);
+  };
+
+  const onClickCalculateDerivedData = () => {
+    setIsPercentileCalculated(true);
+    message.success('Calculation Finished !');
+  };
+
+  const onClickValidate = () => {
+    history.push({
+      pathName: `/task/${props.location.state.taskId}`,
+      state: {
+        taskId: props.location.state.taskId,
+        taskDetails,
+        isValidationCalled: true,
+      },
+    });
+  };
+
+  const onClickBack = () => {
+    setIsPercentileCalculated(false);
+    history.push({
+      pathName: `/task/${props.location.state.taskId}`,
+      state: {
+        taskId: props.location.state.taskId,
+        taskDetails,
+      },
+    });
+  };
+
   const KMPMenuList = (e) => (
     <components.MenuList {...e}>
       <div>
@@ -495,7 +568,7 @@ const Task = (props) => {
             {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isValidationCalled && <TaskTable
               taskDetails={taskDetails}
               dpCodesData={reqDpCodesData}
-              isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : reqTASK.isLoading}
+              isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : reqTASK.isLoading || taskSubmitFromStore.isLoading}
               message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
               icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
             />}
@@ -511,56 +584,24 @@ const Task = (props) => {
 
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
-              { false &&
-              <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
-              { isValidationCalled && isAnalyst_DC && false &&
-              <Button
-                className="datapage-button"
-                variant="success"
-                onClick={() => {
-                  // alert('Calculation Finished !');
-                }
-                }
-              >Calculate Derived Data
-              </Button>}
-              { !isValidationCalled && isAnalyst_DC && false &&
-              <Button
-                className="datapage-button"
-                variant="info"
-                onClick={() => {
-                  history.push({
-                    pathName: `/task/${props.location.state.taskId}`,
-                    state: {
-                      taskId: props.location.state.taskId,
-                      taskDetails,
-                      isValidationCalled: true,
-                    },
-                  });
-                }}
-              >Validate
-              </Button>}
-              { isValidationCalled && isAnalyst_DC && false &&
-              <Button
-                className="datapage-button"
-                variant="danger"
-                onClick={() => {
-                  history.push({
-                    pathName: `/task/${props.location.state.taskId}`,
-                    state: {
-                      taskId: props.location.state.taskId,
-                      taskDetails,
-                    },
-                  });
-                }}
-              >Back
-              </Button>}
+              { (((isAnalyst_DC || isAnalyst_DCR) && isValidationCalled) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
+              <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
+
+              { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled &&
+              <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
+
+              { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled &&
+              <Button className="datapage-button" variant="info" onClick={onClickValidate}>Validate</Button>}
+              { (isAnalyst_DC || isAnalyst_DCR) && isValidationCalled &&
+              <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
+
             </Col>
 
-            <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
-              {/* Button */}
+            {/* Button */}
+            {/* <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               { true &&
               <Button className="datapage-button" variant="success" onClick={null}>Submit</Button>}
-            </Col>
+            </Col> */}
 
             {isAddNewBoardVisible &&
             <Modal title="Add New Board Member" className="task-modal" maskClosable={false} width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>

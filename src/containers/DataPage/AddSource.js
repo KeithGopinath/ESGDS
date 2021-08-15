@@ -48,21 +48,45 @@ const AddSource = (props) => {
     setStatusAlert(true);
   }, []);
 
+  // const companySourceTypesFromStore = useSelector((state) => state.companySourceTypes);
+
   const [getSourceTypeFromStore, postSourceTypeFromStore] = useSelector((state) => [state.sourceType, state.sourceTypeCreate]);
 
   const sourceListAPIData = (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.data ? getSourceTypeFromStore.source.data : []);
 
+  const { dpCodeDetails, taskDetails } = props.locationData.state;
+
   useEffect(() => {
     if (postSourceTypeFromStore && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
+      dispatch({
+        type: 'DPCODEDATA_GET_REQUEST',
+        payload: {
+          taskId: taskDetails.taskId,
+          datapointId: dpCodeDetails.dpCodeId,
+          year: dpCodeDetails.fiscalYear,
+          memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
+          memberName: dpCodeDetails.memberName || '',
+          memberId: dpCodeDetails.memberId || '',
+        },
+      });
       message.success(postSourceTypeFromStore.source.message);
       setStatusAlert(false);
       props.closeAddSourcePanel();
+      // dispatch({ type: 'COMPANY_SOURCE_TYPES_GET_REQUEST', companyId: taskDetails.companyId });
     }
     if (postSourceTypeFromStore && postSourceTypeFromStore.error && statusAlert) {
       message.error(postSourceTypeFromStore.error.message ? postSourceTypeFromStore.error.message : 'Something went wrong, Try again later !');
       setStatusAlert(false);
     }
   }, [postSourceTypeFromStore]);
+
+  // useEffect(() => {
+  //   if (companySourceTypesFromStore.source && companySourceTypesFromStore.source.rows && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
+  //     message.success(postSourceTypeFromStore.source.message);
+  //     setStatusAlert(false);
+  //     props.closeAddSourcePanel();
+  //   }
+  // }, [companySourceTypesFromStore]);
 
   useEffect(() => {
     if (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.status && statusAlert) {

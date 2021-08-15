@@ -21,9 +21,19 @@ export function* sourceTypePostRequest(data) {
   }
 }
 
+export function* companySourceTypesGetRequest(data) {
+  try {
+    const response = yield doGet(`${envConfig.apiEndPoints.getCompanySourceTypes}/?companyId=${data.companyId}`);
+    yield put(actionCreators.companySourceTypesGetSuccess(response));
+  } catch (error) {
+    yield put(actionCreators.companySourceTypesGetFailure(error));
+  }
+}
+
 export function* sourceTypeWatchers() {
   yield [
     takeLatest('SOURCE_TYPE_GET_REQUEST', sourceTypeGetRequest),
     takeLatest('SOURCE_TYPE_POST_REQUEST', sourceTypePostRequest),
+    takeLatest('COMPANY_SOURCE_TYPES_GET_REQUEST', companySourceTypesGetRequest),
   ];
 }

@@ -12,6 +12,21 @@ export const dpCodeDataGetFailure = (error) => ({
   error,
 });
 
+// ANALYST DC POST || UPDATE
+export const dpCodeDataUpdateRequest = () => ({
+  type: 'DPCODEDATA_UPDATE_REQUEST',
+});
+
+export const dpCodeDataUpdateSuccess = (dpCodeData) => ({
+  type: 'DPCODEDATA_UPDATE_SUCCESS',
+  dpCodeData,
+});
+
+export const dpCodeDataUpdateFailure = (error) => ({
+  type: 'DPCODEDATA_UPDATE_FAILURE',
+  error,
+});
+
 // CONTRO GET
 export const controversyDpCodeDataGetRequest = () => ({
   type: 'CONTROVERSY_DPCODEDATA_GET_REQUEST',

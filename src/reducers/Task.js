@@ -1,6 +1,6 @@
-const initialState = {};
+const initialState = { isLoading: false };
 
-export default (state = initialState, action) => {
+export const task = (state = initialState, action) => {
   switch (action.type) {
     case 'TASK_GET_REQUEST':
       return {
@@ -36,6 +36,33 @@ export default (state = initialState, action) => {
         task: action.task,
       };
     case 'CONTROVERSY_TASK_GET_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+        task: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const taskSubmit = (state = initialState, action) => {
+  switch (action.type) {
+    case 'TASK_SUBMIT_POST_REQUEST':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        task: false,
+      };
+    case 'TASK_SUBMIT_POST_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        task: action.task,
+      };
+    case 'TASK_SUBMIT_POST_FAILURE':
       return {
         ...state,
         isLoading: false,

@@ -12,6 +12,20 @@ export const taskGetFailure = (error) => ({
   error,
 });
 
+export const taskSubmitPostRequest = () => ({
+  type: 'TASK_SUBMIT_POST_REQUEST',
+});
+
+export const taskSubmitPostSuccess = (task) => ({
+  type: 'TASK_SUBMIT_POST_SUCCESS',
+  task,
+});
+
+export const taskSubmitPostFailure = (error) => ({
+  type: 'TASK_SUBMIT_POST_FAILURE',
+  error,
+});
+
 export const controversyTaskGetRequest = () => ({
   type: 'CONTROVERSY_TASK_GET_REQUEST',
 });

@@ -56,6 +56,10 @@ export default {
     getReports: 'taskAssignments/task/reports',
     getReportsTaskList: 'taskAssignments/taskListWithStatus',
     controversyTaskList: 'taskAssignments/taskListForControversy',
+    updateDpCodeData: 'standalone_datapoints/saveDatapointDetails',
+    verificationUpdateDpCodeData: 'errorDetails/saveErrorDetails',
+    getCompanySourceTypes: 'companySources',
+    taskSubmitPost: 'taskAssignments/updateCompanyStatus',
   },
   apiBaseUrl: {
     dev: 'http://65.1.140.116:9010/',

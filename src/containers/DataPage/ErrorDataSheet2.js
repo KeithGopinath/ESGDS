@@ -168,7 +168,7 @@ const ErrorDataSheetTwo = (props) => {
   const [formURL, setFormURL] = useState((defaultData.source && defaultData.source.url) || '');
   const [formPublicDate, setFormPublicDate] = useState((defaultData.source && defaultData.source.publicationDate) || '');
   const [formScreenShotFile, setFormScreenShotFile] = useState(null);
-  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
@@ -182,7 +182,7 @@ const ErrorDataSheetTwo = (props) => {
     setFormURL((defaultData.source && defaultData.source.url) || '');
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
     setFormScreenShotFile(null);
-    setFormComment((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+    setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
     setDynamicFields(defaultData.additionalDetails || dynamicThings.dynamicFields);
   }, [defaultData]);
@@ -289,6 +289,7 @@ const ErrorDataSheetTwo = (props) => {
     const dummyDataReps = {
       fiscalYear: defaultData.fiscalYear, // NEEDS AS UNIQUE KEY TO SAVE
       error: {
+        hasError: isError,
         isThere: isError,
         refData: {
           textSnippet: formTextSnippet,
@@ -311,6 +312,7 @@ const ErrorDataSheetTwo = (props) => {
     const dummyDataReps = {
       fiscalYear: defaultData.fiscalYear,
       error: {
+        hasError: isError,
         isThere: isError,
         refData: {
           textSnippet: formTextSnippet,
@@ -337,7 +339,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* DESCRIPTION Field */}
       <FieldWrapper
-        label="Description*"
+        label={<div>Description</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={formDescription}
@@ -346,7 +348,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'NUMBER' &&
         <FieldWrapper
-          label="Response*"
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
@@ -364,7 +366,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'TEXT' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -382,7 +384,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'DATE' &&
         <FieldWrapper
-          label="Response*"
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
@@ -400,7 +402,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'SELECT' &&
         <FieldWrapper
-          label="Response*"
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           visible={isErrorCommentType || isError}
           body={
@@ -417,7 +419,7 @@ const ErrorDataSheetTwo = (props) => {
 
       { formDataType === 'BOOLEAN' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible
         body={
@@ -434,7 +436,7 @@ const ErrorDataSheetTwo = (props) => {
 
       { formDataType === 'GENDER' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible
         body={
@@ -451,7 +453,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* SOURCE Field */}
       <FieldWrapper
-        label="Source*"
+        label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -474,7 +476,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label="Text Snippet*"
+        label={<div>Text Snippet<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -491,7 +493,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* PAGE NO Field */}
       <FieldWrapper
-        label="Page No*"
+        label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -507,7 +509,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* URL Field */}
       <FieldWrapper
-        label="URL*"
+        label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -524,7 +526,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
-        label="PublicationDate*"
+        label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -541,7 +543,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* UPLOAD Field */}
       <FieldWrapper
-        label="Upload Screenshot*"
+        label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={!isErrorCommentType && isError}
         body={
@@ -564,7 +566,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* ScreenShot Field */}
       <FieldWrapper
-        label="Screenshot*"
+        label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -579,7 +581,7 @@ const ErrorDataSheetTwo = (props) => {
       {dynamicFields.map((eachData) => (
         <FieldWrapper
           visible={isErrorCommentType || isError}
-          label={`${eachData.name}*`}
+          label={<div>{eachData.name}<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           body={getReqFields({
             eachData, dynamicFields, setDynamicFields, disableField,
@@ -590,7 +592,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* Comments Field */}
       <FieldWrapper
-        label="Comments*"
+        label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
         size={[6, 5, 7]}
         visible={!isErrorCommentType && isError}
         body={
