@@ -12,7 +12,7 @@ export default (state = initialState, action) => {
     case 'ONSELECTPILLAR_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         pillarTask: action.pillar,
       };
     // case 'ONSELECTPILLAR_RESET':
@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
     case 'ONSELECTPILLAR_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

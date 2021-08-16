@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
+import PageLoader from '../../components/PageLoader';
 
 const GroupView = () => {
 
@@ -36,6 +37,7 @@ const GroupView = () => {
   dispatch({type: "GROUPBYID_RESET"});
  },[]);
  const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
+ const isGroupCreatedLoading = useSelector((getgrouplist) => getgrouplist.getgrouplist.isLoading);
  const groupList = isGroupCreated && isGroupCreated.rows;
   const groupCount = groupList && groupList.length;
 
@@ -112,9 +114,11 @@ const GroupView = () => {
               </div>
             </div>
             <div className="view-min-height">
+              {(isGroupCreatedLoading)? <PageLoader />:
               <Row >
                 {batchlist}
               </Row>
+              }
             </div>
             <Row>
               <Col lg={12} sm={12}>

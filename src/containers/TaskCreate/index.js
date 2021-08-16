@@ -4,14 +4,21 @@ import { Col, Row, Container, Card, Button } from 'react-bootstrap';
 import 'antd/dist/antd.css';
 import { ExceptionOutlined } from '@ant-design/icons';
 import { DatePicker, Radio, message, Tag, Divider, Tabs } from 'antd';
+import { faSearch, faBackward } from '@fortawesome/free-solid-svg-icons';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useDispatch, useSelector } from 'react-redux';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Pagination from '@material-ui/lab/Pagination';
 import CustomTable from '../../components/CustomTable';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import TextField from '@material-ui/core/TextField';
 import Select from 'react-select';
+import PageLoader from '../../components/PageLoader';
 
 const TaskCreate = ({ flag }) => {
   const [taskFlow, settaskFlow] = useState(flag ? 2 : 0);
@@ -35,18 +42,23 @@ const TaskCreate = ({ flag }) => {
 
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
-  const optionsForPagination = {
-    sizePerPage: 10,
-  };
+
 
   const apidata = useSelector((tasklist) => tasklist.taskDetail.taskdata);
+  const apidataLoading = useSelector((tasklist) => tasklist.taskDetail.isLoading);
   const onpillarclick = useSelector((pillar) => pillar.taskpillar.pillarTask);
+  const onpillarclickLoading = useSelector((pillar) => pillar.taskpillar.isLoading);
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
   const controversyTaskData = useSelector((state) => state.controversyTaskData.controversyTaskData);
   const createControversyTask = useSelector((state) => state.createControversyTask.createControversyTask);
   const createControversyTaskError = useSelector((state) => state.createControversyTask.error);
   const aftertaskcreated = useSelector((taskresponse) => taskresponse.createTask.taskpost);
-
+  const aftertaskcreatedLoading = useSelector((taskresponse) => taskresponse.createTask.isLoading);
+  const optionsForPagination = {
+    sizePerPage: 10,
+    noDataText: (onpillarclickLoading)?<PageLoader load={"comp-loader"} />  :"There is no data to display",
+    // noDataText: 'Empty Table'
+  };
   useEffect(() => {
     if (flag) {
       dispatch({ type: 'ClientTaxonomy_REQUEST' });
@@ -152,7 +164,7 @@ const TaskCreate = ({ flag }) => {
     mode: 'checkbox',
     clickToSelect: true,
     bgColor: '#3f51b514',
-    selected: rowDetail.map((e) => e.id),
+    selected: rowDetail && rowDetail.map((e) => e.id),
     onSelect: onSelectRow,
     onSelectAll: onSelectAllRow,
   };
@@ -180,8 +192,7 @@ const TaskCreate = ({ flag }) => {
 
   const onselectGroup = (matchgrp) => {
     groupData && groupData.map((args) => {
-      if (args.groupID === matchgrp) {
-
+      if (args.groupID === matchgrp.groupID) {
         const currentGrpinfo = {
           grpAdmin: args.groupAdmin, grpName: args.groupName, grpId: args.groupID, batches: args.assignedBatches,
         };
@@ -195,7 +206,7 @@ const TaskCreate = ({ flag }) => {
   const onselectBatch = (batchid) => {
     const batchList = companyInfo.batches;
     batchList.map((batchdetails) => {
-      if (batchdetails.batchID === batchid) {
+      if (batchdetails.batchID === batchid.batchID) {
         const modifiedYear = batchdetails.batchYear.map((args) => {
 
           const yearArray = { value: args, label: args };
@@ -235,13 +246,13 @@ const TaskCreate = ({ flag }) => {
     dispatch({ type: 'ONSELECTPILLAR_REQUEST' , payload: getData });
   };
 
-  const grpDetail = groupData && groupData.map((element) => (
-    <Col lg={3} md={6} sm={12} key={element.groupID}>
-      <Card className="card-view groupbox" onClick={() => onselectGroup(element.groupID)} >
-        <ListItemText primary={element.groupName} />
-      </Card>
-    </Col>
-  ));
+  // const grpDetail = groupData && groupData.map((element) => (
+  //   <Col lg={3} md={6} sm={12} key={element.groupID}>
+  //     <Card className="card-view groupbox" onClick={() => onselectGroup(element.groupID)} >
+  //       <ListItemText primary={element.groupName} />
+  //     </Card>
+  //   </Col>
+  // ));
 
   const analystEndData = (e) => {
     if (e !== null) {
@@ -290,28 +301,38 @@ const TaskCreate = ({ flag }) => {
   };
 
   const onCreateTask = () => {
-    if (pillar && selectedAnalyst && selectedQa && !flag) {
-      if ((rowDetail.length && pillar.value.length && selectedAnalyst.name.length && selectedQa.name.length && analystSla.length && qaSla.length) > 0) {
-        const taskPayload = {
-          groupId: companyInfo.grpId,
-          batchId: batchInfo.Batchid,
-          year: batchInfo.Batchyear,
-          pillar: pillar,
-          company: rowDetail,
-          analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
-          qa: { value: selectedQa.id, label: selectedQa.name },
-          analystSla: analystSla,
-          qaSla: qaSla
-        };
-        dispatch({ type: 'CREATE_TASK_REQUEST', payload: taskPayload });
-        setSubmitFlag(true);
-      }
-      else {
-        message.error("fill all the required fields");
-      }
+    if(!flag){
+    if(!pillar){
+      message.error("Choose Pillar");
+    } else if(rowDetail.length === 0){
+      message.error("Choose Company");
+    } else if(!selectedAnalyst || !analystSla.length){
+      message.error("Choose Analyst Details");
+    } else if(!selectedQa || !qaSla.length){
+      message.error("Choose QA Details");
+    } else {
+      const taskPayload = {
+        groupId: companyInfo.grpId,
+        batchId: batchInfo.Batchid,
+        year: batchInfo.Batchyear,
+        pillar: pillar,
+        company: rowDetail,
+        analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
+        qa: { value: selectedQa.id, label: selectedQa.name },
+        analystSla: analystSla,
+        qaSla: qaSla
+      };
+      dispatch({ type: 'CREATE_TASK_REQUEST', payload: taskPayload });
+      setSubmitFlag(true);
     }
-    else if (selectedAnalyst && taxonomy && flag) {
-      if ((rowDetail.length && selectedAnalyst.name.length) > 0) {
+  } else if (flag){
+    if(!taxonomy){
+      message.error("Choose Taxonomy");
+    } else if(rowDetail.length === 0){
+      message.error("Choose Company");
+    } else if (!selectedAnalyst){
+      message.error("Choose Analyst Details");
+    } else {
         const controversyTaskPayload = {
           company: rowDetail,
           analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
@@ -322,31 +343,25 @@ const TaskCreate = ({ flag }) => {
         setRowDetails([]);
         setErrorAlert('');
       }
-      else {
-        message.error("fill all the required fields");
-        setErrorAlert('border-danger dropdown-alert');
-      }
-    }
-    else {
-      message.error("fill all the required fields");
-      setErrorAlert('border-danger dropdown-alert');
     }
   };
 
   // rowSelection object indicates the need for row selection
   const analystTableData = (props) => {
     const tableRowData = (data) => flag ? data.map((obj) => ({
+      key:obj.id,
       select: <div><Radio value={obj.id} onChange={() => onhandleAnalyst(obj)} checked={(obj.id === radioEle) ? true : false}></Radio></div>,
       name: obj.name,
       role: { value: (obj.primaryRole) ? "Primary" : "Secondary", content: <Tag color={(obj.primaryRole) ? "blue" : "cyan"}>{(obj.primaryRole) ? "Primary" : "Secondary"}</Tag> },
-      assignedTask: obj.activeTaskCount,
+      assignedTask: `${obj.activeTaskCount}`,
     })) :
       data.map((obj) => ({
+        key:obj.id,
         select: <div><Radio value={obj.id} onChange={() => onhandleAnalyst(obj)} checked={(obj.id === radioEle) ? true : false}></Radio></div>,
         name: obj.name,
         pillar: { value: (obj.primaryPillar) ? "Primary" : "Secondary", content: <Tag color={(obj.primaryPillar) ? "blue" : "cyan"}>{(obj.primaryPillar) ? "Primary" : "Secondary"}</Tag> },
         role: { value: (obj.primaryRole) ? "Primary" : "Secondary", content: <Tag color={(obj.primaryRole) ? "blue" : "cyan"}>{(obj.primaryRole) ? "Primary" : "Secondary"}</Tag> },
-        assignedTask: obj.activeTaskCount,
+        assignedTask: `${obj.activeTaskCount}`,
       }));
 
     return {
@@ -416,11 +431,12 @@ const TaskCreate = ({ flag }) => {
 
   const qaTableData = (props) => {
     const tableRowData = (data) => data.filter((i) => selectedAnalyst.id !== i.id).map((e) => ({
+      key:e.id,
       select: <div><Radio value={e.id} onChange={() => onhandleQa(e)} checked={(e.id === radioEleqa) ? true : false} disabled={statusRole}></Radio></div>,
       name: e.name,
-      pillar: { value: (e.primaryPillar) ? "Primary" : "secondary", content: <Tag color={(e.primaryPillar) ? "blue" : "cyan"}>{(e.primaryPillar) ? "Primary" : "secondary"}</Tag> },
-      role: { value: (e.primaryRole) ? "Primary" : "secondary", content: <Tag color={(e.primaryRole) ? "blue" : "cyan"}>{(e.primaryRole) ? "Primary" : "secondary"}</Tag> },
-      assignedTask: e.activeTaskCount,
+      pillar: { value: (e.primaryPillar) ? "Primary" : "Secondary", content: <Tag color={(e.primaryPillar) ? "blue" : "cyan"}>{(e.primaryPillar) ? "Primary" : "Secondary"}</Tag> },
+      role: { value: (e.primaryRole) ? "Primary" : "Secondary", content: <Tag color={(e.primaryRole) ? "blue" : "cyan"}>{(e.primaryRole) ? "Primary" : "Secondary"}</Tag> },
+      assignedTask: `${e.activeTaskCount}`,
     }));
 
     return {
@@ -481,14 +497,124 @@ const TaskCreate = ({ flag }) => {
     <Radio key={e.value} value={e.value}>{e.label}</Radio>
   ));
 
+
+ // *** groups with search starts here ***
+ groupData
+ const [searchQuery, setSearchQuery] = useState('');
+ const [min, setmin] = useState(0);
+ const [max, setmax] = useState(20);
+ 
+ const searchtheme = createMuiTheme({
+   palette: {
+     primary: {
+       light: '#66cafb',
+       main: '#2199c8',
+       dark: '#006b97',
+     },
+   },
+ });
+
+ const groupCount = groupData && groupData.length;
+
+ const cardPerPage = 20;
+ const onhandlePage = (e, page) => {
+   const minValue = (page - 1) * cardPerPage;
+   const maxValue = page * cardPerPage;
+   setmin(minValue);
+   setmax(maxValue);
+ };
+ const onSearchGroup = (data) => {
+   const searchData = data.target.value;
+   setSearchQuery(searchData);
+
+ };
+ const searchfilter = (search, card) => {
+   const filteredData = card.filter((e) => {
+     if ((e.groupName.toLowerCase()).includes(search.toLowerCase())) {
+       return true;
+     }
+     return false;
+   });
+   return filteredData;
+ };
+ const calculateCount = groupData && (searchQuery ? searchfilter(searchQuery, groupData).length : groupCount) / cardPerPage;
+ const totalCount = Math.ceil(calculateCount);
+ const grouplist = groupData && (searchQuery ? searchfilter(searchQuery, groupData) : groupData).slice(min, max).map(({ groupName, groupID }) => (
+   <Col lg={3} md={6} key={groupID}>
+     <Card className="batch-card batchbox" onClick={() => onselectGroup({groupID})}>
+       <ListItemText primary={groupName} />
+     </Card>
+   </Col>
+ ));
+ // *** groups with search ends here ***
+
+  // *** batches with search starts here ***
+  groupData
+  const [searchQuerybatch, setSearchQuerybatch] = useState('');
+  const [minbatch, setminbatch] = useState(0);
+  const [maxbatch, setmaxbatch] = useState(20);
+  
+  const searchthemebatch = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#66cafb',
+        main: '#2199c8',
+        dark: '#006b97',
+      },
+    },
+  });
+  const onhandlePagebatch = (e, page) => {
+    const minValue = (page - 1) * cardPerPageBatch;
+    const maxValue = page * cardPerPageBatch;
+    setminbatch(minValue);
+    setmaxbatch(maxValue);
+  };
+  const onSearchBatch = (data) => {
+    const searchData = data.target.value;
+    setSearchQuerybatch(searchData);
+    
+  };
+  const searchfilterbatch = (search, card) => {
+    const filteredData = card.filter((e) => {
+      if ((e.batchName.toLowerCase()).includes(search.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+    return filteredData;
+  };
+  const cardPerPageBatch = 20;
+  const batchCardvalues = companyInfo && companyInfo.batches;
+  const batchCount = batchCardvalues && batchCardvalues.length;
+  const calculateCountbatch = batchCardvalues && (searchQuerybatch ? searchfilterbatch(searchQuerybatch, batchCardvalues).length : batchCount) / cardPerPageBatch;
+  const totalCountbatch = Math.ceil(calculateCountbatch);
+  
+  
+
+  const batchCardList = batchCardvalues && (searchQuerybatch ? searchfilterbatch(searchQuerybatch, batchCardvalues) : batchCardvalues).slice(minbatch, maxbatch).map(({ batchName, batchID  }) => (
+    <Col lg={3} md={6} key={batchID}>
+      <Card className="batch-card batchbox" onClick={() => onselectBatch({batchID})}>
+        <ListItemText primary={batchName} />
+      </Card>
+    </Col>
+  ));
+ 
+  
+ 
+
+  // *** batches with search ends here ***
+
+
+
   const batchInfoTab = () => (
     <Container>
       <Row className="task-row">
         {!flag &&
           <Col lg={12} sm={12}>
             <div className="batch-view-header">
-              <div className="mar-right">
-                <Tag className="grp-batch-name">{batchInfo.Batchname}</Tag>
+              <div className="align-chip">
+              <div className="batch-year-head">{batchInfo.Batchname}</div>
+                {/* <Tag className="content-info"></Tag> */}
               </div>
               <div className="align-chip">
                 <div className="batch-year-head">Year :</div>
@@ -502,7 +628,7 @@ const TaskCreate = ({ flag }) => {
           </Col>
         }
       </Row>
-      {!flag && <Divider style={{ borderTop: '3px solid rgba(0, 0, 0, 0.06)' }}></Divider>}
+      {/* {!flag && <Divider className="task-divider"></Divider>} */}
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           {flag ?
@@ -537,7 +663,7 @@ const TaskCreate = ({ flag }) => {
                   <div className="companylist-task">
                     <BootstrapTable data={flag ? (taxonomy && controversyTaskData && controversyTaskData.companies || []) : (ispillarData && ispillarData.companies || [])} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
                       <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-                      <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
+                      <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort >Companies</TableHeaderColumn>
                     </BootstrapTable>
                   </div>
                   : <div className="not-batch-assign-screen">
@@ -567,7 +693,7 @@ const TaskCreate = ({ flag }) => {
                     }
                     <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
                     <div className="analystQa-table">
-                      <CustomTable tableData={tableDataanalyst} />
+                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading} defaultPagination={5}/>
                     </div>
                   </div>
                   : <div className="not-batch-assign-screen">
@@ -597,7 +723,7 @@ const TaskCreate = ({ flag }) => {
                       </div>
                       <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
                       <div className="analystQa-table">
-                        <CustomTable tableData={tableDataqa} />
+                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading} defaultPagination={5}/>
                       </div>
                     </div>
                     : <div className="not-batch-assign-screen">
@@ -612,7 +738,7 @@ const TaskCreate = ({ flag }) => {
           </div>
         </Col>
       </Row>
-      <Divider style={{ borderTop: '3px solid rgba(0, 0, 0, 0.06)' }}></Divider>
+      <Divider className="task-divider"></Divider>
       <Row style={{ padding: '5%' }} className="task-row">
         <Col>
           <div className="task-foo">
@@ -626,35 +752,108 @@ const TaskCreate = ({ flag }) => {
   );
 
   const groupSelectTab = () => (
-    <Row className="grp-mar-top">
-      {grpDetail}
-    </Row>
+    // <Row className="grp-mar-top">
+    //   {grpDetail}
+    // </Row>
+    <Container className="wrapper">
+         <div className="head-tab-task">
+              <div>
+                <ThemeProvider theme={searchtheme}>
+                  <TextField
+                    placeholder="search"
+                    style={{ padding: '9px' }}
+                    autoComplete="off"
+                    onChange={onSearchGroup}
+                    value={searchQuery}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FontAwesomeIcon icon={faSearch} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </ThemeProvider>
+              </div>
+            </div>
+            <div className="view-min-height">
+              <Row >
+                {grouplist}
+              </Row>
+            </div>
+            <Row>
+              <Col lg={12} sm={12}>
+                <div className="batch-footer">
+                  <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+   
   );
-
   const selectBatchTab = () =>
   (
     <Container>
       <Row>
         <Col lg={12} sm={12}>
           <div className="view-header">
-            <div className="mar-right">
+            {/* <div className="mar-right">
               <Tag className="grp-batch-name">{companyInfo.grpName}</Tag>
-            </div>
+            </div> */}
+            <div className="align-chip">
+              <div className="batch-year-head">{companyInfo.grpName}</div>
+              </div>
             <div>
             </div>
           </div>
         </Col>
       </Row>
-      <Divider style={{ borderTop: '3px solid rgba(0, 0, 0, 0.06)' }}></Divider>
+      {/* <Divider className="task-divider"></Divider> */}
       <Row>
-        {(companyInfo && companyInfo.batches.length > 0) ? companyInfo.batches.map(({ batchName, batchID }) =>
-        (
-          <Col lg={3} md={6} sm={12} key={batchID}>
-            <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
-              <ListItemText primary={batchName} />
-            </Card>
+        {(companyInfo && companyInfo.batches.length > 0) ? 
+        
+          // <Col lg={3} md={6} sm={12} key={batchID}>
+          //   <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
+          //     <ListItemText primary={batchName} />
+          //   </Card>
+          // </Col>
+          <Col>
+          <Container className="wrapper">
+         <div className="head-tab-task">
+              <div>
+                <ThemeProvider theme={searchthemebatch}>
+                  <TextField
+                    placeholder="search"
+                    style={{ padding: '9px' }}
+                    autoComplete="off"
+                    onChange={onSearchBatch}
+                    value={searchQuerybatch}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FontAwesomeIcon icon={faSearch} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </ThemeProvider>
+              </div>
+            </div>
+            <div className="view-min-height">
+              <Row >
+                {batchCardList}
+              </Row>
+            </div>
+            <Row>
+              <Col lg={12} sm={12}>
+                <div className="batch-footer">
+                  <Pagination count={totalCountbatch} defaultPage={1} showFirstButton showLastButton onChange={onhandlePagebatch} />
+                </div>
+              </Col>
+            </Row>
+          </Container>
           </Col>
-        )) :
+        :
           <Col>
             <div className="not-batch-assign-screen">
               <div className="not-batch-assign-screen-inner">
@@ -678,8 +877,11 @@ const TaskCreate = ({ flag }) => {
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
+              {taskFlow > 0 && !flag && <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onhandleBack} />}
                 <Card className="task-page-card">
-                  <div className="card-head">
+                {(aftertaskcreatedLoading || apidataLoading )?<PageLoader />:
+                <React.Fragment>
+                  {/* <div className="card-head">
                     {taskFlow > 0 &&
                       <div>
                         {!flag &&
@@ -695,10 +897,12 @@ const TaskCreate = ({ flag }) => {
                     }
                     <div></div>
                     <div></div>
-                  </div>
-                  {taskFlow === 0 && groupSelectTab()}
-                  {taskFlow === 1 && selectBatchTab()}
-                  {taskFlow === 2 && batchInfoTab()}
+                  </div> */}
+                    {taskFlow === 0 &&  groupSelectTab()}
+                    {taskFlow === 1 && selectBatchTab()}
+                    {taskFlow === 2 && batchInfoTab()}
+                    </React.Fragment>
+                  }
                 </Card>
               </Col>
             </Row>

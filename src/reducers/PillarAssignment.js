@@ -12,20 +12,20 @@ export default (state = initialState, action) => {
     case 'PILLARASSIGN_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         pillarAssign: action.assignpillar,
       };
     case 'PILLARASSIGN_RESET':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: false,
         pillarAssign: false,
       };
     case 'PILLARASSIGN_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

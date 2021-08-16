@@ -10,9 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
+    const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails.isLoading);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
-    const [alert, setAlert] = useState(0);
+    const [alert, setAlert] = useState('');
+    const [alertStatus, setalertStatus] = useState(false);
     const dispatch = useDispatch();
   const handleClose = () => {
     setShow(false);
@@ -20,9 +22,12 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     setqaDetail('');
     setqasla(null);
     setanalystsla(null);
-    setAlert(0);
+    setAlert('');
+    setalertStatus(false);
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
+  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate.isLoading);
+  console.log(isDataEdited, 'isDataEdited');
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});
@@ -32,6 +37,7 @@ if(isDataEdited){
 }
   },[isDataEdited]);
   const isData = useSelector((tasklist) => tasklist.taskList.data);
+  const isDataLoading = useSelector((tasklist) => tasklist.taskList.isLoading);
   const isList = isData && isData.data.rows;
   useEffect(()=>{
   if(isList){
@@ -68,10 +74,11 @@ if(isDataEdited){
      setanalystsla(date)
       if(qasla){
       if(moment(date).isAfter(qasla, 'date')){
-        setAlert(3);
-        setTimeout(() => {
-          setAlert(0);
-        }, 4000);
+        setAlert('Analyst SLA Exceeds Qa SLA');
+        // setTimeout(() => {
+        //   setAlert(0);
+        // }, 4000);
+        setalertStatus(false);
         setqasla(null);
       }
      }
@@ -108,12 +115,14 @@ if(isDataEdited){
 
       }
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
-      setAlert(1);
-      setTimeout(() => {
-        setAlert(0);
-      }, 2000);
+      setalertStatus(true);
+      setAlert('Task Updated Successfully !!');
+      // setTimeout(() => {
+      //   setAlert(0);
+      // }, 2000);
     } else {
-      setAlert(2);
+      setAlert('Fill all the required fields !');
+      setalertStatus(false);
     }
   }
   const analystdisabledDate = (current) => {
@@ -141,7 +150,7 @@ if(isDataEdited){
         </Col>
         <Col lg={6}>
             <div className="edittask-contentBox">
-              <div className="edittask-content" >Sla date <span className="mandatory-color">*</span></div>
+              <div className="edittask-content" >SLA date <span className="mandatory-color">*</span></div>
                 <div>
                     <DatePicker
                         className="date-picker"
@@ -173,7 +182,7 @@ if(isDataEdited){
         </Col>
         <Col lg={6}>
           <div className="edittask-contentBox">
-              <div className="edittask-content" >Sla date <span className="mandatory-color">*</span></div>
+              <div className="edittask-content" >SLA date <span className="mandatory-color">*</span></div>
                 <div>
                     <DatePicker
                         className="date-picker"
@@ -190,16 +199,11 @@ if(isDataEdited){
     </React.Fragment>
   );
   const editFooter = () => (
-    <div style={{width: '100%' }}>
+    <div className="foo-width">
     <div className=" batch-status-minheight">
-    {alert === 1 &&
-    <div className="alert alert-success" role="alert" >Task Edited Successfully !!</div>
-    }
-    {alert === 3 &&
-    <div className="alert alert-warning" role="alert" >Analyst Sla Exceeds Qa Sla </div>
-    }
-    {alert === 2 &&
-      <div className="fill-alert" >Fill all the required fields !</div>
+
+{ alert &&
+      <div className={(alertStatus)? "task-success-alert" : "task-fill-alert"} >{alert}</div>
     }
   </div>
     <div className="edittask-submit-btn">
@@ -217,6 +221,7 @@ if(isDataEdited){
       keyboard={false}
       animation
       centered
+      isLoading={isDataEditedLoading  || isEditDataLoading}
       size="lg"
       title={rowValue.taskNumber}
       body={editBody()}

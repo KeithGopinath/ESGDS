@@ -11,6 +11,7 @@ import EditTask from './TaskEdit';
 import XLSX from "xlsx";
 import { history } from './../../routes';
 import moment from 'moment';
+import PageLoader from '../../components/PageLoader';
 
 const TaskList = (props) => {
   const [show, setShow] = useState(false);
