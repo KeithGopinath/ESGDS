@@ -5,7 +5,6 @@ import { DatePicker, Button as AntButton, Image, Upload, message, Input } from '
 import Select from 'react-select';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import dynamicThings from '../../constants/DynamicConstants';
 
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
@@ -184,7 +183,7 @@ const ErrorDataSheetTwo = (props) => {
     setFormScreenShotFile(null);
     setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
-    setDynamicFields(defaultData.additionalDetails || dynamicThings.dynamicFields);
+    setDynamicFields(defaultData.additionalDetails || []);
   }, [defaultData]);
 
   const sourceList = props.reqSourceData;
