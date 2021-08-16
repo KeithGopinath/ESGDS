@@ -12,20 +12,20 @@ export default (state = initialState, action) => {
     case 'GROUP_CREATE_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         grouppost: action.creategroup,
       };
     case 'GROUP_RESET':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: false,
         grouppost: false,
       };
     case 'GROUP_CREATE_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

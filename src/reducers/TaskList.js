@@ -11,13 +11,13 @@ export default (state = initialState, action) => {
     case 'GET_TASKLIST_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         data: action.tasklist,
       };
     case 'GET_TASKLIST_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

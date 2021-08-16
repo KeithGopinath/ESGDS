@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'COMPANY_LIST_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         companydata: action.companylist,
       };
     case 'COMPANY_LIST_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

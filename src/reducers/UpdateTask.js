@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'UPDATETASK_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         taskUpdate: action.taskupdate,
       };
     case 'UPDATETASK_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

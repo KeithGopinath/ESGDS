@@ -172,6 +172,14 @@
     font-size:16px;
     color:#dc3545;
 }
+.batch-fill-alert{
+    font-size:16px;
+    color:#dc3545;
+}
+.batch-success-alert{
+    font-size:16px;
+    color:#30a561;
+}
 .imp-btn-company {
     .label-imp {
         margin: 0px !important;
@@ -229,4 +237,19 @@ float: right !important;
 .mandatory-color{
     color: red !important;
 }
-
+.pad-right{
+    padding-right: 0px;
+}
+.pad-left{
+    padding-left: 0px;
+}
+.comp-loader{
+    //position: fixed;
+    // top: 44%;
+    // left: 50%;  
+    display: flex;
+    //height: 90vh;
+     height: inherit;
+    justify-content: center;
+    align-items: center;
+}

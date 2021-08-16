@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 /* eslint-disable prefer-const */
@@ -11,8 +12,10 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 // import * as XLSX from 'xlsx';
 import Select from 'react-select';
+import moment from 'moment';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Overlay from '../../components/Overlay';
+import PageLoader from '../../components/PageLoader';
 
 
 // eslint-disable-next-line object-curly-newline
@@ -20,21 +23,26 @@ const BatchCreation = ({ show, setShow }) => {
   const [batch, setBatch] = useState('');
   const [year, setYear] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
-  const [alert, setAlert] = useState(0);
+  const [alert, setAlert] = useState('');
   const [subsetTax, setsubsetTax] = useState('');
+  const [alertStatus, setalertStatus] = useState(false);
   const handleClose = () => {
     setBatch('');
     setYear('');
     setsubsetTax('');
     setRowDetails([]);
-    setAlert(0);
+    setAlert('');
     setValidBorder(false);
     setShow(false);
+    setalertStatus(false);
+    dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   };
   const dispatch = useDispatch();
   const [validBorder, setValidBorder] = useState(false);
   const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
+  const taxonomyLoading = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.isLoading);
   const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany.taxonomycompany);
+  const companyTaxLoading = useSelector((taxcompany) => taxcompany.taxonomyCompany.isLoading);
   const fullList = companyTaxData && companyTaxData.rows;
 
   const rowArray = fullList && fullList.map((args) => ({
@@ -47,14 +55,16 @@ const BatchCreation = ({ show, setShow }) => {
 
   const optionsForPagination = {
     sizePerPage: 10,
+    // eslint-disable-next-line react/jsx-curly-brace-presence
+    noDataText: (companyTaxLoading) ? <PageLoader load={'comp-loader'} /> : 'There is no data to display',
   };
   const isbatchCreated = useSelector((createbatch) => createbatch.createBatch.batchpost);
+  const isbatchCreatedLoading = useSelector((createbatch) => createbatch.createBatch.isLoading);
   useEffect(() => {
     if (isbatchCreated) {
-      setAlert(1);
-      setTimeout(() => {
-        setAlert(0);
-      }, 3000);
+      // setTimeout(() => {
+      //   setAlert(0);
+      // }, 3000);
       setBatch('');
       setYear('');
       setsubsetTax('');
@@ -117,22 +127,26 @@ const BatchCreation = ({ show, setShow }) => {
   };
 
 
+  const currentYear = moment().year();
   const yearOptions = [
-    { value: '2016 - 2017', label: '2016 - 2017' },
-    { value: '2017 - 2018', label: '2017 - 2018' },
-    { value: '2018 - 2019', label: '2018 - 2019' },
-    { value: '2019 - 2020', label: '2019 - 2020' },
+    { value: `${currentYear - 1}-${currentYear}`, label: `${currentYear - 1}-${currentYear}` },
+    { value: `${currentYear - 2}-${currentYear - 1}`, label: `${currentYear - 2}-${currentYear - 1}` },
+    { value: `${currentYear - 3}-${currentYear - 2}`, label: `${currentYear - 3}-${currentYear - 2}` },
+    { value: `${currentYear - 4}-${currentYear - 3}`, label: `${currentYear - 4}-${currentYear - 3}` },
+    { value: `${currentYear - 5}-${currentYear - 4}`, label: `${currentYear - 5}-${currentYear - 4}` },
   ];
   const onHandleYear = (selectedyear) => {
     setYear(selectedyear);
   };
   const onHandleTax = (selectedtax) => {
     setsubsetTax(selectedtax);
+    setalertStatus(false);
+    setAlert('');
     dispatch({ type: 'TAXANOMYCOMPANY_REQUEST', payload: selectedtax.value });
   };
-  const onHandleInput = (batchname) => {
-    if (batchname.target.value.match('^([a-zA-Z]{1,}[ ]{0,})+$')) {
-      setBatch(batchname.target.value);
+  const onHandleInput = (e) => {
+    if (/^(?![\s-])[\A-Za-z0-9\s-]*$/.test(e.target.value)) {
+      setBatch(e.target.value);
     }
   };
 
@@ -147,16 +161,19 @@ const BatchCreation = ({ show, setShow }) => {
       const data = {
         taxonomy: subsetTax, batchName: batch, years: year, companies: rowDetail,
       };
+      setalertStatus(true);
       dispatch({ type: 'BATCH_CREATE_REQUEST', payload: data });
+      setAlert('Batch created successfully!');
     } else {
-      setAlert(2);
+      setAlert('Fill all the required fields');
+      setalertStatus(false);
     }
     // funtion to add batches and show message
   };
   const BatchBody = () => (
     <div className="modal-batch-body">
       <Row>
-        <Col lg={6} sm={12} style={{ paddingRight: '0px' }}>
+        <Col lg={6} sm={12} className="pad-right">
           <div className="batch-year">Select Taxonomy <span className="mandatory-color">*</span></div>
           <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert' }`}>
             <Select
@@ -179,13 +196,16 @@ const BatchCreation = ({ show, setShow }) => {
             />
           </div>
         </Col>
-        <Col lg={6} sm={12} style={{ paddingLeft: '0px' }}>
+        <Col lg={6} sm={12} className="pad-left">
           <div className="batch-create-companies">
+
             <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
               <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
               <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
+
             </BootstrapTable>
           </div>
+
         </Col>
       </Row>
     </div>
@@ -195,11 +215,14 @@ const BatchCreation = ({ show, setShow }) => {
   const BatchFooter = () => (
     <div className="foo-batch">
       <div className=" batch-status-minheight">
-        {alert === 1 &&
+        {/* {alert === 1 &&
         <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
         }
         {alert === 2 &&
           <div className="fill-alert" >Fill all the required fields !</div>
+        } */}
+        {alert &&
+          <div className={(alertStatus) ? 'batch-success-alert' : 'batch-fill-alert'} >{alert}</div>
         }
       </div>
       <div className="batch-submit-btn">
@@ -244,6 +267,7 @@ const BatchCreation = ({ show, setShow }) => {
       title="Batch Creation"
       body={BatchBody()}
       onSubmitPrimary={onCreatebBatch}
+      isLoading={taxonomyLoading || isbatchCreatedLoading}
       footer={BatchFooter()}
     />
   );
