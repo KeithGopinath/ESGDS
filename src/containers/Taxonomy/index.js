@@ -189,7 +189,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
         ...updated.slice(indexUpdated + 1),
       ];
       setTaxonomyData(tempOne);
-      temp.push({ name: item.name, id: item.id })
+      temp.push({ name: item.name, fieldName: item.fieldName, applicableFor: item.applicableFor, inputType: item.inputType, inputValues: item.inputValues, toDisplay: item.toDisplay })
       setSubsetData(temp)
     }
     else {
@@ -210,7 +210,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     const temp = [...subsetData];
     taxonomyData.map((data) => {
       data.isRequired &&
-        temp.push({ name: data.name, id: data.id })
+        temp.push({ name: data.name, fieldName: data.fieldName, applicableFor: data.applicableFor, inputType: data.inputType, inputValues: data.inputValues, toDisplay: data.toDisplay })
     })
     setSubsetData(temp)
     setShowSubset(true);
