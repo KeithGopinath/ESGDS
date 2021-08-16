@@ -12,6 +12,28 @@ export function* dpCodeDataGetRequest(data) {
   }
 }
 
+export function* dpCodeDataUpdateRequest(data) {
+  try {
+    let endPoint = '';
+    switch (data.taskType) {
+      case 'Data Collection':
+        endPoint = `${envConfig.apiEndPoints.updateDpCodeData}`;
+        break;
+      case 'Data Correction':
+      case 'Data Verification':
+      case 'Data Review':
+        endPoint = `${envConfig.apiEndPoints.verificationUpdateDpCodeData}`;
+        break;
+      default:
+        break;
+    }
+    const response = yield doPost(`${endPoint}`, data.payload);
+    yield put(actionCreators.dpCodeDataUpdateSuccess(response));
+  } catch (error) {
+    yield put(actionCreators.dpCodeDataUpdateFailure(error));
+  }
+}
+
 export function* controversyDpCodeDataGetRequest(data) {
   try {
     const response = yield doGet(`${envConfig.apiEndPoints.getControversyDpCodeData}/${data.companyId}/${data.dpCodeId}`);
@@ -42,6 +64,7 @@ export function* controversyDpCodeDataUpdateRequest(data) {
 export function* getDpCodeDataWatchers() {
   yield [
     takeLatest('DPCODEDATA_GET_REQUEST', dpCodeDataGetRequest),
+    takeLatest('DPCODEDATA_UPDATE_REQUEST', dpCodeDataUpdateRequest),
     takeLatest('CONTROVERSY_DPCODEDATA_GET_REQUEST', controversyDpCodeDataGetRequest),
     takeLatest('CONTROVERSY_DPCODEDATA_POST_REQUEST', controversyDpCodeDataPostRequest),
     takeLatest('CONTROVERSY_DPCODEDATA_UPDATE_REQUEST', controversyDpCodeDataUpdateRequest),

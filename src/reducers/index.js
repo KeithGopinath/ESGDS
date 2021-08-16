@@ -22,7 +22,7 @@ import uploadTaxonomy from './UploadTaxonomy';
 import getRoleAssignment from './RoleAssignment';
 import pendingTasks from './PendingTasks';
 import { addNewMember, activeMembers, terminateMembers } from './MatrixMember';
-import task from './Task';
+import { task, taskSubmit } from './Task';
 import taskDetail from './TaskDetails';
 import roleChange from './RoleChange';
 import { dpCodeData, dpCodeDataCreate, dpCodeDataEdit } from './DpCodeData';
@@ -36,7 +36,7 @@ import taskpillar from './OnSelectPillar';
 import taxonomyCompany from './TaxonomyCompanies';
 import createTask from './CreateTasks';
 import uploadCompanies from './UploadCompanies';
-import { sourceType, sourceTypeCreate } from './SourceType';
+import { sourceType, sourceTypeCreate, companySourceTypes } from './SourceType';
 import taskEditDetails from './TaskEditDetails';
 import taskUpdate from './UpdateTask';
 import controversyTaskData from './GetControversyTaskData';
@@ -104,6 +104,8 @@ const combinedReducer = combineReducers({
   pillarWisePercentile,
   calculatePercentile,
   controversyTaskList,
+  companySourceTypes,
+  taskSubmit
 });
 
 const rootReducer = (state, action) => {

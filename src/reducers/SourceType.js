@@ -51,3 +51,29 @@ export const sourceTypeCreate = (state = initialState, action) => {
       return state;
   }
 };
+
+export const companySourceTypes = (state = initialState, action) => {
+  switch (action.type) {
+    case 'COMPANY_SOURCE_TYPES_GET_REQUEST':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        source: false,
+      };
+    case 'COMPANY_SOURCE_TYPES_GET_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        source: action.sourceTypes,
+      };
+    case 'COMPANY_SOURCE_TYPES_GET_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};

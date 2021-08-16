@@ -14,7 +14,7 @@ import validateReqFields from './validateReqFields';
 import AddSource from './AddSource';
 // import dynamicThings from '../../constants/DynamicConstants';
 
-let temporaryData;
+// let temporaryData;
 // Field Wrapper ::
 // A function which wraps the datasheet fields with bootstrap's row and col tags
 const FieldWrapper = (props) => {
@@ -220,23 +220,23 @@ export const DataSheetComponent = (props) => {
   // *SCREEN SHOT FILE*
   const [formScreenShotFile, setFormScreenShotFile] = useState(null);
   // *ERROR TYPE*
-  const [formErrorType, setFormErrorType] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.type) || '');
+  const [formErrorType, setFormErrorType] = useState((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
   // *ERROR*
-  const [formErrorRefData, setFormErrorRefData] = useState((defaultData.error && defaultData.error.isThere) ? {
+  const [formErrorRefData, setFormErrorRefData] = useState((defaultData.error && (defaultData.error.hasError)) ? {
     ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
   } : {
     fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
   });
   // *ERROR COMMENT*
-  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
+  const [formComment, setFormComment] = useState((defaultData.error && (defaultData.error.hasError) && defaultData.error.comment) || '');
   // *QA || CR FOUNDS HAS ERROR *
-  const [formIsError, setFormIsError] = useState((defaultData.error && defaultData.error.isThere) || false);
+  const [formIsError, setFormIsError] = useState((defaultData.error && (defaultData.error.hasError)) || false);
 
   // ANALYST ERROR COMMENT
   const [errorComment, setErrorComment] = useState('');
 
   // *ANALYST DCR ERROR ACCEPTION OR REJECTION BOOLEAN*
-  const [isErrorAccepted, setIsErrorAccepted] = useState(null);
+  const [isErrorAccepted, setIsErrorAccepted] = useState(defaultData.error && (defaultData.error.isAccepted === true || defaultData.error.isAccepted === false) ? !!defaultData.error.isAccepted : null);
   // *ANALYST DCR ERROR PANEL BOOLEAN*
   const [isErrorPanelVisible, setIsErrorPanelVisible] = useState(false);
 
@@ -262,9 +262,9 @@ export const DataSheetComponent = (props) => {
     setFormURL((defaultData.source && defaultData.source.url) || '');
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
     setFormScreenShotFile(null);
-    setFormErrorType((defaultData.error && defaultData.error.isThere && defaultData.error.type) || '');
-    setFormComment((defaultData.error && defaultData.error.isThere && defaultData.error.comment) || '');
-    setFormIsError((defaultData.error && defaultData.error.isThere) || false);
+    setFormErrorType((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
+    setFormComment((defaultData.error && (defaultData.error.hasError) && defaultData.error.comment) || '');
+    setFormIsError((defaultData.error && (defaultData.error.hasError)) || false);
     setFormErrorRefData((defaultData.error) ? {
       ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
     } : {
@@ -276,11 +276,22 @@ export const DataSheetComponent = (props) => {
 
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
+
+    setIsErrorAccepted(defaultData.error && (defaultData.error.isAccepted === true || defaultData.error.isAccepted === false) ? !!defaultData.error.isAccepted : null);
   }, [props.reqData]);
+
+  // console.log(defaultData.error);
+  // console.log(isErrorAccepted);
 
   useEffect(() => {
     setErrorComment('');
   }, [isErrorAccepted]);
+
+  useEffect(() => {
+    if (!formIsError) {
+      setFormErrorType(null);
+    }
+  }, [formIsError]);
 
   // Onchange Functions
   const onChangeFormTextSnippet = (event) => {
@@ -401,6 +412,7 @@ export const DataSheetComponent = (props) => {
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
         screenShot: formScreenShotPath,
+        screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
         additionalDetails: dynamicFields,
       };
     } else {
@@ -413,6 +425,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
+          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
           additionalDetails: dynamicFields,
         };
       }
@@ -428,17 +441,19 @@ export const DataSheetComponent = (props) => {
           isAccepted: isErrorAccepted,
           rejectComment: errorComment,
           status: 'Completed',
-          error: { ...defaultData.error, status: 'Completed' },
+          error: { ...defaultData.error, errorStatus: 'Completed' },
         };
       }
       if (isQA_DV) {
         saveData = {
           ...defaultData,
           error: {
+            hasError: formIsError,
             isThere: formIsError,
             type: formErrorType,
             comment: formComment,
             errorStatus: 'Completed',
+            raisedBy: sessionStorage.role,
           },
         };
       }
@@ -483,6 +498,7 @@ export const DataSheetComponent = (props) => {
         saveData = {
           ...defaultData,
           error: {
+            hasError: formIsError,
             isThere: formIsError,
             type: formErrorType,
             comment: formComment,
@@ -502,14 +518,14 @@ export const DataSheetComponent = (props) => {
   };
 
   const onCloseErrorPanel = () => {
-    temporaryData = defaultData;
+    // temporaryData = defaultData;
     setIsErrorPanelVisible(false);
   };
 
   const onAccept = () => {
     let saveData;
     if (isAnalyst_DCR) {
-      saveData = { ...defaultData, status: 'Editable', error: { ...defaultData.error, status: 'Incomplete' } };
+      saveData = { ...defaultData, status: 'Editable', error: { ...defaultData.error, isAccepted: true, errorStatus: 'Incomplete' } };
     }
     props.onClickSave(saveData);
     setIsErrorAccepted(true);
@@ -521,28 +537,16 @@ export const DataSheetComponent = (props) => {
     setIsErrorAccepted(false);
   };
 
-  const onRevert = () => {
-    props.onClickSave(temporaryData);
-    setIsErrorAccepted(null);
-    message.info('Reverted Successfully, Please click "View Error" button to Accept or Reject the error, again!', 8);
-  };
+  // const onRevert = () => {
+  //   props.onClickSave(temporaryData);
+  //   setIsErrorAccepted(null);
+  //   message.info('Reverted Successfully, Please click "View Error" button to Accept or Reject the error, again!', 8);
+  // };
 
   const onRejectSubmit = () => {
-    const dummyData = {
-      dpCode: formDpCode,
-      fiscalYear: defaultData.fiscalYear,
-      status: 'Completed',
-      textSnippet: formTextSnippet,
-      pageNo: formPageNo,
-      screenShot: formScreenShotPath,
-      response: formResponse,
-      source: formSource,
-      rejectComment: errorComment,
-      isAccepted: isErrorAccepted,
-    };
     let saveData;
     if (isAnalyst_DCR) {
-      saveData = { ...dummyData, error: { ...defaultData.error, status: 'Completed' } };
+      saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, isAccepted: isErrorAccepted, errorStatus: 'Completed' } };
     }
     props.onClickSave(saveData);
     message.error('Error Rejected Successfully, And your response has been recorded!', 8);
@@ -626,7 +630,7 @@ export const DataSheetComponent = (props) => {
 
       {/* DPCode Field */}
       <FieldWrapper
-        label="Dp Code*"
+        label={<div>Dp Code<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -641,7 +645,7 @@ export const DataSheetComponent = (props) => {
 
       {/* HISTORY YEAR Field */}
       <FieldWrapper
-        label="Year"
+        label={<div>Year<span className="addNewMember-red-asterik"> * </span></div>}
         visible={!isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -656,7 +660,7 @@ export const DataSheetComponent = (props) => {
 
       {/* SOURCE NAME Field */}
       <FieldWrapper
-        label="Source Name*"
+        label={<div>Source Name<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -673,7 +677,7 @@ export const DataSheetComponent = (props) => {
 
       {/* SOURCE Field */}
       <FieldWrapper
-        label="Source*"
+        label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
         visible={!isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -699,7 +703,7 @@ export const DataSheetComponent = (props) => {
 
       {/* DESCRIPTION Field */}
       <FieldWrapper
-        label="Description*"
+        label={<div>Description</div>}
         visible
         size={[6, 5, 7]}
         body={formDescription}
@@ -708,7 +712,7 @@ export const DataSheetComponent = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'NUMBER' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -727,7 +731,7 @@ export const DataSheetComponent = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'TEXT' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -745,7 +749,7 @@ export const DataSheetComponent = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'DATE' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -763,7 +767,7 @@ export const DataSheetComponent = (props) => {
       {/* RESPONSE Field */}
       { formDataType === 'SELECT' &&
       <FieldWrapper
-        label="Response*"
+        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -814,7 +818,7 @@ export const DataSheetComponent = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label="Text Snippet*"
+        label={<div>Text Snippet<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -831,7 +835,7 @@ export const DataSheetComponent = (props) => {
 
       {/* PAGE NO Field */}
       <FieldWrapper
-        label="Page No*"
+        label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -847,7 +851,7 @@ export const DataSheetComponent = (props) => {
 
       {/* URL Field */}
       <FieldWrapper
-        label="URL*"
+        label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR || isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -864,7 +868,7 @@ export const DataSheetComponent = (props) => {
 
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
-        label="PublicationDate*"
+        label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isHistoryType || isQA_DV || isCompanyRep_DR || isClientRep_DR || isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -881,7 +885,7 @@ export const DataSheetComponent = (props) => {
 
       {/* UPLOAD Field */}
       <FieldWrapper
-        label="Upload Screenshot*"
+        label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -904,7 +908,7 @@ export const DataSheetComponent = (props) => {
 
       {/* ScreenShot Field */}
       <FieldWrapper
-        label="Screenshot*"
+        label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -919,7 +923,7 @@ export const DataSheetComponent = (props) => {
       {dynamicFields.map((eachData) => (
         <FieldWrapper
           visible
-          label={`${eachData.name}*`}
+          label={<div>{eachData.name}<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           body={getReqFields({
             eachData, dynamicFields, setDynamicFields, disableField,
@@ -932,7 +936,7 @@ export const DataSheetComponent = (props) => {
       <Col lg={12}>
         <Row>
           <FieldWrapper
-            label="Error*"
+            label={<div>Error<span className="addNewMember-red-asterik"> * </span></div>}
             visible
             size={[6, 5, 7]}
             body={
@@ -954,7 +958,7 @@ export const DataSheetComponent = (props) => {
 
       {/* ERROR TYPE Field */}
       <FieldWrapper
-        label="Error Type*"
+        label={<div>Error Type<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isQA_DV && !isHistoryType && formIsError}
         size={[6, 5, 7]}
         body={
@@ -971,7 +975,7 @@ export const DataSheetComponent = (props) => {
 
       {/* Comments Field */}
       <FieldWrapper
-        label="Comments*"
+        label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
         visible={(isQA_DV && !isHistoryType && formIsError)}
         size={[6, 5, 7]}
         body={
@@ -988,7 +992,7 @@ export const DataSheetComponent = (props) => {
 
       {/* Controversy Comments Field */}
       <FieldWrapper
-        label="Comments*"
+        label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -1005,7 +1009,7 @@ export const DataSheetComponent = (props) => {
 
       {/* Controversy Next Review Date Field */}
       <FieldWrapper
-        label="Next review date*"
+        label={<div>Next review date<span className="addNewMember-red-asterik"> * </span></div>}
         visible={isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -1037,7 +1041,7 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
         { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
-        { isAnalyst_DCR && !isHistoryType &&
+        { isAnalyst_DCR && !isHistoryType && defaultData.error &&
         <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
         {/* FOR QA */}
         {(isQA_DV) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
@@ -1073,7 +1077,7 @@ export const DataSheetComponent = (props) => {
         width={300}
         headerStyle={{ backgroundColor: '#2199c8' }}
       >
-        {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} companyId={defaultData.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
+        {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} locationData={props.locationData} companyId={props.locationData.state.dpCodeDetails.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
       </Drawer>
 
       <Modal
@@ -1084,10 +1088,10 @@ export const DataSheetComponent = (props) => {
         visible={isErrorPanelVisible}
         footer={
           <React.Fragment>
-            {isErrorAccepted === false && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Submit And Close</Button>}
+            {isErrorAccepted === false && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Close</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="success" onClick={onAccept}>Accept</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="danger" onClick={onReject}>Reject</Button>}
-            {(isErrorAccepted !== null) && (defaultData.error) && (defaultData.error.status) && <Button className="datapage-button" variant="info" onClick={onRevert}>Revert</Button>}
+            {/* {(isErrorAccepted !== null) && (defaultData.error) && (defaultData.error.status) && <Button className="datapage-button" variant="info" onClick={onRevert}>Revert</Button>} */}
           </React.Fragment>
         }
         onCancel={onCloseErrorPanel}

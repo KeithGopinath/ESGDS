@@ -76,6 +76,26 @@ export const dpCodeDataCreate = (state = initialState, action) => {
 
 export const dpCodeDataEdit = (state = initialState, action) => {
   switch (action.type) {
+    case 'DPCODEDATA_UPDATE_REQUEST':
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        dpCodeData: false,
+      };
+    case 'DPCODEDATA_UPDATE_SUCCESS':
+      return {
+        ...state,
+        isLoading: false,
+        dpCodeData: action.dpCodeData,
+      };
+    case 'DPCODEDATA_UPDATE_FAILURE':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+        dpCodeData: false,
+      };
     case 'CONTROVERSY_DPCODEDATA_UPDATE_REQUEST':
       return {
         ...state,

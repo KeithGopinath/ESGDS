@@ -736,7 +736,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
             {
@@ -751,7 +751,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
           ],
@@ -813,7 +813,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
             {
@@ -828,7 +828,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
           ],
@@ -889,7 +889,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
             {
@@ -904,7 +904,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
           ],
@@ -976,7 +976,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: true, type: 'T1. Document missed', comment: 'Comment No 1', errorStatus: 'Completed',
+                hasError: true, type: 'T1. Document missed', comment: 'Comment No 1', errorStatus: 'Completed',
               },
             },
           ],
@@ -1038,7 +1038,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
           ],
@@ -1099,7 +1099,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
               },
             },
           ],
@@ -1172,7 +1172,7 @@ const TASK_API_DATA = {
                 response: 'Yes',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: true, type: 'T1. Document missed', comment: 'Comment No 1', errorStatus: 'Completed',
+                  hasError: true, type: 'T1. Document missed', comment: 'Comment No 1', errorStatus: 'Completed',
                 },
               },
             ],
@@ -1245,7 +1245,7 @@ const TASK_API_DATA = {
                 response: '10000',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                  hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
                 },
               },
             ],
@@ -1317,7 +1317,7 @@ const TASK_API_DATA = {
                 response: 'Tue May 01 2017',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null, type: '', comment: '', errorStatus: 'Incomplete',
+                  hasError: null, type: '', comment: '', errorStatus: 'Incomplete',
                 },
               },
             ],
@@ -1395,7 +1395,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1421,7 +1421,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1494,7 +1494,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1520,7 +1520,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1592,7 +1592,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1618,7 +1618,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1701,7 +1701,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: true,
+                hasError: true,
                 refData: {
                   textSnippet: 'Snippet 1',
                   pageNo: '46',
@@ -1727,7 +1727,7 @@ const TASK_API_DATA = {
               response: 'Yes',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: true,
+                hasError: true,
                 refData: {
                   textSnippet: 'Snippet 2',
                   pageNo: '44',
@@ -1800,7 +1800,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1826,7 +1826,7 @@ const TASK_API_DATA = {
               response: '10000',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1898,7 +1898,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -1924,7 +1924,7 @@ const TASK_API_DATA = {
               response: 'Tue May 01 2017',
               source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
               error: {
-                isThere: null,
+                hasError: null,
                 refData: {
                   textSnippet: '',
                   pageNo: '',
@@ -2008,7 +2008,7 @@ const TASK_API_DATA = {
                 response: 'Yes',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2034,7 +2034,7 @@ const TASK_API_DATA = {
                 response: 'Yes',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2118,7 +2118,7 @@ const TASK_API_DATA = {
                 response: '10000',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2144,7 +2144,7 @@ const TASK_API_DATA = {
                 response: '10000',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2227,7 +2227,7 @@ const TASK_API_DATA = {
                 response: 'Tue May 01 2017',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2253,7 +2253,7 @@ const TASK_API_DATA = {
                 response: 'Tue May 01 2017',
                 source: { sourceName: 'Annual Report', url: 'https://admin.mrpl.co.in/img/UploadedFiles/AnnualReport/Files/1c7d3b3b1d7f4c65b46e50c3422a1bdb.pdf', publicationDate: 'Tue May 04 2017' },
                 error: {
-                  isThere: null,
+                  hasError: null,
                   refData: {
                     textSnippet: '',
                     pageNo: '',
@@ -2344,7 +2344,7 @@ const TASK_API_DATA = {
               error: {
                 isErrorRaised: true,
                 raisedBy: 'QA',
-                errorType: 'T1. Incorrect data input/typo',
+                type: 'T1. Incorrect data input/typo',
                 errorStatus: 'Incomplete',
               },
             },
@@ -2362,7 +2362,7 @@ const TASK_API_DATA = {
               error: {
                 isErrorRaised: true,
                 raisedBy: 'CompanyRep',
-                errorType: 'Data/information Missed',
+                type: 'Data/information Missed',
                 refData: {
                   description: 'Does the company have a biodiversity restoration program ?',
                   dataType: 'text',

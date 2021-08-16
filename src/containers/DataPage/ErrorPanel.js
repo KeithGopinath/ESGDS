@@ -32,6 +32,7 @@ const ErrorPanel = (props) => {
     defaultError.raisedBy === 'ClientRep',
   ];
 
+
   const { errorComment, setErrorComment } = props;
   return (
     <React.Fragment>
@@ -57,9 +58,9 @@ const ErrorPanel = (props) => {
                     border: 'none',
                   }}
                 >
-                  Data/information Missed
+                  {defaultError.type}
                 </Tag>
-                <Tag style={{ margin: '5px' }}>Raised By QA</Tag>
+                <Tag style={{ margin: '5px' }}>Raised By {defaultError.raisedBy}</Tag>
                 <Tag style={{ margin: '5px' }}>
                   <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
                     <span>{moment().fromNow()}</span>
@@ -111,9 +112,9 @@ const ErrorPanel = (props) => {
                     border: 'none',
                   }}
                 >
-                  Data/information Missed
+                  {defaultError.type}
                 </Tag>
-                <Tag style={{ margin: '5px' }}>Raised By Client Representative</Tag>
+                <Tag style={{ margin: '5px' }}>Raised By {defaultError.raisedBy}</Tag>
                 <Tag style={{ margin: '5px' }}>
                   <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
                     <span>{moment().fromNow()}</span>
