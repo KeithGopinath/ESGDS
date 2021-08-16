@@ -247,7 +247,7 @@ const DataPage = (props) => {
         dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Collection' });
         setStatusAlert(true);
       }
-      if (isQA_DV) {
+      if (isQA_DV || isCompanyRep_DR || isClientRep_DR) {
         dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Verification' });
         setStatusAlert(true);
       }
@@ -343,7 +343,7 @@ const DataPage = (props) => {
               {/* HISTORICAL TABS */}
               <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
                 <DataAccordian header="History">
-                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error) && (!reqHistoricalData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
+                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error) ? // (!reqHistoricalData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
                     (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || (historicalDataForLoading.length !== reqHistoricalData.length)) ? // T2
                       <PageLoader /> : // T2R
                       (dpCodeDataFromStore.error) &&
@@ -377,7 +377,7 @@ const DataPage = (props) => {
               {/* CURRENT TABS */}
               <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
                 <DataAccordian header="Current" isActive >
-                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) && (!reqCurrentData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
+                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // (!reqCurrentData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
                     (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || (currentDataForLoading.length !== reqCurrentData.length)) ? // T2
                       <PageLoader /> : // T2R
                       (dpCodeDataFromStore.error) &&

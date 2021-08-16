@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-import { PENDING_TASK } from '../../constants/PendingTasksConstants';
+// import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 
 
 const PendingTaskTable = (props) => {
@@ -118,14 +118,14 @@ const PendingTasks = () => {
   const getReqTabs = (e) => {
     if (isAnalyst) {
       return [
-        { label: 'Data Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DC : (e.pendingTasksList.data.analystCollectionTaskList).concat(PENDING_TASK.ANALYST_DC) },
-        { label: 'Data Correction', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DCR : (e.pendingTasksList.data.analystCorrectionTaskList).concat(PENDING_TASK.ANALYST_DCR) },
-        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? PENDING_TASK.ANALYST_DCR : (e.pendingTasksList.data.controversyTaskList).concat(PENDING_TASK.ANALYST_CC) },
+        { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCollectionTaskList },
+        { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCorrectionTaskList },
+        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.controversyTaskList },
       ];
     }
-    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? PENDING_TASK.QA_DV : (e.pendingTasksList.data.qaTaskList).concat(PENDING_TASK.QA_DV) }]; }
-    if (isCompanyRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? PENDING_TASK.COMPANY_REP_DR : (e.pendingTasksList.data.companyRepTaskList).concat(PENDING_TASK.COMPANY_REP_DR) }]; }
-    if (isClientRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? PENDING_TASK.COMPANY_REP_DR : (e.pendingTasksList.data.clientRepTaskList).concat(PENDING_TASK.COMPANY_REP_DR) }]; }
+    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.qaTaskList }]; }
+    if (isCompanyRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList }]; }
+    if (isClientRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList }]; }
     return [{
       label: '', data: [],
     }];

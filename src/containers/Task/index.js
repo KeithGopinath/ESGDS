@@ -431,10 +431,10 @@ const Task = (props) => {
       postableData = { ...postableData, taskStatus: 'Collection Completed' };
     }
     if (isAnalyst_DCR) {
-      postableData = { ...postableData, taskStatus: 'Correction Completed' };
+      postableData = { ...postableData, taskStatus: 'Collection Completed' };
     }
     if (isQA_DV) {
-      postableData = { ...postableData, taskStatus: 'Correction Pending' };
+      postableData = { ...postableData, taskStatus: 'Verification Completed' };
     }
     if (isClientRep_DR) {
       postableData = { ...postableData, taskStatus: '' };
@@ -443,6 +443,21 @@ const Task = (props) => {
       postableData = { ...postableData, taskStatus: '' };
     }
 
+    dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
+    setStatusAlert(true);
+  };
+
+  const onSubmitTask2 = () => {
+    let postableData = {
+      companyId: taskDetails.companyId,
+      year: taskDetails.fiscalYear,
+      clientTaxonomyId: taskDetails.clientTaxonomyId,
+      taskStatus: '',
+      taskId: taskDetails.taskId,
+    };
+    if (isQA_DV) {
+      postableData = { ...postableData, taskStatus: 'Correction Pending' };
+    }
     dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
     setStatusAlert(true);
   };
@@ -580,12 +595,15 @@ const Task = (props) => {
               icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : null}
             />}
 
-            {isAnalyst_DC && isValidationCalled && <ValidationTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
+            {(isAnalyst_DC || isAnalyst_DCR) && isValidationCalled && <ValidationTable taskDetails={taskDetails} dpCodesData={reqDpCodesData} />}
 
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
               { (((isAnalyst_DC || isAnalyst_DCR) && isValidationCalled) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
               <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
+
+              { isQA_DV &&
+              <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>}
 
               { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled &&
               <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
