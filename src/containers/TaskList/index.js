@@ -115,12 +115,12 @@ const TaskList = (props) => {
           group: e.group ? e.group : '--',
           batch: e.batch ? e.batch : '--',
           pillar: e.pillar ? e.pillar : '--',
-          analyst: e.analystStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.analyst}</p> : <p className="text-success w-100 m-auto">{e.analyst}</p>,
+          analyst: e.analystStatus === 'Breached' ? { value: e.analyst, content: <p className="text-danger w-100 m-auto">{e.analyst}</p> } : { value: e.analyst, content: <p className="text-success w-100 m-auto">{e.analyst}</p> },
           analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '--',
-          qa: e.qaStatus === 'Breached' ? <p className="text-danger w-100 m-auto">{e.qa}</p> : <p className="text-success w-100 m-auto">{e.qa}</p>,
+          qa: e.qaStatus === 'Breached' ? { value: e.qa, content: <p className="text-danger w-100 m-auto">{e.qa}</p> } : { value: e.qa, content: <p className="text-success w-100 m-auto">{e.qa}</p> },
           qaSla: e.qaSla ? moment(e.qaSla).format('DD-MM-YYYY') : '--',
           stage: e.stage ? e.stage : '--',
-          status: e.status === 'Breached' ? <p className="text-danger w-100 m-auto">{e.status}</p> : <p className="text-success w-100 m-auto">{e.status}</p>,
+          status: e.status === 'Breached' ? { value: e.status, content: <p className="text-danger w-100 m-auto">{e.status}</p> } : { value: e.status, content: <p className="text-success w-100 m-auto">{e.status}</p> },
         })) :
           obj.map((e) => ({
             key: e.taskid,
@@ -195,7 +195,7 @@ const TaskList = (props) => {
             id: 'qa',
             align: 'center',
             label: 'QA',
-            dataType: 'string',
+            dataType: 'stringSearchSortElement',
           },
           {
             id: 'qaSla',
@@ -246,7 +246,7 @@ const TaskList = (props) => {
               id: 'analyst',
               align: 'center',
               label: 'Analyst',
-              dataType: 'string',
+              dataType: 'stringSearchSortElement',
             },
             {
               id: 'analystSla',
@@ -258,7 +258,7 @@ const TaskList = (props) => {
               id: 'qa',
               align: 'center',
               label: 'QA',
-              dataType: 'string',
+              dataType: 'stringSearchSortElement',
             },
             {
               id: 'qaSla',
@@ -276,7 +276,7 @@ const TaskList = (props) => {
               id: 'status',
               align: 'center',
               label: 'Status',
-              dataType: 'string',
+              dataType: 'stringSearchSortElement',
             },
           ] : [
             {
