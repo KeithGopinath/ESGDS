@@ -12,20 +12,20 @@ export default (state = initialState, action) => {
     case 'TASKEDITDETAILS_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         taskeditData: action.taskedit,
       };
     case 'TASKEDITDETAILS_RESET':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: false,
         taskeditData: false,
       };
     case 'TASKEDITDETAILS_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

@@ -12,7 +12,7 @@ export default (state = initialState, action) => {
     case 'GROUPBYID_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         groupById: action.getgroupbyid,
       };
     case 'GROUPBYID_RESET':
@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
     case 'GROUPBYID_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

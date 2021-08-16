@@ -12,20 +12,20 @@ export default (state = initialState, action) => {
     case 'TAXANOMYCOMPANY_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         taxonomycompany: action.taxcompany,
       };
     case 'TAXANOMYCOMPANY_RESET':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: false,
         taxonomycompany: false,
       };
     case 'TAXANOMYCOMPANY_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

@@ -209,6 +209,7 @@ const CustomTable = ({
           if (columnsList[i].dataType === 'stringSearchSortElement' && (eachRowData[columnsList[i].id].value.toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
+          console.log(eachRowData[columnsList[i].id], eachRowData, columnsList[i], ' ****');
           if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }

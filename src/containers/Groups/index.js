@@ -14,6 +14,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Header from '../../components/Header';
 import { useLocation } from "react-router-dom";
+import PageLoader from '../../components/PageLoader';
 import SideMenuBar from '../../components/SideMenuBar';
 
 
@@ -51,11 +52,18 @@ const Groups = () => {
     },
   ];
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
+  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid.isLoading);
   const grpDetail = isGroupByid && isGroupByid.data;
 
   // *** API call *** ***
   useEffect(()=>{
+    // dispatch({type:"GROUPBYID_RESET"});
+
+    if(grpDetail){
+      dispatch({type: "GROUPBYID_RESET"});
+    }
     if(location && !location.state){
+      console.log("undefined");
     const payload = { 
       filters: [
         { filterWith: "isUserApproved", value: true },
@@ -65,8 +73,10 @@ const Groups = () => {
         { filterWith: "userType", value: "Employee" }
         
       ] }
+      dispatch({type: "GROUPBYID_RESET"});
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else {
+      console.log("undefined");
       dispatch({type:"FILTER_USERS_RESET"});
       dispatch({ type: 'GROUPBYID_REQUEST', groupid: location.state });
       dispatch({type:"UNASSIGNEDBATCH_RESET"});
@@ -76,7 +86,7 @@ const Groups = () => {
   },[]);
   
   useEffect(() => {
-    if(grpDetail){
+    if(grpDetail && location.state){
      
       setcreateGrpName(grpDetail && grpDetail.groupName);
       setcreateGrpAdmin(grpDetail && grpDetail.admin.userDetails);
@@ -113,15 +123,17 @@ const Groups = () => {
 
 
   const isGroupCreated = useSelector((creategroup) => creategroup.creategroup.grouppost);
+  const isGroupCreatedLoading = useSelector((creategroup) => creategroup.creategroup.isLoading);
  
   const batchData = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.unassignedbatchdata);
+  const batchDataLoading = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.isLoading);
   const batchAssignment = batchData && batchData.rows;
   
   const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
+  const userDataLoading = useSelector((filterUsers) => filterUsers.filterUsers.isLoading);
   const isData = userData && userData.data;
   useEffect(() => {
     if (isGroupCreated) {
-      // message.success(isGroupCreated.message);
       setresult(isGroupCreated.message);
       setCurrent(current + 1);
       dispatch({type:"GROUP_RESET"});
@@ -154,10 +166,8 @@ const Groups = () => {
        const istest = usertargetKeys.filter((e)=> e === obj1.key);
        if(istest.length === 0){
         filteredData.push(obj1);
-       }
-  
+       } 
     }
-
    
     if(editunassigned){
       
@@ -165,7 +175,7 @@ const Groups = () => {
         for(const j of i.SecRole.role){
           if(j.label === 'GroupAdmin'){
             const ischeck = grpAdminlist.filter((e)=>e.userDetails.value === i.key);
-            if(grpAdminlist.length === 1){
+            if(grpAdminlist.length > 0){
             if(ischeck.length !== 1){
             grpAdminlist.push({ userDetails:{ value:i.key, label:i.title }});
             }
@@ -204,19 +214,9 @@ const Groups = () => {
 //     }
 //   }
 // }
-
-  isData && isData.map((e)=>{
-    e.roleDetails.role.map((arg)=>{
-      if(arg.label === "GroupAdmin"){
-        grpAdminlist.push(e);
-      }
-    })
-  });
-  const groupAdminOptions = [];
-  grpAdminlist.map((obj)=>{
-    groupAdminOptions.push(obj.userDetails);
-  });
+    
   if(isData){
+    const filteruserData= [];
   for (const i of isData) {
     for (const j of i.roleDetails.role) {
       if(j.label === 'Analyst' || j.label === 'QA'){
@@ -225,8 +225,27 @@ const Groups = () => {
       }
     }
   }
+
+  for(const obj of userList){
+    const istest = usertargetKeys.filter((e)=> e === obj.userDetails.value);
+    if(istest.length === 0){
+      filteruserData.push(obj);
+    }
+  }
+
+for(const i of filteruserData){
+  for(const j of i.roleDetails.role){
+    if(j.label === 'GroupAdmin'){
+      grpAdminlist.push(i);
+    }
+  }
 }
- 
+}
+const groupAdminOptions = [];
+
+  grpAdminlist.map((obj)=>{
+    groupAdminOptions.push(obj.userDetails);
+  });
   // *** batch assignments starts ***
 
   const onChangebatchTransfer = (newTargetKeys) => {
@@ -320,6 +339,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
     }
   } 
   if(grpDetail){
+    //const uniqueEdituserData = usertargetKeys.filter((e)=>e !== creategrpAdmin.value);
     for (const i of grpDetail.memberforgrpEdit) {
       for( const j of usertargetKeys){
         if(i.userDetails.value === j){
@@ -336,8 +356,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
        
         setcreateGrpList(grpDetails);
         setgrpName(creategrpName);
-        
-  
         setCurrent(current + 1);
         if(!grpDetail){
         dispatch({ type: 'UNASSIGNEDBATCH_REQUEST' });
@@ -516,9 +534,11 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
  
 
   const onhandelgrpName = (e) => {
-    if (e.target.value.match('^([a-zA-Z]{1,}[ ]{0,})+$')) { 
+    if (/^(?![\s-])[\A-Za-z0-9\s-]*$/.test(e.target.value)) {
       setcreateGrpName(e.target.value);
     }
+      
+    
   };
   const onhandlegrpAdmin = (groupAdmin) => {
     setcreateGrpAdmin(groupAdmin);
@@ -527,6 +547,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
 
 
  const GroupCreation = () =>(
+   
     <Container>
       <Row>
         <Col lg={6} sm={12}>
@@ -605,6 +626,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
           <Row>
             <Col lg={12}>
               <Card className="grp-pad">
+              {(userDataLoading || isGroupByidLoading || batchDataLoading || isGroupCreatedLoading )?<PageLoader /> :
                 <Container>
                   <Row>
                     <Col lg={3} sm={12}>
@@ -626,9 +648,12 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
                     <Col lg={9} sm={12} className="assignment-box">
                       <Row>
                         <Col lg={12} sm={12} >
+                        
+                     
                           {current ===0 && GroupCreation()}
                           {current === 1 && batchAssignments()}
                           {current === steps.length - 1 && statusAssignments()}
+                        
 
                         </Col>
                         <Col lg={12}>
@@ -660,6 +685,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
                     </Col>
                   </Row>
                 </Container>
+               }
               </Card>
             </Col>
           </Row>

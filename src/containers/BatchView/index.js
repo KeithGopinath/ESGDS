@@ -13,13 +13,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
+import PageLoader from '../../components/PageLoader';
  
 const BatchView = () => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
-  const [max, setmax] = useState(20);
+  const [max, setmax] = useState(24);
   useEffect(() => {
     dispatch({ type: 'BATCH_REQUEST' });
     
@@ -39,6 +40,8 @@ const BatchView = () => {
   });
 
   const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
+  const loading = useSelector((batchlist) => batchlist.batchList.isLoading);
+  console.log(loading, 'loading');
   const batchCount = batchData && batchData.count;
   const batches = batchData && batchData.rows;
 
@@ -106,6 +109,7 @@ const BatchView = () => {
               </div>
             </div>
             <div className="view-min-height">
+              {loading && <PageLoader /> }
               <Row >
                 {batchlist}
               </Row>

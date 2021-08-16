@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Transfer, Divider, message } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import PageLoader from '../../components/PageLoader';
 
 
 const PillarAssignment = () => {
@@ -26,12 +27,14 @@ const PillarAssignment = () => {
     
   }, []);
   const isGroup = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
+  const isGroupLoading = useSelector((getgrouplist) => getgrouplist.getgrouplist.isLoading);
   const groupList = isGroup && isGroup.rows;
   const groupOptions = groupList && groupList.map((e) => (
     { value: e._id, label: e.groupName }
   ));
  
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
+  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid.isLoading);
   const grpDtetail = isGroupByid && isGroupByid.data;
   
   useEffect(()=>{
@@ -90,6 +93,7 @@ const PillarAssignment = () => {
 
 
 const assignPillar = useSelector((assignpillar)=> assignpillar.assignpillar.pillarAssign);
+const assignPillarLoading  = useSelector((assignpillar)=> assignpillar.assignpillar.isLoading);
 useEffect(()=>{
   if(assignPillar){
     message.success(assignPillar.message);
@@ -159,10 +163,12 @@ useEffect(()=>{
         <div className="rightsidepane">
           <Header sideBarRef={sideBarRef} title="Pillar assignment" />
           <div className="container-main">
+            
             <Row>
               <Col lg={12} sm={12}>
 
                 <Card className="grp-pad">
+                {(isGroupLoading || assignPillarLoading || isGroupByidLoading )? <PageLoader />:
                   <Container>
                     <Row>
                       <Col lg={4}>
@@ -184,7 +190,7 @@ useEffect(()=>{
                             <Select
                               onChange={onPrimaryPillarChange}
                               options={grpDtetail && grpDtetail.pillarList}
-                              placeholder="primary"
+                              placeholder="Primary"
                               isDisabled={isDisabledPrimary}
                               value={primaryPillar}
                             />
@@ -234,10 +240,12 @@ useEffect(()=>{
                       </Col>
                     </Row>
                   </Container>
+                }
                 </Card>
 
               </Col>
             </Row>
+          
           </div>
         </div>
       </div>

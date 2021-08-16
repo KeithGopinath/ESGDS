@@ -1,39 +1,90 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
 // import { PENDING_TASK } from '../../constants/PendingTasksConstants';
+import moment from 'moment';
+// import { PENDING_TASK } from '../../constants/PendingTasksConstants';
+import SLAExtentions from './extentionSLA';
 
 
 const PendingTaskTable = (props) => {
+ 
+  const onExtendSLA = (arg) => {
+    console.log(arg);
+    props.setdetail(arg);
+    props.setShow(true);
+  };
+
   // TABLE DATA
-  const tablePopulate = (data) => data.map((ePendingTask) => ({
+  const tablePopulate = (data) => (props.isAnalyst) ? data.map((ePendingTask) => ({
     taskNumber: ePendingTask.taskNumber,
     pillar: ePendingTask.pillar,
     company: ePendingTask.company,
+    endDate: { value: moment(ePendingTask.analystSLADate).format('DD-MM-YYYY'), content: (ePendingTask.analystSLADate) ? <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask) }}>{ moment(ePendingTask.analystSLADate).format('DD-MM-YYYY')}</Tag> : "-"},
     fiscalYear: ePendingTask.fiscalYear,
     status: ePendingTask.status || ePendingTask.taskStatus,
     action:
-  <Link
-    href
-    to={{
-      pathname: `/task/${ePendingTask.taskNumber}`,
-      state: {
-        taskDetails: ePendingTask, // passing Whole task data
-      },
-    }}
-  >Enter
-  </Link>,
-  }));
+    <Link
+      href
+      to={{
+        pathname: `/task/${ePendingTask.taskNumber}`,
+        state: {
+          taskDetails: ePendingTask, // passing Whole task data
+        },
+      }}
+    >Enter
+    </Link>,
+  })) : (props.isQA) ?
+    data.map((ePendingTask) => ({
+      taskNumber: ePendingTask.taskNumber,
+      pillar: ePendingTask.pillar,
+      company: ePendingTask.company,
+      endDate: { value: moment(ePendingTask.qaSLADate).format('DD-MM-YYYY'), content: (ePendingTask.qaSLADate) ? <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.qaSLADate).format('DD-MM-YYYY') }</Tag>: "-" },
+      fiscalYear: ePendingTask.fiscalYear,
+      status: ePendingTask.status || ePendingTask.taskStatus,
+      action:
+      <Link
+        href
+        to={{
+          pathname: `/task/${ePendingTask.taskNumber}`,
+          state: {
+            taskDetails: ePendingTask, // passing Whole task data
+          },
+        }}
+      >Enter
+      </Link>,
+    })) :
+    data.map((ePendingTask) => ({
+      taskNumber: ePendingTask.taskNumber,
+      pillar: ePendingTask.pillar,
+      company: ePendingTask.company,
+      fiscalYear: ePendingTask.fiscalYear,
+      status: ePendingTask.status || ePendingTask.taskStatus,
+      action:
+      <Link
+        href
+        to={{
+          pathname: `/task/${ePendingTask.taskNumber}`,
+          state: {
+            taskDetails: ePendingTask, // passing Whole task data
+          },
+        }}
+      >Enter
+      </Link>,
+    }));
 
   const PENDING_TASK_DATA = {
     rowsData: tablePopulate(props.data),
-    columnsHeadData: [
+
+    columnsHeadData: (props.isAnalyst || props.isQA) ? [
       {
         id: 'taskNumber', label: 'Task No', align: 'left', dataType: 'string',
       },
@@ -44,6 +95,9 @@ const PendingTaskTable = (props) => {
         id: 'company', label: 'Company', align: 'left', dataType: 'string',
       },
       {
+        id: 'endDate', label: 'SLA Date', align: 'center', dataType: 'stringSearchSortElement',
+      },
+      {
         id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
       },
       {
@@ -52,7 +106,29 @@ const PendingTaskTable = (props) => {
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
       },
-    ],
+    ] :
+      [
+        {
+          id: 'taskNumber', label: 'Task No', align: 'left', dataType: 'string',
+        },
+        {
+          id: 'pillar', label: 'Pillar', align: 'left', dataType: 'string',
+        },
+        {
+          id: 'company', label: 'Company', align: 'left', dataType: 'string',
+        },
+
+        {
+          id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
+        },
+        {
+          id: 'status', label: 'Status', align: 'left', dataType: 'string',
+        },
+        {
+          id: 'action', label: 'Action', align: 'right', dataType: 'element',
+        },
+      ],
+
     tableLabel: 'Pending Tasks',
   };
 
@@ -95,9 +171,11 @@ const ControversyPendingTaskTable = (props) => {
 };
 
 const PendingTasks = () => {
+  const [show, setShow] = useState(false);
+const [detail, setdetail] = useState('');
   // DISPATCH
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     dispatch({ type: 'PENDING_TASKS_GET_REQUEST' });
   }, []);
@@ -183,8 +261,9 @@ const PendingTasks = () => {
                   </div>
                 </div>
               </div>))}
+              <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail}/>
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} isAnalyst={isAnalyst} isQA={isQA} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>

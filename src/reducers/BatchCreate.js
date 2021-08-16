@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'BATCH_CREATE_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         batchpost: action.createbatch,
       };
     case 'BATCH_CREATE_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

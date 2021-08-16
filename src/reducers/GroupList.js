@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'GROUPLIST_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         grouplist: action.getgrouplist,
       };
     case 'GROUPLIST_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:
