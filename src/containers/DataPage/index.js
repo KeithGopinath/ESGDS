@@ -445,26 +445,27 @@ const DataPage = (props) => {
                 </DataAccordian>
               </Col>
 
-              <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
-                <DataAccordian header="Comments" isActive >
-                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // T1
-                    (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading) ? // T2
-                      <PageLoader /> : // T2R
-                      (dpCodeDataFromStore.error) &&
-                      <Result
-                        className="custom-table-result"
-                        icon={<InboxOutlined />}
-                        title={(dpCodeDataFromStore.error.message) || 'Something Went Wrong!'}
-                      /> : // T1R
-                    reqCommentsList.length > 0 ? // T3
-                      <DataComment reqCommentsList={reqCommentsList} /> : // T3R
-                      <Result
-                        className="custom-table-result"
-                        icon={<InboxOutlined />}
-                        title="No Data Found!"
-                      />}
-                </DataAccordian>
-              </Col>
+              {!isAnalyst_DC &&
+                <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+                  <DataAccordian header="Comments" isActive >
+                    {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // T1
+                      (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading) ? // T2
+                        <PageLoader /> : // T2R
+                        (dpCodeDataFromStore.error) &&
+                        <Result
+                          className="custom-table-result"
+                          icon={<InboxOutlined />}
+                          title={(dpCodeDataFromStore.error.message) || 'Something Went Wrong!'}
+                        /> : // T1R
+                      reqCommentsList.length > 0 ? // T3
+                        <DataComment reqCommentsList={reqCommentsList} /> : // T3R
+                        <Result
+                          className="custom-table-result"
+                          icon={<InboxOutlined />}
+                          title="No Data Found!"
+                        />}
+                  </DataAccordian>
+                </Col>}
 
             </React.Fragment>
           </div>
