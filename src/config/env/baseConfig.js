@@ -62,7 +62,7 @@ export default {
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
   },
   apiBaseUrl: {
-    dev: 'http://65.1.140.116:9010/',
+    dev: 'http://3.108.113.82/',
     prod: 'http://65.1.140.116:9010/',
   },
 };
