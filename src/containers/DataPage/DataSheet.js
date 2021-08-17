@@ -566,7 +566,9 @@ export const DataSheetComponent = (props) => {
   const onRejectSubmit = () => {
     let saveData;
     if (isAnalyst_DCR) {
-      saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' } };
+      saveData = {
+        ...defaultData, isAccepted: false, rejectComment: errorComment, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' },
+      };
     }
     props.onClickSave(saveData);
     message.error('Error Rejected Successfully, And your response has been recorded!', 8);
