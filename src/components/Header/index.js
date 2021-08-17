@@ -36,6 +36,7 @@ const Header = ({ title }) => {
   const onroleChange = (role) => {
     setUserRole(role);
     dispatch({ type: 'ROLE_CHANGE', role });
+    sessionStorage.role = role.label;
     history.push('/dashboard');
   }
 
