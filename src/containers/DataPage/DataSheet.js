@@ -200,7 +200,7 @@ export const DataSheetComponent = (props) => {
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
-  const formDataType = defaultData.dataType.toUpperCase();
+  const formDataType = defaultData.dataType ? defaultData.dataType.toUpperCase() : '';
 
   // *STATES* +
   // *TEXT SNIPPET*
@@ -283,9 +283,9 @@ export const DataSheetComponent = (props) => {
   // console.log(defaultData.error);
   // console.log(isErrorAccepted);
 
-  useEffect(() => {
-    setErrorComment('');
-  }, [isErrorAccepted]);
+  // useEffect(() => {
+  //   setErrorComment('');
+  // }, [isErrorAccepted]);
 
   useEffect(() => {
     if (!formIsError) {
@@ -447,7 +447,16 @@ export const DataSheetComponent = (props) => {
       if (isQA_DV) {
         saveData = {
           ...defaultData,
+          status: 'Completed',
+          source: formSource,
+          response: formResponse,
+          textSnippet: formTextSnippet,
+          pageNo: formPageNo,
+          screenShot: formScreenShotPath,
+          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          additionalDetails: dynamicFields,
           error: {
+            ...defaultData.error,
             hasError: formIsError,
             isThere: formIsError,
             type: formErrorType,
@@ -513,6 +522,17 @@ export const DataSheetComponent = (props) => {
     props.onClickSave(saveData);
   };
 
+  const dummyQAEditClickHandler = () => {
+    let saveData;
+    if (isQA_DV) {
+      saveData = {
+        ...defaultData,
+        status: 'Editable',
+      };
+    }console.log(saveData);
+    props.onClickSave(saveData);
+  };
+
   const onClickViewError = () => {
     setIsErrorPanelVisible(true);
   };
@@ -546,7 +566,7 @@ export const DataSheetComponent = (props) => {
   const onRejectSubmit = () => {
     let saveData;
     if (isAnalyst_DCR) {
-      saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, isAccepted: isErrorAccepted, errorStatus: 'Completed' } };
+      saveData = { ...defaultData, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' } };
     }
     props.onClickSave(saveData);
     message.error('Error Rejected Successfully, And your response has been recorded!', 8);
@@ -606,7 +626,12 @@ export const DataSheetComponent = (props) => {
 
       return false;
     }
-    if (isQA_DV) { return true; }
+    if (isQA_DV) {
+      if (defaultData.status === 'Completed') {
+        return true;
+      }
+      return false;
+    }
     if (isCompanyRep_DR) { return true; }
     if (isClientRep_DR) { return true; }
     return false;
@@ -861,7 +886,7 @@ export const DataSheetComponent = (props) => {
             placeholder="Url"
             onChange={onChangeFormURL}
             value={formURL}
-            disabled={disableField}
+            disabled
           />
         }
       />
@@ -878,46 +903,50 @@ export const DataSheetComponent = (props) => {
             size="large"
             onChange={onChangeFormPublicDate}
             value={formPublicDate && moment(formPublicDate)}
-            disabled={disableField}
+            disabled
           />
         }
       />
 
       {/* UPLOAD Field */}
-      <FieldWrapper
-        label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Upload
-            className="datapage-ant-upload"
-            maxCount={1}
-            fileList={formScreenShotFile && formScreenShotFile.fileList}
-            beforeUpload={screenShotBeforeUpload}
-            onChange={onChangeFormScreenShotPath}
-          >
-            <AntButton
-              className="datapage-ant-button"
-              disabled={disableField}
-              icon={<UploadOutlined />}
-            >Click to Upload
-            </AntButton>
-          </Upload>
-        }
-      />
-
-      {/* ScreenShot Field */}
-      <FieldWrapper
-        label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Image
-            width="50%"
-            src={formScreenShotPath}
+      <Col lg={12}>
+        <Row>
+          <FieldWrapper
+            label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            visible
+            size={[6, 5, 7]}
+            body={
+              <Upload
+                className="datapage-ant-upload"
+                maxCount={1}
+                fileList={formScreenShotFile && formScreenShotFile.fileList}
+                beforeUpload={screenShotBeforeUpload}
+                onChange={onChangeFormScreenShotPath}
+              >
+                <AntButton
+                  className="datapage-ant-button"
+                  disabled={disableField}
+                  icon={<UploadOutlined />}
+                >Click to Upload
+                </AntButton>
+              </Upload>
+            }
           />
-        }
-      />
+
+          {/* ScreenShot Field */}
+          <FieldWrapper
+            label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            visible
+            size={[6, 5, 7]}
+            body={
+              <Image
+                width="50%"
+                src={formScreenShotPath}
+              />
+            }
+          />
+        </Row>
+      </Col>
 
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData) => (
@@ -1044,10 +1073,12 @@ export const DataSheetComponent = (props) => {
         { isAnalyst_DCR && !isHistoryType && defaultData.error &&
         <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
         {/* FOR QA */}
-        {(isQA_DV) && !isHistoryType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        {(isQA_DV) && !isHistoryType && ((defaultData.error && defaultData.error.errorStatus !== 'Completed') || defaultData.status !== 'Completed') &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
         {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
+        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
+        {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' &&
+        <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
       </Col>
 
       {/* HORIZONTAL Line */}
