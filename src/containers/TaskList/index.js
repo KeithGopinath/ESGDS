@@ -134,15 +134,15 @@ const TaskList = (props) => {
       :
       obj.map((e) => ({
         key: e.taskNumber,
-        taskid: e.taskNumber,
-        group: e.group,
-        batch: e.batch,
-        company: e.company,
-        pillar: e.pillar,
-        analyst: e.analyst,
-        analystSla: moment(e.analystSLA).format('DD-MM-YYYY'),
-        qa: e.qa,
-        qaSla: moment(e.qaSLA).format('DD-MM-YYYY'),
+        taskid: e.taskNumber ? e.taskNumber : '--',
+        group: e.group ? e.group : '--',
+        batch: e.batch ? e.batch : '--',
+        company: e.company ? e.company : '--',
+        pillar: e.pillar ? e.pillar : '--',
+        analyst: e.analyst ? e.analyst : '--',
+        analystSla:e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
+        qa: e.qa ? e.qa : '--',
+        qaSla:e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
         action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
       }));
 
@@ -391,7 +391,7 @@ const TaskList = (props) => {
                 {multiCompanies &&
                   <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
                 <Card >
-                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} />
+                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={5} />
                 </Card>
               </Col>
             </Row>

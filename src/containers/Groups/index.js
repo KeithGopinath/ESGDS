@@ -63,7 +63,6 @@ const Groups = () => {
       dispatch({type: "GROUPBYID_RESET"});
     }
     if(location && !location.state){
-      console.log("undefined");
     const payload = { 
       filters: [
         { filterWith: "isUserApproved", value: true },
@@ -76,7 +75,6 @@ const Groups = () => {
       dispatch({type: "GROUPBYID_RESET"});
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else {
-      console.log("undefined");
       dispatch({type:"FILTER_USERS_RESET"});
       dispatch({ type: 'GROUPBYID_REQUEST', groupid: location.state });
       dispatch({type:"UNASSIGNEDBATCH_RESET"});
@@ -224,6 +222,17 @@ const Groups = () => {
         break;
       }
     }
+  }
+
+  for (const i of isData) {
+    if(i.roleDetails.role.length === 1){
+    for (const j of i.roleDetails.role) {
+      if(j.label === 'GroupAdmin'){
+        grpAdminlist.push(i);
+        break;
+      }
+    }
+  }
   }
 
   for(const obj of userList){
