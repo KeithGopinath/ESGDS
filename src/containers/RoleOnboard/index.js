@@ -35,6 +35,8 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     if (validMailStatus) {
       setOnboardAlert(validMailStatus.message);
       setDuplicateMails([]);
+      setInputList([{ email: '', onboardingtype: '', link: '' }]);
+      setEmailFileUpload('');
     } else if (InvalidMailStatus) {
       setChooseOption(chooseOption);
       setOnboardAlert(InvalidMailStatus.message);
@@ -53,6 +55,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       setEmailValid(true);
       setFileValid(true);
       setInputList([{ email: '', onboardingtype: '', link: '' }]);
+      setChooseOption('');
       setEmailFileUpload('');
       setFileUploadValidation(false);
       setEmailFiledsValidation(false);
@@ -66,12 +69,14 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     setChooseOption(data);
     if (data === 'email') {
       setFileUploadValidation(false);
+      setEmailFileUpload('');
       setDuplicateMails([]);
       setOnboardAlert("");
       setEmailValid(false);
       setFileValid(true);
     } else if (data === 'excel') {
       setEmailFiledsValidation(false);
+      setInputList([{ email: '', onboardingtype: '', link: '' }]);
       setDuplicateMails([]);
       setOnboardAlert("");
       setEmailValid(true);
