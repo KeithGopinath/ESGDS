@@ -55,7 +55,7 @@ const TaxonomySubset = () => {
     let obj = {}
     taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
       return (
-        data.headers.map((value) => {
+        data.headers.filter(val => val.inputType == 'Static').map((value) => {
           obj[value.name] = ''
         })
       )
