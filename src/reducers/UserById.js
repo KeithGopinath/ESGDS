@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'USER_BY_ID_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         userById: action.userById,
       };
     case 'USER_BY_ID_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:
