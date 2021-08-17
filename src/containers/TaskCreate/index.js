@@ -693,7 +693,7 @@ const TaskCreate = ({ flag }) => {
                     }
                     <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
                     <div className="analystQa-table">
-                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading} defaultPagination={5}/>
+                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading} defaultNoOfRows={5}/>
                     </div>
                   </div>
                   : <div className="not-batch-assign-screen">
@@ -723,7 +723,7 @@ const TaskCreate = ({ flag }) => {
                       </div>
                       <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
                       <div className="analystQa-table">
-                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading} defaultPagination={5}/>
+                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading} defaultNoOfRows={5}/>
                       </div>
                     </div>
                     : <div className="not-batch-assign-screen">
