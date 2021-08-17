@@ -299,6 +299,7 @@ const ErrorDataSheetTwo = (props) => {
           url: formURL,
           publicationDate: formPublicDate,
         },
+        raisedBy: sessionStorage.role,
         comment: formComment,
         errorStatus: 'Completed',
       },
@@ -407,7 +408,7 @@ const ErrorDataSheetTwo = (props) => {
           body={
             <Select
               name="response"
-              options={textResponse && textResponse.map((e) => ({ label: e, value: e }))}
+              options={textResponse}
               onChange={onChangeFormResponse}
               value={formResponse && { label: formResponse, value: formResponse }}
               placeholder="Choose Response"

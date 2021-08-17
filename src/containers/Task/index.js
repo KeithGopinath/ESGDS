@@ -250,10 +250,10 @@ const Task = (props) => {
 
   const extractReqTask = (data) => {
     let returnableTask;
-    if (isClientRep_DR || isCompanyRep_DR) {
-      [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
-    }
-    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR) {
+    // if (isClientRep_DR || isCompanyRep_DR) {
+    //   [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
+    // }
+    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR) {
       [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : data.filter((e) => (e.taskId === taskDetails.taskId));
     }
     if (isAnalyst_CC) {
@@ -373,6 +373,8 @@ const Task = (props) => {
   const kmpMembersList = dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix ? (reqTaskData.kmpMatrix.kmpMemberList) : [];
   const reqDpCodesData = getReqDpCodesList();
 
+  console.log(reqTaskData);
+
   const taskToNextPage = {
     taskId: reqTaskData.taskId,
     pillar: reqTaskData.pillar,
@@ -431,16 +433,16 @@ const Task = (props) => {
       postableData = { ...postableData, taskStatus: 'Collection Completed' };
     }
     if (isAnalyst_DCR) {
-      postableData = { ...postableData, taskStatus: 'Collection Completed' };
+      postableData = { ...postableData, taskStatus: 'Correction Completed' };
     }
     if (isQA_DV) {
       postableData = { ...postableData, taskStatus: 'Verification Completed' };
     }
     if (isClientRep_DR) {
-      postableData = { ...postableData, taskStatus: '' };
+      postableData = { ...postableData, taskStatus: 'Completed' };
     }
     if (isCompanyRep_DR) {
-      postableData = { ...postableData, taskStatus: '' };
+      postableData = { ...postableData, taskStatus: 'Completed' };
     }
 
     dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
@@ -456,6 +458,12 @@ const Task = (props) => {
       taskId: taskDetails.taskId,
     };
     if (isQA_DV) {
+      postableData = { ...postableData, taskStatus: 'Correction Pending' };
+    }
+    if (isClientRep_DR) {
+      postableData = { ...postableData, taskStatus: 'Correction Pending' };
+    }
+    if (isCompanyRep_DR) {
       postableData = { ...postableData, taskStatus: 'Correction Pending' };
     }
     dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
@@ -602,7 +610,7 @@ const Task = (props) => {
               { (((isAnalyst_DC || isAnalyst_DCR) && isValidationCalled) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
               <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
 
-              { isQA_DV &&
+              { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
               <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>}
 
               { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled &&
