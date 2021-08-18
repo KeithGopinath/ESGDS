@@ -8,7 +8,9 @@
     "start:open": "webpack-dev-server --mode=development --history-api-fallback --hot --host 0.0.0.0 --inline --port 9090 --open --content-base public/",
     "build": "webpack --progress",
     "build:prod": "cross-env NODE_ENV=production webpack --mode=production --profile -p",
-    "serve:prod": "cross-env NODE_ENV=production webpack-dev-server --port 9090 --history-api-fallback --content-base build/"
+    "serve:prod": "cross-env NODE_ENV=production webpack-dev-server --history-api-fallback --content-base build/",
+    "build:qa": "cross-env NODE_ENV=none webpack --mode=none --profile -p",
+    "serve:qa": "cross-env NODE_ENV=none webpack-dev-server --history-api-fallback --content-base build/"
   },
   "author": "",
   "license": "ISC",
