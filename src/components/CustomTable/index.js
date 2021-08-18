@@ -72,7 +72,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination, selectItem, viewCheckedCompanies, tabFlag,
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -136,8 +136,8 @@ const CustomTable = ({
       if (new Date(b[ofOrderBy]) > new Date(a[ofOrderBy])) {
         return 1;
       }
-    } 
-    if (sortDataType === 'string' && b[ofOrderBy] && a[ofOrderBy]){
+    }
+    if (sortDataType === 'string' && b[ofOrderBy] && a[ofOrderBy]) {
       if ((b[ofOrderBy]).toLowerCase() < (a[ofOrderBy]).toLowerCase()) {
         return -1;
       }
@@ -221,7 +221,7 @@ const CustomTable = ({
   };
 
   const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
-  
+
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
 
@@ -328,9 +328,7 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        {selectItem && <button className="view-checked-company-reports btn btn-primary" onClick={viewCheckedCompanies}>{ tabFlag === 'Controversy' ? 'View Controversy Task':'View Companies Task'}</button>}
         <TablePagination
-          className={selectItem ? 'w-auto d-flex align-items-end flex-column' : ''}
           rowsPerPageOptions={[5, 10, 15]}
           component="div"
           count={rowsData.length}
