@@ -118,7 +118,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
           <Option value={data} key={data[id]}>{data}</Option>
         ))}</Select>
       </div>,
@@ -206,7 +206,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >
           {pendingCompaniesFilter && pendingCompaniesFilter.map((data, id) => (
             <Option value={data} key={data[id]}>{data}</Option>
           ))}</Select>
@@ -246,7 +246,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
           <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
         ))}</Select>
       </div>,
