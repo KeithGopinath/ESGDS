@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Card, Button } from 'react-bootstrap';
 import { Checkbox, Select } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
@@ -117,7 +118,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
           <Option value={data} key={data[id]}>{data}</Option>
         ))}</Select>
       </div>,
@@ -205,7 +206,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >
           {pendingCompaniesFilter && pendingCompaniesFilter.map((data, id) => (
             <Option value={data} key={data[id]}>{data}</Option>
           ))}</Select>
@@ -245,7 +246,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
+        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonom" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
           <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
         ))}</Select>
       </div>,
@@ -287,9 +288,12 @@ const Reports = (props) => {
               </div>
             ))}
           </div>
-          <div>
-            <CustomTable tableData={selectTab} showDatePicker selectItem={selectItem} viewCheckedCompanies={viewCheckedCompanies} tabFlag={tabFlag} isLoading={loading} />
-          </div>
+          <Card>
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} />
+            <div className="w-100 d-flex justify-content-center">
+              <Button className="mb-2 view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>{tabFlag === 'Controversy' ? 'View Controversy Task' : 'View Companies Task'}</Button>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
