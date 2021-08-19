@@ -223,8 +223,8 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
           <Row className='d-flex ml-2 mr-2'>
             <Col lg={6} sm={6} md={6}>
               <Form.Group>
-                {(role === 'client' || role === 'company') && <Form.Label>Name <sup className="text-danger">*</sup></Form.Label>}
-                {role === 'employee' && <Form.Label>First Name <sup className="text-danger">*</sup></Form.Label>}
+                {(role === 'client' || role === 'company') && <Form.Label>Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>}
+                {role === 'employee' && <Form.Label>First Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>}
                 <Form.Control
                   className={!firstName && validate}
                   type="text"
@@ -257,7 +257,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Last Name <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Last Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                     <Form.Control
                       className={!lastName && validate}
                       type="text"
@@ -274,7 +274,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
             }
             <Col lg={6} sm={6} md={6}>
               <Form.Group>
-                <Form.Label>Email <sup className="text-danger">*</sup></Form.Label>
+                <Form.Label>Email {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                 <Form.Control
                   className={(email === '' || !flag && validatingSpaces(email) === false)}
                   type="text"
@@ -287,7 +287,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
             </Col>
             <Col lg={6} sm={6} md={6}>
               <Form.Group>
-                <Form.Label>Phone <sup className="text-danger">*</sup></Form.Label>
+                <Form.Label>Phone {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                 <Form.Control
                   className={!phoneNumber && validate || phoneNumber && validate === 'mobile'? 'border-danger': '' }
                   type="tel"
@@ -304,7 +304,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
             {(role === 'company' || role === 'client') &&
               <Col lg={6} sm={6} md={6}>
                 <Form.Group>
-                  <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
+                  <Form.Label>Company Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                   <div className={!flag && ((!companyName || companyName) && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
                     {flag ?
                       <React.Fragment>
@@ -338,12 +338,11 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <React.Fragment>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Pan Card Number <sup className="text-danger">* </sup>
-                      {!flag ? <span>
+                    <Form.Label>Pan Card Number {!flag ? <React.Fragment><sup className="text-danger">*</sup><span>
                         <OverlayTrigger placement="right" overlay={renderTooltip} className="password-tooltip">
                           <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                         </OverlayTrigger>
-                      </span> : ''}
+                      </span> </React.Fragment> : ''}
                     </Form.Label>
                     <Form.Control
                       className={!pancardNumber && validate || (pancardNumber && validate === true ? 'border-danger' : '')}
@@ -360,7 +359,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Aadhar Number <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Aadhar Number {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                     <Form.Control
                       className={(!adharCard || adharCard && adharCard.length < 12) && validate}
                       type="tel"
@@ -376,7 +375,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Account Holder Name <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Account Holder Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                     <Form.Control
                       type="text"
                       name="accHolderName"
@@ -389,7 +388,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Account Number <sup className="text-danger">*</sup></Form.Label>
+                    <Form.Label>Account Number {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                     <Form.Control
                       className={!bankAccountNumber && validate}
                       type="tel"
@@ -406,11 +405,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
-                    <Form.Label>Bank IFSC <sup className="text-danger">* </sup>{!flag ? <span>
+                    <Form.Label>Bank IFSC {!flag ? <React.Fragment>
+                      <sup className="text-danger">*</sup>
+                      <span>
                         <OverlayTrigger placement="right" overlay={ifscTooltip} className="password-tooltip">
                           <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                         </OverlayTrigger>
-                      </span> : ''}</Form.Label>
+                      </span>
+                      </React.Fragment> : ''}</Form.Label>
                     <Form.Control
                       className={!bankIFSCCode && validate || bankIFSCCode && validate==='ifsc' ? 'border-danger': ''}
                       type="text"
@@ -432,7 +434,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Row className='d-flex ml-2 mr-2'>
                 <Col lg={4} sm={4} md={4} className="profile-image">
                   <Form.Group>
-                    <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                    <Form.Label>{role == 'employee' ? 'Aadhar Card ' : 'Letter of authentication '}{!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label><br></br>
                     <Image
                       width={200}
                       src={imageOne}
@@ -442,7 +444,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 </Col>
                 <Col lg={4} sm={4} md={4} className="profile-image">
                   <Form.Group>
-                    <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}<sup className="text-danger">*</sup></Form.Label><br></br>
+                    <Form.Label>{role == 'employee' ? 'Cancelled Cheque ' : role == 'company' ? 'Company ID Proof ' : 'Employee ID Proof '}{!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label><br></br>
                     <Image
                       width={200}
                       src={imageTwo}
@@ -453,7 +455,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 {role == 'employee' &&
                   <Col lg={4} sm={4} md={4} className="profile-image">
                     <Form.Group>
-                      <Form.Label>Pan Card <sup className="text-danger">*</sup></Form.Label><br></br>
+                      <Form.Label>Pan Card {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label><br></br>
                       <Image
                         width={200}
                         src={imageThree}
