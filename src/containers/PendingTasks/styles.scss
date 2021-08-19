@@ -54,3 +54,14 @@
 .tag-btn{
     cursor:pointer;
 }
+.editsla-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.editsla-content{
+    width: 100%;
+    color: gray;
+    font-weight: 600;
+    font-family: sans-serif;
+}

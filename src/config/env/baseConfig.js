@@ -60,6 +60,7 @@ export default {
     verificationUpdateDpCodeData: 'errorDetails/saveErrorDetails',
     getCompanySourceTypes: 'companySources',
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
+    slaExtension: 'taskSlaLogs/slaExtensionRequest',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

@@ -48,7 +48,8 @@ import taskList from './TaskList';
 import pillarWisePercentile from './PillarWisePercentile';
 import calculatePercentile from './CalculatePercentile';
 import controversyTaskList from './ControversyTaskList';
-
+import notification from './Notification';
+import slaExtexsion from './SlaExtension';
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -105,7 +106,9 @@ const combinedReducer = combineReducers({
   calculatePercentile,
   controversyTaskList,
   companySourceTypes,
-  taskSubmit
+  taskSubmit,
+  notification,
+  slaExtexsion
 });
 
 const rootReducer = (state, action) => {

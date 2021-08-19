@@ -16,6 +16,9 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     const [alert, setAlert] = useState('');
     const [alertStatus, setalertStatus] = useState(false);
     const dispatch = useDispatch();
+    useEffect(()=>{
+      dispatch({type:"UPDATETASK_RESET"});
+    },[])
   const handleClose = () => {
     setShow(false);
     setanalystDetail('');
@@ -24,6 +27,7 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     setanalystsla(null);
     setAlert('');
     setalertStatus(false);
+    dispatch({type:"UPDATETASK_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
   const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate.isLoading);
@@ -31,19 +35,13 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});
-  
   dispatch({type:"TASKEDITDETAILS_RESET"});
+     setalertStatus(true);
+    setAlert(isDataEdited.message);
   
 }
   },[isDataEdited]);
-  const isData = useSelector((tasklist) => tasklist.taskList.data);
-  const isDataLoading = useSelector((tasklist) => tasklist.taskList.isLoading);
-  const isList = isData && isData.data.rows;
-  useEffect(()=>{
-  if(isList){
-    handleClose();
-  }
-  },[isList])
+
 
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -115,8 +113,8 @@ if(isDataEdited){
 
       }
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
-      setalertStatus(true);
-      setAlert('Task Updated Successfully !!');
+      // setalertStatus(true);
+      // setAlert('Task Updated Successfully !!');
       // setTimeout(() => {
       //   setAlert(0);
       // }, 2000);
