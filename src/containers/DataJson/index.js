@@ -1,13 +1,14 @@
 /* eslint-disable */
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Select } from 'antd';
+import { message, Select } from 'antd';
 import 'antd/dist/antd.css';
 import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { saveAs } from "file-saver";
 
 const DataJson = ({ flag }) => {
     const sideBarRef = useRef();
@@ -16,58 +17,73 @@ const DataJson = ({ flag }) => {
 
     const dispatch = useDispatch();
     const { Option } = Select;
-    // const dataJson = useSelector((state) => state.dataJson.dataJson);
-    // const controversyJson = useSelector((state) => state.controversyJson.controversyJson);
+    const dataJson = useSelector((state) => state.dataJson.dataJson);
+    const controversyJson = useSelector((state) => state.controversyJson.controversyJson);
+    const generateJson = useSelector((state) => state.generateJson.generateJson);
+    const generateJsonError = useSelector((state) => state.generateJson.error);
+    const downloadJson = useSelector((state) => state.downloadJson.downloadJson);
+    const downloadJsonError = useSelector((state) => state.downloadJson.error);
 
     useEffect(() => {
+        if (flag) {
+            dispatch({ type: 'GET_CONTROVERSY_JSON_REQUEST' });
+        } else {
+            dispatch({ type: 'GET_DATA_JSON_REQUEST' });
+        }
         tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
         setTabFlag('Pending Companies');
     }, []);
 
-    // useEffect(() => {
-    //     if (flag) {
-    //         dispatch({ type: 'GET_CONTROVERSY_JSON_REQUEST' });
-    //     } else {
-    //         dispatch({ type: 'GET_DATA_JSON_REQUEST' });
-    //     }
-    // }, []);
+    // To display Generate Json messege and refresh the page
+    useEffect(() => {
+        if (generateJson) {
+            message.success(generateJson.message);
+            flag ? dispatch({ type: 'GET_CONTROVERSY_JSON_REQUEST' }) : dispatch({ type: 'GET_DATA_JSON_REQUEST' });
+            dispatch({ type: 'GENERATE_JSON_RESET' });
+        } else if (generateJsonError) {
+            message.error(generateJsonError.message);
+            dispatch({ type: 'GENERATE_JSON_RESET' });
+        }
+    }, [generateJson, generateJsonError]);
 
-    const onTaxonomyChange = (taxonomy) => {
-        setTaxonomy(taxonomy)
-    }
+    // To  Download Json file and show messege
+    useEffect(() => {
+        if (downloadJson) {
+            message.success(downloadJson.message);
+            saveAs(`${downloadJson && downloadJson.signedUrl}`);
+            dispatch({ type: 'DOWNLOAD_JSON_RESET' });
+        } else if (downloadJsonError) {
+            message.error(downloadJsonError.message);
+            dispatch({ type: 'DOWNLOAD_JSON_RESET' });
+        }
+    }, [downloadJson, downloadJsonError]);
 
     const onGenerateJson = (data) => {
         if (flag) {
-            const controversyPayload = {
-                taxonomyId: data.taxonomyId,
+            const payload = {
                 companyId: data.companyId,
+                type: 'controversy',
             }
-            //dispatch({ type: 'GET_REPORTS_REQUEST' });
+            dispatch({ type: 'GENERATE_JSON_REQUEST', payload });
         } else {
-            const dataPayload = {
-                taxonomyId: data.taxonomyId,
+            const payload = {
                 companyId: data.companyId,
-                year: data.year
+                year: data.year,
+                type: 'data',
             }
-            // dispatch({ type: 'GET_REPORTS_REQUEST' });
+            dispatch({ type: 'GENERATE_JSON_REQUEST', payload });
         }
     }
 
     const onDownloadJson = (data) => {
-        if (flag) {
-            const controversyPayload = {
-                taxonomyId: data.taxonomyId,
-                companyId: data.companyId,
-            }
-            //dispatch({ type: 'GET_REPORTS_REQUEST' });
-        } else {
-            const dataPayload = {
-                taxonomyId: data.taxonomyId,
-                companyId: data.companyId,
-                year: data.year
-            }
-            // dispatch({ type: 'GET_REPORTS_REQUEST' });
+        const payload = {
+            fileName: data.fileName
         }
+        dispatch({ type: 'DOWNLOAD_JSON_REQUEST', payload });
+    }
+
+    const onTaxonomyChange = (taxonomy) => {
+        setTaxonomy(taxonomy)
     }
 
     const pendingCompaniesTableData = (props) => {
@@ -149,7 +165,7 @@ const DataJson = ({ flag }) => {
                 key: index,
                 companyName: data.companyName,
                 year: data.year,
-                generatedDate: new Date(data.generatedDate).toDateString(),
+                generatedDate: new Date(data.modifiedDate).toDateString(),
                 download: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadJson(data) }} />
             }))
         return {
@@ -228,135 +244,15 @@ const DataJson = ({ flag }) => {
         setTabFlag(label);
     };
 
-    const dummyData = {
-        "pendingCompaniesData": [
-            {
-                "companyId": "60bf7d08b09656fa36050322",
-                "companyName": "Reliance LTD",
-                "year": "2019-2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa36050322",
-                "companyName": "Reliance LTD",
-                "year": "2018-2019",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa36050312",
-                "companyName": "Adani Gas",
-                "year": "2019-2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa36018975",
-                "companyName": "Infosys",
-                "year": "2018-2019",
-                "taxonomyId": "60bf7d08b09656fa36050324",
-                "taxonomyName": "C-Taxonomy"
-            }
-        ],
-        "completedCompaniesData": [
-            {
-                "companyId": "60bf7d08b09656fa3j532789",
-                "companyName": "Tata Power",
-                "year": "2019-2020",
-                "generatedDate": "Fri Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532788",
-                "companyName": "Flipkart",
-                "year": "2018-2019",
-                "generatedDate": "Tue Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532787",
-                "companyName": "Indian Oil",
-                "year": "2019-2020",
-                "generatedDate": "Wed Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532786",
-                "companyName": "Byjus",
-                "year": "2018-2019",
-                "generatedDate": "Fri Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            }
-        ]
-    }
+    const dataJsoncompanies = dataJson && dataJson.data;
+    const controversyJsoncompanies = controversyJson && controversyJson.data;
 
-    const dummyControversyData = {
-        "pendingCompaniesData": [
-            {
-                "companyId": "60bf7d08b09656fa3j532781",
-                "companyName": "Oppo",
-                "modifiedDate": "Fri Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532782",
-                "companyName": "Kitex",
-                "modifiedDate": "Fri Aug 05 2020",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532783",
-                "companyName": "Spice Jet",
-                "modifiedDate": "Fri Aug 03 2020",
-                "taxonomyId": "60bf7d08b09656fa36050324",
-                "taxonomyName": "C-Taxonomy"
-            }
-        ],
-        "completedCompaniesData": [
-            {
-                "companyId": "60bf7d08b09656fa3j532784",
-                "companyName": "Bajaj",
-                "modifiedDate": "Fri Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532785",
-                "companyName": "Maruti suzuki india Ltd",
-                "modifiedDate": "Tue Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050322",
-                "taxonomyName": "A-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532786",
-                "companyName": "HDFC Bank",
-                "modifiedDate": "Wed Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            },
-            {
-                "companyId": "60bf7d08b09656fa3j532787",
-                "companyName": "Ambuja Cements",
-                "modifiedDate": "Fri Aug 07 2020",
-                "taxonomyId": "60bf7d08b09656fa36050323",
-                "taxonomyName": "B-Taxonomy"
-            }
-        ]
-    }
-
-    const activeData = flag ? (tabFlag == 'Pending Companies' ? dummyControversyData.pendingCompaniesData : dummyControversyData.completedCompaniesData) :
-        (tabFlag == 'Pending Companies' ? dummyData.pendingCompaniesData : dummyData.completedCompaniesData);
+    const activeData = flag ? (tabFlag == 'Pending Companies' ? controversyJsoncompanies && controversyJsoncompanies.pendingCompaniesData : controversyJsoncompanies && controversyJsoncompanies.completedCompaniesData) :
+        (tabFlag == 'Pending Companies' ? dataJsoncompanies && dataJsoncompanies.pendingCompaniesData : dataJsoncompanies && dataJsoncompanies.completedCompaniesData);
 
     const filterData = activeData && activeData.filter(val => val.taxonomyId == taxonomy);
 
-    const tableData = tabFlag == 'Pending Companies' ? pendingCompaniesTableData(filterData) : completedCompaniesTableData(filterData);
+    const tableData = tabFlag == 'Pending Companies' ? pendingCompaniesTableData(filterData || []) : completedCompaniesTableData(filterData || []);
 
     return (
         <div className="main">

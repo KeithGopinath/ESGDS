@@ -60,6 +60,10 @@ export default {
     verificationUpdateDpCodeData: 'errorDetails/saveErrorDetails',
     getCompanySourceTypes: 'companySources',
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
+    getDataJson: 'json_files/payLoadGenerationDetails/data',
+    getControversyJson: 'json_files/payLoadGenerationDetails/controversy',
+    generateJson: 'json_files/generate-json',
+    downloadJson: 'json_files/download-json',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
