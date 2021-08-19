@@ -31,7 +31,6 @@ const TaxonomySubset = () => {
   // File handling
   const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
-  const fileName = 'clientTaxonomy'
 
   const onViewTaxonomy = (id) => {
     let temp = []
@@ -50,9 +49,9 @@ const TaxonomySubset = () => {
     setShowList(true);
   }
 
-  const onDownloadTaxonomy = (id) => {
-    let currentData = []
-    let obj = {}
+  const onDownloadTaxonomy = (id, taxonomyName) => {
+    let currentData = [];
+    let obj = {};
     taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
       return (
         data.headers.filter(val => val.inputType == 'Static').map((value) => {
@@ -60,7 +59,8 @@ const TaxonomySubset = () => {
         })
       )
     })
-    currentData.push(obj)
+    currentData.push(obj);
+    const fileName = taxonomyName;
     const ws = XLSX.utils.json_to_sheet(currentData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -81,7 +81,7 @@ const TaxonomySubset = () => {
       key: id,
       name,
       viewTaxonomy: <FontAwesomeIcon key={id} icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
-      downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id) }} />,
+      downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id, name) }} />,
       uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" className="taxonomy-subset-icons" onClick={() => { onUploadTaxonomy(id) }} />,
     }));
     return {
@@ -111,7 +111,7 @@ const TaxonomySubset = () => {
         dataType: 'element',
       },
       ],
-      tableLabel: 'Taxonomy Subsets',
+      // tableLabel: 'Taxonomy Subsets',
     };
   };
 
