@@ -18,31 +18,28 @@ const ButtonList = [
     id: 4, label: 'Profile', icon: faUser, address: 'user-profile',
   },
   {
-    id: 5, label: 'Role Assignment', icon: faUserTag, address: '',
+    id: 5, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
   },
   {
-    id: 6, label: 'Batch', icon: faFolderPlus, address: 'createbatch',
+    id: 6, label: 'Groups', icon: faUsers, address: 'groupshead',
   },
   {
-    id: 7, label: 'Groups', icon: faUsers, address: 'groupshead',
+    id: 7, label: 'Task', icon: faUsers, address: 'taskhead',
   },
   {
-    id: 8, label: 'Task', icon: faUsers, address: 'taskhead',
+    id: 8, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
   },
   {
-    id: 9, label: 'Pending Tasks', icon: faTasks, address: 'pendingtasks',
+    id: 9, label: 'Calculations', icon: faCalculator, address: 'calculationhead',
   },
   {
-    id: 10, label: 'Calculations', icon: faCalculator, address: 'calculationhead',
+    id: 10, label: 'JSON Generation', icon: faEdit, address: 'jsonhead',
   },
   {
-    id: 11, label: 'JSON Generation', icon: faEdit, address: 'jsonhead',
+    id: 11, label: 'Reports', icon: faChartBar, address: 'reports',
   },
   {
-    id: 12, label: 'Reports', icon: faChartBar, address: 'reports',
-  },
-  {
-    id: 13, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
+    id: 12, label: 'Upload Company', icon: faUpload, address: 'upload-companies',
   },
 ];
 
@@ -94,6 +91,9 @@ const UsersSubMenu = [
   },
   {
     id: 1, label: 'Manage Users', icon: faCog, address: 'manageusers'
+  },
+  {
+    id: 2, label: 'Role Assignment', icon: faUserTag, address: '',
   },
 ]
 

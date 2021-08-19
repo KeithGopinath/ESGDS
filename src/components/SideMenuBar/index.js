@@ -6,6 +6,7 @@ import { ButtonList, TaxonomySubMenu, ValidationSubMenu, GroupsSubMenu, UsersSub
 import { history } from '../../routes';
 import RoleAssignment from '../../containers/RoleAssign';
 import { faBars, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const SideMenuBar = React.forwardRef((props, ref) => {
   const taxonomyBtnRefs = useRef(TaxonomySubMenu.map(() => React.createRef()));
@@ -26,10 +27,10 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   // Buttonlist modified based on roles
   const modifiedButtonList = ButtonList.filter(val => (
-    userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 9 :
-      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 6 || val.id == 7 || val.id == 8 || val.id == 9 || val.id == 4 :
-        userRole == 'Company Representative' || userRole == 'Client Representative' ? val.id == 4 || val.id == 9 :
-          userRole == 'SuperAdmin' || userRole == 'Admin' ? val.id !== 4 && val.id !== 9 :
+    userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 8 :
+      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 4 || val.id == 7 :
+        userRole == 'Company Representative' || userRole == 'Client Representative' ? val.id == 4 || val.id == 8 :
+          userRole == 'SuperAdmin' || userRole == 'Admin' ? val.id !== 4 && val.id !== 8 :
             val.id == 0 || val.id == 4))
     .map((data) => ({
       id: data.id,
@@ -56,7 +57,9 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     const url = new URL(window.location.href)
-    if (url.pathname.includes('taxonomy')) {
+    if (show) {
+      setUsersSubMenu(true);
+    } else if (url.pathname.includes('taxonomy')) {
       setTaxonomySubMenu(true);
     } else if (url.pathname.includes('validation')) {
       setValidationSubMenu(true);
@@ -83,7 +86,8 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     const target = ref.current;
     target.classList.remove('sideMenuMini-main-responsive');
     target.classList.add('sideMenu-main-responsive');
-  }, []);
+
+  }, [show]);
 
   // Mapping of sideBar Menu and subMenu
   const sideMenuBtns = modifiedButtonList.map(({ id, label, icon, address, }, index) => {
@@ -93,7 +97,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
     return (
       <div>
-        {id == 1 || id == 2 || id == 3 || id == 7 || id == 8 || id == 10 || id == 11 ?
+        {id == 1 || id == 2 || id == 3 || id == 6 || id == 7 || id == 9 || id == 10 ?
           <div ref={sideMenuBtnRefs.current[index]} className={handler ? (subMenuShow ? 'submenu' : 'submenu-button') : (subMenuShow ? 'submenu-mini-button' : 'sideMenuMini-btn')}
             key={id} onClick={(event) => buttonClickHandler(event, address)}>
             <div className={handler ? 'sideMenu-btn' : 'sideMenuMini-btn'}>
@@ -150,25 +154,24 @@ const SideMenuBar = React.forwardRef((props, ref) => {
 
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
-    const BtnRefs = showValidationSubMenu && !show ? validationBtnRefs : showTaxonomySubMenu && !show ? taxonomyBtnRefs : showGroupsSubMenu && !show ? groupsBtnRefs : showUsersSubMenu && !show ? usersBtnRefs : showTaskSubMenu && !show ? taskBtnRefs : showCalculationSubMenu && !show ? calculationBtnRefs : showJsonSubMenu && !show ? jsonBtnRefs : sideMenuBtnRefs;
-    const MenuButton = showValidationSubMenu && !show ? ValidationSubMenu : showTaxonomySubMenu && !show ? TaxonomySubMenu : showGroupsSubMenu && !show ? GroupsSubMenu : showUsersSubMenu && !show ? UsersSubMenu : showTaskSubMenu && !show ? TaskSubMenu : showCalculationSubMenu && !show ? CalculationSubMenu : showJsonSubMenu && !show ? JsonGenerationSubMenu : modifiedButtonList;
-    const subMenuRefs = showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : showTaskSubMenu ? taskBtnRefs : showCalculationSubMenu ? calculationBtnRefs : showJsonSubMenu ? jsonBtnRefs : false;
+    const BtnRefs = showUsersSubMenu && show ? usersBtnRefs : showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : showTaskSubMenu ? taskBtnRefs : showCalculationSubMenu ? calculationBtnRefs : showJsonSubMenu ? jsonBtnRefs : sideMenuBtnRefs;
+    const MenuButton = showUsersSubMenu && show ? UsersSubMenu : showValidationSubMenu ? ValidationSubMenu : showTaxonomySubMenu ? TaxonomySubMenu : showUsersSubMenu ? UsersSubMenu : showGroupsSubMenu ? GroupsSubMenu : showTaskSubMenu ? TaskSubMenu : showCalculationSubMenu ? CalculationSubMenu : showJsonSubMenu ? JsonGenerationSubMenu : modifiedButtonList;
 
-    subMenuRefs && subMenuRefs.current.forEach((element) => {
+    usersBtnRefs && usersBtnRefs.current.forEach((element) => {
       const btn = element.current;
       btn && btn.classList.remove('sideMenu-btn-highlight');
     });
 
-    sideMenuBtnRefs && sideMenuBtnRefs.current.forEach((element) => {
+    BtnRefs && BtnRefs.current.forEach((element) => {
       const btn = element.current;
       btn && btn.classList.remove('sideMenu-btn-highlight');
     });
 
     MenuButton && MenuButton.forEach((Button, index) => {
       if (show && Button.label === 'Role Assignment') {
-        BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
+        BtnRefs && BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       } else if (!show && (history.location.pathname) == (`/${Button.address}`) && Button.address.length !== 0) {
-        BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
+        BtnRefs && BtnRefs.current[index].current.classList.add('sideMenu-btn-highlight');
       }
     });
   };
@@ -202,16 +205,22 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     }
   };
 
+  const scrollStyle = { height: 654 }
+
   return (
     <div ref={ref} className="sideMenu-main">
-      <div className="hamburger-start">
-        <div className="hamburger-bars-icon" onClick={sideBarMenuHandler} >
-          <FontAwesomeIcon icon={faBars} />
+      <div className="sidemenu-scroll-area">
+        <div className="hamburger-start">
+          <div className="hamburger-bars-icon">
+            <FontAwesomeIcon icon={faBars} onClick={sideBarMenuHandler} />
+            <div className={handler ? "sideMenu-logo" : "sidemenu-logo-hide"}>ESG</div>
+          </div>
         </div>
+        <Scrollbars thumbSize={500} style={scrollStyle}>
+          {sideMenuBtns}
+        </Scrollbars>
+        <RoleAssignment show={show} setShow={setShow} />
       </div>
-      <div className="sideMenu-logo">ESG</div>
-      {sideMenuBtns}
-      <RoleAssignment show={show} setShow={setShow} />
     </div>
   );
 });

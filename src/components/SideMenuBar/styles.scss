@@ -1,7 +1,5 @@
-
-
 .sideMenu-main {
-    width: 245px;
+    width: 247px;
     min-height: 100vh;
     background-color: $color-blue;
     display: flex;
@@ -14,7 +12,7 @@
 }
 
 .sideMenu-logo {
-    min-width: 220px;
+    min-width: 190px;
     font-size: large;
     font-weight: 600;
     font-family: 'Roboto', sans-serif;
@@ -29,7 +27,7 @@
     border-radius: 5px;
     display: flex;
     align-items: center;
-    margin: 10px 0 10px 0;
+    margin: 10px 13px 10px 0;
     outline: none;
     text-decoration: none !important;
 }
@@ -94,7 +92,7 @@
 }
 
 .sideMenuMini-main-responsive {
-    width: 50px;
+    width: 55px;
 }
 
 .sideMenuMini-btn {
@@ -142,7 +140,6 @@
     outline: none;
     text-decoration: none !important;
     background-color: rgba(83, 182, 240, 0.055);
-    ;
 }
 
 .submenu-button {
@@ -154,7 +151,7 @@
     margin: 10px 0 10px 0;
     outline: none;
     text-decoration: none !important;
-    transition:0.5s;
+    transition: 0.5s;
 }
 
 .submenu-mini-button {
@@ -168,4 +165,16 @@
     outline: none;
     justify-content: center;
     background-color: rgba(83, 182, 240, 0.055);
+}
+
+.sidemenu-scroll-area {
+    position: fixed;
+}
+
+.sidemenu-logo-hide {
+    display: none;
+}
+
+#root>div>div.sideMenu-main.sideMenu-main-responsive>div>div:nth-child(2)>div:nth-child(3)>div {
+    background-color: rgba(240, 240, 240, 0.2) !important
 }

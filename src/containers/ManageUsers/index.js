@@ -4,59 +4,66 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const ManageUsers = () => {
   const sideBarRef = useRef();
 
   const personalDetailsUpdateTableData = (props) => {
-    const tableRowData = (data) => data.map(({
-      name, email, phoneNo, role, requestedAt,
-    }, index) => ({
-      id: index,
-      name,
-      email,
-      phoneNo,
-      role,
-      requestedAt: new Date(requestedAt).toDateString(),
-      action: <div className="personal-details-action-wrap" > <div className="personal-details-action-details" > View updated details </div><div className="personal-details-action-reject">Reject</div > </div>,
+    const tableRowData = (data) => data.map((data,index) => ({
+      key: index,
+      name: data.name,
+      email: data.email,
+      phoneNo: data.phoneNo,
+      type: data.type,
+      primaryRole: data.primaryRole,
+      requestedDate: new Date(data.requestedAt).toDateString(),
+      viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons"/>
     }));
 
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [{
         id: 'name',
-        align: 'left',
+        align: 'center',
         label: 'Name',
         dataType: 'string',
       },
       {
         id: 'email',
-        align: 'left',
+        align: 'center',
         label: 'Email',
         dataType: 'string',
       },
       {
         id: 'phoneNo',
-        align: 'left',
+        align: 'center',
         label: 'Phone No',
         dataType: 'string',
       },
       {
-        id: 'role',
-        align: 'left',
-        label: 'Role',
+        id: 'type',
+        align: 'center',
+        label: 'Type',
         dataType: 'string',
       },
       {
-        id: 'requestedAt',
-        align: 'left',
-        label: 'Requested At',
+        id: 'primaryRole',
+        align: 'center',
+        label: 'Primary Role',
+        dataType: 'string',
+      },
+      {
+        id: 'requestedDate',
+        align: 'center',
+        label: 'Requested Date',
         dataType: 'date',
       },
       {
-        id: 'action',
-        align: 'left',
-        label: 'Action',
+        id: 'viewDetails',
+        align: 'center',
+        label: 'View Details',
         dataType: 'element',
       },
       ],
@@ -64,19 +71,30 @@ const ManageUsers = () => {
     };
   };
 
-  const PERSONAL_DETAILS_UPDATE_DATA = [{
+  const PERSONAL_DETAILS_UPDATE_DATA = [
+    {
     name: 'Balaji',
     email: 'balaji@gmail.com',
-    phoneNo: '91XXXXXX80',
-    role: 'Analyst',
-    requestedAt: '5-13-2020',
+    phoneNo: '9495540770',
+    type: 'Employee',
+    primaryRole: 'Group Admin',
+    requestedAt: 'Tue Aug 17 2021',
   },
   {
     name: 'Praveen Kumar',
     email: 'Pk@gmail.com',
-    phoneNo: '91XXXXXX80',
-    role: 'QA',
-    requestedAt: '5-18-2020',
+    phoneNo: '8787667789',
+    type: 'Company Representative',
+    primaryRole: 'NA',
+    requestedAt: 'Fri March 10 2021',
+  },
+  {
+    name: 'Jerin VS',
+    email: 'jerry@gmail.com',
+    phoneNo: '87873456789',
+    type: 'Client Representative',
+    primaryRole: 'NA',
+    requestedAt: 'Wed Jan 18 2021',
   },
   ];
 
