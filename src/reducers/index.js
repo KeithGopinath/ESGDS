@@ -48,6 +48,10 @@ import taskList from './TaskList';
 import pillarWisePercentile from './PillarWisePercentile';
 import calculatePercentile from './CalculatePercentile';
 import controversyTaskList from './ControversyTaskList';
+import dataJson from './GetDataJson';
+import controversyJson from './GetControversyJson';
+import generateJson from './GenerateJson';
+import downloadJson from './DownloadJson';
 
 const combinedReducer = combineReducers({
   login,
@@ -105,7 +109,11 @@ const combinedReducer = combineReducers({
   calculatePercentile,
   controversyTaskList,
   companySourceTypes,
-  taskSubmit
+  taskSubmit,
+  dataJson,
+  controversyJson,
+  generateJson,
+  downloadJson,
 });
 
 const rootReducer = (state, action) => {
