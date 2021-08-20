@@ -58,8 +58,10 @@ export default {
     controversyTaskList: 'taskAssignments/taskListForControversy',
     updateDpCodeData: 'standalone_datapoints/saveDatapointDetails',
     verificationUpdateDpCodeData: 'errorDetails/saveErrorDetails',
+    reviewUpdateDpCodeData: 'errorDetails/saveRepErrorDetails',
     getCompanySourceTypes: 'companySources',
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
+    postDerivedDataCalculation: 'derived_datapoints/derivedCalculation',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

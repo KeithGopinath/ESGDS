@@ -26,10 +26,12 @@ const FieldWrapper = (props) => {
 
 const ErrorPanel = (props) => {
   const defaultError = props.reqErrorData;
+
+  console.log('32453454325345454456456', defaultError);
   const [isQARaisedError, isCompanyRepRaisedError, isClientRepRaisedError] = [
     defaultError.raisedBy === 'QA',
-    defaultError.raisedBy === 'CompanyRep',
-    defaultError.raisedBy === 'ClientRep',
+    (defaultError.raisedBy === 'CompanyRep' || defaultError.raisedBy === 'Company Representative'),
+    (defaultError.raisedBy === 'ClientRep' || defaultError.raisedBy === 'Client Representative'),
   ];
 
 

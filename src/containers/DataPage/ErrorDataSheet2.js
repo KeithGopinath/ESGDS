@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { UploadOutlined } from '@ant-design/icons';
@@ -5,6 +6,8 @@ import { DatePicker, Button as AntButton, Image, Upload, message, Input } from '
 import Select from 'react-select';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import validateReqFields from './validateReqFields';
+
 
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
@@ -68,7 +71,7 @@ const onChangeDynamiceFieldsValue = (event, dynamicDataList, eachField, setDynam
 };
 
 const getReqFields = ({
-  eachData, dynamicFields, setDynamicFields, disableField,
+  eachData, dynamicFields, setDynamicFields, disableField, error,
 }) => {
   const {
     inputType, name, value, inputValues,
@@ -79,6 +82,7 @@ const getReqFields = ({
       return (
         <Input
           placeholder={`Enter ${name}`}
+          className={error && 'red-class'}
           onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
           value={value}
           size="large"
@@ -91,6 +95,7 @@ const getReqFields = ({
         <Input.TextArea
           rows={1}
           size="large"
+          className={error && 'red-class'}
           placeholder={`Enter ${name}`}
           onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
           value={value}
@@ -125,6 +130,7 @@ const getReqFields = ({
         <Select
           name={name}
           options={inputValues}
+          className={error && 'red-class'}
           onChange={(e) => onChangeDynamiceFieldsValue(e, dynamicFields, eachData, setDynamicFields)}
           value={value.value && value.label ? value : null}
           placeholder={`Select ${name}`}
@@ -145,19 +151,29 @@ const getReqFields = ({
   return null;
 };
 
+
 const ErrorDataSheetTwo = (props) => {
+  console.log(props);
+
+  // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
-  const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
-    currentRole === 'Analyst',
-    currentRole === 'QA',
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // REQUIRED CONSOLE:
+  // console.log('******DATA SHEET PROPS******', props);
+
+  // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
+  const [isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR] = [
+    currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
   const defaultData = props.reqData;
   const formDescription = defaultData.description;
-  const formDataType = defaultData.dataType.toUpperCase();
+  const formDataType = defaultData.dataType && defaultData.dataType.toUpperCase();
 
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   const [formPageNo, setFormPageNo] = useState(defaultData.pageNo || '');
@@ -171,6 +187,29 @@ const ErrorDataSheetTwo = (props) => {
 
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
+  const [hasErrors, setHasErrors] = useState({
+    formTextSnippet: false,
+    formPageNo: false,
+    formScreenShotPath: false,
+    formResponse: false,
+    formSource: false,
+    formURL: false,
+    formPublicDate: false,
+    formScreenShotFile: false,
+    formErrorType: false,
+    formComment: false,
+    formIsError: false,
+    errorComment: false,
+    formControversyComment: false,
+    formNextReviewDate: false,
+    dynamicFields: [false],
+  });
+
+  const sourceList = props.reqSourceData;
+
+  const { textResponse } = props;
+
+  const { isError, isErrorCommentType } = props;
 
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -184,13 +223,24 @@ const ErrorDataSheetTwo = (props) => {
     setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
     setDynamicFields(defaultData.additionalDetails || []);
-  }, [defaultData]);
-
-  const sourceList = props.reqSourceData;
-
-  const { textResponse } = props;
-
-  const { isError, isErrorCommentType } = props;
+    setHasErrors({
+      formTextSnippet: false,
+      formPageNo: false,
+      formScreenShotPath: false,
+      formResponse: false,
+      formSource: false,
+      formURL: false,
+      formPublicDate: false,
+      formScreenShotFile: false,
+      formErrorType: false,
+      formComment: false,
+      formIsError: false,
+      errorComment: false,
+      formControversyComment: false,
+      formNextReviewDate: false,
+      dynamicFields: [false],
+    });
+  }, [defaultData, isError]);
 
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
@@ -200,9 +250,18 @@ const ErrorDataSheetTwo = (props) => {
     setFormPageNo(event.currentTarget.value);
   };
 
+  const getBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    }
+  });
+
   const onChangeFormScreenShotPath = (event) => {
     setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    setFormScreenShotFile(event);
+    getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
   };
 
   const onChangeFormResponse = (event) => {
@@ -257,23 +316,16 @@ const ErrorDataSheetTwo = (props) => {
   };
 
   const getIsDisableOrNot = () => {
-    if (isAnalyst) {
-      if (isErrorCommentType) {
-        return true;
-      }
-      if (defaultData.status === 'Completed') {
-        return true;
-      }
-      return false;
+    if (isAnalyst_DCR) {
+      return true;
     }
-    if (isQA) { return true; }
-    if (isCompanyRep) {
+    if (isCompanyRep_DR) {
       if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
         return true;
       }
       return false;
     }
-    if (isClientRep) {
+    if (isClientRep_DR) {
       if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
         return true;
       }
@@ -282,7 +334,38 @@ const ErrorDataSheetTwo = (props) => {
     return false;
   };
 
-  const disableField = props.isDataCorrection ? true : getIsDisableOrNot();
+  const doValidate = () => {
+    const errors = {
+      formTextSnippet: isError && !(formTextSnippet.length > 0),
+      formPageNo: isError && !(formPageNo),
+      formScreenShotPath: isError && !formScreenShotPath,
+      formResponse: isError && !formResponse,
+      formSource: isError && !(formSource.url && formSource.sourceName && formSource.publicationDate),
+      formURL: isError && !formURL,
+      formPublicDate: isError && !formPublicDate,
+      formScreenShotFile: isError && !formScreenShotFile,
+      formComment: isError && !(formComment.length > 0),
+      dynamicFields: isError ? dynamicFields.map((e) => {
+        if (e.inputType === 'Select') {
+          return !(e.value && e.value.value && e.value.label);
+        }
+        if (e.inputType === 'Text') {
+          return !(e.value.length > 0);
+        }
+        if (e.inputType === 'TextArea') {
+          return !(e.value.length > 0);
+        }
+        return false;
+      }) : [false],
+    };
+    setHasErrors(errors);
+
+    console.log(errors);
+    const roleScreenType = {
+      isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR,
+    };
+    return validateReqFields(errors, roleScreenType);
+  };
 
   const onClickSave = () => {
     const dummyDataReps = {
@@ -291,20 +374,28 @@ const ErrorDataSheetTwo = (props) => {
         hasError: isError,
         isThere: isError,
         refData: {
+          description: formDescription,
+          dataType: formDataType,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
+          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
           response: formResponse,
           source: formSource,
           url: formURL,
           publicationDate: formPublicDate,
+          additionalDetails: dynamicFields,
         },
         raisedBy: sessionStorage.role,
         comment: formComment,
         errorStatus: 'Completed',
       },
     };
-    props.onClickSave(dummyDataReps);
+    if (doValidate()) {
+      props.onClickSave(dummyDataReps);
+    } else {
+      message.error('Please Fill Required fields !');
+    }
   };
 
   const onClickEdit = () => {
@@ -315,9 +406,12 @@ const ErrorDataSheetTwo = (props) => {
         hasError: isError,
         isThere: isError,
         refData: {
+          description: formDescription,
+          dataType: formDataType,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
+          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
           response: formResponse,
           source: formSource,
           url: formURL,
@@ -329,6 +423,8 @@ const ErrorDataSheetTwo = (props) => {
 
     props.onClickSave(dummyDataReps);
   };
+
+  const disableField = getIsDisableOrNot();
 
   return (
     <React.Fragment>
@@ -354,6 +450,7 @@ const ErrorDataSheetTwo = (props) => {
           body={
             <Form.Control
               type="number"
+              className={hasErrors.formResponse && 'red-class'}
               name="response"
               placeholder="Response"
               onChange={onChangeFormResponse}
@@ -373,6 +470,7 @@ const ErrorDataSheetTwo = (props) => {
           <Form.Control
             type="text"
             name="response"
+            className={hasErrors.formResponse && 'red-class'}
             placeholder="Response"
             onChange={onChangeFormResponse}
             value={formResponse}
@@ -389,7 +487,7 @@ const ErrorDataSheetTwo = (props) => {
           visible={isErrorCommentType || isError}
           body={
             <DatePicker
-              className="datapage-datepicker"
+              className={hasErrors.formResponse ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
               name="response"
               size="large"
               onChange={onChangeFormResponse}
@@ -408,6 +506,7 @@ const ErrorDataSheetTwo = (props) => {
           body={
             <Select
               name="response"
+              className={hasErrors.formResponse && 'red-class'}
               options={textResponse}
               onChange={onChangeFormResponse}
               value={formResponse && { label: formResponse, value: formResponse }}
@@ -459,6 +558,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Select
             name="source"
+            className={hasErrors.formSource && 'red-class'}
             options={sourceList && sourceList.map((e) => ({ label: e.sourceName, value: e }))}
             onChange={onChangeFormSource}
             value={formSource && { label: formSource.sourceName, value: formSource }}
@@ -469,7 +569,7 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       {/* ADD SOURCE Button */}
-      {!isErrorCommentType && isError &&
+      {!isErrorCommentType && isError && !disableField &&
       <Col lg={6}>
         <Button onClick={props.openSourcePanel}>Add Source</Button>
       </Col>}
@@ -482,6 +582,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Form.Control
             as="textarea"
+            className={hasErrors.formTextSnippet && 'red-class'}
             name="textSnippet"
             placeholder="Snippet"
             onChange={onChangeFormTextSnippet}
@@ -499,6 +600,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Form.Control
             type="number"
+            className={hasErrors.formPageNo && 'red-class'}
             placeholder="Page No"
             onChange={onChangeFormPageNo}
             value={formPageNo}
@@ -542,49 +644,53 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       {/* UPLOAD Field */}
-      <FieldWrapper
-        label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-        size={[6, 5, 7]}
-        visible={!isErrorCommentType && isError}
-        body={
-          <Upload
-            className="datapage-ant-upload"
-            maxCount={1}
-            fileList={formScreenShotFile && formScreenShotFile.fileList}
-            beforeUpload={screenShotBeforeUpload}
-            onChange={onChangeFormScreenShotPath}
-          >
-            <AntButton
-              className="datapage-ant-button"
-              disabled={disableField}
-              icon={<UploadOutlined />}
-            >Click to Upload
-            </AntButton>
-          </Upload>
-        }
-      />
-
-      {/* ScreenShot Field */}
-      <FieldWrapper
-        label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-        size={[6, 5, 7]}
-        visible={isErrorCommentType || isError}
-        body={
-          <Image
-            width="50%"
-            src={formScreenShotPath}
+      <Col lg={12}>
+        <Row>
+          <FieldWrapper
+            label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            visible={isErrorCommentType || isError}
+            size={[6, 5, 7]}
+            body={
+              <Upload
+                className="datapage-ant-upload"
+                maxCount={1}
+                fileList={formScreenShotFile && formScreenShotFile.fileList}
+                beforeUpload={screenShotBeforeUpload}
+                onChange={onChangeFormScreenShotPath}
+              >
+                <AntButton
+                  className={hasErrors.formResponse ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
+                  disabled={disableField}
+                  icon={<UploadOutlined />}
+                >Click to Upload
+                </AntButton>
+              </Upload>
+            }
           />
-        }
-      />
+
+          {/* ScreenShot Field */}
+          <FieldWrapper
+            label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            visible={isErrorCommentType || isError}
+            size={[6, 5, 7]}
+            body={
+              <Image
+                width="50%"
+                src={formScreenShotPath}
+              />
+            }
+          />
+        </Row>
+      </Col>
 
       {/* DYNAMIC FIELDS COMES HERE */}
-      {dynamicFields.map((eachData) => (
+      {dynamicFields.map((eachData, index) => (
         <FieldWrapper
           visible={isErrorCommentType || isError}
           label={<div>{eachData.name}<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
           body={getReqFields({
-            eachData, dynamicFields, setDynamicFields, disableField,
+            eachData, dynamicFields, setDynamicFields, disableField, error: hasErrors.dynamicFields[index],
           })}
         />
       ))}
@@ -600,6 +706,7 @@ const ErrorDataSheetTwo = (props) => {
             as="textarea"
             disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
             aria-label="With textarea"
+            className={hasErrors.formComment && 'red-class'}
             placeholder="Comments"
             onChange={onChangeFormComment}
             value={formComment}
@@ -626,7 +733,6 @@ ErrorDataSheetTwo.propTypes = {
   isErrorCommentType: PropTypes.string,
   openSourcePanel: PropTypes.func,
   onClickSave: PropTypes.func,
-  isDataCorrection: PropTypes.bool,
 };
 
 export default ErrorDataSheetTwo;
