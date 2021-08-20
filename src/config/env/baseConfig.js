@@ -62,6 +62,10 @@ export default {
     getCompanySourceTypes: 'companySources',
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
     postDerivedDataCalculation: 'derived_datapoints/derivedCalculation',
+    getDataJson: 'json_files/payLoadGenerationDetails/data',
+    getControversyJson: 'json_files/payLoadGenerationDetails/controversy',
+    generateJson: 'json_files/generate-json',
+    downloadJson: 'json_files/download-json',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

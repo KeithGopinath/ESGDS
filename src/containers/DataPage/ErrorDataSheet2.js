@@ -704,7 +704,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Form.Control
             as="textarea"
-            disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
+            disabled={disableField}
             aria-label="With textarea"
             className={hasErrors.formComment && 'red-class'}
             placeholder="Comments"
