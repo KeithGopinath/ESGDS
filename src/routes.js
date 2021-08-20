@@ -7,7 +7,7 @@ import Users from './containers/Users';
 import Groups from './containers/Groups';
 import ManageUsers from './containers/ManageUsers';
 import Onboard from './containers/Onboard';
-import Task from './containers/Task';
+import Task from './containers/Task/index';
 import Createbatch from './containers/BatchView';
 import CreateGroup from './containers/GroupCreate';
 import PendingTasks from './containers/PendingTasks';

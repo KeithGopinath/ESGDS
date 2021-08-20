@@ -17,12 +17,14 @@ export function* dpCodeDataUpdateRequest(data) {
     let endPoint = '';
     switch (data.taskType) {
       case 'Data Collection':
+      case 'Data Correction':
         endPoint = `${envConfig.apiEndPoints.updateDpCodeData}`;
         break;
-      case 'Data Correction':
       case 'Data Verification':
-      case 'Data Review':
         endPoint = `${envConfig.apiEndPoints.verificationUpdateDpCodeData}`;
+        break;
+      case 'Data Review':
+        endPoint = `${envConfig.apiEndPoints.reviewUpdateDpCodeData}`;
         break;
       default:
         break;
