@@ -69,7 +69,7 @@ export default {
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
-    qa: 'http://3.109.80.244',
+    qa: 'http://3.109.80.244/',
     prod: 'http://3.108.113.82/',
   },
 };

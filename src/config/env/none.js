@@ -1,7 +1,7 @@
 import baseConfig from './baseConfig';
 
 const qa = {
-  baseUrl: baseConfig.apiBaseUrl.test,
+  baseUrl: baseConfig.apiBaseUrl.qa,
 };
 
 export default {
