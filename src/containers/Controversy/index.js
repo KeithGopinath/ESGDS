@@ -46,7 +46,7 @@ const ControversyPendingTaskTable = (props) => {
     href
     to={{
       pathname: '/controversypage',
-      state: { dpCodeData: { ...e, status: 'Completed', controversyResponseList: props.controversyResponseList }, type: 'UPDATE', taskDetails: props.taskDetails },
+      state: { dpCodeData: { ...e, status: 'Completed', inputValues: props.inputValues }, type: 'UPDATE', taskDetails: props.taskDetails },
     }}
   >View
   </Link>,
@@ -169,7 +169,7 @@ const Controversy = (props) => {
                 message={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? (reqConDpCodeDataFromStore.error.message || 'Something went wrong !') : null}
                 icon={(reqConDpCodeDataFromStore && reqConDpCodeDataFromStore.error) ? <CloseCircleFilled /> : null}
                 taskDetails={taskDetails}
-                controversyResponseList={reqDpCodeData.responseList}
+                inputValues={reqDpCodeData.inputValues}
               />
             </div>
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>

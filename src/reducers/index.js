@@ -50,6 +50,12 @@ import calculatePercentile from './CalculatePercentile';
 import controversyTaskList from './ControversyTaskList';
 import notification from './Notification';
 import slaExtexsion from './SlaExtension';
+import derivedDataCalculation from './DerivedDataCalculation';
+import dataJson from './GetDataJson';
+import controversyJson from './GetControversyJson';
+import generateJson from './GenerateJson';
+import downloadJson from './DownloadJson';
+
 const combinedReducer = combineReducers({
   login,
   otp,
@@ -108,7 +114,12 @@ const combinedReducer = combineReducers({
   companySourceTypes,
   taskSubmit,
   notification,
-  slaExtexsion
+  slaExtexsion,
+  derivedDataCalculation,
+  dataJson,
+  controversyJson,
+  generateJson,
+  downloadJson,
 });
 
 const rootReducer = (state, action) => {

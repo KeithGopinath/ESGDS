@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { Button } from 'react-bootstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -72,7 +73,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination, tabFlagEnable, viewCheckedCompanies, selectItem
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -248,7 +249,7 @@ const CustomTable = ({
             </Space>
             <ThemeProvider theme={theme}>
               <TextField
-                placeholder="search"
+                placeholder="Search"
                 style={{ padding: '20px' }}
                 onChange={handlesSearch}
                 autoComplete="off"
@@ -328,15 +329,21 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 15]}
-          component="div"
-          count={rowsData.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        {/* <div className="w-100 d-flex justify-content-between"> */}
+        {/* <div></div> */}
+        <div className="w-100 d-flex justify-content-end">
+          {tabFlagEnable ?
+            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={rowsData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </div>
       </Paper>
     </div>
   );

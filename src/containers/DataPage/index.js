@@ -98,7 +98,18 @@ const DataPage = (props) => {
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
   const [reqHistoricalData, setReqHistoricalData] = useState((reqDpCodeData && reqDpCodeData.historicalData) || []);
 
+  // ABSENCE OF DATA IN SUBSEQUEST YEARS
+  const lastHistoricalData = reqHistoricalData.filter((e, i) => (i === reqHistoricalData.lenght - 1));
+
+  console.log(lastHistoricalData);
+
   const reqCommentsList = reqDpCodeData.comments || [];
+
+  const getDefaultCurrentDataForYear = (year) => {
+    const defaultCurrentData = (reqDpCodeData && reqDpCodeData.currentData) || [];
+    const [returnableData] = defaultCurrentData.filter((e) => e.fiscalYear === year);
+    return returnableData;
+  };
 
   const saveReqCurrentData = (data) => {
     setReqCurrentData(reqCurrentData.map((e) => {
@@ -200,7 +211,7 @@ const DataPage = (props) => {
       fiscalYear: e.fiscalYear,
       textSnippet: e.textSnippet,
       pageNo: e.pageNo,
-      screenShot: e.screenShotBase64,
+      screenShot: e.screenShotBase64 || e.screenShot,
       response: e.response,
       source: e.source,
       additionalDetails: additionalDetailsMapper(e),
@@ -216,7 +227,20 @@ const DataPage = (props) => {
       returnableData = {
         dpCode: e.dpCode,
         fiscalYear: e.fiscalYear,
-        error: { ...e.error, refData: { ...e.error.refData, additionalDetails: additionalDetailsMapper(e.error.refData) } },
+        error: {
+          ...e.error,
+          // refData: {
+          //   ...e.error.refData, screenShot: e.error.refData.screenShotBase64, screenShotBase64: undefined, additionalDetails: additionalDetailsMapper(e.error.refData),
+          // },
+          refData: {
+            textSnippet: e.error.refData.textSnippet,
+            pageNo: e.error.refData.pageNo,
+            screenShot: e.error.refData.screenShotBase64 || e.error.refData.screenShot,
+            response: e.error.refData.response,
+            source: e.error.refData.source,
+            additionalDetails: additionalDetailsMapper(e.error.refData),
+          },
+        },
       };
     }
     return returnableData;
@@ -247,8 +271,12 @@ const DataPage = (props) => {
         dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Collection' });
         setStatusAlert(true);
       }
-      if (isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+      if (isQA_DV) {
         dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Verification' });
+        setStatusAlert(true);
+      }
+      if (isCompanyRep_DR || isClientRep_DR) {
+        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Review' });
         setStatusAlert(true);
       }
     } else {
@@ -409,6 +437,7 @@ const DataPage = (props) => {
                               locationData={props.location}
                               reqErrorList={reqErrorList}
                               // openSourcePanel={openSourcePanel}
+                              getDefaultCurrentDataForYear={getDefaultCurrentDataForYear}
                               onClickSave={saveReqCurrentData}
                             />
                             <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
