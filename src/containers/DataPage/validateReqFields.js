@@ -16,38 +16,42 @@ export default (errors, roleScreenType) => {
     formErrorType,
     formComment,
     formIsError,
-    // errorComment,
+    errorComment,
     formControversyComment,
     formNextReviewDate,
     dynamicFields,
+    formThreshold,
   } = errors;
   if (isAnalyst_DC) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold &&
     !dynamicFields.includes(true));
   }
   if (isAnalyst_DCR) {
-    return true;
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !errorComment && !formThreshold &&
+      !dynamicFields.includes(true));
   }
   if (isAnalyst_CC) {
     return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formURL && !formPublicDate && !formScreenShotPath &&
     !formNextReviewDate && !formControversyComment && !dynamicFields.includes(true));
   }
   if (isQA_DV) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formThreshold &&
     !formScreenShotPath && !dynamicFields.includes(true) && !formIsError && !formErrorType && !formComment);
   }
   if (isCompanyRep_DR) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
     !dynamicFields.includes(true));
   }
   if (isCompanyRep_DR) {
-    return true;
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
+      !dynamicFields.includes(true));
   }
   if (isClientRep_DR) {
-    return true;
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
+      !dynamicFields.includes(true));
   }
   if (isHistoryType) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold &&
       !formScreenShotFile && !dynamicFields.includes(true));
   }
   return false;

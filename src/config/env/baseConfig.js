@@ -67,6 +67,7 @@ export default {
     getControversyJson: 'json_files/payLoadGenerationDetails/controversy',
     generateJson: 'json_files/generate-json',
     downloadJson: 'json_files/download-json',
+    getDpCodeDataForClientCompanyRep: 'datapoints/repDpDetails',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

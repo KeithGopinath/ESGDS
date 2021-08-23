@@ -5,7 +5,20 @@ import { doGet, doPost, doPut } from '../utils/fetchWrapper';
 
 export function* dpCodeDataGetRequest(data) {
   try {
-    const response = yield doPost(`${envConfig.apiEndPoints.getDpCodeData}`, data.payload);
+    let endPoint = '';
+    switch (data.taskType) {
+      case 'DATA_COLLECTION':
+      case 'DATA_CORRECTION':
+      case 'DATA_VERIFICATION':
+        endPoint = `${envConfig.apiEndPoints.getDpCodeData}`;
+        break;
+      case 'DATA_REVIEW':
+        endPoint = `${envConfig.apiEndPoints.getDpCodeDataForClientCompanyRep}`;
+        break;
+      default:
+        break;
+    }
+    const response = yield doPost(`${endPoint}`, data.payload);
     yield put(actionCreators.dpCodeDataGetSuccess(response));
   } catch (error) {
     yield put(actionCreators.dpCodeDataGetFailure(error));
@@ -16,14 +29,14 @@ export function* dpCodeDataUpdateRequest(data) {
   try {
     let endPoint = '';
     switch (data.taskType) {
-      case 'Data Collection':
-      case 'Data Correction':
+      case 'DATA_COLLECTION':
+      case 'DATA_CORRECTION':
         endPoint = `${envConfig.apiEndPoints.updateDpCodeData}`;
         break;
-      case 'Data Verification':
+      case 'DATA_VERIFICATION':
         endPoint = `${envConfig.apiEndPoints.verificationUpdateDpCodeData}`;
         break;
-      case 'Data Review':
+      case 'DATA_REVIEW':
         endPoint = `${envConfig.apiEndPoints.reviewUpdateDpCodeData}`;
         break;
       default:
