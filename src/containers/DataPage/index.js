@@ -21,7 +21,7 @@ import DataAccordian from './DataAccordian';
 import DataComment from './DataComment';
 import PageLoader from '../../components/PageLoader';
 
-let count = 0;
+// let count = 0;
 
 const DataPage = (props) => {
   // CURRENT ROLE
@@ -90,18 +90,18 @@ const DataPage = (props) => {
 
   const currentDataForLoading = (reqDpCodeData && reqDpCodeData.currentData) || [];
 
-  const historicalDataForLoading = (reqDpCodeData && reqDpCodeData.historicalData) || [];
+  const historicalDataForLoading = (reqDpCodeData && reqDpCodeData.currentData) || [];
 
   // reqCurrentData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF CURRENT DATA
   const [reqCurrentData, setReqCurrentData] = useState((reqDpCodeData && reqDpCodeData.currentData) || []);
 
   // reqHistoricalData A TEMP STATE WITH DEFAULT DATA AS ARRAY OF HISTORICAL DATA
-  const [reqHistoricalData, setReqHistoricalData] = useState((reqDpCodeData && reqDpCodeData.historicalData) || []);
+  const [reqHistoricalData, setReqHistoricalData] = useState((reqDpCodeData && reqDpCodeData.currentData) || []);
 
-  // ABSENCE OF DATA IN SUBSEQUEST YEARS
-  const lastHistoricalData = reqHistoricalData.filter((e, i) => (i === reqHistoricalData.lenght - 1));
+  // // ABSENCE OF DATA IN SUBSEQUEST YEARS
+  // const lastHistoricalData = reqHistoricalData.filter((e, i) => (i === reqHistoricalData.length - 1));
 
-  console.log(lastHistoricalData);
+  // console.log(lastHistoricalData);
 
   const reqCommentsList = reqDpCodeData.comments || [];
 
@@ -112,6 +112,7 @@ const DataPage = (props) => {
   };
 
   const saveReqCurrentData = (data) => {
+    // console.log(data, 'INCOMING DATA');
     setReqCurrentData(reqCurrentData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
@@ -119,9 +120,17 @@ const DataPage = (props) => {
       }
       return e;
     }));
+    // console.log(reqCurrentData.map((e) => {
+    //   if (e.fiscalYear === data.fiscalYear) {
+    //     const returnableData = { ...e, ...data };
+    //     return returnableData;
+    //   }
+    //   return e;
+    // }), 'OUTGOING DATA');
   };
 
   const saveReqHistoricalData = (data) => {
+    // console.log(data, 'INCOMING EDIT DATA');
     setReqHistoricalData(reqHistoricalData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
@@ -129,6 +138,13 @@ const DataPage = (props) => {
       }
       return e;
     }));
+    // console.log(reqHistoricalData.map((e) => {
+    //   if (e.fiscalYear === data.fiscalYear) {
+    //     const returnableData = { ...e, ...data };
+    //     return returnableData;
+    //   }
+    //   return e;
+    // }), 'OUTGING HISTORICAL DATA');
   };
 
   const getUnsavedCurrentYears = () => {
@@ -172,7 +188,7 @@ const DataPage = (props) => {
   });
 
   const backClickHandler = () => {
-    console.log('backClickHandler');
+    // console.log('backClickHandler');
     history.push({
       pathname: `/task/${reqTask.taskNumber}`,
       state: {
@@ -183,7 +199,7 @@ const DataPage = (props) => {
   };
 
   const previousClickHandler = () => {
-    console.log('previousClickHandler');
+    // console.log('previousClickHandler');
     const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
@@ -211,7 +227,7 @@ const DataPage = (props) => {
       fiscalYear: e.fiscalYear,
       textSnippet: e.textSnippet,
       pageNo: e.pageNo,
-      screenShot: e.screenShotBase64 || e.screenShot,
+      screenShot: e.screenShotBase64,
       response: e.response,
       source: e.source,
       additionalDetails: additionalDetailsMapper(e),
@@ -235,7 +251,7 @@ const DataPage = (props) => {
           refData: {
             textSnippet: e.error.refData.textSnippet,
             pageNo: e.error.refData.pageNo,
-            screenShot: e.error.refData.screenShotBase64 || e.error.refData.screenShot,
+            screenShot: e.error.refData.screenShotBase64,
             response: e.error.refData.response,
             source: e.error.refData.source,
             additionalDetails: additionalDetailsMapper(e.error.refData),
@@ -264,19 +280,19 @@ const DataPage = (props) => {
   };
 
   const saveAndNextClickHandler = () => {
-    console.log(reqDataCheckBeforeSave(), 'LIST OF NUMS');
+    // console.log(reqDataCheckBeforeSave(), 'LIST OF NUMS');
     if ((reqDataCheckBeforeSave().currentData).length === 0 && (reqDataCheckBeforeSave().historicalData).length === 0) {
-      console.log('saveAndNextClickHandler');
+      // console.log('saveAndNextClickHandler');
       if (isAnalyst_DC || isAnalyst_DCR) {
-        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Collection' });
+        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'DATA_COLLECTION' });
         setStatusAlert(true);
       }
       if (isQA_DV) {
-        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Verification' });
+        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'DATA_VERIFICATION' });
         setStatusAlert(true);
       }
       if (isCompanyRep_DR || isClientRep_DR) {
-        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'Data Review' });
+        dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'DATA_REVIEW' });
         setStatusAlert(true);
       }
     } else {
@@ -312,6 +328,7 @@ const DataPage = (props) => {
         memberName: dpCodeDetails.memberName || '',
         memberId: dpCodeDetails.memberId || '',
       },
+      taskType: 'DATA_COLLECTION',
     });
     // dispatch({ type: 'COMPANY_SOURCE_TYPES_GET_REQUEST', companyId: taskDetails.companyId });
   }, [props.location]);
@@ -322,8 +339,8 @@ const DataPage = (props) => {
       setStatusAlert(false);
     }
 
-    setReqCurrentData(reqDpCodeData.currentData || []);
-    setReqHistoricalData(reqDpCodeData.historicalData || []);
+    setReqCurrentData((reqDpCodeData && reqDpCodeData.currentData) || []);
+    setReqHistoricalData((reqDpCodeData && reqDpCodeData.currentData) || []);
   }, [dpCodeDataFromStore]);
 
   useEffect(() => {
@@ -355,9 +372,9 @@ const DataPage = (props) => {
     }
   }, [dpCodeDataUpdateFromStore]);
 
-  count += 1;
-  console.log(count, dpCodeDataFromStore.isLoading, dpCodeDataUpdateFromStore.isLoading, statusAlert, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-  console.log(currentDataForLoading.length, reqCurrentData.length);
+  // count += 1;
+  // console.log(count, dpCodeDataFromStore.isLoading, dpCodeDataUpdateFromStore.isLoading, statusAlert, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+  // console.log(currentDataForLoading.length, reqCurrentData.length);
 
   return (
     <div className="main">
@@ -382,7 +399,7 @@ const DataPage = (props) => {
                       /> : // T1R
                     reqHistoricalData.length > 0 ? // T3
                       <Tabs defaultActiveKey={reqHistoricalData[0] && reqHistoricalData[0].fiscalYear} >
-                        {reqHistoricalData.map((e) => (
+                        {reqHistoricalData.map((e, i) => (
                           <Tabs.TabPane tab={e.fiscalYear} key={e.fiscalYear}>
                             <DataSheetComponent
                               isHistoryType
@@ -391,6 +408,7 @@ const DataPage = (props) => {
                               reqErrorList={reqErrorList}
                               // openSourcePanel={openSourcePanel}
                               onClickSave={saveReqHistoricalData}
+                              lastHistoricalData={reqHistoricalData[i - 1] ? [reqHistoricalData[i - 1]] : []}
                             />
                           </Tabs.TabPane>))}
                       </Tabs> : // T3R
@@ -422,7 +440,7 @@ const DataPage = (props) => {
                       /> : // T1R
                     reqCurrentData.length > 0 ? // T3
                       <Tabs defaultActiveKey={reqCurrentData[0] && reqCurrentData[0].fiscalYear}>
-                        {reqCurrentData.map((e) => (
+                        {reqCurrentData.map((e, i) => (
                           <Tabs.TabPane
                             tab={
                               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -439,6 +457,7 @@ const DataPage = (props) => {
                               // openSourcePanel={openSourcePanel}
                               getDefaultCurrentDataForYear={getDefaultCurrentDataForYear}
                               onClickSave={saveReqCurrentData}
+                              lastHistoricalData={reqCurrentData[i - 1] ? [reqCurrentData[i - 1]] : reqHistoricalData.filter((ec, ic) => (ic === reqHistoricalData.length - 1))}
                             />
                             <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
                             <Col lg={12} className="datapage-button-wrap">

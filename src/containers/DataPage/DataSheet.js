@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -14,7 +15,6 @@ import validateReqFields from './validateReqFields';
 import AddSource from './AddSource';
 // import dynamicThings from '../../constants/DynamicConstants';
 
-// let temporaryData;
 // Field Wrapper ::
 // A function which wraps the datasheet fields with bootstrap's row and col tags
 const FieldWrapper = (props) => {
@@ -87,8 +87,6 @@ const getReqFields = ({
   const {
     inputType, name, value, inputValues,
   } = eachData;
-
-  console.log(error);
 
   switch (inputType) {
     case 'Text':
@@ -171,9 +169,6 @@ export const DataSheetComponent = (props) => {
   // CURRENT TAB
   const currentTab = sessionStorage.tab;
 
-  // REQUIRED CONSOLE:
-  // console.log('******DATA SHEET PROPS******', props);
-
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
@@ -191,13 +186,18 @@ export const DataSheetComponent = (props) => {
 
   // DEFAULT DATA
   const defaultData = props.reqData;
-  console.log(defaultData);
+
   // TEMPORANY DATAS
   const sourceList = defaultData.sourceList || [];
 
   const textResponse = defaultData.inputValues || [];
 
   const errorTypeList = props.reqErrorList;
+
+  const thresholdValue = defaultData.thresholdValue || { min: 0, max: 100 };
+
+  const lastHistoricalDataResponse = props.lastHistoricalData && props.lastHistoricalData[0] ? props.lastHistoricalData[0].response : null;
+
 
   // DATASHEET FORM DATA +
   // *DPCODE*
@@ -273,10 +273,12 @@ export const DataSheetComponent = (props) => {
     formControversyComment: false,
     formNextReviewDate: false,
     dynamicFields: [false],
+    formThreshold: false,
   });
 
   // USEEFFECTS
   useEffect(() => {
+    // console.log(props, '******PROPS******');
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
     setFormScreenShotPath(defaultData.screenShot || '');
@@ -317,6 +319,7 @@ export const DataSheetComponent = (props) => {
       formControversyComment: false,
       formNextReviewDate: false,
       dynamicFields: [false],
+      formThreshold: false,
     });
   }, [props.reqData]);
 
@@ -327,7 +330,7 @@ export const DataSheetComponent = (props) => {
   //   setErrorComment('');
   // }, [isErrorAccepted]);
 
-  console.log(formErrorRefData);
+  // console.log(formErrorRefData);
 
   useEffect(() => {
     if (!formIsError) {
@@ -349,7 +352,8 @@ export const DataSheetComponent = (props) => {
     }
   }, [formIsError]);
 
-  // Onchange Functions
+  // ONCHANGE FUNCTIONS
+
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
   };
@@ -372,19 +376,11 @@ export const DataSheetComponent = (props) => {
     getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
   };
 
-  console.log(formScreenShotFile);
-
   const onChangeFormResponse = (event) => {
     switch (formDataType) {
       case 'SELECT':
         setFormResponse(event.value);
         break;
-      // case 'BOOLEAN':
-      //   setFormResponse(event.value);
-      //   break;
-      // case 'GENDER':
-      //   setFormResponse(event.value);
-      //   break;
       case 'DATE':
         setFormResponse(event);
         break;
@@ -463,7 +459,12 @@ export const DataSheetComponent = (props) => {
       formTextSnippet: dpCodeInCompleteStatus && !(formTextSnippet.length > 0),
       formPageNo: dpCodeInCompleteStatus && !(formPageNo),
       formScreenShotPath: dpCodeInCompleteStatus && !formScreenShotPath,
-      formResponse: dpCodeInCompleteStatus && !formResponse,
+      formResponse: dpCodeInCompleteStatus && (formResponse ?
+        lastHistoricalDataResponse ?
+          ['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) ? !(['NA', 'na', 'Na'].includes(formResponse) || formResponse) : ['NA', 'na', 'Na'].includes(formResponse)
+          : !formResponse
+        : !formResponse
+      ),
       formSource: dpCodeInCompleteStatus && !(formSource.url && formSource.sourceName && formSource.publicationDate),
       formURL: dpCodeInCompleteStatus && !formURL,
       formPublicDate: dpCodeInCompleteStatus && !formPublicDate,
@@ -471,7 +472,7 @@ export const DataSheetComponent = (props) => {
       formErrorType: formIsError === true && !formErrorType,
       formComment: formIsError === true && !(formComment.length > 0),
       formIsError: !(formIsError === true || formIsError === false),
-      errorComment: !(errorComment.length > 0),
+      errorComment: !isErrorAccepted && !(errorComment.length > 0),
       formControversyComment: !(formControversyComment.length > 0),
       formNextReviewDate: dpCodeInCompleteStatus && !formNextReviewDate,
       dynamicFields: dpCodeInCompleteStatus ? dynamicFields.map((e) => {
@@ -486,10 +487,11 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }) : [false],
+      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
     };
     setHasErrors(errors);
 
-    console.log(errors);
+    // console.log(errors, '*******ERRORS******');
     const roleScreenType = {
       isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType,
     };
@@ -509,7 +511,7 @@ export const DataSheetComponent = (props) => {
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
         screenShot: formScreenShotPath,
-        screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+        screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
         additionalDetails: dynamicFields,
       };
     } else {
@@ -522,7 +524,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           additionalDetails: dynamicFields,
         };
       }
@@ -534,6 +536,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           additionalDetails: dynamicFields,
           isAccepted: isErrorAccepted,
           rejectComment: errorComment,
@@ -550,7 +553,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           additionalDetails: dynamicFields,
           error: {
             ...defaultData.error,
@@ -572,7 +575,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           comment: formControversyComment,
           nextReviewDate: formNextReviewDate,
           additionalDetails: dynamicFields,
@@ -584,6 +587,12 @@ export const DataSheetComponent = (props) => {
       props.onClickSave(saveData);
     } else {
       message.error('Please Fill Required fields !');
+      if (hasErrors.formThreshold) {
+        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+      }
+      if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
+        message.error('Response Should Not Be "NA');
+      }
     }
   };
 
@@ -603,11 +612,8 @@ export const DataSheetComponent = (props) => {
         saveData = {
           ...defaultData,
           error: {
-            hasError: formIsError,
-            isThere: formIsError,
-            type: formErrorType,
-            comment: formComment,
-            status: 'Editable',
+            ...defaultData.error,
+            errorStatus: 'Editable',
           },
         };
       }
@@ -625,10 +631,9 @@ export const DataSheetComponent = (props) => {
         ...defaultData,
         status: 'Editable',
       };
-    }console.log(saveData);
+    }
     setFormIsError(false);
     props.onClickSave(saveData);
-    // props.resetReqCurrentData();
   };
 
   const onClickViewError = () => {
@@ -636,7 +641,6 @@ export const DataSheetComponent = (props) => {
   };
 
   const onCloseErrorPanel = () => {
-    // temporaryData = defaultData;
     setIsErrorPanelVisible(false);
   };
 
@@ -655,12 +659,6 @@ export const DataSheetComponent = (props) => {
     setIsErrorAccepted(false);
   };
 
-  // const onRevert = () => {
-  //   props.onClickSave(temporaryData);
-  //   setIsErrorAccepted(null);
-  //   message.info('Reverted Successfully, Please click "View Error" button to Accept or Reject the error, again!', 8);
-  // };
-
   const onRejectSubmit = () => {
     let saveData;
     if (isAnalyst_DCR) {
@@ -668,9 +666,20 @@ export const DataSheetComponent = (props) => {
         ...defaultData, isAccepted: false, rejectComment: errorComment, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' },
       };
     }
-    props.onClickSave(saveData);
-    message.error('Error Rejected Successfully, And your response has been recorded!', 8);
-    onCloseErrorPanel();
+    if (doValidate()) {
+      props.onClickSave(saveData);
+      setIsErrorAccepted(false);
+      message.success('Error Rejected Successfully, And your response has been recorded!', 8);
+      onCloseErrorPanel();
+    } else {
+      message.error('Please Fill Required Details !', 8);
+      if (hasErrors.formThreshold) {
+        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+      }
+      if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
+        message.error('Response Should Not Be "NA');
+      }
+    }
   };
 
   // FUNC THAT MAKE SRC PANEL TO OPEN ON CALL
@@ -741,12 +750,12 @@ export const DataSheetComponent = (props) => {
 
 
   const saveClickHandler = () => {
-    console.log('HISTORICAL SAVE');
+    // console.log('HISTORICAL SAVE');
     dummySaveClickHandler();
   };
 
   const unFreezeClickHandler = () => {
-    console.log('UNFREEZE');
+    // console.log('UNFREEZE');
     dummyEditClickHandler();
   };
 
@@ -771,7 +780,7 @@ export const DataSheetComponent = (props) => {
       {/* HISTORY YEAR Field */}
       <FieldWrapper
         label={<div>Year<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={!isAnalyst_CC}
+        visible={isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType}
         size={[6, 5, 7]}
         body={
           <Form.Control
@@ -804,7 +813,7 @@ export const DataSheetComponent = (props) => {
       {/* SOURCE Field */}
       <FieldWrapper
         label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={!isAnalyst_CC}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType)}
         size={[6, 5, 7]}
         body={
           <Select
@@ -846,7 +855,7 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="number"
             name="response"
-            className={hasErrors.formResponse && 'red-class'}
+            className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
             placeholder="Response"
             onChange={onChangeFormResponse}
             value={formResponse}
@@ -902,7 +911,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Select
             name="response"
-            options={textResponse}
+            options={textResponse.concat([{ label: 'NA', value: 'NA' }])}
             className={hasErrors.formResponse && 'red-class'}
             onChange={onChangeFormResponse}
             value={formResponse && { label: formResponse, value: formResponse }}
@@ -911,40 +920,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />}
-
-      {/* { formDataType === 'BOOLEAN' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Select
-            name="response"
-            options={['Yes', 'No'].map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-            isDisabled={disableField}
-          />
-        }
-      />}
-
-      { formDataType === 'GENDER' &&
-      <FieldWrapper
-        label="Response*"
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Select
-            name="response"
-            options={['M', 'F', 'NA'].map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-            isDisabled={disableField}
-          />
-        }
-      />} */}
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
@@ -1056,6 +1031,23 @@ export const DataSheetComponent = (props) => {
         </Row>
       </Col>
 
+      {/* Controversy Next Review Date Field */}
+      <FieldWrapper
+        label={<div>Next review date<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formNextReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormNextReviewDate}
+            value={formNextReviewDate && moment(formNextReviewDate)}
+            disabled={disableField}
+          />
+        }
+      />
+
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData, index) => (
         <FieldWrapper
@@ -1083,12 +1075,6 @@ export const DataSheetComponent = (props) => {
               </Radio.Group>
             }
           />
-          {/* <FieldWrapper
-          label={null}
-          visible
-          size={[6, 5, 7]}
-          body={null}
-        /> */}
         </Row>
       </Col>
       }
@@ -1147,23 +1133,6 @@ export const DataSheetComponent = (props) => {
         }
       />
 
-      {/* Controversy Next Review Date Field */}
-      <FieldWrapper
-        label={<div>Next review date<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            className={hasErrors.formNextReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
-            name="response"
-            size="large"
-            onChange={onChangeFormNextReviewDate}
-            value={formNextReviewDate && moment(formNextReviewDate)}
-            disabled={disableField}
-          />
-        }
-      />
-
       {/* ERROR DATA SHEET COMPANY AND CLIENT REP's */}
       {(isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
       <ErrorDataSheetTwo
@@ -1196,7 +1165,6 @@ export const DataSheetComponent = (props) => {
       <Col lg={12} className="datapage-horizontalLine"></Col>
 
       <Col lg={12} className="datapage-button-wrap">
-
         {/* HISTORY UNFREEZE Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
@@ -1204,8 +1172,6 @@ export const DataSheetComponent = (props) => {
         {/* HISTORY SAVE Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
-
-
       </Col>
 
       {/* ADD SOURCE PANEL */}
@@ -1222,6 +1188,7 @@ export const DataSheetComponent = (props) => {
         {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} locationData={props.locationData} companyId={props.locationData.state.dpCodeDetails.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
       </Drawer>
 
+      {/* ERROR PANEL FOR DATA CORRECTION */}
       <Modal
         title="Error Panel"
         width="75%"
@@ -1233,7 +1200,6 @@ export const DataSheetComponent = (props) => {
             {isErrorAccepted === false && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Close</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="success" onClick={onAccept}>Accept</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="danger" onClick={onReject}>Reject</Button>}
-            {/* {(isErrorAccepted !== null) && (defaultData.error) && (defaultData.error.status) && <Button className="datapage-button" variant="info" onClick={onRevert}>Revert</Button>} */}
           </React.Fragment>
         }
         onCancel={onCloseErrorPanel}
@@ -1254,6 +1220,7 @@ DataSheetComponent.propTypes = {
   locationData: PropTypes.object,
   onClickSave: PropTypes.func,
   getDefaultCurrentDataForYear: PropTypes.func,
+  lastHistoricalData: PropTypes.array,
   // reqSourceData: PropTypes.array,
   // dummyDataCheck: PropTypes.func,
 };

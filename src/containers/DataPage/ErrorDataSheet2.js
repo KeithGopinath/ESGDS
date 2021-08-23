@@ -153,7 +153,7 @@ const getReqFields = ({
 
 
 const ErrorDataSheetTwo = (props) => {
-  console.log(props);
+  // console.log(props);
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
@@ -203,6 +203,7 @@ const ErrorDataSheetTwo = (props) => {
     formControversyComment: false,
     formNextReviewDate: false,
     dynamicFields: [false],
+    formThreshold: false,
   });
 
   const sourceList = props.reqSourceData;
@@ -210,6 +211,8 @@ const ErrorDataSheetTwo = (props) => {
   const { textResponse } = props;
 
   const { isError, isErrorCommentType } = props;
+
+  const thresholdValue = { min: 0, max: 100 };
 
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -239,6 +242,7 @@ const ErrorDataSheetTwo = (props) => {
       formControversyComment: false,
       formNextReviewDate: false,
       dynamicFields: [false],
+      formThreshold: false,
     });
   }, [defaultData, isError]);
 
@@ -357,10 +361,11 @@ const ErrorDataSheetTwo = (props) => {
         }
         return false;
       }) : [false],
+      formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
     };
     setHasErrors(errors);
 
-    console.log(errors);
+    // console.log(errors);
     const roleScreenType = {
       isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR,
     };
@@ -374,12 +379,10 @@ const ErrorDataSheetTwo = (props) => {
         hasError: isError,
         isThere: isError,
         refData: {
-          description: formDescription,
-          dataType: formDataType,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           response: formResponse,
           source: formSource,
           url: formURL,
@@ -395,23 +398,23 @@ const ErrorDataSheetTwo = (props) => {
       props.onClickSave(dummyDataReps);
     } else {
       message.error('Please Fill Required fields !');
+      if (hasErrors.formThreshold) {
+        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+      }
     }
   };
 
   const onClickEdit = () => {
-    console.log(defaultData);
     const dummyDataReps = {
       fiscalYear: defaultData.fiscalYear,
       error: {
         hasError: isError,
         isThere: isError,
         refData: {
-          description: formDescription,
-          dataType: formDataType,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: formScreenShotFile && formScreenShotFile.base64,
+          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           response: formResponse,
           source: formSource,
           url: formURL,
@@ -450,7 +453,7 @@ const ErrorDataSheetTwo = (props) => {
           body={
             <Form.Control
               type="number"
-              className={hasErrors.formResponse && 'red-class'}
+              className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
               name="response"
               placeholder="Response"
               onChange={onChangeFormResponse}
@@ -659,7 +662,7 @@ const ErrorDataSheetTwo = (props) => {
                 onChange={onChangeFormScreenShotPath}
               >
                 <AntButton
-                  className={hasErrors.formResponse ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
+                  className={hasErrors.formScreenShotPath ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
                   disabled={disableField}
                   icon={<UploadOutlined />}
                 >Click to Upload
