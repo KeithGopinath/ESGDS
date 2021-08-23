@@ -6,6 +6,7 @@ import { Col, Row, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
+import { useLocation } from "react-router-dom";
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
 import XLSX from "xlsx";
@@ -18,16 +19,22 @@ const TaskList = (props) => {
   const [rowValue, setrowValue] = useState('');
   const [analystDetail, setanalystDetail] = useState('');
   const [qaDetail, setqaDetail] = useState('');
-
+  const isTasknumber = useSelector((notification) => notification.notification.message);
+  // console.log(getTask, 'Task numner')
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
-
+  const location = useLocation();
   const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
   const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
   const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
-
+useEffect(()=>{
+  if(isTasknumber){
+    
+  }
+},[isTasknumber])
   useEffect(() => {
+    console.log(location, location.state, 'history data ')
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;

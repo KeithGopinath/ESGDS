@@ -46,6 +46,7 @@ import { calculateActualsWatchers } from './CalculateActuals';
 import { pillarWisePercentileWatchers } from './PillarWisePercentile';
 import { calculatePercentileWatchers } from './CalculatePercentile';
 import { controversyTaskListWatchers } from './ControversyTaskList';
+import { getSlaExtensionWatchers } from './SlaExtension';
 import { derivedDataCalculationWatchers } from './DerivedDataCalculation';
 import { getControversyJsonWatchers } from './GetControversyJson';
 import { getDataJsonWatchers } from './GetDataJson';
@@ -101,6 +102,7 @@ export default function* rootWatchers() {
     pillarWisePercentileWatchers(),
     calculatePercentileWatchers(),
     controversyTaskListWatchers(),
+    getSlaExtensionWatchers(),
     derivedDataCalculationWatchers(),
     getControversyJsonWatchers(),
     getDataJsonWatchers(),

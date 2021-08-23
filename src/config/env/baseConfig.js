@@ -61,6 +61,7 @@ export default {
     reviewUpdateDpCodeData: 'errorDetails/saveRepErrorDetails',
     getCompanySourceTypes: 'companySources',
     taskSubmitPost: 'taskAssignments/updateCompanyStatus',
+    slaExtension: 'taskSlaLogs/slaExtensionRequest',
     postDerivedDataCalculation: 'derived_datapoints/derivedCalculation',
     getDataJson: 'json_files/payLoadGenerationDetails/data',
     getControversyJson: 'json_files/payLoadGenerationDetails/controversy',

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Form } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 // import moment from 'moment';
 // import { DatePicker, message } from 'antd';
 import Overlay from '../../components/Overlay';
@@ -19,15 +20,24 @@ const ExtentionSLA = ({
     setalertStatus(false);
     setalert(false);
   };
+  const dispatch = useDispatch();
+  const slaRequest = useSelector((slapost) => slapost.slaExtexsion);
+  const isslaData = slaRequest.slapost;
+  console.log(slaRequest, 'slaRequest');
+  useEffect(() => {
+    if (!slaRequest.error && !slaRequest.isLoading && slaRequest.slapost) {
+      setalert(slaRequest.slapost.message);
+    }
+  }, [isslaData]);
   const onhandleDay = (e) => {
     if ((e.target.value >= 1) && (e.target.value <= 30)) {
       setdays(e.target.value);
     }
   };
   const onExtendSla = () => {
-    const payload = { taskid: detail.taskId, days: day };
-    console.log(payload, 'payload');
-    setalert('Request sent !');
+    const requestData = { taskId: detail.taskId, days: day };
+    //  console.log(payload, 'payload');
+    dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
     setalertStatus(true);
   };
   const editBody = () => (
@@ -35,21 +45,20 @@ const ExtentionSLA = ({
       <Row>
         <Col lg={12}>
           <div className="editsla-box">
-            <div className="editsla-content">How many days do you want to extent ? </div>
-
-          </div>
-          <div className="datecount-box">
+            <div className="editsla-content">How many days do you want to extend ? </div>
             <div className="datecount-content">
               <Form.Control
                 type="number"
                 name="Days"
-                style={{ width: '35%' }}
+                style={{ width: '55%' }}
                 placeholder="Days"
                 onChange={onhandleDay}
                 value={day}
               />
             </div>
           </div>
+          {/* <div className="datecount-box">
+          </div> */}
         </Col>
       </Row>
 

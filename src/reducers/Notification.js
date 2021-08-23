@@ -1,27 +1,34 @@
 const initialState = {};
 
 export default (state = initialState, action) => {
+  console.log(action, 'action');
   switch (action.type) {
-    case 'UPDATETASK_REQUEST':
+    case 'NOTIFICATION_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        taskUpdate: false,
+        message: false,
       };
-    case 'UPDATETASK_SUCCESS':
+    case 'NOTIFICATION_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        taskUpdate: action.taskupdate,
+        message: action.notification,
       };
-    case 'UPDATETASK_RESET':
+    case 'NOTIFICATION_TYPE':
       return {
         ...state,
         isLoading: false,
-        taskUpdate: false,
+        message: action.payload,
       };
-    case 'UPDATETASK_FAILURE':
+    case 'NOTIFICATION_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        message: false,
+      };
+    case 'NOTIFICATION_FAILURE':
       return {
         ...state,
         isLoading: false,

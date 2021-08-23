@@ -48,6 +48,8 @@ import taskList from './TaskList';
 import pillarWisePercentile from './PillarWisePercentile';
 import calculatePercentile from './CalculatePercentile';
 import controversyTaskList from './ControversyTaskList';
+import notification from './Notification';
+import slaExtexsion from './SlaExtension';
 import derivedDataCalculation from './DerivedDataCalculation';
 import dataJson from './GetDataJson';
 import controversyJson from './GetControversyJson';
@@ -111,6 +113,8 @@ const combinedReducer = combineReducers({
   controversyTaskList,
   companySourceTypes,
   taskSubmit,
+  notification,
+  slaExtexsion,
   derivedDataCalculation,
   dataJson,
   controversyJson,
