@@ -8,7 +8,6 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileExport } from '@fortawesome/free-solid-svg-icons';
-import { saveAs } from "file-saver";
 
 const DataJson = ({ flag }) => {
     const sideBarRef = useRef();
@@ -50,7 +49,8 @@ const DataJson = ({ flag }) => {
     useEffect(() => {
         if (downloadJson) {
             message.success(downloadJson.message);
-            saveAs(`${downloadJson && downloadJson.signedUrl}`);
+            var file = downloadJson && downloadJson.signedUrl;
+            window.location.href = file;
             dispatch({ type: 'DOWNLOAD_JSON_RESET' });
         } else if (downloadJsonError) {
             message.error(downloadJsonError.message);

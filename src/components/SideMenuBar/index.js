@@ -205,8 +205,6 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     }
   };
 
-  const scrollStyle = { height: 654 }
-
   return (
     <div ref={ref} className="sideMenu-main">
       <div className="sidemenu-scroll-area">
@@ -216,7 +214,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
             <div className={handler ? "sideMenu-logo" : "sidemenu-logo-hide"}>ESG</div>
           </div>
         </div>
-        <Scrollbars thumbSize={500} style={scrollStyle}>
+        <Scrollbars thumbSize={500} style={{height: '95vh'}}>
           {sideMenuBtns}
         </Scrollbars>
         <RoleAssignment show={show} setShow={setShow} />
