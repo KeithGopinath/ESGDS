@@ -7,6 +7,7 @@ import Header from '../../components/Header';
 import { useSelector } from 'react-redux';
 import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
+import { Result } from 'antd';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,11 +37,10 @@ const GroupView = () => {
   dispatch({ type: 'GROUPLIST_REQUEST' });
   dispatch({type: "GROUPBYID_RESET"});
  },[]);
- const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
+ const isGroupCreated = useSelector((getgrouplist) => getgrouplist.getgrouplist);
  const isGroupCreatedLoading = useSelector((getgrouplist) => getgrouplist.getgrouplist.isLoading);
- const groupList = isGroupCreated && isGroupCreated.rows;
+ const groupList = isGroupCreated.grouplist && isGroupCreated.grouplist.rows;
   const groupCount = groupList && groupList.length;
-
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
@@ -113,11 +113,29 @@ const GroupView = () => {
                 </Button>
               </div>
             </div>
+    
             <div className="view-min-height">
-              {(isGroupCreatedLoading)? <PageLoader />:
-              <Row >
-                {batchlist}
-              </Row>
+             
+              { 
+                (!isGroupCreated.error && !isGroupCreated.isLoading && isGroupCreated.grouplist) && (
+                  <Row >
+                    {batchlist}
+                  </Row>
+                )
+              }
+
+              { 
+                (isGroupCreated.error && !isGroupCreatedLoading) && (
+                <Result
+                  status="error"
+                  title={isGroupCreated.error.message}
+                >
+                </Result>
+                )
+              }
+              {
+                (isGroupCreatedLoading) &&  
+                (<PageLoader />)
               }
             </div>
             <Row>

@@ -7,6 +7,7 @@ import { Transfer, Divider, message } from 'antd';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import PageLoader from '../../components/PageLoader';
+import { Result} from 'antd';
 
 
 const PillarAssignment = () => {
@@ -27,14 +28,14 @@ const PillarAssignment = () => {
     
   }, []);
   const isGroup = useSelector((getgrouplist) => getgrouplist.getgrouplist.grouplist);
-  const isGroupLoading = useSelector((getgrouplist) => getgrouplist.getgrouplist.isLoading);
+  const isGroupLoading = useSelector((getgrouplist) => getgrouplist.getgrouplist);
   const groupList = isGroup && isGroup.rows;
   const groupOptions = groupList && groupList.map((e) => (
     { value: e._id, label: e.groupName }
   ));
  
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
-  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid.isLoading);
+  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid);
   const grpDtetail = isGroupByid && isGroupByid.data;
   
   useEffect(()=>{
@@ -93,9 +94,10 @@ const PillarAssignment = () => {
 
 
 const assignPillar = useSelector((assignpillar)=> assignpillar.assignpillar.pillarAssign);
-const assignPillarLoading  = useSelector((assignpillar)=> assignpillar.assignpillar.isLoading);
+
+const assignPillarLoading  = useSelector((assignpillar)=> assignpillar.assignpillar);
 useEffect(()=>{
-  if(assignPillar){
+  if(assignPillar && !assignPillarLoading.error){
     message.success(assignPillar.message);
     setgroup('');
     setprimaryPillar('');
@@ -107,9 +109,14 @@ useEffect(()=>{
     setInputValidate('');
     dispatch({type:"PILLARASSIGN_RESET"});
 }
+
 },[assignPillar])
 
- 
+ useEffect(()=>{
+  if (isGroupLoading.error || isGroupByidLoading.error || assignPillarLoading.error){
+    message.error(isGroupLoading.error.message || isGroupByidLoading.error.message || assignPillarLoading.error.message )
+  }
+ },[isGroupLoading.error, isGroupByidLoading.error, assignPillarLoading.error]);
   const onChange = (newTargetKeys, direction, moveKeys) => {
     setTargetKeys(newTargetKeys);
     const unassignedmember = [];
@@ -168,7 +175,7 @@ useEffect(()=>{
               <Col lg={12} sm={12}>
 
                 <Card className="grp-pad">
-                {(isGroupLoading || assignPillarLoading || isGroupByidLoading )? <PageLoader />:
+                {(isGroupLoading.isLoading || assignPillarLoading.isLoading || isGroupByidLoading.isLoading ) ? ( <PageLoader />): 
                   <Container>
                     <Row>
                       <Col lg={4}>

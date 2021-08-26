@@ -51,8 +51,10 @@ const Groups = () => {
       title: 'Status',
     },
   ];
+
+  // api response
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
-  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid.isLoading);
+  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid);
   const grpDetail = isGroupByid && isGroupByid.data;
 
   // *** API call *** ***
@@ -117,18 +119,19 @@ const Groups = () => {
     } 
  }, [grpDetail]);
 
+
 // edit part
 
 
   const isGroupCreated = useSelector((creategroup) => creategroup.creategroup.grouppost);
-  const isGroupCreatedLoading = useSelector((creategroup) => creategroup.creategroup.isLoading);
+  const isGroupCreatedLoading = useSelector((creategroup) => creategroup.creategroup);
  
   const batchData = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.unassignedbatchdata);
-  const batchDataLoading = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.isLoading);
+  const batchDataLoading = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch);
   const batchAssignment = batchData && batchData.rows;
   
   const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
-  const userDataLoading = useSelector((filterUsers) => filterUsers.filterUsers.isLoading);
+  const userDataLoading = useSelector((filterUsers) => filterUsers.filterUsers);
   const isData = userData && userData.data;
   useEffect(() => {
     if (isGroupCreated) {
@@ -149,6 +152,15 @@ const Groups = () => {
     }
     
   }, [isGroupCreated]);
+  
+   // throw error response 
+ useEffect(()=>{
+  if(isGroupByidLoading.error || isGroupCreatedLoading.error || batchDataLoading.error || userDataLoading.error) {
+    message.error((isGroupByidLoading.error && isGroupByidLoading.error.message) || (isGroupCreatedLoading.error && isGroupCreatedLoading.error.message) || (batchDataLoading.error && batchDataLoading.error.message) || (userDataLoading.error && userDataLoading.error.message))
+  }
+ },[isGroupByidLoading.error, isGroupCreatedLoading.error, batchDataLoading.error, userDataLoading.error]);
+
+
   const grpAdminlist = [];
   const userList = [];
 
@@ -262,7 +274,6 @@ const groupAdminOptions = [];
   };
 
   const next = () => {
-    
    if(batchAssignment){
     const batcharr = [];
     if ((targetKeys.length) > 0) {
@@ -635,7 +646,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
           <Row>
             <Col lg={12}>
               <Card className="grp-pad">
-              {(userDataLoading || isGroupByidLoading || batchDataLoading || isGroupCreatedLoading )?<PageLoader /> :
+              {(userDataLoading.isLoading || isGroupByidLoading.isLoading || batchDataLoading.isLoading || isGroupCreatedLoading.isLoading )?<PageLoader /> :
                 <Container>
                   <Row>
                     <Col lg={3} sm={12}>

@@ -18,9 +18,10 @@ const TaskList = (props) => {
   const [show, setShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
   const [analystDetail, setanalystDetail] = useState('');
+  const [tasktabFlag, settaskTabFlag] = useState();
   const [qaDetail, setqaDetail] = useState('');
+  const [roleType, setRole] = useState('');
   const isTasknumber = useSelector((notification) => notification.notification.message);
-  // console.log(getTask, 'Task numner')
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
@@ -28,13 +29,33 @@ const TaskList = (props) => {
   const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
   const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
   const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
-useEffect(()=>{
-  if(isTasknumber){
-    
-  }
-},[isTasknumber])
+
+const tasklisttabLabelSets = [
+  { label: 'Pending Task' },
+  { label: 'Completed Task' },
+  { label: 'Controversy' },
+];
+const groupAdminLabelSets = [
+  { label: 'Pending Task' },
+  { label: 'Completed Task' },
+];
+const tasktabsRefs = useRef(tasklisttabLabelSets.map(() => React.createRef()));
+const grpAdminRefs = useRef(groupAdminLabelSets.map(() => React.createRef()));
+const defaultRefs = (roleType === 'GroupAdmin') ? grpAdminRefs : tasktabsRefs;
+const defaultLabels = (roleType === 'GroupAdmin') ? groupAdminLabelSets : tasklisttabLabelSets;
+
+const tasklisttabsClickHandler = (event, label) => {
+  defaultRefs.current.forEach((element) => {
+    const target = element.current;
+    target.classList.remove('tabs-label-count-wrap-active');
+  });
+  const target = event.currentTarget;
+  target.classList.add('tabs-label-count-wrap-active');
+  settaskTabFlag(label);
+};
+const tabFlag = props.location.tabFlag && props.location.tabFlag;
+const multiCompanies = props.location.multiSelect && props.location.multiSelect;
   useEffect(() => {
-    console.log(location, location.state, 'history data ')
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;
@@ -50,10 +71,26 @@ useEffect(()=>{
         dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports: companiesId });
       }
     }
+    setRole(sessionStorage.role);
+    
   }, []);
+  useEffect(()=>{
+if(!multiCompanies){
+    
+      if (defaultRefs.current[0]) {
+        defaultRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
+      settaskTabFlag('Pending Task');
+    }
+    } else if (defaultRefs.current[1]) {
+      defaultRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
+      settaskTabFlag('Completed Task');
+    } else if (defaultRefs.current[2]) {
+      defaultRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
+      settaskTabFlag('Controversy');
+}
+  },[multiCompanies])
 
-  const tabFlag = props.location.tabFlag && props.location.tabFlag;
-  const multiCompanies = props.location.multiSelect && props.location.multiSelect;
+
 
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
@@ -98,7 +135,7 @@ useEffect(()=>{
 
   const isData = useSelector((tasklist) => tasklist.taskList.data);
   const isDataLoading = useSelector((state) => state.taskList.isLoading);
-  const isList = isData && isData.data.rows;
+  const isList = isData && isData.data;
 
   const totalTaskList = (props) => {
     const tableRowData = (obj) => multiCompanies ?
@@ -139,6 +176,7 @@ useEffect(()=>{
           }))
       )
       :
+      (tasktabFlag === 'Pending Task') ?
       obj.map((e) => ({
         key: e.taskNumber,
         taskid: e.taskNumber ? e.taskNumber : '--',
@@ -151,7 +189,30 @@ useEffect(()=>{
         qa: e.qa ? e.qa : '--',
         qaSla:e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
         action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
-      }));
+      }))
+      :
+      (tasktabFlag === 'Completed Task') ?
+      obj.map((e) => ({
+        key: e.taskNumber,
+        taskid: e.taskNumber ? e.taskNumber : '--',
+        group: e.group ? e.group : '--',
+        batch: e.batch ? e.batch : '--',
+        company: e.company ? e.company : '--',
+        pillar: e.pillar ? e.pillar : '--',
+        analyst: e.analyst ? e.analyst : '--',
+        analystSla:e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
+        qa: e.qa ? e.qa : '--',
+        qaSla:e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
+       // action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+      }))
+      :
+      obj.map((e) => ({
+        key: e.taskNumber,
+        taskid: e.taskNumber ? e.taskNumber : '--',
+        company: e.company ? e.company : '--',
+        analyst: e.analyst ? e.analyst : '--',
+        action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+      }))
 
     return {
       rowsData: tableRowData(props),
@@ -311,7 +372,10 @@ useEffect(()=>{
               label: 'Created Date',
               dataType: 'string',
             },
-          ] : [
+          ] : 
+          (tasktabFlag === 'Pending Task')?
+
+          [
         {
           id: 'taskid',
           align: 'center',
@@ -372,19 +436,127 @@ useEffect(()=>{
           label: 'Action',
           dataType: 'element',
         },
+      
+      
+      
+      ]
+      :
+      (tasktabFlag === 'Completed Task') ?
+      [
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task ID',
+          dataType: 'string',
+        },
+        {
+          id: 'group',
+          align: 'center',
+          label: 'Group',
+          dataType: 'string',
+        },
+        {
+          id: 'batch',
+          align: 'center',
+          label: 'Batch',
+          dataType: 'string',
+        },
+        {
+          id: 'company',
+          align: 'center',
+          label: 'Company',
+          dataType: 'string',
+        },
+        {
+          id: 'pillar',
+          align: 'center',
+          label: 'Pillar',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'analystSla',
+          align: 'center',
+          label: 'SLA Date',
+          dataType: 'string',
+        },
+        {
+          id: 'qa',
+          align: 'center',
+          label: 'QA',
+          dataType: 'string',
+        },
+        {
+          id: 'qaSla',
+          align: 'center',
+          label: 'SLA Date',
+          dataType: 'string',
+        },  
+      ]
+      :
+      [
+        {
+          id: 'taskid',
+          align: 'center',
+          label: 'Task ID',
+          dataType: 'string',
+        },
+        {
+          id: 'company',
+          align: 'center',
+          label: 'Company',
+          dataType: 'string',
+        },
+        {
+          id: 'analyst',
+          align: 'center',
+          label: 'Analyst',
+          dataType: 'string',
+        },
+        {
+          id: 'action',
+          align: 'center',
+          label: 'Action',
+          dataType: 'element',
+        },
       ],
+    
       tableLabel: <span>{multiCompanies ?
         <span>{tabFlag === 'Controversy' ? 'Controversy List' : 'Task List'}
           <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadReports} />
         </span> : 'Tasks'}</span>,
     };
+
   };
 
   const onBackButton = () => {
     history.push({ pathname: '/reports', tabFlag: tabFlag });
   };
 
-  const tasklist = totalTaskList(multiCompanies ? tabFlag === 'Controversy' ? (controversyDetails ? controversyDetails : []) : (getCompanyDetails ? getCompanyDetails : []) : isList ? isList : []);
+  const tasklist = 
+  totalTaskList(multiCompanies ? 
+    tabFlag === 'Controversy' ?
+     (controversyDetails ? controversyDetails : []) :
+      (getCompanyDetails ? getCompanyDetails : []) : 
+      ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Pending Task' ) ?
+       (isList ?  isList.adminTaskList.pendingList : []):
+       ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Completed Task' ) ?
+        (isList ? isList.adminTaskList.completedList : []) :
+        ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Controversy' ) ?
+        (isList ? isList.adminTaskList.controversyList : []) :
+        (roleType === 'GroupAdmin' && tasktabFlag === 'Pending Task' ) ?
+        (isList ? isList.groupAdminTaskList.pendingList : []):
+        (roleType === 'GroupAdmin' && tasktabFlag === 'Completed Task' ) ?
+        (isList ? isList.groupAdminTaskList.completedList : []) :
+        (roleType === 'GroupAdmin' && tasktabFlag === 'Controversy' ) ?
+        (isList ? isList.groupAdminTaskList.controversyList : []):
+        []
+       );
 
   return (
     <React.Fragment>
@@ -397,8 +569,28 @@ useEffect(()=>{
               <Col lg={12} sm={12}>
                 {multiCompanies &&
                   <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onBackButton} />}
-                <Card >
-                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={5} />
+                
+                {multiCompanies ? <div className="reports-tabs-stack" style={{display:'none'}}>
+            {defaultLabels.map(({ label }, index) => (
+              <div key={label} ref={defaultRefs.current[index]} onClick={(event) => (tasklisttabsClickHandler(event, label))} className="tabs-label-count-wrap">
+                <div className="tabs-label">
+                  {label}
+                </div>
+              </div>
+            ))}
+          </div>  : <div className="reports-tabs-stack">
+            {defaultLabels.map(({ label }, index) => (
+              <div key={label} ref={defaultRefs.current[index]} onClick={(event) => (tasklisttabsClickHandler(event, label))} className="tabs-label-count-wrap">
+                <div className="tabs-label">
+                  {label}
+                </div>
+              </div>
+            ))}
+          </div>
+          }
+                  
+          <Card >
+                <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={5} />
                 </Card>
               </Col>
             </Row>
