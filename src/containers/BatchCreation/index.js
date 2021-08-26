@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+// import { Result } from 'antd';
 // import { message } from 'antd';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faFileImport } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +27,10 @@ const BatchCreation = ({ show, setShow }) => {
   const [alert, setAlert] = useState('');
   const [subsetTax, setsubsetTax] = useState('');
   const [alertStatus, setalertStatus] = useState(false);
+  useEffect(() => {
+    dispatch({ type: 'BATCH_CREATE_RESET' });
+    dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
+  }, []);
   const handleClose = () => {
     setBatch('');
     setYear('');
@@ -35,20 +40,21 @@ const BatchCreation = ({ show, setShow }) => {
     setValidBorder(false);
     setShow(false);
     setalertStatus(false);
+    dispatch({ type: 'BATCH_CREATE_RESET' });
     dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   };
   const dispatch = useDispatch();
   const [validBorder, setValidBorder] = useState(false);
-  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.taxonomydata);
+  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy);
   const taxonomyLoading = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.isLoading);
-  const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany.taxonomycompany);
+  const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany);
   const companyTaxLoading = useSelector((taxcompany) => taxcompany.taxonomyCompany.isLoading);
-  const fullList = companyTaxData && companyTaxData.rows;
+  const fullList = companyTaxData.taxonomycompany && companyTaxData.taxonomycompany.rows;
 
   const rowArray = fullList && fullList.map((args) => ({
     id: args.id, companydata: args.companyName,
   }));
-  const modTax = taxonomyData && taxonomyData.rows;
+  const modTax = taxonomyData.taxonomydata && taxonomyData.taxonomydata.rows;
   const taxOptions = modTax && modTax.map((e) => (
     { value: e._id, label: e.taxonomyName }
   ));
@@ -58,13 +64,11 @@ const BatchCreation = ({ show, setShow }) => {
     // eslint-disable-next-line react/jsx-curly-brace-presence
     noDataText: (companyTaxLoading) ? <PageLoader load={'comp-loader'} /> : 'There is no data to display',
   };
-  const isbatchCreated = useSelector((createbatch) => createbatch.createBatch.batchpost);
+  const isbatchCreated = useSelector((createbatch) => createbatch.createBatch);
   const isbatchCreatedLoading = useSelector((createbatch) => createbatch.createBatch.isLoading);
   useEffect(() => {
-    if (isbatchCreated) {
-      // setTimeout(() => {
-      //   setAlert(0);
-      // }, 3000);
+    if (isbatchCreated.batchpost) {
+      setAlert(isbatchCreated.batchpost.message);
       setBatch('');
       setYear('');
       setsubsetTax('');
@@ -73,7 +77,7 @@ const BatchCreation = ({ show, setShow }) => {
       dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
       dispatch({ type: 'BATCH_REQUEST' });
     }
-  }, [isbatchCreated]);
+  }, [isbatchCreated.batchpost]);
   const onRowSelect = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { value: row.id, selectedCompany: row.companydata };
@@ -149,6 +153,12 @@ const BatchCreation = ({ show, setShow }) => {
       setBatch(e.target.value);
     }
   };
+  useEffect(() => {
+    if (isbatchCreated.error || taxonomyData.error || companyTaxData.error) {
+      setalertStatus(false);
+      setAlert((isbatchCreated.error && isbatchCreated.error.message) || (taxonomyData.error && taxonomyData.error.message) || (companyTaxData.error && companyTaxData.error.message));
+    }
+  }, [isbatchCreated.error, taxonomyData.error, companyTaxData.error]);
 
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
@@ -163,7 +173,6 @@ const BatchCreation = ({ show, setShow }) => {
       };
       setalertStatus(true);
       dispatch({ type: 'BATCH_CREATE_REQUEST', payload: data });
-      setAlert('Batch created successfully!');
     } else {
       setAlert('Fill all the required fields');
       setalertStatus(false);
@@ -198,11 +207,9 @@ const BatchCreation = ({ show, setShow }) => {
         </Col>
         <Col lg={6} sm={12} className="pad-left">
           <div className="batch-create-companies">
-
             <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
               <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
               <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
-
             </BootstrapTable>
           </div>
 
@@ -213,22 +220,18 @@ const BatchCreation = ({ show, setShow }) => {
 
 
   const BatchFooter = () => (
-    <div className="foo-batch">
-      <div className=" batch-status-minheight">
-        {/* {alert === 1 &&
-        <div className="alert alert-success" role="alert" >Batch Created successfully !!</div>
-        }
-        {alert === 2 &&
-          <div className="fill-alert" >Fill all the required fields !</div>
-        } */}
-        {alert &&
-          <div className={(alertStatus) ? 'batch-success-alert' : 'batch-fill-alert'} >{alert}</div>
-        }
+    <React.Fragment>
+      <div className="foo-batch">
+        <div className=" batch-status-minheight">
+          {alert &&
+            <div className={(alertStatus) ? 'batch-success-alert' : 'batch-fill-alert'} >{alert}</div>
+          }
+        </div>
+        <div className="batch-submit-btn">
+          <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create</button></div>
+        </div>
       </div>
-      <div className="batch-submit-btn">
-        <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create</button></div>
-      </div>
-    </div>
+    </React.Fragment>
 
   );
 
@@ -251,7 +254,6 @@ const BatchCreation = ({ show, setShow }) => {
   //     };
   //   });
   //   promise.then((data) => {
-  //     console.log(data);
   //   });
   // };
   return (
