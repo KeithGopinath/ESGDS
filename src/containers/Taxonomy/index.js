@@ -16,7 +16,7 @@ import PageLoader from '../../components/PageLoader';
 import Overlay from '../../components/Overlay';
 import Select from 'react-select';
 
-const Taxonomy = ({ subsetList, showList, handleListClose }) => {
+const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   const sideBarRef = useRef();
   const [showSubset, setShowSubset] = useState(false);
   const [show, setShow] = useState(false);
@@ -374,7 +374,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose }) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header sideBarRef={sideBarRef} title={showList ? "Subset" : "Master Taxonomy"} />
+        <Header sideBarRef={sideBarRef} title={showList ? taxonomyName : "Master Taxonomy"} />
         <div className="container-main">
         {showList && <FontAwesomeIcon size="lg" className="taxonomy-backward-icon" icon={faBackward} onClick={handleListClose} />}
           <Container className="wrapper">
