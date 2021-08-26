@@ -18,7 +18,7 @@ import SLAExtentions from './extentionSLA';
 const PendingTaskTable = (props) => {
  
   const onExtendSLA = (arg) => {
-    // console.log(arg);
+    // // console.log(arg);
     props.setdetail(arg);
     props.setShow(true);
   };

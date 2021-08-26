@@ -39,7 +39,10 @@ const FieldWrapper = (props) => {
 FieldWrapper.propTypes = {
   visible: PropTypes.bool,
   size: PropTypes.array.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+  ]),
   body: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.string,
@@ -278,7 +281,7 @@ export const DataSheetComponent = (props) => {
 
   // USEEFFECTS
   useEffect(() => {
-    // console.log(props, '******PROPS******');
+    // // console.log(props, '******PROPS******');
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
     setFormScreenShotPath(defaultData.screenShot || '');
@@ -323,14 +326,14 @@ export const DataSheetComponent = (props) => {
     });
   }, [props.reqData]);
 
-  // console.log(defaultData.error);
-  // console.log(isErrorAccepted);
+  // // console.log(defaultData.error);
+  // // console.log(isErrorAccepted);
 
   // useEffect(() => {
   //   setErrorComment('');
   // }, [isErrorAccepted]);
 
-  // console.log(formErrorRefData);
+  // // console.log(formErrorRefData);
 
   useEffect(() => {
     if (!formIsError) {
@@ -491,7 +494,7 @@ export const DataSheetComponent = (props) => {
     };
     setHasErrors(errors);
 
-    // console.log(errors, '*******ERRORS******');
+    // // console.log(errors, '*******ERRORS******');
     const roleScreenType = {
       isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType,
     };
@@ -750,12 +753,12 @@ export const DataSheetComponent = (props) => {
 
 
   const saveClickHandler = () => {
-    // console.log('HISTORICAL SAVE');
+    // // console.log('HISTORICAL SAVE');
     dummySaveClickHandler();
   };
 
   const unFreezeClickHandler = () => {
-    // console.log('UNFREEZE');
+    // // console.log('UNFREEZE');
     dummyEditClickHandler();
   };
 

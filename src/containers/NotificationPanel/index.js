@@ -100,7 +100,7 @@ const NotificationPanel = () => {
         setCount(0)
     }
     const onHandleNotification =(arg)=> {
-        console.log(arg, 'onHandleNotification');
+        // console.log(arg, 'onHandleNotification');
         const splitingString = arg.message.split("-");
         const taskNumber = splitingString[splitingString.length - 1];
         dispatch({type:"NOTIFICATION_TYPE", payload: taskNumber })

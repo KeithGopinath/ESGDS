@@ -153,7 +153,7 @@ const getReqFields = ({
 
 
 const ErrorDataSheetTwo = (props) => {
-  // console.log(props);
+  // // console.log(props);
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
@@ -162,7 +162,7 @@ const ErrorDataSheetTwo = (props) => {
   const currentTab = sessionStorage.tab;
 
   // REQUIRED CONSOLE:
-  // console.log('******DATA SHEET PROPS******', props);
+  // // console.log('******DATA SHEET PROPS******', props);
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR] = [
@@ -365,7 +365,7 @@ const ErrorDataSheetTwo = (props) => {
     };
     setHasErrors(errors);
 
-    // console.log(errors);
+    // // console.log(errors);
     const roleScreenType = {
       isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR,
     };
@@ -733,7 +733,7 @@ ErrorDataSheetTwo.propTypes = {
   reqSourceData: PropTypes.array,
   textResponse: PropTypes.array,
   isError: PropTypes.bool,
-  isErrorCommentType: PropTypes.string,
+  isErrorCommentType: PropTypes.bool,
   openSourcePanel: PropTypes.func,
   onClickSave: PropTypes.func,
 };

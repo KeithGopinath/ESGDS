@@ -22,6 +22,7 @@ const TaskList = (props) => {
   const [qaDetail, setqaDetail] = useState('');
   const [roleType, setRole] = useState('');
   const isTasknumber = useSelector((notification) => notification.notification.message);
+  // // console.log(getTask, 'Task numner')
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
@@ -56,6 +57,7 @@ const tasklisttabsClickHandler = (event, label) => {
 const tabFlag = props.location.tabFlag && props.location.tabFlag;
 const multiCompanies = props.location.multiSelect && props.location.multiSelect;
   useEffect(() => {
+    // console.log(location, location.state, 'history data ')
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;

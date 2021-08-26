@@ -68,6 +68,7 @@ export default {
     generateJson: 'json_files/generate-json',
     downloadJson: 'json_files/download-json',
     getDpCodeDataForClientCompanyRep: 'datapoints/repDpDetails',
+    getDpCodeValidation: 'validations/validateDpDetails',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

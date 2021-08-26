@@ -52,6 +52,7 @@ import { getControversyJsonWatchers } from './GetControversyJson';
 import { getDataJsonWatchers } from './GetDataJson';
 import { generateJsonWatchers } from './GenerateJson';
 import { downloadJsonWatchers } from './DownloadJson';
+import { getDpCodeValidationhWatchers } from './DpCodeValidation';
 
 export default function* rootWatchers() {
   yield all([
@@ -108,5 +109,6 @@ export default function* rootWatchers() {
     getDataJsonWatchers(),
     generateJsonWatchers(),
     downloadJsonWatchers(),
+    getDpCodeValidationhWatchers(),
   ]);
 }

@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Accordion } from 'react-bootstrap';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const DataAccordian = (props) => {
   const [isArrowDown, setIsArrowDown] = useState(false);
+  useEffect(() => {
+    setIsArrowDown(props.isActive);
+  }, [props.isActive]);
   return (
     <Accordion defaultActiveKey={props.isActive && '0'}>
       <Card>
@@ -24,7 +27,7 @@ const DataAccordian = (props) => {
             }}
             eventKey="0"
             onClick={() => { setIsArrowDown(!isArrowDown); }}
-          ><FontAwesomeIcon icon={isArrowDown ? faAngleDown : faAngleUp} />
+          ><FontAwesomeIcon icon={isArrowDown ? faAngleUp : faAngleDown} />
           </Accordion.Toggle>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
