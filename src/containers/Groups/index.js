@@ -571,7 +571,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
     <Container>
       <Row>
         <Col lg={6} sm={12}>
-          <div className="group-content">Group name <span className="mandatory-color">*</span></div>
+          <div className="group-content">Group Name <span className="mandatory-color">*</span></div>
           <div className="form-group group-input-width" ><input type="text" value={creategrpName} className={`form-control ${creategrpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required disabled={disablegrpName}></input></div>
         </Col>
         <Col lg={6} sm={12}>

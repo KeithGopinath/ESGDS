@@ -181,7 +181,6 @@ const BatchCreation = ({ show, setShow }) => {
   };
   const BatchBody = () => (
     <div className="modal-batch-body">
-      {/* {(!isbatchCreated.error && !taxonomyData.error && !companyTaxData.error) ? */}
       <Row>
         <Col lg={6} sm={12} className="pad-right">
           <div className="batch-year">Select Taxonomy <span className="mandatory-color">*</span></div>
@@ -192,7 +191,7 @@ const BatchCreation = ({ show, setShow }) => {
               value={subsetTax}
             />
           </div>
-          <div className="batch-name">Batch name <span className="mandatory-color">*</span></div>
+          <div className="batch-name">Batch Name <span className="mandatory-color">*</span></div>
           <div className="form-group batch-input-width " >
             <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
@@ -208,31 +207,20 @@ const BatchCreation = ({ show, setShow }) => {
         </Col>
         <Col lg={6} sm={12} className="pad-left">
           <div className="batch-create-companies">
-
             <BootstrapTable data={!rowArray ? [] : rowArray} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
               <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
               <TableHeaderColumn dataField="companydata" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort>Companies</TableHeaderColumn>
-
             </BootstrapTable>
           </div>
 
         </Col>
       </Row>
-      {/* :
-        <Result
-          status="error"
-          title={taxonomyData.error.message || companyTaxData.error.message || isbatchCreated.error.message}
-        >
-        </Result>
-
-      } */}
     </div>
   );
 
 
   const BatchFooter = () => (
     <React.Fragment>
-      {/* {(!isbatchCreated.error && !taxonomyData.error && !companyTaxData.error) ? */}
       <div className="foo-batch">
         <div className=" batch-status-minheight">
           {alert &&
@@ -240,12 +228,9 @@ const BatchCreation = ({ show, setShow }) => {
           }
         </div>
         <div className="batch-submit-btn">
-          <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create batch</button></div>
+          <div className="create-btn"><button type="button" className="btn btn-outline-primary" onClick={onCreatebBatch}>Create</button></div>
         </div>
       </div>
-      {/* :
-        <div></div>
-      } */}
     </React.Fragment>
 
   );
