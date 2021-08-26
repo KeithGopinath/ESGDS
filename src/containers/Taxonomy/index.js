@@ -129,8 +129,12 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
     setShow(true);
   };
 
-  const onSubmitHeader = () => {
-    if (!label || !applicable.label || !labelType.label || (!labelValues && !labelValueDisabled) || !display.label) {
+  const onSubmitHeader = (info) => {
+    if (header.isRequired && !label) {
+      setErrorAlert('error-alert')
+      setAlertMsg('Please enter all the fields')
+
+    } else if (!label || !applicable.label || !labelType.label || !display.label || (!labelValueDisabled && !labelValues)) {
       setErrorAlert('error-alert')
       setAlertMsg('Please enter all the fields')
     }
@@ -148,9 +152,9 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   }
 
   // disabled conditions 
-  const labelValueDisabled = !labelType.value || labelType && labelType.value.includes('Text') ? true : false;
+  // const labelValueDisabled = !labelType.value || labelType && (labelType.value.includes('Text')||labelType.value.includes('Static') ) ? true : false;
+  const labelValueDisabled = !labelType.value || !labelType.value.includes('Select')
   const headerValueDisabled = header.isRequired ? true : false;
-
 
   const onTaxonomyChange = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9_@./#&+-\s-]*$/.test(e.target.value)) {
@@ -162,6 +166,8 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
     const temp = [...taxonomyData];
     temp.push({ name: '' })
     setTaxonomyData(temp)
+    setShow(true)
+    setHeader('')
   }
 
   const updateTaxonomy = (item) => {
@@ -330,7 +336,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
         </Row>
         <Row className="taxonomy-popup-row">
           <Col lg={6} sm={6} md={6}>
-            <Form.Label>Label type <sup className="text-danger">*</sup></Form.Label>
+            <Form.Label>Label Type <sup className="text-danger">*</sup></Form.Label>
             <Select
               name="labeltype"
               options={labelTypeOptions}
@@ -341,7 +347,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
             />
           </Col>
           <Col lg={6} sm={6} md={6}>
-            <Form.Label>Label values <sup className="text-danger">*</sup></Form.Label>
+            <Form.Label>Label Values <sup className="text-danger">*</sup></Form.Label>
             <Form.Control
               as="textarea"
               // size="large"
@@ -376,7 +382,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} title={showList ? taxonomyName : "Master Taxonomy"} />
         <div className="container-main">
-        {showList && <FontAwesomeIcon size="lg" className="taxonomy-backward-icon" icon={faBackward} onClick={handleListClose} />}
+          {showList && <FontAwesomeIcon size="lg" className="taxonomy-backward-icon" icon={faBackward} onClick={handleListClose} />}
           <Container className="wrapper">
             <div className="head-tab">
               <div>
