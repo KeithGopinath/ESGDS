@@ -12,6 +12,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { Result} from 'antd';
 import Pagination from '@material-ui/lab/Pagination';
 import PageLoader from '../../components/PageLoader';
  
@@ -40,11 +41,10 @@ const BatchView = () => {
   });
 
   const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
+  const batchErr = useSelector((batchlist) => batchlist.batchList);
   const loading = useSelector((batchlist) => batchlist.batchList.isLoading);
-  console.log(loading, 'loading');
   const batchCount = batchData && batchData.count;
   const batches = batchData && batchData.rows;
-
   const cardPerPage = 20;
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
@@ -108,12 +108,36 @@ const BatchView = () => {
                 </Button>
               </div>
             </div>
-            <div className="view-min-height">
+            {/* <div className="view-min-height">
               {loading && <PageLoader /> }
               <Row >
                 {batchlist}
               </Row>
-            </div>
+            </div> */}
+               <div className="view-min-height">
+             
+             { 
+               (!batchErr.error && !loading ) && (
+                 <Row >
+                   {batchlist}
+                 </Row>
+               )
+             }
+
+             { 
+               (batchErr.error && !loading) && (
+               <Result
+                 status="error"
+                 title={batchErr.error.message}
+               >
+               </Result>
+               )
+             }
+             {
+               (loading) &&  
+               (<PageLoader />)
+             }
+           </div>
             <Row>
               <Col lg={12} sm={12}>
                 <div className="batch-footer">

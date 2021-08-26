@@ -4,13 +4,14 @@ import { Col, Row } from 'react-bootstrap';
 import { DatePicker, message } from 'antd';
 import moment from 'moment';
 import Select from 'react-select';
+import { Result} from 'antd';
 import Overlay from '../../components/Overlay';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
-    const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails.isLoading);
+    const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
     const [alert, setAlert] = useState('');
@@ -30,8 +31,7 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     dispatch({type:"UPDATETASK_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
-  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate.isLoading);
-  console.log(isDataEdited, 'isDataEdited');
+  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});
@@ -40,9 +40,16 @@ if(isDataEdited){
     setAlert(isDataEdited.message);
   
 }
+
   },[isDataEdited]);
 
+useEffect(()=> {
 
+  if(isDataEditedLoading.error || isEditDataLoading.error ){
+    setalertStatus(false);
+    setAlert(isDataEditedLoading.error.message || isEditDataLoading.error.message );
+  }
+},[isDataEditedLoading, isEditDataLoading]);
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
@@ -73,9 +80,6 @@ if(isDataEdited){
       if(qasla){
       if(moment(date).isAfter(qasla, 'date')){
         setAlert('Analyst SLA Exceeds Qa SLA');
-        // setTimeout(() => {
-        //   setAlert(0);
-        // }, 4000);
         setalertStatus(false);
         setqasla(null);
       }
@@ -113,11 +117,6 @@ if(isDataEdited){
 
       }
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
-      // setalertStatus(true);
-      // setAlert('Task Updated Successfully !!');
-      // setTimeout(() => {
-      //   setAlert(0);
-      // }, 2000);
     } else {
       setAlert('Fill all the required fields !');
       setalertStatus(false);
@@ -130,7 +129,8 @@ if(isDataEdited){
     return current && current < moment(customDate, 'YYYY-MM-DD');
   }
   const editBody = () => (
-    <React.Fragment>
+<React.Fragment>
+    <div>
       <Row>
         <Col lg={6}>
             <div className="edittask-contentBox">
@@ -194,9 +194,12 @@ if(isDataEdited){
           </div>
         </Col>
       </Row>
-    </React.Fragment>
+      </div>
+  </React.Fragment>
   );
   const editFooter = () => (
+    <React.Fragment>
+    {(!isEditDataLoading.error)?
     <div className="foo-width">
     <div className=" batch-status-minheight">
 
@@ -208,7 +211,12 @@ if(isDataEdited){
       <div className="edittask-btn"><button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button></div>
     </div>
     </div>
-  );
+  :
+  null
+}
+</React.Fragment>
+    );
+
 
   return (
     <Overlay
@@ -219,7 +227,7 @@ if(isDataEdited){
       keyboard={false}
       animation
       centered
-      isLoading={isDataEditedLoading  || isEditDataLoading}
+      isLoading={isDataEditedLoading.isLoading  || isEditDataLoading.isLoading}
       size="lg"
       title={rowValue.taskNumber}
       body={editBody()}

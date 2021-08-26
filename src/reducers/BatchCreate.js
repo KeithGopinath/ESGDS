@@ -21,6 +21,12 @@ export default (state = initialState, action) => {
         isLoading: false,
         error: action.error,
       };
+    case 'BATCH_CREATE_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+      };
     default:
       return state;
   }
