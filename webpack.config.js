@@ -28,6 +28,7 @@ const config = {
     publicPath: '/',
     path: paths.appBuild,
     filename: '[name].[hash].js',
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
