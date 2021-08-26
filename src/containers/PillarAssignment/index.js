@@ -185,7 +185,7 @@ useEffect(()=>{
                       </Col>
                       <Col lg={4}>
                         <div className="inner-pillar-content-mar-bot">
-                          <div className="pillar-content">primary pillar <span className="mandatory-color">*</span></div>
+                          <div className="pillar-content">Primary Pillar <span className="mandatory-color">*</span></div>
                           <div className={(primaryPillar.length === 0 && inputValidate) ? 'pillar-dropdown-alert' : ''} >
                             <Select
                               onChange={onPrimaryPillarChange}
@@ -199,7 +199,7 @@ useEffect(()=>{
                       </Col>
                       <Col lg={4}>
                         <div className="inner-pillar-content-mar-bot">
-                          <div className="pillar-content">Secondary pillar</div>
+                          <div className="pillar-content">Secondary Pillar</div>
                           <div>
                             <Select
                               isMulti
@@ -235,7 +235,7 @@ useEffect(()=>{
                     <Row>
                       <Col>
                         <div className=" pillar-assign-btn">
-                          <button className="btn btn-success" onClick={onhandlesubmit}>Assign pillar</button>
+                          <button className="btn btn-success" onClick={onhandlesubmit}>Assign Pillar</button>
                         </div>
                       </Col>
                     </Row>

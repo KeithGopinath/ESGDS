@@ -37,6 +37,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       setDuplicateMails([]);
       setInputList([{ email: '', onboardingtype: '', link: '' }]);
       setEmailFileUpload('');
+      setEmailFile(''); 
     } else if (InvalidMailStatus) {
       setChooseOption(chooseOption);
       setOnboardAlert(InvalidMailStatus.message);
