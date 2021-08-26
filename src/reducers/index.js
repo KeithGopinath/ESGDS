@@ -55,6 +55,7 @@ import dataJson from './GetDataJson';
 import controversyJson from './GetControversyJson';
 import generateJson from './GenerateJson';
 import downloadJson from './DownloadJson';
+import dpCodeValidation from './DpCodeValidation';
 
 const combinedReducer = combineReducers({
   login,
@@ -120,6 +121,7 @@ const combinedReducer = combineReducers({
   controversyJson,
   generateJson,
   downloadJson,
+  dpCodeValidation,
 });
 
 const rootReducer = (state, action) => {

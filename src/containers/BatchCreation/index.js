@@ -254,6 +254,7 @@ const BatchCreation = ({ show, setShow }) => {
   //     };
   //   });
   //   promise.then((data) => {
+  //     // console.log(data);
   //   });
   // };
   return (

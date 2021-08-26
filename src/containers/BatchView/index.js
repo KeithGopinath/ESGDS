@@ -43,6 +43,7 @@ const BatchView = () => {
   const batchData = useSelector((batchlist) => batchlist.batchList.batchdata);
   const batchErr = useSelector((batchlist) => batchlist.batchList);
   const loading = useSelector((batchlist) => batchlist.batchList.isLoading);
+  // console.log(loading, 'loading');
   const batchCount = batchData && batchData.count;
   const batches = batchData && batchData.rows;
   const cardPerPage = 20;

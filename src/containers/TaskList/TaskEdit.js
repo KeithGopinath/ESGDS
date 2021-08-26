@@ -31,7 +31,8 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     dispatch({type:"UPDATETASK_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
-  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
+  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate.isLoading);
+  // console.log(isDataEdited, 'isDataEdited');
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});

@@ -15,7 +15,7 @@ import { Modal, Tooltip, message } from 'antd';
 
 import { CloseCircleFilled, UserOutlined } from '@ant-design/icons';
 
-import { faUserPlus, faUserTimes, faCommentAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Header from '../../components/Header';
@@ -28,6 +28,7 @@ import AddNewKMPMember from './AddNewKMPMember';
 import { history } from '../../routes';
 
 import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
+import ValidationComments from './ValidationComments';
 
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
@@ -56,7 +57,7 @@ FieldWrapper.propTypes = {
 };
 
 const TaskTable = (props) => {
-  console.log(props); // REQ
+  // // console.log(props); // REQ
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     key: `${x.dpCodeId}${x.memberName}${x.dpCode}${x.fiscalYear}`,
     dpCode: x.dpCode,
@@ -92,7 +93,7 @@ const TaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultNoOfRows={5} message={props.message} icon={props.icon} />
+    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultNoOfRows={10} message={props.message} icon={props.icon} />
   );
 };
 
@@ -133,7 +134,7 @@ const ControversyTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_TASK_DATA} defaultNoOfRows={5} isLoading={props.isLoading} icon={props.icon} message={props.message} />
+    <CustomTable tableData={CONTROVERSY_TASK_DATA} defaultNoOfRows={10} isLoading={props.isLoading} icon={props.icon} message={props.message} />
   );
 };
 
@@ -144,26 +145,35 @@ ControversyTaskTable.propTypes = {
 };
 
 const ValidationTable = (props) => {
-  const [desModal, setDesModal] = useState(false);
+  // // console.log(props);
+  const getDescription = (description) => {
+    if (description.length > 0) {
+      return (
+        <Tooltip
+          placement="top"
+          color="#fff"
+          overlayInnerStyle={{ width: 300 }}
+          title={
+            <div style={{ padding: '10px', color: '#444c59' }}>
+              {description.map((e, i) => <div style={{ padding: '1%', borderTop: i > 0 ? '1px solid rgba(224, 224, 224, 1)' : 'none' }}>{e}</div>)}
+            </div>
+          }
+        ><span style={{ cursor: 'pointer' }}>View</span>
+        </Tooltip>);
+    }
+    return <div>-</div>;
+  };
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+    key: `${x.dpCode}-${x.fiscalYear}-${x.memberId}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
-    description:
-  <div>Validation Failed Descript...
-    <Tooltip
-      placement="top"
-      color="#fff"
-      title={
-        <div style={{ padding: '10px', color: 'black' }}>
-          <div>Validation Failed Description 1</div>
-          <div>Validation Failed Description 2</div>
-          <div>Validation Failed Description 3</div>
-        </div>
-      }
-    ><span style={{ cursor: 'pointer' }}>View more</span>
-    </Tooltip>
-  </div>,
-    validationstatus: <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}><div style={{ color: '#dc3545' }}>Failed</div><div title="Add Comments" onClick={() => { setDesModal(true); }} style={{ cursor: 'pointer', color: 'dodgerblue' }}><FontAwesomeIcon icon={faCommentAlt} /></div></div>,
+    description: getDescription(x.description),
+    validationstatus: x.isValidResponse && x.description.length === 0 ?
+      <div style={{ color: '#28a745' }}>Success</div> :
+      <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+        <div style={{ color: '#e40e22' }}>Failed</div>
+        <ValidationComments />
+      </div>,
     action:
   <Link
     to={{
@@ -198,27 +208,7 @@ const ValidationTable = (props) => {
 
   return (
     <React.Fragment>
-      <CustomTable tableData={VALIDATION_DATA} defaultNoOfRows={5} isLoading={props.isLoading} message={props.message} icon={props.icon} />
-      <Modal
-        title="Add Comments"
-        className="task-modal"
-        maskClosable={false}
-        width="80%"
-        style={{ maxWidth: '700px' }}
-        visible={desModal}
-        footer={<div style={{ display: 'flex', justifyContent: 'center' }}><Button variant="success">Sumbit</Button></div>}
-        onCancel={() => setDesModal(false)}
-      >
-        <React.Fragment>
-          <Form.Control
-            as="textarea"
-            disabled={false}
-            aria-label="With textarea"
-            placeholder="Comments"
-            onChange={null}
-          />
-        </React.Fragment>
-      </Modal>
+      <CustomTable tableData={VALIDATION_DATA} defaultNoOfRows={10} isLoading={props.isLoading} message={props.message} icon={props.icon} />
     </React.Fragment>
   );
 };
@@ -257,6 +247,7 @@ const Task = (props) => {
   const reqTASK = useSelector((state) => state.task);
   const taskSubmitFromStore = useSelector((state) => state.taskSubmit);
   const derivedCalculationFromStore = useSelector((state) => state.derivedDataCalculation);
+  const dpCodeValidationFromStore = useSelector((state) => state.dpCodeValidation);
 
   // STATES
   const [dpCodeType, setDpCodeType] = useState('Standalone');
@@ -297,6 +288,9 @@ const Task = (props) => {
     if (isAnalyst_CC) {
       // KEY NAMES CHANGES REQ FROM SHIVA !
       [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : data.filter((e) => (e.taskId === taskDetails.taskId));
+    }
+    if (isValidationCalled) {
+      [returnableTask] = (dpCodeValidationFromStore && dpCodeValidationFromStore.validation) ? [dpCodeValidationFromStore.validation] : [];
     }
     return { ...returnableTask, ...taskDetails };
   };
@@ -394,8 +388,8 @@ const Task = (props) => {
       allDpCodes = [...allDpCodes, ...reqTaskData.kmpMatrix.dpCodesData];
     }
 
-    console.log(allDpCodes);
-    return allDpCodes.filter((e) => e.status !== 'Completed');
+    // // console.log(allDpCodes);
+    return isValidationCalled ? allDpCodes.filter((e) => e.isValidResponse === false || e.description.length > 0) : allDpCodes.filter((e) => e.status !== 'Completed');
   };
 
   // ONCLICK FUNCS
@@ -412,69 +406,68 @@ const Task = (props) => {
   };
 
   const onSubmitTask = () => {
-    let postableData = {
+    const postableData = {
       companyId: taskDetails.companyId,
       year: taskDetails.fiscalYear,
       clientTaxonomyId: taskDetails.clientTaxonomyId,
-      taskStatus: '',
+      role: sessionStorage.role,
       taskId: taskDetails.taskId,
     };
-    if (isAnalyst_DC) {
-      postableData = { ...postableData, taskStatus: 'Collection Completed' };
-    }
-    if (isAnalyst_DCR) {
-      postableData = { ...postableData, taskStatus: 'Correction Completed' };
-    }
-    if (isQA_DV) {
-      postableData = { ...postableData, taskStatus: 'Verification Completed' };
-    }
-    if (isClientRep_DR) {
-      postableData = { ...postableData, taskStatus: 'Completed' };
-    }
-    if (isCompanyRep_DR) {
-      postableData = { ...postableData, taskStatus: 'Completed' };
-    }
+    // if (isAnalyst_DC) {
+    //   postableData = { ...postableData, taskStatus: 'Collection Completed' };
+    // }
+    // if (isAnalyst_DCR) {
+    //   postableData = { ...postableData, taskStatus: 'Correction Completed' };
+    // }
+    // if (isQA_DV) {
+    //   postableData = { ...postableData, taskStatus: 'Verification Completed' };
+    // }
+    // if (isClientRep_DR) {
+    //   postableData = { ...postableData, taskStatus: 'Completed' };
+    // }
+    // if (isCompanyRep_DR) {
+    //   postableData = { ...postableData, taskStatus: 'Completed' };
+    // }
 
     const inCompleteDpCodes = getInCompleteDpCodes();
     if (inCompleteDpCodes.length === 0) {
       dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
       setStatusAlert(true);
     } else {
-      message.error(`DpCode: "${inCompleteDpCodes[0].dpCode}" of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" is not completed !`);
+      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
     }
   };
 
-  const onSubmitTask2 = () => {
-    let postableData = {
-      companyId: taskDetails.companyId,
-      year: taskDetails.fiscalYear,
-      clientTaxonomyId: taskDetails.clientTaxonomyId,
-      taskStatus: '',
-      taskId: taskDetails.taskId,
-    };
-    if (isQA_DV) {
-      postableData = { ...postableData, taskStatus: 'Correction Pending' };
-    }
-    if (isClientRep_DR) {
-      postableData = { ...postableData, taskStatus: 'Correction Pending' };
-    }
-    if (isCompanyRep_DR) {
-      postableData = { ...postableData, taskStatus: 'Correction Pending' };
-    }
-    dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
-    setStatusAlert(true);
-  };
+  // const onSubmitTask2 = () => {
+  //   let postableData = {
+  //     companyId: taskDetails.companyId,
+  //     year: taskDetails.fiscalYear,
+  //     clientTaxonomyId: taskDetails.clientTaxonomyId,
+  //     taskStatus: '',
+  //     taskId: taskDetails.taskId,
+  //   };
+  //   if (isQA_DV) {
+  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
+  //   }
+  //   if (isClientRep_DR) {
+  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
+  //   }
+  //   if (isCompanyRep_DR) {
+  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
+  //   }
+  //   dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
+  //   setStatusAlert(true);
+  // };
 
   const onClickCalculateDerivedData = () => {
-    // const inCompleteDpCodes = getInCompleteDpCodes();
+    const inCompleteDpCodes = getInCompleteDpCodes();
     setIsPercentileCalculated(true);
-    // if (inCompleteDpCodes.length === 0) {
-    //   // dispatch({ type: 'DERIVED_CALCULATION_POST_REQUEST', payload: { taskId: taskDetails.taskId } });
-    //   // setStatusAlert(true);
-    //   setIsPercentileCalculated(true);
-    // } else {
-    //   message.error(`DpCode: "${inCompleteDpCodes[0].dpCode}" of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" is not completed !`);
-    // }
+    if (inCompleteDpCodes.length === 0) {
+      dispatch({ type: 'DERIVED_CALCULATION_POST_REQUEST', payload: { taskId: taskDetails.taskId } });
+      setStatusAlert(true);
+    } else {
+      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
+    }
   };
 
   const onClickValidate = () => {
@@ -548,13 +541,16 @@ const Task = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!isAnalyst_CC) {
+    if (!isAnalyst_CC && !isValidationCalled) {
       dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
     }
-    if (isAnalyst_CC) {
+    if (isAnalyst_CC && !isValidationCalled) {
       dispatch({ type: 'CONTROVERSY_TASK_GET_REQUEST', taskId: taskDetails.taskId });
     }
-  }, []);
+    if (isValidationCalled) {
+      dispatch({ type: 'DPCODE_VALIDATION_GET_REQUEST', taskId: taskDetails.taskId, previousYear: '2016-2017' });
+    }
+  }, [isValidationCalled]);
 
   useEffect(() => {
     setReqKeyIssue('');
@@ -682,10 +678,10 @@ const Task = (props) => {
             {(isAnalyst_DC || isAnalyst_DCR) && isValidationCalled &&
               <ValidationTable
                 taskDetails={taskDetails}
-                dpCodesData={(derivedCalculationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}
-                isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || reqTASK.isLoading || taskSubmitFromStore.isLoading)}
-                message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
-                icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
+                dpCodesData={(dpCodeValidationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}
+                isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading || taskSubmitFromStore.isLoading)}
+                message={(dpCodeValidationFromStore.error) ? (dpCodeValidationFromStore.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
+                icon={(dpCodeValidationFromStore && dpCodeValidationFromStore.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
               />}
 
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
@@ -693,15 +689,15 @@ const Task = (props) => {
               { (((isAnalyst_DC || isAnalyst_DCR) && isValidationCalled) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
                 <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
 
-              { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
-                <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>}
+              {/* { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
+                <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>} */}
 
-              { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled &&
+              { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled && !isPercentileCalculated &&
                 <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
 
               { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled &&
                 <Button className="datapage-button" variant="info" onClick={onClickValidate}>Validate</Button>}
-              { (isAnalyst_DC || isAnalyst_DCR) && isValidationCalled &&
+              { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated &&
                 <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
 
             </Col>
