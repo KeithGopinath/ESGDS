@@ -42,7 +42,7 @@ const Groups = () => {
   const location = useLocation();
   const steps = [
     {
-      title:'Create group',
+      title:'Create Group',
     },
     {
       title: 'Batch Assignment',

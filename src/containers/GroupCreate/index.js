@@ -93,7 +93,7 @@ const GroupView = () => {
               <div>
                 <ThemeProvider theme={searchtheme}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '20px' }}
                     autoComplete="off"
                     onChange={onSearchBatch}

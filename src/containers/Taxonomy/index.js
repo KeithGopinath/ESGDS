@@ -33,6 +33,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   const [header, setHeader] = useState('');
   const [errorAlert, setErrorAlert] = useState('');
   const [alertMsg, setAlertMsg] = useState('');
+  const [flag, setFlag] = useState(false);
 
   const dispatch = useDispatch();
   const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
@@ -49,7 +50,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   }, [taxonomy]);
 
   useEffect(() => {
-    if (taxonomyHeader && taxonomyHeader.status === '200') {
+    if (taxonomyHeader && taxonomyHeader.status === '200' && flag) {
       dispatch({ type: 'MASTER_TAXONOMY_REQUEST' });
       setShow(false)
       message.success(`${taxonomyHeader.message}`)
@@ -148,6 +149,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
         toDisplay: display.value
       }
       dispatch({ type: 'MASTER_TAXONOMY_HEADER_REQUEST', column, header });
+      setFlag(true);
     }
   }
 
@@ -388,7 +390,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
               <div>
                 <ThemeProvider theme={searchtheme}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '20px' }}
                     autoComplete="off"
                     onChange={onSearchBatch}
