@@ -210,6 +210,13 @@ export const DataSheetComponent = (props) => {
   // *DATATYPE*
   const formDataType = defaultData.dataType ? defaultData.dataType.toUpperCase() : '';
 
+  const reqErrorData = {
+    ...defaultData.error,
+    refData: {
+      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
+    },
+  };
+
   // *STATES* +
   // *TEXT SNIPPET*
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
@@ -1207,7 +1214,7 @@ export const DataSheetComponent = (props) => {
         }
         onCancel={onCloseErrorPanel}
       >
-        <ErrorPanel reqErrorData={defaultData.error} isAccepted={isErrorAccepted} errorComment={errorComment} setErrorComment={setErrorComment} />
+        <ErrorPanel reqErrorData={reqErrorData} isAccepted={isErrorAccepted} errorComment={errorComment} setErrorComment={setErrorComment} />
       </Modal>
 
     </Row>
