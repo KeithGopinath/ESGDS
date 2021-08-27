@@ -9,15 +9,19 @@ import SideMenuBar from '../../components/SideMenuBar';
 import { useLocation } from "react-router-dom";
 import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
+import ControversyEdit from './ControversyTaskEdit';
 import XLSX from "xlsx";
 import { history } from './../../routes';
 import moment from 'moment';
-import PageLoader from '../../components/PageLoader';
+
 
 const TaskList = (props) => {
   const [show, setShow] = useState(false);
+  const [controversyShow, setcontroversyShow ] = useState(false);
   const [rowValue, setrowValue] = useState('');
+  const [controversyValue, setcontroversyValue ] = useState('');
   const [analystDetail, setanalystDetail] = useState('');
+  const [controversyAnalyst,setcontroversyAnalyst] = useState('');
   const [tasktabFlag, settaskTabFlag] = useState();
   const [qaDetail, setqaDetail] = useState('');
   const [roleType, setRole] = useState('');
@@ -124,11 +128,26 @@ if(!multiCompanies){
     setqaDetail({ value: arg.qaId, label: arg.qa });
     setanalystsla(getFormatDate(arg.analystSLA));
     setqasla(getFormatDate(arg.qaSLA));
-
     setrowValue(arg);
     setShow(true);
   };
 
+  const handleControversyShow = (arg) => {
+    const payload = { 
+      filters: [
+        { filterWith: "isUserApproved", value: true },
+        { filterWith: "isAssignedToGroup", value: true },
+        { filterWith: "isRoleAssigned", value: true },
+        { filterWith: "isUserActive", value: true },
+        { filterWith: "userType", value: "Employee" },
+        { filterWith :"role" , value: "Analyst" }
+        
+      ] }
+      dispatch({ type: 'FILTER_USERS_REQUEST', payload });
+    setcontroversyValue(arg);
+    setcontroversyAnalyst({value:arg.analystId ,label:arg.analyst });
+    setcontroversyShow(true);
+  }
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -190,7 +209,7 @@ if(!multiCompanies){
         analystSla:e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
         qa: e.qa ? e.qa : '--',
         qaSla:e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
-        action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+        action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}></FontAwesomeIcon>,
       }))
       :
       (tasktabFlag === 'Completed Task') ?
@@ -205,7 +224,6 @@ if(!multiCompanies){
         analystSla:e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
         qa: e.qa ? e.qa : '--',
         qaSla:e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
-       // action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
       }))
       :
       obj.map((e) => ({
@@ -213,7 +231,7 @@ if(!multiCompanies){
         taskid: e.taskNumber ? e.taskNumber : '--',
         company: e.company ? e.company : '--',
         analyst: e.analyst ? e.analyst : '--',
-        action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}>Edit</FontAwesomeIcon>,
+        action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleControversyShow(e); }}></FontAwesomeIcon>,
       }))
 
     return {
@@ -539,17 +557,18 @@ if(!multiCompanies){
   const onBackButton = () => {
     history.push({ pathname: '/reports', tabFlag: tabFlag });
   };
-
+  console.log(isList, 'isList');
+console.log(roleType,tasktabFlag ,'roleType','tasktabFlag');
   const tasklist = 
   totalTaskList(multiCompanies ? 
     tabFlag === 'Controversy' ?
      (controversyDetails ? controversyDetails : []) :
       (getCompanyDetails ? getCompanyDetails : []) : 
-      ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Pending Task' ) ?
+      ((roleType === 'SuperAdmin' || roleType === 'Admin') && tasktabFlag === 'Pending Task' ) ?
        (isList ?  isList.adminTaskList.pendingList : []):
-       ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Completed Task' ) ?
+       ((roleType === 'SuperAdmin' || roleType === 'Admin') && tasktabFlag === 'Completed Task' ) ?
         (isList ? isList.adminTaskList.completedList : []) :
-        ((roleType === 'SuperAdmin' || 'Admin') && tasktabFlag === 'Controversy' ) ?
+        ((roleType === 'SuperAdmin' || roleType ==='Admin') && tasktabFlag === 'Controversy' ) ?
         (isList ? isList.adminTaskList.controversyList : []) :
         (roleType === 'GroupAdmin' && tasktabFlag === 'Pending Task' ) ?
         (isList ? isList.groupAdminTaskList.pendingList : []):
@@ -559,7 +578,7 @@ if(!multiCompanies){
         (isList ? isList.groupAdminTaskList.controversyList : []):
         []
        );
-
+       console.log(tasklist, 'tasklist');
   return (
     <React.Fragment>
       <div className="main">
@@ -599,7 +618,8 @@ if(!multiCompanies){
           </div>
         </div>
       </div>
-      <EditTask setShow={setShow} show={show} rowValue={rowValue} qasla={qasla} setqasla={setqasla} analystsla={analystsla} analystDetail={analystDetail} setanalystDetail={setanalystDetail} qaDetail={qaDetail} setqaDetail={setqaDetail} setanalystsla={setanalystsla} setqaDetailsetrowValue={setrowValue} />
+      <EditTask setShow={setShow} show={show} rowValue={rowValue} qasla={qasla} setqasla={setqasla} analystsla={analystsla} analystDetail={analystDetail} setanalystDetail={setanalystDetail} qaDetail={qaDetail} setqaDetail={setqaDetail} setanalystsla={setanalystsla} setrowValue={setrowValue} />
+      <ControversyEdit setcontroversyShow={setcontroversyShow} controversyShow={controversyShow} controversyValue={controversyValue} setcontroversyValue={setcontroversyValue}  controversyAnalyst={controversyAnalyst} setcontroversyAnalyst={setcontroversyAnalyst} />
     </React.Fragment>
   );
 };
