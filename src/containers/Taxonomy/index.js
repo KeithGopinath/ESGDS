@@ -165,9 +165,6 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   }
 
   const addNewTaxonomy = () => {
-    const temp = [...taxonomyData];
-    temp.push({ name: '' })
-    setTaxonomyData(temp)
     setShow(true)
     setHeader('')
   }
