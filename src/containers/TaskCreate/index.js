@@ -758,7 +758,7 @@ const TaskCreate = ({ flag }) => {
               <div>
                 <ThemeProvider theme={searchtheme}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '9px' }}
                     autoComplete="off"
                     onChange={onSearchGroup}
@@ -821,7 +821,7 @@ const TaskCreate = ({ flag }) => {
               <div>
                 <ThemeProvider theme={searchthemebatch}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '9px' }}
                     autoComplete="off"
                     onChange={onSearchBatch}

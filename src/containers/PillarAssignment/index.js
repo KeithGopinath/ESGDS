@@ -168,7 +168,7 @@ useEffect(()=>{
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title="Pillar assignment" />
+          <Header sideBarRef={sideBarRef} title="Pillar Assignment" />
           <div className="container-main">
             
             <Row>
