@@ -93,7 +93,7 @@ const TaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={TASK_DATA} isLoading={props.isLoading} defaultNoOfRows={10} message={props.message} icon={props.icon} />
+    <CustomTable tableData={TASK_DATA} footerBesidePagination={props.footerBesidePagination} isLoading={props.isLoading} defaultNoOfRows={10} message={props.message} icon={props.icon} />
   );
 };
 
@@ -101,6 +101,7 @@ TaskTable.propTypes = {
   isLoading: PropTypes.bool,
   message: PropTypes.string,
   icon: PropTypes.element,
+  footerBesidePagination: PropTypes.element,
 };
 
 const ControversyTaskTable = (props) => {
@@ -134,7 +135,7 @@ const ControversyTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_TASK_DATA} defaultNoOfRows={10} isLoading={props.isLoading} icon={props.icon} message={props.message} />
+    <CustomTable tableData={CONTROVERSY_TASK_DATA} footerBesidePagination={props.footerBesidePagination} defaultNoOfRows={10} isLoading={props.isLoading} icon={props.icon} message={props.message} />
   );
 };
 
@@ -142,6 +143,7 @@ ControversyTaskTable.propTypes = {
   isLoading: PropTypes.bool,
   message: PropTypes.string,
   icon: PropTypes.element,
+  footerBesidePagination: PropTypes.element,
 };
 
 const ValidationTable = (props) => {
@@ -208,7 +210,7 @@ const ValidationTable = (props) => {
 
   return (
     <React.Fragment>
-      <CustomTable tableData={VALIDATION_DATA} defaultNoOfRows={10} isLoading={props.isLoading} message={props.message} icon={props.icon} />
+      <CustomTable tableData={VALIDATION_DATA} footerBesidePagination={props.footerBesidePagination} defaultNoOfRows={10} isLoading={props.isLoading} message={props.message} icon={props.icon} />
     </React.Fragment>
   );
 };
@@ -217,6 +219,7 @@ ValidationTable.propTypes = {
   isLoading: PropTypes.bool,
   icon: PropTypes.element,
   message: PropTypes.string,
+  footerBesidePagination: PropTypes.element,
 };
 
 
@@ -582,6 +585,10 @@ const Task = (props) => {
     }
   }, [derivedCalculationFromStore]);
 
+  const getFooterBesidePagination = () => (
+    null
+  );
+
 
   return (
     <div className="main">
@@ -664,6 +671,7 @@ const Task = (props) => {
                 isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || reqTASK.isLoading || taskSubmitFromStore.isLoading)}
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
+                footerBesidePagination={getFooterBesidePagination()}
               />}
 
             {isAnalyst_CC &&
@@ -673,6 +681,7 @@ const Task = (props) => {
                 isLoading={reqTASK.isLoading}
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : null}
+                footerBesidePagination={getFooterBesidePagination()}
               />}
 
             {(isAnalyst_DC || isAnalyst_DCR) && isValidationCalled &&
@@ -682,23 +691,23 @@ const Task = (props) => {
                 isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading || taskSubmitFromStore.isLoading)}
                 message={(dpCodeValidationFromStore.error) ? (dpCodeValidationFromStore.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(dpCodeValidationFromStore && dpCodeValidationFromStore.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
+                footerBesidePagination={getFooterBesidePagination()}
               />}
-
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
-              { (((isAnalyst_DC || isAnalyst_DCR) && isValidationCalled) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
-                <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
+              { (((isAnalyst_DC || isAnalyst_DCR) && (isPercentileCalculated && (isValidationCalled || !taskDetails.isValidationRequired))) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
+              <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
 
               {/* { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
                 <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>} */}
 
               { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled && !isPercentileCalculated &&
-                <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
+              <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
 
-              { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled &&
-                <Button className="datapage-button" variant="info" onClick={onClickValidate}>Validate</Button>}
+              { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled && taskDetails.isValidationRequired &&
+              <Button className="datapage-button" variant="info" onClick={onClickValidate}>Validate</Button>}
               { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated &&
-                <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
+              <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
 
             </Col>
 

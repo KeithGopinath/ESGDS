@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
@@ -41,6 +42,21 @@ const FieldWrapper = (props) => {
 };
 
 const AddSource = (props) => {
+  // CURRENT ROLE
+  const currentRole = sessionStorage.role;
+
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
+  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+    currentRole === 'Analyst' && currentTab === 'Data Collection',
+    currentRole === 'Analyst' && currentTab === 'Data Correction',
+    currentRole === 'QA',
+    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
+    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+  ];
+
   // DISPATCH
   const dispatch = useDispatch();
   useEffect(() => {
@@ -58,17 +74,45 @@ const AddSource = (props) => {
 
   useEffect(() => {
     if (postSourceTypeFromStore && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
-      dispatch({
-        type: 'DPCODEDATA_GET_REQUEST',
-        payload: {
-          taskId: taskDetails.taskId,
-          datapointId: dpCodeDetails.dpCodeId,
-          year: dpCodeDetails.fiscalYear,
-          memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
-          memberName: dpCodeDetails.memberName || '',
-          memberId: dpCodeDetails.memberId || '',
-        },
-      });
+      if (isAnalyst_DC || isAnalyst_DCR || isQA_DV) {
+        dispatch({
+          type: 'DPCODEDATA_GET_REQUEST',
+          payload: {
+            taskId: taskDetails.taskId,
+            datapointId: dpCodeDetails.dpCodeId,
+            year: dpCodeDetails.fiscalYear,
+            memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
+            memberName: dpCodeDetails.memberName || '',
+            memberId: dpCodeDetails.memberId || '',
+          },
+          taskType: 'DATA_COLLECTION_CORRECTION_VERIFICATION',
+        });
+      }
+      if (isClientRep_DR || isCompanyRep_DR) {
+        dispatch({
+          type: 'DPCODEDATA_GET_REQUEST',
+          payload: {
+            taskId: taskDetails.taskId,
+            datapointId: dpCodeDetails.dpCodeId,
+            year: dpCodeDetails.fiscalYear,
+            memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
+            memberName: dpCodeDetails.memberName || '',
+            memberId: dpCodeDetails.memberId || '',
+          },
+          taskType: 'DATA_REVIEW',
+        });
+      }
+      // dispatch({
+      //   type: 'DPCODEDATA_GET_REQUEST',
+      //   payload: {
+      //     taskId: taskDetails.taskId,
+      //     datapointId: dpCodeDetails.dpCodeId,
+      //     year: dpCodeDetails.fiscalYear,
+      //     memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
+      //     memberName: dpCodeDetails.memberName || '',
+      //     memberId: dpCodeDetails.memberId || '',
+      //   },
+      // });
       message.success(postSourceTypeFromStore.source.message);
       setStatusAlert(false);
       props.closeAddSourcePanel();
