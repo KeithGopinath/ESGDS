@@ -69,6 +69,7 @@ export default {
     downloadJson: 'json_files/download-json',
     getDpCodeDataForClientCompanyRep: 'datapoints/repDpDetails',
     getDpCodeValidation: 'validations/validateDpDetails',
+    controversyUpdate: 'controversy_tasks/update-task',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

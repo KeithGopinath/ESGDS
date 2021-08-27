@@ -4,12 +4,11 @@ import { Col, Row } from 'react-bootstrap';
 import { DatePicker, message } from 'antd';
 import moment from 'moment';
 import Select from 'react-select';
-import { Result} from 'antd';
 import Overlay from '../../components/Overlay';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
+const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
     const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
     const editAnalystOption = isEditData && isEditData.data.analyst;
@@ -27,11 +26,12 @@ const TaskEdit = ({ show, setShow, rowValue, analystDetail, setanalystDetail, qa
     setqasla(null);
     setanalystsla(null);
     setAlert('');
+    setrowValue('');
     setalertStatus(false);
     dispatch({type:"UPDATETASK_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
-  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate.isLoading);
+  const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
   // console.log(isDataEdited, 'isDataEdited');
   useEffect(()=>{
 if(isDataEdited){
@@ -43,12 +43,12 @@ if(isDataEdited){
 }
 
   },[isDataEdited]);
-
+console.log(isDataEditedLoading,isEditDataLoading );
 useEffect(()=> {
 
   if(isDataEditedLoading.error || isEditDataLoading.error ){
     setalertStatus(false);
-    setAlert(isDataEditedLoading.error.message || isEditDataLoading.error.message );
+    setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message );
   }
 },[isDataEditedLoading, isEditDataLoading]);
   const getFormatDate=(arg)=>{
@@ -200,7 +200,6 @@ useEffect(()=> {
   );
   const editFooter = () => (
     <React.Fragment>
-    {(!isEditDataLoading.error)?
     <div className="foo-width">
     <div className=" batch-status-minheight">
 
@@ -212,9 +211,7 @@ useEffect(()=> {
       <div className="edittask-btn"><button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button></div>
     </div>
     </div>
-  :
-  null
-}
+
 </React.Fragment>
     );
 
