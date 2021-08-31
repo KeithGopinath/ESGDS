@@ -212,9 +212,9 @@ export const DataSheetComponent = (props) => {
 
   const reqErrorData = {
     ...defaultData.error,
-    refData: {
+    refData: (defaultData.error && defaultData.error.refData) ? {
       ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
-    },
+    } : {},
   };
 
   // *STATES* +
