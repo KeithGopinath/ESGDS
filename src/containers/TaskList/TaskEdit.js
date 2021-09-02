@@ -32,7 +32,6 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
     setrowValue('');
     setalertStatus(false);
     dispatch({type:"UPDATETASK_RESET"});
-    // dispatch({type:"NOTIFICATION_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
   const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);

@@ -125,7 +125,7 @@ const Groups = () => {
         }
       }
       }
-      console.log(onlyanalystqa, 'onlyanalystqa');
+
       seteditunassignedAnalystQa(onlyanalystqa);
       // for batch Edit
       const assignedbatch = [];
@@ -195,8 +195,6 @@ const Groups = () => {
       }
     });
     const filteredData = []
-    console.log(editunassigned, 'editunassigned');
-    console.log(usertargetKeys, 'usertargetKeys');
     for(const obj1 of editunassigned){
        const istest = usertargetKeys.filter((e)=> e === obj1.key);
        if(istest.length === 0){
@@ -205,7 +203,6 @@ const Groups = () => {
     }
    
     if(editunassigned){
-      console.log(filteredData, 'filteredData');
       for(const i of filteredData){
         for(const j of i.SecRole.role){
           if(j.label === 'GroupAdmin'){
@@ -223,7 +220,6 @@ const Groups = () => {
       }
    
     }
-     console.log(editunassignedAnalystQa, 'editunassignedAnalystQa');
   // *** unassign member / batches ***
   //   if(grpDetail){
   //   for (const grpobj of unassignedobj){
