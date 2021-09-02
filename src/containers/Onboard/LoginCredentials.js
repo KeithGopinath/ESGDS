@@ -12,7 +12,7 @@ const LoginCredentials = ({ onPassword, previousStep, nextStep, onSubmit, setAct
   const [validPassword, setValidPassword] = useState(true);
 
   const handlePassword = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
+    if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*_]*$')) {
       setPassword(e.target.value);
       onPassword(e.target.value);
       setValidPassword(true);
@@ -20,14 +20,14 @@ const LoginCredentials = ({ onPassword, previousStep, nextStep, onSubmit, setAct
   };
 
   const handleConfirmPassword = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*]*$')) {
+    if (e.target.value.match('^[a-zA-Z0-9!@#$%^&*_]*$')) {
       setConfirmPassword(e.target.value);
       setValidPassword(true);
     }
   };
 
   const passwordValidation = () => {
-    const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/;
     if (!password) {
       message.error('Please enter your password');
       setValidPassword(false);

@@ -57,6 +57,7 @@ import generateJson from './GenerateJson';
 import downloadJson from './DownloadJson';
 import dpCodeValidation from './DpCodeValidation';
 import controversyUpdate from './ControversyTaskUpdate';
+import userTabChange from './UserTabChange';
 
 const combinedReducer = combineReducers({
   login,
@@ -124,6 +125,7 @@ const combinedReducer = combineReducers({
   downloadJson,
   dpCodeValidation,
   controversyUpdate,
+  userTabChange,
 });
 
 const rootReducer = (state, action) => {

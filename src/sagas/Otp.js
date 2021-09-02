@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { put, takeLatest } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/Otp';
@@ -9,6 +10,7 @@ export function* getOtp(data) {
     yield put(actionCreators.getOtpSuccess(response));
     sessionStorage.access = response.token;
     sessionStorage.role = response.user.roleDetails.primaryRole.label;
+    sessionStorage.userId = response.user._id;
   } catch (error) {
     yield put(actionCreators.getOtpFailure(error));
   }

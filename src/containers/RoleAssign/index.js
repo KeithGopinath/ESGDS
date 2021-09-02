@@ -21,6 +21,7 @@ const RoleAssignment = ({ show, setShow }) => {
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
   const otpDetails = useSelector((state) => state.otp.otp);
+  const userTab = useSelector((state) => state.userTabChange.userTab);
 
   const userType = otpDetails && otpDetails.user.userType;
 
@@ -42,7 +43,9 @@ const RoleAssignment = ({ show, setShow }) => {
 
   useEffect(() => {
     if (roleAssignmentEdit) {
-      setAlertMsg(roleAssignmentEdit.message)
+      setAlertMsg(roleAssignmentEdit.message);
+      const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
+      userTab == 'Approved Users' && dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     }
     else if (roleAssignmentEditError) {
       setAlertMsg(roleAssignmentEditError.message)

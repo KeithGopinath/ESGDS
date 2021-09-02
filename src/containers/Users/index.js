@@ -37,8 +37,9 @@ const Users = (props) => {
   }, []);
 
   useEffect(() => {
+    dispatch({ type: 'FILTER_USERS_RESET' });
     if (tabFlag == 'Pending Users') {
-      const payload = { filters: [{ filterWith: "isUserApproved", value: false },{ filterWith: "isUserRejected", value: false }] }
+      const payload = { filters: [{ filterWith: "isUserApproved", value: false }, { filterWith: "isUserRejected", value: false }] }
       dispatch({ type: 'FILTER_USERS_REQUEST', payload });
     } else if (tabFlag == 'Approved Users') {
       const payload = { filters: [{ filterWith: "isUserApproved", value: true }] }
@@ -226,6 +227,8 @@ const Users = (props) => {
     const target = event.currentTarget;
     target.classList.add('tabs-label-count-wrap-active');
     setTabFlag(label)
+    const userTab = label;
+    dispatch({ type: 'USER_TAB_CHANGE', userTab });
   };
 
   const handleShow = (id, status) => {
@@ -244,7 +247,7 @@ const Users = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Users"/>
+        <Header title="Users" />
         <div className="container-main">
           <div className="users-tabs-stack">
             {tabLabelSets.map(({ label }, index) => (
