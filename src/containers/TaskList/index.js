@@ -16,6 +16,7 @@ import moment from 'moment';
 
 
 const TaskList = (props) => {
+  const location = useLocation();
   const [show, setShow] = useState(false);
   const [controversyShow, setcontroversyShow ] = useState(false);
   const [rowValue, setrowValue] = useState('');
@@ -25,12 +26,11 @@ const TaskList = (props) => {
   const [tasktabFlag, settaskTabFlag] = useState();
   const [qaDetail, setqaDetail] = useState('');
   const [roleType, setRole] = useState('');
-  const isTasknumber = useSelector((notification) => notification.notification.message);
-  // // console.log(getTask, 'Task numner')
+  const isTasknumber = useSelector((notification) => notification.notification.notificationType);
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
   const companiesTaskList = getcompanyTask && getcompanyTask.data;
-  const location = useLocation();
+  
   const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
   const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
   const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
@@ -58,10 +58,11 @@ const tasklisttabsClickHandler = (event, label) => {
   target.classList.add('tabs-label-count-wrap-active');
   settaskTabFlag(label);
 };
+console.log(location.state, 'location');
+console.log(isTasknumber, 'isTasknumber');
 const tabFlag = props.location.tabFlag && props.location.tabFlag;
 const multiCompanies = props.location.multiSelect && props.location.multiSelect;
   useEffect(() => {
-    // console.log(location, location.state, 'history data ')
     if (props.location.multiSelect) {
       const propsData = props.location.state;
       const tabLabel = props.location.tabFlag && props.location.tabFlag;
@@ -78,7 +79,7 @@ const multiCompanies = props.location.multiSelect && props.location.multiSelect;
       }
     }
     setRole(sessionStorage.role);
-    
+
   }, []);
   useEffect(()=>{
 if(!multiCompanies){
@@ -149,14 +150,22 @@ if(!multiCompanies){
     setcontroversyShow(true);
   }
   const dispatch = useDispatch();
-
+const isData = useSelector((tasklist) => tasklist.taskList.data);
+const isDataLoading = useSelector((state) => state.taskList.isLoading);
+const isList = isData && isData.data;
   useEffect(() => {
-    dispatch({ type: "GET_TASKLIST_REQUEST" });
+    if(isList){
+    dispatch({type:"GET_TASKLIST_RESET"});
+    }
+    dispatch({ type: "GET_TASKLIST_REQUEST" }); 
+     // if history doesn't have state then reset notification reducer
+     if(location && !location.state){
+     dispatch({type:"NOTIFICATION_RESET"});
+   }
+   
   }, []);
 
-  const isData = useSelector((tasklist) => tasklist.taskList.data);
-  const isDataLoading = useSelector((state) => state.taskList.isLoading);
-  const isList = isData && isData.data;
+
 
   const totalTaskList = (props) => {
     const tableRowData = (obj) => multiCompanies ?
@@ -557,8 +566,7 @@ if(!multiCompanies){
   const onBackButton = () => {
     history.push({ pathname: '/reports', tabFlag: tabFlag });
   };
-  console.log(isList, 'isList');
-console.log(roleType,tasktabFlag ,'roleType','tasktabFlag');
+
   const tasklist = 
   totalTaskList(multiCompanies ? 
     tabFlag === 'Controversy' ?
@@ -571,14 +579,13 @@ console.log(roleType,tasktabFlag ,'roleType','tasktabFlag');
         ((roleType === 'SuperAdmin' || roleType ==='Admin') && tasktabFlag === 'Controversy' ) ?
         (isList ? isList.adminTaskList.controversyList : []) :
         (roleType === 'GroupAdmin' && tasktabFlag === 'Pending Task' ) ?
-        (isList ? isList.groupAdminTaskList.pendingList : []):
+        (isList ?  isList.groupAdminTaskList.pendingList.filter((e)=>isTasknumber ? isTasknumber === e.taskNumber : e) : []):
         (roleType === 'GroupAdmin' && tasktabFlag === 'Completed Task' ) ?
         (isList ? isList.groupAdminTaskList.completedList : []) :
         (roleType === 'GroupAdmin' && tasktabFlag === 'Controversy' ) ?
         (isList ? isList.groupAdminTaskList.controversyList : []):
         []
        );
-       console.log(tasklist, 'tasklist');
   return (
     <React.Fragment>
       <div className="main">
@@ -611,7 +618,7 @@ console.log(roleType,tasktabFlag ,'roleType','tasktabFlag');
           }
                   
           <Card >
-                <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={5} />
+                <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
                 </Card>
               </Col>
             </Row>

@@ -27,7 +27,8 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
     useEffect(()=>{
         if(controversyUpdateStatus.controversypost){
             setalertStatus(true);
-            setalert(controversyUpdateStatus.controversypost && controversyUpdateStatus.controversypost.message)
+            setalert(controversyUpdateStatus.controversypost && controversyUpdateStatus.controversypost.message);
+            dispatch({ type: "GET_TASKLIST_REQUEST" });
         }
     },[controversyUpdateStatus.controversypost]);
   const handleClose = () => {
@@ -92,7 +93,7 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
       animation
       centered
       isLoading={isDataLoading.isLoading}
-      size="sm"
+      size="md"
       title={controversyValue.taskNumber}
       body={editBody()}
       onSubmitPrimary={controversyeditTaskBtn}
