@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        message: false,
+        notificationType: false,
       };
     case 'NOTIFICATION_FAILURE':
       return {

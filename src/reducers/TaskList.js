@@ -12,7 +12,15 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        error: false,
         data: action.tasklist,
+      };
+    case 'GET_TASKLIST_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        data: false,
       };
     case 'GET_TASKLIST_FAILURE':
       return {

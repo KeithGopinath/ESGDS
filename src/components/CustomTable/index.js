@@ -18,9 +18,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
+import { useDispatch } from 'react-redux';
 import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
+// import { useHistory } from 'react-router-dom';
 import PageLoader from '../../components/PageLoader';
+
 
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
@@ -91,7 +94,6 @@ const CustomTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
-
   useEffect(() => {
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
@@ -106,9 +108,14 @@ const CustomTable = ({
     setPage(DEFAULT_PAGE);
   }, [searchQuery]);
 
+
   useEffect(() => {
     setSearchQuery(defaultSearchQuery || '');
   }, [defaultSearchQuery]);
+
+  // changes by balaji (for notification)
+  const dispatch = useDispatch();
+  // const history = useHistory();
 
   const theme = createMuiTheme({
     palette: {
@@ -185,6 +192,8 @@ const CustomTable = ({
   };
 
   const handlesSearch = (event) => {
+    dispatch({ type: 'NOTIFICATION_RESET' });
+    // history.replace();
     const searchedQuery = event.currentTarget.value;
     setSearchQuery(searchedQuery);
   };
