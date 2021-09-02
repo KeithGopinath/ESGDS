@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { put, takeLatest, all } from 'redux-saga/effects';
 import envConfig from 'envConfig'; //eslint-disable-line
 import * as actionCreators from '../actionCreators/Login';
@@ -9,6 +10,7 @@ export function* getLogin(data) {
     yield put(actionCreators.getLoginSuccess(response));
     sessionStorage.access = response.token;
     sessionStorage.role = response.user && response.user.roleDetails.primaryRole.label;
+    sessionStorage.userId = response.user && response.user._id;
   } catch (error) {
     yield put(actionCreators.getLoginFailure(error));
   }

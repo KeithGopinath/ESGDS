@@ -70,6 +70,7 @@ export default {
     getDpCodeDataForClientCompanyRep: 'datapoints/repDpDetails',
     getDpCodeValidation: 'validations/validateDpDetails',
     controversyUpdate: 'controversy_tasks/update-task',
+    getNotification: 'notifications/my-notifications',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',

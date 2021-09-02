@@ -1,7 +1,6 @@
 const initialState = {};
 
 export default (state = initialState, action) => {
-  // console.log(action, 'action');
   switch (action.type) {
     case 'NOTIFICATION_REQUEST':
       return {
@@ -20,7 +19,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        message: action.payload,
+        notificationType: action.payload,
       };
     case 'NOTIFICATION_RESET':
       return {

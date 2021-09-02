@@ -37,7 +37,7 @@ const UserProfile = () => {
 
   const sessionRole = (sessionStorage.role == 'Company Representative' || sessionStorage.role == 'Client Representative') ? sessionStorage.role : 'Employee';
   const role = otpDetails && otpDetails.user.userType || login && login.user && login.user.userType || sessionRole;
-  const userId = otpDetails && otpDetails.user._id || login && login.user._id;
+  const userId = otpDetails && otpDetails.user._id || login && login.user._id || sessionStorage.userId;
   const userDetails = userData && userData.user;
 
   useEffect(() => {

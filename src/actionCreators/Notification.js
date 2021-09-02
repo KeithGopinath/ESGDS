@@ -1,7 +1,3 @@
-export const getNotificationRequest = () => ({
-  type: 'NOTIFICATION_REQUEST',
-});
-
 export const getNotificationSuccess = (notification) => ({
   type: 'NOTIFICATION_SUCCESS',
   notification,
