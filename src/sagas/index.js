@@ -55,6 +55,7 @@ import { downloadJsonWatchers } from './DownloadJson';
 import { getDpCodeValidationhWatchers } from './DpCodeValidation';
 import { getControversyUpdateWatchers } from './ControversyTaskUpdate';
 import { getNotificationWatchers } from './Notification';
+import { getDashboardWatchers } from './Dashboard';
 
 export default function* rootWatchers() {
   yield all([
@@ -114,5 +115,6 @@ export default function* rootWatchers() {
     getDpCodeValidationhWatchers(),
     getControversyUpdateWatchers(),
     getNotificationWatchers(),
+    getDashboardWatchers(),
   ]);
 }
