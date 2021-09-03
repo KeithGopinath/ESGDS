@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { createBrowserHistory } from 'history';
 import { Router, Route, Switch } from 'react-router-dom';
 import AuthRoute from './components/AuthRoute';
-import ErrorPage from './components/ErrorPage';
 import Login from './containers/Login';
 import UpdatePassword from './containers/UpdatePassword';
 import Onboard from './containers/Onboard';
@@ -33,11 +32,12 @@ import CalculateActuals from './containers/CalculateActuals';
 import CalculatePercentile from './containers/CalculatePercentile';
 import DataJson from './containers/DataJson';
 import ControversyJson from './containers/ControversyJson';
+import ErrorPage from './containers/ErrorPage';
 
 export const history = createBrowserHistory();
 
 const Routes = () => {
-  const [auth, setAuth] = useState(!!sessionStorage.acsess);
+  const [auth, setAuth] = useState(!!sessionStorage.access);
   useEffect(() => {
     setAuth(true);
   }, []);
