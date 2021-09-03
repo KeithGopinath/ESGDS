@@ -174,11 +174,11 @@ const CalculatePercentile = () => {
   const calculatePercentileTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
       dpCode: data.dpCode,
-      fiveYearsBackAvg: data.fiveYearsBackAvg ? data.fiveYearsBackAvg : '--',
-      fourYearsBackAvg: data.fourYearsBackAvg ? data.fourYearsBackAvg : '--',
-      threeYearsBackAvg: data.threeYearsBackAvg ? data.threeYearsBackAvg : '--',
-      twoYerasBackAvg: data.twoYearsBackAvg ? data.twoYearsBackAvg : '--',
-      oneYearBackAvg: data.oneYearBackAvg ? data.oneYearBackAvg : '--',
+      fiveYearsBackAvg: (data.fiveYearsBackAvg >= 0 && data.fiveYearsBackAvg !== '') ? data.fiveYearsBackAvg : '--',
+      fourYearsBackAvg: (data.fourYearsBackAvg >= 0 && data.fourYearsBackAvg !== '') ? data.fourYearsBackAvg : '--',
+      threeYearsBackAvg: (data.threeYearsBackAvg >= 0 && data.threeYearsBackAvg !== '') ? data.threeYearsBackAvg : '--',
+      twoYerasBackAvg: (data.twoYearsBackAvg >= 0 && data.twoYearsBackAvg !== '') ? data.twoYearsBackAvg : '--',
+      oneYearBackAvg: (data.oneYearBackAvg >= 0 && data.oneYearBackAvg !== '') ? data.oneYearBackAvg : '--',
       projectedAvg: <Form.Control
         type="text"
         name="projectedAvg"
@@ -186,11 +186,11 @@ const CalculatePercentile = () => {
         onChange={(e) => { onAverageChange(e, data) }}
         maxLength={isNaN(data.projectedAvg) ? 2 : ''}
         className={classNamefinder(data.projectedAvg) ? errorAlert : ''} />,
-      fiveYearsBackSD: data.fiveYearsBackSd ? data.fiveYearsBackSd : '--',
-      fourYearsBackSD: data.fourYearsBackSd ? data.fourYearsBackSd : '--',
-      threeYearsBackSD: data.threeYearsBackSd ? data.threeYearsBackSd : '--',
-      twoYearsBackSD: data.twoYearsBackSd ? data.twoYearsBackSd : '--',
-      oneYearBackSD: data.oneYearBackSd ? data.oneYearBackSd : '--',
+      fiveYearsBackSD: (data.fiveYearsBackSd >= 0 && data.fiveYearsBackSd !== '') ? data.fiveYearsBackSd : '--',
+      fourYearsBackSD: (data.fourYearsBackSd >= 0 && data.fourYearsBackSd !== '') ? data.fourYearsBackSd : '--',
+      threeYearsBackSD: (data.threeYearsBackSd >= 0 && data.threeYearsBackSd !== '') ? data.threeYearsBackSd : '--',
+      twoYearsBackSD: (data.twoYearsBackSd >= 0 && data.twoYearsBackSd !== '') ? data.twoYearsBackSd : '--',
+      oneYearBackSD: (data.oneYearBackSd >= 0 && data.oneYearBackSd !== '') ? data.oneYearBackSd : '--',
       projectedSD: <Form.Control
         type="text"
         name="projectedSD"

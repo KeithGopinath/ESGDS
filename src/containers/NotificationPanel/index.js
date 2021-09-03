@@ -33,13 +33,17 @@ const NotificationPanel = () => {
     const handler = () => {
         setCount(0)
     }
-
-    const onHandleNotification = (arg) => {
+    const onHandleNotification =(arg)=> {     
         const splitingString = arg.content.split("-");
         const taskNumber = splitingString[splitingString.length - 1];
-        dispatch({ type: 'NOTIFICATION_TYPE', payload: taskNumber });
-        history.push({ pathname: arg.notificationType });
-    }
+        dispatch({type:"NOTIFICATION_TYPE", payload: taskNumber.trim() })
+        history.push({
+            pathname: arg.notificationType,
+            state: arg.notificationTitle
+          });
+      
+        }
+    
     const scrollStyle = { height: 620, width: 400 }
 
     return (

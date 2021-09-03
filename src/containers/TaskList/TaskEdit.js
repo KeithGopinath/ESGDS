@@ -1,8 +1,9 @@
 /* eslint-disable */
 import React, {useEffect, useState} from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { DatePicker, message } from 'antd';
+import { DatePicker } from 'antd';
 import moment from 'moment';
+import { useLocation } from "react-router-dom";
 import Select from 'react-select';
 import Overlay from '../../components/Overlay';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,12 +14,14 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
     const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
+    const isTasknumber = useSelector((notification) => notification.notification.notificationType);
     const [alert, setAlert] = useState('');
     const [alertStatus, setalertStatus] = useState(false);
     const dispatch = useDispatch();
     useEffect(()=>{
       dispatch({type:"UPDATETASK_RESET"});
     },[])
+    const location = useLocation();
   const handleClose = () => {
     setShow(false);
     setanalystDetail('');
@@ -32,7 +35,7 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
   const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
-  // console.log(isDataEdited, 'isDataEdited');
+
   useEffect(()=>{
 if(isDataEdited){
   dispatch({type:"GET_TASKLIST_REQUEST"});
@@ -43,7 +46,7 @@ if(isDataEdited){
 }
 
   },[isDataEdited]);
-console.log(isDataEditedLoading,isEditDataLoading );
+
 useEffect(()=> {
 
   if(isDataEditedLoading.error || isEditDataLoading.error ){
@@ -208,7 +211,12 @@ useEffect(()=> {
     }
   </div>
     <div className="edittask-submit-btn">
-      <div className="edittask-btn"><button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button></div>
+      
+        <button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button>
+        {(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) && 
+          <button type="button" className="btn btn-danger reject-request-btn" >Reject</button>
+        }
+    
     </div>
     </div>
 

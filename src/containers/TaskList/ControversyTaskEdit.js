@@ -14,7 +14,6 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
     const isData = userData && userData.data;
     const isDataLoading = useSelector((filterUsers) => filterUsers.filterUsers);
     const controversyUpdateStatus = useSelector((controversyUpdate)=>controversyUpdate.controversyUpdate);
-    console.log(controversyUpdateStatus, 'controversyUpdateStatus');
     const optionsControversyAnalyst =isData && isData.map((e)=>{
         return e.userDetails;
     });
@@ -27,7 +26,8 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
     useEffect(()=>{
         if(controversyUpdateStatus.controversypost){
             setalertStatus(true);
-            setalert(controversyUpdateStatus.controversypost && controversyUpdateStatus.controversypost.message)
+            setalert(controversyUpdateStatus.controversypost && controversyUpdateStatus.controversypost.message);
+            dispatch({ type: "GET_TASKLIST_REQUEST" });
         }
     },[controversyUpdateStatus.controversypost]);
   const handleClose = () => {
@@ -92,7 +92,7 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
       animation
       centered
       isLoading={isDataLoading.isLoading}
-      size="sm"
+      size="md"
       title={controversyValue.taskNumber}
       body={editBody()}
       onSubmitPrimary={controversyeditTaskBtn}

@@ -23,7 +23,6 @@ const ExtentionSLA = ({
   const dispatch = useDispatch();
   const slaRequest = useSelector((slapost) => slapost.slaExtexsion);
   const isslaData = slaRequest.slapost;
-  // console.log(slaRequest, 'slaRequest');
   useEffect(() => {
     if (!slaRequest.error && !slaRequest.isLoading && slaRequest.slapost) {
       setalert(slaRequest.slapost.message);
@@ -36,7 +35,6 @@ const ExtentionSLA = ({
   };
   const onExtendSla = () => {
     const requestData = { taskId: detail.taskId, days: day };
-    //  // console.log(payload, 'payload');
     dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
     setalertStatus(true);
   };

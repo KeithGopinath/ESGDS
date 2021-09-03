@@ -32,6 +32,7 @@ const Groups = () => {
   const [inputValidate, setInputValidate] = useState(false);
   const [usertargetKeys, setuserTargetKeys] = React.useState([]);
   const [isdisableduser, setisdisableduser] = useState(true);
+  const [editunassignedAnalystQa,seteditunassignedAnalystQa] = useState([]);
   const [disablegrpName, setdisablegrpName ] = useState(false);
   
   const [editunassigned, seteditunassigned ] = useState([]);
@@ -94,6 +95,7 @@ const Groups = () => {
       setdisablegrpName(true);
       const assignedobj = [];
       const unassignedobj = [];
+      const onlyanalystqa = [];
       
       for (const i of grpDetail.memberforgrpEdit) {
         if(i.isAssignedToGroup === true){
@@ -102,8 +104,29 @@ const Groups = () => {
         unassignedobj.push( { key: i.userDetails.value, title: i.userDetails.label, SecRole: {primary: i.roleDetails.primaryRole.label, role: i.roleDetails.role }, disabled:i.isAssignedToGroup });
          
       }
+ 
       setuserTargetKeys(assignedobj);
       seteditunassigned(unassignedobj);
+ 
+      for(const i of unassignedobj){
+        if(i.SecRole.role.length === 1){
+          for(const k of i.SecRole.role){
+            if(k.label !== 'GroupAdmin'){
+              onlyanalystqa.push(i);
+              
+            }
+          }
+        } 
+        if(i.SecRole.role.length > 1){
+        for(const k of i.SecRole.role){
+          if(k.label === "Analyst" || k.label ==="QA"){
+          onlyanalystqa.push(i);
+          }
+        }
+      }
+      }
+
+      seteditunassignedAnalystQa(onlyanalystqa);
       // for batch Edit
       const assignedbatch = [];
       const unassignedatch = [];
@@ -180,10 +203,10 @@ const Groups = () => {
     }
    
     if(editunassigned){
-      
       for(const i of filteredData){
         for(const j of i.SecRole.role){
           if(j.label === 'GroupAdmin'){
+            
             const ischeck = grpAdminlist.filter((e)=>e.userDetails.value === i.key);
             if(grpAdminlist.length > 0){
             if(ischeck.length !== 1){
@@ -195,6 +218,7 @@ const Groups = () => {
           }
         }
       }
+   
     }
   // *** unassign member / batches ***
   //   if(grpDetail){
@@ -267,6 +291,8 @@ const groupAdminOptions = [];
   grpAdminlist.map((obj)=>{
     groupAdminOptions.push(obj.userDetails);
   });
+
+
   // *** batch assignments starts ***
 
   const onChangebatchTransfer = (newTargetKeys) => {
@@ -593,7 +619,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
           <div className="group-content">Add members to your group <span className="mandatory-color">*</span></div>
           <div className="add-batches">
             <TableTransfer
-              dataSource={(grpDetail)? editunassigned.filter((e)=>( creategrpAdmin.value !== e.key)) : mockData.filter((e)=>( creategrpAdmin.value !== e.key))}
+              dataSource={(grpDetail)? editunassignedAnalystQa.filter((e)=>( creategrpAdmin.value !== e.key)) : mockData.filter((e)=>( creategrpAdmin.value !== e.key))}
               targetKeys={usertargetKeys}
               disabled={isdisableduser}
               onChange={onChangeTransfer}
