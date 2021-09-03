@@ -37,7 +37,7 @@ import ControversyJson from './containers/ControversyJson';
 export const history = createBrowserHistory();
 
 const Routes = () => {
-  const [auth, setAuth] = useState(!!sessionStorage.acsess);
+  const [auth, setAuth] = useState(!!sessionStorage.access);
   useEffect(() => {
     setAuth(true);
   }, []);
