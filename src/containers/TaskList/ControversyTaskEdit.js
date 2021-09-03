@@ -14,7 +14,6 @@ const ControversyTaskEdit = ({ setcontroversyShow, setcontroversyValue, controve
     const isData = userData && userData.data;
     const isDataLoading = useSelector((filterUsers) => filterUsers.filterUsers);
     const controversyUpdateStatus = useSelector((controversyUpdate)=>controversyUpdate.controversyUpdate);
-    console.log(controversyUpdateStatus, 'controversyUpdateStatus');
     const optionsControversyAnalyst =isData && isData.map((e)=>{
         return e.userDetails;
     });

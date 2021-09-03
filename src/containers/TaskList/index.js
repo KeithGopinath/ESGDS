@@ -58,8 +58,7 @@ const tasklisttabsClickHandler = (event, label) => {
   target.classList.add('tabs-label-count-wrap-active');
   settaskTabFlag(label);
 };
-console.log(location.state, 'location');
-console.log(isTasknumber, 'isTasknumber');
+
 const tabFlag = props.location.tabFlag && props.location.tabFlag;
 const multiCompanies = props.location.multiSelect && props.location.multiSelect;
   useEffect(() => {
