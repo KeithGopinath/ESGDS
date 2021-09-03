@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
-      - run: npm run build:test
+      - run: npm run build:prod
 
       # Runs a set of commands using the runners shell
       - name: Deploy to S3
