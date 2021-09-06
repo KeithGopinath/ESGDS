@@ -32,6 +32,7 @@ const Groups = () => {
   const [inputValidate, setInputValidate] = useState(false);
   const [usertargetKeys, setuserTargetKeys] = React.useState([]);
   const [isdisableduser, setisdisableduser] = useState(true);
+  const [editunassignedAnalystQa,seteditunassignedAnalystQa] = useState([]);
   const [disablegrpName, setdisablegrpName ] = useState(false);
   
   const [editunassigned, seteditunassigned ] = useState([]);
@@ -42,7 +43,7 @@ const Groups = () => {
   const location = useLocation();
   const steps = [
     {
-      title:'Create group',
+      title:'Create Group',
     },
     {
       title: 'Batch Assignment',
@@ -51,8 +52,10 @@ const Groups = () => {
       title: 'Status',
     },
   ];
+
+  // api response
   const isGroupByid = useSelector((getgroupbyid) => getgroupbyid.groupbtid.groupById);
-  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid.isLoading);
+  const isGroupByidLoading = useSelector((getgroupbyid) => getgroupbyid.groupbtid);
   const grpDetail = isGroupByid && isGroupByid.data;
 
   // *** API call *** ***
@@ -92,6 +95,7 @@ const Groups = () => {
       setdisablegrpName(true);
       const assignedobj = [];
       const unassignedobj = [];
+      const onlyanalystqa = [];
       
       for (const i of grpDetail.memberforgrpEdit) {
         if(i.isAssignedToGroup === true){
@@ -100,8 +104,29 @@ const Groups = () => {
         unassignedobj.push( { key: i.userDetails.value, title: i.userDetails.label, SecRole: {primary: i.roleDetails.primaryRole.label, role: i.roleDetails.role }, disabled:i.isAssignedToGroup });
          
       }
+ 
       setuserTargetKeys(assignedobj);
       seteditunassigned(unassignedobj);
+ 
+      for(const i of unassignedobj){
+        if(i.SecRole.role.length === 1){
+          for(const k of i.SecRole.role){
+            if(k.label !== 'GroupAdmin'){
+              onlyanalystqa.push(i);
+              
+            }
+          }
+        } 
+        if(i.SecRole.role.length > 1){
+        for(const k of i.SecRole.role){
+          if(k.label === "Analyst" || k.label ==="QA"){
+          onlyanalystqa.push(i);
+          }
+        }
+      }
+      }
+
+      seteditunassignedAnalystQa(onlyanalystqa);
       // for batch Edit
       const assignedbatch = [];
       const unassignedatch = [];
@@ -117,18 +142,19 @@ const Groups = () => {
     } 
  }, [grpDetail]);
 
+
 // edit part
 
 
   const isGroupCreated = useSelector((creategroup) => creategroup.creategroup.grouppost);
-  const isGroupCreatedLoading = useSelector((creategroup) => creategroup.creategroup.isLoading);
+  const isGroupCreatedLoading = useSelector((creategroup) => creategroup.creategroup);
  
   const batchData = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.unassignedbatchdata);
-  const batchDataLoading = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch.isLoading);
+  const batchDataLoading = useSelector((unassignedbatchlist) => unassignedbatchlist.unassignedBatch);
   const batchAssignment = batchData && batchData.rows;
   
   const userData = useSelector((filterUsers) => filterUsers.filterUsers.filterUsers);
-  const userDataLoading = useSelector((filterUsers) => filterUsers.filterUsers.isLoading);
+  const userDataLoading = useSelector((filterUsers) => filterUsers.filterUsers);
   const isData = userData && userData.data;
   useEffect(() => {
     if (isGroupCreated) {
@@ -149,6 +175,15 @@ const Groups = () => {
     }
     
   }, [isGroupCreated]);
+  
+   // throw error response 
+ useEffect(()=>{
+  if(isGroupByidLoading.error || isGroupCreatedLoading.error || batchDataLoading.error || userDataLoading.error) {
+    message.error((isGroupByidLoading.error && isGroupByidLoading.error.message) || (isGroupCreatedLoading.error && isGroupCreatedLoading.error.message) || (batchDataLoading.error && batchDataLoading.error.message) || (userDataLoading.error && userDataLoading.error.message))
+  }
+ },[isGroupByidLoading.error, isGroupCreatedLoading.error, batchDataLoading.error, userDataLoading.error]);
+
+
   const grpAdminlist = [];
   const userList = [];
 
@@ -168,10 +203,10 @@ const Groups = () => {
     }
    
     if(editunassigned){
-      
       for(const i of filteredData){
         for(const j of i.SecRole.role){
           if(j.label === 'GroupAdmin'){
+            
             const ischeck = grpAdminlist.filter((e)=>e.userDetails.value === i.key);
             if(grpAdminlist.length > 0){
             if(ischeck.length !== 1){
@@ -183,6 +218,7 @@ const Groups = () => {
           }
         }
       }
+   
     }
   // *** unassign member / batches ***
   //   if(grpDetail){
@@ -255,6 +291,8 @@ const groupAdminOptions = [];
   grpAdminlist.map((obj)=>{
     groupAdminOptions.push(obj.userDetails);
   });
+
+
   // *** batch assignments starts ***
 
   const onChangebatchTransfer = (newTargetKeys) => {
@@ -262,7 +300,6 @@ const groupAdminOptions = [];
   };
 
   const next = () => {
-    
    if(batchAssignment){
     const batcharr = [];
     if ((targetKeys.length) > 0) {
@@ -560,7 +597,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
     <Container>
       <Row>
         <Col lg={6} sm={12}>
-          <div className="group-content">Group name <span className="mandatory-color">*</span></div>
+          <div className="group-content">Group Name <span className="mandatory-color">*</span></div>
           <div className="form-group group-input-width" ><input type="text" value={creategrpName} className={`form-control ${creategrpName === '' && inputValidate}`} onChange={onhandelgrpName} autoComplete="off" required disabled={disablegrpName}></input></div>
         </Col>
         <Col lg={6} sm={12}>
@@ -582,7 +619,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
           <div className="group-content">Add members to your group <span className="mandatory-color">*</span></div>
           <div className="add-batches">
             <TableTransfer
-              dataSource={(grpDetail)? editunassigned.filter((e)=>( creategrpAdmin.value !== e.key)) : mockData.filter((e)=>( creategrpAdmin.value !== e.key))}
+              dataSource={(grpDetail)? editunassignedAnalystQa.filter((e)=>( creategrpAdmin.value !== e.key)) : mockData.filter((e)=>( creategrpAdmin.value !== e.key))}
               targetKeys={usertargetKeys}
               disabled={isdisableduser}
               onChange={onChangeTransfer}
@@ -635,7 +672,7 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
           <Row>
             <Col lg={12}>
               <Card className="grp-pad">
-              {(userDataLoading || isGroupByidLoading || batchDataLoading || isGroupCreatedLoading )?<PageLoader /> :
+              {(userDataLoading.isLoading || isGroupByidLoading.isLoading || batchDataLoading.isLoading || isGroupCreatedLoading.isLoading )?<PageLoader /> :
                 <Container>
                   <Row>
                     <Col lg={3} sm={12}>

@@ -2,30 +2,24 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'BATCH_CREATE_REQUEST':
+    case 'DPCODE_VALIDATION_GET_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        batchpost: false,
+        validation: false,
       };
-    case 'BATCH_CREATE_SUCCESS':
+    case 'DPCODE_VALIDATION_GET_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        batchpost: action.createbatch,
+        validation: action.validation,
       };
-    case 'BATCH_CREATE_FAILURE':
+    case 'DPCODE_VALIDATION_GET_FAILURE':
       return {
         ...state,
         isLoading: false,
         error: action.error,
-      };
-    case 'BATCH_CREATE_RESET':
-      return {
-        ...state,
-        isLoading: false,
-        error: false,
       };
     default:
       return state;

@@ -27,6 +27,7 @@ const TaskCreate = ({ flag }) => {
   const [pillar, setPillar] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
   const [analystSla, setanalystSla] = useState('');
+  const [roleType, setRole ] = useState('');
   const [isDisabledQA, setisDisabledQA] = useState(true);
   const [statusRole, setstatusRole] = useState(true);
   const [qacheckdate, setqacheckdate] = useState('');
@@ -45,26 +46,28 @@ const TaskCreate = ({ flag }) => {
 
 
   const apidata = useSelector((tasklist) => tasklist.taskDetail.taskdata);
-  const apidataLoading = useSelector((tasklist) => tasklist.taskDetail.isLoading);
+  const apidataLoading = useSelector((tasklist) => tasklist.taskDetail);
   const onpillarclick = useSelector((pillar) => pillar.taskpillar.pillarTask);
-  const onpillarclickLoading = useSelector((pillar) => pillar.taskpillar.isLoading);
+  const onpillarclickLoading = useSelector((pillar) => pillar.taskpillar);
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
   const controversyTaskData = useSelector((state) => state.controversyTaskData.controversyTaskData);
   const createControversyTask = useSelector((state) => state.createControversyTask.createControversyTask);
   const createControversyTaskError = useSelector((state) => state.createControversyTask.error);
   const aftertaskcreated = useSelector((taskresponse) => taskresponse.createTask.taskpost);
-  const aftertaskcreatedLoading = useSelector((taskresponse) => taskresponse.createTask.isLoading);
+  const aftertaskcreatedLoading = useSelector((taskresponse) => taskresponse.createTask);
   const optionsForPagination = {
     sizePerPage: 10,
-    noDataText: (onpillarclickLoading)?<PageLoader load={"comp-loader"} />  :"There is no data to display",
-    // noDataText: 'Empty Table'
+    noDataText: (onpillarclickLoading.isLoading)?<PageLoader load={"comp-loader"} />  :"There is no data to display",
   };
   useEffect(() => {
     if (flag) {
       dispatch({ type: 'ClientTaxonomy_REQUEST' });
     } else {
       dispatch({ type: 'TASKDETAILS_REQUEST' });
+      
     }
+    dispatch({type:'ONSELECTPILLAR_RESET'});
+    setRole(sessionStorage.role);
   }, []);
 
   useEffect(() => {
@@ -95,14 +98,17 @@ const TaskCreate = ({ flag }) => {
     setisDisabledQA(true);
     onSelectAllRow(false);
     message.success(aftertaskcreated.message);
-    // dispatch({type:"CREATE_TASK_RESET"});
     }
     }, [aftertaskcreated]);
- 
-  
+  useEffect(()=>{
+    if((apidataLoading.error || onpillarclickLoading.error || aftertaskcreatedLoading.error) && !flag){
+      message.error((apidataLoading.error && apidataLoading.error.message) || (onpillarclickLoading.error && onpillarclickLoading.error.message) || (aftertaskcreatedLoading.error && aftertaskcreatedLoading.error.message ));
+    }
+  },[apidataLoading.error, onpillarclickLoading.error, aftertaskcreatedLoading.error])
 
 
-  const groupData = apidata && apidata.groups;
+  const getApiData = apidata && apidata.data;
+  const groupData = (roleType === 'SuperAdmin' || roleType === 'Admin' ) ? getApiData && getApiData.adminList : getApiData && getApiData.groupAdminList;
   const ispillarData = onpillarclick && onpillarclick.data;
 
   const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data) => ({
@@ -245,14 +251,6 @@ const TaskCreate = ({ flag }) => {
     const getData = { batchId:batchInfo.Batchid ,groupId: companyInfo.grpId , categoryId: selectedPillar[0].value };
     dispatch({ type: 'ONSELECTPILLAR_REQUEST' , payload: getData });
   };
-
-  // const grpDetail = groupData && groupData.map((element) => (
-  //   <Col lg={3} md={6} sm={12} key={element.groupID}>
-  //     <Card className="card-view groupbox" onClick={() => onselectGroup(element.groupID)} >
-  //       <ListItemText primary={element.groupName} />
-  //     </Card>
-  //   </Col>
-  // ));
 
   const analystEndData = (e) => {
     if (e !== null) {
@@ -693,7 +691,7 @@ const TaskCreate = ({ flag }) => {
                     }
                     <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
                     <div className="analystQa-table">
-                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading} defaultNoOfRows={5}/>
+                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5}/>
                     </div>
                   </div>
                   : <div className="not-batch-assign-screen">
@@ -723,7 +721,7 @@ const TaskCreate = ({ flag }) => {
                       </div>
                       <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
                       <div className="analystQa-table">
-                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading} defaultNoOfRows={5}/>
+                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5}/>
                       </div>
                     </div>
                     : <div className="not-batch-assign-screen">
@@ -760,7 +758,7 @@ const TaskCreate = ({ flag }) => {
               <div>
                 <ThemeProvider theme={searchtheme}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '9px' }}
                     autoComplete="off"
                     onChange={onSearchGroup}
@@ -823,7 +821,7 @@ const TaskCreate = ({ flag }) => {
               <div>
                 <ThemeProvider theme={searchthemebatch}>
                   <TextField
-                    placeholder="search"
+                    placeholder="Search"
                     style={{ padding: '9px' }}
                     autoComplete="off"
                     onChange={onSearchBatch}
@@ -879,7 +877,7 @@ const TaskCreate = ({ flag }) => {
               <Col lg={12} sm={12}>
               {taskFlow > 0 && !flag && <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onhandleBack} />}
                 <Card className="task-page-card">
-                {(aftertaskcreatedLoading || apidataLoading )?<PageLoader />:
+                {(aftertaskcreatedLoading.isLoading || apidataLoading.isLoading )?<PageLoader />:
                 <React.Fragment>
                   {/* <div className="card-head">
                     {taskFlow > 0 &&

@@ -19,6 +19,7 @@ const TaxonomySubset = () => {
   const [subsetName, setSubsetName] = useState('');
   const [subsetId, setsubsetId] = useState('');
   const [subsetList, setSubsetList] = useState('');
+  const [taxonomyName, setTaxonomyName] = useState('');
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
@@ -32,7 +33,7 @@ const TaxonomySubset = () => {
   const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
   const fileExtension = ".xlsx";
 
-  const onViewTaxonomy = (id) => {
+  const onViewTaxonomy = (id, taxonomyName) => {
     let temp = []
     let obj = {}
     taxonomyData && taxonomyData.rows.filter(val => val._id == id).map((data) => {
@@ -47,6 +48,7 @@ const TaxonomySubset = () => {
     })
     setSubsetList(temp);
     setShowList(true);
+    setTaxonomyName(taxonomyName);
   }
 
   const onDownloadTaxonomy = (id, taxonomyName) => {
@@ -80,7 +82,7 @@ const TaxonomySubset = () => {
     const tableRowData = (data) => data.map(({ name, id }) => ({
       key: id,
       name,
-      viewTaxonomy: <FontAwesomeIcon key={id} icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id) }} />,
+      viewTaxonomy: <FontAwesomeIcon key={id} icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewTaxonomy(id, name) }} />,
       downloadTaxonomy: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadTaxonomy(id, name) }} />,
       uploadTaxonomy: <FontAwesomeIcon icon={faUpload} size="lg" className="taxonomy-subset-icons" onClick={() => { onUploadTaxonomy(id) }} />,
     }));
@@ -137,7 +139,7 @@ const TaxonomySubset = () => {
   return (
     <React.Fragment>
       {showList ?
-        <Taxonomy subsetList={subsetList} showList={showList} handleListClose={handleListClose} />
+        <Taxonomy subsetList={subsetList} showList={showList} handleListClose={handleListClose} taxonomyName={taxonomyName} />
         :
         <div className="main">
           <SideMenuBar ref={sideBarRef} />

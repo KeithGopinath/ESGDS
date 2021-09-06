@@ -7,9 +7,7 @@ export function* dpCodeDataGetRequest(data) {
   try {
     let endPoint = '';
     switch (data.taskType) {
-      case 'DATA_COLLECTION':
-      case 'DATA_CORRECTION':
-      case 'DATA_VERIFICATION':
+      case 'DATA_COLLECTION_CORRECTION_VERIFICATION':
         endPoint = `${envConfig.apiEndPoints.getDpCodeData}`;
         break;
       case 'DATA_REVIEW':
@@ -29,8 +27,7 @@ export function* dpCodeDataUpdateRequest(data) {
   try {
     let endPoint = '';
     switch (data.taskType) {
-      case 'DATA_COLLECTION':
-      case 'DATA_CORRECTION':
+      case 'DATA_COLLECTION_CORRECTION':
         endPoint = `${envConfig.apiEndPoints.updateDpCodeData}`;
         break;
       case 'DATA_VERIFICATION':

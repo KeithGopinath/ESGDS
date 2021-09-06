@@ -1,5 +1,5 @@
-/*eslint-disable*/
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -18,9 +18,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
+import { useDispatch } from 'react-redux';
 import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
+// import { useHistory } from 'react-router-dom';
 import PageLoader from '../../components/PageLoader';
+
 
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
@@ -73,7 +76,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultPagination, tabFlagEnable, viewCheckedCompanies, selectItem
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem,
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -91,6 +94,28 @@ const CustomTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
+  useEffect(() => {
+    setSortDataType('string');
+    setSortOrder(DEFAULT_SORT_ORDER);
+    setOrderBy(DEFAULT_ORDER_BY);
+    setPage(DEFAULT_PAGE);
+    setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
+    setSearchQuery('');
+    setSearchDate(null);
+  }, [tableData]);
+
+  useEffect(() => {
+    setPage(DEFAULT_PAGE);
+  }, [searchQuery]);
+
+
+  useEffect(() => {
+    setSearchQuery(defaultSearchQuery || '');
+  }, [defaultSearchQuery]);
+
+  // changes by balaji (for notification)
+  const dispatch = useDispatch();
+  // const history = useHistory();
 
   const theme = createMuiTheme({
     palette: {
@@ -167,6 +192,8 @@ const CustomTable = ({
   };
 
   const handlesSearch = (event) => {
+    dispatch({ type: 'NOTIFICATION_RESET' });
+    // history.replace();
     const searchedQuery = event.currentTarget.value;
     setSearchQuery(searchedQuery);
   };
@@ -332,11 +359,12 @@ const CustomTable = ({
         {/* <div></div> */}
         <div className="w-100 d-flex justify-content-end">
           {tabFlagEnable ?
+            // eslint-disable-next-line no-unneeded-ternary
             <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
-            count={rowsData.length}
+            count={mainData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

@@ -2,36 +2,30 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'NOTIFICATION_REQUEST':
+    case 'CONTROVERSY_UPDATE_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        message: false,
+        controversypost: false,
       };
-    case 'NOTIFICATION_SUCCESS':
+    case 'CONTROVERSY_UPDATE_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        message: action.notification,
+        controversypost: action.update,
       };
-    case 'NOTIFICATION_TYPE':
-      return {
-        ...state,
-        isLoading: false,
-        notificationType: action.payload,
-      };
-    case 'NOTIFICATION_RESET':
-      return {
-        ...state,
-        isLoading: false,
-        notificationType: false,
-      };
-    case 'NOTIFICATION_FAILURE':
+    case 'CONTROVERSY_UPDATE_FAILURE':
       return {
         ...state,
         isLoading: false,
         error: action.error,
+      };
+    case 'CONTROVERSY_UPDATE_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
       };
     default:
       return state;

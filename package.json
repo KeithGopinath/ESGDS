@@ -9,8 +9,8 @@
     "build": "webpack --progress",
     "build:prod": "cross-env NODE_ENV=production webpack --mode=production --profile -p",
     "serve:prod": "cross-env NODE_ENV=production webpack-dev-server --history-api-fallback --content-base build/",
-    "build:qa": "cross-env NODE_ENV=none webpack --mode=none --profile -p",
-    "serve:qa": "cross-env NODE_ENV=none webpack-dev-server --history-api-fallback --content-base build/"
+    "build:test": "cross-env NODE_ENV=none webpack --mode=none --profile -p",
+    "serve:test": "cross-env NODE_ENV=none webpack-dev-server --history-api-fallback --content-base build/"
   },
   "author": "",
   "license": "ISC",

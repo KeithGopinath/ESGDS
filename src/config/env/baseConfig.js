@@ -68,10 +68,13 @@ export default {
     generateJson: 'json_files/generate-json',
     downloadJson: 'json_files/download-json',
     getDpCodeDataForClientCompanyRep: 'datapoints/repDpDetails',
+    getDpCodeValidation: 'validations/validateDpDetails',
+    controversyUpdate: 'controversy_tasks/update-task',
+    getNotification: 'notifications/my-notifications',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
-    qa: 'http://3.109.80.244/',
+    test: 'http://3.109.80.244/',
     prod: 'http://3.108.113.82/',
   },
 };

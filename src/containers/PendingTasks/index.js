@@ -9,16 +9,13 @@ import { Link } from 'react-router-dom';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-// import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 import moment from 'moment';
-// import { PENDING_TASK } from '../../constants/PendingTasksConstants';
 import SLAExtentions from './extentionSLA';
 
 
 const PendingTaskTable = (props) => {
  
   const onExtendSLA = (arg) => {
-    // console.log(arg);
     props.setdetail(arg);
     props.setShow(true);
   };

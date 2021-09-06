@@ -15,13 +15,13 @@ export default (state = initialState, action) => {
         isLoading: false,
         pillarTask: action.pillar,
       };
-    // case 'ONSELECTPILLAR_RESET':
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     error: false,
-    //     pillarTask: false,
-    //   };
+    case 'ONSELECTPILLAR_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        error: false,
+        pillarTask: false,
+      };
     case 'ONSELECTPILLAR_FAILURE':
       return {
         ...state,
