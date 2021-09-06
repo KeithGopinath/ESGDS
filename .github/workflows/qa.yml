@@ -6,7 +6,7 @@ name: ESG S3 QA DEPLOYMENT
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ s3/qa ]
+    branches: [ test ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
