@@ -289,10 +289,7 @@ const Reports = (props) => {
             ))}
           </div>
           <Card>
-            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} />
-            <div className="w-100 d-flex justify-content-center">
-              <Button className="mb-2 view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>{tabFlag === 'Controversy' ? 'View Controversy Task' : 'View Companies Task'}</Button>
-            </div>
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} />
           </Card>
         </div>
       </div>
