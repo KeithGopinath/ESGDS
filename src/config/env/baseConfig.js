@@ -71,6 +71,7 @@ export default {
     getDpCodeValidation: 'validations/validateDpDetails',
     controversyUpdate: 'controversy_tasks/update-task',
     getNotification: 'notifications/my-notifications',
+    getDashboard: 'dashboards',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
