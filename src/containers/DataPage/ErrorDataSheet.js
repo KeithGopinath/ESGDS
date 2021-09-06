@@ -153,8 +153,6 @@ const getReqFields = ({
 
 
 const ErrorDataSheetTwo = (props) => {
-  // // console.log(props);
-
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
 
@@ -162,7 +160,7 @@ const ErrorDataSheetTwo = (props) => {
   const currentTab = sessionStorage.tab;
 
   // REQUIRED CONSOLE:
-  // // console.log('******DATA SHEET PROPS******', props);
+  // ('******DATA SHEET PROPS******', props)
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR] = [
@@ -273,12 +271,6 @@ const ErrorDataSheetTwo = (props) => {
       case 'SELECT':
         setFormResponse(event.value);
         break;
-      // case 'BOOLEAN':
-      //   setFormResponse(event.value);
-      //   break;
-      // case 'GENDER':
-      //   setFormResponse(event.value);
-      //   break;
       case 'DATE':
         setFormResponse(event);
         break;
@@ -365,7 +357,6 @@ const ErrorDataSheetTwo = (props) => {
     };
     setHasErrors(errors);
 
-    // // console.log(errors);
     const roleScreenType = {
       isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR,
     };
@@ -428,7 +419,6 @@ const ErrorDataSheetTwo = (props) => {
   };
 
   const disableField = getIsDisableOrNot();
-  console.log(dynamicFields, '3333333333333333');
 
   return (
     <React.Fragment>
@@ -456,7 +446,7 @@ const ErrorDataSheetTwo = (props) => {
               type="number"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
               name="response"
-              placeholder="Response"
+              placeholder="Enter Response"
               onChange={onChangeFormResponse}
               value={formResponse}
               disabled={disableField}
@@ -475,7 +465,7 @@ const ErrorDataSheetTwo = (props) => {
             type="text"
             name="response"
             className={hasErrors.formResponse && 'red-class'}
-            placeholder="Response"
+            placeholder="Enter Response"
             onChange={onChangeFormResponse}
             value={formResponse}
             disabled={disableField}
@@ -514,45 +504,11 @@ const ErrorDataSheetTwo = (props) => {
               options={textResponse}
               onChange={onChangeFormResponse}
               value={formResponse && { label: formResponse, value: formResponse }}
-              placeholder="Choose Response"
+              placeholder="Select Response"
               isDisabled={disableField}
             />
           }
         />}
-
-      { formDataType === 'BOOLEAN' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        size={[6, 5, 7]}
-        visible
-        body={
-          <Select
-            name="response"
-            options={['Yes', 'No'].map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-            isDisabled={disableField}
-          />
-        }
-      />}
-
-      { formDataType === 'GENDER' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        size={[6, 5, 7]}
-        visible
-        body={
-          <Select
-            name="response"
-            options={['M', 'F', 'NA'].map((e) => ({ label: e, value: e }))}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
-            isDisabled={disableField}
-          />
-        }
-      />}
 
       {/* SOURCE Field */}
       <FieldWrapper
@@ -566,7 +522,7 @@ const ErrorDataSheetTwo = (props) => {
             options={sourceList && sourceList.map((e) => ({ label: e.sourceName, value: e }))}
             onChange={onChangeFormSource}
             value={formSource && { label: formSource.sourceName, value: formSource }}
-            placeholder="Choose Source File"
+            placeholder="Select Source"
             isDisabled={disableField}
           />
         }
@@ -588,7 +544,7 @@ const ErrorDataSheetTwo = (props) => {
             as="textarea"
             className={hasErrors.formTextSnippet && 'red-class'}
             name="textSnippet"
-            placeholder="Snippet"
+            placeholder="Enter Text Snippet"
             onChange={onChangeFormTextSnippet}
             value={formTextSnippet}
             disabled={disableField}
@@ -605,7 +561,7 @@ const ErrorDataSheetTwo = (props) => {
           <Form.Control
             type="number"
             className={hasErrors.formPageNo && 'red-class'}
-            placeholder="Page No"
+            placeholder="Enter Page No"
             onChange={onChangeFormPageNo}
             value={formPageNo}
             disabled={disableField}
@@ -622,7 +578,7 @@ const ErrorDataSheetTwo = (props) => {
           <Form.Control
             type="text"
             name="url"
-            placeholder="Url"
+            placeholder="Enter Url"
             onChange={onChangeFormURL}
             value={formURL}
             disabled
@@ -711,7 +667,7 @@ const ErrorDataSheetTwo = (props) => {
             disabled={disableField}
             aria-label="With textarea"
             className={hasErrors.formComment && 'red-class'}
-            placeholder="Comments"
+            placeholder="Enter Comment"
             onChange={onChangeFormComment}
             value={formComment}
           />
