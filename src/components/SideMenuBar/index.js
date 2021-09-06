@@ -210,7 +210,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
       <div className="sidemenu-scroll-area">
         <div className="hamburger-start">
           <div className="hamburger-bars-icon">
-            <FontAwesomeIcon icon={faBars} onClick={sideBarMenuHandler} />
+            <FontAwesomeIcon className="hamburger-pointer" icon={faBars} onClick={sideBarMenuHandler} />
             <div className={handler ? "sideMenu-logo" : "sidemenu-logo-hide"}>ESG</div>
           </div>
         </div>
