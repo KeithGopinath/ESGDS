@@ -7,13 +7,12 @@ import { UploadOutlined } from '@ant-design/icons';
 import { DatePicker, Button as AntButton, Image, Upload, message, Radio, Modal, Drawer, Input } from 'antd';
 import Select from 'react-select';
 import moment from 'moment';
-import ErrorDataSheetTwo from './ErrorDataSheet2';
+import ErrorDataSheetTwo from './ErrorDataSheet';
 import ErrorPanel from './ErrorPanel';
 
 import validateReqFields from './validateReqFields';
 
 import AddSource from './AddSource';
-// import dynamicThings from '../../constants/DynamicConstants';
 
 // Field Wrapper ::
 // A function which wraps the datasheet fields with bootstrap's row and col tags
@@ -288,7 +287,6 @@ export const DataSheetComponent = (props) => {
 
   // USEEFFECTS
   useEffect(() => {
-    // // console.log(props, '******PROPS******');
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
     setFormScreenShotPath(defaultData.screenShot || '');
@@ -333,15 +331,6 @@ export const DataSheetComponent = (props) => {
     });
   }, [props.reqData]);
 
-  // // console.log(defaultData.error);
-  // // console.log(isErrorAccepted);
-
-  // useEffect(() => {
-  //   setErrorComment('');
-  // }, [isErrorAccepted]);
-
-  // // console.log(formErrorRefData);
-
   useEffect(() => {
     if (!formIsError) {
       setFormErrorType(null);
@@ -358,7 +347,7 @@ export const DataSheetComponent = (props) => {
           },
         };
       }
-      props.onClickSave(saveData);
+      props.onClickSave(saveData, true);
     }
   }, [formIsError]);
 
@@ -463,6 +452,8 @@ export const DataSheetComponent = (props) => {
     return false;
   };
 
+  const disabledPublicationDate = (event) => event && event > moment().endOf('day');
+
   const doValidate = () => {
     const dpCodeInCompleteStatus = defaultData.status !== 'Completed';
     const errors = {
@@ -501,7 +492,6 @@ export const DataSheetComponent = (props) => {
     };
     setHasErrors(errors);
 
-    // // console.log(errors, '*******ERRORS******');
     const roleScreenType = {
       isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isHistoryType,
     };
@@ -760,12 +750,10 @@ export const DataSheetComponent = (props) => {
 
 
   const saveClickHandler = () => {
-    // // console.log('HISTORICAL SAVE');
     dummySaveClickHandler();
   };
 
   const unFreezeClickHandler = () => {
-    // // console.log('UNFREEZE');
     dummyEditClickHandler();
   };
 
@@ -811,9 +799,9 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="text"
             name="response"
-            placeholder="Response"
+            placeholder="Select Response"
             className={hasErrors.formSource && 'red-class'}
-            value={formSource && formSource.sourceName}
+            value={formSource ? formSource.sourceName : null}
             onChange={onChangeFormSource}
             disabled={disableField}
           />
@@ -831,8 +819,8 @@ export const DataSheetComponent = (props) => {
             className={hasErrors.formSource && 'red-class'}
             options={sourceList && sourceList.map((e) => ({ label: e.sourceName, value: e }))}
             onChange={onChangeFormSource}
-            value={formSource && { label: formSource.sourceName, value: formSource }}
-            placeholder="Choose Source File"
+            value={formSource && formSource.sourceName && formSource.value ? { label: formSource.sourceName, value: formSource } : null}
+            placeholder="Select Source"
             isDisabled={disableField}
           />
         }
@@ -866,7 +854,7 @@ export const DataSheetComponent = (props) => {
             type="number"
             name="response"
             className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
-            placeholder="Response"
+            placeholder="Enter Response"
             onChange={onChangeFormResponse}
             value={formResponse}
             disabled={disableField}
@@ -885,7 +873,7 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="text"
             name="response"
-            placeholder="Response"
+            placeholder="Enter Response"
             className={hasErrors.formResponse && 'red-class'}
             onChange={onChangeFormResponse}
             value={formResponse}
@@ -925,7 +913,7 @@ export const DataSheetComponent = (props) => {
             className={hasErrors.formResponse && 'red-class'}
             onChange={onChangeFormResponse}
             value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Choose Response"
+            placeholder="Select Response"
             isDisabled={disableField}
           />
         }
@@ -940,7 +928,7 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             as="textarea"
             name="textSnippet"
-            placeholder="Snippet"
+            placeholder="Enter Text Snippet"
             className={hasErrors.formTextSnippet && 'red-class'}
             onChange={onChangeFormTextSnippet}
             value={formTextSnippet}
@@ -957,7 +945,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Form.Control
             type="number"
-            placeholder="Page No"
+            placeholder="Enter Page No"
             className={hasErrors.formPageNo && 'red-class'}
             onChange={onChangeFormPageNo}
             value={formPageNo}
@@ -975,7 +963,7 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="text"
             name="url"
-            placeholder="Url"
+            placeholder="Enter Url"
             className={hasErrors.formURL && 'red-class'}
             onChange={onChangeFormURL}
             value={formURL}
@@ -997,6 +985,7 @@ export const DataSheetComponent = (props) => {
             onChange={onChangeFormPublicDate}
             value={formPublicDate && moment(formPublicDate)}
             disabled={disableField}
+            disabledDate={disabledPublicationDate}
           />
         }
       />
@@ -1102,7 +1091,7 @@ export const DataSheetComponent = (props) => {
             options={errorTypeList && errorTypeList.map((e) => ({ label: e, value: e }))}
             onChange={onChangeFormErrorType}
             value={formErrorType && { label: formErrorType, value: formErrorType }}
-            placeholder="Choose Error Type"
+            placeholder="Select Error Type"
           />
         }
       />
@@ -1118,7 +1107,7 @@ export const DataSheetComponent = (props) => {
             className={hasErrors.formComment && 'red-class'}
             disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
             aria-label="With textarea"
-            placeholder="Comments"
+            placeholder="Enter Comment"
             onChange={onChangeFormComment}
             value={formComment}
           />
@@ -1133,10 +1122,10 @@ export const DataSheetComponent = (props) => {
         body={
           <Form.Control
             as="textarea"
-            className={hasErrors.formNextReviewDate && 'red-class'}
+            className={hasErrors.formControversyComment && 'red-class'}
             disabled={disableField}
             aria-label="With textarea"
-            placeholder="Comments"
+            placeholder="Enter Comment"
             onChange={onChangeFormControversyComment}
             value={formControversyComment}
           />
@@ -1169,12 +1158,7 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
         {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
         <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
-      </Col>
 
-      {/* HORIZONTAL Line */}
-      <Col lg={12} className="datapage-horizontalLine"></Col>
-
-      <Col lg={12} className="datapage-button-wrap">
         {/* HISTORY UNFREEZE Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
         <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
@@ -1184,6 +1168,9 @@ export const DataSheetComponent = (props) => {
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
       </Col>
 
+      {/* HORIZONTAL Line */}
+      <Col lg={12} className="datapage-horizontalLine"></Col>
+
       {/* ADD SOURCE PANEL */}
       <Drawer
         title="Add Source"
@@ -1192,7 +1179,7 @@ export const DataSheetComponent = (props) => {
         onClose={onClickCloseAddSource}
         visible={isSrcPanelOpened}
         key="right"
-        width={300}
+        width={325}
         headerStyle={{ backgroundColor: '#2199c8' }}
       >
         {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} locationData={props.locationData} companyId={props.locationData.state.dpCodeDetails.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
@@ -1223,14 +1210,10 @@ export const DataSheetComponent = (props) => {
 
 DataSheetComponent.propTypes = {
   isHistoryType: PropTypes.bool,
-  // reqTask: PropTypes.object,
-  // reqIndexes: PropTypes.object,
   reqData: PropTypes.object,
   reqErrorList: PropTypes.array,
   locationData: PropTypes.object,
   onClickSave: PropTypes.func,
   getDefaultCurrentDataForYear: PropTypes.func,
   lastHistoricalData: PropTypes.array,
-  // reqSourceData: PropTypes.array,
-  // dummyDataCheck: PropTypes.func,
 };

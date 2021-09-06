@@ -6,7 +6,7 @@ import moment from 'moment';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Col, Row, Form } from 'react-bootstrap';
 import { Comment, Tag, Tooltip, Divider } from 'antd';
-import ErrorDataSheetTwo from './ErrorDataSheet2';
+import ErrorDataSheetTwo from './ErrorDataSheet';
 
 
 const FieldWrapper = (props) => {
@@ -58,6 +58,7 @@ const ErrorPanel = (props) => {
                     background: 'none',
                     border: 'none',
                   }}
+                  color="orange"
                 >
                   {defaultError.type}
                 </Tag>
@@ -69,8 +70,6 @@ const ErrorPanel = (props) => {
                 </Tag>
               </div>
               {!props.isAccepted && props.isAccepted !== null && <Divider />}
-              {/* {props.isAccepted !== null && <Divider orientation="left">{`Status: ${props.isAccepted ? 'Accepted' : (props.isAccepted === false ? 'Rejected' : '')}`}</Divider>} */}
-              {/* Comments Field */}
               <FieldWrapper
                 label="Comments*"
                 visible={!props.isAccepted && props.isAccepted !== null}
@@ -112,8 +111,9 @@ const ErrorPanel = (props) => {
                     background: 'none',
                     border: 'none',
                   }}
+                  color="orange"
                 >
-                  {defaultError.type}
+                  Recommended Data
                 </Tag>
                 <Tag style={{ margin: '5px' }}>Raised By {defaultError.raisedBy}</Tag>
                 <Tag style={{ margin: '5px' }}>
@@ -127,8 +127,6 @@ const ErrorPanel = (props) => {
                 <ErrorDataSheetTwo isErrorCommentType reqData={defaultError.refData} />
               </Row>
               <Divider />
-              {/* {props.isAccepted !== null && <Divider orientation="left">{`Status: ${props.isAccepted ? 'Accepted' : (props.isAccepted === false ? 'Rejected' : '')}`}</Divider>} */}
-              {/* Comments Field */}
               <FieldWrapper
                 label="Comments*"
                 visible={!props.isAccepted && props.isAccepted !== null}
