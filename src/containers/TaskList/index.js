@@ -178,7 +178,7 @@ const isList = isData && isData.data;
           pillar: e.pillar ? e.pillar : '--',
           analyst: e.analyst ? e.analyst : '--',
           analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '--',
-          qa: e.qa ? e.qa : '-',
+          qa: e.qa ? e.qa : '--',
           qaSla: e.qaSla ? moment(e.qaSla).format('DD-MM-YYYY') : '--',
           status: e.status ? e.status : '--',
         })) :
@@ -197,7 +197,7 @@ const isList = isData && isData.data;
           status: e.status === 'Breached' ? { value: e.status, content: <p className="text-danger w-100 m-auto">{e.status}</p> } : { value: e.status, content: <p className="text-success w-100 m-auto">{e.status}</p> },
         })) :
           obj.map((e) => ({
-            key: e.taskid,
+            key: e.controversyId,
             company: e.companyName ? e.companyName : '--',
             controversyId: e.controversyId ? e.controversyId : '--',
             analyst: e.analyst ? e.analyst : '--',
@@ -590,7 +590,7 @@ const isList = isData && isData.data;
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title={multiCompanies ? 'Company Task List' : ''} />
+          <Header sideBarRef={sideBarRef} title={tabFlag === 'Controversy' ? 'Controversy Task List' : 'Company Task List'} />
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
