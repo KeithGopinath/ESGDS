@@ -66,6 +66,7 @@ const BatchCreation = ({ show, setShow }) => {
   };
   const isbatchCreated = useSelector((createbatch) => createbatch.createBatch);
   const isbatchCreatedLoading = useSelector((createbatch) => createbatch.createBatch.isLoading);
+
   useEffect(() => {
     if (isbatchCreated.batchpost) {
       setAlert(isbatchCreated.batchpost.message);
@@ -150,7 +151,8 @@ const BatchCreation = ({ show, setShow }) => {
   };
   const onHandleInput = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9\s-]*$/.test(e.target.value)) {
-      setBatch(e.target.value);
+      const uppercaseName = (e.target.value).toUpperCase();
+      setBatch(uppercaseName);
     }
   };
   useEffect(() => {

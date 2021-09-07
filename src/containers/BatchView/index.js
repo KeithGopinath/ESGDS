@@ -70,7 +70,7 @@ const BatchView = () => {
   const totalCount = Math.ceil(calculateCount);
   const batchlist = batches && (searchQuery ? searchfilter(searchQuery, batches) : batches).slice(min, max).map(({ batchName }) => (
     <Col lg={3} md={6} key={batchName}>
-      <Card className="batch-card batchbox">
+      <Card className="batch-card-display">
         <ListItemText primary={batchName} />
       </Card>
     </Col>
@@ -108,12 +108,6 @@ const BatchView = () => {
                 </Button>
               </div>
             </div>
-            {/* <div className="view-min-height">
-              {loading && <PageLoader /> }
-              <Row >
-                {batchlist}
-              </Row>
-            </div> */}
                <div className="view-min-height">
              
              { 

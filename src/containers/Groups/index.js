@@ -581,7 +581,8 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
 
   const onhandelgrpName = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9\s-]*$/.test(e.target.value)) {
-      setcreateGrpName(e.target.value);
+      const uppercaseName = (e.target.value).toUpperCase();
+      setcreateGrpName(uppercaseName);
     }
       
     
