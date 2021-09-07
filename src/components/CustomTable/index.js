@@ -21,7 +21,6 @@ import 'antd/dist/antd.css';
 import { useDispatch } from 'react-redux';
 import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
-// import { useHistory } from 'react-router-dom';
 import PageLoader from '../../components/PageLoader';
 
 
@@ -115,7 +114,6 @@ const CustomTable = ({
 
   // changes by balaji (for notification)
   const dispatch = useDispatch();
-  // const history = useHistory();
 
   const theme = createMuiTheme({
     palette: {
@@ -193,7 +191,6 @@ const CustomTable = ({
 
   const handlesSearch = (event) => {
     dispatch({ type: 'NOTIFICATION_RESET' });
-    // history.replace();
     const searchedQuery = event.currentTarget.value;
     setSearchQuery(searchedQuery);
   };

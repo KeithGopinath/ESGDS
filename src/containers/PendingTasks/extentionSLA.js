@@ -1,9 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-// import moment from 'moment';
-// import { DatePicker, message } from 'antd';
+import moment from 'moment';
 import Overlay from '../../components/Overlay';
 
 
@@ -20,6 +20,11 @@ const ExtentionSLA = ({
     setalertStatus(false);
     setalert(false);
   };
+  const currentRole = sessionStorage.role;
+  const [isAnalyst, isQA] = [
+    currentRole === 'Analyst',
+    currentRole === 'QA',
+  ];
   const dispatch = useDispatch();
   const slaRequest = useSelector((slapost) => slapost.slaExtexsion);
   const isslaData = slaRequest.slapost;
@@ -34,9 +39,22 @@ const ExtentionSLA = ({
     }
   };
   const onExtendSla = () => {
-    const requestData = { taskId: detail.taskId, days: day };
-    dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
-    setalertStatus(true);
+    if (isAnalyst) {
+      const modifiedsla = moment(detail.analystSLADate, 'YYYY-MM-DD').add(day, 'days');
+      const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      const requestData = { taskId: detail.taskId, days: sladate };
+      console.log(requestData, 'requestData');
+      setalertStatus(true);
+      dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
+    }
+    if (isQA) {
+      const modifiedsla = moment(detail.qaSLADate, 'YYYY-MM-DD').add(day, 'days');
+      const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      const requestData = { taskId: detail.taskId, days: sladate };
+      console.log(requestData, 'requestData');
+      setalertStatus(true);
+      dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
+    }
   };
   const editBody = () => (
     <React.Fragment>
