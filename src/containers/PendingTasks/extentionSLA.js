@@ -43,7 +43,6 @@ const ExtentionSLA = ({
       const modifiedsla = moment(detail.analystSLADate, 'YYYY-MM-DD').add(day, 'days');
       const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
       const requestData = { taskId: detail.taskId, days: sladate };
-      console.log(requestData, 'requestData');
       setalertStatus(true);
       dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
     }
@@ -51,7 +50,6 @@ const ExtentionSLA = ({
       const modifiedsla = moment(detail.qaSLADate, 'YYYY-MM-DD').add(day, 'days');
       const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
       const requestData = { taskId: detail.taskId, days: sladate };
-      console.log(requestData, 'requestData');
       setalertStatus(true);
       dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
     }
