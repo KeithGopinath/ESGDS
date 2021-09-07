@@ -558,7 +558,7 @@ const TaskList = (props) => {
       tableLabel: <span>{multiCompanies ?
         <span>{tabFlag === 'Controversy' ? 'Controversy List' : 'Task List'}
           <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadReports} />
-        </span> : 'Tasks'}</span>,
+        </span> : (location.state && isTasknumber) ? location.state : 'tasks' }</span>,
     };
 
   };
