@@ -118,8 +118,10 @@ useEffect(()=> {
       const editTaskData = {
         taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value },
         taskId: rowValue.taskId,
+        // isfromNotification: (isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false 
 
       }
+     
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
     } else {
       setAlert('Fill all the required fields !');
