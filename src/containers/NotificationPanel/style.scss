@@ -15,6 +15,7 @@
 }
 
 .pt-body {
+    inset: 0px auto auto 0px !important;
     transform: translate(-310px, 55px) !important;
     background-image: linear-gradient(to right, #2199c8, #2da68a);
 }
