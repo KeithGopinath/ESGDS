@@ -73,15 +73,17 @@ const ValidationSubMenu = [
 ]
 
 const GroupsSubMenu = [
+  
   {
-    id: 0, label: 'Pillar Assignment', icon: faTasks, address: 'pillarassignment',
+    id: 0, label: 'Group Assignment', icon: faFolderPlus, address: 'group-assignment'
   },
   {
-    id: 1, label: 'Group Assignment', icon: faFolderPlus, address: 'group-assignment'
+    id: 1, label: 'Pillar Assignment', icon: faTasks, address: 'pillarassignment',
   },
   {
     id: 2, label: 'Group List', icon: faList, address: 'group-list'
   },
+  
 
 ]
 
