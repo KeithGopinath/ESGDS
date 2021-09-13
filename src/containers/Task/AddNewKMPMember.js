@@ -360,6 +360,9 @@ const AddNewKMPMember = (props) => {
       message.error('Please Enter Required Fields !');
     }
   };
+
+  const disabledDobDates = (event) => event && event > moment().endOf('day');
+
   return (
     <Spin indicator={<PageLoader />} spinning={activeMembersFromStore.isLoading || addNewMemberFromStore.isLoading || terminateMembersFromStore.isLoading || reqTASK.isLoading} >
       <Row>
@@ -481,7 +484,7 @@ const AddNewKMPMember = (props) => {
             </React.Fragment>
           }
           body={
-            <DatePicker size="large" value={dob && moment(dob)} onChange={onChangeDob} className={hasError.dob ? 'addNewMember-dob addNewMember-red-border' : 'addNewMember-dob'} />
+            <DatePicker size="large" value={dob && moment(dob)} onChange={onChangeDob} disabledDate={disabledDobDates} className={hasError.dob ? 'addNewMember-dob addNewMember-red-border' : 'addNewMember-dob'} />
           }
         />
 

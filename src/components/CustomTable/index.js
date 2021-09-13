@@ -252,41 +252,41 @@ const CustomTable = ({
   return (
     <div>
       <Paper className="users-table-paper">
-        <TableContainer>
-          <div className="users-table-label-datepicker-search-wrap">
-            <div className="users-table-label">
-              {tableLabel}
-            </div>
-            <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
-              <RangePicker
-                // showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD"
-                onChange={(x) => {
-                  if (x) {
-                    setSearchDate({ startDate: x[0], endDate: x[1] });
-                  } else {
-                    setSearchDate(null);
-                  }
-                }}
-              />
-            </Space>
-            <ThemeProvider theme={theme}>
-              <TextField
-                placeholder="Search"
-                style={{ padding: '20px' }}
-                onChange={handlesSearch}
-                autoComplete="off"
-                value={searchQuery}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </ThemeProvider>
+        <div className="users-table-label-datepicker-search-wrap">
+          <div className="users-table-label">
+            {tableLabel}
           </div>
+          <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
+            <RangePicker
+              // showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD"
+              onChange={(x) => {
+                if (x) {
+                  setSearchDate({ startDate: x[0], endDate: x[1] });
+                } else {
+                  setSearchDate(null);
+                }
+              }}
+            />
+          </Space>
+          <ThemeProvider theme={theme}>
+            <TextField
+              placeholder="Search"
+              style={{ padding: '20px' }}
+              onChange={handlesSearch}
+              autoComplete="off"
+              value={searchQuery}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </ThemeProvider>
+        </div>
+        <TableContainer>
           <Table className="users-table">
             <ColumnsHead
               sortOrder={sortOrder}
