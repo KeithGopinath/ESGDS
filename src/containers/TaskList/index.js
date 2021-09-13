@@ -249,7 +249,7 @@ const TaskList = (props) => {
         [
           {
             id: 'company',
-            align: 'center',
+            align: 'left',
             label: 'Company',
             dataType: 'string',
           },
@@ -312,7 +312,7 @@ const TaskList = (props) => {
           [
             {
               id: 'company',
-              align: 'center',
+              align: 'left',
               label: 'Company',
               dataType: 'string',
             },
@@ -558,7 +558,7 @@ const TaskList = (props) => {
       tableLabel: <span>{multiCompanies ?
         <span>{tabFlag === 'Controversy' ? 'Controversy List' : 'Task List'}
           <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadReports} />
-        </span> : (location.state && isTasknumber) ? location.state : 'tasks' }</span>,
+        </span> : (location.state && isTasknumber) ? location.state : 'tasks'}</span>,
     };
 
   };
