@@ -263,7 +263,7 @@ const Task = (props) => {
   const { isValidationCalled } = props.location.state;
 
   // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
-  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
+  let taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
 
   // IS TASKPAGE BUTTON DISABLED
   const isTaskButtonDisabled = reqTASK.isLoading || taskSubmitFromStore.isLoading || derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading;
@@ -342,17 +342,20 @@ const Task = (props) => {
 
   const reqDpCodesData = getReqDpCodesList();
 
-  const taskToNextPage = {
-    taskId: reqTaskData.taskId,
-    pillar: reqTaskData.pillar,
-    company: reqTaskData.company,
-    companyId: reqTaskData.companyId,
-    taskNumber: reqTaskData.taskNumber,
-    memberType: reqTaskData.memberType,
-    dpCodesData: reqDpCodesData,
-  };
+  // const taskToNextPage = {
+  //   taskId: reqTaskData.taskId,
+  //   pillar: reqTaskData.pillar,
+  //   company: reqTaskData.company,
+  //   companyId: reqTaskData.companyId,
+  //   taskNumber: reqTaskData.taskNumber,
+  //   memberType: reqTaskData.memberType,
+  //   dpCodesData: reqDpCodesData,
+  // };
 
-  sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+  // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+
+  // Change Session storage to props.location.state
+  taskDetails = { ...taskDetails, filteredData: reqDpCodesData };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
