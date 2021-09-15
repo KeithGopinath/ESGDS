@@ -122,8 +122,11 @@ const TaskList = (props) => {
   };
 
   const handleShow = (arg) => {
+    console.log(arg, 'arg');
+      dispatch({ type: "RAISEDSLA_REQUEST", taskid:arg.taskId});
     const editDetails = { groupId: arg.groupId, batchId: arg.batchId };
     dispatch({ type: "TASKEDITDETAILS_REQUEST", payload: editDetails });
+   
     setanalystDetail({ value: arg.analystId, label: arg.analyst });
     setqaDetail({ value: arg.qaId, label: arg.qa });
     setanalystsla(getFormatDate(arg.analystSLA));
@@ -160,6 +163,7 @@ const TaskList = (props) => {
     dispatch({ type: "GET_TASKLIST_REQUEST" });
     // if history doesn't have state then reset notification reducer
     if (location && !location.state) {
+      dispatch({ type: "RAISEDSLA_RESET" });
       dispatch({ type: "NOTIFICATION_RESET" });
     }
 

@@ -1,20 +1,27 @@
 /* eslint-disable */
 import React, {useEffect, useState} from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { DatePicker } from 'antd';
+import { Col, Row, Card } from 'react-bootstrap';
+import { DatePicker, Divider } from 'antd';
 import moment from 'moment';
 import { useLocation } from "react-router-dom";
 import Select from 'react-select';
 import Overlay from '../../components/Overlay';
 import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt, faReceipt, faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
+    const isSlaRequested = useSelector((raisedsladata)=>raisedsladata.RaisedSla);
+    console.log(isSlaRequested, 'isSlaRequested');
     const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
-    const isTasknumber = useSelector((notification) => notification.notification.notificationType);
+    // const isTasknumber = useSelector((notification) => notification.notification.notificationType);
+    const rejectslaResponse = useSelector((rejectsladata)=>rejectsladata.RejectSla);
+    console.log(rejectslaResponse, 'rejectslaResponse');
     const [alert, setAlert] = useState('');
     const [alertStatus, setalertStatus] = useState(false);
     const dispatch = useDispatch();
@@ -23,6 +30,7 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
     },[])
     const location = useLocation();
   const handleClose = () => {
+    dispatch({type:"RAISEDSLA_RESET"});
     setShow(false);
     setanalystDetail('');
     setqaDetail('');
@@ -114,15 +122,31 @@ useEffect(()=> {
   }
   const editTaskBtn = () => {
     if(analystsla && qasla && analystDetail && qaDetail ){
-    
+      if( (analystDetail.value === rowValue.analystId) && (qaDetail.value === rowValue.qaId ) && (analystsla ===  moment(rowValue.analystSLA, 'YYYY-MM-DD').format('YYYY-MM-DD')) && (qasla === moment(rowValue.qaSLA, 'YYYY-MM-DD').format('YYYY-MM-DD')) ){
+        setAlert(' fields not get updated');
+        setalertStatus(false);      
+      } else{
+        const analystDate = [];
+      const qaDate = [];
+      isSlaRequested.raisedsladata && isSlaRequested.raisedsladata.data.map((e)=>{
+        if(e.requestedBy === 'Analyst'){
+          analystDate.push(e.days);
+        }
+        if(e.requestedBy === 'QA'){
+          qaDate.push(e.days);
+        }
+      });
+
       const editTaskData = {
-        taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value },
+        taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value, analystRequestedDate:analystDate[0]? analystDate[0]: "", qaRequestedDate:qaDate[0]? qaDate[0]:"" },
         taskId: rowValue.taskId,
         // isfromNotification: (isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false 
 
       }
-     
+      setAlert('');
+     console.log(editTaskData, 'editTaskData');
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
+    }
     } else {
       setAlert('Fill all the required fields !');
       setalertStatus(false);
@@ -134,25 +158,30 @@ useEffect(()=> {
     const customDate = date;
     return current && current < moment(customDate, 'YYYY-MM-DD');
   }
+
+  // SLA reject
+  const onRejectSla = (arg) => {
+    dispatch({type:"REJECTSLA_REQUEST", slaId: arg});
+  }
   const editBody = () => (
 <React.Fragment>
     <div>
       <Row>
-        <Col lg={6}>
+        <Col lg={4}>
             <div className="edittask-contentBox">
                 <div className="edittask-content">Analyst <span className="mandatory-color">*</span></div>
                 <div>
                     <Select
                       
                         value ={analystDetail && analystDetail }
-                        
                         options={editAnalystOption}
                         onChange={onHandleEditanalyst}
+                        // isDisabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false }
                     />
                 </div>
             </div>
         </Col>
-        <Col lg={6}>
+        <Col lg={8}>
             <div className="edittask-contentBox">
               <div className="edittask-content" >SLA date <span className="mandatory-color">*</span></div>
                 <div>
@@ -163,6 +192,7 @@ useEffect(()=> {
                         value={(analystsla)? moment(analystsla, baseFormat):null} 
                         onChange={onEditanalystDate}
                         disabledDate={analystdisabledDate}
+                        // disabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'Reassignment Pending')) ? true : false }
                         
                     />
                 </div>
@@ -170,7 +200,7 @@ useEffect(()=> {
         </Col>
       </Row>
       <Row>
-        <Col lg={6}>
+        <Col lg={4}>
           <div className="edittask-contentBox">
             <div className="edittask-content" >Quality Analyst <span className="mandatory-color">*</span></div>
             <div>
@@ -179,12 +209,13 @@ useEffect(()=> {
                     value={qaDetail && qaDetail}
                     options={editQaOption && editQaOption.filter((e)=>e.value !== (analystDetail.value) )}
                     onChange={onHandleEditQa}
+                    // isDisabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false }
                     
                 />
             </div>
           </div>
         </Col>
-        <Col lg={6}>
+        <Col lg={8}>
           <div className="edittask-contentBox">
               <div className="edittask-content" >SLA date <span className="mandatory-color">*</span></div>
                 <div>
@@ -195,11 +226,44 @@ useEffect(()=> {
                         value={(qasla)? moment(qasla, baseFormat): null}
                         onChange={onEditqaDate}
                         disabledDate={qadisabledDate}
+                       // disabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'Reassignment Pending')) ? true : false}
                     />
                 </div>
           </div>
         </Col>
       </Row>
+      {isSlaRequested.raisedsladata && isSlaRequested.raisedsladata.data.length > 0 &&
+      <Row>
+          <div className="sla-heading">
+            SLA Pending Request
+          </div>
+          {isSlaRequested.raisedsladata && isSlaRequested.raisedsladata.data.length > 0 && isSlaRequested.raisedsladata.data.map((e)=>(
+
+          
+            <Col lg={12} className="card-sla-pad">
+              <Card className="sla-pending-card">
+                <div>
+                <div className="slapending-box">
+                  <div className="inner-sla-box">
+                    <div className="sla-pending-role-date"><FontAwesomeIcon icon={faUser}/> <span className="sla-pending-role-date-heading">Requested By</span></div>
+                    <div className="sla-details">{e.requestedBy}</div>
+                  </div>  
+                    <div className="inner-sla-box">
+                      <div className="sla-pending-role-date"><FontAwesomeIcon icon={faCalendarAlt}/> <span className="sla-pending-role-date-heading">Requested Date </span></div>
+                      <div className="sla-details">{moment(e.days, 'YYYY-MM-DD').format('DD-MM-YYYY')}</div>
+                    </div> 
+                    <div className="inner-sla-box">
+                      <div className="sla-pending-role-date"><FontAwesomeIcon icon={faReceipt}/> <span className="sla-pending-role-date-heading">Action </span></div>
+                      <div className="sla-details"><button type="button" className="btn btn-danger btn-sm" onClick={()=>{onRejectSla(e.id)}}>Reject</button></div>
+                    </div> 
+                </div>
+                </div>
+              </Card>
+            </Col>
+            )) }
+      </Row>
+          }
+      
       </div>
   </React.Fragment>
   );
@@ -215,9 +279,6 @@ useEffect(()=> {
     <div className="edittask-submit-btn">
       
         <button type="button" className="btn btn-outline-primary" onClick={editTaskBtn}>Update</button>
-        {(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) && 
-          <button type="button" className="btn btn-danger reject-request-btn" >Reject</button>
-        }
     
     </div>
     </div>
@@ -235,8 +296,8 @@ useEffect(()=> {
       keyboard={false}
       animation
       centered
-      isLoading={isDataEditedLoading.isLoading  || isEditDataLoading.isLoading}
-      size="lg"
+      isLoading={isDataEditedLoading.isLoading  || isEditDataLoading.isLoading || isSlaRequested.isLoading }
+      size="md"
       title={rowValue.taskNumber}
       body={editBody()}
       onSubmitPrimary={editTaskBtn}
