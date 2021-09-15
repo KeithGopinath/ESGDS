@@ -63,18 +63,18 @@ const DataPage = (props) => {
 
   const getReqData = () => {
     // const { dpCodeDetails } = props.location.state;
-    const reqTask = JSON.parse(sessionStorage.filteredData);
-    const reqMaxIndex = reqTask.dpCodesData.length - 1;
+    // const taskDetails = JSON.parse(sessionStorage.filteredData);
+    // const taskDetails = taskDetails;
+    const reqMaxIndex = taskDetails.filteredData.length - 1;
     const reqMinIndex = 0; // CONSTANT
     let returnableData = {};
     //  TO GET CURRENT INDEX !
-    for (let i = 0; i < reqTask.dpCodesData.length; i += 1) {
-      if (reqTask.dpCodesData[i].dpCode === dpCodeDetails.dpCode) {
+    for (let i = 0; i < taskDetails.filteredData.length; i += 1) {
+      if (taskDetails.filteredData[i].dpCode === dpCodeDetails.dpCode) {
         returnableData = {
           ...returnableData,
           reqIndexes: { maxIndex: reqMaxIndex, currentIndex: i, minIndex: reqMinIndex },
-          reqDpCodeData: (dpCodeDataFromStore.dpCodeData && dpCodeDataFromStore.dpCodeData.dpCodeData) || reqTask.dpCodesData[i],
-          reqTask,
+          reqDpCodeData: (dpCodeDataFromStore.dpCodeData && dpCodeDataFromStore.dpCodeData.dpCodeData) || taskDetails.filteredData[i],
         };
         break;
       }
@@ -83,7 +83,7 @@ const DataPage = (props) => {
     return returnableData;
   };
 
-  const { reqDpCodeData, reqIndexes, reqTask } = getReqData();
+  const { reqDpCodeData, reqIndexes } = getReqData();
 
   const [statusAlert, setStatusAlert] = useState(false);
 
@@ -184,7 +184,7 @@ const DataPage = (props) => {
 
   const backClickHandler = () => {
     history.push({
-      pathname: `/task/${reqTask.taskNumber}`,
+      pathname: `/task/${taskDetails.taskNumber}`,
       state: {
         taskDetails,
         isValidationCalled: taskDetails.isValidationCalled,
@@ -193,13 +193,13 @@ const DataPage = (props) => {
   };
 
   const previousClickHandler = () => {
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
+    const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
       state: {
         taskDetails,
         dpCodeDetails: nextDpCode,
-        filteredData: reqTask.dpCodesData,
+        filteredData: taskDetails.filteredData,
       },
     });
   };
@@ -214,6 +214,20 @@ const DataPage = (props) => {
     return additionalDetails || [];
   };
 
+  const getReqHistoricalDetails = (dataList) => dataList.map((e) => {
+    const returnableData = {
+      dpCode: e.dpCode,
+      fiscalYear: e.fiscalYear,
+      textSnippet: e.textSnippet,
+      pageNo: e.pageNo,
+      screenShot: e.screenShotBase64,
+      response: e.response,
+      source: e.source,
+      additionalDetails: additionalDetailsMapper(e),
+    };
+    return returnableData;
+  });
+
   const getReqDetails = (dataList) => dataList.map((e) => {
     let returnableData = {
       dpCode: e.dpCode,
@@ -227,7 +241,9 @@ const DataPage = (props) => {
     };
 
     if (isAnalyst_DCR) {
-      returnableData = { ...returnableData, rejectComment: e.rejectComment, isAccepted: e.isAccepted };
+      returnableData = {
+        ...returnableData, rejectComment: e.rejectComment, rejectedTo: e.rejectComment ? e.error.raisedBy : '', isAccepted: e.isAccepted,
+      };
     }
     if (isQA_DV) {
       returnableData = { ...returnableData, error: { ...e.error, refData: '' } };
@@ -253,18 +269,18 @@ const DataPage = (props) => {
   });
 
   const getPostableData = () => {
-    const reqDpcodeData = reqTask.dpCodesData[reqIndexes.currentIndex];
+    const reqDpcodeData = taskDetails.filteredData[reqIndexes.currentIndex];
     const postableData = {
-      taskId: reqTask.taskId,
-      taskNumber: reqTask.taskNumber,
+      taskId: taskDetails.taskId,
+      taskNumber: taskDetails.taskNumber,
       dpCodeId: reqDpcodeData.dpCodeId,
       companyId: reqDpcodeData.companyId,
       pillarId: reqDpcodeData.pillarId,
       memberId: reqDpcodeData.memberId || '',
       memberName: reqDpcodeData.memberName || '',
-      memberType: reqTask.memberType === 'Kmp Matrix' ? 'KMP Matrix' : reqTask.memberType,
+      memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
       currentData: getReqDetails(reqCurrentData),
-      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqDetails(reqHistoricalData),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData),
     };
     return postableData;
   };
@@ -306,19 +322,19 @@ const DataPage = (props) => {
   };
 
   const nextClickHandler = () => {
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+    const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex + 1];
     if (reqIndexes.currentIndex !== reqIndexes.maxIndex) {
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
         state: {
           taskDetails,
           dpCodeDetails: nextDpCode,
-          filteredData: reqTask.dpCodesData,
+          filteredData: taskDetails.filteredData,
         },
       });
     } else {
       history.push({
-        pathname: `/task/${reqTask.taskNumber}`,
+        pathname: `/task/${taskDetails.taskNumber}`,
         state: {
           taskDetails,
           isValidationCalled: taskDetails.isValidationCalled,
@@ -378,7 +394,7 @@ const DataPage = (props) => {
   useEffect(() => {
     if (dpCodeDataUpdateFromStore && dpCodeDataUpdateFromStore.dpCodeData && statusAlert) {
       if (reqIndexes.currentIndex !== reqIndexes.maxIndex) {
-        const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+        const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex + 1];
         history.push({
           pathname: `/dpcode/${nextDpCode.dpCode}`,
           state: {
@@ -390,7 +406,7 @@ const DataPage = (props) => {
         message.success(dpCodeDataUpdateFromStore.dpCodeData.message);
         setStatusAlert(false);
         history.push({
-          pathname: `/task/${reqTask.taskNumber}`,
+          pathname: `/task/${taskDetails.taskNumber}`,
           state: {
             taskDetails,
             isValidationCalled: taskDetails.isValidationCalled,

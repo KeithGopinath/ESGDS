@@ -673,10 +673,10 @@ export const DataSheetComponent = (props) => {
     if (doValidate()) {
       props.onClickSave(saveData);
       setIsErrorAccepted(false);
-      message.success('Error Rejected Successfully, And your response has been recorded!', 8);
+      message.success('Error Rejected Successfully !', 8);
       onCloseErrorPanel();
     } else {
-      message.error('Please Fill Required Details !', 8);
+      message.error('Please Enter Comments !', 8); // Please Fill Required Fields !
       if (hasErrors.formThreshold) {
         message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
       }
