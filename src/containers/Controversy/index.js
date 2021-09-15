@@ -100,7 +100,10 @@ const Controversy = (props) => {
   // EXTRACT DPCODE DATA
   const extractReqDpCode = (data) => data.filter((e) => (e.dpCode === dpCodeDetails.dpCode));
 
-  const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
+  // session.storage to props.location.state
+  // const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
+
+  const reqDpCodesData = taskDetails.filteredData;
 
   const [reqDpCodeData] = reqConDpCodeData && reqConDpCodeData.data ? [reqConDpCodeData.data] : extractReqDpCode(reqDpCodesData);
 
