@@ -195,6 +195,15 @@ const CustomTable = ({
     setSearchQuery(searchedQuery);
   };
 
+  const onChangeSearchDate = (event) => {
+    console.log(event);
+    if (event) {
+      setSearchDate({ startDate: event[0], endDate: event[1] });
+    } else {
+      setSearchDate(null);
+    }
+  };
+
   const searcher = (rowdata, coldata, searchedQuery, searchedDate) => {
     const columnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'string' || eachColData.dataType === 'stringSearchSortElement' || eachColData.dataType === 'date') ? ({ id: eachColData.id, dataType: eachColData.dataType }) : (null)))).filter((eachColData) => (eachColData !== null));
     // const dateOnlyColumnsList = (coldata.map((eachColData) => ((eachColData.dataType === 'date') ? (eachColData.id) : (null)))).filter((eachColData) => (eachColData !== null));
@@ -234,7 +243,7 @@ const CustomTable = ({
           if (columnsList[i].dataType === 'stringSearchSortElement' && (eachRowData[columnsList[i].id].value.toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
-          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (String(eachRowData[columnsList[i].id]).toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
@@ -260,13 +269,8 @@ const CustomTable = ({
             <RangePicker
               // showTime={{ format: 'HH:mm' }}
               format="YYYY-MM-DD"
-              onChange={(x) => {
-                if (x) {
-                  setSearchDate({ startDate: x[0], endDate: x[1] });
-                } else {
-                  setSearchDate(null);
-                }
-              }}
+              onChange={onChangeSearchDate}
+              value={searchDate && [searchDate.startDate, searchDate.endDate]}
             />
           </Space>
           <ThemeProvider theme={theme}>

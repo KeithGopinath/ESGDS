@@ -102,6 +102,7 @@ TaskTable.propTypes = {
 
 const ControversyTaskTable = (props) => {
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+    key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
     action:
