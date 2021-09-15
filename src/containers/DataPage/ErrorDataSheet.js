@@ -263,7 +263,11 @@ const ErrorDataSheetTwo = (props) => {
 
   const onChangeFormScreenShotPath = (event) => {
     setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
+    if (event.fileList[0]) {
+      getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
+    } else {
+      setFormScreenShotFile({ ...event, base64: null });
+    }
   };
 
   const onChangeFormResponse = (event) => {
@@ -334,12 +338,12 @@ const ErrorDataSheetTwo = (props) => {
     const errors = {
       formTextSnippet: isError && !(formTextSnippet.length > 0),
       formPageNo: isError && !(formPageNo),
-      formScreenShotPath: isError && !formScreenShotPath,
+      formScreenShotPath: isError && false, // !formScreenShotPath, Not Mandatory
       formResponse: isError && !formResponse,
       formSource: isError && !(formSource.url && formSource.sourceName && formSource.publicationDate),
       formURL: isError && !formURL,
       formPublicDate: isError && !formPublicDate,
-      formScreenShotFile: isError && !formScreenShotFile,
+      formScreenShotFile: isError && false, // !formScreenShotFile, Not Mandatory
       formComment: isError && !(formComment.length > 0),
       dynamicFields: isError ? dynamicFields.map((e) => {
         if (e.inputType === 'Select') {
@@ -607,7 +611,7 @@ const ErrorDataSheetTwo = (props) => {
       <Col lg={12}>
         <Row>
           <FieldWrapper
-            label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            label={<div>Upload Screenshot</div>} // <span className="addNewMember-red-asterik"> * </span>
             visible={isErrorCommentType || isError}
             size={[6, 5, 7]}
             body={
@@ -630,8 +634,8 @@ const ErrorDataSheetTwo = (props) => {
 
           {/* ScreenShot Field */}
           <FieldWrapper
-            label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-            visible={isErrorCommentType || isError}
+            label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
+            visible={(isErrorCommentType || isError) && formScreenShotPath}
             size={[6, 5, 7]}
             body={
               <Image

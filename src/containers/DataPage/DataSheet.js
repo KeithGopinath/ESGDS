@@ -372,7 +372,11 @@ export const DataSheetComponent = (props) => {
 
   const onChangeFormScreenShotPath = (event) => {
     setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
+    if (event.fileList[0]) {
+      getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
+    } else {
+      setFormScreenShotFile({ ...event, base64: null });
+    }
   };
 
   const onChangeFormResponse = (event) => {
@@ -459,7 +463,7 @@ export const DataSheetComponent = (props) => {
     const errors = {
       formTextSnippet: dpCodeInCompleteStatus && !(formTextSnippet.length > 0),
       formPageNo: dpCodeInCompleteStatus && !(formPageNo),
-      formScreenShotPath: dpCodeInCompleteStatus && !formScreenShotPath,
+      formScreenShotPath: dpCodeInCompleteStatus && false, // !formScreenShotPath, Not Mandatory
       formResponse: dpCodeInCompleteStatus && (formResponse ?
         lastHistoricalDataResponse ?
           ['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) ? !(['NA', 'na', 'Na'].includes(formResponse) || formResponse) : ['NA', 'na', 'Na'].includes(formResponse)
@@ -469,7 +473,7 @@ export const DataSheetComponent = (props) => {
       formSource: dpCodeInCompleteStatus && !(formSource.url && formSource.sourceName && formSource.publicationDate),
       formURL: dpCodeInCompleteStatus && !formURL,
       formPublicDate: dpCodeInCompleteStatus && !formPublicDate,
-      formScreenShotFile: dpCodeInCompleteStatus && !formScreenShotFile,
+      formScreenShotFile: dpCodeInCompleteStatus && false, // !formScreenShotFile, Not Mandatory
       formErrorType: formIsError === true && !formErrorType,
       formComment: formIsError === true && !(formComment.length > 0),
       formIsError: !(formIsError === true || formIsError === false),
@@ -669,10 +673,10 @@ export const DataSheetComponent = (props) => {
     if (doValidate()) {
       props.onClickSave(saveData);
       setIsErrorAccepted(false);
-      message.success('Error Rejected Successfully, And your response has been recorded!', 8);
+      message.success('Error Rejected Successfully !', 8);
       onCloseErrorPanel();
     } else {
-      message.error('Please Fill Required Details !', 8);
+      message.error('Please Enter Comments !', 8); // Please Fill Required Fields !
       if (hasErrors.formThreshold) {
         message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
       }
@@ -994,7 +998,7 @@ export const DataSheetComponent = (props) => {
       <Col lg={12}>
         <Row>
           <FieldWrapper
-            label={<div>Upload Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
+            label={<div>Upload Screenshot</div>} // <span className="addNewMember-red-asterik"> * </span>
             visible
             size={[6, 5, 7]}
             body={
@@ -1017,8 +1021,8 @@ export const DataSheetComponent = (props) => {
 
           {/* ScreenShot Field */}
           <FieldWrapper
-            label={<div>Screenshot<span className="addNewMember-red-asterik"> * </span></div>}
-            visible
+            label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
+            visible={formScreenShotPath}
             size={[6, 5, 7]}
             body={
               <Image

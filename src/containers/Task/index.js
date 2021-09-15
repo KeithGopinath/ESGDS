@@ -22,7 +22,6 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 
-import AddNewBoardMember from './AddNewBoardMember';
 import AddNewKMPMember from './AddNewKMPMember';
 
 import { history } from '../../routes';
@@ -264,7 +263,7 @@ const Task = (props) => {
   const { isValidationCalled } = props.location.state;
 
   // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
-  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
+  let taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
 
   // IS TASKPAGE BUTTON DISABLED
   const isTaskButtonDisabled = reqTASK.isLoading || taskSubmitFromStore.isLoading || derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading;
@@ -343,17 +342,20 @@ const Task = (props) => {
 
   const reqDpCodesData = getReqDpCodesList();
 
-  const taskToNextPage = {
-    taskId: reqTaskData.taskId,
-    pillar: reqTaskData.pillar,
-    company: reqTaskData.company,
-    companyId: reqTaskData.companyId,
-    taskNumber: reqTaskData.taskNumber,
-    memberType: reqTaskData.memberType,
-    dpCodesData: reqDpCodesData,
-  };
+  // const taskToNextPage = {
+  //   taskId: reqTaskData.taskId,
+  //   pillar: reqTaskData.pillar,
+  //   company: reqTaskData.company,
+  //   companyId: reqTaskData.companyId,
+  //   taskNumber: reqTaskData.taskNumber,
+  //   memberType: reqTaskData.memberType,
+  //   dpCodesData: reqDpCodesData,
+  // };
 
-  sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+  // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+
+  // Change Session storage to props.location.state
+  taskDetails = { ...taskDetails, filteredData: reqDpCodesData };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
@@ -407,7 +409,7 @@ const Task = (props) => {
       dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
       setStatusAlert(true);
     } else {
-      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
+      message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
     }
   };
 
@@ -418,7 +420,7 @@ const Task = (props) => {
       dispatch({ type: 'DERIVED_CALCULATION_POST_REQUEST', payload: { taskId: taskDetails.taskId } });
       setStatusAlert(true);
     } else {
-      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
+      message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
     }
   };
 
@@ -469,20 +471,22 @@ const Task = (props) => {
 
   const KMPMenuList = (e) => (
     <components.MenuList {...e}>
+      {(isAnalyst_DC || isQA_DV) &&
       <div>
         <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewKMPVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
         <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateKmpVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
-      </div>
+      </div>}
       {e.children}
     </components.MenuList>
   );
 
   const BoardMemMenuList = (e) => (
     <components.MenuList {...e}>
+      {(isAnalyst_DC || isQA_DV) &&
       <div>
         <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewBoardVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
         <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateBoardVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
-      </div>
+      </div>}
       {e.children}
     </components.MenuList>
   );
@@ -561,7 +565,7 @@ const Task = (props) => {
                 {/* ONLY FOR STANDALONE */}
                 {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeType === 'Standalone' &&
                   <FieldWrapper
-                    label="Key Issues*"
+                    label="Key Issues"
                     size={[6, 5, 7]}
                     visible
                     body={
@@ -579,7 +583,7 @@ const Task = (props) => {
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
                 { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Board Matrix' &&
                   <FieldWrapper
-                    label="Board Members*"
+                    label="Board Members"
                     visible
                     size={[6, 5, 7]}
                     body={
@@ -597,7 +601,7 @@ const Task = (props) => {
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
                 { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Kmp Matrix' &&
                   <FieldWrapper
-                    label="KMP*"
+                    label="KMP Members"
                     visible
                     size={[6, 5, 7]}
                     body={
@@ -664,7 +668,6 @@ const Task = (props) => {
 
             {isAddNewBoardVisible &&
               <Modal title="Add New Board Member" className="task-modal" maskClosable={false} width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
-                {isAddNewBoardVisible && false && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
                 {isAddNewBoardVisible && <AddNewKMPMember modalType="AddNewBoardType" taskDetails={taskDetails} closeModal={() => setIsAddNewBoardVisible(false)} />}
               </Modal>}
 
