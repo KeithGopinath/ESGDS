@@ -15,13 +15,10 @@ import { faCalendarAlt, faReceipt, faUser } from '@fortawesome/free-solid-svg-ic
 const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
     const isSlaRequested = useSelector((raisedsladata)=>raisedsladata.RaisedSla);
-    console.log(isSlaRequested, 'isSlaRequested');
     const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
     const editAnalystOption = isEditData && isEditData.data.analyst;
     const editQaOption = isEditData && isEditData.data.qa;
-    // const isTasknumber = useSelector((notification) => notification.notification.notificationType);
     const rejectslaResponse = useSelector((rejectsladata)=>rejectsladata.RejectSla);
-    console.log(rejectslaResponse, 'rejectslaResponse');
     const [alert, setAlert] = useState('');
     const [alertStatus, setalertStatus] = useState(false);
     const dispatch = useDispatch();
@@ -140,11 +137,9 @@ useEffect(()=> {
       const editTaskData = {
         taskDetails : { analystSLADate: analystsla, qaSLADate: qasla, qaId: qaDetail.value, analystId: analystDetail.value, analystRequestedDate:analystDate[0]? analystDate[0]: "", qaRequestedDate:qaDate[0]? qaDate[0]:"" },
         taskId: rowValue.taskId,
-        // isfromNotification: (isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false 
 
       }
       setAlert('');
-     console.log(editTaskData, 'editTaskData');
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
     }
     } else {
@@ -176,7 +171,6 @@ useEffect(()=> {
                         value ={analystDetail && analystDetail }
                         options={editAnalystOption}
                         onChange={onHandleEditanalyst}
-                        // isDisabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false }
                     />
                 </div>
             </div>
@@ -192,7 +186,6 @@ useEffect(()=> {
                         value={(analystsla)? moment(analystsla, baseFormat):null} 
                         onChange={onEditanalystDate}
                         disabledDate={analystdisabledDate}
-                        // disabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'Reassignment Pending')) ? true : false }
                         
                     />
                 </div>
@@ -209,7 +202,6 @@ useEffect(()=> {
                     value={qaDetail && qaDetail}
                     options={editQaOption && editQaOption.filter((e)=>e.value !== (analystDetail.value) )}
                     onChange={onHandleEditQa}
-                    // isDisabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'SLA extension requested')) ? true : false }
                     
                 />
             </div>
@@ -226,7 +218,7 @@ useEffect(()=> {
                         value={(qasla)? moment(qasla, baseFormat): null}
                         onChange={onEditqaDate}
                         disabledDate={qadisabledDate}
-                       // disabled={(isTasknumber && (isTasknumber === rowValue.taskNumber) && (location.state === 'Reassignment Pending')) ? true : false}
+                       
                     />
                 </div>
           </div>

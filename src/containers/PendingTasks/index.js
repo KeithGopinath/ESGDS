@@ -19,7 +19,6 @@ const PendingTaskTable = (props) => {
     return date
   };
   const onExtendSLA = (arg) => {
-    console.log(arg, 'arg');
     props.setdetail(arg);
     props.setShow(true);
     props.isAnalyst ? props.setrejectslaDate(getFormatDate(arg.analystSLADate)) : null ;
