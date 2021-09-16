@@ -1,3 +1,5 @@
+/* eslint-disable no-debugger */
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
@@ -148,6 +150,12 @@ const getReqFields = ({
           value={value.value && value.label ? value : null}
           placeholder={`Select ${name}`}
           isDisabled={disableField}
+          styles={{
+            menuList: (provided) => ({
+              ...provided,
+              maxHeight: 120,
+            }),
+          }}
         />);
     case 'Image':
       return (
@@ -196,7 +204,7 @@ export const DataSheetComponent = (props) => {
 
   const errorTypeList = props.reqErrorList;
 
-  const thresholdValue = defaultData.thresholdValue || { min: 0, max: 100 };
+  const thresholdValue = defaultData.thresholdValue || { min: -10000, max: 10000 };
 
   const lastHistoricalDataResponse = props.lastHistoricalData && props.lastHistoricalData[0] ? props.lastHistoricalData[0].response : null;
 
@@ -458,6 +466,10 @@ export const DataSheetComponent = (props) => {
 
   const disabledPublicationDate = (event) => event && event > moment().endOf('day');
 
+  const onScreenShotUploadError = () => {
+    message.warn('Uploaded img file is broken');
+  };
+
   const doValidate = () => {
     const dpCodeInCompleteStatus = defaultData.status !== 'Completed';
     const errors = {
@@ -471,7 +483,7 @@ export const DataSheetComponent = (props) => {
         : !formResponse
       ),
       formSource: dpCodeInCompleteStatus && !(formSource.url && formSource.sourceName && formSource.publicationDate),
-      formURL: dpCodeInCompleteStatus && !formURL,
+      formURL: dpCodeInCompleteStatus && !(formURL && (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(formURL))),
       formPublicDate: dpCodeInCompleteStatus && !formPublicDate,
       formScreenShotFile: dpCodeInCompleteStatus && false, // !formScreenShotFile, Not Mandatory
       formErrorType: formIsError === true && !formErrorType,
@@ -589,14 +601,14 @@ export const DataSheetComponent = (props) => {
 
     if (doValidate()) {
       props.onClickSave(saveData);
+    } else if (hasErrors.formThreshold) {
+      message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+    } else if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
+      message.error('Response Should Not Be "NA');
+    } else if (hasErrors.formURL && formURL) {
+      message.error('Invalid Url');
     } else {
       message.error('Please Fill Required fields !');
-      if (hasErrors.formThreshold) {
-        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
-      }
-      if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
-        message.error('Response Should Not Be "NA');
-      }
     }
   };
 
@@ -803,8 +815,9 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="text"
             name="response"
+            autoComplete="false"
             placeholder="Select Response"
-            className={hasErrors.formSource && 'red-class'}
+            className={hasErrors.formSource && !formSource.sourceName && 'red-class'}
             value={formSource ? formSource.sourceName : null}
             onChange={onChangeFormSource}
             disabled={disableField}
@@ -826,6 +839,12 @@ export const DataSheetComponent = (props) => {
             value={formSource && formSource.sourceName && formSource.value ? { label: formSource.sourceName, value: formSource } : null}
             placeholder="Select Source"
             isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
           />
         }
       />
@@ -856,6 +875,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Form.Control
             type="number"
+            autoComplete="false"
             name="response"
             className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
             placeholder="Enter Response"
@@ -876,6 +896,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Form.Control
             type="text"
+            autoComplete="false"
             name="response"
             placeholder="Enter Response"
             className={hasErrors.formResponse && 'red-class'}
@@ -919,6 +940,12 @@ export const DataSheetComponent = (props) => {
             value={formResponse && { label: formResponse, value: formResponse }}
             placeholder="Select Response"
             isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
           />
         }
       />}
@@ -931,6 +958,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Form.Control
             as="textarea"
+            autoComplete="false"
             name="textSnippet"
             placeholder="Enter Text Snippet"
             className={hasErrors.formTextSnippet && 'red-class'}
@@ -950,6 +978,7 @@ export const DataSheetComponent = (props) => {
           <Form.Control
             type="number"
             placeholder="Enter Page No"
+            autoComplete="false"
             className={hasErrors.formPageNo && 'red-class'}
             onChange={onChangeFormPageNo}
             value={formPageNo}
@@ -968,6 +997,7 @@ export const DataSheetComponent = (props) => {
             type="text"
             name="url"
             placeholder="Enter Url"
+            autoComplete="false"
             className={hasErrors.formURL && 'red-class'}
             onChange={onChangeFormURL}
             value={formURL}
@@ -1022,12 +1052,13 @@ export const DataSheetComponent = (props) => {
           {/* ScreenShot Field */}
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
-            visible={formScreenShotPath}
+            visible={!!formScreenShotPath}
             size={[6, 5, 7]}
             body={
               <Image
                 width="50%"
                 src={formScreenShotPath}
+                onError={onScreenShotUploadError}
               />
             }
           />
@@ -1054,6 +1085,7 @@ export const DataSheetComponent = (props) => {
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData, index) => (
         <FieldWrapper
+          key={eachData.name}
           visible
           label={<div>{eachData.name}<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
@@ -1096,6 +1128,12 @@ export const DataSheetComponent = (props) => {
             onChange={onChangeFormErrorType}
             value={formErrorType && { label: formErrorType, value: formErrorType }}
             placeholder="Select Error Type"
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
           />
         }
       />
@@ -1111,6 +1149,7 @@ export const DataSheetComponent = (props) => {
             className={hasErrors.formComment && 'red-class'}
             disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'}
             aria-label="With textarea"
+            autoComplete="false"
             placeholder="Enter Comment"
             onChange={onChangeFormComment}
             value={formComment}
@@ -1130,6 +1169,7 @@ export const DataSheetComponent = (props) => {
             disabled={disableField}
             aria-label="With textarea"
             placeholder="Enter Comment"
+            autoComplete="false"
             onChange={onChangeFormControversyComment}
             value={formControversyComment}
           />
