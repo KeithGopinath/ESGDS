@@ -56,6 +56,8 @@ import { getDpCodeValidationhWatchers } from './DpCodeValidation';
 import { getControversyUpdateWatchers } from './ControversyTaskUpdate';
 import { getNotificationWatchers } from './Notification';
 import { getDashboardWatchers } from './Dashboard';
+import { rejectslaWatchers } from './RejectSla';
+import { raisedslaWatchers } from './RaisedSlaDetails';
 
 export default function* rootWatchers() {
   yield all([
@@ -116,5 +118,7 @@ export default function* rootWatchers() {
     getControversyUpdateWatchers(),
     getNotificationWatchers(),
     getDashboardWatchers(),
+    rejectslaWatchers(),
+    raisedslaWatchers(),
   ]);
 }

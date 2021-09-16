@@ -173,6 +173,7 @@ const CalculatePercentile = () => {
 
   const calculatePercentileTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
+      key: data.dpCode,
       dpCode: data.dpCode,
       fiveYearsBackAvg: (data.fiveYearsBackAvg >= 0 && data.fiveYearsBackAvg !== '') ? data.fiveYearsBackAvg : '--',
       fourYearsBackAvg: (data.fourYearsBackAvg >= 0 && data.fourYearsBackAvg !== '') ? data.fourYearsBackAvg : '--',

@@ -52,6 +52,7 @@ const Users = (props) => {
 
   const pendingUsersTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
+      key: data.userDetails.value,
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
@@ -97,6 +98,7 @@ const Users = (props) => {
 
   const approvedUsersTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
+      key: data.userDetails.value,
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
@@ -170,6 +172,7 @@ const Users = (props) => {
 
   const rejectedUsersTableData = (props) => {
     const tableRowData = (data) => data.map((data) => ({
+      key: data.userDetails.value,
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
