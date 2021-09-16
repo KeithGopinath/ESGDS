@@ -14,10 +14,15 @@ import SLAExtentions from './extentionSLA';
 
 
 const PendingTaskTable = (props) => {
- 
+  const getFormatDate = (arg) => {
+    const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
+    return date
+  };
   const onExtendSLA = (arg) => {
     props.setdetail(arg);
     props.setShow(true);
+    props.isAnalyst ? props.setrejectslaDate(getFormatDate(arg.analystSLADate)) : null ;
+    props.isQA ? props.setrejectslaDate(getFormatDate(arg.qaSLADate)) : null;
   };
 
   // TABLE DATA
@@ -169,6 +174,7 @@ const ControversyPendingTaskTable = (props) => {
 
 const PendingTasks = () => {
   const [show, setShow] = useState(false);
+  const [rejectSlaDate, setrejectslaDate] = useState('');
 const [detail, setdetail] = useState('');
   // DISPATCH
   const dispatch = useDispatch();
@@ -258,9 +264,9 @@ const [detail, setdetail] = useState('');
                   </div>
                 </div>
               </div>))}
-              <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail}/>
+              <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate}/>
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} isAnalyst={isAnalyst} isQA={isQA} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>
