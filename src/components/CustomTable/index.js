@@ -196,7 +196,6 @@ const CustomTable = ({
   };
 
   const onChangeSearchDate = (event) => {
-    console.log(event);
     if (event) {
       setSearchDate({ startDate: event[0], endDate: event[1] });
     } else {
