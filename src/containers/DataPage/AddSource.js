@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-nested-ternary */
@@ -247,7 +248,8 @@ const AddSource = (props) => {
     const sourceNameCheck = (sourceName.length > 0);
     const isMultiYearCheck = (isMultiYear === true || isMultiYear === false);
     const isMultiSourceCheck = (isMultiSource === true || isMultiSource === false);
-    const sourceURLCheck = (sourceURL.length > 0);
+    const sourceURLCheck = (sourceURL.length > 0) &&
+    (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(sourceURL)); // REGEX FOR URL VALIDATION
     const publicationDateCheck = (publicationDate !== null);
     const sourcePDFCheck = (sourcePDF !== null);
     setErrors({
@@ -328,11 +330,12 @@ const AddSource = (props) => {
         {/* SOURCE TYPE  */}
         <FieldWrapper
           visible
-          label="Source*"
+          label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Select
                 name="sourceType"
+                className={errors.sourceType && 'red-class'}
                 onChange={onChangeSourceType}
                 value={currentSourceType}
                 options={sourceListAPIData.map((sourceType) => sourceType).concat(sourceTypeOthers)}
@@ -349,12 +352,13 @@ const AddSource = (props) => {
         {currentSourceType && currentSourceType.isMultiSource && currentSourceType.isMultiSource !== 'true/false' &&
         <FieldWrapper
           visible
-          label="Sub Source Type*"
+          label={<div>Sub Source Type<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Select
                 name="subSourceType"
                 onChange={onChangeSubSourceType}
+                className={errors.subSourceType && 'red-class'}
                 value={currentSubSourceType}
                 options={currentSourceType.subSourceTypes.map((sourceType) => sourceType).concat(subSourceTypeOthers)}
                 isSearchable
@@ -370,11 +374,12 @@ const AddSource = (props) => {
         {((currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-') || (currentSubSourceType && currentSubSourceType.label === 'Others-' && currentSubSourceType.label === 'Others-')) &&
         <FieldWrapper
           visible
-          label="Name*"
+          label={<div>Name<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Form.Control
                 type="text"
+                className={errors.sourceName && 'red-class'}
                 onChange={onChangeSourceName}
                 value={sourceName}
                 placeholder="Enter Source Name"
@@ -388,7 +393,7 @@ const AddSource = (props) => {
         {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
         <FieldWrapper
           visible
-          label="Is MultiYear*"
+          label="Is MultiYear"
           body={
             <React.Fragment>
               <Radio.Group onChange={onChangeIsMultiyear} value={isMultiYear}>
@@ -403,7 +408,7 @@ const AddSource = (props) => {
         {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
         <FieldWrapper
           visible
-          label="Is MultiSource*"
+          label="Is MultiSource"
           body={
             <React.Fragment>
               <Radio.Group onChange={onChangeIsMultiSource} value={isMultiSource}>
@@ -417,7 +422,7 @@ const AddSource = (props) => {
         {/* SOURCE URL */}
         <FieldWrapper
           visible
-          label="Url*"
+          label={<div>Url<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Form.Control
@@ -425,8 +430,9 @@ const AddSource = (props) => {
                 onChange={onChangeSourceURL}
                 value={sourceURL}
                 placeholder="Enter Url"
+                className={errors.sourceURL && 'red-class'}
               />
-              {errors.sourceURL && <small className="addsource-validate-text">*Should have atleast one character</small>}
+              {errors.sourceURL && <small className="addsource-validate-text">*Invalid Url</small>}
             </React.Fragment>
           }
         />
@@ -434,17 +440,20 @@ const AddSource = (props) => {
         {/* UPLOAD BUTTON */}
         <FieldWrapper
           visible
-          label="Upload*"
+          label={<div>Upload<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Upload
                 style={{ width: '100%' }}
                 maxCount={1}
+                className="datapage-ant-upload"
                 fileList={sourcePDF && sourcePDF.fileList}
                 beforeUpload={uploadPDFCheck}
                 onChange={onChangeSourcePDFUpload}
+                accept="application/pdf"
               >
                 <AntButton
+                  className={errors.sourcePDF ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38px',
                   }}
@@ -460,11 +469,11 @@ const AddSource = (props) => {
         {/* PUBLICATION DATE */}
         <FieldWrapper
           visible
-          label="Publication Date*"
+          label={<div>Publication Date<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <DatePicker
-                className="datapage-datepicker"
+                className={errors.publicationDate ? 'datapage-datepicker red-class' : 'datapage-datepicker'}
                 onChange={onChangePublicationDate}
                 value={publicationDate && moment(publicationDate)}
                 size="large"
