@@ -1,6 +1,5 @@
 version: 0.2
 #ESG FRONTEND S3 PROD DEPLOYMENT
-run-as: ubuntu
 env:
    shell: /bin/sh 
 
