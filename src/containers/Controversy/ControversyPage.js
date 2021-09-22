@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button } from 'react-bootstrap';
-import { Comment, List, Avatar, Tag, message, Spin } from 'antd';
+import { Comment, List, Avatar, Tag, message, Spin, Tabs } from 'antd';
 import { SwapRightOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
@@ -57,23 +57,23 @@ const ControversyPage = (props) => {
     setReqCurrentData({ ...reqCurrentData, ...data });
   };
 
-  const getColorForResponse = (res) => {
-    switch (res) {
-      case 'Very High':
-        return 'volcano';
-      case 'High':
-        return 'orange';
-      case 'Medium':
-        return 'blue';
-      case 'Low':
-        return 'green';
-      case 'No':
-        return 'default';
-      default:
-        break;
-    }
-    return 'default';
-  };
+  // const getColorForResponse = (res) => {
+  //   switch (res) {
+  //     case 'Very High':
+  //       return 'volcano';
+  //     case 'High':
+  //       return 'orange';
+  //     case 'Medium':
+  //       return 'blue';
+  //     case 'Low':
+  //       return 'green';
+  //     case 'No':
+  //       return 'default';
+  //     default:
+  //       break;
+  //   }
+  //   return 'default';
+  // };
 
   const getAdditionalDetails = () => {
     let additionalDetails = {};
@@ -86,6 +86,7 @@ const ControversyPage = (props) => {
   const submitAndCloseClickHandler = () => {
     if (reqCurrentData.status === 'Completed') {
       const postableData = {
+        controversyNumber: reqCurrentData.controversyNumber || '',
         dpCodeId: reqCurrentData.dpCodeId,
         companyId: taskDetails.companyId,
         taskId: taskDetails.taskId,
@@ -94,30 +95,15 @@ const ControversyPage = (props) => {
         textSnippet: reqCurrentData.textSnippet,
         pageNo: reqCurrentData.pageNo,
         screenShot: reqCurrentData.screenShotBase64,
-        nextReviewDate: reqCurrentData.nextReviewDate,
+        reviewDate: reqCurrentData.reviewDate,
+        // nextReviewDate: reqCurrentData.nextReviewDate,
+        isApplicableForCommiteeReview: reqCurrentData.isApplicableForCommiteeReview,
+        assessmentDate: reqCurrentData.assessmentDate,
+        reassessmentDate: reqCurrentData.reassessmentDate,
+        controversyFiscalYear: reqCurrentData.controversyFiscalYear,
+        // controversyFiscalYearEnd: reqCurrentData.controversyFiscalYearEnd,
         additionalDetails: getAdditionalDetails(),
-        comments: type === 'NEW' ? [
-          {
-            author: sessionStorage.role,
-            content: reqCurrentData.comment,
-            dateTime: moment(),
-            response: {
-              value: reqCurrentData.response,
-              color: getColorForResponse(reqCurrentData.response),
-            },
-          },
-        ] : [
-          {
-            author: sessionStorage.role,
-            content: reqCurrentData.comment,
-            dateTime: moment(),
-            response: {
-              value: reqCurrentData.response,
-              color: getColorForResponse(reqCurrentData.response),
-            },
-          },
-          ...reqCurrentData.comments,
-        ],
+        comments: reqCurrentData.comments,
       };
       if (type === 'NEW') {
         dispatch({ type: 'CONTROVERSY_DPCODEDATA_POST_REQUEST', payload: postableData });
@@ -136,6 +122,7 @@ const ControversyPage = (props) => {
     history.goBack();
   };
 
+  const reqHistoricalData = reqCurrentData.historicalData || [];
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -143,6 +130,26 @@ const ControversyPage = (props) => {
         <Header title="Task" sideBarRef={sideBarRef} />
         <div className="container-main" >
           <div className="datapage-info-group">
+
+            { type === 'UPDATE' &&
+            <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
+              <DataAccordian header="History">
+                <Spin indicator={<PageLoader />} spinning={false} >
+                  <Tabs tabBarGutter={5} >
+                    {reqHistoricalData.map((e) => (
+                      <Tabs.TabPane tab={moment(e.updatedAt).format('DD-MM-YYYY LT')} key={`${e.id} ${e.updatedAt}`}>
+                        <div className="controversy-history-datasheet">
+                          <DataSheetComponent
+                            reqData={e}
+                            isHistoryType
+                          />
+                        </div>
+                      </Tabs.TabPane>))}
+                  </Tabs>
+                </Spin>
+              </DataAccordian>
+            </Col>}
+
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Controversy" isActive >
                 <Spin indicator={<PageLoader />} spinning={false} >
@@ -157,7 +164,7 @@ const ControversyPage = (props) => {
                 </Spin>
               </DataAccordian>
             </Col>
-            {dpCodeData.comments &&
+            {dpCodeData.comments && false &&
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="Comments" isActive >
                 <List

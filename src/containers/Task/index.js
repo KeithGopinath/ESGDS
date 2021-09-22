@@ -105,6 +105,9 @@ const ControversyTaskTable = (props) => {
     key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
+    reassessmentDate: x.reassessmentDate || '-',
+    nextReviewDate: x.nextReviewDate || '-',
+    controversyFiscalYearEndDate: x.controversyFiscalYearEndDate || '-',
     action:
   <Link
     to={{
@@ -123,6 +126,15 @@ const ControversyTaskTable = (props) => {
       },
       {
         id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'nextReviewDate', label: 'Next Review Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
