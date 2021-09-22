@@ -1,0 +1,33 @@
+version: 0.2
+#ESG FRONTEND S3 PROD DEPLOYMENT
+run-as: ubuntu
+env:
+   shell: /bin/sh 
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo Getting started
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+      - node --version
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Build started on `date`
+      - npm run build:prod
+      - echo Build finished, now moving to S3
+  post_build:
+    on-failure: ABORT
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: no
