@@ -89,39 +89,41 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   const onPancardNoChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-        setPancardNumber(e.target.value.toUpperCase());
+      setPancardNumber(e.target.value.toUpperCase());
       onPancard(e.target.value.toUpperCase());
     }
   };
 
   const onAadharNoChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
-        setAdharCard(e.target.value);
+      setAdharCard(e.target.value);
       onAadhar(e.target.value);
     }
   };
 
+  // CLient and Company Reps has choose multiple companies
   const onCompanyNameSelect = (companySelect) => {
     setCompanyName(companySelect);
     onCompanyName(companySelect);
 
   };
 
-  const onCompanyClientSelect = (companySelect) => {
-    setCompanyName(companySelect);
-    onCompanyName(companySelect.value);
-  }
+  // Client Rep only one company Choosen
+  // const onCompanyClientSelect = (companySelect) => {
+  //   setCompanyName(companySelect);
+  //   onCompanyName(companySelect.value);
+  // }
 
   const onAccountNumberChange = (e) => {
     if (e.target.value.match('^[0-9]*$')) {
-        setBankAccountNumber(e.target.value);
+      setBankAccountNumber(e.target.value);
       onBankAccount(e.target.value);
     }
   };
 
   const onBankIfscChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9]*$')) {
-        setBankIFSCCode(e.target.value.toUpperCase());
+      setBankIFSCCode(e.target.value.toUpperCase());
       onBankIfsc(e.target.value.toUpperCase());
     }
   };
@@ -133,7 +135,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     </Tooltip>
   );
 
-// ifsc tooltip
+  // ifsc tooltip
   const ifscTooltip = (props) => (
     <Tooltip className="password-tooltip" {...props}>
       IFSC code format SBIN0001111
@@ -145,7 +147,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
     const valid = validatingSpaces(email);
     const re = /^[6-9]{1}[0-9]{9}$/;
     const pancardRe = /^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$/;
-    const ifscCode= /^[A-Za-z]{4}[0-9]{7}$/
+    const ifscCode = /^[A-Za-z]{4}[0-9]{7}$/
     if (role === 'client' || role === 'company') {
       if (!phoneNumber && valid === false) {
         message.error('Please fill all required fields');
@@ -181,13 +183,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       } else if (pancardNumber && !pancardRe.test(pancardNumber)) {
         message.error('Please enter valid pancard number');
         setValidate(true);
-      } else if (bankAccountNumber && bankAccountNumber.length < 11) { 
+      } else if (bankAccountNumber && bankAccountNumber.length < 11) {
         message.error('Account number has minmum 11 digits & maximum 16 digits');
         setValidate('border-danger');
-      } else if(bankIFSCCode && bankIFSCCode.length !== 11) { 
+      } else if (bankIFSCCode && bankIFSCCode.length !== 11) {
         message.error('IFSC code has 11 characters');
         setValidate('ifsc');
-      } else if(bankIFSCCode && !ifscCode.test(bankIFSCCode)) { 
+      } else if (bankIFSCCode && !ifscCode.test(bankIFSCCode)) {
         message.error('Please enter proper IFSC code');
         setValidate('ifsc');
       } else {
@@ -289,7 +291,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
               <Form.Group>
                 <Form.Label>Phone {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                 <Form.Control
-                  className={!phoneNumber && validate || phoneNumber && validate === 'mobile'? 'border-danger': '' }
+                  className={!phoneNumber && validate || phoneNumber && validate === 'mobile' ? 'border-danger' : ''}
                   type="tel"
                   name="phone"
                   id="phone"
@@ -324,11 +326,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                         }
                       </React.Fragment> :
                       <Select
-                        isMulti={role === 'company' ? true : false}
+                        // isMulti={role === 'company' ? true : false}
+                        isMulti
                         options={companyList}
                         name="companyName"
                         value={companyName}
-                        onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
+                        // onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
+                        onChange={onCompanyNameSelect}
                         isDisabled={flag}
                       />}
                   </div>
@@ -339,10 +343,10 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                 <Col lg={6} sm={6} md={6}>
                   <Form.Group>
                     <Form.Label>Pan Card Number {!flag ? <React.Fragment><sup className="text-danger">*</sup><span>
-                        <OverlayTrigger placement="right" overlay={renderTooltip} className="password-tooltip">
-                          <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
-                        </OverlayTrigger>
-                      </span> </React.Fragment> : ''}
+                      <OverlayTrigger placement="right" overlay={renderTooltip} className="password-tooltip">
+                        <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                      </OverlayTrigger>
+                    </span> </React.Fragment> : ''}
                     </Form.Label>
                     <Form.Control
                       className={!pancardNumber && validate || (pancardNumber && validate === true ? 'border-danger' : '')}
@@ -412,9 +416,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                           <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
                         </OverlayTrigger>
                       </span>
-                      </React.Fragment> : ''}</Form.Label>
+                    </React.Fragment> : ''}</Form.Label>
                     <Form.Control
-                      className={!bankIFSCCode && validate || bankIFSCCode && validate==='ifsc' ? 'border-danger': ''}
+                      className={!bankIFSCCode && validate || bankIFSCCode && validate === 'ifsc' ? 'border-danger' : ''}
                       type="text"
                       name="bankIFSC"
                       id="bankIFSC"
