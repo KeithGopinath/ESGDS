@@ -144,7 +144,7 @@ const ControversyPendingTaskTable = (props) => {
   const tablePopulate = (data) => data.map((ePendingTask) => ({
     taskNumber: ePendingTask.taskNumber,
     company: ePendingTask.company,
-    updatedDate: ePendingTask.lastModifiedDate || '-',
+    updatedDate: ePendingTask.lastModifiedDate ? new Date(ePendingTask.lastModifiedDate).toDateString() : '-',
     action: <Link href to={{ pathname: `/task/${ePendingTask.taskNumber}`, state: { taskDetails: ePendingTask } }}>Enter</Link>,
   }));
 
@@ -252,7 +252,7 @@ const [detail, setdetail] = useState('');
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Pending Tasks" />
-        <div className="container-main" >
+        <div className="pendingtasks-main" >
           <div className="pendingtasks-tabs-stack">
             {tabs.map((tab, index) => (
               <div key={tab.label} ref={tabsRef.current[index]} data-id={tab.label} onClick={(event) => onClickChangeTab(event, tab)} className="tabs-label-count-wrap">

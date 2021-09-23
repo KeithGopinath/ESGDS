@@ -3,8 +3,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button } from 'react-bootstrap';
-import { Comment, List, Avatar, Tag, message, Spin, Tabs } from 'antd';
-import { SwapRightOutlined } from '@ant-design/icons';
+import { Comment, List, Avatar, Tag, message, Spin, Tabs, Result } from 'antd';
+import { SwapRightOutlined, InboxOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
@@ -127,25 +127,31 @@ const ControversyPage = (props) => {
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
-        <Header title="Task" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <Header title={reqCurrentData.controversyNumber || 'Add New Controversy'} sideBarRef={sideBarRef} />
+        <div className="controversy-page-main" >
           <div className="datapage-info-group">
 
             { type === 'UPDATE' &&
             <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
               <DataAccordian header="History">
                 <Spin indicator={<PageLoader />} spinning={false} >
-                  <Tabs tabBarGutter={5} >
-                    {reqHistoricalData.map((e) => (
-                      <Tabs.TabPane tab={moment(e.updatedAt).format('DD-MM-YYYY LT')} key={`${e.id} ${e.updatedAt}`}>
-                        <div className="controversy-history-datasheet">
-                          <DataSheetComponent
-                            reqData={e}
-                            isHistoryType
-                          />
-                        </div>
-                      </Tabs.TabPane>))}
-                  </Tabs>
+                  {reqHistoricalData.length > 0 ?
+                    <Tabs tabBarGutter={5} >
+                      {reqHistoricalData.map((e) => (
+                        <Tabs.TabPane tab={moment(e.updatedAt).format('DD-MM-YYYY LT')} key={`${e.id} ${e.updatedAt}`}>
+                          <div className="controversy-history-datasheet">
+                            <DataSheetComponent
+                              reqData={e}
+                              isHistoryType
+                            />
+                          </div>
+                        </Tabs.TabPane>))}
+                    </Tabs> :
+                    <Result
+                      className="custom-table-result"
+                      icon={<InboxOutlined />}
+                      title="No Data Found!"
+                    />}
                 </Spin>
               </DataAccordian>
             </Col>}

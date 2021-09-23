@@ -284,10 +284,10 @@ export const DataSheetComponent = (props) => {
   const [formIsApplicableForCommiteeReview, setFormIsApplicableForCommiteeReview] = useState(defaultData.isApplicableForCommiteeReview || '');
 
   // CONTROVERSY COLLECTION REVIEW DATE
-  const [formAssessmentDate, setFormAssessmentDate] = useState(defaultData.assessmentDate || '');
+  const [formAssessmentDate, setFormAssessmentDate] = useState(defaultData.assessmentDate || moment());
 
   // CONTROVERSY COLLECTION REVIEW DATE
-  const [formReassessmentDate, setFormReassessmentDate] = useState(defaultData.reassessmentDate || '');
+  const [formReassessmentDate, setFormReassessmentDate] = useState(defaultData.reassessmentDate || moment());
 
   // CONTROVERSY COLLECTION FISCAL YEAR DATE
   const [formControversyFiscalYear, setFormControversyfiscalYear] = useState(defaultData.controversyFiscalYear || '');
@@ -347,8 +347,8 @@ export const DataSheetComponent = (props) => {
 
     setFormReviewDate(defaultData.reviewDate || '');
     setFormIsApplicableForCommiteeReview(defaultData.isApplicableForCommiteeReview || '');
-    setFormAssessmentDate(defaultData.assessmentDate || '');
-    setFormReassessmentDate(defaultData.reassessmentDate || '');
+    setFormAssessmentDate(defaultData.assessmentDate || moment());
+    setFormReassessmentDate(defaultData.reassessmentDate || moment());
     setFormControversyfiscalYear(defaultData.controversyFiscalYear || '');
     setFormControversyFiscalYearEnd(defaultData.controversyFiscalYearEnd || '');
 
@@ -699,7 +699,9 @@ export const DataSheetComponent = (props) => {
         };
       }
       if (isAnalyst_CC) {
-        saveData = { ...defaultData, status: 'Editable' };
+        saveData = {
+          ...defaultData, comments: '', reassessmentDate: moment(), status: 'Editable',
+        };
       }
     }
     props.onClickSave(saveData);
@@ -846,7 +848,7 @@ export const DataSheetComponent = (props) => {
 
       {/* DPCode Field */}
       <FieldWrapper
-        label={<div>Dp Code<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Dp Code</div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -861,7 +863,7 @@ export const DataSheetComponent = (props) => {
 
       {/* HISTORY YEAR Field */}
       <FieldWrapper
-        label={<div>Year<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Year</div>}
         visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
         size={[6, 5, 7]}
         body={
@@ -1121,7 +1123,7 @@ export const DataSheetComponent = (props) => {
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
             visible={!!formScreenShotPath}
-            size={[6, 5, 7]}
+            size={[4, 5, 7]}
             body={
               <Image
                 width="50%"
@@ -1132,57 +1134,6 @@ export const DataSheetComponent = (props) => {
           />
         </Row>
       </Col>
-
-      {/* Controversy Assessment Date Field */}
-      <FieldWrapper
-        label={<div>Assessment date<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            className={hasErrors.formAssessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
-            name="response"
-            size="large"
-            onChange={onChangeFormAssessmentDate}
-            value={formAssessmentDate && moment(formAssessmentDate)}
-            disabled={disableField}
-          />
-        }
-      />
-
-      {/* Controversy Reassessment Date Field */}
-      <FieldWrapper
-        label={<div>Reassessment date<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            className={hasErrors.formReassessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
-            name="response"
-            size="large"
-            onChange={onChangeFormReassessmentDate}
-            value={formReassessmentDate && moment(formReassessmentDate)}
-            disabled={disableField}
-          />
-        }
-      />
-
-      {/* Controversy Review Date Field */}
-      <FieldWrapper
-        label={<div>Review date<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            className={hasErrors.formReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
-            name="response"
-            size="large"
-            onChange={onChangeFormReviewDate}
-            value={formReviewDate && moment(formReviewDate)}
-            disabled={disableField}
-          />
-        }
-      />
 
       {/* Controversy Fiscal Year Field */}
       <FieldWrapper
@@ -1213,13 +1164,64 @@ export const DataSheetComponent = (props) => {
         label={<div>Fiscal Year End Date</div>}
         visible={isAnalyst_CC}
         size={[6, 5, 7]}
-        body={formControversyFiscalYearEnd}
+        body={formControversyFiscalYearEnd || 'NA'}
+      />
+
+      {/* Controversy Assessment Date Field */}
+      <FieldWrapper
+        label={<div>Assessment date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formAssessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormAssessmentDate}
+            value={formAssessmentDate && moment(formAssessmentDate)}
+            disabled
+          />
+        }
+      />
+
+      {/* Controversy Reassessment Date Field */}
+      <FieldWrapper
+        label={<div>Reassessment date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formReassessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormReassessmentDate}
+            value={formReassessmentDate && moment(formReassessmentDate)}
+            disabled
+          />
+        }
+      />
+
+      {/* Controversy Review Date Field */}
+      <FieldWrapper
+        label={<div>Review date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormReviewDate}
+            value={formReviewDate && moment(formReviewDate)}
+            disabled={disableField}
+          />
+        }
       />
 
       {/* RESPONSE Field */}
       <FieldWrapper
-        label={<div>Is Commitee reviewed ?<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
+        label={<div>Commitee review<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={isAnalyst_CC}
         size={[6, 5, 7]}
         body={
           <Select
@@ -1328,8 +1330,8 @@ export const DataSheetComponent = (props) => {
             aria-label="With textarea"
             placeholder="Enter Comment"
             autoComplete="false"
-            onChange={onChangeFormControversyComment}
             value={formControversyComment}
+            onChange={onChangeFormControversyComment}
           />
         }
       />

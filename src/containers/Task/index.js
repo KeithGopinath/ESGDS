@@ -105,9 +105,9 @@ const ControversyTaskTable = (props) => {
     key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
-    reassessmentDate: x.reassessmentDate || '-',
-    nextReviewDate: x.nextReviewDate || '-',
-    controversyFiscalYearEndDate: x.controversyFiscalYearEndDate || '-',
+    reassessmentDate: x.reassessmentDate ? new Date(x.reassessmentDate).toDateString() : '-',
+    reviewDate: x.reviewDate ? new Date(x.reviewDate).toDateString() : '-',
+    controversyFiscalYearEndDate: x.controversyFiscalYearEndDate ? new Date(x.controversyFiscalYearEndDate).toDateString() : '-',
     action:
   <Link
     to={{
@@ -131,7 +131,7 @@ const ControversyTaskTable = (props) => {
         id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
       },
       {
-        id: 'nextReviewDate', label: 'Next Review Date', align: 'center', dataType: 'string',
+        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
       },
       {
         id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
@@ -562,7 +562,7 @@ const Task = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Task" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
               {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
