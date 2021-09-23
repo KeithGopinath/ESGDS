@@ -1,7 +1,12 @@
 version: 0.2
 #ESG FRONTEND S3 PROD DEPLOYMENT
+
+# Uses runners shell to execute set of commands below
+
 env:
    shell: /bin/sh 
+
+# phases represent a sequence of tasks that will be executed as part of the job
 
 phases:
   install:
@@ -26,7 +31,8 @@ phases:
     on-failure: ABORT
     commands:
       - echo Build completed on `date`
+      - aws s3 sync build/ s3://test-esg-frontend-deploy.s3 --acl public-read
 artifacts:
   files:
-    - '**/*'
+    - 'build/*'
   discard-paths: no
