@@ -31,7 +31,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo Build completed on `date`
-      - aws s3 sync build/ s3://test-esg-frontend-deploy --acl public-read --delete
+        #- aws s3 sync build/ s3://test-esg-frontend-deploy --acl public-read --delete
 artifacts:
   files:
     - 'build/**/*'
