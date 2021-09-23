@@ -97,7 +97,7 @@ const CustomTable = ({
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    setPage(DEFAULT_PAGE);
+    // setPage(DEFAULT_PAGE);
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     setSearchQuery('');
     setSearchDate(null);

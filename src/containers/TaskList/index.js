@@ -14,7 +14,6 @@ import XLSX from "xlsx";
 import { history } from './../../routes';
 import moment from 'moment';
 
-
 const TaskList = (props) => {
   const location = useLocation();
   const [show, setShow] = useState(false);
@@ -122,10 +121,10 @@ const TaskList = (props) => {
   };
 
   const handleShow = (arg) => {
-      dispatch({ type: "RAISEDSLA_REQUEST", taskid:arg.taskId});
+    dispatch({ type: "RAISEDSLA_REQUEST", taskid: arg.taskId });
     const editDetails = { groupId: arg.groupId, batchId: arg.batchId };
     dispatch({ type: "TASKEDITDETAILS_REQUEST", payload: editDetails });
-   
+
     setanalystDetail({ value: arg.analystId, label: arg.analyst });
     setqaDetail({ value: arg.qaId, label: arg.qa });
     setanalystsla(getFormatDate(arg.analystSLA));
@@ -167,8 +166,6 @@ const TaskList = (props) => {
     }
 
   }, []);
-
-
 
   const totalTaskList = (props) => {
     const tableRowData = (obj) => multiCompanies ?
@@ -594,7 +591,7 @@ const TaskList = (props) => {
       <div className="main">
         <SideMenuBar ref={sideBarRef} />
         <div className="rightsidepane">
-          <Header sideBarRef={sideBarRef} title={multiCompanies ? (tabFlag === 'Controversy' ? 'Controversy Task List' : 'Company Task List') : ''} />
+          <Header sideBarRef={sideBarRef} title={multiCompanies ? (tabFlag === 'Controversy' ? 'Controversy Task List' : 'Company Task List') : 'Task List'} />
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
