@@ -34,5 +34,5 @@ phases:
         #- aws s3 sync build/ s3://test-esg-frontend-deploy --acl public-read --delete
 artifacts:
   files:
-    - 'build/**/*'
+    - '/**/*'
   discard-paths: no
