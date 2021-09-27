@@ -208,6 +208,18 @@ export const DataSheetComponent = (props) => {
 
   const lastHistoricalDataResponse = props.lastHistoricalData && props.lastHistoricalData[0] ? props.lastHistoricalData[0].response : null;
 
+  const getControversyYearList = (currentYear, nos) => {
+    const list = [];
+    for (let i = 0; i < nos; i += 1) {
+      list.push({
+        label: `${currentYear - i - 1}-${currentYear - i}`,
+        value: `${currentYear - i - 1}-${currentYear - i}`,
+      });
+    }
+    return list;
+  };
+  const controversyFiscalYearList = getControversyYearList(moment().year(), 10);
+
 
   // DATASHEET FORM DATA +
   // *DPCODE*
@@ -263,10 +275,25 @@ export const DataSheetComponent = (props) => {
   const [isErrorPanelVisible, setIsErrorPanelVisible] = useState(false);
 
   // CONTROVERSY COLLECTION COMMENT
-  const [formControversyComment, setFormControversyComment] = useState(defaultData.comment || '');
+  const [formControversyComment, setFormControversyComment] = useState(defaultData.comments || '');
 
-  // CONTROVERSY COLLECTION NEXT REVIEW DATE
-  const [formNextReviewDate, setFormNextReviewDate] = useState(defaultData.nextReviewDate || '');
+  // CONTROVERSY COLLECTION REVIEW DATE
+  const [formReviewDate, setFormReviewDate] = useState(defaultData.reviewDate || '');
+
+  // CONTROVERSY COLLECTION COMMITEE REVIEW
+  const [formIsApplicableForCommiteeReview, setFormIsApplicableForCommiteeReview] = useState(defaultData.isApplicableForCommiteeReview || '');
+
+  // CONTROVERSY COLLECTION REVIEW DATE
+  const [formAssessmentDate, setFormAssessmentDate] = useState(defaultData.assessmentDate || moment());
+
+  // CONTROVERSY COLLECTION REVIEW DATE
+  const [formReassessmentDate, setFormReassessmentDate] = useState(defaultData.reassessmentDate || moment());
+
+  // CONTROVERSY COLLECTION FISCAL YEAR DATE
+  const [formControversyFiscalYear, setFormControversyfiscalYear] = useState(defaultData.controversyFiscalYear || '');
+
+  // CONTROVERSY COLLECTION FISCAL YEAR END DATE
+  const [formControversyFiscalYearEnd, setFormControversyFiscalYearEnd] = useState(defaultData.controversyFiscalYearEnd || '');
 
   // SOURCE PANEL OPEN/CLOSE BOOLEAN FLAG
   const [isSrcPanelOpened, setIsSrcPanelOpened] = useState(false);
@@ -288,7 +315,11 @@ export const DataSheetComponent = (props) => {
     formIsError: false,
     errorComment: false,
     formControversyComment: false,
-    formNextReviewDate: false,
+    formReviewDate: false,
+    formIsApplicableForCommiteeReview: false,
+    formAssessmentDate: false,
+    formReassessmentDate: false,
+    formControversyFiscalYear: false,
     dynamicFields: [false],
     formThreshold: false,
   });
@@ -312,8 +343,14 @@ export const DataSheetComponent = (props) => {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
     setIsErrorPanelVisible(false);
-    setFormControversyComment(defaultData.comment || '');
-    setFormNextReviewDate(defaultData.nextReviewDate || '');
+    setFormControversyComment(defaultData.comments || '');
+
+    setFormReviewDate(defaultData.reviewDate || '');
+    setFormIsApplicableForCommiteeReview(defaultData.isApplicableForCommiteeReview || '');
+    setFormAssessmentDate(defaultData.assessmentDate || moment());
+    setFormReassessmentDate(defaultData.reassessmentDate || moment());
+    setFormControversyfiscalYear(defaultData.controversyFiscalYear || '');
+    setFormControversyFiscalYearEnd(defaultData.controversyFiscalYearEnd || '');
 
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
@@ -333,7 +370,11 @@ export const DataSheetComponent = (props) => {
       formIsError: false,
       errorComment: false,
       formControversyComment: false,
-      formNextReviewDate: false,
+      formReviewDate: false,
+      formIsApplicableForCommiteeReview: false,
+      formAssessmentDate: false,
+      formReassessmentDate: false,
+      formControversyFiscalYear: false,
       dynamicFields: [false],
       formThreshold: false,
     });
@@ -448,8 +489,24 @@ export const DataSheetComponent = (props) => {
     setFormControversyComment(event.target.value);
   };
 
-  const onChangeFormNextReviewDate = (event) => {
-    setFormNextReviewDate(event);
+  const onChangeFormReviewDate = (event) => {
+    setFormReviewDate(event);
+  };
+
+  const onChangeFormcommiteeReview = (event) => {
+    setFormIsApplicableForCommiteeReview(event);
+  };
+
+  const onChangeFormAssessmentDate = (event) => {
+    setFormAssessmentDate(event);
+  };
+
+  const onChangeFormReassessmentDate = (event) => {
+    setFormReassessmentDate(event);
+  };
+
+  const onChangeFormControversyFiscalYear = (event) => {
+    setFormControversyfiscalYear(event.value);
   };
 
   const onChangeFormIsError = (event) => {
@@ -491,7 +548,11 @@ export const DataSheetComponent = (props) => {
       formIsError: !(formIsError === true || formIsError === false),
       errorComment: !isErrorAccepted && !(errorComment.length > 0),
       formControversyComment: !(formControversyComment.length > 0),
-      formNextReviewDate: dpCodeInCompleteStatus && !formNextReviewDate,
+      formReviewDate: dpCodeInCompleteStatus && !formReviewDate,
+      formIsApplicableForCommiteeReview: dpCodeInCompleteStatus && !formIsApplicableForCommiteeReview,
+      formAssessmentDate: dpCodeInCompleteStatus && !formAssessmentDate,
+      formReassessmentDate: dpCodeInCompleteStatus && !formReassessmentDate,
+      formControversyFiscalYear: dpCodeInCompleteStatus && !formControversyFiscalYear,
       dynamicFields: dpCodeInCompleteStatus ? dynamicFields.map((e) => {
         if (e.inputType === 'Select') {
           return !(e.value && e.value.value && e.value.label);
@@ -592,8 +653,12 @@ export const DataSheetComponent = (props) => {
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
           screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
-          comment: formControversyComment,
-          nextReviewDate: formNextReviewDate,
+          comments: formControversyComment,
+          reviewDate: formReviewDate,
+          isApplicableForCommiteeReview: formIsApplicableForCommiteeReview,
+          assessmentDate: formAssessmentDate,
+          reassessmentDate: formReassessmentDate,
+          controversyFiscalYear: formControversyFiscalYear,
           additionalDetails: dynamicFields,
         };
       }
@@ -634,7 +699,9 @@ export const DataSheetComponent = (props) => {
         };
       }
       if (isAnalyst_CC) {
-        saveData = { ...defaultData, status: 'Editable' };
+        saveData = {
+          ...defaultData, comments: '', reassessmentDate: moment(), status: 'Editable',
+        };
       }
     }
     props.onClickSave(saveData);
@@ -716,6 +783,9 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }
+      if (isAnalyst_CC) {
+        return true;
+      }
       if (isAnalyst_DCR) {
         if (defaultData.status === 'Completed') {
           return true;
@@ -778,7 +848,7 @@ export const DataSheetComponent = (props) => {
 
       {/* DPCode Field */}
       <FieldWrapper
-        label={<div>Dp Code<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Dp Code</div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -793,8 +863,8 @@ export const DataSheetComponent = (props) => {
 
       {/* HISTORY YEAR Field */}
       <FieldWrapper
-        label={<div>Year<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType}
+        label={<div>Year</div>}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
         size={[6, 5, 7]}
         body={
           <Form.Control
@@ -828,7 +898,7 @@ export const DataSheetComponent = (props) => {
       {/* SOURCE Field */}
       <FieldWrapper
         label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType)}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
         size={[6, 5, 7]}
         body={
           <Select
@@ -934,7 +1004,7 @@ export const DataSheetComponent = (props) => {
         body={
           <Select
             name="response"
-            options={textResponse.concat([{ label: 'NA', value: 'NA' }])}
+            options={textResponse}
             className={hasErrors.formResponse && 'red-class'}
             onChange={onChangeFormResponse}
             value={formResponse && { label: formResponse, value: formResponse }}
@@ -1053,7 +1123,7 @@ export const DataSheetComponent = (props) => {
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
             visible={!!formScreenShotPath}
-            size={[6, 5, 7]}
+            size={[4, 5, 7]}
             body={
               <Image
                 width="50%"
@@ -1065,19 +1135,109 @@ export const DataSheetComponent = (props) => {
         </Row>
       </Col>
 
-      {/* Controversy Next Review Date Field */}
+      {/* Controversy Fiscal Year Field */}
       <FieldWrapper
-        label={<div>Next review date<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Fiscal Year<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="fiscal yera"
+            options={controversyFiscalYearList}
+            className={hasErrors.formControversyFiscalYear && 'red-class'}
+            onChange={onChangeFormControversyFiscalYear}
+            value={formControversyFiscalYear && { label: formControversyFiscalYear, value: formControversyFiscalYear }}
+            placeholder="Select Value"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* Controversy Fiscal Year End Date Field */}
+      <FieldWrapper
+        label={<div>Fiscal Year End Date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={formControversyFiscalYearEnd || 'NA'}
+      />
+
+      {/* Controversy Assessment Date Field */}
+      <FieldWrapper
+        label={<div>Assessment date</div>}
         visible={isAnalyst_CC}
         size={[6, 5, 7]}
         body={
           <DatePicker
-            className={hasErrors.formNextReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            className={hasErrors.formAssessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"
-            onChange={onChangeFormNextReviewDate}
-            value={formNextReviewDate && moment(formNextReviewDate)}
+            onChange={onChangeFormAssessmentDate}
+            value={formAssessmentDate && moment(formAssessmentDate)}
+            disabled
+          />
+        }
+      />
+
+      {/* Controversy Reassessment Date Field */}
+      <FieldWrapper
+        label={<div>Reassessment date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formReassessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormReassessmentDate}
+            value={formReassessmentDate && moment(formReassessmentDate)}
+            disabled
+          />
+        }
+      />
+
+      {/* Controversy Review Date Field */}
+      <FieldWrapper
+        label={<div>Review date</div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <DatePicker
+            className={hasErrors.formReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
+            name="response"
+            size="large"
+            onChange={onChangeFormReviewDate}
+            value={formReviewDate && moment(formReviewDate)}
             disabled={disableField}
+          />
+        }
+      />
+
+      {/* RESPONSE Field */}
+      <FieldWrapper
+        label={<div>Commitee review<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={isAnalyst_CC}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="commity review"
+            options={[{ label: 'Yes', value: true }, { label: 'No', value: false }]}
+            className={hasErrors.formIsApplicableForCommiteeReview && 'red-class'}
+            onChange={onChangeFormcommiteeReview}
+            value={formIsApplicableForCommiteeReview}
+            placeholder="Select Value"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
           />
         }
       />
@@ -1170,8 +1330,8 @@ export const DataSheetComponent = (props) => {
             aria-label="With textarea"
             placeholder="Enter Comment"
             autoComplete="false"
-            onChange={onChangeFormControversyComment}
             value={formControversyComment}
+            onChange={onChangeFormControversyComment}
           />
         }
       />
@@ -1188,6 +1348,7 @@ export const DataSheetComponent = (props) => {
         onClickSave={props.onClickSave}
       />}
 
+      {!(isAnalyst_CC && isHistoryType) &&
       <Col lg={12} className="datapage-button-wrap">
         { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
@@ -1210,10 +1371,10 @@ export const DataSheetComponent = (props) => {
         {/* HISTORY SAVE Button */}
         { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
         <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
-      </Col>
+      </Col>}
 
       {/* HORIZONTAL Line */}
-      <Col lg={12} className="datapage-horizontalLine"></Col>
+      {!(isAnalyst_CC && isHistoryType) && <Col lg={12} className="datapage-horizontalLine"></Col>}
 
       {/* ADD SOURCE PANEL */}
       <Drawer

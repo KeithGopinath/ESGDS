@@ -126,7 +126,7 @@ const Controversy = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Controversy" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <div className="controversy-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap" style={{ marginBottom: '1%' }}>
               <div className="task-pillar">{reqDpCodeData.dpCode}</div>
