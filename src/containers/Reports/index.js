@@ -89,7 +89,7 @@ const Reports = (props) => {
       key: data.companyId,
       checkBox: <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}></Checkbox>,
       companyName: data.companyName ? data.companyName : '--',
-      completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '--',
+      completedDate: data.complatedDate ? new Date(data.complatedDate).toDateString() : '--',
       clientRep: data.clientRrepresentative ? data.clientRrepresentative : '--',
       companyRep: data.companyRepresentative ? data.companyRepresentative : '--',
     }));
@@ -199,7 +199,7 @@ const Reports = (props) => {
       key: dataTaxonomy.companyId + dataTaxonomy.companyName,
       checkBox: <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}></Checkbox>,
       companyName: dataTaxonomy.companyName ? dataTaxonomy.companyName : '--',
-      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '--',
+      allocatedDate: dataTaxonomy.allocatedDate ? new Date(dataTaxonomy.allocatedDate).toDateString() : '--',
       clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '--',
       companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '--',
     }))
@@ -255,7 +255,7 @@ const Reports = (props) => {
       checkBox: <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}></Checkbox>,
       companyName: e.companyName ? e.companyName : '--',
       taskid: e.taskId ? e.taskId : '--',
-      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '--',
+      allocatedDate: e.allocatedDate ? new Date(e.allocatedDate).toDateString() : '--',
     }))
 
     return {
