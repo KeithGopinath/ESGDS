@@ -37,6 +37,7 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
     setrowValue('');
     setalertStatus(false);
     dispatch({type:"UPDATETASK_RESET"});
+    dispatch({type: "REJECTSLA_RESET"});
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
   const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
@@ -54,11 +55,11 @@ if(isDataEdited){
 
 useEffect(()=> {
 
-  if(isDataEditedLoading.error || isEditDataLoading.error ){
+  if(isDataEditedLoading.error || isEditDataLoading.error || rejectslaResponse.error){
     setalertStatus(false);
-    setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message );
+    setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message || rejectslaResponse.error && rejectslaResponse.error.message );
   }
-},[isDataEditedLoading, isEditDataLoading]);
+},[isDataEditedLoading, isEditDataLoading, rejectslaResponse]);
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
@@ -288,7 +289,7 @@ useEffect(()=> {
       keyboard={false}
       animation
       centered
-      isLoading={isDataEditedLoading.isLoading  || isEditDataLoading.isLoading || isSlaRequested.isLoading }
+      isLoading={isDataEditedLoading.isLoading  || isEditDataLoading.isLoading || isSlaRequested.isLoading || rejectslaResponse.isLoading}
       size="md"
       title={rowValue.taskNumber}
       body={editBody()}

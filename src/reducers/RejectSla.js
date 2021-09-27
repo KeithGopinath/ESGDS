@@ -15,6 +15,13 @@ export default (state = initialState, action) => {
         isLoading: false,
         rejectsladata: action.rejected,
       };
+    case 'REJECTSLA_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        rejectsladata: false,
+        error: false,
+      };
     case 'REJECTSLA_FAILURE':
       return {
         ...state,
