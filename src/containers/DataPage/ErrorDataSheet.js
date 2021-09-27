@@ -398,6 +398,7 @@ const ErrorDataSheetTwo = (props) => {
         comment: formComment,
         errorStatus: 'Completed',
       },
+      isEdited: true,
     };
     if (doValidate()) {
       props.onClickSave(dummyDataReps);
