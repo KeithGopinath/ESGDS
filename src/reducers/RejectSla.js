@@ -2,6 +2,13 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'REJECTSLA_RESET':
+      return {
+        ...state,
+        isLoading: false,
+        rejectsladata: false,
+        error: false,
+      };
     case 'REJECTSLA_REQUEST':
       return {
         ...state,
@@ -14,13 +21,6 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         rejectsladata: action.rejected,
-      };
-    case 'REJECTSLA_RESET':
-      return {
-        ...state,
-        isLoading: false,
-        rejectsladata: false,
-        error: false,
       };
     case 'REJECTSLA_FAILURE':
       return {
