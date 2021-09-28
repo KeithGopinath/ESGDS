@@ -590,6 +590,7 @@ export const DataSheetComponent = (props) => {
         screenShot: formScreenShotPath,
         screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
         additionalDetails: dynamicFields,
+        isEdited: true,
       };
     } else {
       if (isAnalyst_DC) {
@@ -603,6 +604,7 @@ export const DataSheetComponent = (props) => {
           screenShot: formScreenShotPath,
           screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
           additionalDetails: dynamicFields,
+          isEdited: true,
         };
       }
       if (isAnalyst_DCR) {
@@ -619,6 +621,7 @@ export const DataSheetComponent = (props) => {
           rejectComment: errorComment,
           status: 'Completed',
           error: { ...defaultData.error, errorStatus: 'Completed' },
+          isEdited: true,
         };
       }
       if (isQA_DV) {
@@ -641,6 +644,7 @@ export const DataSheetComponent = (props) => {
             errorStatus: 'Completed',
             raisedBy: sessionStorage.role,
           },
+          isEdited: true,
         };
       }
       if (isAnalyst_CC) {
@@ -660,6 +664,7 @@ export const DataSheetComponent = (props) => {
           reassessmentDate: formReassessmentDate,
           controversyFiscalYear: formControversyFiscalYear,
           additionalDetails: dynamicFields,
+          isEdited: true,
         };
       }
     }
@@ -746,7 +751,7 @@ export const DataSheetComponent = (props) => {
     let saveData;
     if (isAnalyst_DCR) {
       saveData = {
-        ...defaultData, isAccepted: false, rejectComment: errorComment, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' },
+        ...defaultData, isAccepted: false, rejectComment: `[Error Type: ${defaultData.error.type}] ${errorComment}`, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' }, isEdited: true,
       };
     }
     if (doValidate()) {
@@ -1399,7 +1404,7 @@ export const DataSheetComponent = (props) => {
         visible={isErrorPanelVisible}
         footer={
           <React.Fragment>
-            {isErrorAccepted === false && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Close</Button>}
+            {isErrorAccepted === false && reqErrorData.errorStatus !== 'Completed' && <Button className="datapage-button" variant="success" onClick={onRejectSubmit}>Close</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="success" onClick={onAccept}>Accept</Button>}
             {(isErrorAccepted === null) && <Button className="datapage-button" variant="danger" onClick={onReject}>Reject</Button>}
           </React.Fragment>

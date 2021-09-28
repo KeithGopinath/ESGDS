@@ -41,6 +41,7 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
   };
   const isDataEdited = useSelector((taskupdate) => taskupdate.taskUpdate.taskUpdate);
   const isDataEditedLoading = useSelector((taskupdate) => taskupdate.taskUpdate);
+  
 
   useEffect(()=>{
 if(isDataEdited){
@@ -55,11 +56,21 @@ if(isDataEdited){
 
 useEffect(()=> {
 
-  if(isDataEditedLoading.error || isEditDataLoading.error || rejectslaResponse.error){
+  if(isDataEditedLoading.error || isEditDataLoading.error || rejectslaResponse.error || isSlaRequested.error){
     setalertStatus(false);
-    setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message || rejectslaResponse.error && rejectslaResponse.error.message );
+    setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message || rejectslaResponse.error && rejectslaResponse.error.message || isSlaRequested.error && isSlaRequested.error.message);
   }
-},[isDataEditedLoading, isEditDataLoading, rejectslaResponse]);
+
+  if(rejectslaResponse.rejectsladata && rejectslaResponse.rejectsladata.status) {
+    dispatch({ type: "RAISEDSLA_REQUEST", taskid: rowValue.taskId });
+  }
+
+  if(isSlaRequested.raisedsladata && isSlaRequested.raisedsladata.status && rejectslaResponse.rejectsladata && rejectslaResponse.rejectsladata.status) {
+    setalertStatus(true);
+    setAlert(rejectslaResponse.rejectsladata.message)
+  }
+
+},[isDataEditedLoading, isEditDataLoading, rejectslaResponse, isSlaRequested]);
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
@@ -71,6 +82,10 @@ useEffect(()=> {
     }
     setanalystDetail(arg);
   };
+
+  // useEffect(() => {
+  //   if(rejectslaResponse.error)
+  // }, [rejectslaResponse])
 
 
   const onHandleEditQa = (arg) => {
@@ -141,6 +156,7 @@ useEffect(()=> {
 
       }
       setAlert('');
+      dispatch({type:"REJECTSLA_RESET"});
       dispatch({type:"UPDATETASK_REQUEST", payload: editTaskData });
     }
     } else {
