@@ -302,7 +302,8 @@ const CustomTable = ({
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
-                  const rowsDataKeyList = Object.keys(eachRow);
+                  // const rowsDataKeyList = Object.keys(eachRow);
+                  const rowsDataKeyList = columnsHeadData.map((e) => e.id);
                   const cellArray = rowsDataKeyList.map((data) => {
                     const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {

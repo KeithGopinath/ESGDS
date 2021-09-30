@@ -117,7 +117,7 @@ const ErrorPanel = (props) => {
               <Row>
                 <ErrorDataSheetTwo isErrorCommentType reqData={defaultError.refData} />
               </Row>
-              <Divider />
+              {!props.isAccepted && defaultError.errorStatus !== 'Completed' && props.isAccepted !== null && <Divider />}
               <FieldWrapper
                 label="Comments*"
                 visible={!props.isAccepted && defaultError.errorStatus !== 'Completed' && props.isAccepted !== null}

@@ -61,16 +61,18 @@ useEffect(()=> {
     setAlert(isDataEditedLoading.error && isDataEditedLoading.error.message || isEditDataLoading.error && isEditDataLoading.error.message || rejectslaResponse.error && rejectslaResponse.error.message || isSlaRequested.error && isSlaRequested.error.message);
   }
 
-  if(rejectslaResponse.rejectsladata && rejectslaResponse.rejectsladata.status) {
-    dispatch({ type: "RAISEDSLA_REQUEST", taskid: rowValue.taskId });
-  }
-
   if(isSlaRequested.raisedsladata && isSlaRequested.raisedsladata.status && rejectslaResponse.rejectsladata && rejectslaResponse.rejectsladata.status) {
     setalertStatus(true);
     setAlert(rejectslaResponse.rejectsladata.message)
   }
 
-},[isDataEditedLoading, isEditDataLoading, rejectslaResponse, isSlaRequested]);
+},[isDataEditedLoading, isEditDataLoading, isSlaRequested]);
+
+useEffect(() => {
+  if(rejectslaResponse.rejectsladata && rejectslaResponse.rejectsladata.status) {
+    dispatch({ type: "RAISEDSLA_REQUEST", taskid: rowValue.taskId });
+  }
+}, [rejectslaResponse]);
   const getFormatDate=(arg)=>{
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
     return date
