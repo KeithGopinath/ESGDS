@@ -751,7 +751,7 @@ export const DataSheetComponent = (props) => {
     let saveData;
     if (isAnalyst_DCR) {
       saveData = {
-        ...defaultData, isAccepted: false, rejectComment: `[Error Type: ${defaultData.error.type}] - ${errorComment}`, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' }, isEdited: true,
+        ...defaultData, isAccepted: false, rejectComment: `${!defaultData.error.type ? `${errorComment}` : `${errorComment} - ( ${defaultData.error.type} ).`}`, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' }, isEdited: true,
       };
     }
     if (doValidate()) {
