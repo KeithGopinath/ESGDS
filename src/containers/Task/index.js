@@ -59,14 +59,22 @@ const TaskTable = (props) => {
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
-    action:
-  <Link
-    to={{
-      pathname: `/dpcode/${x.dpCode}`,
-      state: { taskDetails, dpCodeDetails: x },
-    }}
-  >Enter Data
-  </Link>,
+    action: (props.isAnalyst_DC && x.priority && x.priority.isDpcodeValidForCollection) || !props.isAnalyst_DC ?
+      <Link
+        to={{
+          pathname: `/dpcode/${x.dpCode}`,
+          state: { taskDetails, dpCodeDetails: x },
+        }}
+      >Enter Data
+      </Link> :
+      <Tooltip
+        placement="left"
+        color="#fff"
+        title={
+          <div style={{ padding: '10px', color: '#444c59' }}>{(x.priority && x.priority.message) || 'Please Check'}</div>
+        }
+      ><span style={{ cursor: 'pointer' }}>View</span>
+      </Tooltip>,
   }));
 
   const TASK_DATA = {
@@ -98,6 +106,7 @@ TaskTable.propTypes = {
   message: PropTypes.string,
   icon: PropTypes.element,
   footerBesidePagination: PropTypes.element,
+  isAnalyst_DC: PropTypes.bool,
 };
 
 const ControversyTaskTable = (props) => {
@@ -353,7 +362,12 @@ const Task = (props) => {
     return [];
   };
 
-  const reqDpCodesData = getReqDpCodesList();
+  const reqDpCodesData = (getReqDpCodesList()).map((e) => {
+    if (isAnalyst_DC) {
+      return { ...e, priority: { isDpcodeValidForCollection: true, message: '' } };
+    }
+    return e;
+  });
 
   // const taskToNextPage = {
   //   taskId: reqTaskData.taskId,
@@ -368,7 +382,8 @@ const Task = (props) => {
   // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
 
   // Change Session storage to props.location.state
-  taskDetails = { ...taskDetails, filteredData: reqDpCodesData };
+  const priorityCheckedList = isAnalyst_DC ? [...reqDpCodesData].filter((e) => e.priority) : [...reqDpCodesData];
+  taskDetails = { ...taskDetails, filteredData: priorityCheckedList };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
@@ -639,6 +654,7 @@ const Task = (props) => {
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
                 footerBesidePagination={getFooterBesidePagination()}
+                isAnalyst_DC={isAnalyst_DC}
               />}
 
             {isAnalyst_CC &&

@@ -216,7 +216,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const { isError, isErrorCommentType } = props;
 
-  const thresholdValue = { min: 0, max: 100 };
+  const thresholdValue = { min: -10000, max: 10000 };
 
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -346,7 +346,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const doValidate = () => {
     const errors = {
-      formTextSnippet: isError && !(formTextSnippet.length > 0),
+      formTextSnippet: isError && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
       formPageNo: isError && !(formPageNo),
       formScreenShotPath: isError && false, // !formScreenShotPath, Not Mandatory
       formResponse: isError && !formResponse,
@@ -564,7 +564,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label={<div>Text Snippet<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
