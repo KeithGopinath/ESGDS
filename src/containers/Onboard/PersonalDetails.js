@@ -310,7 +310,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   <div className={!flag && ((!companyName || companyName) && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
                     {flag ?
                       <React.Fragment>
-                        {role === 'company' ?
+                        {role === 'company' || role === 'client' ?
                           <Select
                             isMulti
                             value={companyNameList}

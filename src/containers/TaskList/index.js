@@ -25,6 +25,8 @@ const TaskList = (props) => {
   const [tasktabFlag, settaskTabFlag] = useState();
   const [qaDetail, setqaDetail] = useState('');
   const [roleType, setRole] = useState('');
+  const [storeTaskReport, setStoreTaskReport] = useState([]);
+
   const isTasknumber = useSelector((notification) => notification.notification.notificationType);
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
@@ -95,8 +97,6 @@ const TaskList = (props) => {
     }
   }, [multiCompanies])
 
-
-
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
   const controversyDetails = controversyTaskList && controversyTaskList;
@@ -105,7 +105,22 @@ const TaskList = (props) => {
 
   // export data in excel file
   const downloadReports = () => {
-    const workSheet = XLSX.utils.json_to_sheet(tabFlag === 'Controversy' ? controversyDetails && controversyDetails : getCompanyDetails && getCompanyDetails);
+    const downloadData = storeTaskReport.rowsData.map(({ company, taskid, group, batch, pillar, analyst, analystSla, qa, qaSla, stage, status, controversyId, createdDate }) => {
+      if (tabFlag === 'Pending Companies') {
+        return { company, taskid, group, batch, pillar, analyst: analyst.value, analystSla, qa: qa.value, qaSla, stage, status: status.value }
+      } else if (tabFlag === 'Completed Companies') {
+        return { company, taskid, group, batch, pillar, analyst, analystSla, qa, qaSla, status };
+      } else if (tabFlag === 'Controversy') {
+        return { company, controversyId, analyst, createdDate };
+      }
+    })
+
+    const exactData = downloadData.map(e => {
+      const { key, analystStatus, qaStatus, ...rest } = e;
+      return rest;
+    });
+
+    const workSheet = XLSX.utils.json_to_sheet(exactData);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Reports");
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
@@ -166,6 +181,12 @@ const TaskList = (props) => {
     }
 
   }, []);
+
+  useEffect(() => {
+    if (controversyDetails || getCompanyDetails) {
+      setStoreTaskReport(tasklist)
+    }
+  }, [controversyDetails, getCompanyDetails]);
 
   const totalTaskList = (props) => {
     const tableRowData = (obj) => multiCompanies ?
@@ -242,7 +263,6 @@ const TaskList = (props) => {
             analyst: e.analyst ? e.analyst : '--',
             action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleControversyShow(e); }}></FontAwesomeIcon>,
           }))
-
     return {
       rowsData: tableRowData(props),
       columnsHeadData: multiCompanies ? (tabFlag === 'Completed Companies') ?
@@ -293,7 +313,7 @@ const TaskList = (props) => {
             id: 'qa',
             align: 'center',
             label: 'QA',
-            dataType: 'stringSearchSortElement',
+            dataType: 'string',
           },
           {
             id: 'qaSla',
@@ -586,6 +606,7 @@ const TaskList = (props) => {
                   (isList ? isList.groupAdminTaskList.controversyList : []) :
                   []
     );
+
   return (
     <React.Fragment>
       <div className="main">
