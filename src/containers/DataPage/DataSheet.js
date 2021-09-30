@@ -530,7 +530,7 @@ export const DataSheetComponent = (props) => {
   const doValidate = () => {
     const dpCodeInCompleteStatus = defaultData.status !== 'Completed';
     const errors = {
-      formTextSnippet: dpCodeInCompleteStatus && !(formTextSnippet.length > 0),
+      formTextSnippet: dpCodeInCompleteStatus && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
       formPageNo: dpCodeInCompleteStatus && !(formPageNo),
       formScreenShotPath: dpCodeInCompleteStatus && false, // !formScreenShotPath, Not Mandatory
       formResponse: dpCodeInCompleteStatus && (formResponse ?
@@ -751,7 +751,7 @@ export const DataSheetComponent = (props) => {
     let saveData;
     if (isAnalyst_DCR) {
       saveData = {
-        ...defaultData, isAccepted: false, rejectComment: `[Error Type: ${defaultData.error.type}] ${errorComment}`, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' }, isEdited: true,
+        ...defaultData, isAccepted: false, rejectComment: `[Error Type: ${defaultData.error.type}] - ${errorComment}`, status: 'Completed', error: { ...defaultData.error, isAccepted: false, errorStatus: 'Completed' }, isEdited: true,
       };
     }
     if (doValidate()) {
@@ -1027,7 +1027,7 @@ export const DataSheetComponent = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label={<div>Text Snippet<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
         visible
         size={[6, 5, 7]}
         body={

@@ -628,9 +628,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
               onChange={onChangeTransfer}
               leftColumns={leftTableColumns}
               rightColumns={rightTableColumns}
-              showSearch
-              filterOption={(inputValue, item) => ((item.title.trim()).toLowerCase()).includes((inputValue.trim()).toLowerCase())}
-              //pagination
             />
           </div>
         </Col>
