@@ -58,6 +58,9 @@ import downloadJson from './DownloadJson';
 import dpCodeValidation from './DpCodeValidation';
 import controversyUpdate from './ControversyTaskUpdate';
 import userTabChange from './UserTabChange';
+import dashboard from './Dashboard';
+import RejectSla from './RejectSla';
+import RaisedSla from './RaisedSlaDetails';
 
 const combinedReducer = combineReducers({
   login,
@@ -126,6 +129,9 @@ const combinedReducer = combineReducers({
   dpCodeValidation,
   controversyUpdate,
   userTabChange,
+  dashboard,
+  RejectSla,
+  RaisedSla,
 });
 
 const rootReducer = (state, action) => {

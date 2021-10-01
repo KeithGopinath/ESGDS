@@ -1,6 +1,6 @@
 .pendingtasks-main{
     display:'flex';
-    padding: 40px 5%;
+    padding: 3%;
     background-color: #f0f0f0;
     flex-direction: column;
     height: 100%;
@@ -64,4 +64,7 @@
     color: gray;
     font-weight: 600;
     font-family: sans-serif;
+}
+.datecount-content{
+    width:48%;
 }

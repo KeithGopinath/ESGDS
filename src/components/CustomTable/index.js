@@ -21,7 +21,6 @@ import 'antd/dist/antd.css';
 import { useDispatch } from 'react-redux';
 import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
-// import { useHistory } from 'react-router-dom';
 import PageLoader from '../../components/PageLoader';
 
 
@@ -98,7 +97,7 @@ const CustomTable = ({
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    setPage(DEFAULT_PAGE);
+    // setPage(DEFAULT_PAGE);
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     setSearchQuery('');
     setSearchDate(null);
@@ -115,7 +114,6 @@ const CustomTable = ({
 
   // changes by balaji (for notification)
   const dispatch = useDispatch();
-  // const history = useHistory();
 
   const theme = createMuiTheme({
     palette: {
@@ -193,9 +191,16 @@ const CustomTable = ({
 
   const handlesSearch = (event) => {
     dispatch({ type: 'NOTIFICATION_RESET' });
-    // history.replace();
     const searchedQuery = event.currentTarget.value;
     setSearchQuery(searchedQuery);
+  };
+
+  const onChangeSearchDate = (event) => {
+    if (event) {
+      setSearchDate({ startDate: event[0], endDate: event[1] });
+    } else {
+      setSearchDate(null);
+    }
   };
 
   const searcher = (rowdata, coldata, searchedQuery, searchedDate) => {
@@ -237,7 +242,7 @@ const CustomTable = ({
           if (columnsList[i].dataType === 'stringSearchSortElement' && (eachRowData[columnsList[i].id].value.toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
-          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (eachRowData[columnsList[i].id].toLowerCase()).includes(searchedQuery.toLowerCase())) {
+          if (columnsList[i].dataType !== 'stringSearchSortElement' && eachRowData[columnsList[i].id] && (String(eachRowData[columnsList[i].id]).toLowerCase()).includes(searchedQuery.toLowerCase())) {
             return true;
           }
         }
@@ -255,41 +260,36 @@ const CustomTable = ({
   return (
     <div>
       <Paper className="users-table-paper">
-        <TableContainer>
-          <div className="users-table-label-datepicker-search-wrap">
-            <div className="users-table-label">
-              {tableLabel}
-            </div>
-            <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
-              <RangePicker
-                // showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD"
-                onChange={(x) => {
-                  if (x) {
-                    setSearchDate({ startDate: x[0], endDate: x[1] });
-                  } else {
-                    setSearchDate(null);
-                  }
-                }}
-              />
-            </Space>
-            <ThemeProvider theme={theme}>
-              <TextField
-                placeholder="Search"
-                style={{ padding: '20px' }}
-                onChange={handlesSearch}
-                autoComplete="off"
-                value={searchQuery}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </ThemeProvider>
+        <div className="users-table-label-datepicker-search-wrap">
+          <div className="users-table-label">
+            {tableLabel}
           </div>
+          <Space style={{ display: (!showDatePicker) ? 'none' : 'unset' }} direction="vertical" size={12}>
+            <RangePicker
+              // showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD"
+              onChange={onChangeSearchDate}
+              value={searchDate && [searchDate.startDate, searchDate.endDate]}
+            />
+          </Space>
+          <ThemeProvider theme={theme}>
+            <TextField
+              placeholder="Search"
+              style={{ padding: '20px' }}
+              onChange={handlesSearch}
+              autoComplete="off"
+              value={searchQuery}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </ThemeProvider>
+        </div>
+        <TableContainer>
           <Table className="users-table">
             <ColumnsHead
               sortOrder={sortOrder}
@@ -302,7 +302,8 @@ const CustomTable = ({
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
-                  const rowsDataKeyList = Object.keys(eachRow);
+                  // const rowsDataKeyList = Object.keys(eachRow);
+                  const rowsDataKeyList = columnsHeadData.map((e) => e.id);
                   const cellArray = rowsDataKeyList.map((data) => {
                     const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {

@@ -18,6 +18,7 @@ const Reports = (props) => {
   const [controversy, setContorversy] = useState([]);
   const [selectItem, setSelectItem] = useState(false);
   const [taxonomy, setTaxonomy] = useState('');
+  const [allChecked, setAllChecked] = useState(false);
   const { Option } = Select;
 
   const dispatch = useDispatch();
@@ -74,7 +75,9 @@ const Reports = (props) => {
       setContorversy(controversyData);
     }
     setSelectItem(false);
-  }, [tabFlag, compData]);
+    setAllChecked(false);
+  }, [tabFlag, compData, taxonomy]);
+
 
   const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
@@ -84,8 +87,9 @@ const Reports = (props) => {
   const CompletedCompanyTableData = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((data) => ({
       key: data.companyId,
-      companyName: data.companyName ? { value: data.companyName, content: <div> <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}>{data.companyName}</Checkbox> </div> } : { value: '', content: '' },
-      completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '--',
+      checkBox: <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}></Checkbox>,
+      companyName: data.companyName ? data.companyName : '--',
+      completedDate: data.completedDate ? moment(data.completedDate).format('DD-MM-YYYY') : '--',
       clientRep: data.clientRrepresentative ? data.clientRrepresentative : '--',
       companyRep: data.companyRepresentative ? data.companyRepresentative : '--',
     }));
@@ -93,16 +97,22 @@ const Reports = (props) => {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
+          id: 'checkBox',
+          align: 'right',
+          label: <Checkbox checked={allChecked} onChange={() => allCompanyCheck(props, allChecked, setCompletedCompanies)}></Checkbox>,
+          dataType: 'element',
+        },
+        {
           id: 'companyName',
           align: 'left',
           label: 'Company Name',
-          dataType: 'stringSearchSortElement',
+          dataType: 'string',
         },
         {
           id: 'completedDate',
           align: 'center',
           label: 'Completed Date',
-          dataType: 'date',
+          dataType: 'string',
         },
         {
           id: 'clientRep',
@@ -118,7 +128,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
+        <Select className="choose-reports-taxonomy" placeholder="All Taxonomy" allowClear onChange={onTaxonomyChange} >{completedCompaniesFilter.map((data, id) => (
           <Option value={data} key={data[id]}>{data}</Option>
         ))}</Select>
       </div>,
@@ -143,7 +153,7 @@ const Reports = (props) => {
       const newCompanies = [...controversy]
       const itemIndex = newCompanies.findIndex(item => item.companyName === data.companyName);
       newCompanies[itemIndex].isChecked = !newCompanies[itemIndex].isChecked;
-      setCompletedCompanies(newCompanies);
+      setContorversy(newCompanies);
       setSelectItem(newCompanies.filter(company => company.isChecked === true).length !== 0);
     }
   };
@@ -167,30 +177,54 @@ const Reports = (props) => {
     }
   }
 
+  const allCompanyCheck = (data, checked, setType) => {
+    let filteredData = [];
+    if (taxonomy) {
+      filteredData = data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val);
+    } else {
+      filteredData = data;
+    }
+    let details = filteredData.map((e) => ({
+      ...e, isChecked: !checked,
+    })
+    );
+    setType(details);
+    setAllChecked(!checked);
+    setSelectItem(details.filter(company => company.isChecked === true).length !== 0);
+  }
+
   // pending company table
   const PendingCompanyTableData = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((dataTaxonomy) => ({
       key: dataTaxonomy.companyId + dataTaxonomy.companyName,
-      companyName: dataTaxonomy.companyName ? { value: dataTaxonomy.companyName, content: <div> <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}>{dataTaxonomy.companyName}</Checkbox> </div> } : { value: '', content: '' },
+      checkBox: <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}></Checkbox>,
+      companyName: dataTaxonomy.companyName ? dataTaxonomy.companyName : '--',
       allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '--',
       clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '--',
       companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '--',
     }))
 
+
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
+          id: 'checkBox',
+          align: 'right',
+          label: <Checkbox checked={allChecked} onChange={() => allCompanyCheck(props, allChecked, setPendingCompanies)}></Checkbox>,
+          dataType: 'element',
+        },
+        {
           id: 'companyName',
           align: 'left',
           label: 'Company Name',
-          dataType: 'stringSearchSortElement',
+          dataType: 'string',
         },
         {
           id: 'allocatedDate',
           align: 'center',
           label: 'Allocated Date',
-          dataType: 'date',
+          dataType: 'string',
         },
         {
           id: 'clientRep',
@@ -206,7 +240,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >
+        <Select className="choose-reports-taxonomy" placeholder="All Taxonomy" allowClear onChange={onTaxonomyChange} >
           {pendingCompaniesFilter && pendingCompaniesFilter.map((data, id) => (
             <Option value={data} key={data[id]}>{data}</Option>
           ))}</Select>
@@ -218,7 +252,8 @@ const Reports = (props) => {
   const ControversyTable = (props) => {
     const tableRowData = (data) => data.filter(val => taxonomy ? val.taxonomy === taxonomy : val === val).map((e) => ({
       key: e.companyId + e.taskId,
-      companyName: e.companyName ? { value: e.companyName, content: <div> <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}>{e.companyName}</Checkbox> </div> } : { value: '', content: '' },
+      checkBox: <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}></Checkbox>,
+      companyName: e.companyName ? e.companyName : '--',
       taskid: e.taskId ? e.taskId : '--',
       allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '--',
     }))
@@ -227,10 +262,16 @@ const Reports = (props) => {
       rowsData: tableRowData(props),
       columnsHeadData: [
         {
+          id: 'checkBox',
+          align: 'right',
+          label: <Checkbox checked={allChecked} onChange={() => allCompanyCheck(props, allChecked, setContorversy)}></Checkbox>,
+          dataType: 'element',
+        },
+        {
           id: 'companyName',
           align: 'left',
           label: 'Company Name',
-          dataType: 'stringSearchSortElement',
+          dataType: 'string',
         },
         {
           id: 'taskid',
@@ -246,7 +287,7 @@ const Reports = (props) => {
         },
       ],
       tableLabel: <div className="w-100">
-        <Select className="choose-reports-taxonomy" placeholder="Choose Taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
+        <Select className="choose-reports-taxonomy" placeholder="All Taxonomy" allowClear onChange={onTaxonomyChange} >{controversyTaxonomyFilter && controversyTaxonomyFilter[0] === null ? 'No Data' : controversyTaxonomyFilter && controversyTaxonomyFilter.map((data) => (
           <Option value={data.taxonomy} key={data.taxonomy}>{data.taxonomy}</Option>
         ))}</Select>
       </div>,
@@ -289,10 +330,7 @@ const Reports = (props) => {
             ))}
           </div>
           <Card>
-            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} />
-            <div className="w-100 d-flex justify-content-center">
-              <Button className="mb-2 view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>{tabFlag === 'Controversy' ? 'View Controversy Task' : 'View Companies Task'}</Button>
-            </div>
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} />
           </Card>
         </div>
       </div>

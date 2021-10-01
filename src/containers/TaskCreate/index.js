@@ -190,7 +190,7 @@ const TaskCreate = ({ flag }) => {
   const qadisabledDate = (current) => {
     const analystEnddate = analystSla;
     if(analystEnddate){
-      return current && current < moment(analystEnddate, 'YYYY-MM-DD').add(1, 'days');
+      return current && current < moment(analystEnddate, 'YYYY-MM-DD');
     }
   }
 
@@ -612,7 +612,6 @@ const TaskCreate = ({ flag }) => {
             <div className="batch-view-header">
               <div className="align-chip">
               <div className="batch-year-head">{batchInfo.Batchname}</div>
-                {/* <Tag className="content-info"></Tag> */}
               </div>
               <div className="align-chip">
                 <div className="batch-year-head">Year :</div>
@@ -626,7 +625,6 @@ const TaskCreate = ({ flag }) => {
           </Col>
         }
       </Row>
-      {/* {!flag && <Divider className="task-divider"></Divider>} */}
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           {flag ?
@@ -750,9 +748,7 @@ const TaskCreate = ({ flag }) => {
   );
 
   const groupSelectTab = () => (
-    // <Row className="grp-mar-top">
-    //   {grpDetail}
-    // </Row>
+
     <Container className="wrapper">
          <div className="head-tab-task">
               <div>
@@ -795,9 +791,6 @@ const TaskCreate = ({ flag }) => {
       <Row>
         <Col lg={12} sm={12}>
           <div className="view-header">
-            {/* <div className="mar-right">
-              <Tag className="grp-batch-name">{companyInfo.grpName}</Tag>
-            </div> */}
             <div className="align-chip">
               <div className="batch-year-head">{companyInfo.grpName}</div>
               </div>
@@ -806,15 +799,9 @@ const TaskCreate = ({ flag }) => {
           </div>
         </Col>
       </Row>
-      {/* <Divider className="task-divider"></Divider> */}
       <Row>
         {(companyInfo && companyInfo.batches.length > 0) ? 
         
-          // <Col lg={3} md={6} sm={12} key={batchID}>
-          //   <Card className="card-view groupbox" onClick={() => onselectBatch(batchID)} >
-          //     <ListItemText primary={batchName} />
-          //   </Card>
-          // </Col>
           <Col>
           <Container className="wrapper">
          <div className="head-tab-task">
@@ -879,23 +866,6 @@ const TaskCreate = ({ flag }) => {
                 <Card className="task-page-card">
                 {(aftertaskcreatedLoading.isLoading || apidataLoading.isLoading )?<PageLoader />:
                 <React.Fragment>
-                  {/* <div className="card-head">
-                    {taskFlow > 0 &&
-                      <div>
-                        {!flag &&
-                          <Button variant="primary" className="imp-btn" onClick={onhandleBack}>
-                            <div>Back</div>
-                          </Button>
-                        }
-                      </div>
-                    }
-                    {taskFlow === 0 &&
-                      <div>
-                      </div>
-                    }
-                    <div></div>
-                    <div></div>
-                  </div> */}
                     {taskFlow === 0 &&  groupSelectTab()}
                     {taskFlow === 1 && selectBatchTab()}
                     {taskFlow === 2 && batchInfoTab()}

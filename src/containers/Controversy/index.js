@@ -100,7 +100,10 @@ const Controversy = (props) => {
   // EXTRACT DPCODE DATA
   const extractReqDpCode = (data) => data.filter((e) => (e.dpCode === dpCodeDetails.dpCode));
 
-  const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
+  // session.storage to props.location.state
+  // const reqDpCodesData = JSON.parse(sessionStorage.filteredData);
+
+  const reqDpCodesData = taskDetails.filteredData;
 
   const [reqDpCodeData] = reqConDpCodeData && reqConDpCodeData.data ? [reqConDpCodeData.data] : extractReqDpCode(reqDpCodesData);
 
@@ -123,7 +126,7 @@ const Controversy = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Controversy" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <div className="controversy-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap" style={{ marginBottom: '1%' }}>
               <div className="task-pillar">{reqDpCodeData.dpCode}</div>

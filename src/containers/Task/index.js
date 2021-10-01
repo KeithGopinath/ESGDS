@@ -22,12 +22,9 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 
-import AddNewBoardMember from './AddNewBoardMember';
 import AddNewKMPMember from './AddNewKMPMember';
 
 import { history } from '../../routes';
-
-import { TASK_API_DATA } from '../../constants/PendingTasksConstants';
 import ValidationComments from './ValidationComments';
 
 const FieldWrapper = (props) => {
@@ -57,20 +54,27 @@ FieldWrapper.propTypes = {
 };
 
 const TaskTable = (props) => {
-  // // console.log(props); // REQ
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     key: `${x.dpCodeId}${x.memberName}${x.dpCode}${x.fiscalYear}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
-    action:
-  <Link
-    to={{
-      pathname: `/dpcode/${x.dpCode}`,
-      state: { taskDetails, dpCodeDetails: x },
-    }}
-  >Enter Data
-  </Link>,
+    action: (props.isAnalyst_DC && x.priority && x.priority.isDpcodeValidForCollection) || !props.isAnalyst_DC ?
+      <Link
+        to={{
+          pathname: `/dpcode/${x.dpCode}`,
+          state: { taskDetails, dpCodeDetails: x },
+        }}
+      >Enter Data
+      </Link> :
+      <Tooltip
+        placement="left"
+        color="#fff"
+        title={
+          <div style={{ padding: '10px', color: '#444c59' }}>{(x.priority && x.priority.message) || 'Please Check'}</div>
+        }
+      ><span style={{ cursor: 'pointer' }}>View</span>
+      </Tooltip>,
   }));
 
   const TASK_DATA = {
@@ -102,12 +106,17 @@ TaskTable.propTypes = {
   message: PropTypes.string,
   icon: PropTypes.element,
   footerBesidePagination: PropTypes.element,
+  isAnalyst_DC: PropTypes.bool,
 };
 
 const ControversyTaskTable = (props) => {
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+    key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
+    reassessmentDate: x.reassessmentDate ? new Date(x.reassessmentDate).toDateString() : '-',
+    reviewDate: x.reviewDate ? new Date(x.reviewDate).toDateString() : '-',
+    controversyFiscalYearEndDate: x.controversyFiscalYearEndDate ? new Date(x.controversyFiscalYearEndDate).toDateString() : '-',
     action:
   <Link
     to={{
@@ -126,6 +135,15 @@ const ControversyTaskTable = (props) => {
       },
       {
         id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
@@ -147,7 +165,6 @@ ControversyTaskTable.propTypes = {
 };
 
 const ValidationTable = (props) => {
-  // // console.log(props);
   const getDescription = (description) => {
     if (description.length > 0) {
       return (
@@ -268,29 +285,19 @@ const Task = (props) => {
   const { isValidationCalled } = props.location.state;
 
   // VALUES FROM PENDING TASKS PAGE THROUGH PROPS.LOCATION.STATE
-  const taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
+  let taskDetails = { ...props.location.state.taskDetails, memberType: dpCodeType, isValidationCalled };
 
-  const getReqAPIData = () => {
-    if (isClientRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
-    if (isCompanyRep_DR) { return TASK_API_DATA.COMPANY_REP_DR; }
-    if (isQA_DV) { return TASK_API_DATA.QA_DV; }
-    if (isAnalyst_DC) { return TASK_API_DATA.ANALYST_DC; }
-    if (isAnalyst_DCR) { return TASK_API_DATA.ANALYST_DCR; }
-    if (isAnalyst_CC) { return TASK_API_DATA.ANALYST_CC; }
-    return [];
-  };
+  // IS TASKPAGE BUTTON DISABLED
+  const isTaskButtonDisabled = reqTASK.isLoading || taskSubmitFromStore.isLoading || derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading;
 
-  const extractReqTask = (data) => {
+  const extractReqTask = () => {
     let returnableTask;
-    // if (isClientRep_DR || isCompanyRep_DR) {
-    //   [returnableTask] = data.filter((e) => (e.taskId === taskDetails.taskId));
-    // }
     if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR) {
-      [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : data.filter((e) => (e.taskId === taskDetails.taskId));
+      [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : [];
     }
     if (isAnalyst_CC) {
       // KEY NAMES CHANGES REQ FROM SHIVA !
-      [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : data.filter((e) => (e.taskId === taskDetails.taskId));
+      [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : [];
     }
     if (isValidationCalled) {
       [returnableTask] = (dpCodeValidationFromStore && dpCodeValidationFromStore.validation) ? [dpCodeValidationFromStore.validation] : [];
@@ -316,7 +323,7 @@ const Task = (props) => {
     return { dpCodesData: [] };
   };
 
-  const reqTaskData = extractReqTask(getReqAPIData());
+  const reqTaskData = extractReqTask();
   const reqKeyIssuesList = dpCodeType === 'Standalone' && reqTaskData.keyIssuesList ? reqTaskData.keyIssuesList : [];
   const boardMembersList = dpCodeType === 'Board Matrix' && reqTaskData.boardMatrix ? (reqTaskData.boardMatrix.boardMemberList) : [];
   const kmpMembersList = dpCodeType === 'Kmp Matrix' && reqTaskData.kmpMatrix ? (reqTaskData.kmpMatrix.kmpMemberList) : [];
@@ -355,19 +362,28 @@ const Task = (props) => {
     return [];
   };
 
-  const reqDpCodesData = getReqDpCodesList();
+  const reqDpCodesData = (getReqDpCodesList()).map((e) => {
+    if (isAnalyst_DC) {
+      return { ...e, priority: { isDpcodeValidForCollection: true, message: '' } };
+    }
+    return e;
+  });
 
-  const taskToNextPage = {
-    taskId: reqTaskData.taskId,
-    pillar: reqTaskData.pillar,
-    company: reqTaskData.company,
-    companyId: reqTaskData.companyId,
-    taskNumber: reqTaskData.taskNumber,
-    memberType: reqTaskData.memberType,
-    dpCodesData: reqDpCodesData,
-  };
+  // const taskToNextPage = {
+  //   taskId: reqTaskData.taskId,
+  //   pillar: reqTaskData.pillar,
+  //   company: reqTaskData.company,
+  //   companyId: reqTaskData.companyId,
+  //   taskNumber: reqTaskData.taskNumber,
+  //   memberType: reqTaskData.memberType,
+  //   dpCodesData: reqDpCodesData,
+  // };
 
-  sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+  // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
+
+  // Change Session storage to props.location.state
+  const priorityCheckedList = isAnalyst_DC ? [...reqDpCodesData].filter((e) => e.priority) : [...reqDpCodesData];
+  taskDetails = { ...taskDetails, filteredData: priorityCheckedList };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
@@ -391,7 +407,6 @@ const Task = (props) => {
       allDpCodes = [...allDpCodes, ...reqTaskData.kmpMatrix.dpCodesData];
     }
 
-    // // console.log(allDpCodes);
     return isValidationCalled ? allDpCodes.filter((e) => e.isValidResponse === false || e.description.length > 0) : allDpCodes.filter((e) => e.status !== 'Completed');
   };
 
@@ -416,60 +431,24 @@ const Task = (props) => {
       role: sessionStorage.role,
       taskId: taskDetails.taskId,
     };
-    // if (isAnalyst_DC) {
-    //   postableData = { ...postableData, taskStatus: 'Collection Completed' };
-    // }
-    // if (isAnalyst_DCR) {
-    //   postableData = { ...postableData, taskStatus: 'Correction Completed' };
-    // }
-    // if (isQA_DV) {
-    //   postableData = { ...postableData, taskStatus: 'Verification Completed' };
-    // }
-    // if (isClientRep_DR) {
-    //   postableData = { ...postableData, taskStatus: 'Completed' };
-    // }
-    // if (isCompanyRep_DR) {
-    //   postableData = { ...postableData, taskStatus: 'Completed' };
-    // }
 
     const inCompleteDpCodes = getInCompleteDpCodes();
     if (inCompleteDpCodes.length === 0) {
       dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
       setStatusAlert(true);
     } else {
-      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
+      message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
     }
   };
 
-  // const onSubmitTask2 = () => {
-  //   let postableData = {
-  //     companyId: taskDetails.companyId,
-  //     year: taskDetails.fiscalYear,
-  //     clientTaxonomyId: taskDetails.clientTaxonomyId,
-  //     taskStatus: '',
-  //     taskId: taskDetails.taskId,
-  //   };
-  //   if (isQA_DV) {
-  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
-  //   }
-  //   if (isClientRep_DR) {
-  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
-  //   }
-  //   if (isCompanyRep_DR) {
-  //     postableData = { ...postableData, taskStatus: 'Correction Pending' };
-  //   }
-  //   dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
-  //   setStatusAlert(true);
-  // };
 
   const onClickCalculateDerivedData = () => {
     const inCompleteDpCodes = getInCompleteDpCodes();
-    setIsPercentileCalculated(true);
     if (inCompleteDpCodes.length === 0) {
       dispatch({ type: 'DERIVED_CALCULATION_POST_REQUEST', payload: { taskId: taskDetails.taskId } });
       setStatusAlert(true);
     } else {
-      message.error(`#${inCompleteDpCodes[0].dpCode}# of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}`}" ${inCompleteDpCodes.length > 1 ? `& other ${inCompleteDpCodes.length} dpCodes` : ''} is not completed !`);
+      message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
     }
   };
 
@@ -520,20 +499,22 @@ const Task = (props) => {
 
   const KMPMenuList = (e) => (
     <components.MenuList {...e}>
+      {(isAnalyst_DC || isQA_DV) &&
       <div>
         <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewKMPVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
         <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateKmpVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
-      </div>
+      </div>}
       {e.children}
     </components.MenuList>
   );
 
   const BoardMemMenuList = (e) => (
     <components.MenuList {...e}>
+      {(isAnalyst_DC || isQA_DV) &&
       <div>
         <Button style={{ width: '50%' }} variant="light" title="Add New Member" onClick={() => setIsAddNewBoardVisible(true)}><FontAwesomeIcon color="dodgerblue" icon={faUserPlus} /></Button>
         <Button style={{ width: '50%' }} variant="light" title="Terminate Member" onClick={() => setIsTerminateBoardVisible(true)}><FontAwesomeIcon color="red" icon={faUserTimes} /></Button>
-      </div>
+      </div>}
       {e.children}
     </components.MenuList>
   );
@@ -581,6 +562,7 @@ const Task = (props) => {
 
     if (derivedCalculationFromStore.error && statusAlert) {
       message.error(derivedCalculationFromStore.error.message || 'Something Went Wrong !');
+      setIsPercentileCalculated(true);
       setStatusAlert(false);
     }
   }, [derivedCalculationFromStore]);
@@ -595,7 +577,7 @@ const Task = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Task" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
               {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
@@ -611,7 +593,7 @@ const Task = (props) => {
                 {/* ONLY FOR STANDALONE */}
                 {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeType === 'Standalone' &&
                   <FieldWrapper
-                    label="Key Issues*"
+                    label="Key Issues"
                     size={[6, 5, 7]}
                     visible
                     body={
@@ -629,7 +611,7 @@ const Task = (props) => {
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
                 { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Board Matrix' &&
                   <FieldWrapper
-                    label="Board Members*"
+                    label="Board Members"
                     visible
                     size={[6, 5, 7]}
                     body={
@@ -647,7 +629,7 @@ const Task = (props) => {
                 {/* ONLY FOR GOVERNANCE > MATRIX */}
                 { (reqTaskData.pillar === 'Governance' || reqTaskData.pillar === 'Corporate Governance') && dpCodeType === 'Kmp Matrix' &&
                   <FieldWrapper
-                    label="KMP*"
+                    label="KMP Members"
                     visible
                     size={[6, 5, 7]}
                     body={
@@ -672,6 +654,7 @@ const Task = (props) => {
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
                 footerBesidePagination={getFooterBesidePagination()}
+                isAnalyst_DC={isAnalyst_DC}
               />}
 
             {isAnalyst_CC &&
@@ -693,27 +676,27 @@ const Task = (props) => {
                 icon={(dpCodeValidationFromStore && dpCodeValidationFromStore.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
                 footerBesidePagination={getFooterBesidePagination()}
               />}
+            {!isTaskButtonDisabled &&
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
               { (((isAnalyst_DC || isAnalyst_DCR) && (isPercentileCalculated && (isValidationCalled || !taskDetails.isValidationRequired))) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
-              <Button className="datapage-button" variant="success" onClick={onSubmitTask}>Submit</Button>}
+              <Button className="datapage-button" variant="success" disable={isTaskButtonDisabled} onClick={onSubmitTask}>Submit</Button>}
 
               {/* { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
                 <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>} */}
 
               { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled && !isPercentileCalculated &&
-              <Button className="datapage-button" variant="success" onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
+              <Button className="datapage-button" variant="success" disable={isTaskButtonDisabled} onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
 
               { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled && taskDetails.isValidationRequired &&
-              <Button className="datapage-button" variant="info" onClick={onClickValidate}>Validate</Button>}
+              <Button className="datapage-button" variant="info" disable={isTaskButtonDisabled} onClick={onClickValidate}>Validate</Button>}
               { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated &&
-              <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
+              <Button className="datapage-button" variant="danger" disable={isTaskButtonDisabled} onClick={onClickBack}>Back</Button>}
 
-            </Col>
+            </Col>}
 
             {isAddNewBoardVisible &&
               <Modal title="Add New Board Member" className="task-modal" maskClosable={false} width="80%" visible={isAddNewBoardVisible} footer={null} onCancel={() => setIsAddNewBoardVisible(false)}>
-                {isAddNewBoardVisible && false && <AddNewBoardMember reqYears={reqTaskData.fiscalYear} reqMemberType="boardMatrix" onCloseAddNewMemberModal={() => setIsAddNewBoardVisible(false)} />}
                 {isAddNewBoardVisible && <AddNewKMPMember modalType="AddNewBoardType" taskDetails={taskDetails} closeModal={() => setIsAddNewBoardVisible(false)} />}
               </Modal>}
 

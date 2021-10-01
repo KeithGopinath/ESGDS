@@ -39,7 +39,7 @@ const Onboard = (props) => {
       setRole('client');
     } else if (getRole === 'CompanyRepresentative') {
       setRole('company');
-    } else {
+    } else if ((getRole === 'Employee')) {
       setRole('employee');
     }
   }, [])

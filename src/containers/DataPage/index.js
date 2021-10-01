@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Tabs, message, Result } from 'antd';
-import { ExclamationCircleTwoTone, InboxOutlined } from '@ant-design/icons';
+import { ExclamationCircleTwoTone, InboxOutlined, CheckCircleTwoTone } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { Col, Button } from 'react-bootstrap';
 
@@ -21,7 +21,6 @@ import DataAccordian from './DataAccordian';
 import DataComment from './DataComment';
 import PageLoader from '../../components/PageLoader';
 
-// let count = 0;
 
 const DataPage = (props) => {
   // CURRENT ROLE
@@ -64,18 +63,18 @@ const DataPage = (props) => {
 
   const getReqData = () => {
     // const { dpCodeDetails } = props.location.state;
-    const reqTask = JSON.parse(sessionStorage.filteredData);
-    const reqMaxIndex = reqTask.dpCodesData.length - 1;
+    // const taskDetails = JSON.parse(sessionStorage.filteredData);
+    // const taskDetails = taskDetails;
+    const reqMaxIndex = taskDetails.filteredData.length - 1;
     const reqMinIndex = 0; // CONSTANT
     let returnableData = {};
     //  TO GET CURRENT INDEX !
-    for (let i = 0; i < reqTask.dpCodesData.length; i += 1) {
-      if (reqTask.dpCodesData[i].dpCode === dpCodeDetails.dpCode) {
+    for (let i = 0; i < taskDetails.filteredData.length; i += 1) {
+      if (taskDetails.filteredData[i].dpCode === dpCodeDetails.dpCode) {
         returnableData = {
           ...returnableData,
           reqIndexes: { maxIndex: reqMaxIndex, currentIndex: i, minIndex: reqMinIndex },
-          reqDpCodeData: (dpCodeDataFromStore.dpCodeData && dpCodeDataFromStore.dpCodeData.dpCodeData) || reqTask.dpCodesData[i],
-          reqTask,
+          reqDpCodeData: (dpCodeDataFromStore.dpCodeData && dpCodeDataFromStore.dpCodeData.dpCodeData) || taskDetails.filteredData[i],
         };
         break;
       }
@@ -84,7 +83,7 @@ const DataPage = (props) => {
     return returnableData;
   };
 
-  const { reqDpCodeData, reqIndexes, reqTask } = getReqData();
+  const { reqDpCodeData, reqIndexes } = getReqData();
 
   const [statusAlert, setStatusAlert] = useState(false);
 
@@ -100,11 +99,6 @@ const DataPage = (props) => {
 
   const [isDpCodeEditted, setIsDpCodeEditted] = useState(false);
 
-  // // ABSENCE OF DATA IN SUBSEQUEST YEARS
-  // const lastHistoricalData = reqHistoricalData.filter((e, i) => (i === reqHistoricalData.length - 1));
-
-  // // console.log(lastHistoricalData);
-
   const reqCommentsList = reqDpCodeData.comments || [];
 
   const getDefaultCurrentDataForYear = (year) => {
@@ -113,9 +107,8 @@ const DataPage = (props) => {
     return returnableData;
   };
 
-  const saveReqCurrentData = (data) => {
-    // // console.log(data, 'INCOMING DATA');
-    setIsDpCodeEditted(true);
+  const saveReqCurrentData = (data, isNonClick) => {
+    setIsDpCodeEditted(!isNonClick);
     setReqCurrentData(reqCurrentData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
@@ -123,18 +116,10 @@ const DataPage = (props) => {
       }
       return e;
     }));
-    // // console.log(reqCurrentData.map((e) => {
-    //   if (e.fiscalYear === data.fiscalYear) {
-    //     const returnableData = { ...e, ...data };
-    //     return returnableData;
-    //   }
-    //   return e;
-    // }), 'OUTGOING DATA');
   };
 
-  const saveReqHistoricalData = (data) => {
-    // // console.log(data, 'INCOMING EDIT DATA');
-    setIsDpCodeEditted(true);
+  const saveReqHistoricalData = (data, isNonClick) => {
+    setIsDpCodeEditted(!isNonClick);
     setReqHistoricalData(reqHistoricalData.map((e) => {
       if (e.fiscalYear === data.fiscalYear) {
         const returnableData = { ...e, ...data };
@@ -142,13 +127,6 @@ const DataPage = (props) => {
       }
       return e;
     }));
-    // // console.log(reqHistoricalData.map((e) => {
-    //   if (e.fiscalYear === data.fiscalYear) {
-    //     const returnableData = { ...e, ...data };
-    //     return returnableData;
-    //   }
-    //   return e;
-    // }), 'OUTGING HISTORICAL DATA');
   };
 
   const getUnsavedCurrentYears = () => {
@@ -176,6 +154,19 @@ const DataPage = (props) => {
     return nonSavedYears;
   };
 
+  const getIsCompletedStatus = (dpCodeObj) => {
+    if (isAnalyst_DC && dpCodeObj.status === 'Completed') {
+      return true;
+    }
+    if (isAnalyst_DCR && dpCodeObj.status === 'Completed' && (dpCodeObj.error.errorStatus === 'Completed')) {
+      return true;
+    }
+    if ((isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeObj.error && dpCodeObj.error.errorStatus === 'Completed') {
+      return true;
+    }
+    return false;
+  };
+
   const getUnsavedHistoricalYears = () => {
     const nonSavedYears = (reqHistoricalData.map((e) => {
       if (e.status !== 'Completed') {
@@ -192,9 +183,8 @@ const DataPage = (props) => {
   });
 
   const backClickHandler = () => {
-    // // console.log('backClickHandler');
     history.push({
-      pathname: `/task/${reqTask.taskNumber}`,
+      pathname: `/task/${taskDetails.taskNumber}`,
       state: {
         taskDetails,
         isValidationCalled: taskDetails.isValidationCalled,
@@ -203,14 +193,13 @@ const DataPage = (props) => {
   };
 
   const previousClickHandler = () => {
-    // // console.log('previousClickHandler');
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex - 1];
+    const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex - 1];
     history.push({
       pathname: `/dpcode/${nextDpCode.dpCode}`,
       state: {
         taskDetails,
         dpCodeDetails: nextDpCode,
-        filteredData: reqTask.dpCodesData,
+        filteredData: taskDetails.filteredData,
       },
     });
   };
@@ -225,6 +214,20 @@ const DataPage = (props) => {
     return additionalDetails || [];
   };
 
+  const getReqHistoricalDetails = (dataList) => dataList.map((e) => {
+    const returnableData = {
+      dpCode: e.dpCode,
+      fiscalYear: e.fiscalYear,
+      textSnippet: e.textSnippet,
+      pageNo: e.pageNo,
+      screenShot: e.screenShotBase64,
+      response: e.response,
+      source: e.source,
+      additionalDetails: additionalDetailsMapper(e),
+    };
+    return returnableData;
+  });
+
   const getReqDetails = (dataList) => dataList.map((e) => {
     let returnableData = {
       dpCode: e.dpCode,
@@ -238,7 +241,9 @@ const DataPage = (props) => {
     };
 
     if (isAnalyst_DCR) {
-      returnableData = { ...returnableData, rejectComment: e.rejectComment, isAccepted: e.isAccepted };
+      returnableData = {
+        ...returnableData, rejectComment: e.rejectComment, rejectedTo: e.rejectComment ? e.error.raisedBy : '', isAccepted: e.isAccepted,
+      };
     }
     if (isQA_DV) {
       returnableData = { ...returnableData, error: { ...e.error, refData: '' } };
@@ -249,9 +254,6 @@ const DataPage = (props) => {
         fiscalYear: e.fiscalYear,
         error: {
           ...e.error,
-          // refData: {
-          //   ...e.error.refData, screenShot: e.error.refData.screenShotBase64, screenShotBase64: undefined, additionalDetails: additionalDetailsMapper(e.error.refData),
-          // },
           refData: {
             textSnippet: e.error.refData.textSnippet,
             pageNo: e.error.refData.pageNo,
@@ -267,26 +269,24 @@ const DataPage = (props) => {
   });
 
   const getPostableData = () => {
-    const reqDpcodeData = reqTask.dpCodesData[reqIndexes.currentIndex];
+    const reqDpcodeData = taskDetails.filteredData[reqIndexes.currentIndex];
     const postableData = {
-      taskId: reqTask.taskId,
-      taskNumber: reqTask.taskNumber,
+      taskId: taskDetails.taskId,
+      taskNumber: taskDetails.taskNumber,
       dpCodeId: reqDpcodeData.dpCodeId,
       companyId: reqDpcodeData.companyId,
       pillarId: reqDpcodeData.pillarId,
       memberId: reqDpcodeData.memberId || '',
       memberName: reqDpcodeData.memberName || '',
-      memberType: reqTask.memberType === 'Kmp Matrix' ? 'KMP Matrix' : reqTask.memberType,
-      currentData: getReqDetails(reqCurrentData),
-      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqDetails(reqHistoricalData),
+      memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
+      currentData: getReqDetails(reqCurrentData.filter((e) => e.isEdited)),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData.filter((e) => e.isEdited)),
     };
     return postableData;
   };
 
   const saveAndNextClickHandler = () => {
-    // // console.log(reqDataCheckBeforeSave(), 'LIST OF NUMS');
     if ((reqDataCheckBeforeSave().currentData).length === 0 && (reqDataCheckBeforeSave().historicalData).length === 0) {
-      // // console.log('saveAndNextClickHandler');
       if (isAnalyst_DC || isAnalyst_DCR) {
         dispatch({ type: 'DPCODEDATA_UPDATE_REQUEST', payload: getPostableData(), taskType: 'DATA_COLLECTION_CORRECTION' });
         setStatusAlert(true);
@@ -322,19 +322,19 @@ const DataPage = (props) => {
   };
 
   const nextClickHandler = () => {
-    const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+    const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex + 1];
     if (reqIndexes.currentIndex !== reqIndexes.maxIndex) {
       history.push({
         pathname: `/dpcode/${nextDpCode.dpCode}`,
         state: {
           taskDetails,
           dpCodeDetails: nextDpCode,
-          filteredData: reqTask.dpCodesData,
+          filteredData: taskDetails.filteredData,
         },
       });
     } else {
       history.push({
-        pathname: `/task/${reqTask.taskNumber}`,
+        pathname: `/task/${taskDetails.taskNumber}`,
         state: {
           taskDetails,
           isValidationCalled: taskDetails.isValidationCalled,
@@ -373,11 +373,11 @@ const DataPage = (props) => {
           memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
           memberName: dpCodeDetails.memberName || '',
           memberId: dpCodeDetails.memberId || '',
+          role: sessionStorage.role,
         },
         taskType: 'DATA_REVIEW',
       });
     }
-    // dispatch({ type: 'COMPANY_SOURCE_TYPES_GET_REQUEST', companyId: taskDetails.companyId });
   }, [props.location]);
 
   useEffect(() => {
@@ -395,7 +395,7 @@ const DataPage = (props) => {
   useEffect(() => {
     if (dpCodeDataUpdateFromStore && dpCodeDataUpdateFromStore.dpCodeData && statusAlert) {
       if (reqIndexes.currentIndex !== reqIndexes.maxIndex) {
-        const nextDpCode = reqTask.dpCodesData[reqIndexes.currentIndex + 1];
+        const nextDpCode = taskDetails.filteredData[reqIndexes.currentIndex + 1];
         history.push({
           pathname: `/dpcode/${nextDpCode.dpCode}`,
           state: {
@@ -407,7 +407,7 @@ const DataPage = (props) => {
         message.success(dpCodeDataUpdateFromStore.dpCodeData.message);
         setStatusAlert(false);
         history.push({
-          pathname: `/task/${reqTask.taskNumber}`,
+          pathname: `/task/${taskDetails.taskNumber}`,
           state: {
             taskDetails,
             isValidationCalled: taskDetails.isValidationCalled,
@@ -421,10 +421,6 @@ const DataPage = (props) => {
     }
   }, [dpCodeDataUpdateFromStore]);
 
-  // count += 1;
-  // // console.log(count, dpCodeDataFromStore.isLoading, dpCodeDataUpdateFromStore.isLoading, statusAlert, '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-  // // console.log(currentDataForLoading.length, reqCurrentData.length);
-
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -437,7 +433,7 @@ const DataPage = (props) => {
               {/* HISTORICAL TABS */}
               <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
                 <DataAccordian header="History">
-                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error) ? // (!reqHistoricalData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
+                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error) ? // T1
                     (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || (historicalDataForLoading.length !== reqHistoricalData.length)) ? // T2
                       <PageLoader /> : // T2R
                       (dpCodeDataFromStore.error) &&
@@ -472,7 +468,7 @@ const DataPage = (props) => {
               {/* CURRENT TABS */}
               <Col lg={12} style={{ padding: 0, margin: '3% 0' }}>
                 <DataAccordian header="Current" isActive >
-                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // (!reqCurrentData > 0 && !(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading)) ? // T1
+                  {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // T1
                     (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || (currentDataForLoading.length !== reqCurrentData.length)) ? // T2
                       <PageLoader /> : // T2R
                       (dpCodeDataFromStore.error) &&
@@ -494,7 +490,7 @@ const DataPage = (props) => {
                             tab={
                               <div style={{ display: 'flex', alignItems: 'center' }}>
                                 {e.fiscalYear}
-                                {e.error && e.error.isErrorRaised && <ExclamationCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#FF0000" />}
+                                {getIsCompletedStatus(e) ? <CheckCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#52c41a" /> : <ExclamationCircleTwoTone style={{ margin: '0 0 0 5px' }} twoToneColor="#FF0000" />}
                               </div>
                             }
                             key={e.fiscalYear}
@@ -508,7 +504,6 @@ const DataPage = (props) => {
                               onClickSave={saveReqCurrentData}
                               lastHistoricalData={reqCurrentData[i - 1] ? [reqCurrentData[i - 1]] : reqHistoricalData.filter((ec, ic) => (ic === reqHistoricalData.length - 1))}
                             />
-                            <Col lg={12} className="datapage-button-wrap"><div>{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</div></Col>
                             <Col lg={12} className="datapage-button-wrap">
                               {/* BACK Button */}
                               { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
@@ -517,6 +512,10 @@ const DataPage = (props) => {
                               {/* PREVIOUS Button */}
                               { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
                               <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
+
+                              {/* cURRENT INDEX Button */}
+                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && reqIndexes &&
+                              <Button className="datapage-button" variant="default" disabled >{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</Button>}
 
                               {/* SAVE&NEXT Button */}
                               { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&

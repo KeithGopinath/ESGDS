@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-nested-ternary */
@@ -64,13 +65,29 @@ const AddSource = (props) => {
     setStatusAlert(true);
   }, []);
 
-  // const companySourceTypesFromStore = useSelector((state) => state.companySourceTypes);
-
   const [getSourceTypeFromStore, postSourceTypeFromStore] = useSelector((state) => [state.sourceType, state.sourceTypeCreate]);
 
   const sourceListAPIData = (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.data ? getSourceTypeFromStore.source.data : []);
 
   const { dpCodeDetails, taskDetails } = props.locationData.state;
+
+  const [sourceTypeOthers, subSourceTypeOthers] = [
+    [
+      {
+        value: 'Others-',
+        label: 'Others-',
+        isMultiYear: false,
+        isMultiSource: false,
+        subSourceTypes: [],
+      },
+    ],
+    [
+      {
+        label: 'Others-',
+        value: 'Others-',
+      },
+    ],
+  ];
 
   useEffect(() => {
     if (postSourceTypeFromStore && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
@@ -102,35 +119,15 @@ const AddSource = (props) => {
           taskType: 'DATA_REVIEW',
         });
       }
-      // dispatch({
-      //   type: 'DPCODEDATA_GET_REQUEST',
-      //   payload: {
-      //     taskId: taskDetails.taskId,
-      //     datapointId: dpCodeDetails.dpCodeId,
-      //     year: dpCodeDetails.fiscalYear,
-      //     memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
-      //     memberName: dpCodeDetails.memberName || '',
-      //     memberId: dpCodeDetails.memberId || '',
-      //   },
-      // });
       message.success(postSourceTypeFromStore.source.message);
       setStatusAlert(false);
       props.closeAddSourcePanel();
-      // dispatch({ type: 'COMPANY_SOURCE_TYPES_GET_REQUEST', companyId: taskDetails.companyId });
     }
     if (postSourceTypeFromStore && postSourceTypeFromStore.error && statusAlert) {
       message.error(postSourceTypeFromStore.error.message ? postSourceTypeFromStore.error.message : 'Something went wrong, Try again later !');
       setStatusAlert(false);
     }
   }, [postSourceTypeFromStore]);
-
-  // useEffect(() => {
-  //   if (companySourceTypesFromStore.source && companySourceTypesFromStore.source.rows && postSourceTypeFromStore.source && postSourceTypeFromStore.source.status && statusAlert) {
-  //     message.success(postSourceTypeFromStore.source.message);
-  //     setStatusAlert(false);
-  //     props.closeAddSourcePanel();
-  //   }
-  // }, [companySourceTypesFromStore]);
 
   useEffect(() => {
     if (getSourceTypeFromStore && getSourceTypeFromStore.source && getSourceTypeFromStore.source.status && statusAlert) {
@@ -210,12 +207,12 @@ const AddSource = (props) => {
     setCurrentSourceType(event);
     setIsMultiYear(event.isMultiYear);
     setIsMultiSource(event.isMultiSource);
-    setSourceName(event.label === 'Others' ? '' : event.label);
+    setSourceName(event.label === 'Others-' && event.value === 'Others-' ? '' : event.label);
   };
 
   const onChangeSubSourceType = (event) => {
     setCurrentSubSourceType(event);
-    setSourceName(event.label === 'Others' ? '' : event.label);
+    setSourceName(event.label === 'Others-' && event.value === 'Others-' ? '' : event.label);
   };
 
   const onChangeSourceName = (event) => {
@@ -243,13 +240,16 @@ const AddSource = (props) => {
     getBase64(event.fileList.length > 0 ? event.fileList[0].originFileObj : null).then((e) => setSourcePDF64(e));
   };
 
+  const disabledPublicationDate = (event) => event && event > moment().endOf('day');
+
   const validate = () => {
     const sourceTypeCheck = (currentSourceType !== null);
     const subSourceTypeCheck = (currentSubSourceType !== null);
     const sourceNameCheck = (sourceName.length > 0);
     const isMultiYearCheck = (isMultiYear === true || isMultiYear === false);
     const isMultiSourceCheck = (isMultiSource === true || isMultiSource === false);
-    const sourceURLCheck = (sourceURL.length > 0);
+    const sourceURLCheck = (sourceURL.length > 0) &&
+    (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(sourceURL)); // REGEX FOR URL VALIDATION
     const publicationDateCheck = (publicationDate !== null);
     const sourcePDFCheck = (sourcePDF !== null);
     setErrors({
@@ -298,24 +298,20 @@ const AddSource = (props) => {
     if (validate()) {
       const postableData = {
         companyId: props.companyId, // THIS DATA IS DEPENDENT ON EACH DPCODE FETCH API
-        sourceTypeId: currentSourceType && currentSourceType.value,
+        sourceTypeId: currentSourceType && !(currentSourceType.value === 'Others-' && currentSourceType.label === 'Others-') ? currentSourceType.value : '',
         isMultiYear,
         isMultiSource,
-        sourceSubTypeId: currentSubSourceType && currentSubSourceType.value,
+        sourceSubTypeId: currentSubSourceType && !(currentSubSourceType.value === 'Others-' && currentSubSourceType.label === 'Others-') ? currentSubSourceType.value : '',
         url: sourceURL,
         publicationDate,
         fiscalYear: props.fiscalYear,
         sourcePDF: sourcePDFBase64,
-        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others' ? sourceName : '',
-        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others' ? sourceName : '',
+        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others-' ? sourceName : '',
+        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others-' ? sourceName : '',
         name: !isMultiYear ? `${sourceName}_${props.fiscalYear}` : `${sourceName}`,
       };
       dispatch({ type: 'SOURCE_TYPE_POST_REQUEST', sourceTypeData: postableData });
       setStatusAlert(true);
-      // const newSourceName = !isMultiYear ? (`${sourceName} 2018-2019`) : sourceName;
-      // const uploadSourceData = { sourceName: newSourceName, url: sourceURL, publicationDate };
-      // props.onUploadAddSource(uploadSourceData);
-      // props.closeAddSourcePanel();
     }
   };
 
@@ -334,14 +330,15 @@ const AddSource = (props) => {
         {/* SOURCE TYPE  */}
         <FieldWrapper
           visible
-          label="Source*"
+          label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Select
                 name="sourceType"
+                className={errors.sourceType && 'red-class'}
                 onChange={onChangeSourceType}
                 value={currentSourceType}
-                options={sourceListAPIData.map((sourceType) => sourceType)}
+                options={sourceListAPIData.map((sourceType) => sourceType).concat(sourceTypeOthers)}
                 isSearchable
                 placeholder="Choose source type"
                 maxLength={30}
@@ -355,14 +352,15 @@ const AddSource = (props) => {
         {currentSourceType && currentSourceType.isMultiSource && currentSourceType.isMultiSource !== 'true/false' &&
         <FieldWrapper
           visible
-          label="Sub Source Type*"
+          label={<div>Sub Source Type<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Select
                 name="subSourceType"
                 onChange={onChangeSubSourceType}
+                className={errors.subSourceType && 'red-class'}
                 value={currentSubSourceType}
-                options={currentSourceType.subSourceTypes.map((sourceType) => sourceType)}
+                options={currentSourceType.subSourceTypes.map((sourceType) => sourceType).concat(subSourceTypeOthers)}
                 isSearchable
                 placeholder="Choose sub-source type"
                 maxLength={30}
@@ -373,16 +371,15 @@ const AddSource = (props) => {
         />}
 
         {/* SOURCE NAME */}
-        {((currentSourceType && currentSourceType.label === 'Others') || (currentSubSourceType && currentSubSourceType.label === 'Others')) &&
+        {((currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-') || (currentSubSourceType && currentSubSourceType.label === 'Others-' && currentSubSourceType.label === 'Others-')) &&
         <FieldWrapper
           visible
-          label="Name*"
+          label={<div>Name<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Form.Control
                 type="text"
-                // id="response"
-                //   readOnly={historyDpCodeData && !historyEdit}
+                className={errors.sourceName && 'red-class'}
                 onChange={onChangeSourceName}
                 value={sourceName}
                 placeholder="Enter Source Name"
@@ -393,10 +390,10 @@ const AddSource = (props) => {
         />}
 
         {/* IS MULTIYEAR */}
-        {currentSourceType && currentSourceType.label === 'Others' &&
+        {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
         <FieldWrapper
           visible
-          label="Is MultiYear*"
+          label="Is MultiYear"
           body={
             <React.Fragment>
               <Radio.Group onChange={onChangeIsMultiyear} value={isMultiYear}>
@@ -408,10 +405,10 @@ const AddSource = (props) => {
         />}
 
         {/* ISMULTISOURCE */}
-        {currentSourceType && currentSourceType.label === 'Others' &&
+        {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
         <FieldWrapper
           visible
-          label="Is MultiSource*"
+          label="Is MultiSource"
           body={
             <React.Fragment>
               <Radio.Group onChange={onChangeIsMultiSource} value={isMultiSource}>
@@ -425,7 +422,7 @@ const AddSource = (props) => {
         {/* SOURCE URL */}
         <FieldWrapper
           visible
-          label="Url*"
+          label={<div>Url<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Form.Control
@@ -433,8 +430,9 @@ const AddSource = (props) => {
                 onChange={onChangeSourceURL}
                 value={sourceURL}
                 placeholder="Enter Url"
+                className={errors.sourceURL && 'red-class'}
               />
-              {errors.sourceURL && <small className="addsource-validate-text">*Should have atleast one character</small>}
+              {errors.sourceURL && <small className="addsource-validate-text">*Invalid Url</small>}
             </React.Fragment>
           }
         />
@@ -442,18 +440,20 @@ const AddSource = (props) => {
         {/* UPLOAD BUTTON */}
         <FieldWrapper
           visible
-          label="Upload*"
+          label={<div>Upload<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <Upload
                 style={{ width: '100%' }}
                 maxCount={1}
+                className="datapage-ant-upload"
                 fileList={sourcePDF && sourcePDF.fileList}
                 beforeUpload={uploadPDFCheck}
                 onChange={onChangeSourcePDFUpload}
+                accept="application/pdf"
               >
                 <AntButton
-                  // disabled={isFieldDisabled}
+                  className={errors.sourcePDF ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '38px',
                   }}
@@ -469,14 +469,15 @@ const AddSource = (props) => {
         {/* PUBLICATION DATE */}
         <FieldWrapper
           visible
-          label="Publication Date*"
+          label={<div>Publication Date<span className="addNewMember-red-asterik"> * </span></div>}
           body={
             <React.Fragment>
               <DatePicker
-                className="datapage-datepicker"
+                className={errors.publicationDate ? 'datapage-datepicker red-class' : 'datapage-datepicker'}
                 onChange={onChangePublicationDate}
                 value={publicationDate && moment(publicationDate)}
                 size="large"
+                disabledDate={disabledPublicationDate}
               />
               {errors.publicationDate && <small className="addsource-validate-text">*Required</small>}
             </React.Fragment>

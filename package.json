@@ -7,10 +7,12 @@
     "start": "webpack-dev-server --mode=development --history-api-fallback --hot --inline --port 3000 --content-base public/",
     "start:open": "webpack-dev-server --mode=development --history-api-fallback --hot --host 0.0.0.0 --inline --port 9090 --open --content-base public/",
     "build": "webpack --progress",
-    "build:prod": "cross-env NODE_ENV=production webpack --mode=production --profile -p",
-    "serve:prod": "cross-env NODE_ENV=production webpack-dev-server --history-api-fallback --content-base build/",
+    "build:dev": "cross-env NODE_ENV=development webpack --mode=production --profile -p",
+    "serve:dev": "cross-env NODE_ENV=development webpack-dev-server --history-api-fallback --content-base build/",
     "build:test": "cross-env NODE_ENV=none webpack --mode=none --profile -p",
-    "serve:test": "cross-env NODE_ENV=none webpack-dev-server --history-api-fallback --content-base build/"
+    "serve:test": "cross-env NODE_ENV=none webpack-dev-server --history-api-fallback --content-base build/",
+    "build:prod": "cross-env NODE_ENV=production webpack --mode=production --profile -p",
+    "serve:prod": "cross-env NODE_ENV=production webpack-dev-server --history-api-fallback --content-base build/"
   },
   "author": "",
   "license": "ISC",

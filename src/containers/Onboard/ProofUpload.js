@@ -23,10 +23,8 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         onCompany(reader.result);
       }
       reader.readAsDataURL(file);
-      setAuthValidate(false);
       setFileSize({ ...fileSize, authentication: file.size });
     } else {
-      setAuthValidate(true);
       message.error("File type should be .png/.jpg/.jpeg");
     }
   }
@@ -40,10 +38,8 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         onEmployeeId(reader.result);
       }
       reader.readAsDataURL(file);
-      setIdProofValidate(false);
       setFileSize({ ...fileSize, idProof: file.size });
     } else {
-      setIdProofValidate(true);
       message.error('File type should be .png/.jpg/.jpeg');
     }
   };
@@ -57,10 +53,8 @@ const ProofUpload = ({ role, onCompany, onEmployeeId, onCancelledCheque, previou
         onCancelledCheque(reader.result);
       }
       reader.readAsDataURL(file);
-      setChequeValidate(false);
       setFileSize({ ...fileSize, cancelCheque: file.size });
     } else {
-      setChequeValidate(true);
       message.error('File type should be .png/.jpg/.jpeg');
     }
   };
