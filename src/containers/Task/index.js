@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { Modal, Tooltip, message } from 'antd';
 
-import { CloseCircleFilled, UserOutlined } from '@ant-design/icons';
+import { CloseCircleFilled, UserOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
 
 import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -69,11 +69,10 @@ const TaskTable = (props) => {
       </Link> :
       <Tooltip
         placement="left"
-        color="#fff"
         title={
-          <div style={{ padding: '10px', color: '#444c59' }}>{(x.priority && x.priority.message) || 'Please Check'}</div>
+          <div>{(x.priority && x.priority.message) || 'Please Check'}</div>
         }
-      ><span style={{ cursor: 'pointer' }}>View</span>
+      ><span style={{ cursor: 'pointer' }}><ExclamationCircleTwoTone style={{ fontSize: 'medium' }} twoToneColor="#f18618" /></span>
       </Tooltip>,
   }));
 
@@ -362,12 +361,7 @@ const Task = (props) => {
     return [];
   };
 
-  const reqDpCodesData = (getReqDpCodesList()).map((e) => {
-    if (isAnalyst_DC) {
-      return { ...e, priority: { isDpcodeValidForCollection: true, message: '' } };
-    }
-    return e;
-  });
+  const reqDpCodesData = getReqDpCodesList();
 
   // const taskToNextPage = {
   //   taskId: reqTaskData.taskId,
@@ -382,7 +376,7 @@ const Task = (props) => {
   // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
 
   // Change Session storage to props.location.state
-  const priorityCheckedList = isAnalyst_DC ? [...reqDpCodesData].filter((e) => e.priority) : [...reqDpCodesData];
+  const priorityCheckedList = isAnalyst_DC ? [...reqDpCodesData].filter((e) => e.priority && e.priority.isDpcodeValidForCollection) : [...reqDpCodesData];
   taskDetails = { ...taskDetails, filteredData: priorityCheckedList };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
