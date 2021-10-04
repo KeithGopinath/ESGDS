@@ -117,7 +117,7 @@ const Login = () => {
   };
 
   const onPasswordChange = (e) => {
-    if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+    if (e.target.value.match('^[a-zA-Z0-9_$!@./#&+-]*$')) {
       setPassword(e.target.value)
     }
   };

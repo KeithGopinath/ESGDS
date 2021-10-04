@@ -136,7 +136,7 @@ const ControversyPage = (props) => {
               <DataAccordian header="History">
                 <Spin indicator={<PageLoader />} spinning={false} >
                   {reqHistoricalData.length > 0 ?
-                    <Tabs tabBarGutter={5} >
+                    <Tabs style={{ marginLeft: '5px' }} >
                       {reqHistoricalData.map((e) => (
                         <Tabs.TabPane tab={moment(e.updatedAt).format('DD-MM-YYYY LT')} key={`${e.id} ${e.updatedAt}`}>
                           <div className="controversy-history-datasheet">

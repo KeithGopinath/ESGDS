@@ -41,7 +41,7 @@ const ColumnsHead = (props) => {
               key={headData.id}
               align={headData.align}
               sortDirection={orderBy === headData.id ? sortOrder : false}
-              className="users-table-column-cell"
+              className={headData.align === 'left' ? 'users-table-column-cell users-table-column-cell-margin-left' : 'users-table-column-cell'}
             >
               <TableSortLabel
                 active={orderBy === headData.id}
@@ -97,7 +97,7 @@ const CustomTable = ({
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    // setPage(DEFAULT_PAGE);
+    setPage(DEFAULT_PAGE);
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     setSearchQuery('');
     setSearchDate(null);

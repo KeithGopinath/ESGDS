@@ -45,6 +45,7 @@ const PendingTaskTable = (props) => {
     if (props.isAnalyst) {
       populatableData = {
         ...populatableData,
+        qaName: ePendingTask.qa,
         endDate: {
           value: moment(ePendingTask.analystSLADate).format('DD-MM-YYYY'),
           content: (ePendingTask.analystSLADate) ?
@@ -56,6 +57,7 @@ const PendingTaskTable = (props) => {
     if (props.isQA) {
       populatableData = {
         ...populatableData,
+        analystName: ePendingTask.analyst,
         endDate: {
           value: moment(ePendingTask.qaSLADate).format('DD-MM-YYYY'),
           content: (ePendingTask.qaSLADate) ?
@@ -97,6 +99,9 @@ const PendingTaskTable = (props) => {
       ...splitColumnsHeadDataOne,
       {
         id: 'endDate', label: 'SLA Date', align: 'center', dataType: 'stringSearchSortElement',
+      },
+      {
+        id: props.isAnalyst ? 'qaName' : 'analystName', label: props.isAnalyst ? 'QA' : 'Analyst', align: 'left', dataType: 'string',
       },
       ...splitColumnsHeadDataTwo,
     ] : [
