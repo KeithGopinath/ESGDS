@@ -41,7 +41,7 @@ const ColumnsHead = (props) => {
               key={headData.id}
               align={headData.align}
               sortDirection={orderBy === headData.id ? sortOrder : false}
-              className="users-table-column-cell"
+              className={headData.align === 'left' ? 'users-table-column-cell users-table-column-cell-margin-left' : 'users-table-column-cell'}
             >
               <TableSortLabel
                 active={orderBy === headData.id}
@@ -196,7 +196,6 @@ const CustomTable = ({
   };
 
   const onChangeSearchDate = (event) => {
-    console.log(event);
     if (event) {
       setSearchDate({ startDate: event[0], endDate: event[1] });
     } else {
@@ -303,7 +302,8 @@ const CustomTable = ({
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
-                  const rowsDataKeyList = Object.keys(eachRow);
+                  // const rowsDataKeyList = Object.keys(eachRow);
+                  const rowsDataKeyList = columnsHeadData.map((e) => e.id);
                   const cellArray = rowsDataKeyList.map((data) => {
                     const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
                     if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {

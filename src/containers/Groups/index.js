@@ -104,9 +104,10 @@ const Groups = () => {
         unassignedobj.push( { key: i.userDetails.value, title: i.userDetails.label, SecRole: {primary: i.roleDetails.primaryRole.label, role: i.roleDetails.role }, disabled:i.isAssignedToGroup });
          
       }
- 
+      console.log(unassignedobj, 'unassignedobj');
       setuserTargetKeys(assignedobj);
       seteditunassigned(unassignedobj);
+      
  
       for(const i of unassignedobj){
         if(i.SecRole.role.length === 1){
@@ -119,13 +120,14 @@ const Groups = () => {
         } 
         if(i.SecRole.role.length > 1){
         for(const k of i.SecRole.role){
-          if(k.label === "Analyst" || k.label ==="QA"){
+          if(k.label === "Analyst" || k.label === "QA"){
           onlyanalystqa.push(i);
+          break;
           }
         }
       }
       }
-
+      console.log(onlyanalystqa, 'onlyanalystqa');
       seteditunassignedAnalystQa(onlyanalystqa);
       // for batch Edit
       const assignedbatch = [];
@@ -201,7 +203,7 @@ const Groups = () => {
         filteredData.push(obj1);
        } 
     }
-   
+   console.log(editunassigned, 'editunassigned');
     if(editunassigned){
       for(const i of filteredData){
         for(const j of i.SecRole.role){
@@ -626,7 +628,6 @@ const onChangeTransfer = (newTargetKeys, direction, moveKeys) => {
               onChange={onChangeTransfer}
               leftColumns={leftTableColumns}
               rightColumns={rightTableColumns}
-              //pagination
             />
           </div>
         </Col>

@@ -135,6 +135,12 @@ const getReqFields = ({
           value={value.value && value.label ? value : null}
           placeholder={`Select ${name}`}
           isDisabled={disableField}
+          styles={{
+            menuList: (provided) => ({
+              ...provided,
+              maxHeight: 120,
+            }),
+          }}
         />);
     case 'Image':
       return (
@@ -210,7 +216,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const { isError, isErrorCommentType } = props;
 
-  const thresholdValue = { min: 0, max: 100 };
+  const thresholdValue = { min: -10000, max: 10000 };
 
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
@@ -315,6 +321,10 @@ const ErrorDataSheetTwo = (props) => {
     return false;
   };
 
+  const onScreenShotUploadError = () => {
+    message.warn('Uploaded img file is broken');
+  };
+
   const getIsDisableOrNot = () => {
     if (isAnalyst_DCR) {
       return true;
@@ -336,7 +346,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const doValidate = () => {
     const errors = {
-      formTextSnippet: isError && !(formTextSnippet.length > 0),
+      formTextSnippet: isError && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
       formPageNo: isError && !(formPageNo),
       formScreenShotPath: isError && false, // !formScreenShotPath, Not Mandatory
       formResponse: isError && !formResponse,
@@ -388,14 +398,14 @@ const ErrorDataSheetTwo = (props) => {
         comment: formComment,
         errorStatus: 'Completed',
       },
+      isEdited: true,
     };
     if (doValidate()) {
       props.onClickSave(dummyDataReps);
+    } else if (hasErrors.formThreshold) {
+      message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
     } else {
       message.error('Please Fill Required fields !');
-      if (hasErrors.formThreshold) {
-        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
-      }
     }
   };
 
@@ -448,6 +458,7 @@ const ErrorDataSheetTwo = (props) => {
           body={
             <Form.Control
               type="number"
+              autoComplete="false"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
               name="response"
               placeholder="Enter Response"
@@ -467,6 +478,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Form.Control
             type="text"
+            autoComplete="false"
             name="response"
             className={hasErrors.formResponse && 'red-class'}
             placeholder="Enter Response"
@@ -510,6 +522,12 @@ const ErrorDataSheetTwo = (props) => {
               value={formResponse && { label: formResponse, value: formResponse }}
               placeholder="Select Response"
               isDisabled={disableField}
+              styles={{
+                menuList: (provided) => ({
+                  ...provided,
+                  maxHeight: 120,
+                }),
+              }}
             />
           }
         />}
@@ -528,6 +546,12 @@ const ErrorDataSheetTwo = (props) => {
             value={formSource && { label: formSource.sourceName, value: formSource }}
             placeholder="Select Source"
             isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
           />
         }
       />
@@ -540,12 +564,13 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label={<div>Text Snippet<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
           <Form.Control
             as="textarea"
+            autoComplete="false"
             className={hasErrors.formTextSnippet && 'red-class'}
             name="textSnippet"
             placeholder="Enter Text Snippet"
@@ -564,6 +589,7 @@ const ErrorDataSheetTwo = (props) => {
         body={
           <Form.Control
             type="number"
+            autoComplete="false"
             className={hasErrors.formPageNo && 'red-class'}
             placeholder="Enter Page No"
             onChange={onChangeFormPageNo}
@@ -582,6 +608,7 @@ const ErrorDataSheetTwo = (props) => {
           <Form.Control
             type="text"
             name="url"
+            autoComplete="false"
             placeholder="Enter Url"
             onChange={onChangeFormURL}
             value={formURL}
@@ -641,6 +668,7 @@ const ErrorDataSheetTwo = (props) => {
               <Image
                 width="50%"
                 src={formScreenShotPath}
+                onError={onScreenShotUploadError}
               />
             }
           />
@@ -650,6 +678,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData, index) => (
         <FieldWrapper
+          key={eachData.name}
           visible={isErrorCommentType || isError}
           label={<div>{eachData.name}<span className="addNewMember-red-asterik"> * </span></div>}
           size={[6, 5, 7]}
@@ -669,6 +698,7 @@ const ErrorDataSheetTwo = (props) => {
           <Form.Control
             as="textarea"
             disabled={disableField}
+            autoComplete="false"
             aria-label="With textarea"
             className={hasErrors.formComment && 'red-class'}
             placeholder="Enter Comment"

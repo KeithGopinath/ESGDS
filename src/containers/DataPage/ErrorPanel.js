@@ -2,10 +2,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import moment from 'moment';
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Col, Row, Form } from 'react-bootstrap';
-import { Comment, Tag, Tooltip, Divider } from 'antd';
+import { Comment, Tag, Divider } from 'antd';
 import ErrorDataSheetTwo from './ErrorDataSheet';
 
 
@@ -63,16 +62,12 @@ const ErrorPanel = (props) => {
                   {defaultError.type}
                 </Tag>
                 <Tag style={{ margin: '5px' }}>Raised By {defaultError.raisedBy}</Tag>
-                <Tag style={{ margin: '5px' }}>
-                  <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                    <span>{moment().fromNow()}</span>
-                  </Tooltip>
-                </Tag>
+                {props.isAccepted !== null && <Tag style={{ margin: '5px' }}>{props.isAccepted ? 'Accepted' : 'Rejected'}</Tag>}
               </div>
               {!props.isAccepted && props.isAccepted !== null && <Divider />}
               <FieldWrapper
                 label="Comments*"
-                visible={!props.isAccepted && props.isAccepted !== null}
+                visible={!props.isAccepted && defaultError.errorStatus !== 'Completed' && props.isAccepted !== null}
                 body={
                   <Form.Control
                     as="textarea"
@@ -116,20 +111,16 @@ const ErrorPanel = (props) => {
                   Recommended Data
                 </Tag>
                 <Tag style={{ margin: '5px' }}>Raised By {defaultError.raisedBy}</Tag>
-                <Tag style={{ margin: '5px' }}>
-                  <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                    <span>{moment().fromNow()}</span>
-                  </Tooltip>
-                </Tag>
+                {props.isAccepted !== null && <Tag style={{ margin: '5px' }}>{props.isAccepted ? 'Accepted' : 'Rejected'}</Tag>}
               </div>
               <Divider />
               <Row>
                 <ErrorDataSheetTwo isErrorCommentType reqData={defaultError.refData} />
               </Row>
-              <Divider />
+              {!props.isAccepted && defaultError.errorStatus !== 'Completed' && props.isAccepted !== null && <Divider />}
               <FieldWrapper
                 label="Comments*"
-                visible={!props.isAccepted && props.isAccepted !== null}
+                visible={!props.isAccepted && defaultError.errorStatus !== 'Completed' && props.isAccepted !== null}
                 body={
                   <Form.Control
                     as="textarea"
