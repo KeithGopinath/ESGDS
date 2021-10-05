@@ -99,7 +99,7 @@ const DataPage = (props) => {
 
   const [isDpCodeEditted, setIsDpCodeEditted] = useState(false);
 
-  const reqCommentsList = reqDpCodeData.comments || [];
+  const reqCommentsList = reqDpCodeData && (reqDpCodeData.comments || []);
 
   const getDefaultCurrentDataForYear = (year) => {
     const defaultCurrentData = (reqDpCodeData && reqDpCodeData.currentData) || [];

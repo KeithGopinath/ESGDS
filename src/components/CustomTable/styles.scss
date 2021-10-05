@@ -31,6 +31,12 @@
     padding-bottom: 13px !important; */
 }
 
+.users-table-column-cell-margin-left {
+    .users-table-column-cell{
+        margin-left: -12px !important;
+    }
+}
+
 .personal-details-action-wrap {
     display: flex;
 }

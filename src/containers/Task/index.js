@@ -376,7 +376,7 @@ const Task = (props) => {
   // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
 
   // Change Session storage to props.location.state
-  const priorityCheckedList = isAnalyst_DC ? [...reqDpCodesData].filter((e) => e.priority && e.priority.isDpcodeValidForCollection) : [...reqDpCodesData];
+  const priorityCheckedList = isAnalyst_DC && !isValidationCalled ? [...reqDpCodesData].filter((e) => e.priority && e.priority.isDpcodeValidForCollection) : [...reqDpCodesData];
   taskDetails = { ...taskDetails, filteredData: priorityCheckedList };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
