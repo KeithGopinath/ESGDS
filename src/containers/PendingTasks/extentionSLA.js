@@ -1,30 +1,25 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Form } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import { DatePicker } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Overlay from '../../components/Overlay';
 
 
 const ExtentionSLA = ({
-  show, setShow, detail, setdetail,
+  show, setShow, detail, setdetail, setrejectslaDate, rejectSlaDate,
 }) => {
-  const [day, setdays] = useState(1);
   const [alert, setalert] = useState(false);
   const [alertStatus, setalertStatus] = useState(false);
   const handleClose = () => {
     setShow(false);
-    setdays(1);
     setdetail('');
     setalertStatus(false);
     setalert(false);
   };
-  const currentRole = sessionStorage.role;
-  const [isAnalyst, isQA] = [
-    currentRole === 'Analyst',
-    currentRole === 'QA',
-  ];
+
   const dispatch = useDispatch();
   const slaRequest = useSelector((slapost) => slapost.slaExtexsion);
   const isslaData = slaRequest.slapost;
@@ -33,25 +28,29 @@ const ExtentionSLA = ({
       setalert(slaRequest.slapost.message);
     }
   }, [isslaData]);
-  const onhandleDay = (e) => {
-    if ((e.target.value >= 1) && (e.target.value <= 30)) {
-      setdays(e.target.value);
-    }
-  };
+
+  const baseFormat = 'YYYY-MM-DD';
   const onExtendSla = () => {
-    if (isAnalyst) {
-      const modifiedsla = moment(detail.analystSLADate, 'YYYY-MM-DD').add(day, 'days');
-      const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
-      const requestData = { taskId: detail.taskId, days: sladate };
-      setalertStatus(true);
-      dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
-    }
-    if (isQA) {
-      const modifiedsla = moment(detail.qaSLADate, 'YYYY-MM-DD').add(day, 'days');
-      const sladate = moment(modifiedsla._d, 'YYYY-MM-DD').format('YYYY-MM-DD');
-      const requestData = { taskId: detail.taskId, days: sladate };
-      setalertStatus(true);
-      dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
+    setalertStatus(true);
+    const requestData = { taskId: detail.taskId, days: rejectSlaDate };
+    dispatch({ type: 'SLA_EXTENSION_REQUEST', payload: requestData });
+  };
+  const getFormatDate = (arg) => {
+    const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
+    return date;
+  };
+  const sladisabledDate = (current) => {
+    const yourDate = new Date();
+    const date = getFormatDate(yourDate);
+    const customDate = date;
+    return current && current < moment(customDate, 'YYYY-MM-DD');
+  };
+  const onEditslaDate = (arg) => {
+    if (arg !== null) {
+      const date = getFormatDate(arg._d);
+      setrejectslaDate(date);
+    } else {
+      setrejectslaDate(arg);
     }
   };
   const editBody = () => (
@@ -61,13 +60,14 @@ const ExtentionSLA = ({
           <div className="editsla-box">
             <div className="editsla-content">How many days do you want to extend ? </div>
             <div className="datecount-content">
-              <Form.Control
-                type="number"
-                name="Days"
-                style={{ width: '55%' }}
-                placeholder="Days"
-                onChange={onhandleDay}
-                value={day}
+
+              <DatePicker
+                className="date-picker"
+                size="middle"
+                format="DD-MM-YYYY"
+                value={(rejectSlaDate) ? moment(rejectSlaDate, baseFormat) : null}
+                onChange={onEditslaDate}
+                disabledDate={sladisabledDate}
               />
             </div>
           </div>

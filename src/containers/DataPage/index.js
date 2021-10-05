@@ -99,7 +99,7 @@ const DataPage = (props) => {
 
   const [isDpCodeEditted, setIsDpCodeEditted] = useState(false);
 
-  const reqCommentsList = reqDpCodeData.comments || [];
+  const reqCommentsList = reqDpCodeData && (reqDpCodeData.comments || []);
 
   const getDefaultCurrentDataForYear = (year) => {
     const defaultCurrentData = (reqDpCodeData && reqDpCodeData.currentData) || [];
@@ -279,8 +279,8 @@ const DataPage = (props) => {
       memberId: reqDpcodeData.memberId || '',
       memberName: reqDpcodeData.memberName || '',
       memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
-      currentData: getReqDetails(reqCurrentData),
-      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData),
+      currentData: getReqDetails(reqCurrentData.filter((e) => e.isEdited)),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData.filter((e) => e.isEdited)),
     };
     return postableData;
   };
@@ -373,6 +373,7 @@ const DataPage = (props) => {
           memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
           memberName: dpCodeDetails.memberName || '',
           memberId: dpCodeDetails.memberId || '',
+          role: sessionStorage.role,
         },
         taskType: 'DATA_REVIEW',
       });

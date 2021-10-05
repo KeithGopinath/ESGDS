@@ -72,10 +72,12 @@ export default {
     controversyUpdate: 'controversy_tasks/update-task',
     getNotification: 'notifications/my-notifications',
     getDashboard: 'dashboards',
+    rejectsla: 'taskSlaLogs/reject',
+    raisedSla: 'taskSlaLogs/task-requests',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
     test: 'http://3.109.80.244/',
-    prod: 'http://3.108.113.82/',
+    prod: 'https://backend.esgds.com/',
   },
 };

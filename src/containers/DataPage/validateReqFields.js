@@ -18,7 +18,11 @@ export default (errors, roleScreenType) => {
     formIsError,
     errorComment,
     formControversyComment,
-    formNextReviewDate,
+    formReviewDate,
+    formIsApplicableForCommiteeReview,
+    formAssessmentDate,
+    formReassessmentDate,
+    formControversyFiscalYear,
     dynamicFields,
     formThreshold,
   } = errors;
@@ -37,7 +41,8 @@ export default (errors, roleScreenType) => {
   }
   if (isAnalyst_CC) {
     return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formURL && !formPublicDate && !formScreenShotPath &&
-    !formNextReviewDate && !formControversyComment && !dynamicFields.includes(true));
+      !formReviewDate && !formIsApplicableForCommiteeReview && !formAssessmentDate && !formControversyFiscalYear &&
+      !formControversyComment && !formReassessmentDate && !dynamicFields.includes(true));
   }
   if (isQA_DV) {
     return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formThreshold &&

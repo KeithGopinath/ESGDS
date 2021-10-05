@@ -1,12 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: ESG S3 DEV DEPLOYMENT
+name: ESG S3 PROD DEPLOYMENT
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ dev ]
+    branches: [ prod ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm install
-      - run: npm run build:dev
+      - run: npm run build:prod
 
       # Runs a set of commands using the runners shell
       - name: Deploy to S3
@@ -36,7 +36,7 @@ jobs:
         with:
           args: --acl public-read --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME_DEV }}
+          AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME_PROD }}
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
           SOURCE_DIR: "build"

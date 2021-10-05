@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { Modal, Tooltip, message } from 'antd';
 
-import { CloseCircleFilled, UserOutlined } from '@ant-design/icons';
+import { CloseCircleFilled, UserOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
 
 import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -59,14 +59,21 @@ const TaskTable = (props) => {
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
     status: x.status,
-    action:
-  <Link
-    to={{
-      pathname: `/dpcode/${x.dpCode}`,
-      state: { taskDetails, dpCodeDetails: x },
-    }}
-  >Enter Data
-  </Link>,
+    action: (props.isAnalyst_DC && x.priority && x.priority.isDpcodeValidForCollection) || !props.isAnalyst_DC ?
+      <Link
+        to={{
+          pathname: `/dpcode/${x.dpCode}`,
+          state: { taskDetails, dpCodeDetails: x },
+        }}
+      >Enter Data
+      </Link> :
+      <Tooltip
+        placement="left"
+        title={
+          <div>{(x.priority && x.priority.message) || 'Please Check'}</div>
+        }
+      ><span style={{ cursor: 'pointer' }}><ExclamationCircleTwoTone style={{ fontSize: 'medium' }} twoToneColor="#f18618" /></span>
+      </Tooltip>,
   }));
 
   const TASK_DATA = {
@@ -98,6 +105,7 @@ TaskTable.propTypes = {
   message: PropTypes.string,
   icon: PropTypes.element,
   footerBesidePagination: PropTypes.element,
+  isAnalyst_DC: PropTypes.bool,
 };
 
 const ControversyTaskTable = (props) => {
@@ -105,6 +113,9 @@ const ControversyTaskTable = (props) => {
     key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
+    reassessmentDate: x.reassessmentDate ? new Date(x.reassessmentDate).toDateString() : '-',
+    reviewDate: x.reviewDate ? new Date(x.reviewDate).toDateString() : '-',
+    controversyFiscalYearEndDate: x.controversyFiscalYearEndDate ? new Date(x.controversyFiscalYearEndDate).toDateString() : '-',
     action:
   <Link
     to={{
@@ -123,6 +134,15 @@ const ControversyTaskTable = (props) => {
       },
       {
         id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+      },
+      {
+        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
@@ -356,7 +376,8 @@ const Task = (props) => {
   // sessionStorage.filteredData = isAnalyst_CC ? JSON.stringify(reqDpCodesData) : JSON.stringify(taskToNextPage);
 
   // Change Session storage to props.location.state
-  taskDetails = { ...taskDetails, filteredData: reqDpCodesData };
+  const priorityCheckedList = isAnalyst_DC && !isValidationCalled ? [...reqDpCodesData].filter((e) => e.priority && e.priority.isDpcodeValidForCollection) : [...reqDpCodesData];
+  taskDetails = { ...taskDetails, filteredData: priorityCheckedList };
 
   const tabs = ['Standalone', 'Board Matrix', 'Kmp Matrix'];
   const tabsRef = useRef(tabs.map(() => React.createRef()));
@@ -550,7 +571,7 @@ const Task = (props) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Task" sideBarRef={sideBarRef} />
-        <div className="container-main" >
+        <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
               {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
@@ -627,6 +648,7 @@ const Task = (props) => {
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
                 footerBesidePagination={getFooterBesidePagination()}
+                isAnalyst_DC={isAnalyst_DC}
               />}
 
             {isAnalyst_CC &&

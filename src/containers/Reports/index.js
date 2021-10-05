@@ -89,7 +89,7 @@ const Reports = (props) => {
       key: data.companyId,
       checkBox: <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}></Checkbox>,
       companyName: data.companyName ? data.companyName : '--',
-      completedDate: data.complatedDate ? moment(data.complatedDate).format('DD-MM-YYYY') : '--',
+      completedDate: data.completedDate ? moment(data.completedDate).format('DD-MM-YYYY') : '--',
       clientRep: data.clientRrepresentative ? data.clientRrepresentative : '--',
       companyRep: data.companyRepresentative ? data.companyRepresentative : '--',
     }));
@@ -112,7 +112,7 @@ const Reports = (props) => {
           id: 'completedDate',
           align: 'center',
           label: 'Completed Date',
-          dataType: 'date',
+          dataType: 'string',
         },
         {
           id: 'clientRep',
@@ -224,7 +224,7 @@ const Reports = (props) => {
           id: 'allocatedDate',
           align: 'center',
           label: 'Allocated Date',
-          dataType: 'date',
+          dataType: 'string',
         },
         {
           id: 'clientRep',
