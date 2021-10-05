@@ -25,7 +25,6 @@ import CustomTable from '../../components/CustomTable';
 import AddNewKMPMember from './AddNewKMPMember';
 
 import { history } from '../../routes';
-import ValidationComments from './ValidationComments';
 
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
@@ -190,7 +189,6 @@ const ValidationTable = (props) => {
       <div style={{ color: '#28a745' }}>Success</div> :
       <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
         <div style={{ color: '#e40e22' }}>Failed</div>
-        <ValidationComments />
       </div>,
     action:
   <Link

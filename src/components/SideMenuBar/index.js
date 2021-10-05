@@ -205,16 +205,18 @@ const SideMenuBar = React.forwardRef((props, ref) => {
     }
   };
 
+  const userName = (sessionStorage.userName).split(" ")[0];
+
   return (
     <div ref={ref} className="sideMenu-main">
       <div className="sidemenu-scroll-area">
         <div className="hamburger-start">
           <div className="hamburger-bars-icon">
             <FontAwesomeIcon className="hamburger-pointer" icon={faBars} onClick={sideBarMenuHandler} />
-            <div className={handler ? "sideMenu-logo" : "sidemenu-logo-hide"}>ESG</div>
+            <div className={handler ? "sideMenu-logo ml-2" : "sidemenu-logo-hide"}>Hi, {userName}</div>
           </div>
         </div>
-        <Scrollbars thumbSize={500} style={{height: '95vh'}}>
+        <Scrollbars thumbSize={500} style={{ height: '95vh' }}>
           {sideMenuBtns}
         </Scrollbars>
         <RoleAssignment show={show} setShow={setShow} />
