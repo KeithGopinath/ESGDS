@@ -11,6 +11,7 @@ export function* getLogin(data) {
     sessionStorage.access = response.token;
     sessionStorage.role = response.user && response.user.roleDetails.primaryRole.label;
     sessionStorage.userId = response.user && response.user._id;
+    { response.user && response.user.roleDetails.primaryRole.label === 'SuperAdmin' ? null : sessionStorage.userName = response.user && response.user.name }
   } catch (error) {
     yield put(actionCreators.getLoginFailure(error));
   }

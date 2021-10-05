@@ -11,6 +11,7 @@ export function* getOtp(data) {
     sessionStorage.access = response.token;
     sessionStorage.role = response.user.roleDetails.primaryRole.label;
     sessionStorage.userId = response.user._id;
+    sessionStorage.userName = response.user && response.user.name;
   } catch (error) {
     yield put(actionCreators.getOtpFailure(error));
   }
