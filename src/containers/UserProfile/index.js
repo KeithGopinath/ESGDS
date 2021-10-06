@@ -40,6 +40,8 @@ const UserProfile = () => {
   const userId = otpDetails && otpDetails.user._id || login && login.user._id || sessionStorage.userId;
   const userDetails = userData && userData.user;
 
+  console.log('USER DETAILS: ', userDetails);
+
   useEffect(() => {
     dispatch({ type: 'USER_BY_ID_REQUEST', userId });
   }, []);
@@ -455,19 +457,12 @@ const UserProfile = () => {
                     <Col lg={6} sm={6} md={6}>
                       <Form.Group>
                         <Form.Label>Company Name</Form.Label>
-                        {role === 'Company Representative' ?
                           <Select
                             isMulti
                             isDisabled
                             className="company-select-list"
                             value={userDetails && userDetails.companies}
-                          /> :
-                          <Input
-                            size="large"
-                            type="tel"
-                            disabled
-                            value={userDetails && userDetails.companyName}
-                          />}
+                          />
                       </Form.Group>
                     </Col>
                   }
