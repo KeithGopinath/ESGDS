@@ -8,6 +8,7 @@ import NotificationPanel from '../../containers/NotificationPanel';
 import { Button } from 'react-bootstrap';
 import RoleOnboard from '../../containers/RoleOnboard';
 import Select from 'react-select';
+import EsgdsLogo from '../../../assets/images/Logo-JPEG.jpg';
 // import Avatar from 'react-avatar';
 
 const Header = ({ title }) => {
@@ -59,31 +60,35 @@ const Header = ({ title }) => {
 
   return (
     <div className="header-container">
-      <div className="header-content-zero content-head">
-        <FontAwesomeIcon className="bellicon" icon={faSignOutAlt} onClick={buttonClicklogout} />
-      </div>
-      <div className="header-content-three content-head">
-        <NotificationPanel />
-      </div>
-      {(userRole.label == "Admin" || userRole.label == "GroupAdmin" || userRole.label == "QA" || userRole.label == "Analyst") &&
-        <div className="header-content-one content-head">
-          <Select options={roleOptions} onChange={onroleChange} value={userRole} />
+      <div className="d-flex flex-row-reverse">
+        <div className="header-content-zero content-head">
+          <FontAwesomeIcon className="bellicon" icon={faSignOutAlt} onClick={buttonClicklogout} />
         </div>
-      }
-      {(userRole.label == "SuperAdmin" || userRole.label == "Admin") &&
-        <div className="header-content-four content-head">
-          <div className="users-back-label-onboardlink-container">
-            <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
-            </Button>
+        <div className="header-content-three content-head">
+          <NotificationPanel />
+        </div>
+        {(userRole.label == "Admin" || userRole.label == "GroupAdmin" || userRole.label == "QA" || userRole.label == "Analyst") &&
+          <div className="header-content-one content-head">
+            <Select options={roleOptions} onChange={onroleChange} value={userRole} />
           </div>
-        </div>
-      }
+        }
+        {(userRole.label == "SuperAdmin" || userRole.label == "Admin") &&
+          <div className="header-content-four content-head">
+            <div className="users-back-label-onboardlink-container">
+              <Button className="onboardlink-btn" onClick={sendOnboard}>Send onboarding link
+              </Button>
+            </div>
+          </div>
+        }
+      </div>
       {/* <div className="header-content-two content-head">
         <Avatar name="Foo Bar" size="38" round />
       </div> */}
       {/* <div className="header-content-four content-head">
         <div className="head-link-element">Quick Links</div>
       </div> */}
+      <img className="esgds-logo" title="Environmental, Social, Governance Data & Solutions" alt="esgds logo" src={EsgdsLogo} />
+
       <div className="header-content-five content-head">
         <h4 className="header-title">{title}</h4>
       </div>
