@@ -121,6 +121,7 @@ const ControversyPendingTaskTable = (props) => {
   const tablePopulate = (data) => data.map((ePendingTask) => ({
     taskNumber: ePendingTask.taskNumber,
     company: ePendingTask.company,
+    reviewDate: ePendingTask.reviewDate ? new Date(ePendingTask.reviewDate).toDateString() : '-',
     updatedDate: ePendingTask.lastModifiedDate ? new Date(ePendingTask.lastModifiedDate).toDateString() : '-',
     action: <Link href to={{ pathname: `/task/${ePendingTask.taskNumber}`, state: { taskDetails: ePendingTask } }}>Enter</Link>,
   }));
@@ -133,6 +134,9 @@ const ControversyPendingTaskTable = (props) => {
       },
       {
         id: 'company', label: 'Company', align: 'left', dataType: 'string',
+      },
+      {
+        id: 'reviewDate', label: 'Review Date', align: 'left', dataType: 'string',
       },
       {
         id: 'updatedDate', label: 'Last Updated On', align: 'center', dataType: 'string',
