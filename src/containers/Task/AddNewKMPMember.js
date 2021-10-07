@@ -484,7 +484,7 @@ const AddNewKMPMember = (props) => {
             </React.Fragment>
           }
           body={
-            <DatePicker size="large" value={dob && moment(dob)} onChange={onChangeDob} disabledDate={disabledDobDates} className={hasError.dob ? 'addNewMember-dob addNewMember-red-border' : 'addNewMember-dob'} />
+            <DatePicker format="DD/MM/YYYY" size="large" value={dob && moment(dob)} onChange={onChangeDob} disabledDate={disabledDobDates} className={hasError.dob ? 'addNewMember-dob addNewMember-red-border' : 'addNewMember-dob'} />
           }
         />
 
@@ -518,7 +518,7 @@ const AddNewKMPMember = (props) => {
             </React.Fragment>
           }
           body={
-            <DatePicker size="large" value={startDate && moment(startDate)} onChange={onChangeStartDate} className={hasError.startDate ? 'addNewMember-start-date addNewMember-red-border' : 'addNewMember-start-date'} />
+            <DatePicker format="DD/MM/YYYY" size="large" value={startDate && moment(startDate)} onChange={onChangeStartDate} className={hasError.startDate ? 'addNewMember-start-date addNewMember-red-border' : 'addNewMember-start-date'} />
           }
         />
 
@@ -561,7 +561,7 @@ const AddNewKMPMember = (props) => {
             </React.Fragment>
           }
           body={
-            <DatePicker size="large" value={endDate && moment(endDate)} onChange={onChangeEndDate} className={hasError.endDate ? 'terminateMember-end-date addNewMember-red-border' : 'terminateMember-end-date'} />
+            <DatePicker format="DD/MM/YYYY" size="large" value={endDate && moment(endDate)} onChange={onChangeEndDate} className={hasError.endDate ? 'terminateMember-end-date addNewMember-red-border' : 'terminateMember-end-date'} />
           }
         />
 
