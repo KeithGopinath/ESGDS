@@ -461,6 +461,7 @@ const UserProfile = () => {
                             isMulti
                             isDisabled
                             className="company-select-list"
+                            placeholder=""
                             value={userDetails && userDetails.companies}
                           />
                       </Form.Group>

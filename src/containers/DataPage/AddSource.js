@@ -473,6 +473,7 @@ const AddSource = (props) => {
           body={
             <React.Fragment>
               <DatePicker
+                format="DD/MM/YYYY"
                 className={errors.publicationDate ? 'datapage-datepicker red-class' : 'datapage-datepicker'}
                 onChange={onChangePublicationDate}
                 value={publicationDate && moment(publicationDate)}
