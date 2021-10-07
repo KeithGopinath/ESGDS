@@ -131,6 +131,7 @@ const getReqFields = ({
     case 'Date':
       return (
         <DatePicker
+          format="DD/MM/YYYY"
           size="large"
           style={{ width: '100%' }}
           placeholder={`Select ${name}`}
@@ -999,6 +1000,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             name="response"
             size="large"
             className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
@@ -1097,6 +1099,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             name="publicationDate"
             size="large"
             className={hasErrors.formPublicDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
@@ -1188,6 +1191,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formAssessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"
@@ -1205,6 +1209,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formReassessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"
@@ -1222,6 +1227,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"

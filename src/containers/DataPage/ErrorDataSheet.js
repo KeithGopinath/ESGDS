@@ -116,6 +116,7 @@ const getReqFields = ({
     case 'Date':
       return (
         <DatePicker
+          format="DD/MM/YYYY"
           size="large"
           style={{ width: '100%' }}
           placeholder={`Select ${name}`}
@@ -497,6 +498,7 @@ const ErrorDataSheetTwo = (props) => {
           visible={isErrorCommentType || isError}
           body={
             <DatePicker
+              format="DD/MM/YYYY"
               className={hasErrors.formResponse ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
               name="response"
               size="large"
@@ -624,6 +626,7 @@ const ErrorDataSheetTwo = (props) => {
         visible={isErrorCommentType || isError}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className="datapage-datepicker"
             name="publicationDate"
             size="large"
