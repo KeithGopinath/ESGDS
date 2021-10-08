@@ -8,6 +8,7 @@ import { Image } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import UserStatusManage from '../../containers/UserStatusManage';
+import PageLoader from '../../components/PageLoader';
 
 const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone,
   onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep,
@@ -26,7 +27,6 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [validate, setValidate] = useState(false);
   const [show, setShow] = useState(false);
   const [decision, setDecision] = useState('');
-
 
   const dispatch = useDispatch();
 
@@ -53,12 +53,14 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
 
   // Getting the list of companies
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
-  const fullList = companyData && companyData.rows;
+  const companyDataLoading = useSelector((state) => state.companylist.isLoading);
+
+  const fullList = companyData && companyData.data;
 
   const companyList = fullList && fullList.map((args) => ({
     value: args.id, label: args.companyName,
   }));
-
+  
   const onFirstNameChange = (e) => {
     if (e.target.value.match('^[a-zA-Z ]*$')) {
       setFirstName(e.target.value);
@@ -218,7 +220,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const imageThree = userDetails && userDetails.documents.pancardUrl;
 
   return (
-    <Container>
+    companyDataLoading ? <PageLoader /> : <Container>
       <Row className="personal-content mr-0">
         <Card className="personal-details shadow mb-5">
           <h4 className="personal-text">Personal Details</h4>
