@@ -26,13 +26,13 @@ const UpdatePassword = () => {
     const url = new URL(window.location.href)
 
     const onPasswordChange = (e) => {
-        if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+        if (e.target.value.match('^[a-zA-Z0-9_@./!$#&+-]*$')) {
             setPassword(e.target.value)
         }
     };
 
     const onConfirmPasswordChange = (e) => {
-        if (e.target.value.match('^[a-zA-Z0-9_@./#&+-]*$')) {
+        if (e.target.value.match('^[a-zA-Z0-9_@./!$#&+-]*$')) {
             setConfirmPassword(e.target.value)
         }
     };

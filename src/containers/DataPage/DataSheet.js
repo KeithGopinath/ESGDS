@@ -131,6 +131,7 @@ const getReqFields = ({
     case 'Date':
       return (
         <DatePicker
+          format="DD/MM/YYYY"
           size="large"
           style={{ width: '100%' }}
           placeholder={`Select ${name}`}
@@ -301,6 +302,9 @@ export const DataSheetComponent = (props) => {
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
 
+  // SHOW IMAGE UPLOADE ERROR
+  const [showImgUploadError, setShowImgUploadError] = useState(false);
+
   const [hasErrors, setHasErrors] = useState({
     formTextSnippet: false,
     formPageNo: false,
@@ -378,6 +382,8 @@ export const DataSheetComponent = (props) => {
       dynamicFields: [false],
       formThreshold: false,
     });
+
+    setShowImgUploadError(false);
   }, [props.reqData]);
 
   useEffect(() => {
@@ -423,6 +429,7 @@ export const DataSheetComponent = (props) => {
     setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
     if (event.fileList[0]) {
       getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
+      setShowImgUploadError(true);
     } else {
       setFormScreenShotFile({ ...event, base64: null });
     }
@@ -524,7 +531,10 @@ export const DataSheetComponent = (props) => {
   const disabledPublicationDate = (event) => event && event > moment().endOf('day');
 
   const onScreenShotUploadError = () => {
-    message.warn('Uploaded img file is broken');
+    if (showImgUploadError) {
+      message.warn('Uploaded img file is broken');
+      setShowImgUploadError(false);
+    }
   };
 
   const doValidate = () => {
@@ -990,6 +1000,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             name="response"
             size="large"
             className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
@@ -1088,6 +1099,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             name="publicationDate"
             size="large"
             className={hasErrors.formPublicDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
@@ -1179,6 +1191,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formAssessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"
@@ -1196,6 +1209,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formReassessmentDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"
@@ -1213,6 +1227,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <DatePicker
+            format="DD/MM/YYYY"
             className={hasErrors.formReviewDate ? 'red-class datapage-datepicker' : 'datapage-datepicker'}
             name="response"
             size="large"

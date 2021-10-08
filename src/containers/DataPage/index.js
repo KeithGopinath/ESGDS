@@ -470,7 +470,7 @@ const DataPage = (props) => {
                 <DataAccordian header="Current" isActive >
                   {(dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || dpCodeDataFromStore.error || (currentDataForLoading.length !== reqCurrentData.length)) ? // T1
                     (dpCodeDataFromStore.isLoading || dpCodeDataUpdateFromStore.isLoading || (currentDataForLoading.length !== reqCurrentData.length)) ? // T2
-                      <PageLoader /> : // T2R
+                      <div className="datapage-current-loader"><PageLoader /></div> : // T2R
                       (dpCodeDataFromStore.error) &&
                       <Result
                         className="custom-table-result"
