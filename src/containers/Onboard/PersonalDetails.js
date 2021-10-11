@@ -55,11 +55,11 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
   const companyDataLoading = useSelector((state) => state.companylist.isLoading);
 
-  const fullList = companyData && companyData.data;
+  const fullList = companyData && companyData.rows;
 
-  const companyList = fullList && fullList.map((args) => ({
+  const companyList = fullList ? fullList && fullList.map((args) => ({
     value: args.id, label: args.companyName,
-  }));
+  })) : [];
   
   const onFirstNameChange = (e) => {
     if (e.target.value.match('^[a-zA-Z ]*$')) {
