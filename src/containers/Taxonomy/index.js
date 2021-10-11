@@ -22,7 +22,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [min, setmin] = useState(0);
-  const [max, setmax] = useState(20);
+  const [max, setmax] = useState(30);
   const [taxonomyData, setTaxonomyData] = useState()
   const [subsetData, setSubsetData] = useState([])
   const [label, setLabel] = useState('');
@@ -231,7 +231,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
     },
   });
 
-  const cardPerPage = 20;
+  const cardPerPage = 30;
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
     const maxValue = page * cardPerPage;
@@ -269,39 +269,34 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   const calculateCount = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData).length : taxonomyData.length) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = taxonomyData && (searchQuery ? searchfilter(searchQuery, taxonomyData) : taxonomyData).slice(min, max).map((item, index) => (
-    <Col key={item.id} lg={3} md={6}>
-      <Card className="batch-card batchbox">
-        <div className={item.isRequired ? "taxonomy-checkbox-mandatory-container" : "taxonomy-checkbox-container"}>
-          {!showList &&
-            <div>
-              {!item.isRequired &&
-                <Form.Control
-                  type="checkbox"
-                  className="taxonomy-checkbox"
-                  onChange={(e) => { createSubset(item, e) }}
-                  checked={item.checked}
-                />
-              }
-            </div>
-          }
+    <Col key={item.id} lg={2} md={6} sm={6}>
+      <Card className="taxonomy-card">
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <div className="taxonomy-icons-container">
+            {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
+              : null}
+            {!showList &&
+              <div>
+                <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
+              </div>
+            }
+          </div>
+          <div className={item.isRequired ? "taxonomy-checkbox-mandatory-container" : "taxonomy-checkbox-container"}>
+            {!showList &&
+              <div>
+                {!item.isRequired &&
+                  <Form.Control
+                    type="checkbox"
+                    className="taxonomy-checkbox"
+                    onChange={(e) => { createSubset(item, e) }}
+                    checked={item.checked}
+                  />
+                }
+              </div>
+            }
+          </div>
         </div>
-        <Form.Control
-          className="input-taxonomy"
-          type="text"
-          name="taxonomy"
-          value={item.isActive ? label : item.name}
-          disabled={item.isActive ? false : true}
-          onChange={onTaxonomyChange}
-        />
-        <Row className="taxonomy-icons-container">
-          {item.isActive ? <FontAwesomeIcon icon={faCheckCircle} className="taxonomy-icon" onClick={() => { updateTaxonomy(item) }} />
-            : null}
-          {!showList &&
-            <div>
-              <FontAwesomeIcon icon={faEdit} className="taxonomy-icon" onClick={() => { editTaxonomy(item) }} />
-            </div>
-          }
-        </Row>
+        <span className="input-taxonomy" onChange={onTaxonomyChange} title={item.isActive ? label : item.name}>{item.isActive ? label : item.name}</span>
       </Card>
     </Col>
   ));
@@ -380,7 +375,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header sideBarRef={sideBarRef} title={showList ? taxonomyName : "Master Taxonomy"} />
-        <div className="container-main">
+        <div className="container-main pb-1">
           {showList && <FontAwesomeIcon size="lg" className="taxonomy-backward-icon" icon={faBackward} onClick={handleListClose} />}
           <Container className="wrapper">
             <div className="head-tab">
@@ -407,19 +402,21 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
             </div>
             <div className="view-min-height">
               {loading && <PageLoader />}
-              <Row >
+              <Row>
                 {batchlist}
               </Row>
             </div>
             <Row>
               <Col lg={12} sm={12}>
                 <div className="taxonomy-footer">
-                  <div className="taxonomy-submit">
+                  <div className="submit-taxonomy">
                     {!showList &&
                       <Button variant="primary" className="taxonomy-btn" onClick={onSubmitSubset}>Create New Taxonomy</Button>
                     }
                   </div>
-                  <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+                  <div className="master-taxonomy-pagination">
+                    <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+                  </div>
                 </div>
               </Col>
             </Row>
