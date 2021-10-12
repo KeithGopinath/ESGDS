@@ -1,7 +1,4 @@
-/* eslint-disable no-debugger */
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable camelcase */
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Row, Col, Button } from 'react-bootstrap';
@@ -181,13 +178,14 @@ export const DataSheetComponent = (props) => {
   const currentTab = sessionStorage.tab;
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
   const {
@@ -826,14 +824,12 @@ export const DataSheetComponent = (props) => {
       if (defaultData.status === 'Completed') {
         return true;
       }
-
       return false;
     }
     if (isAnalyst_CC) {
       if (defaultData.status === 'Completed') {
         return true;
       }
-
       return false;
     }
     if (isQA_DV) {
@@ -842,8 +838,9 @@ export const DataSheetComponent = (props) => {
       }
       return false;
     }
-    if (isCompanyRep_DR) { return true; }
-    if (isClientRep_DR) { return true; }
+    if (isCompanyRep_DR || isClientRep_DR || IsAdmin) {
+      return true
+    }
     return false;
   };
 
@@ -936,9 +933,9 @@ export const DataSheetComponent = (props) => {
 
       {/* ADD SOURCE Button */}
       {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
-      <Col lg={6}>
-        <Button onClick={onClickOpenAddSource}>Add Source</Button>
-      </Col>}
+        <Col lg={6}>
+          <Button onClick={onClickOpenAddSource}>Add Source</Button>
+        </Col>}
 
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
@@ -952,89 +949,89 @@ export const DataSheetComponent = (props) => {
       />
 
       {/* RESPONSE Field */}
-      { formDataType === 'NUMBER' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Form.Control
-            type="number"
-            autoComplete="false"
-            name="response"
-            className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
-            placeholder="Enter Response"
-            onChange={onChangeFormResponse}
-            value={formResponse}
-            disabled={disableField}
-          />
-        }
-      />}
+      {formDataType === 'NUMBER' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Form.Control
+              type="number"
+              autoComplete="false"
+              name="response"
+              className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
+              placeholder="Enter Response"
+              onChange={onChangeFormResponse}
+              value={formResponse}
+              disabled={disableField}
+            />
+          }
+        />}
 
 
       {/* RESPONSE Field */}
-      { formDataType === 'TEXT' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Form.Control
-            type="text"
-            autoComplete="false"
-            name="response"
-            placeholder="Enter Response"
-            className={hasErrors.formResponse && 'red-class'}
-            onChange={onChangeFormResponse}
-            value={formResponse}
-            disabled={disableField}
-          />
-        }
-      />}
+      {formDataType === 'TEXT' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Form.Control
+              type="text"
+              autoComplete="false"
+              name="response"
+              placeholder="Enter Response"
+              className={hasErrors.formResponse && 'red-class'}
+              onChange={onChangeFormResponse}
+              value={formResponse}
+              disabled={disableField}
+            />
+          }
+        />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'DATE' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            format="DD/MM/YYYY"
-            name="response"
-            size="large"
-            className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
-            onChange={onChangeFormResponse}
-            value={formResponse && moment(formResponse)}
-            disabled={disableField}
-          />
-        }
-      />}
+      {formDataType === 'DATE' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <DatePicker
+              format="DD/MM/YYYY"
+              name="response"
+              size="large"
+              className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
+              onChange={onChangeFormResponse}
+              value={formResponse && moment(formResponse)}
+              disabled={disableField}
+            />
+          }
+        />}
 
       {/* RESPONSE Field */}
-      { formDataType === 'SELECT' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Select
-            name="response"
-            options={textResponse}
-            className={hasErrors.formResponse && 'red-class'}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Select Response"
-            isDisabled={disableField}
-            styles={{
-              menuList: (provided) => ({
-                ...provided,
-                maxHeight: 120,
-              }),
-            }}
-          />
-        }
-      />}
+      {formDataType === 'SELECT' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Select
+              name="response"
+              options={textResponse}
+              className={hasErrors.formResponse && 'red-class'}
+              onChange={onChangeFormResponse}
+              value={formResponse && { label: formResponse, value: formResponse }}
+              placeholder="Select Response"
+              isDisabled={disableField}
+              styles={{
+                menuList: (provided) => ({
+                  ...provided,
+                  maxHeight: 120,
+                }),
+              }}
+            />
+          }
+        />}
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
@@ -1277,21 +1274,21 @@ export const DataSheetComponent = (props) => {
 
       {/* IS ERORR Field */}
       {(isCompanyRep_DR || isClientRep_DR || isQA_DV) && !isHistoryType &&
-      <Col lg={12}>
-        <Row>
-          <FieldWrapper
-            label={<div>Error<span className="addNewMember-red-asterik"> * </span></div>}
-            visible
-            size={[6, 5, 7]}
-            body={
-              <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
-                <Radio value>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </Radio.Group>
-            }
-          />
-        </Row>
-      </Col>
+        <Col lg={12}>
+          <Row>
+            <FieldWrapper
+              label={<div>Error<span className="addNewMember-red-asterik"> * </span></div>}
+              visible
+              size={[6, 5, 7]}
+              body={
+                <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
+                  <Radio value>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </Radio.Group>
+              }
+            />
+          </Row>
+        </Col>
       }
 
       {/* ERROR TYPE Field */}
@@ -1358,40 +1355,40 @@ export const DataSheetComponent = (props) => {
 
       {/* ERROR DATA SHEET COMPANY AND CLIENT REP's */}
       {(isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
-      <ErrorDataSheetTwo
-        isError={formIsError}
-        reqData={formErrorRefData}
-        reqSourceData={sourceList}
-        textResponse={textResponse}
-        locationData={props.locationData}
-        openSourcePanel={onClickOpenAddSource}
-        onClickSave={props.onClickSave}
-      />}
+        <ErrorDataSheetTwo
+          isError={formIsError}
+          reqData={formErrorRefData}
+          reqSourceData={sourceList}
+          textResponse={textResponse}
+          locationData={props.locationData}
+          openSourcePanel={onClickOpenAddSource}
+          onClickSave={props.onClickSave}
+        />}
 
       {!(isAnalyst_CC && isHistoryType) &&
-      <Col lg={12} className="datapage-button-wrap">
-        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
-        { isAnalyst_DCR && !isHistoryType && defaultData.error &&
-        <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
-        {/* FOR QA */}
-        {(isQA_DV) && !isHistoryType && ((defaultData.error && defaultData.error.errorStatus !== 'Completed') || defaultData.status !== 'Completed') &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
-        {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
-        <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
+        <Col lg={12} className="datapage-button-wrap">
+          {(isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
+            <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
+          {(isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
+            <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
+          {isAnalyst_DCR && !isHistoryType && defaultData.error &&
+            <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
+          {/* FOR QA */}
+          {(isQA_DV) && !isHistoryType && ((defaultData.error && defaultData.error.errorStatus !== 'Completed') || defaultData.status !== 'Completed') &&
+            <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
+          {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+            <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
+          {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
+            <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
 
-        {/* HISTORY UNFREEZE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
-        <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
+          {/* HISTORY UNFREEZE Button */}
+          {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
+            <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
 
-        {/* HISTORY SAVE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
-        <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
-      </Col>}
+          {/* HISTORY SAVE Button */}
+          {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
+            <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
+        </Col>}
 
       {/* HORIZONTAL Line */}
       {!(isAnalyst_CC && isHistoryType) && <Col lg={12} className="datapage-horizontalLine"></Col>}
@@ -1428,7 +1425,6 @@ export const DataSheetComponent = (props) => {
       >
         <ErrorPanel reqErrorData={reqErrorData} isAccepted={isErrorAccepted} errorComment={errorComment} setErrorComment={setErrorComment} />
       </Modal>
-
     </Row>
   );
 };

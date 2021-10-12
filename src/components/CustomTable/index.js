@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { Button } from 'react-bootstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -115,7 +115,7 @@ const CustomTable = ({
   // changes by balaji (for notification)
   const dispatch = useDispatch();
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',
@@ -154,10 +154,10 @@ const CustomTable = ({
       }
     }
     if (sortDataType === 'date') {
-      if (new Date(b[ofOrderBy]) < new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD-MM-YYYY') < Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return -1;
       }
-      if (new Date(b[ofOrderBy]) > new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD/MM/YYYY') > Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return 1;
       }
     }
@@ -221,7 +221,7 @@ const CustomTable = ({
       });
       rowDataToBeReturned = filteredData.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }
@@ -230,7 +230,7 @@ const CustomTable = ({
     } else if (searchedDate) {
       rowDataToBeReturned = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }

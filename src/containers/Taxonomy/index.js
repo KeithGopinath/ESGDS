@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEdit, faCheckCircle, faBackward } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Pagination from '@material-ui/lab/Pagination';
@@ -221,7 +221,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
     setShowSubset(true);
   }
 
-  const searchtheme = createMuiTheme({
+  const searchtheme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',
