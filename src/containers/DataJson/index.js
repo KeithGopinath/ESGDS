@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileExport } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 const DataJson = ({ flag }) => {
     const sideBarRef = useRef();
@@ -90,7 +91,7 @@ const DataJson = ({ flag }) => {
         const tableRowData = (data) => flag ? data.map((data, index) => ({
             key: index,
             companyName: data.companyName,
-            modifiedDate: new Date(data.modifiedDate).toDateString(),
+            modifiedDate: moment(data.modifiedDate).format('DD/MM/YYYY') || new Date(data.modifiedDate).toDateString(),
             generate: <FontAwesomeIcon icon={faFileExport} size="lg" className="taxonomy-subset-icons" onClick={() => { onGenerateJson(data) }} />
         }))
             :
@@ -157,7 +158,7 @@ const DataJson = ({ flag }) => {
         const tableRowData = (data) => flag ? data.map((data, index) => ({
             key: index,
             companyName: data.companyName,
-            modifiedDate: new Date(data.modifiedDate).toDateString(),
+            modifiedDate: moment(data.modifiedDate).format('DD/MM/YYYY') || new Date(data.modifiedDate).toDateString(),
             download: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadJson(data) }} />
         }))
             :
@@ -165,7 +166,7 @@ const DataJson = ({ flag }) => {
                 key: index,
                 companyName: data.companyName,
                 year: data.year,
-                generatedDate: new Date(data.modifiedDate).toDateString(),
+                generatedDate: moment(data.modifiedDate).format('DD/MM/YYYY') || new Date(data.modifiedDate).toDateString(),
                 download: <FontAwesomeIcon icon={faDownload} size="lg" className="taxonomy-subset-icons" onClick={() => { onDownloadJson(data) }} />
             }))
         return {

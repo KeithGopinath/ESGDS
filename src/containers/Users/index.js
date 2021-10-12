@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { history } from '../../routes';
 import UserStatusManage from '../../containers/UserStatusManage';
+import moment from 'moment';
 
 const Users = (props) => {
   const sideBarRef = useRef();
@@ -56,7 +57,7 @@ const Users = (props) => {
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
       viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value) }} />
     }));
     return {
@@ -105,7 +106,7 @@ const Users = (props) => {
       primaryRole: data.userType == 'Employee' ? (data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA") : "NA",
       roleAssigned: data.userType == 'Employee' ? (data.isRoleAssigned ? 'Assigned' : 'Unassigned') : "NA",
       groupAssigned: data.userType == 'Employee' ? (data.isAssignedToGroup ? 'Assigned' : 'Unassigned') : "NA",
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
       status: data.isUserActive ? "Active" : "Inactive",
       action: <FontAwesomeIcon icon={faUser} size="lg" onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }} className={data.isUserActive ? "user-active-icon" : "user-inactive-icon"} />
     }));
@@ -176,7 +177,7 @@ const Users = (props) => {
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
     }));
     return {
       rowsData: tableRowData(props),

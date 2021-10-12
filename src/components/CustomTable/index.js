@@ -154,10 +154,10 @@ const CustomTable = ({
       }
     }
     if (sortDataType === 'date') {
-      if (new Date(b[ofOrderBy]) < new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD-MM-YYYY') < Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return -1;
       }
-      if (new Date(b[ofOrderBy]) > new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD/MM/YYYY') > Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return 1;
       }
     }
@@ -221,7 +221,7 @@ const CustomTable = ({
       });
       rowDataToBeReturned = filteredData.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }
@@ -230,7 +230,7 @@ const CustomTable = ({
     } else if (searchedDate) {
       rowDataToBeReturned = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }
