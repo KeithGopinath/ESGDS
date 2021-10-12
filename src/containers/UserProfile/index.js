@@ -40,7 +40,6 @@ const UserProfile = () => {
   const userId = otpDetails && otpDetails.user._id || login && login.user._id || sessionStorage.userId;
   const userDetails = userData && userData.user;
 
-  console.log('USER DETAILS: ', userDetails);
 
   useEffect(() => {
     dispatch({ type: 'USER_BY_ID_REQUEST', userId });

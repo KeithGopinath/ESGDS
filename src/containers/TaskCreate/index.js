@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import { ExceptionOutlined } from '@ant-design/icons';
 import { DatePicker, Radio, message, Tag, Divider, Tabs } from 'antd';
 import { faSearch, faBackward } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -502,7 +502,7 @@ const TaskCreate = ({ flag }) => {
  const [min, setmin] = useState(0);
  const [max, setmax] = useState(20);
  
- const searchtheme = createMuiTheme({
+ const searchtheme = createTheme({
    palette: {
      primary: {
        light: '#66cafb',
@@ -552,7 +552,7 @@ const TaskCreate = ({ flag }) => {
   const [minbatch, setminbatch] = useState(0);
   const [maxbatch, setmaxbatch] = useState(20);
   
-  const searchthemebatch = createMuiTheme({
+  const searchthemebatch = createTheme({
     palette: {
       primary: {
         light: '#66cafb',

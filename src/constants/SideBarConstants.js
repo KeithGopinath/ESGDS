@@ -48,7 +48,7 @@ const TaskSubMenu = [
     id: 0, label: 'Create Task', icon: faUserTag, address: 'createtask',
   },
   {
-    id: 1, label: 'Controversy Task', icon: faUserTag, address: 'create-controversy-task',
+    id: 1, label: 'Create Controversy Task', icon: faUserTag, address: 'create-controversy-task',
   },
   {
     id: 2, label: 'Task List', icon: faList, address: 'tasklist',

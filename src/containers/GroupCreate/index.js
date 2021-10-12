@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
 import { Result } from 'antd';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -22,7 +22,7 @@ const GroupView = () => {
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(20);
   const history = useHistory();
-  const searchtheme = createMuiTheme({
+  const searchtheme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',
