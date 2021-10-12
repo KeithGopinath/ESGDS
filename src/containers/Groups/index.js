@@ -104,7 +104,6 @@ const Groups = () => {
         unassignedobj.push( { key: i.userDetails.value, title: i.userDetails.label, SecRole: {primary: i.roleDetails.primaryRole.label, role: i.roleDetails.role }, disabled:i.isAssignedToGroup });
          
       }
-      console.log(unassignedobj, 'unassignedobj');
       setuserTargetKeys(assignedobj);
       seteditunassigned(unassignedobj);
       
@@ -127,7 +126,6 @@ const Groups = () => {
         }
       }
       }
-      console.log(onlyanalystqa, 'onlyanalystqa');
       seteditunassignedAnalystQa(onlyanalystqa);
       // for batch Edit
       const assignedbatch = [];
@@ -203,7 +201,6 @@ const Groups = () => {
         filteredData.push(obj1);
        } 
     }
-   console.log(editunassigned, 'editunassigned');
     if(editunassigned){
       for(const i of filteredData){
         for(const j of i.SecRole.role){

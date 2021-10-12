@@ -39,7 +39,7 @@ const ControversyPendingTaskTable = (props) => {
     key: e.controversyNumber,
     controversyNumber: e.controversyNumber,
     srcName: e.source.sourceName,
-    publicationDate: moment(e.source.publicationDate).format('ddd MMM DD Y'),
+    publicationDate: moment(e.source.publicationDate).format('DD/MM/YYYY'),
     response: e.response,
     action:
   <Link

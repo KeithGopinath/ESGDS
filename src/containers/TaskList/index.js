@@ -11,6 +11,7 @@ import CustomTable from '../../components/CustomTable';
 import EditTask from './TaskEdit';
 import ControversyEdit from './ControversyTaskEdit';
 import XLSX from "xlsx";
+import { message } from 'antd';
 import { history } from './../../routes';
 import moment from 'moment';
 
@@ -120,6 +121,7 @@ const TaskList = (props) => {
       return rest;
     });
 
+
     const workSheet = XLSX.utils.json_to_sheet(exactData);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Reports");
@@ -189,6 +191,26 @@ const TaskList = (props) => {
   }, [controversyDetails, getCompanyDetails]);
 
   const totalTaskList = (props) => {
+    const downloadControversyTasks = () => {
+      if(props.length > 0) {
+        const exactData = props.map((e) => ({
+          'Task No': e.taskNumber,
+          'Company': e.company,
+          'Analyst': e.analyst,
+          'Controversies Collected': e.totalNoOfControversy,
+          'Review Date': e.reviewDate ? moment(e.reviewDate).format('DD/MM/YYYY') : 'NA',
+          'Last Updated On': e.lastModifiedDate ? moment(e.lastModifiedDate).format('DD/MM/YYYY') : 'NA',
+        }));
+        const workSheet = XLSX.utils.json_to_sheet(exactData);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, workSheet, "Controversy Tasks");
+        let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+        XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+        XLSX.writeFile(workBook,'Controversy Tasks.xlsx');
+      } else {
+        message.warn('No Data Available To Download');
+      }
+    }
     const tableRowData = (obj) => multiCompanies ?
       ((tabFlag === 'Completed Companies') ?
         obj.map((e) => ({
@@ -199,9 +221,9 @@ const TaskList = (props) => {
           batch: e.batch ? e.batch : '--',
           pillar: e.pillar ? e.pillar : '--',
           analyst: e.analyst ? e.analyst : '--',
-          analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '--',
+          analystSla: e.analystSla ? moment(e.analystSla).format('DD/MM/YYYY') : '--',
           qa: e.qa ? e.qa : '--',
-          qaSla: e.qaSla ? moment(e.qaSla).format('DD-MM-YYYY') : '--',
+          qaSla: e.qaSla ? moment(e.qaSla).format('DD/MM/YYYY') : '--',
           status: e.status ? e.status : '--',
         })) :
         (tabFlag === 'Pending Companies') ? obj.map((e) => ({
@@ -212,9 +234,9 @@ const TaskList = (props) => {
           batch: e.batch ? e.batch : '--',
           pillar: e.pillar ? e.pillar : '--',
           analyst: e.analystStatus === 'Breached' ? { value: e.analyst, content: <p className="text-danger w-100 m-auto">{e.analyst}</p> } : { value: e.analyst, content: <p className="text-success w-100 m-auto">{e.analyst}</p> },
-          analystSla: e.analystSla ? moment(e.analystSla).format('DD-MM-YYYY') : '--',
+          analystSla: e.analystSla ? moment(e.analystSla).format('DD/MM/YYYY') : '--',
           qa: e.qaStatus === 'Breached' ? { value: e.qa, content: <p className="text-danger w-100 m-auto">{e.qa}</p> } : { value: e.qa, content: <p className="text-success w-100 m-auto">{e.qa}</p> },
-          qaSla: e.qaSla ? moment(e.qaSla).format('DD-MM-YYYY') : '--',
+          qaSla: e.qaSla ? moment(e.qaSla).format('DD/MM/YYYY') : '--',
           stage: e.stage ? e.stage : '--',
           status: e.status === 'Breached' ? { value: e.status, content: <p className="text-danger w-100 m-auto">{e.status}</p> } : { value: e.status, content: <p className="text-success w-100 m-auto">{e.status}</p> },
         })) :
@@ -223,7 +245,7 @@ const TaskList = (props) => {
             company: e.companyName ? e.companyName : '--',
             controversyId: e.controversyId ? e.controversyId : '--',
             analyst: e.analyst ? e.analyst : '--',
-            createdDate: e.createdDate ? moment(e.createdDate).format('DD-MM-YYYY') : '--',
+            createdDate: e.createdDate ? moment(e.createdDate).format('DD/MM.YYYY') : '--',
           }))
       )
       :
@@ -236,9 +258,9 @@ const TaskList = (props) => {
           company: e.company ? e.company : '--',
           pillar: e.pillar ? e.pillar : '--',
           analyst: e.analyst ? e.analyst : '--',
-          analystSla: e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
+          analystSla: e.analystSLA ? moment(e.analystSLA).format('DD/MM/YYYY') : '--',
           qa: e.qa ? e.qa : '--',
-          qaSla: e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
+          qaSla: e.qaSLA ? moment(e.qaSLA).format('DD/MM/YYYY') : '--',
           action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleShow(e); }}></FontAwesomeIcon>,
         }))
         :
@@ -251,9 +273,9 @@ const TaskList = (props) => {
             company: e.company ? e.company : '--',
             pillar: e.pillar ? e.pillar : '--',
             analyst: e.analyst ? e.analyst : '--',
-            analystSla: e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
+            analystSla: e.analystSLA ? moment(e.analystSLA).format('DD/MM/YYYY') : '--',
             qa: e.qa ? e.qa : '--',
-            qaSla: e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
+            qaSla: e.qaSLA ? moment(e.qaSLA).format('DD/MM/YYYY') : '--',
           }))
           :
           obj.map((e) => ({
@@ -261,6 +283,9 @@ const TaskList = (props) => {
             taskid: e.taskNumber ? e.taskNumber : '--',
             company: e.company ? e.company : '--',
             analyst: e.analyst ? e.analyst : '--',
+            reviewDate: e.reviewDate ? moment(e.reviewDate).format('DD/MM/YYYY') || new Date(e.reviewDate).toDateString() : '-',
+            updatedDate: e.lastModifiedDate ? (moment(e.lastModifiedDate).format('DD/MM/YYYY') || new Date(e.lastModifiedDate).toDateString()) : '-',
+            totalNoOfControversies: e.totalNoOfControversy,
             action: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleControversyShow(e); }}></FontAwesomeIcon>,
           }))
     return {
@@ -568,6 +593,15 @@ const TaskList = (props) => {
                 dataType: 'string',
               },
               {
+                id: 'totalNoOfControversies', label: 'Contoversies Collected', align: 'center', dataType: 'string',
+              },
+              {
+                id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+              },
+              {
+                id: 'updatedDate', label: 'Last Updated On', align: 'center', dataType: 'string',
+              },
+              {
                 id: 'action',
                 align: 'center',
                 label: 'Action',
@@ -578,7 +612,10 @@ const TaskList = (props) => {
       tableLabel: <span>{multiCompanies ?
         <span>{tabFlag === 'Controversy' ? 'Controversy List' : 'Task List'}
           <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadReports} />
-        </span> : (location.state && isTasknumber) ? location.state : 'tasks'}</span>,
+        </span> : (location.state && isTasknumber) ? location.state : (tasktabFlag === 'Controversy' ? <span>
+          Tasks
+          <FontAwesomeIcon className="reports-download-icon ml-2" size="sm" icon={faDownload} onClick={downloadControversyTasks} />
+          </span> : 'Tasks')}</span>,
     };
 
   };
