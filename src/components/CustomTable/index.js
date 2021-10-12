@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { Button } from 'react-bootstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -115,7 +115,7 @@ const CustomTable = ({
   // changes by balaji (for notification)
   const dispatch = useDispatch();
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',

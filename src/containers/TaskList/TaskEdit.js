@@ -12,7 +12,7 @@ import { faCalendarAlt, faReceipt, faUser } from '@fortawesome/free-solid-svg-ic
 
 
 
-const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqasla, analystsla, setanalystsla }) => {
+const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanalystDetail, qaDetail, setqaDetail, qasla, setqaSla, analystsla, setanalystsla }) => {
     const isEditData = useSelector((taskedit) => taskedit.taskEditDetails.taskeditData);
     const isSlaRequested = useSelector((raisedsladata)=>raisedsladata.RaisedSla);
     const isEditDataLoading = useSelector((taskedit) => taskedit.taskEditDetails);
@@ -31,7 +31,7 @@ const TaskEdit = ({ show, setrowValue,setShow, rowValue, analystDetail, setanaly
     setShow(false);
     setanalystDetail('');
     setqaDetail('');
-    setqasla(null);
+    setqaSla(null);
     setanalystsla(null);
     setAlert('');
     setrowValue('');
@@ -108,7 +108,7 @@ useEffect(() => {
       if(moment(date).isAfter(qasla, 'date')){
         setAlert('Analyst SLA Exceeds Qa SLA');
         setalertStatus(false);
-        setqasla(null);
+        setqaSla(null);
       }
      }
     
@@ -122,10 +122,10 @@ useEffect(() => {
     
     if(arg !== null){
       const date = getFormatDate(arg._d);
-      setqasla(date);
+      setqaSla(date);
     }
      else { 
-      setqasla(arg);
+      setqaSla(arg);
      }
   
   }

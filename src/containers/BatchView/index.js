@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SideMenuBar from '../../components/SideMenuBar';
 import BatchCreation from '../BatchCreation';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -30,7 +30,7 @@ const BatchView = () => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
     setShow(true);
   };
-  const searchtheme = createMuiTheme({
+  const searchtheme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',

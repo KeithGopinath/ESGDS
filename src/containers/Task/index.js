@@ -250,13 +250,14 @@ const Task = (props) => {
   const currentTab = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
   // DECLARING DISPATCH
@@ -291,7 +292,7 @@ const Task = (props) => {
 
   const extractReqTask = () => {
     let returnableTask;
-    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR) {
+    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR || IsAdmin) {
       [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : [];
     }
     if (isAnalyst_CC) {
@@ -305,7 +306,7 @@ const Task = (props) => {
   };
 
   const getReqTaskList = () => {
-    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) {
       if (dpCodeType === 'Standalone' && reqTaskData.standalone) {
         return reqTaskData.standalone;
       }
@@ -329,7 +330,7 @@ const Task = (props) => {
   const reqTaskList = getReqTaskList();
 
   const getReqDpCodesList = () => {
-    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) {
       if (dpCodeType === 'Standalone') {
         if (reqKeyIssue) {
           return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId && e.keyIssueId === reqKeyIssue.value));
@@ -574,7 +575,7 @@ const Task = (props) => {
         <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
-              {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
+              {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
               {isAnalyst_CC && <div className="task-pillar">{reqTaskData.company}</div>}
               <div className="task-id">{`Task No: ${reqTaskData.taskNumber}`}</div>
             </div>
@@ -585,7 +586,7 @@ const Task = (props) => {
             <div className="task-keyissue">
               <Row>
                 {/* ONLY FOR STANDALONE */}
-                {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeType === 'Standalone' &&
+                {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && dpCodeType === 'Standalone' &&
                   <FieldWrapper
                     label="Key Issues"
                     size={[6, 5, 7]}
@@ -640,7 +641,7 @@ const Task = (props) => {
                   />}
               </Row>
             </div>
-            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isValidationCalled &&
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && !isValidationCalled &&
               <TaskTable
                 taskDetails={taskDetails}
                 dpCodesData={(derivedCalculationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}
