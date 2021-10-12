@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { Modal, Tooltip, message } from 'antd';
 
+import moment from 'moment';
+
 import { CloseCircleFilled, UserOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
 
 import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
@@ -112,8 +114,8 @@ const ControversyTaskTable = (props) => {
     key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
-    reassessmentDate: x.reassessmentDate ? new Date(x.reassessmentDate).toDateString() : '-',
-    reviewDate: x.reviewDate ? new Date(x.reviewDate).toDateString() : '-',
+    reassessmentDate: x.reassessmentDate ? (moment(x.reassessmentDate).format('DD/MM/YYYY') || new Date(x.reassessmentDate).toDateString()) : '-',
+    reviewDate: x.reviewDate ? (moment(x.reviewDate).format('DD/MM/YYYY') || new Date(x.reviewDate).toDateString()) : '-',
     controversyFiscalYearEndDate: x.controversyFiscalYearEndDate ? new Date(x.controversyFiscalYearEndDate).toDateString() : '-',
     action:
   <Link
