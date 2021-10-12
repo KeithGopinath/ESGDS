@@ -9,8 +9,7 @@ import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-import SLAExtentions from './extentionSLA';
-
+import SLAExtentions from './Extention';
 
 const PendingTaskTable = (props) => {
   const getFormatDate = (arg) => moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
