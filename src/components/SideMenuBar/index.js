@@ -9,14 +9,6 @@ import { faBars, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icon
 import { Scrollbars } from 'react-custom-scrollbars';
 
 const SideMenuBar = React.forwardRef((props, ref) => {
-  const taxonomyBtnRefs = useRef(TaxonomySubMenu.map(() => React.createRef()));
-  const validationBtnRefs = useRef(ValidationSubMenu.map(() => React.createRef()));
-  const groupsBtnRefs = useRef(GroupsSubMenu.map(() => React.createRef()));
-  const usersBtnRefs = useRef(UsersSubMenu.map(() => React.createRef()));
-  const taskBtnRefs = useRef(TaskSubMenu.map(() => React.createRef()));
-  const calculationBtnRefs = useRef(CalculationSubMenu.map(() => React.createRef()));
-  const jsonBtnRefs = useRef(JsonGenerationSubMenu.map(() => React.createRef()));
-
   // checking user type and role
   const userDetails = useSelector((state) => state.login.login);
   const otpDetails = useSelector((state) => state.otp.otp);
@@ -25,11 +17,21 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const role = (otpDetails && otpDetails.user.roleDetails.primaryRole.label) || (userDetails && userDetails.user && userDetails.user.roleDetails.primaryRole.label)
   const userRole = roleChange && roleChange.label || role || sessionStorage.role;
 
+  const conditionedJsonGenerationSubMenu = userRole == 'Client Representative' ? [JsonGenerationSubMenu[0]] : JsonGenerationSubMenu;
+  const taxonomyBtnRefs = useRef(TaxonomySubMenu.map(() => React.createRef()));
+  const validationBtnRefs = useRef(ValidationSubMenu.map(() => React.createRef()));
+  const groupsBtnRefs = useRef(GroupsSubMenu.map(() => React.createRef()));
+  const usersBtnRefs = useRef(UsersSubMenu.map(() => React.createRef()));
+  const taskBtnRefs = useRef(TaskSubMenu.map(() => React.createRef()));
+  const calculationBtnRefs = useRef(CalculationSubMenu.map(() => React.createRef()));
+  const jsonBtnRefs = useRef(conditionedJsonGenerationSubMenu.map(() => React.createRef()));
+
   // Buttonlist modified based on roles
   const modifiedButtonList = ButtonList.filter(val => (
     userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 8 :
-      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 4 || val.id == 7 :
-        userRole == 'Company Representative' || userRole == 'Client Representative' ? val.id == 4 || val.id == 8 :
+      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 4 || val.id == 7 || val.id == 10 :
+        userRole == 'Company Representative' ? val.id == 4 || val.id == 8 :
+        userRole == 'Client Representative' ? val.id == 4 || val.id == 8 || val.id == 10 :
           userRole == 'SuperAdmin' || userRole == 'Admin' ? val.id !== 4 && val.id !== 8 :
             val.id == 0 || val.id == 4))
     .map((data) => ({
@@ -92,7 +94,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   // Mapping of sideBar Menu and subMenu
   const sideMenuBtns = modifiedButtonList.map(({ id, label, icon, address, }, index) => {
     const subMenuShow = label == 'Taxonomy' ? showTaxonomySubMenu : label == 'Validation' ? showValidationSubMenu : label == 'Groups' ? showGroupsSubMenu : label == 'Users' ? showUsersSubMenu : label == 'Task' ? showTaskSubMenu : label == 'Calculations' ? showCalculationSubMenu : label == 'JSON Generation' ? showJsonSubMenu : false;
-    const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : label == 'Users' ? UsersSubMenu : label == 'Task' ? TaskSubMenu : label == 'Calculations' ? CalculationSubMenu : label == 'JSON Generation' ? JsonGenerationSubMenu : false;
+    const subMenuList = label == 'Taxonomy' ? TaxonomySubMenu : label == 'Validation' ? ValidationSubMenu : label == 'Groups' ? GroupsSubMenu : label == 'Users' ? UsersSubMenu : label == 'Task' ? TaskSubMenu : label == 'Calculations' ? CalculationSubMenu : label == 'JSON Generation' ? conditionedJsonGenerationSubMenu : false;
     const subMenuRef = label == 'Taxonomy' ? taxonomyBtnRefs : label == 'Validation' ? validationBtnRefs : label == 'Groups' ? groupsBtnRefs : label == 'Users' ? usersBtnRefs : label == 'Task' ? taskBtnRefs : label == 'Calculations' ? calculationBtnRefs : label == 'JSON Generation' ? jsonBtnRefs : false;
 
     return (
@@ -155,7 +157,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   // FUNCTION that Highlights the button based on url
   const onRenderButtonHighter = () => {
     const BtnRefs = showUsersSubMenu && show ? usersBtnRefs : showValidationSubMenu ? validationBtnRefs : showTaxonomySubMenu ? taxonomyBtnRefs : showUsersSubMenu ? usersBtnRefs : showGroupsSubMenu ? groupsBtnRefs : showTaskSubMenu ? taskBtnRefs : showCalculationSubMenu ? calculationBtnRefs : showJsonSubMenu ? jsonBtnRefs : sideMenuBtnRefs;
-    const MenuButton = showUsersSubMenu && show ? UsersSubMenu : showValidationSubMenu ? ValidationSubMenu : showTaxonomySubMenu ? TaxonomySubMenu : showUsersSubMenu ? UsersSubMenu : showGroupsSubMenu ? GroupsSubMenu : showTaskSubMenu ? TaskSubMenu : showCalculationSubMenu ? CalculationSubMenu : showJsonSubMenu ? JsonGenerationSubMenu : modifiedButtonList;
+    const MenuButton = showUsersSubMenu && show ? UsersSubMenu : showValidationSubMenu ? ValidationSubMenu : showTaxonomySubMenu ? TaxonomySubMenu : showUsersSubMenu ? UsersSubMenu : showGroupsSubMenu ? GroupsSubMenu : showTaskSubMenu ? TaskSubMenu : showCalculationSubMenu ? CalculationSubMenu : showJsonSubMenu ? conditionedJsonGenerationSubMenu : modifiedButtonList;
 
     usersBtnRefs && usersBtnRefs.current.forEach((element) => {
       const btn = element.current;
