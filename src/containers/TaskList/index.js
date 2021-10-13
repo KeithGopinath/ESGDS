@@ -102,8 +102,8 @@ const TaskList = (props) => {
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
   const controversyDetails = controversyTaskList && controversyTaskList;
-  const [analystsla, setAnalystsla] = useState(null);
-  const [qasla, setQasla] = useState(null);
+  const [analystSla, setAnalystSla] = useState(null);
+  const [qaSla, setQaSla] = useState(null);
 
   // export data in excel file
   const downloadReports = () => {
@@ -117,13 +117,7 @@ const TaskList = (props) => {
       }
     })
 
-    const exactData = downloadData.map(e => {
-      const { key, analystStatus, qaStatus, ...rest } = e;
-      return rest;
-    });
-
-
-    const workSheet = XLSX.utils.json_to_sheet(exactData);
+    const workSheet = XLSX.utils.json_to_sheet(downloadData);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Reports");
     let buffer = XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
@@ -145,8 +139,8 @@ const TaskList = (props) => {
 
     setanalystDetail({ value: arg.analystId, label: arg.analyst });
     setqaDetail({ value: arg.qaId, label: arg.qa });
-    setAnalystsla(getFormatDate(arg.analystSLA));
-    setQasla(getFormatDate(arg.qaSLA));
+    setAnalystSla(getFormatDate(arg.analystSLA));
+    setQaSla(getFormatDate(arg.qaSLA));
     setrowValue(arg);
     setShow(true);
   };
@@ -243,7 +237,7 @@ const TaskList = (props) => {
           qa: e.qaStatus === 'Breached' ? { value: e.qa, content: <p className="text-danger w-100 m-auto">{e.qa}</p> } : { value: e.qa, content: <p className="text-success w-100 m-auto">{e.qa}</p> },
           qaSla: e.qaSla ? moment(e.qaSla).format('DD/MM/YYYY') : '--',
           stage: e.stage ? e.stage : '--',
-          status: e.status === 'Breached' ? { value: e.status, content: <p className="text-danger w-100 m-auto">{e.status}</p> } : { value: e.status, content: <p className="text-success w-100 m-auto">{e.status}</p> },
+          status: e.status === 'Met' ? { value: e.status, content: <p className="text-danger w-100 m-auto">{e.status}</p> } : { value: e.status, content: <p className="text-success w-100 m-auto">{e.status}</p> },
         }))
           : obj.map((e) => ({
             key: e.controversyId,
@@ -616,7 +610,7 @@ const TaskList = (props) => {
           </div>
         </div>
       </div>
-      <EditTask setShow={setShow} show={show} rowValue={rowValue} qasla={qasla} setQasla={setQasla} analystsla={analystsla} analystDetail={analystDetail} setanalystDetail={setanalystDetail} qaDetail={qaDetail} setqaDetail={setqaDetail} setAnalystsla={setAnalystsla} setrowValue={setrowValue} />
+      <EditTask setShow={setShow} show={show} rowValue={rowValue} qaSla={qaSla} setQaSla={setQaSla} analystSla={analystSla} analystDetail={analystDetail} setanalystDetail={setanalystDetail} qaDetail={qaDetail} setqaDetail={setqaDetail} setAnalystSla={setAnalystSla} setrowValue={setrowValue} />
       <ControversyEdit setcontroversyShow={setcontroversyShow} controversyShow={controversyShow} controversyValue={controversyValue} setcontroversyValue={setcontroversyValue} controversyAnalyst={controversyAnalyst} setcontroversyAnalyst={setcontroversyAnalyst} />
     </React.Fragment>
   );
