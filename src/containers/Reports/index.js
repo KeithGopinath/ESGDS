@@ -74,11 +74,11 @@ const Reports = (props) => {
     } else if (tabFlag === 'Controversy' && controversyData) {
       setContorversy(controversyData);
     }
-    setSelectItem(false);
+    // setSelectItem(false);
     setAllChecked(false);
   }, [tabFlag, compData, taxonomy]);
 
-
+  // get unique taxonomy
   const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const controversyTaxonomyFilter = controversy.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
@@ -177,6 +177,7 @@ const Reports = (props) => {
     }
   }
 
+  // check all companies
   const allCompanyCheck = (data, checked, setType) => {
     let filteredData = [];
     if (taxonomy) {
@@ -330,7 +331,7 @@ const Reports = (props) => {
             ))}
           </div>
           <Card>
-            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} />
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} disablePageChange={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} reportsTaxonomy={taxonomy} />
           </Card>
         </div>
       </div>

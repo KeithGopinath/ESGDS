@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -75,7 +75,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem,
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -97,7 +97,7 @@ const CustomTable = ({
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    setPage(DEFAULT_PAGE);
+    { disablePageChange ? null : setPage(DEFAULT_PAGE) }
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     setSearchQuery('');
     setSearchDate(null);
@@ -105,7 +105,7 @@ const CustomTable = ({
 
   useEffect(() => {
     setPage(DEFAULT_PAGE);
-  }, [searchQuery]);
+  }, [searchQuery, reportsTaxonomy]);
 
 
   useEffect(() => {
@@ -356,11 +356,8 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <div className="w-100 d-flex justify-content-between"> */}
-        {/* <div></div> */}
         <div className="w-100 d-flex justify-content-end">
           {tabFlagEnable ?
-            // eslint-disable-next-line no-unneeded-ternary
             <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
