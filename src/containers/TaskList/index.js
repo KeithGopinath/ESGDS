@@ -152,24 +152,7 @@ const TaskList = (props) => {
   };
 
   const handleView = (arg) => {
-
-    console.log('arg', arg)
     history.push({ pathname: `/task/${arg.taskNumber}`, state: { taskDetails: arg } });
-    // {
-    //   pathname: `/task/${arg.taskNumber}`,
-    //   state: {
-    //     taskDetails: ePendingTask, // passing Whole task data
-    //   },
-    // dispatch({ type: "RAISEDSLA_REQUEST", taskid: arg.taskId });
-    // const editDetails = { groupId: arg.groupId, batchId: arg.batchId };
-    // dispatch({ type: "TASKEDITDETAILS_REQUEST", payload: editDetails });
-
-    // setanalystDetail({ value: arg.analystId, label: arg.analyst });
-    // setqaDetail({ value: arg.qaId, label: arg.qa });
-    // setAnalystsla(getFormatDate(arg.analystSLA));
-    // setQasla(getFormatDate(arg.qaSLA));
-    // setrowValue(arg);
-    // setShow(true);
   };
 
   const handleControversyShow = (arg) => {
@@ -284,20 +267,6 @@ const TaskList = (props) => {
           assign: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEdit} onClick={() => { handleEdit(e); }}></FontAwesomeIcon>,
           view: <FontAwesomeIcon className="tasklist-edit-icon" icon={faEye} onClick={() => { handleView(e); }}></FontAwesomeIcon>,
         }))
-        // :
-        // (tasktabFlag === 'Completed Task') ?
-        //   obj.map((e) => ({
-        //     key: e.taskNumber,
-        //     taskid: e.taskNumber ? e.taskNumber : '--',
-        //     group: e.group ? e.group : '--',
-        //     batch: e.batch ? e.batch : '--',
-        //     company: e.company ? e.company : '--',
-        //     pillar: e.pillar ? e.pillar : '--',
-        //     analyst: e.analyst ? e.analyst : '--',
-        //     analystSla: e.analystSLA ? moment(e.analystSLA).format('DD-MM-YYYY') : '--',
-        //     qa: e.qa ? e.qa : '--',
-        //     qaSla: e.qaSLA ? moment(e.qaSLA).format('DD-MM-YYYY') : '--',
-        //   }))
         : obj.map((e) => ({
           key: e.taskNumber,
           taskid: e.taskNumber ? e.taskNumber : '--',
@@ -538,122 +507,6 @@ const TaskList = (props) => {
               dataType: 'element',
             },
           ]
-          // :
-          // (tasktabFlag === 'Completed Task') ?
-          //   [
-          //     {
-          //       id: 'taskid',
-          //       align: 'center',
-          //       label: 'Task ID',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'group',
-          //       align: 'center',
-          //       label: 'Group',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'batch',
-          //       align: 'center',
-          //       label: 'Batch',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'company',
-          //       align: 'center',
-          //       label: 'Company',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'pillar',
-          //       align: 'center',
-          //       label: 'Pillar',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'analyst',
-          //       align: 'center',
-          //       label: 'Analyst',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'analystSla',
-          //       align: 'center',
-          //       label: 'SLA Date',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'qa',
-          //       align: 'center',
-          //       label: 'QA',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'qaSla',
-          //       align: 'center',
-          //       label: 'SLA Date',
-          //       dataType: 'string',
-          //     },
-          //   ]
-          // :
-          // (tasktabFlag === 'Completed Task') ?
-          //   [
-          //     {
-          //       id: 'taskid',
-          //       align: 'center',
-          //       label: 'Task ID',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'group',
-          //       align: 'center',
-          //       label: 'Group',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'batch',
-          //       align: 'center',
-          //       label: 'Batch',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'company',
-          //       align: 'center',
-          //       label: 'Company',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'pillar',
-          //       align: 'center',
-          //       label: 'Pillar',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'analyst',
-          //       align: 'center',
-          //       label: 'Analyst',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'analystSla',
-          //       align: 'center',
-          //       label: 'SLA Date',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'qa',
-          //       align: 'center',
-          //       label: 'QA',
-          //       dataType: 'string',
-          //     },
-          //     {
-          //       id: 'qaSla',
-          //       align: 'center',
-          //       label: 'SLA Date',
-          //       dataType: 'string',
-          //     },
-          //   ]
           :
           [
             {
