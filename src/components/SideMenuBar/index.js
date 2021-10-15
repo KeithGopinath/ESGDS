@@ -29,7 +29,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   // Buttonlist modified based on roles
   const modifiedButtonList = ButtonList.filter(val => (
     userRole == 'QA' || userRole == 'Analyst' ? val.id == 0 || val.id == 4 || val.id == 8 :
-      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 4 || val.id == 7 || val.id == 10 :
+      userRole == 'GroupAdmin' ? val.id == 0 || val.id == 4 || val.id == 7 || val.id == 10 || val.id == 11 :
         userRole == 'Company Representative' ? val.id == 4 || val.id == 8 :
         userRole == 'Client Representative' ? val.id == 4 || val.id == 8 || val.id == 10 :
           userRole == 'SuperAdmin' || userRole == 'Admin' ? val.id !== 4 && val.id !== 8 :
