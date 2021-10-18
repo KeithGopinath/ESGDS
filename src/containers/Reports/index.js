@@ -28,9 +28,10 @@ const Reports = (props) => {
   const pendingComp = compData && compData.pending;
   const completedComp = compData && compData.completed;
   const controversyData = compData && compData.controversy;
+  const userRole = sessionStorage.role || '';
 
   useEffect(() => {
-    dispatch({ type: 'GET_REPORTS_REQUEST' });
+    dispatch({ type: 'GET_REPORTS_REQUEST', role: userRole });
   }, []);
 
   useEffect(() => {
