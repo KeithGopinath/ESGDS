@@ -108,6 +108,7 @@ const Users = (props) => {
       groupAssigned: data.userType == 'Employee' ? (data.isAssignedToGroup ? 'Assigned' : 'Unassigned') : "NA",
       registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
       status: data.isUserActive ? "Active" : "Inactive",
+      view: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value) }} />,
       action: <FontAwesomeIcon icon={faUser} size="lg" onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }} className={data.isUserActive ? "user-active-icon" : "user-inactive-icon"} />
     }));
     return {
@@ -161,6 +162,12 @@ const Users = (props) => {
         dataType: 'string',
       },
       {
+        id: 'view',
+        align: 'center',
+        label: 'View',
+        dataType: 'element',
+      },
+      {
         id: 'action',
         align: 'center',
         label: 'Action',
@@ -212,7 +219,15 @@ const Users = (props) => {
 
   const onViewUser = (userId) => {
     dispatch({ type: 'USER_BY_ID_REQUEST', userId });
-    history.push({ pathname: '/user-view' });
+    let userType = "";
+    if (tabFlag === 'Pending Users') {
+      userType = 'Pending'
+    } else if (tabFlag === 'Approved Users') {
+      userType = 'Approved'
+    } else if (tabFlag === 'Rejected Users') {
+      userType = 'Rejected';
+    }
+    history.push({ pathname: '/user-view', userTypes: userType });
   }
 
   const tabLabelSets = [
