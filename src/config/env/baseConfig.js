@@ -74,6 +74,7 @@ export default {
     getDashboard: 'dashboards',
     rejectsla: 'taskSlaLogs/reject',
     raisedSla: 'taskSlaLogs/task-requests',
+    UserAssingCompanies: 'users/assign-companies',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
