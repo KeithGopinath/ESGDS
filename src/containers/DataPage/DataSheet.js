@@ -8,9 +8,7 @@ import Select from 'react-select';
 import moment from 'moment';
 import ErrorDataSheetTwo from './ErrorDataSheet';
 import ErrorPanel from './ErrorPanel';
-
 import validateReqFields from './validateReqFields';
-
 import AddSource from './AddSource';
 
 // Field Wrapper ::
@@ -223,6 +221,8 @@ export const DataSheetComponent = (props) => {
   // DATASHEET FORM DATA +
   // *DPCODE*
   const formDpCode = defaultData.dpCode;
+  // *DPNAME*
+  const formDpName = defaultData.dpName;
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
@@ -857,37 +857,27 @@ export const DataSheetComponent = (props) => {
 
   return (
     <Row>
-
-      {/* DPCode Field */}
+      {/* DP Code Field */}
       <FieldWrapper
         label={<div>Dp Code</div>}
         visible
         size={[6, 5, 7]}
-        body={
-          <Form.Control
-            name="dpCode"
-            type="text"
-            value={formDpCode}
-            disabled
-          />
-        }
+        body={<div className="datapage-current-tab">{formDpCode}</div>}
       />
-
+      {/* DP Name Field */}
+      <FieldWrapper
+        label={<div>Dp Name</div>}
+        visible
+        size={[6, 5, 7]}
+        body={<div className="datapage-current-tab">{formDpName}</div>}
+      />
       {/* HISTORY YEAR Field */}
       <FieldWrapper
         label={<div>Year</div>}
         visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
         size={[6, 5, 7]}
-        body={
-          <Form.Control
-            name="year"
-            type="text"
-            value={defaultData.fiscalYear}
-            disabled
-          />
-        }
+        body={<div className="datapage-current-tab">{defaultData.fiscalYear}</div>}
       />
-
       {/* SOURCE NAME Field */}
       <FieldWrapper
         label={<div>Source Name<span className="addNewMember-red-asterik"> * </span></div>}
@@ -906,7 +896,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* SOURCE Field */}
       <FieldWrapper
         label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
@@ -930,16 +919,13 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* ADD SOURCE Button */}
       {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
-        <Col lg={6}>
-          <Button onClick={onClickOpenAddSource}>Add Source</Button>
+        <Col lg={12}>
+          <Button className="datapage-addsource-button" onClick={onClickOpenAddSource}>Add Source</Button>
         </Col>}
-
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-
       {/* DESCRIPTION Field */}
       <FieldWrapper
         label={<div>Description</div>}
@@ -947,7 +933,6 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={formDescription}
       />
-
       {/* RESPONSE Field */}
       {formDataType === 'NUMBER' &&
         <FieldWrapper
@@ -967,8 +952,6 @@ export const DataSheetComponent = (props) => {
             />
           }
         />}
-
-
       {/* RESPONSE Field */}
       {formDataType === 'TEXT' &&
         <FieldWrapper
@@ -988,7 +971,6 @@ export const DataSheetComponent = (props) => {
             />
           }
         />}
-
       {/* RESPONSE Field */}
       {formDataType === 'DATE' &&
         <FieldWrapper
@@ -1007,7 +989,6 @@ export const DataSheetComponent = (props) => {
             />
           }
         />}
-
       {/* RESPONSE Field */}
       {formDataType === 'SELECT' &&
         <FieldWrapper
@@ -1032,7 +1013,6 @@ export const DataSheetComponent = (props) => {
             />
           }
         />}
-
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
         label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
@@ -1051,7 +1031,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* PAGE NO Field */}
       <FieldWrapper
         label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1069,7 +1048,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* URL Field */}
       <FieldWrapper
         label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1088,7 +1066,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1107,7 +1084,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* UPLOAD Field */}
       <Col lg={12}>
         <Row>
@@ -1132,7 +1108,6 @@ export const DataSheetComponent = (props) => {
               </Upload>
             }
           />
-
           {/* ScreenShot Field */}
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
@@ -1148,7 +1123,6 @@ export const DataSheetComponent = (props) => {
           />
         </Row>
       </Col>
-
       {/* Controversy Fiscal Year Field */}
       <FieldWrapper
         label={<div>Fiscal Year<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1172,7 +1146,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Fiscal Year End Date Field */}
       <FieldWrapper
         label={<div>Fiscal Year End Date</div>}
@@ -1180,7 +1153,6 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={formControversyFiscalYearEnd || 'NA'}
       />
-
       {/* Controversy Assessment Date Field */}
       <FieldWrapper
         label={<div>Assessment date</div>}
@@ -1198,7 +1170,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Reassessment Date Field */}
       <FieldWrapper
         label={<div>Reassessment date</div>}
@@ -1216,7 +1187,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Review Date Field */}
       <FieldWrapper
         label={<div>Review date</div>}
@@ -1234,7 +1204,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* RESPONSE Field */}
       <FieldWrapper
         label={<div>Commitee review<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1258,7 +1227,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData, index) => (
         <FieldWrapper
@@ -1271,7 +1239,6 @@ export const DataSheetComponent = (props) => {
           })}
         />
       ))}
-
       {/* IS ERORR Field */}
       {(isCompanyRep_DR || isClientRep_DR || isQA_DV) && !isHistoryType &&
         <Col lg={12}>
@@ -1290,7 +1257,6 @@ export const DataSheetComponent = (props) => {
           </Row>
         </Col>
       }
-
       {/* ERROR TYPE Field */}
       <FieldWrapper
         label={<div>Error Type<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1314,7 +1280,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1333,7 +1298,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1352,7 +1316,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* ERROR DATA SHEET COMPANY AND CLIENT REP's */}
       {(isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
         <ErrorDataSheetTwo
@@ -1380,19 +1343,15 @@ export const DataSheetComponent = (props) => {
             <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
           {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
             <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
-
           {/* HISTORY UNFREEZE Button */}
           {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
             <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
-
           {/* HISTORY SAVE Button */}
           {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
             <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
         </Col>}
-
       {/* HORIZONTAL Line */}
       {!(isAnalyst_CC && isHistoryType) && <Col lg={12} className="datapage-horizontalLine"></Col>}
-
       {/* ADD SOURCE PANEL */}
       <Drawer
         title="Add Source"
@@ -1406,7 +1365,6 @@ export const DataSheetComponent = (props) => {
       >
         {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} locationData={props.locationData} companyId={props.locationData.state.dpCodeDetails.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
       </Drawer>
-
       {/* ERROR PANEL FOR DATA CORRECTION */}
       <Modal
         title="Error Panel"
