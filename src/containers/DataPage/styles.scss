@@ -1,35 +1,38 @@
-.datapage-main{
+.datapage-main {
     display: flex;
     padding: 3%;
     background-color: #f0f0f0;
     flex-direction: column;
     height: 100%;
 }
-.datapage-info-group{
+
+.datapage-info-group {
     padding: 2%;
     background-color: #fff;
     height: inherit;
 }
-.datapage-horizontalLine{
+
+.datapage-horizontalLine {
     border-bottom: 2px solid #e6e9ee;
     margin: 1% 0 1% 0;
 }
-.datapage-datepicker{
+
+.datapage-datepicker {
     width: 100%;
 }
 
-.datapage-button-wrap{
+.datapage-button-wrap {
     justify-content: center;
     display: flex;
     margin-top: 1.5%;
     margin-bottom: 1.5%;
 }
 
-.datapage-current-loader{
+.datapage-current-loader {
     height: 580px;
 }
 
-.datapage-button{
+.datapage-button {
     margin-right: 1%;
     margin-left: 1%;
 }
@@ -40,24 +43,29 @@
     cursor: not-allowed;
 }
 
-.ant-picker-large .ant-picker-input > input {
+.ant-picker-large .ant-picker-input>input {
     font-size: 16px;
     color: black;
 }
+
 .ant-upload {
     width: 100%;
 }
-.ant-message-custom-content{
+
+.ant-message-custom-content {
     display: flex;
     align-items: center;
 }
-.ant-drawer-title{
+
+.ant-drawer-title {
     color: white;
 }
-.datapage-ant-upload{
+
+.datapage-ant-upload {
     width: 100%;
 }
-.datapage-ant-button{
+
+.datapage-ant-button {
     width: 100%;
     display: flex;
     align-items: center;
@@ -65,27 +73,29 @@
     height: 38px;
 }
 
-.css-4ljt47-MenuList{
+.css-4ljt47-MenuList {
     z-index: 8000 !important;
     max-height: 130px !important;
 }
 
-.my-custom-react-select{
+.my-custom-react-select {
     z-index: 8000;
 }
 
-.addsource-validate-text{
+.addsource-validate-text {
     color: red;
 }
 
-.error-panel{
-    .ant-modal-header{
+.error-panel {
+    .ant-modal-header {
         background-color: #dc4535;
     }
-    .ant-modal-title{
+
+    .ant-modal-title {
         color: #fff;
     }
-    .ant-modal-body{
+
+    .ant-modal-body {
         max-height: 600px;
         overflow: auto;
     }
@@ -97,4 +107,17 @@
     .css-yk16xz-control {
         border-color: red;
     }
+}
+
+.datapage-addsource-button {
+    float: right;
+    margin: 5px 0px;
+}
+
+.datapage-current-tab {
+    font-family: ui-rounded;
+    font-size: 15px;
+    font-weight: 700;
+    position: relative;
+    top: 8px;
 }
