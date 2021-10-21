@@ -1,75 +1,91 @@
 .edittask-submit-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    // margin-bottom: 0.5rem;
-    width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // margin-bottom: 0.5rem;
+  width: 100%;
 }
-.edittask-reject-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width:100%;
+
+.edittask-reject-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
+
 .edittask-content {
-    font-size: 15px;
-    color: gray;
-    margin-bottom: 0.5rem;
+  font-size: $font-size-medium;
+  color: gray;
+  margin-bottom: 0.5rem;
 }
-.edittask-contentBox{
-    margin-bottom: 1rem;
+
+.edittask-contentBox {
+  margin-bottom: 1rem;
 }
-.tasklist-edit-icon{
-    color:#04385a;
-    cursor: pointer;
+
+.tasklist-edit-icon {
+  color: $color-blue;
+  cursor: pointer;
 }
-.foo-width{
-    width:100% !important;
+
+.foo-width {
+  width: 100% !important;
 }
-.task-fill-alert{
-    font-size:16px;
-    color:#dc3545;
+
+.task-fill-alert {
+  font-size: 16px;
+  color: #dc3545;
 }
-.task-success-alert{
-    font-size:16px;
-    color:#30a561;
+
+.task-success-alert {
+  font-size: 16px;
+  color: #30a561;
 }
-.reject-request-btn{
-    margin-left:2%;
+
+.reject-request-btn {
+  margin-left: 2%;
 }
-.slapending-box{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+
+.slapending-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-.inner-sla-box{
-    display: flex;
-    flex-direction: column;
+
+.inner-sla-box {
+  display: flex;
+  flex-direction: column;
 }
-.sla-pending-role-date{
-    font-size: 0.8rem;
-    color: #f39000;
+
+.sla-pending-role-date {
+  font-size: 0.8rem;
+  color: #f39000;
 }
-.sla-pending-role-date-heading{
-    font-size: 0.8rem;
-    color: gray !important;
+
+.sla-pending-role-date-heading {
+  font-size: 0.8rem;
+  color: gray !important;
 }
-.sla-pending-card{
-    padding: 5% 0% 2% 0%;
+
+.sla-pending-card {
+  padding: 5% 0% 2% 0%;
 }
-.sla-details{
-    font-size: 1.3rem;
-    color: #2b272cb5;
-    padding-top:11%;
-    font-weight: bold;
+
+.sla-details {
+  font-size: 1.3rem;
+  color: #2b272cb5;
+  padding-top: 11%;
+  font-weight: bold;
 }
-.sla-heading{
-    width:100%;
-    padding: 8% 2% 0% 2%;
-    color: #dc3545;
-    font-size: 1.3rem;
-    font-weight: bold;
+
+.sla-heading {
+  width: 100%;
+  padding: 8% 2% 0% 2%;
+  color: #dc3545;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
-.card-sla-pad{
-    padding:5% 3% 5% 3% !important;
+
+.card-sla-pad {
+  padding: 5% 3% 5% 3% !important;
 }
