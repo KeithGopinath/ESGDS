@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import Overlay from '../../components/Overlay';
 
-
 const ExtentionSLA = ({
   show, setShow, detail, setdetail, setrejectslaDate, rejectSlaDate,
 }) => {
@@ -60,7 +59,6 @@ const ExtentionSLA = ({
           <div className="editsla-box">
             <div className="editsla-content">How many days do you want to extend ? </div>
             <div className="datecount-content">
-
               <DatePicker
                 className="date-picker"
                 size="middle"
@@ -81,8 +79,8 @@ const ExtentionSLA = ({
     <div className="foo-width">
       <div className=" batch-status-minheight">
 
-        { alert &&
-        <div className={(alertStatus) ? 'task-success-alert' : 'task-fill-alert'} >{alert}</div>
+        {alert &&
+          <div className={(alertStatus) ? 'task-success-alert' : 'task-fill-alert'} >{alert}</div>
         }
       </div>
       <div className="edittask-submit-btn">

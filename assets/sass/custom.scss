@@ -29,7 +29,7 @@ body {
   body,h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6,p,.navbar,.brand,.btn-simple,.alert,a,.td-name,td,button.close {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    font-family: Roboto, Helvetica Neue, Arial, sans-serif;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
     font-weight: 400;
   }
 
@@ -38,3 +38,9 @@ $color-white: #fffaf0;
 $color-blue: #04385a;
 $color-highlight:#e1fdf7;
 $color-green: #2da68a;
+
+// font-size
+$font-size-small: 12px;
+$font-size-medium: 16px;
+$font-size-large: 20px;
+$font-size-x-large: 24px;

@@ -43,14 +43,12 @@
 
 .dashboard-card-labelvalue {
     color: #2199c8;
-    font-family: 'Roboto', sans-serif;
     font-size: 30px;
 }
 
 .dashboard-card-labeltext {
     color: #666666;
-    font-family: 'Roboto', sans-serif;
-    font-size: 13px;
+    font-size: $font-size-small;
     height: 38px;
     overflow: hidden;
     text-align: end;

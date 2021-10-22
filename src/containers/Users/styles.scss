@@ -1,137 +1,133 @@
 .users-main {
-    background-color: #f0f0f0;
-    height: 100%;
-    padding: 40px 4%;
-    font-family: 'Roboto';
+  background-color: #f0f0f0;
+  height: 100%;
+  padding: 40px 4%;
 }
 
 .users-back-label-onboardlink-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .back-label-wrap {
-    padding: 7px;
-    min-width: 80px;
-    font-family: 'Roboto';
-    margin: 10px 10px 10px 0;
+  padding: 7px;
+  min-width: 80px;
+  margin: 10px 10px 10px 0;
 }
 
 .back-lefticon-wrap {
-    display: flex;
-    color: #8190a9;
-    align-items: center;
-    margin: 0 0 10px 0;
-    font-weight: 500;
-    font-size: 13px;
+  display: flex;
+  color: #8190a9;
+  align-items: center;
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  font-size: $font-size-small;
 }
 
 .lefticon {
-    margin: 0 10px 0 0;
-    font-size: 20px;
+  margin: 0 10px 0 0;
+  font-size: $font-size-large;
 }
 
 .users-label {
-    font-family: 'Roboto', sans-serif;
-    color: #2da68a;
-    font-size: 17px;
-    font-weight: bolder;
-    text-align: center;
-    margin: 30px 0px;
+  color: $color-green;
+  font-size: $font-size-medium;
+  font-weight: bolder;
+  text-align: center;
+  margin: 30px 0px;
 }
 
 .onboardlink-btn {
-    padding: 7px;
-    min-width: 158px;
-    border: 2px solid #2199c8;
-    border-radius: 4px;
-    font-size: 14px;
-    font-family: 'Roboto';
-    color: #2199c8;
-    background-color: #ffffff;
-    font-weight: 600;
+  padding: 7px;
+  min-width: 158px;
+  border: 2px solid #2199c8;
+  border-radius: 4px;
+  font-size: $font-size-small;
+  color: #2199c8;
+  background-color: #ffffff;
+  font-weight: 600;
 
-    &:hover {
-        color: #fff;
-        background-color: #2199c8 !important;
-        border-color: #2199c8 !important;
-    }
+  &:hover {
+    color: #fff;
+    background-color: #2199c8 !important;
+    border-color: #2199c8 !important;
+  }
 }
 
 .users-tabs-stack {
-    background-color: white;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 2%;
-    justify-content: space-evenly;
-    height: 2em;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2%;
+  justify-content: space-evenly;
+  height: 2em;
 }
 
 .tabs-label-count-wrap {
-    display: flex;
-    min-width: 220px;
-    width: 20%;
-    align-items: center;
-    padding: 0 15px;
-    justify-content: space-between;
-    cursor: pointer;
-    border-bottom: 2px solid white;
-    text-align: center;
+  display: flex;
+  min-width: 220px;
+  width: 20%;
+  align-items: center;
+  padding: 0 15px;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 2px solid white;
+  text-align: center;
 }
 
 .tabs-label {
-    width: 100%;
-    margin: 0 10px;
-    color: #8190a9;
-    font-size: 14px;
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+  width: 100%;
+  margin: 0 10px;
+  color: #8190a9;
+  font-size: $font-size-medium;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .tabs-count-wrap {
-    background-color: #ebebeb;
-    align-items: center;
-    justify-content: center;
-    min-width: 50px;
-    display: flex;
-    border-radius: 5px;
-    font-size: 13px;
-    color: #8190a9;
-    font-weight: 400;
-    padding: 5px;
-    margin: 10px 5px;
+  background-color: #ebebeb;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  display: flex;
+  border-radius: 5px;
+  font-size: $font-size-small;
+  color: #8190a9;
+  font-weight: 400;
+  padding: 5px;
+  margin: 10px 5px;
 }
 
 .tabs-count {
-    max-width: 35px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  max-width: 35px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .tabs-label-count-wrap-active {
-    border-bottom: 2px solid #50bfa5;
+  border-bottom: 2px solid #50bfa5;
 }
 
 .tabs-label-count-wrap-active>.tabs-label {
-    color: #444c59;
+  color: #444c59;
 }
 
 .tabs-label-count-wrap-active>.tabs-count-wrap {
-    background-color: #2199c8;
-    color: #ffffff;
+  background-color: #2199c8;
+  color: #ffffff;
 }
 
 .user-active-icon {
-    cursor: pointer;
-    color: green;
+  cursor: pointer;
+  color: green;
 }
 
 .user-inactive-icon {
-    cursor: pointer;
-    color: red;
+  cursor: pointer;
+  color: red;
 }

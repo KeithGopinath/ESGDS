@@ -46,8 +46,8 @@
 }
 
 .header-title {
-  color: #2da68a;
-  font-size: x-large;
+  color: $color-green;
+  font-size: $font-size-x-large;
   padding-top: 10px;
 }
 
@@ -64,8 +64,7 @@
 
 .head-link-element {
   color: #2199c8;
-  font-size: 14px;
-  font-family: 'Roboto', sans-serif;
+  font-size: $font-size-small;
   font-weight: 600;
   cursor: pointer,
 }
@@ -76,7 +75,6 @@
   align-items: center;
   justify-content: center;
   float: right;
-  font-family: 'Roboto', sans-serif;
   margin-left: 5px;
   font-weight: 500;
   color: #2199c8;
@@ -102,7 +100,7 @@
   align-items: center;
   padding: 2.5px 10px;
   margin: 5px 10px 0 10px;
-  font-size: 24px;
+  font-size: $font-size-x-large;
   outline: none;
   color: $color-white;
 }
