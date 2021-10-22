@@ -2,14 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
+import { message } from 'antd';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
-import { message } from 'antd';
+import ReCaptcha from '../../components/ReCaptcha';
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const Login = () => {
+  // const { executeRecaptcha } = useGoogleReCaptcha();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginAlert, setLoginAlert] = useState('');
@@ -25,6 +28,7 @@ const Login = () => {
   const [forgotPasswordvalidate, setforgotPasswordvalidate] = useState('');
   const [start, setStart] = useState(false);
   const [seconds, setSeconds] = useState(30);
+  const [captchaToken,setCaptchaToken] = useState('')
 
   const dispatch = useDispatch();
   // login
@@ -134,6 +138,26 @@ const Login = () => {
       setValidate('border-danger');
       message.error('Please enter the vaild password')
     } else {
+      window.grecaptcha.ready(function() {
+        window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', {action: 'submit'}).then(function(token) {
+          // Send form value as well as token to the server
+console.log('token',token)
+setCaptchaToken(token)
+        });
+      });
+      // console.log('token2',token)
+  // Create an event handler so you can call the verification on button click event or form submit
+  // useCallback(async () => {
+    // if (!executeRecaptcha) {
+    //   console.log('Execute recaptcha not yet available');
+    // }
+
+    // const token = await executeRecaptcha('yourAction');
+    // // Do whatever you want with the token
+    // console.log('hi',token)
+  // });
+
+
       setLoginAlert('');
       setLoginRole(true);
       setStart(true);
@@ -147,6 +171,9 @@ const Login = () => {
       dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
   };
+
+  console.log('captchaToken',captchaToken)
+  // },[]);
 
   // Otp screen
   const handleClose = () => {
@@ -169,7 +196,8 @@ const Login = () => {
       let user = Buffer.from(objJsonStr).toString("base64");
 
       const otpDetails = {
-        login: user
+        login: user,
+        token: captchaToken
       }
 
       dispatch({ type: 'OTP_REQUEST', otpDetails });
@@ -228,6 +256,11 @@ const Login = () => {
     }
   }
 
+  // const onVerifyCaptcha = (token) => {
+  //   // console.log('captchaToken', token);
+  //   setCaptchaToken(token)
+  // };
+
   // condition for Forgot password alert message class name
   const forgotPasswordClass = forgotPasswordvalidate ? 'danger' : validPasswordChange ? 'success' : 'danger';
 
@@ -272,6 +305,9 @@ const Login = () => {
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
             <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>
           </Card>
+ {/* <GoogleReCaptchaProvider reCaptchaKey="6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr">
+          <ReCaptcha onVerifyCaptcha={onVerifyCaptcha} />
+  </GoogleReCaptchaProvider> */}
           <OtpScreen
             show={showOtp}
             start={start}
