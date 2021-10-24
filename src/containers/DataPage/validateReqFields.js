@@ -12,7 +12,7 @@ export default (errors, roleScreenType) => {
     formSource,
     formURL,
     formPublicDate,
-    formScreenShotFile,
+    // formScreenShotFile,
     formErrorType,
     formComment,
     formIsError,
@@ -28,8 +28,7 @@ export default (errors, roleScreenType) => {
   } = errors;
 
   if (isHistoryType) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold &&
-      !formScreenShotFile && !dynamicFields.includes(true));
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold && !dynamicFields.includes(true));
   }
   if (isAnalyst_DC) {
     return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold &&

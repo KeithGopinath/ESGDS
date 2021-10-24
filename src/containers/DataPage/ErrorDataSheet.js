@@ -31,8 +31,14 @@ const FieldWrapper = (props) => {
 FieldWrapper.propTypes = {
   visible: PropTypes.bool,
   size: PropTypes.array.isRequired,
-  label: PropTypes.string,
-  body: PropTypes.element,
+  label: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+  ]),
+  body: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+  ]),
 };
 
 const onChangeDynamiceFieldsValue = (event, dynamicDataList, eachField, setDynamicData) => {
@@ -182,16 +188,25 @@ const ErrorDataSheetTwo = (props) => {
 
   const [formTextSnippet, setFormTextSnippet] = useState(defaultData.textSnippet || '');
   const [formPageNo, setFormPageNo] = useState(defaultData.pageNo || '');
-  const [formScreenShotPath, setFormScreenShotPath] = useState(defaultData.screenShot || '');
+  const [formScreenShotPath, setFormScreenShotPath] = useState(defaultData.screenShot || []);
   const [formResponse, setFormResponse] = useState(defaultData.response || '');
   const [formSource, setFormSource] = useState(defaultData.source || '');
   const [formURL, setFormURL] = useState((defaultData.source && defaultData.source.url) || '');
   const [formPublicDate, setFormPublicDate] = useState((defaultData.source && defaultData.source.publicationDate) || '');
-  const [formScreenShotFile, setFormScreenShotFile] = useState(null);
+  // const [formScreenShotFile, setFormScreenShotFile] = useState(defaultData.screenShotBase64 ? {
+  //   added: [...defaultData.screenShotBase64.added],
+  //   deleted: [...defaultData.screenShotBase64.deleted],
+  // } : {
+  //   added: [], deleted: [],
+  // });
   const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
+
+  // SHOW IMAGE UPLOADE ERROR
+  const [showImgUploadError, setShowImgUploadError] = useState(false);
+
   const [hasErrors, setHasErrors] = useState({
     formTextSnippet: false,
     formPageNo: false,
@@ -200,7 +215,7 @@ const ErrorDataSheetTwo = (props) => {
     formSource: false,
     formURL: false,
     formPublicDate: false,
-    formScreenShotFile: false,
+    // formScreenShotFile: false,
     formErrorType: false,
     formComment: false,
     formIsError: false,
@@ -219,15 +234,41 @@ const ErrorDataSheetTwo = (props) => {
 
   const thresholdValue = { min: -10000, max: 10000 };
 
+  // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
+  const urlToBlob = (imgObjs) => Promise.all(imgObjs.map((eImg) => new Promise((res, rej) => {
+    if (eImg.url) {
+      fetch(eImg.url).then((response) => response.blob().then((blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        if (blob) {
+          reader.readAsDataURL(blob);
+          reader.onload = () => resolve({
+            uid: eImg.uid,
+            name: eImg.name,
+            base64: reader.result,
+          });
+          reader.onerror = (error) => reject(error);
+        }
+      }))).then((base64res) => res(base64res)).catch((error) => rej(error));
+    } else {
+      res(eImg);
+    }
+  })));
+
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
-    setFormScreenShotPath(defaultData.screenShot || '');
+    // setFormScreenShotPath(defaultData.screenShot || []);
+    urlToBlob(defaultData.screenShot || []).then((base64Res) => setFormScreenShotPath(base64Res));
     setFormResponse(defaultData.response || '');
     setFormSource(defaultData.source || '');
     setFormURL((defaultData.source && defaultData.source.url) || '');
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
-    setFormScreenShotFile(null);
+    // setFormScreenShotFile(defaultData.screenShotBase64 ? {
+    //   added: [...defaultData.screenShotBase64.added],
+    //   deleted: [...defaultData.screenShotBase64.deleted],
+    // } : {
+    //   added: [], deleted: [],
+    // });
     setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
 
     setDynamicFields(defaultData.additionalDetails || []);
@@ -239,7 +280,7 @@ const ErrorDataSheetTwo = (props) => {
       formSource: false,
       formURL: false,
       formPublicDate: false,
-      formScreenShotFile: false,
+      // formScreenShotFile: false,
       formErrorType: false,
       formComment: false,
       formIsError: false,
@@ -249,6 +290,8 @@ const ErrorDataSheetTwo = (props) => {
       dynamicFields: [false],
       formThreshold: false,
     });
+
+    setShowImgUploadError(false);
   }, [defaultData, isError]);
 
   const onChangeFormTextSnippet = (event) => {
@@ -259,21 +302,37 @@ const ErrorDataSheetTwo = (props) => {
     setFormPageNo(event.currentTarget.value);
   };
 
-  const getBase64 = (file) => new Promise((resolve, reject) => {
+  const getBase64 = (filesArray) => Promise.all(filesArray.map((eachFile) => new Promise((resolve, reject) => {
     const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+    if (eachFile) {
+      reader.readAsDataURL(eachFile.originFileObj);
+      reader.onload = () => resolve({
+        uid: eachFile.uid,
+        name: eachFile.name,
+        base64: reader.result,
+      });
       reader.onerror = (error) => reject(error);
     }
-  });
+  })));
 
   const onChangeFormScreenShotPath = (event) => {
-    setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    if (event.fileList[0]) {
-      getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
-    } else {
-      setFormScreenShotFile({ ...event, base64: null });
+    if (event && event.file && event.file.status === 'removed') {
+      // setFormScreenShotFile({
+      //   added: formScreenShotFile.added.filter((e) => e.uid !== event.file.uid),
+      //   deleted: [...formScreenShotFile.deleted, ...formScreenShotPath.filter((e) => e.uid === event.file.uid && !e.base64)],
+      // });
+      setFormScreenShotPath(formScreenShotPath.filter((e) => e.uid !== event.file.uid));
+    } else if (event && event.fileList.length > 0) {
+      const uploadedFiles = event.fileList.filter((e) => !!e.originFileObj);
+      getBase64(uploadedFiles).then((filesWithBase64) => {
+        setFormScreenShotPath([...formScreenShotPath, ...filesWithBase64]);
+        // setFormScreenShotFile({
+        //   ...formScreenShotFile,
+        //   added: [...formScreenShotFile.added, ...filesWithBase64],
+        // });
+        setShowImgUploadError(true);
+        // setFormScreenShotFile(filesWithBase64);
+      }).catch((error) => message.warn(error));
     }
   };
 
@@ -323,7 +382,10 @@ const ErrorDataSheetTwo = (props) => {
   };
 
   const onScreenShotUploadError = () => {
-    message.warn('Uploaded img file is broken');
+    if (showImgUploadError) {
+      message.warn('Uploaded img file is broken');
+      setShowImgUploadError(false);
+    }
   };
 
   const getIsDisableOrNot = () => {
@@ -354,7 +416,7 @@ const ErrorDataSheetTwo = (props) => {
       formSource: isError && !(formSource.url && formSource.sourceName && formSource.publicationDate),
       formURL: isError && !formURL,
       formPublicDate: isError && !formPublicDate,
-      formScreenShotFile: isError && false, // !formScreenShotFile, Not Mandatory
+      // formScreenShotFile: isError && false, // !formScreenShotFile, Not Mandatory
       formComment: isError && !(formComment.length > 0),
       dynamicFields: isError ? dynamicFields.map((e) => {
         if (e.inputType === 'Select') {
@@ -388,7 +450,7 @@ const ErrorDataSheetTwo = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+          // screenShotBase64: formScreenShotFile,
           response: formResponse,
           source: formSource,
           url: formURL,
@@ -417,13 +479,7 @@ const ErrorDataSheetTwo = (props) => {
         hasError: isError,
         isThere: isError,
         refData: {
-          textSnippet: formTextSnippet,
-          pageNo: formPageNo,
-          screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
-          response: formResponse,
-          source: formSource,
-          url: formURL,
+          ...defaultData,
         },
         comment: formComment,
         errorStatus: 'Editable',
@@ -647,16 +703,19 @@ const ErrorDataSheetTwo = (props) => {
             body={
               <Upload
                 className="datapage-ant-upload"
-                maxCount={1}
-                fileList={formScreenShotFile && formScreenShotFile.fileList}
+                multiple
+                maxCount={6}
+                accept="image/*"
+                fileList={formScreenShotPath}
                 beforeUpload={screenShotBeforeUpload}
                 onChange={onChangeFormScreenShotPath}
+                showUploadList={!disableField}
               >
                 <AntButton
                   className={hasErrors.formScreenShotPath ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
-                  disabled={disableField}
+                  disabled={disableField || formScreenShotPath.length >= 6}
                   icon={<UploadOutlined />}
-                >Click to Upload
+                >{formScreenShotPath.length >= 6 ? 'Upload Limit Reached (Max: 6)' : 'Click to Upload'}
                 </AntButton>
               </Upload>
             }
@@ -665,14 +724,19 @@ const ErrorDataSheetTwo = (props) => {
           {/* ScreenShot Field */}
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
-            visible={(isErrorCommentType || isError) && formScreenShotPath}
+            visible={(isErrorCommentType || isError) && formScreenShotPath.length > 0}
             size={[6, 5, 7]}
             body={
-              <Image
-                width="50%"
-                src={formScreenShotPath}
-                onError={onScreenShotUploadError}
-              />
+              <Image.PreviewGroup>
+                {formScreenShotPath.map((e) =>
+                  (<Image
+                    width="46%"
+                    className="antd-img-set-cover"
+                    key={e.uid}
+                    src={e.url || e.base64}
+                    onError={onScreenShotUploadError}
+                  />))}
+              </Image.PreviewGroup>
             }
           />
         </Row>
