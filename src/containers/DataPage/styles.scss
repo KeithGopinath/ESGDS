@@ -121,14 +121,15 @@
   position: relative;
   top: 8px;
 }
-
-.antd-img-set-cover{
+.datapage-ant-screenshots{
+  .antd-img-set-cover{
     object-fit: cover;
     height: 64px;
 }
-.ant-image{
-    margin: 1px 1px;
-    padding: 2px 2px;
-    height: 70px;
-    border: 1px solid rgba(0, 0, 0, 0.055);
+  .ant-image{
+      margin: 1px 1px;
+      padding: 2px 2px;
+      height: 70px;
+      border: 1px solid rgba(0, 0, 0, 0.055);
+  }
 }
