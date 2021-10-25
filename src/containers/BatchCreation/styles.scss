@@ -5,7 +5,7 @@
 
 .import-title {
   font-size: $font-size-large;
-  color: #2199c8;
+  color: $color-oceanBlue;
   font-weight: 600;
 }
 
@@ -109,7 +109,7 @@
   background-color: #2da68a !important;
   display: flex;
   min-width: 27%;
-  color: white;
+  color: $color-white;
   padding: 8px 12px;
   border-radius: 0.3rem;
   cursor: pointer;
@@ -166,24 +166,24 @@
 
 .dropdown-alert {
   .css-yk16xz-control {
-    border-color: #dc3545 !important;
+    border-color: $color-borderRed !important;
   }
 }
 
 .dropdown-alert-sla {
   .ant-picker {
-    border-color: #dc3545 !important;
+    border-color: $color-borderRed !important;
   }
 }
 
 .fill-alert {
   font-size: 16px;
-  color: #dc3545;
+  color: $color-borderRed;
 }
 
 .batch-fill-alert {
   font-size: 16px;
-  color: #dc3545;
+  color: $color-borderRed;
 }
 
 .batch-success-alert {
@@ -254,7 +254,7 @@
 }
 
 .mandatory-color {
-  color: red !important;
+  color: $color-red !important;
 }
 
 .pad-right {

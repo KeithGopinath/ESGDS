@@ -41,22 +41,22 @@
 .onboardlink-btn {
   padding: 7px;
   min-width: 158px;
-  border: 2px solid #2199c8;
+  border: 2px solid $color-oceanBlue;
   border-radius: 4px;
   font-size: $font-size-small;
-  color: #2199c8;
-  background-color: #ffffff;
+  color: $color-oceanBlue;
+  background-color: $color-white;
   font-weight: 600;
 
   &:hover {
-    color: #fff;
-    background-color: #2199c8 !important;
-    border-color: #2199c8 !important;
+    color: $color-white;
+    background-color: $color-oceanBlue !important;
+    border-color: $color-oceanBlue !important;
   }
 }
 
 .users-tabs-stack {
-  background-color: white;
+  background-color: $color-white;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -73,7 +73,7 @@
   padding: 0 15px;
   justify-content: space-between;
   cursor: pointer;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid $color-white;
   text-align: center;
 }
 
@@ -118,8 +118,8 @@
 }
 
 .tabs-label-count-wrap-active>.tabs-count-wrap {
-  background-color: #2199c8;
-  color: #ffffff;
+  background-color: $color-oceanBlue;
+  color: $color-white;
 }
 
 .user-active-icon {
@@ -129,5 +129,5 @@
 
 .user-inactive-icon {
   cursor: pointer;
-  color: red;
+  color: $color-red;
 }

@@ -20,13 +20,13 @@
 
 .modal-title {
   font-size: $font-size-medium;
-  color: #2199c8;
+  color: $color-oceanBlue;
   font-weight: 700;
 }
 
 .setting-icon {
   font-size: $font-size-small;
-  color: #2199c8;
+  color: $color-oceanBlue;
   margin-top: 5px;
   margin-right: 5px;
 }
@@ -108,10 +108,10 @@
 .role-button {
   border-color: $color-green;
   background-color: $color-green;
-  color: white;
+  color: $color-white;
 }
 
 .error-alert {
-  border: 1px solid red !important;
+  border: 1px solid $color-red !important;
   border-radius: 4px !important;
 }

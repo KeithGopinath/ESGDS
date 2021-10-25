@@ -7,7 +7,7 @@
   vertical-align: 0% !important;
   font-weight: 600 !important;
   margin-left: 7.5em !important;
-  color: #2199c8 !important;
+  color: $color-oceanBlue !important;
   cursor: pointer;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .otp-focus {
-  border-color: #2199c8;
+  border-color: $color-oceanBlue;
 }
 
 .otp-close {
@@ -39,6 +39,6 @@
 
 .modal-body {
   span {
-    color: #2199c8
+    color: $color-oceanBlue;
   }
 }

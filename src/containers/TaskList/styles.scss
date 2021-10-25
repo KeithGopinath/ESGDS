@@ -34,7 +34,7 @@
 
 .task-fill-alert {
   font-size: 16px;
-  color: #dc3545;
+  color: $color-borderRed;
 }
 
 .task-success-alert {
@@ -81,7 +81,7 @@
 .sla-heading {
   width: 100%;
   padding: 8% 2% 0% 2%;
-  color: #dc3545;
+  color: $color-borderRed;
   font-size: 1.3rem;
   font-weight: bold;
 }
