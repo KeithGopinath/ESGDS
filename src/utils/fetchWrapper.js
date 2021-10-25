@@ -1,7 +1,7 @@
 import envConfig from 'envConfig'; //eslint-disable-line
 
 const { baseUrl } = envConfig;
-const TIMEOUT = 100000;
+const TIMEOUT = 300000;
 
 /**
 * @description function to handle the time out error

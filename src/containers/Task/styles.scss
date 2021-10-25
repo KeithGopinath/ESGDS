@@ -1,135 +1,147 @@
-.task-main{
-    display: flex;
-    padding: 3%;
-    background-color: #f0f0f0;
-    flex-direction: column;
+.task-main {
+  display: flex;
+  padding: 3%;
+  background-color: #f0f0f0;
+  flex-direction: column;
 }
 
-.task-tabs-wrap{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 30px 0;
-    padding: 20px 2%;
+.task-tabs-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px 0;
+  padding: 20px 2%;
 }
 
-.task-tabs{
-    padding: 5px;
-    min-width: 170px;
-    background-color:rgb(255, 255, 255);
-    color: rgb(33, 153, 200);;
-    font-weight: 600;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
-    margin: 3px;
-    cursor: pointer;
-}
-.active{
-    background-color: rgb(33, 153, 200);
-    color: rgb(255, 255, 255);
-} 
-
-.task-info-group{
-    background-color: #fff;
+.task-tabs {
+  padding: 5px;
+  min-width: 170px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(33, 153, 200);
+  ;
+  font-weight: 600;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  margin: 3px;
+  cursor: pointer;
 }
 
-.task-id{
-    font-size: x-large;
+.active {
+  background-color: rgb(33, 153, 200);
+  color: rgb(255, 255, 255);
 }
 
-.task-pillar{
-    font-size: x-large;
+.task-info-group {
+  background-color: #fff;
 }
 
-.task-id-year-wrap{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4%;
-    padding: 20px 2%;
+.task-id,
+.task-pillar {
+  font-size: $font-size-x-large;
 }
 
-.task-keyissue{
-    padding: 20px 2%;
+.task-id-year-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4%;
+  padding: 20px 2%;
 }
 
-.task-year{
-    width: 130px;
-}
-.task-table-col{
-    z-index: 0;
+.task-keyissue {
+  padding: 20px 2%;
 }
 
-.task-button-wrap{
-    justify-content: center;
-    display: flex;
-    margin-top: 3%;
+.task-year {
+  width: 130px;
 }
+
+.task-table-col {
+  z-index: 0;
+}
+
+.task-button-wrap {
+  justify-content: center;
+  display: flex;
+  margin-top: 3%;
+}
+
 // TASK TABLE STYLES
-.task-table-label{
-    padding: 20px;
-    font-weight: 600;
+.task-table-label {
+  padding: 20px;
+  font-weight: 600;
 }
-.task-table-label-search-wrap{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 600px;
+
+.task-table-label-search-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 600px;
 }
 
 .task-modal {
-    .ant-modal-header{
-        background:rgb(33, 153, 200);
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-    }
-    .ant-modal-close-x, .ant-modal-title{
-        color: rgb(255, 255, 255);
-    }
-    .ant-modal-content{
-        border-radius: 7px;
-    }
+  .ant-modal-header {
+    background: rgb(33, 153, 200);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  .ant-modal-close-x,
+  .ant-modal-title {
+    color: rgb(255, 255, 255);
+  }
+
+  .ant-modal-content {
+    border-radius: 7px;
+  }
 }
 
 
 // ADD NEW || TERMINATE KMP || BOARD MEMBER STYLES
-.addNewMember-red-asterik{
-    color: red;
+.addNewMember-red-asterik {
+  color: red;
 }
 
-.addNewMember-member-name-group{
-    display: flex;
-    justify-content: space-between;
+.addNewMember-member-name-group {
+  display: flex;
+  justify-content: space-between;
 }
 
 .addNewMember-title {
-    width: 18% !important;
+  width: 18% !important;
 }
+
 .addNewMember-memberName {
-    width: 26% !important;
+  width: 26% !important;
 }
+
 .terminateMember-memberList {
-    width: 100%;
+  width: 100%;
 }
-.addNewMember-dob, .addNewMember-start-date, .terminateMember-end-date{
-    width: 100%;
+
+.addNewMember-dob,
+.addNewMember-start-date,
+.terminateMember-end-date {
+  width: 100%;
 }
+
 .addNewTerminate-button-wrap {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-.addNewMember-red-border{
+.addNewMember-red-border {
+  border: 1px solid red;
+  border-radius: inherit;
+}
+
+.addNewMember-select-red-border {
+  .ant-select-selector {
+    border: 1px solid red !important;
+  }
+
+  .css-yk16xz-control {
     border: 1px solid red;
-    border-radius: inherit;
-}
-
-.addNewMember-select-red-border{
-    .ant-select-selector{
-        border: 1px solid red !important;
-    }
-    .css-yk16xz-control{
-        border: 1px solid red;
-    }
+  }
 }

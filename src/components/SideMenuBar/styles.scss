@@ -1,180 +1,176 @@
 .sideMenu-main {
-    width: 247px;
-    min-height: 100vh;
-    background-color: $color-blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
-    flex-shrink: 0;
-    transition: 0.4s;
-    overflow-x: hidden;
+  width: 247px;
+  min-height: 100vh;
+  background-color: $color-blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  flex-shrink: 0;
+  transition: 0.4s;
+  overflow-x: hidden;
 }
 
 .sideMenu-logo {
-    min-width: 190px;
-    font-size: medium;
-    font-weight: 600;
-    font-family: 'Roboto', sans-serif;
-    color: $color-white;
-    display: flex;
-    justify-content: center;
+  min-width: 190px;
+  font-size: medium;
+  font-weight: 600;
+  color: $color-white;
+  display: flex;
+  justify-content: center;
 }
 
 .sideMenu-btn {
-    min-width: 220px;
-    min-height: 50px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    margin: 10px;
-    outline: none;
-    text-decoration: none !important;
+  min-width: 220px;
+  min-height: 50px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  outline: none;
+  text-decoration: none !important;
 }
 
 .sideMenu-btn-label {
-    font-size: 15px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: $color-white;
-    margin-left: 20px;
-    width: 120px;
+  font-size: $font-size-medium;
+  font-weight: normal;
+  color: $color-white;
+  margin-left: 20px;
+  width: 120px;
 }
 
 .sideMenu-btn-icon {
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 24px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: $color-white;
-    margin-left: 10px;
+  width: 24px !important;
+  height: 24px !important;
+  font-size: $font-size-x-large;
+  font-weight: normal;
+  color: $color-white;
+  margin-left: 10px;
 }
 
 .sideMenu-btn:hover {
-    cursor: pointer;
-    background-color: rgba(250, 244, 244, 0.055);
-    ;
+  cursor: pointer;
+  background-color: rgba(250, 244, 244, 0.055);
+  ;
 }
 
 .sideMenu-btn-highlight {
-    background-color: $color-highlight;
+  background-color: $color-highlight;
 }
 
 .sideMenu-btn-highlight .sideMenu-btn-label {
-    color: $color-green;
+  color: $color-green;
 }
 
 .sideMenu-btn-highlight .sideMenu-btn-icon {
-    color: $color-green;
+  color: $color-green;
 }
 
 .sideMenu-btn-highlight:hover {
-    cursor: pointer;
-    background-color: $color-highlight;
+  cursor: pointer;
+  background-color: $color-highlight;
 }
 
 @media only screen and (max-width: 768px) {
-    .sideMenu-main {
-        width: 50px;
-    }
+  .sideMenu-main {
+    width: 50px;
+  }
 
-    .sideMenu-main-responsive {
-        width: 245px;
-    }
+  .sideMenu-main-responsive {
+    width: 245px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
-    .hamburger-bars-icon {
-        display: flex;
-        color: $color-white;
-    }
+  .hamburger-bars-icon {
+    display: flex;
+    color: $color-white;
+  }
 }
 
 .sideMenuMini-main-responsive {
-    width: 55px;
+  width: 55px;
 }
 
 .sideMenuMini-btn {
-    min-width: 50px;
-    min-height: 50px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    margin: 10px;
-    outline: none;
-    justify-content: center;
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  outline: none;
+  justify-content: center;
 }
 
 .sideMenuMini-btn:hover {
-    cursor: pointer;
-    background-color: rgba(250, 244, 244, 0.055);
+  cursor: pointer;
+  background-color: rgba(250, 244, 244, 0.055);
 }
 
 .sideMenu-btn-highlight.sideMenuMini-btn:hover {
-    cursor: pointer;
-    background-color: $color-highlight;
+  cursor: pointer;
+  background-color: $color-highlight;
 }
 
 .sideMenuMini-btn-icon {
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 24px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: $color-white;
+  width: 24px !important;
+  height: 24px !important;
+  font-size: $font-size-x-large;
+  font-weight: normal;
+  color: $color-white;
 }
 
 .sideMenu-btn-highlight .sideMenuMini-btn-icon {
-    color: $color-green;
+  color: $color-green;
 }
 
 .submenu {
-    min-width: 220px;
-    min-height: 150px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 0 10px 0;
-    outline: none;
-    text-decoration: none !important;
-    background-color: rgba(83, 182, 240, 0.055);
+  min-width: 220px;
+  min-height: 150px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0 10px 0;
+  outline: none;
+  text-decoration: none !important;
+  background-color: rgba(83, 182, 240, 0.055);
 }
 
 .submenu-button {
-    min-width: 220px;
-    min-height: 50px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    margin: 10px 0 10px 0;
-    outline: none;
-    text-decoration: none !important;
-    transition: 0.5s;
+  min-width: 220px;
+  min-height: 50px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px 0 10px 0;
+  outline: none;
+  text-decoration: none !important;
+  transition: 0.5s;
 }
 
 .submenu-mini-button {
-    min-width: 50px;
-    min-height: 150px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 0 10px 0;
-    outline: none;
-    justify-content: center;
-    background-color: rgba(83, 182, 240, 0.055);
+  min-width: 50px;
+  min-height: 150px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0 10px 0;
+  outline: none;
+  justify-content: center;
+  background-color: rgba(83, 182, 240, 0.055);
 }
 
 .sidemenu-scroll-area {
-    position: fixed;
+  position: fixed;
 }
 
 .sidemenu-logo-hide {
-    display: none;
+  display: none;
 }
 
 #root>div>div.sideMenu-main.sideMenu-main-responsive>div>div:nth-child(2)>div:nth-child(3)>div {
-    background-color: rgba(240, 240, 240, 0.2) !important
+  background-color: rgba(240, 240, 240, 0.2) !important
 }
