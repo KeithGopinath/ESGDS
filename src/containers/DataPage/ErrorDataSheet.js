@@ -694,7 +694,7 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       {/* UPLOAD Field */}
-      <Col lg={12}>
+      <Col lg={12} className="datapage-ant-screenshots">
         <Row>
           <FieldWrapper
             label={<div>Upload Screenshot</div>} // <span className="addNewMember-red-asterik"> * </span>

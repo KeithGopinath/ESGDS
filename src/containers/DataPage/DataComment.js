@@ -15,9 +15,9 @@ const DataComment = (props) => {
       itemLayout="horizontal"
       renderItem={(eachCmt) => (
         <Comment
-          author={<span style={{ color: '#2199c8' }}>{eachCmt.author}</span>}
+          author={<span className="author-name">{eachCmt.author}</span>}
           avatar={
-            <Avatar style={{ backgroundColor: '#2199c8' }}>{eachCmt.author ? eachCmt.author.split(' ').map((e) => (e[0])).join('') : ''}</Avatar>}
+            <Avatar className="author-avatar">{eachCmt.author ? eachCmt.author.split(' ').map((e) => (e[0])).join('') : ''}</Avatar>}
           content={
             <p
               style={{

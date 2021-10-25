@@ -1,148 +1,148 @@
 .onboarding-form {
-    margin: .7rem 0;
-    padding-left: 4%;
+  margin: .7rem 0;
+  padding-left: 4%;
 }
 
 .personal-content,
 .proof-content,
 .logincred-content {
-    margin-top: 1%;
+  margin-top: 1%;
 
-    .personal-details,
-    .proof-details,
-    .logincred-details {
-        width: 85%;
-        margin: 0% auto 2% auto;
-        padding: 3%;
-    }
+  .personal-details,
+  .proof-details,
+  .logincred-details {
+    width: 85%;
+    margin: 0% auto 2% auto;
+    padding: 3%;
+  }
 }
 
 .login-content {
-    margin: 0% 3%;
+  margin: 0% 3%;
 }
 
 .personal-text,
 .proof-text,
 .logincred-text {
-    color: #6ab649;
-    margin-bottom: 3%;
+  color: #6ab649;
+  margin-bottom: 3%;
 }
 
 .back,
 .save-continue {
-    background-color: #2199c8 !important;
-    border-color: #2199c8 !important;
-    color: #ffffff !important;
+  background-color: $color-oceanBlue !important;
+  border-color: $color-oceanBlue !important;
+  color: $color-white !important;
 
-    &.hover,
-    &:hover {
-        text-decoration: none !important;
-    }
+  &.hover,
+  &:hover {
+    text-decoration: none !important;
+  }
 }
 
 .company-drop-down {
-    min-width: 100% !important;
-    border-radius: 7px !important;
-    padding: 4px 50px 8px 11px !important;
-    cursor: pointer;
+  min-width: 100% !important;
+  border-radius: 7px !important;
+  padding: 4px 50px 8px 11px !important;
+  cursor: pointer;
 }
 
 .drop-down-company-menu {
-    max-height: 300px !important;
+  max-height: 300px !important;
 }
 
 .MuiStepIcon-root {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
 
-    &.MuiStepper-horizontal {
-        margin: auto !important;
-    }
+  &.MuiStepper-horizontal {
+    margin: auto !important;
+  }
 
-    &.MuiStepIcon-active {
-        color: #2199c8 !important;
-    }
+  &.MuiStepIcon-active {
+    color: $color-oceanBlue !important;
+  }
 
-    &.MuiStepIcon-completed {
-        color: #2199c8 !important;
-    }
+  &.MuiStepIcon-completed {
+    color: $color-oceanBlue !important;
+  }
 }
 
 .MuiStepConnector-lineHorizontal {
-    margin-top: 1vh;
+  margin-top: 1vh;
 
-    &::after {
-        color: #2199c8 !important;
-    }
+  &::after {
+    color: $color-oceanBlue !important;
+  }
 }
 
 .file-not-upload>.custom-file-label {
-    border-color: #dc3545;
+  border-color: $color-borderRed;
 }
 
 .password-tooltip>.tooltip-inner,
 .proofUpload-tooltip>.tooltip-inner {
-    max-width: 50vw !important;
-    text-align: start !important;
-    color: #fff !important;
-    background-color: #2199c8 !important;
-    box-shadow: 0 0.1rem 0.1rem #000;
-    padding: 3px 8px !important;
+  max-width: 50vw !important;
+  text-align: start !important;
+  color: $color-white !important;
+  background-color: #2199c8 !important;
+  box-shadow: 0 0.1rem 0.1rem #000;
+  padding: 3px 8px !important;
 }
 
 .info-icon {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover {
-        color: #2199c8 !important;
-    }
+  &:hover {
+    color: $color-oceanBlue !important;
+  }
 }
 
 .approve-button-container {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .approve-user-button {
-    background-color: green !important;
-    border-color: green !important;
-    color: #fffaf0 !important;
+  background-color: green !important;
+  border-color: green !important;
+  color: $color-white !important;
 
-    &.hover,
-    &:hover {
-        text-decoration: none !important;
-    }
+  &.hover,
+  &:hover {
+    text-decoration: none !important;
+  }
 
-    margin-left: 10px;
-    margin-bottom: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .reject-user-button {
-    background-color: red !important;
-    border-color: red !important;
-    color: #fffaf0 !important;
+  background-color: $color-red !important;
+  border-color: $color-red !important;
+  color: $color-white !important;
 
-    &.hover,
-    &:hover {
-        text-decoration: none !important;
-    }
+  &.hover,
+  &:hover {
+    text-decoration: none !important;
+  }
 
-    margin-right: 10px;
-    margin-bottom: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .status-icon {
-    width: 3em !important;
-    height: 3em !important;
-    margin-bottom: 1%;
+  width: 3em !important;
+  height: 3em !important;
+  margin-bottom: 1%;
 }
 
 .company-select-list {
-    .css-xb97g8 {
-        display: none !important;
-    }
+  .css-xb97g8 {
+    display: none !important;
+  }
 
-    .css-1hb7zxy-IndicatorsContainer {
-        display: none !important;
-    }
+  .css-1hb7zxy-IndicatorsContainer {
+    display: none !important;
+  }
 }

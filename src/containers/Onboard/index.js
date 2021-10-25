@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { Container } from 'react-bootstrap';
-import './styles.scss';
+// import './styles.scss';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';

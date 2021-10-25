@@ -22,7 +22,7 @@
   padding: 0% 2% 3% 2%;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  background: white;
+  background: $color-white;
 }
 
 .batch-heading-name {
@@ -38,7 +38,7 @@
   align-items: center;
   margin-bottom: 10px;
   font-size: $font-size-medium;
-  color: #2199c8;
+  color: $color-oceanBlue;
   font-weight: 600;
 }
 
@@ -51,7 +51,7 @@
 
 .view-min-height {
   min-height: 25rem;
-  background-color: white;
+  background-color: $color-white;
 }
 
 .batch-card-content {
@@ -82,7 +82,7 @@
 .batchbox {
   border-radius: 4px;
   padding: 8px;
-  background: #fff;
+  background: $color-white;
   box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
   transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
   cursor: pointer;
@@ -107,7 +107,7 @@
   justify-content: flex-end;
   padding: 2%;
   border-top: 2px solid #f8f9fa;
-  background: white;
+  background: $color-white;
 }
 
 .MuiFab-secondary {

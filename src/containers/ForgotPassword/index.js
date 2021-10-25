@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
 
 const ForgotPassword = ({
-    show, handleClose, onSubmitForgotPassword, validate, forgotPasswordAlert, email, onEmailChange, forgotPasswordClass
+    show, handleClose, onSubmitForgotPassword, validate, forgotPasswordAlert, email, onEmailChange, forgotPasswordClass,forgotPasswordLoading
 }) => {
 
     const passwordBody = () => (
@@ -46,6 +46,7 @@ const ForgotPassword = ({
             onSubmitPrimary={onSubmitForgotPassword}
             footer={<Redirect />}
             alertClass={forgotPasswordClass}
+            isLoading={forgotPasswordLoading}
         />
     );
 };

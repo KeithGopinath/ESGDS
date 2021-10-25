@@ -1,6 +1,6 @@
 .bellicon {
   font-size: $font-size-x-large;
-  color: #2199c8;
+  color: $color-oceanBlue;
   cursor: pointer;
 }
 
@@ -17,7 +17,7 @@
 .pt-body {
   inset: 0px auto auto 0px !important;
   transform: translate(-310px, 55px) !important;
-  background-image: linear-gradient(to right, #2199c8, #2da68a);
+  background-image: linear-gradient(to right, $color-oceanBlue, #2da68a);
 }
 
 .dropdown-menu {
@@ -25,7 +25,7 @@
 }
 
 .panel-header {
-  color: white;
+  color: $color-white;
   font-size: $font-size-large;
 }
 
@@ -33,11 +33,11 @@
   position: relative;
   border-radius: 7px;
   bottom: 8px;
-  background-image: linear-gradient(to left, #2199c8, #2da68a);
+  background-image: linear-gradient(to left, $color-oceanBlue, #2da68a);
 }
 
 .dropdown-item {
-  color: white;
+  color: $color-white;
   // width: 98% !important;
 }
 

@@ -1,6 +1,6 @@
 .reports-tabs-stack {
   height: 2em;
-  background-color: white;
+  background-color: $color-white;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -15,8 +15,8 @@
 
 .reports-view-btn {
   align-items: center;
-  background-color: #2199c8 !important;
-  border-color: #2199c8 !important;
+  background-color: $color-oceanBlue !important;
+  border-color: $color-oceanBlue !important;
   padding: 2px 14px 2px 13px !important;
 }
 
@@ -24,7 +24,7 @@
   cursor: pointer;
 
   &:hover {
-    color: #2199c8;
+    color: $color-oceanBlue;
   }
 }
 
@@ -41,7 +41,7 @@
 
 .view-checked-company-reports {
   margin: auto 5vw auto 0vw;
-  background-color: #2199c8 !important;
-  border-color: #2199c8 !important;
+  background-color: $color-oceanBlue !important;
+  border-color: $color-oceanBlue !important;
   padding: 2px 14px 2px 13px !important;
 }

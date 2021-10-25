@@ -1,70 +1,70 @@
 .dashboard-main {
-    display: flex;
-    padding: 30px 5%;
-    flex-direction: column;
-    flex-grow: 1;
+  display: flex;
+  padding: 30px 5%;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .dashboard-cardstack {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .dashboard-card-wrapper {
-    margin: 20px 0;
-    min-width: 215px;
+  margin: 20px 0;
+  min-width: 215px;
 }
 
 .dashboard-card {
-    height: 105px;
-    width: 100%;
-    min-width: 205px;
-    background-color: #ffffff;
-    display: flex;
-    padding: 0 15px;
-    flex-direction: row;
+  height: 105px;
+  width: 100%;
+  min-width: 205px;
+  background-color: $color-white;
+  display: flex;
+  padding: 0 15px;
+  flex-direction: row;
 }
 
 .dashboard-card-avatar {
-    width: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dashboard-card-labelset {
-    width: 70%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: flex-end;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .dashboard-card-labelvalue {
-    color: #2199c8;
-    font-size: 30px;
+  color: $color-oceanBlue;
+  font-size: 30px;
 }
 
 .dashboard-card-labeltext {
-    color: #666666;
-    font-size: $font-size-small;
-    height: 38px;
-    overflow: hidden;
-    text-align: end;
+  color: #666666;
+  font-size: $font-size-small;
+  height: 38px;
+  overflow: hidden;
+  text-align: end;
 }
 
 .dashboard-tabs-stack {
-    background-color: white;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 2%;
-    justify-content: space-evenly;
-    height: 2em;
+  background-color: $color-white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2%;
+  justify-content: space-evenly;
+  height: 2em;
 }
 
 .dashboard-tabs-stack .tabs-label-count-wrap {
-    min-width: 10px !important;
-    width: auto !important;
+  min-width: 10px !important;
+  width: auto !important;
 }
