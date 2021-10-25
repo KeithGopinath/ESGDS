@@ -1,5 +1,5 @@
 .header-container {
-  background-color: white;
+  background-color: $color-white;
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
@@ -63,7 +63,7 @@
 }
 
 .head-link-element {
-  color: #2199c8;
+  color: $color-oceanBlue;
   font-size: $font-size-small;
   font-weight: 600;
   cursor: pointer,
@@ -77,12 +77,12 @@
   float: right;
   margin-left: 5px;
   font-weight: 500;
-  color: #2199c8;
+  color: $color-oceanBlue;
 
   &:hover {
-    color: #fff;
-    background-color: #2199c8 !important;
-    border-color: #2199c8 !important;
+    color: $color-white;
+    background-color: $color-oceanBlue !important;
+    border-color: $color-oceanBlue !important;
   }
 }
 

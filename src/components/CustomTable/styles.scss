@@ -100,7 +100,7 @@
 
 .label-assigned.is-selected {
   color: #d3d3d3;
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 .label-unassigned {
@@ -115,7 +115,7 @@
 
 .label-unassigned.is-selected {
   color: #d3d3d3;
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 .pending-users-status {

@@ -33,7 +33,7 @@
 }
 
 .task-info-group {
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 .task-id,
@@ -89,7 +89,7 @@
 
   .ant-modal-close-x,
   .ant-modal-title {
-    color: rgb(255, 255, 255);
+    color: $color-white;
   }
 
   .ant-modal-content {
@@ -100,7 +100,7 @@
 
 // ADD NEW || TERMINATE KMP || BOARD MEMBER STYLES
 .addNewMember-red-asterik {
-  color: red;
+  color: $color-red;
 }
 
 .addNewMember-member-name-group {
@@ -132,16 +132,16 @@
 }
 
 .addNewMember-red-border {
-  border: 1px solid red;
+  border: 1px solid $color-red;
   border-radius: inherit;
 }
 
 .addNewMember-select-red-border {
   .ant-select-selector {
-    border: 1px solid red !important;
+    border: 1px solid $color-red !important;
   }
 
   .css-yk16xz-control {
-    border: 1px solid red;
+    border: 1px solid $color-red;
   }
 }
