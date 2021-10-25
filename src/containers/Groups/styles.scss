@@ -64,18 +64,14 @@
 }
 
 .pillar-assign-box {
-
-
   margin-bottom: 8rem !important;
-
 }
-
 
 .display-grpname {
 
   .grpname-prop {
     color: $color-blue !important;
-    background-color: white !important;
+    background-color: $color-white !important;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -230,7 +226,7 @@
 
 .group-tot-alert {
   font-size: $font-size-medium;
-  color: #dc3545;
+  color: $color-borderRed;
 }
 
 .group-status-minheight {
@@ -244,13 +240,12 @@
 
 .group-dropdown-alert {
   .css-yk16xz-control {
-    border-color: #dc3545 !important;
+    border-color: $color-borderRed !important;
   }
 }
 
 .grp-pad {
   padding: 2%;
-
   width: 100%;
 }
 

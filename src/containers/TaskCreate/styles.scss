@@ -105,7 +105,7 @@
 .groupbox {
   border-radius: 4px;
   padding: 8px;
-  background: #fff;
+  background: $color-white;
   box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
   transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
   cursor: pointer;
@@ -171,7 +171,7 @@
 }
 
 .MuiButton-root {
-  background-color: #2199c8 !important;
+  background-color: $color-oceanBlue !important;
 }
 
 .batch-year-head {
@@ -184,7 +184,7 @@
 
 .content-info {
   font-size: $font-size-medium;
-  color: #dc3545;
+  color: $color-borderRed;
 }
 
 .MuiListItemText-multiline {
@@ -212,7 +212,7 @@
 .radio-select {
   .ant-checkbox-group-item {
     font-size: 1.1rem !important;
-    color: #2199c8 !important;
+    color: $color-oceanBlue !important;
     font-weight: 600 !important;
   }
 }
@@ -223,7 +223,7 @@
   align-items: center;
   font-size: 1.5rem;
   padding: 1%;
-  color: #2199c8;
+  color: $color-oceanBlue;
   // border-bottom: 2px solid #e9ecef;
   // min-height: 4.5rem;    
 }
@@ -250,10 +250,8 @@
   padding: 0% 0% 3% 1%;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  background: white;
+  background: $color-white;
 }
-
-// dummy css
 
 .date-picker-analyst {
   width: 40%;
@@ -263,7 +261,7 @@
 .analystQa-table {
   .ant-table-thead>tr>th {
     background-color: #2da68a !important;
-    color: white;
+    color: $color-white;
   }
 }
 
@@ -285,7 +283,7 @@
   background-color: $color-blue;
   padding: 8% 10% 10% 15%;
   font-size: 1.2rem;
-  color: white;
+  color: $color-white;
 }
 
 .detail-task-tab {

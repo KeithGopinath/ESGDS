@@ -38,6 +38,7 @@ const Login = () => {
   // forgot password screen
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
+  const forgotPasswordLoading = useSelector((state) => state.forgotPassword.isLoading);
 
   // checking user role
   const role = login && login.user && login.user.roleDetails.primaryRole.label;
@@ -224,7 +225,7 @@ const Login = () => {
       }
       dispatch({ type: 'FORGOT_PASSWORD_REQUEST', payload });
       setforgotPasswordvalidate('');
-      setforgotPasswordAlert('')
+      setforgotPasswordAlert('');
     }
   }
 
@@ -294,6 +295,7 @@ const Login = () => {
             email={forgotemail}
             onEmailChange={onForgotEmailChange}
             forgotPasswordClass={forgotPasswordClass}
+            forgotPasswordLoading ={forgotPasswordLoading}
           />
         </div>
       </Col>
