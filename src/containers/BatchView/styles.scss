@@ -26,9 +26,8 @@
 }
 
 .batch-heading-name {
-    font-size: 20px;
-    font-family: 'Roboto', sans-serif;
-    color: #2da68a;
+    font-size: $font-size-large;
+    color: $color-green;
     font-weight: bolder;
     padding: 5% 0% 6% 0%;
 }
@@ -38,12 +37,10 @@
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 10px;
-    font-size: 17px;
+    font-size: $font-size-medium;
     color: #2199c8;
     font-weight: 600;
 }
-
-
 
 .view-min-height {
     min-height: 25rem;
@@ -57,7 +54,7 @@
 }
 
 .batch-card-content-name {
-    font-size: 15px;
+    font-size: $font-size-medium;
     color: gray;
     margin-right: 2%;
     font-weight: 700;
@@ -65,7 +62,7 @@
 }
 
 .batch-card-content-value {
-    font-size: 18px;
+    font-size: $font-size-medium;
     color: #0096fb;
     font-weight: 600;
     letter-spacing: 1px;
@@ -88,7 +85,7 @@
 
 
 .icon-plus {
-    font-size: 15px;
+    font-size: $font-size-medium;
     color: whitesmoke;
 }
 
