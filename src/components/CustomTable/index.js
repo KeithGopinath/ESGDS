@@ -99,7 +99,7 @@ const CustomTable = ({
     setOrderBy(DEFAULT_ORDER_BY);
     { disablePageChange ? null : setPage(DEFAULT_PAGE) }
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
-    setSearchQuery('');
+    { disablePageChange ? null : setSearchQuery('') }
     setSearchDate(null);
   }, [tableData]);
 
@@ -356,9 +356,12 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        <div className="w-100 d-flex justify-content-end">
-          {tabFlagEnable ?
-            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
+        <div className="w-100 d-flex flex-wrap">
+          <div className="w-50 d-flex justify-content-end">
+        {tabFlagEnable ?
+            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button>: ''}
+          </div>
+        <div className="w-50 d-flex justify-content-end">
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
@@ -368,6 +371,7 @@ const CustomTable = ({
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
+        </div>
         </div>
       </Paper>
     </div>
