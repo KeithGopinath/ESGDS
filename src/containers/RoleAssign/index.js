@@ -18,6 +18,7 @@ const RoleAssignment = ({ show, setShow }) => {
   const dispatch = useDispatch();
   const roleData = useSelector((state) => state.roles.roles);
   const userData = useSelector((state) => state.getRoleAssignment.getRoleAssignment);
+  const userDataLoading = useSelector((state) => state.getRoleAssignment.isLoading);
   const roleAssignmentEdit = useSelector((state) => state.roleAssignmentEdit.roleAssignmentEdit);
   const roleAssignmentEditError = useSelector((state) => state.roleAssignmentEdit.error);
   const otpDetails = useSelector((state) => state.otp.otp);
@@ -202,6 +203,7 @@ const RoleAssignment = ({ show, setShow }) => {
       alertClass={alertClassName}
       onSubmitPrimary={onEditPrimary}
       footer={<RoleAssignFooter />}
+      isLoading={userDataLoading}
     />
   );
 };

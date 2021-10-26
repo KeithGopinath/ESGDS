@@ -5,7 +5,7 @@ import { Form, Col } from 'react-bootstrap';
 import Overlay from '../../components/Overlay';
 import { history } from '../../routes';
 
-const UserStatusManage = ({ show, handleClose, decision, userID, assingConpanies }) => {
+const UserStatusManage = ({ show, handleClose, decision, userID, assingCompanies }) => {
   const [comment, setComment] = useState('');
   const [alertMsg, setAlertMsg] = useState('');
   const [errorAlert, setErrorAlert] = useState('');
@@ -56,7 +56,7 @@ const UserStatusManage = ({ show, handleClose, decision, userID, assingConpanies
 
   const onSubmit = () => {
     if (decision == 'approve' || decision == 'save') {
-      assingConpanies();
+      assingCompanies();
       const payload = { userId: userID, userDetails: { isUserApproved: true } }
       dispatch({ type: 'USER_UPDATE_REQUEST', payload });
       handleRedirect();

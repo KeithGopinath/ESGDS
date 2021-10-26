@@ -1,15 +1,19 @@
 /* eslint-disable*/
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Button, Card, Form, Col, Jumbotron } from 'react-bootstrap';
+import { Row, Button, Card, Form, Col, Jumbotron, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../assets/images/logo.png';
 import PageLoader from '../../components/PageLoader';
+import { history } from '../../routes';
 
 const UpdatePassword = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [alertMsg, setAlertMsg] = useState('');
   const [validate, setValidate] = useState('');
+  const [validPassword, setValidPassword] = useState(true);
 
   const validPasswordUpdate = useSelector((state) => state.updatePassword.updatePassword);
   const InvalidPasswordUpdate = useSelector((state) => state.updatePassword.error);
@@ -18,6 +22,11 @@ const UpdatePassword = () => {
   useEffect(() => {
     if (validPasswordUpdate) {
       setAlertMsg(validPasswordUpdate.message);
+      setPassword('');
+      setConfirmPassword('');
+      setTimeout(() => {
+        history.push('/');
+      }, 2000);
     } else if (InvalidPasswordUpdate) {
       setAlertMsg(InvalidPasswordUpdate.message);
       setValidate('border-danger');
@@ -29,31 +38,50 @@ const UpdatePassword = () => {
 
   const onPasswordChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./!$#&+-]*$')) {
-      setPassword(e.target.value)
+      setPassword(e.target.value);
+      setValidPassword(true);
     }
   };
 
   const onConfirmPasswordChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./!$#&+-]*$')) {
-      setConfirmPassword(e.target.value)
+      setConfirmPassword(e.target.value);
+      setValidPassword(true);
     }
   };
 
+  const tooltip = (props) => (
+    <Tooltip className="password-update-tooltip" {...props}>
+      <strong>Password must:</strong>
+      <li>Should minium of eight (8) characters</li>
+      <li>Should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*_)</li>
+    </Tooltip>
+  );
+
   const onPasswordSubmit = () => {
-    if (!password || !confirmPassword) {
+    const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/;
+    if (!password) {
       setAlertMsg('Please fill the required fields');
       setValidate('border-danger');
-    } else if (password !== confirmPassword) {
-      setAlertMsg("Password and confirm password does not match")
+      setValidPassword(false);
+    } else if (re.test(password)) {
+      if (password === confirmPassword) {
+        const pathArray = url.pathname.split('/');
+        const token = pathArray[2];
+        const payload = { password: password }
+        dispatch({ type: 'UPDATE_PASSWORD_REQUEST', payload, token });
+        setValidPassword(true);
+        setValidate('');
+        setAlertMsg('')
+      } else {
+        setAlertMsg("Password and confirm password does not match")
+        setValidate('border-danger');
+        setValidPassword(false);
+      }
+    } else {
+      setAlertMsg('Password should match tooltip criteria');
       setValidate('border-danger');
-    }
-    else {
-      const pathArray = url.pathname.split('/');
-      const token = pathArray[2];
-      const payload = { password: password }
-      dispatch({ type: 'UPDATE_PASSWORD_REQUEST', payload, token });
-      setValidate('');
-      setAlertMsg('')
+      setValidPassword(false);
     }
   };
 
@@ -73,9 +101,15 @@ const UpdatePassword = () => {
               {passwordUpdateLoading ? <PageLoader /> :
                 <React.Fragment>
                   <Form.Group>
-                    <Form.Label>Password</Form.Label>
+                  <Form.Label>Password <sup className="text-danger">* </sup>
+                <span>
+                  <OverlayTrigger placement="auto-end" overlay={tooltip} className="password-update-tooltip">
+                    <FontAwesomeIcon className="info-icon" icon={faInfoCircle} />
+                  </OverlayTrigger>
+                </span>
+              </Form.Label>
                     <Form.Control
-                      className={!password && validate}
+                      className={!validPassword && validate}
                       type="password"
                       name="password"
                       value={password}
@@ -86,7 +120,7 @@ const UpdatePassword = () => {
                   <Form.Group>
                     <Form.Label>Confirm password</Form.Label>
                     <Form.Control
-                      className={!confirmPassword && validate}
+                      className={!validPassword && validate}
                       type="password"
                       name="confirmpassword"
                       value={confirmPassword}
