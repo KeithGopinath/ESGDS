@@ -107,13 +107,13 @@ const DataJson = ({ flag }) => {
             columnsHeadData: flag ? [
                 {
                     id: 'companyName',
-                    align: 'center',
+                    align: 'left',
                     label: 'Company Name',
                     dataType: 'string',
                 },
                 {
                     id: 'modifiedDate',
-                    align: 'center',
+                    align: 'left',
                     label: 'Modified Date',
                     dataType: 'date',
                 },
@@ -128,13 +128,13 @@ const DataJson = ({ flag }) => {
                 [
                     {
                         id: 'companyName',
-                        align: 'center',
+                        align: 'left',
                         label: 'Company Name',
                         dataType: 'string',
                     },
                     {
                         id: 'year',
-                        align: 'center',
+                        align: 'left',
                         label: 'Year',
                         dataType: 'date',
                     },
@@ -175,13 +175,13 @@ const DataJson = ({ flag }) => {
             columnsHeadData: flag ? [
                 {
                     id: 'companyName',
-                    align: 'center',
+                    align: 'left',
                     label: 'Company Name',
                     dataType: 'string',
                 },
                 {
                     id: 'modifiedDate',
-                    align: 'center',
+                    align: 'left',
                     label: 'Modified Date',
                     dataType: 'date',
                 },
@@ -196,19 +196,19 @@ const DataJson = ({ flag }) => {
                 [
                     {
                         id: 'companyName',
-                        align: 'center',
+                        align: 'left',
                         label: 'Company Name',
                         dataType: 'string',
                     },
                     {
                         id: 'year',
-                        align: 'center',
+                        align: 'left',
                         label: 'Year',
                         dataType: 'date',
                     },
                     {
                         id: 'generatedDate',
-                        align: 'center',
+                        align: 'left',
                         label: 'Generated Date',
                         dataType: 'date',
                     },
