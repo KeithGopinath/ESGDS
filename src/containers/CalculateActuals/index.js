@@ -20,6 +20,7 @@ const CalculateActuals = () => {
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const calculateActuals = useSelector((state) => state.calculateActuals.calculateActuals);
   const calculateActualsError = useSelector((state) => state.calculateActuals.error);
   const cloneActuals = useSelector((state) => state.cloneActuals.cloneActuals);
@@ -123,48 +124,51 @@ const CalculateActuals = () => {
         <div className="container-main">
           <Container>
             <Card className="upload-container">
-              <Row>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={taxonomyOptions}
-                      name="taxonomy"
-                      value={taxonomy}
-                      onChange={onTaxonomyChange}
-                      className={!taxonomy && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select NIC <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={nicOptions}
-                      name="taxonomy"
-                      value={NIC}
-                      onChange={onNICChangeChange}
-                      className={!NIC && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select Years <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={yearOptions}
-                      name="taxonomy"
-                      value={year}
-                      onChange={onYearChange}
-                      className={!year && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row className="upload-button-container">
-                <Button variant="primary" className="upload-actuals-button" value={calculate} onClick={(e) => onSubmit(e)}>{calculate}</Button>
-                <Button variant="primary" className="upload-actuals-button" disabled={calculateActuals && !reset ? false : true} onClick={onSubmitClone}>Clone Actuals</Button>
-              </Row>
+              {taxonomyDataLoading ? <PageLoader /> :
+                <React.Fragment>
+                  <Row>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={taxonomyOptions}
+                          name="taxonomy"
+                          value={taxonomy}
+                          onChange={onTaxonomyChange}
+                          className={!taxonomy && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select NIC <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={nicOptions}
+                          name="taxonomy"
+                          value={NIC}
+                          onChange={onNICChangeChange}
+                          className={!NIC && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select Years <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={yearOptions}
+                          name="taxonomy"
+                          value={year}
+                          onChange={onYearChange}
+                          className={!year && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row className="upload-button-container">
+                    <Button variant="primary" className="upload-actuals-button" value={calculate} onClick={(e) => onSubmit(e)}>{calculate}</Button>
+                    <Button variant="primary" className="upload-actuals-button" disabled={calculateActuals && !reset ? false : true} onClick={onSubmitClone}>Clone Actuals</Button>
+                  </Row>
+                </React.Fragment>}
               {loading && <PageLoader />}
             </Card>
           </Container>

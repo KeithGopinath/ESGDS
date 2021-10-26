@@ -24,3 +24,12 @@
 .reset-password-card {
   height: 26em;
 }
+
+.password-update-tooltip>.tooltip-inner {
+  max-width: 18vw !important;
+  text-align: start !important;
+  color: $color-white !important;
+  background-color: #2199c8 !important;
+  box-shadow: 0 0.1rem 0.1rem #000;
+  padding: 3px 8px !important;
+}

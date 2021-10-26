@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { message } from 'antd';
 import CustomTable from '../../components/CustomTable';
 import moment from 'moment';
+import PageLoader from '../../components/PageLoader';
 
 const CalculatePercentile = () => {
   const sideBarRef = useRef();
@@ -21,6 +22,7 @@ const CalculatePercentile = () => {
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const loading = useSelector((state) => state.pillarWisePercentile.isLoading);
   const pillarWisePercentile = useSelector((state) => state.pillarWisePercentile.pillarWisePercentile);
   const calculatePercentile = useSelector((state) => state.calculatePercentile.calculatePercentile);
@@ -295,11 +297,12 @@ const CalculatePercentile = () => {
         <div className="container-main">
           <Container>
             <Card className="upload-container">
-              <Row>
+            {taxonomyDataLoading ? <PageLoader />: <React.Fragment>
+            <Row>
                 <Col lg={4} sm={4} md={4}>
                   <Form.Group>
                     <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
-                    <Select
+                     <Select
                       options={taxonomyOptions}
                       name="taxonomy"
                       value={taxonomy}
@@ -336,6 +339,8 @@ const CalculatePercentile = () => {
               <Row className="upload-button-container">
                 <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Submit</Button>
               </Row>
+              </React.Fragment>
+                }
             </Card>
             <div className="calculate-projectile-table">
               <Card className="upload-container">

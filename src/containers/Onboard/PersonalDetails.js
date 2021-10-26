@@ -243,7 +243,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   }
 
   //while approve the user companies assign to the user
-  const assingCompnaies = () => {
+  const assingCompanies = () => {
     const Payload = {
       userId: userId,
       type: role,
@@ -507,7 +507,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
           }
         </Card>
       </Row>
-      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails && userDetails._id} assingConpanies={assingCompnaies} />
+      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails && userDetails._id} assingCompanies={assingCompanies} />
     </Container>
   );
 };

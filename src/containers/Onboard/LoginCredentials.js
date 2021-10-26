@@ -57,7 +57,7 @@ const LoginCredentials = ({ onPassword, previousStep, nextStep, onSubmit, setAct
     <Tooltip className="password-tooltip" {...props}>
       <strong>Password must:</strong>
       <li>Should minium of eight (8) characters</li>
-      <li>Should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*)</li>
+      <li>Should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*_)</li>
     </Tooltip>
   );
 
