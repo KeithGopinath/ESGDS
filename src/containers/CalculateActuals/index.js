@@ -19,6 +19,7 @@ const CalculateActuals = () => {
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const calculateActuals = useSelector((state) => state.calculateActuals.calculateActuals);
   const calculateActualsError = useSelector((state) => state.calculateActuals.error);
   const loading = useSelector((state) => state.calculateActuals.isLoading);
@@ -90,6 +91,7 @@ const CalculateActuals = () => {
         <div className="container-main">
           <Container>
             <Card className="upload-container">
+              {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
               <Row>
                 <Col lg={4} sm={4} md={4}>
                   <Form.Group>
@@ -130,7 +132,7 @@ const CalculateActuals = () => {
               </Row>
               <Row className="upload-button-container">
                 <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Calculate Actuals</Button>
-              </Row>
+              </Row> </React.Fragment>}
               {loading && <PageLoader />}
             </Card>
           </Container>

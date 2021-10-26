@@ -50,6 +50,7 @@ const TaskCreate = ({ flag }) => {
   const onpillarclick = useSelector((pillar) => pillar.taskpillar.pillarTask);
   const onpillarclickLoading = useSelector((pillar) => pillar.taskpillar);
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const controversyTaskData = useSelector((state) => state.controversyTaskData.controversyTaskData);
   const createControversyTask = useSelector((state) => state.createControversyTask.createControversyTask);
   const createControversyTaskError = useSelector((state) => state.createControversyTask.error);
@@ -622,6 +623,7 @@ const TaskCreate = ({ flag }) => {
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           {flag ?
+              taxonomyDataLoading ? <PageLoader /> :
             <div className="select-taxonomy">
               <div className="task-role-analystsla" > Select Taxonomy <span className="mandatory-color">*</span></div>
               <div >
