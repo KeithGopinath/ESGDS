@@ -58,6 +58,7 @@ const TaskTable = (props) => {
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     key: `${x.dpCodeId}${x.memberName}${x.dpCode}${x.fiscalYear}`,
     dpCode: x.dpCode,
+    dpName: x.dpName,
     fiscalYear: x.fiscalYear,
     status: x.status,
     action: (props.isAnalyst_DC && x.priority && x.priority.isDpcodeValidForCollection) || !props.isAnalyst_DC ?
@@ -84,13 +85,16 @@ const TaskTable = (props) => {
         id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
       },
       {
+        id: 'dpName', label: 'DP Name', align: 'left', dataType: 'string',
+      },
+      {
         id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
       },
       {
         id: 'status', label: 'Status', align: 'center', dataType: 'string',
       },
       {
-        id: 'action', label: 'Action', align: 'right', dataType: 'element',
+        id: 'action', label: 'Action', align: 'center', dataType: 'element',
       },
     ],
     tableLabel: 'Pending DpCodes',
