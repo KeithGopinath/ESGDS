@@ -91,7 +91,7 @@ const TaskTable = (props) => {
         id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
       },
       {
-        id: 'status', label: 'Status', align: 'center', dataType: 'string',
+        id: 'status', label: 'Status', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'center', dataType: 'element',
@@ -141,13 +141,13 @@ const ControversyTaskTable = (props) => {
         id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
       },
       {
-        id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
+        id: 'reassessmentDate', label: 'Reassessment Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+        id: 'reviewDate', label: 'Review Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
+        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
