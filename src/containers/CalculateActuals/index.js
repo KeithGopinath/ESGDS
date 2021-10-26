@@ -16,11 +16,14 @@ const CalculateActuals = () => {
   const [year, setYear] = useState();
   const [errorAlert, setErrorAlert] = useState('');
   const [flag, setFlag] = useState(false);
+  const [reset, setReset] = useState(false);
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
   const calculateActuals = useSelector((state) => state.calculateActuals.calculateActuals);
   const calculateActualsError = useSelector((state) => state.calculateActuals.error);
+  const cloneActuals = useSelector((state) => state.cloneActuals.cloneActuals);
+  const cloneActualsError = useSelector((state) => state.cloneActuals.error);
   const loading = useSelector((state) => state.calculateActuals.isLoading);
 
   useEffect(() => {
@@ -30,18 +33,32 @@ const CalculateActuals = () => {
   useEffect(() => {
     if (calculateActuals && flag) {
       message.success(calculateActuals.message);
-      setTaxonomy('');
-      setNIC('');
-      setYear('');
     } else if (calculateActualsError && flag) {
       message.error(calculateActualsError.message)
     }
   }, [calculateActuals, calculateActualsError]);
 
-  const onSubmit = () => {
-    if (!taxonomy || !NIC || !year) {
+  useEffect(() => {
+    if (cloneActuals && flag) {
+      message.success(cloneActuals.message);
+      setTaxonomy('');
+      setNIC('');
+      setYear('');
+    } else if (cloneActualsError && flag) {
+      message.error(cloneActualsError.message)
+    }
+  }, [cloneActuals, cloneActualsError]);
+
+  const onSubmit = (e) => {
+    const button = e.target.value
+    if (button === `Calculate Actuals` && (!taxonomy || !NIC || !year)) {
       message.error('Please select required fields')
       setErrorAlert('border-danger dropdown-alert');
+    } else if (button === `Reset`) {
+      setTaxonomy('');
+      setNIC('');
+      setYear('');
+      setReset(true)
     } else {
       const payload = {
         clientTaxonomyId: taxonomy.value,
@@ -50,7 +67,22 @@ const CalculateActuals = () => {
       }
       dispatch({ type: 'CALCULATE_ACTUALS_REQUEST', payload });
       setFlag(true);
+      setReset(false)
     }
+  }
+
+  const onSubmitClone = () => {
+    setTaxonomy('');
+    setNIC('');
+    setYear('');
+    setReset(true)
+    const payload = {
+      clientTaxonomyId: taxonomy.value,
+      nic: NIC.value,
+      year: year.label,
+    }
+    dispatch({ type: 'CLONE_ACTUALS_REQUEST', payload });
+    setFlag(true);
   }
 
   const onTaxonomyChange = (taxonomy) => {
@@ -81,6 +113,7 @@ const CalculateActuals = () => {
     label: data.taxonomyName
   }));
   const nicOptions = nicData && nicData[0] && nicData[0].nicList;
+  const calculate = calculateActuals && !reset ? 'Reset' : 'Calculate Actuals';
 
   return (
     <div className="main">
@@ -129,7 +162,8 @@ const CalculateActuals = () => {
                 </Col>
               </Row>
               <Row className="upload-button-container">
-                <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Calculate Actuals</Button>
+                <Button variant="primary" className="upload-actuals-button" value={calculate} onClick={(e) => onSubmit(e)}>{calculate}</Button>
+                <Button variant="primary" className="upload-actuals-button" disabled={calculateActuals && !reset ? false : true} onClick={onSubmitClone}>Clone Actuals</Button>
               </Row>
               {loading && <PageLoader />}
             </Card>

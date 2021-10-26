@@ -1,31 +1,19 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable camelcase */
+/* eslint-disable */
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-
 import Select, { components } from 'react-select';
 import { Modal, Tooltip, message } from 'antd';
-
 import moment from 'moment';
-
 import { CloseCircleFilled, UserOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
-
 import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
-
 import AddNewKMPMember from './AddNewKMPMember';
-
 import { history } from '../../routes';
 
 const FieldWrapper = (props) => {
@@ -440,7 +428,6 @@ const Task = (props) => {
     }
   };
 
-
   const onClickCalculateDerivedData = () => {
     const inCompleteDpCodes = getInCompleteDpCodes();
     if (inCompleteDpCodes.length === 0) {
@@ -569,7 +556,6 @@ const Task = (props) => {
   const getFooterBesidePagination = () => (
     null
   );
-
 
   return (
     <div className="main">
