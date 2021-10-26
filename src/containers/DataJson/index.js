@@ -14,6 +14,7 @@ const DataJson = ({ flag }) => {
     const sideBarRef = useRef();
     const [tabFlag, setTabFlag] = useState();
     const [taxonomy, setTaxonomy] = useState('');
+    const role = sessionStorage.role;
 
     const dispatch = useDispatch();
     const { Option } = Select;
@@ -106,13 +107,13 @@ const DataJson = ({ flag }) => {
             columnsHeadData: flag ? [
                 {
                     id: 'companyName',
-                    align: 'center',
+                    align: 'left',
                     label: 'Company Name',
                     dataType: 'string',
                 },
                 {
                     id: 'modifiedDate',
-                    align: 'center',
+                    align: 'left',
                     label: 'Modified Date',
                     dataType: 'date',
                 },
@@ -127,13 +128,13 @@ const DataJson = ({ flag }) => {
                 [
                     {
                         id: 'companyName',
-                        align: 'center',
+                        align: 'left',
                         label: 'Company Name',
                         dataType: 'string',
                     },
                     {
                         id: 'year',
-                        align: 'center',
+                        align: 'left',
                         label: 'Year',
                         dataType: 'date',
                     },
@@ -174,13 +175,13 @@ const DataJson = ({ flag }) => {
             columnsHeadData: flag ? [
                 {
                     id: 'companyName',
-                    align: 'center',
+                    align: 'left',
                     label: 'Company Name',
                     dataType: 'string',
                 },
                 {
                     id: 'modifiedDate',
-                    align: 'center',
+                    align: 'left',
                     label: 'Modified Date',
                     dataType: 'date',
                 },
@@ -195,19 +196,19 @@ const DataJson = ({ flag }) => {
                 [
                     {
                         id: 'companyName',
-                        align: 'center',
+                        align: 'left',
                         label: 'Company Name',
                         dataType: 'string',
                     },
                     {
                         id: 'year',
-                        align: 'center',
+                        align: 'left',
                         label: 'Year',
                         dataType: 'date',
                     },
                     {
                         id: 'generatedDate',
-                        align: 'center',
+                        align: 'left',
                         label: 'Generated Date',
                         dataType: 'date',
                     },
@@ -228,7 +229,7 @@ const DataJson = ({ flag }) => {
         };
     };
 
-    const tabLabelSets = [
+    const tabLabelSets = role ==='Client Representative' ? [{ label: 'Completed Companies' }] : [
         { label: 'Pending Companies' },
         { label: 'Completed Companies' },
     ];
@@ -253,7 +254,7 @@ const DataJson = ({ flag }) => {
 
     const filterData = activeData && activeData.filter(val => val.taxonomyId == taxonomy);
 
-    const tableData = tabFlag == 'Pending Companies' ? pendingCompaniesTableData(filterData || []) : completedCompaniesTableData(filterData || []);
+    const tableData = (flag && role === 'Client Representative' ?  completedCompaniesTableData(filterData || []) :  tabFlag == 'Pending Companies' ? pendingCompaniesTableData(filterData || []) : completedCompaniesTableData(filterData || []));
 
     return (
         <div className="main">
