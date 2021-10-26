@@ -139,10 +139,10 @@ const ControversyPendingTaskTable = (props) => {
         id: 'totalNoOfControversies', label: 'Contoversies Collected', align: 'center', dataType: 'string',
       },
       {
-        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+        id: 'reviewDate', label: 'Review Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'updatedDate', label: 'Last Updated On', align: 'center', dataType: 'string',
+        id: 'updatedDate', label: 'Last Updated On', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
