@@ -62,6 +62,7 @@ import dashboard from './Dashboard';
 import RejectSla from './RejectSla';
 import RaisedSla from './RaisedSlaDetails';
 import userAssignCompanies from './UserAssignCompanies';
+import cloneActuals from './CloneActuals';
 
 const combinedReducer = combineReducers({
   login,
@@ -134,6 +135,7 @@ const combinedReducer = combineReducers({
   RejectSla,
   RaisedSla,
   userAssignCompanies,
+  cloneActuals,
 });
 
 const rootReducer = (state, action) => {

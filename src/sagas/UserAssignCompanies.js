@@ -5,9 +5,8 @@ import * as actionCreators from '../actionCreators/UserAssignCompanies';
 import { doPut } from '../utils/fetchWrapper';
 
 export function* UserAssignCompanies(data) {
-  console.log("data", data);
   try {
-    const response = yield doPut(envConfig.apiEndPoints.UserAssingCompanies, data.Payload);
+    const response = yield doPut(envConfig.apiEndPoints.userAssingCompanies, data.Payload);
     yield put(actionCreators.UserAssignCompaniesSuccess(response));
   } catch (error) {
     yield put(actionCreators.UserAssignCompaniesFailure(error));

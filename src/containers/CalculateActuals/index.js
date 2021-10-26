@@ -16,12 +16,15 @@ const CalculateActuals = () => {
   const [year, setYear] = useState();
   const [errorAlert, setErrorAlert] = useState('');
   const [flag, setFlag] = useState(false);
+  const [reset, setReset] = useState(false);
 
   const dispatch = useDispatch();
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
   const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const calculateActuals = useSelector((state) => state.calculateActuals.calculateActuals);
   const calculateActualsError = useSelector((state) => state.calculateActuals.error);
+  const cloneActuals = useSelector((state) => state.cloneActuals.cloneActuals);
+  const cloneActualsError = useSelector((state) => state.cloneActuals.error);
   const loading = useSelector((state) => state.calculateActuals.isLoading);
 
   useEffect(() => {
@@ -31,18 +34,32 @@ const CalculateActuals = () => {
   useEffect(() => {
     if (calculateActuals && flag) {
       message.success(calculateActuals.message);
-      setTaxonomy('');
-      setNIC('');
-      setYear('');
     } else if (calculateActualsError && flag) {
       message.error(calculateActualsError.message)
     }
   }, [calculateActuals, calculateActualsError]);
 
-  const onSubmit = () => {
-    if (!taxonomy || !NIC || !year) {
+  useEffect(() => {
+    if (cloneActuals && flag) {
+      message.success(cloneActuals.message);
+      setTaxonomy('');
+      setNIC('');
+      setYear('');
+    } else if (cloneActualsError && flag) {
+      message.error(cloneActualsError.message)
+    }
+  }, [cloneActuals, cloneActualsError]);
+
+  const onSubmit = (e) => {
+    const button = e.target.value
+    if (button === `Calculate Actuals` && (!taxonomy || !NIC || !year)) {
       message.error('Please select required fields')
       setErrorAlert('border-danger dropdown-alert');
+    } else if (button === `Reset`) {
+      setTaxonomy('');
+      setNIC('');
+      setYear('');
+      setReset(true)
     } else {
       const payload = {
         clientTaxonomyId: taxonomy.value,
@@ -51,7 +68,22 @@ const CalculateActuals = () => {
       }
       dispatch({ type: 'CALCULATE_ACTUALS_REQUEST', payload });
       setFlag(true);
+      setReset(false)
     }
+  }
+
+  const onSubmitClone = () => {
+    setTaxonomy('');
+    setNIC('');
+    setYear('');
+    setReset(true)
+    const payload = {
+      clientTaxonomyId: taxonomy.value,
+      nic: NIC.value,
+      year: year.label,
+    }
+    dispatch({ type: 'CLONE_ACTUALS_REQUEST', payload });
+    setFlag(true);
   }
 
   const onTaxonomyChange = (taxonomy) => {
@@ -82,6 +114,7 @@ const CalculateActuals = () => {
     label: data.taxonomyName
   }));
   const nicOptions = nicData && nicData[0] && nicData[0].nicList;
+  const calculate = calculateActuals && !reset ? 'Reset' : 'Calculate Actuals';
 
   return (
     <div className="main">
@@ -91,48 +124,51 @@ const CalculateActuals = () => {
         <div className="container-main">
           <Container>
             <Card className="upload-container">
-              {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
-              <Row>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={taxonomyOptions}
-                      name="taxonomy"
-                      value={taxonomy}
-                      onChange={onTaxonomyChange}
-                      className={!taxonomy && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select NIC <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={nicOptions}
-                      name="taxonomy"
-                      value={NIC}
-                      onChange={onNICChangeChange}
-                      className={!NIC && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col lg={4} sm={4} md={4}>
-                  <Form.Group>
-                    <Form.Label>Select Years <sup className="text-danger">*</sup></Form.Label>
-                    <Select
-                      options={yearOptions}
-                      name="taxonomy"
-                      value={year}
-                      onChange={onYearChange}
-                      className={!year && errorAlert}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row className="upload-button-container">
-                <Button variant="primary" className="upload-data-button" onClick={onSubmit}>Calculate Actuals</Button>
-              </Row> </React.Fragment>}
+              {taxonomyDataLoading ? <PageLoader /> :
+                <React.Fragment>
+                  <Row>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select Taxonomy <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={taxonomyOptions}
+                          name="taxonomy"
+                          value={taxonomy}
+                          onChange={onTaxonomyChange}
+                          className={!taxonomy && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select NIC <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={nicOptions}
+                          name="taxonomy"
+                          value={NIC}
+                          onChange={onNICChangeChange}
+                          className={!NIC && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col lg={4} sm={4} md={4}>
+                      <Form.Group>
+                        <Form.Label>Select Years <sup className="text-danger">*</sup></Form.Label>
+                        <Select
+                          options={yearOptions}
+                          name="taxonomy"
+                          value={year}
+                          onChange={onYearChange}
+                          className={!year && errorAlert}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row className="upload-button-container">
+                    <Button variant="primary" className="upload-actuals-button" value={calculate} onClick={(e) => onSubmit(e)}>{calculate}</Button>
+                    <Button variant="primary" className="upload-actuals-button" disabled={calculateActuals && !reset ? false : true} onClick={onSubmitClone}>Clone Actuals</Button>
+                  </Row>
+                </React.Fragment>}
               {loading && <PageLoader />}
             </Card>
           </Container>
