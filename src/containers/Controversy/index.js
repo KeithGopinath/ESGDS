@@ -56,16 +56,16 @@ const ControversyPendingTaskTable = (props) => {
     rowsData: tablePopulate(props.controversyList),
     columnsHeadData: [
       {
-        id: 'controversyNumber', label: 'No', align: 'center', dataType: 'string',
+        id: 'controversyNumber', label: 'No', align: 'left', dataType: 'string',
       },
       {
-        id: 'srcName', label: 'Source Name', align: 'center', dataType: 'string',
+        id: 'srcName', label: 'Source Name', align: 'left', dataType: 'string',
       },
       {
-        id: 'publicationDate', label: 'Publication Date', align: 'center', dataType: 'date',
+        id: 'publicationDate', label: 'Publication Date', align: 'left', dataType: 'date',
       },
       {
-        id: 'response', label: 'Response', align: 'center', dataType: 'string',
+        id: 'response', label: 'Response', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
