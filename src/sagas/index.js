@@ -59,6 +59,7 @@ import { getDashboardWatchers } from './Dashboard';
 import { rejectslaWatchers } from './RejectSla';
 import { raisedslaWatchers } from './RaisedSlaDetails';
 import { userAssignCompaniesWatcher } from './UserAssignCompanies';
+import { cloneActualsWatchers } from './CloneActuals';
 
 export default function* rootWatchers() {
   yield all([
@@ -122,5 +123,6 @@ export default function* rootWatchers() {
     rejectslaWatchers(),
     raisedslaWatchers(),
     userAssignCompaniesWatcher(),
+    cloneActualsWatchers(),
   ]);
 }
