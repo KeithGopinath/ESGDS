@@ -274,7 +274,7 @@ const Login = () => {
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
-            {loginLoading ? <PageLoader /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button> }
+            {loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
           <OtpScreen
             show={showOtp}
@@ -299,7 +299,7 @@ const Login = () => {
             email={forgotemail}
             onEmailChange={onForgotEmailChange}
             forgotPasswordClass={forgotPasswordClass}
-            forgotPasswordLoading ={forgotPasswordLoading}
+            forgotPasswordLoading={forgotPasswordLoading}
           />
         </div>
       </Col>
