@@ -4,7 +4,7 @@ import OtpInput from 'react-otp-input';
 import Overlay from '../../components/Overlay';
 
 const OtpScreen = ({
-  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start,
+  show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start, otpLoading
 }) => {
   const OtpBody = () => (
     <div><p>We've sent a one time password to the email <span>{email}</span></p>
@@ -38,6 +38,7 @@ const OtpScreen = ({
       alertClass='danger'
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
+      isLoading={otpLoading}
     />
   );
 };

@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'LOGIN_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         login: action.login,
       };
     case 'LOGIN_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:
