@@ -76,6 +76,7 @@ export default {
     raisedSla: 'taskSlaLogs/task-requests',
     userAssingCompanies: 'users/assign-companies',
     cloneActuals: 'projected_values/copy_actuals_as_projected',
+    getSubsetTaxonomyDownload: 'datapoints/downloadSubsetTaxmonony',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
