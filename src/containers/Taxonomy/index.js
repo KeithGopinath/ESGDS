@@ -38,6 +38,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
   const dispatch = useDispatch();
   const taxonomy = useSelector((state) => state.masterTaxonomy.masterTaxonomy);
   const taxonomyHeader = useSelector((state) => state.masterTaxonomyHeader.masterTaxonomyHeader);
+  const taxonomyHeaderLoading = useSelector((state) => state.masterTaxonomyHeader.isLoading);
   const loading = useSelector((state) => state.masterTaxonomy.isLoading);
   const masterTaxonomy = taxonomy && taxonomy.rows;
 
@@ -436,6 +437,7 @@ const Taxonomy = ({ subsetList, showList, handleListClose, taxonomyName }) => {
               primary="submit"
               onSubmitPrimary={onSubmitHeader}
               alertClass='danger'
+              isLoading={taxonomyHeaderLoading}
             />
           </Container>
         </div>

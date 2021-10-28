@@ -12,10 +12,10 @@ import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Result} from 'antd';
+import { Result } from 'antd';
 import Pagination from '@material-ui/lab/Pagination';
 import PageLoader from '../../components/PageLoader';
- 
+
 const BatchView = () => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
@@ -24,12 +24,13 @@ const BatchView = () => {
   const [max, setmax] = useState(24);
   useEffect(() => {
     dispatch({ type: 'BATCH_REQUEST' });
-    
-  },[]);
+  }, []);
+
   const handleShow = () => {
     dispatch({ type: 'ClientTaxonomy_REQUEST' });
     setShow(true);
   };
+
   const searchtheme = createTheme({
     palette: {
       primary: {
@@ -46,17 +47,19 @@ const BatchView = () => {
   const batchCount = batchData && batchData.count;
   const batches = batchData && batchData.rows;
   const cardPerPage = 20;
+
   const onhandlePage = (e, page) => {
     const minValue = (page - 1) * cardPerPage;
     const maxValue = page * cardPerPage;
     setmin(minValue);
     setmax(maxValue);
   };
+
   const onSearchBatch = (data) => {
     const searchData = data.target.value;
     setSearchQuery(searchData);
-
   };
+
   const searchfilter = (search, card) => {
     const filteredData = card.filter((e) => {
       if ((e.batchName.toLowerCase()).includes(search.toLowerCase())) {
@@ -66,6 +69,7 @@ const BatchView = () => {
     });
     return filteredData;
   };
+
   const calculateCount = batches && (searchQuery ? searchfilter(searchQuery, batches).length : batchCount) / cardPerPage;
   const totalCount = Math.ceil(calculateCount);
   const batchlist = batches && (searchQuery ? searchfilter(searchQuery, batches) : batches).slice(min, max).map(({ batchName }) => (
@@ -77,6 +81,7 @@ const BatchView = () => {
   ));
 
   const sideBarRef = useRef();
+
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -108,30 +113,29 @@ const BatchView = () => {
                 </Button>
               </div>
             </div>
-               <div className="view-min-height">
-             
-             { 
-               (!batchErr.error && !loading ) && (
-                 <Row >
-                   {batchlist}
-                 </Row>
-               )
-             }
+            <div className="view-min-height">
 
-             { 
-               (batchErr.error && !loading) && (
-               <Result
-                 status="error"
-                 title={batchErr.error.message}
-               >
-               </Result>
-               )
-             }
-             {
-               (loading) &&  
-               (<PageLoader />)
-             }
-           </div>
+              {
+                (!batchErr.error && !loading) && (
+                  <Row >
+                    {batchlist}
+                  </Row>
+                )
+              }
+              {
+                (batchErr.error && !loading) && (
+                  <Result
+                    status="error"
+                    title={batchErr.error.message}
+                  >
+                  </Result>
+                )
+              }
+              {
+                (loading) &&
+                (<PageLoader />)
+              }
+            </div>
             <Row>
               <Col lg={12} sm={12}>
                 <div className="batch-footer">

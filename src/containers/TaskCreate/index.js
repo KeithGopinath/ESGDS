@@ -620,10 +620,10 @@ const TaskCreate = ({ flag }) => {
           </Col>
         }
       </Row>
+          {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           {flag ?
-              taxonomyDataLoading ? <PageLoader /> :
             <div className="select-taxonomy">
               <div className="task-role-analystsla" > Select Taxonomy <span className="mandatory-color">*</span></div>
               <div >
@@ -739,7 +739,7 @@ const TaskCreate = ({ flag }) => {
             </Button>
           </div>
         </Col>
-      </Row>
+      </Row></React.Fragment>}
     </Container>
   );
 
