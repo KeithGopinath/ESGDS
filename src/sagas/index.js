@@ -60,6 +60,7 @@ import { rejectslaWatchers } from './RejectSla';
 import { raisedslaWatchers } from './RaisedSlaDetails';
 import { userAssignCompaniesWatcher } from './UserAssignCompanies';
 import { cloneActualsWatchers } from './CloneActuals';
+import { getSubsetTaxonomyDownloadWatchers } from './SubsetTaxonomyDownload';
 
 export default function* rootWatchers() {
   yield all([
@@ -124,5 +125,6 @@ export default function* rootWatchers() {
     raisedslaWatchers(),
     userAssignCompaniesWatcher(),
     cloneActualsWatchers(),
+    getSubsetTaxonomyDownloadWatchers(),
   ]);
 }
