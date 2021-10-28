@@ -62,7 +62,7 @@ const CalculatePercentile = () => {
     } else {
       const payload = {
         taxonomy: taxonomy.value,
-        nicCode: NIC.value,
+        nic: NIC.value,
         pillar: pillar.value,
         years: years,
         currentYear: `${currentYear - 1}-${currentYear}`
