@@ -1,114 +1,114 @@
 .batch-wrapper {
-    margin-top: 5px;
-    padding: 0% 4% 4% 4%;
-    height: 100%;
+  margin-top: 5px;
+  padding: 0% 4% 4% 4%;
+  height: 100%;
 }
 
 .background-batch-view {
-    background: #f0f0f0;
+  background: #f0f0f0;
 }
 
 .batch-heading-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .head-tab {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0% 2% 3% 2%;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    background: $color-white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0% 2% 3% 2%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: $color-white;
 }
 
 .batch-heading-name {
-    font-size: $font-size-large;
-    color: $color-green;
-    font-weight: bolder;
-    padding: 5% 0% 6% 0%;
+  font-size: $font-size-large;
+  color: $color-green;
+  font-weight: bolder;
+  padding: 5% 0% 6% 0%;
 }
 
 .batch-detail {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: $font-size-medium;
-    color: $color-oceanBlue;
-    font-weight: 600;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: $font-size-medium;
+  color: $color-oceanBlue;
+  font-weight: 600;
 }
 
 .view-min-height {
-    min-height: 25rem;
-    background-color: $color-white;
+  min-height: 25rem;
+  background-color: $color-white;
 }
 
 .batch-card-content {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .batch-card-content-name {
-    font-size: $font-size-medium;
-    color: gray;
-    margin-right: 2%;
-    font-weight: 700;
-    // min-width: 90px;
+  font-size: $font-size-medium;
+  color: gray;
+  margin-right: 2%;
+  font-weight: 700;
+  // min-width: 90px;
 }
 
 .batch-card-content-value {
-    font-size: $font-size-medium;
-    color: #0096fb;
-    font-weight: 600;
-    letter-spacing: 1px;
-    min-width: 82px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: $font-size-medium;
+  color: #0096fb;
+  font-weight: 600;
+  letter-spacing: 1px;
+  min-width: 82px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .batch-card-display {
-    margin: 0px auto;
-    width: 88% !important;
-    margin-bottom: 6%;
-    min-width: 140px;
-    border-radius: 4px;
-    padding: 8px;
-    background: $color-white;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+  word-break: break-word;
+  text-align: center;
+  margin: 0px auto;
+  width: 90% !important;
+  margin-bottom: 5%;
+  min-width: 140px;
+  border-radius: 5px;
+  padding: 10px;
+  background: $color-white;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
 }
-
-
 
 .icon-plus {
-    font-size: $font-size-medium;
-    color: whitesmoke;
+  font-size: $font-size-medium;
+  color: whitesmoke;
 }
 
 .border-danger:focus {
-    border-color: #80bdff !important;
+  border-color: #80bdff !important;
 }
 
 .batchbox:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
 }
 
 .batch-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 2%;
-    border-top: 2px solid #f8f9fa;
-    background: $color-white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 2%;
+  border-top: 2px solid #f8f9fa;
+  background: $color-white;
 }
 
 .MuiFab-secondary {
-    background-color: #2da68a !important;
+  background-color: #2da68a !important;
 }
 
 // @media screen and (max-width: 774px) {
@@ -125,9 +125,9 @@
 // }
 
 .imp-btn {
-    display: flex;
-    align-items: center;
-    background-color: $color-oceanBlue !important;
-    border-color: $color-oceanBlue !important;
-    padding: 2px 14px 2px 13px !important
+  display: flex;
+  align-items: center;
+  background-color: $color-oceanBlue !important;
+  border-color: $color-oceanBlue !important;
+  padding: 2px 14px 2px 13px !important
 }

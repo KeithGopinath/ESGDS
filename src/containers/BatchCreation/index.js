@@ -1,8 +1,4 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable react/prop-types */
-/* eslint-disable prefer-const */
-/* eslint-disable no-console */
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 // import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
@@ -18,8 +14,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Overlay from '../../components/Overlay';
 import PageLoader from '../../components/PageLoader';
 
-
-// eslint-disable-next-line object-curly-newline
 const BatchCreation = ({ show, setShow }) => {
   const [batch, setBatch] = useState('');
   const [year, setYear] = useState('');
@@ -27,10 +21,12 @@ const BatchCreation = ({ show, setShow }) => {
   const [alert, setAlert] = useState('');
   const [subsetTax, setsubsetTax] = useState('');
   const [alertStatus, setalertStatus] = useState(false);
+
   useEffect(() => {
     dispatch({ type: 'BATCH_CREATE_RESET' });
     dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   }, []);
+
   const handleClose = () => {
     setBatch('');
     setYear('');
@@ -43,6 +39,7 @@ const BatchCreation = ({ show, setShow }) => {
     dispatch({ type: 'BATCH_CREATE_RESET' });
     dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   };
+
   const dispatch = useDispatch();
   const [validBorder, setValidBorder] = useState(false);
   const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy);
@@ -61,7 +58,6 @@ const BatchCreation = ({ show, setShow }) => {
 
   const optionsForPagination = {
     sizePerPage: 10,
-    // eslint-disable-next-line react/jsx-curly-brace-presence
     noDataText: (companyTaxLoading) ? <PageLoader load={'comp-loader'} /> : 'There is no data to display',
   };
   const isbatchCreated = useSelector((createbatch) => createbatch.createBatch);
@@ -79,6 +75,7 @@ const BatchCreation = ({ show, setShow }) => {
       dispatch({ type: 'BATCH_REQUEST' });
     }
   }, [isbatchCreated.batchpost]);
+  
   const onRowSelect = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
       const rowDetails = { value: row.id, selectedCompany: row.companydata };
@@ -94,6 +91,7 @@ const BatchCreation = ({ show, setShow }) => {
         return [];
       });
     }
+
     // removing rows from an array
     if (isSelected === false) {
       rowDetail.map((arr, index) => {
@@ -106,7 +104,7 @@ const BatchCreation = ({ show, setShow }) => {
       });
     }
   };
-  // eslint-disable-next-line consistent-return
+
   const onRowSelectAll = (isSelected) => {
     if (isSelected) {
       const dummy = [...rowDetail];
@@ -123,6 +121,7 @@ const BatchCreation = ({ show, setShow }) => {
       setRowDetails([]);
     }
   };
+
   const selectRowProp = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -130,7 +129,6 @@ const BatchCreation = ({ show, setShow }) => {
     onSelect: onRowSelect,
     onSelectAll: onRowSelectAll,
   };
-
 
   const currentYear = moment().year();
   const yearOptions = [
@@ -140,21 +138,25 @@ const BatchCreation = ({ show, setShow }) => {
     { value: `${currentYear - 4}-${currentYear - 3}`, label: `${currentYear - 4}-${currentYear - 3}` },
     { value: `${currentYear - 5}-${currentYear - 4}`, label: `${currentYear - 5}-${currentYear - 4}` },
   ];
+
   const onHandleYear = (selectedyear) => {
     setYear(selectedyear);
   };
+
   const onHandleTax = (selectedtax) => {
     setsubsetTax(selectedtax);
     setalertStatus(false);
     setAlert('');
     dispatch({ type: 'TAXANOMYCOMPANY_REQUEST', payload: selectedtax.value });
   };
+
   const onHandleInput = (e) => {
     if (/^(?![\s-])[\A-Za-z0-9\s-]*$/.test(e.target.value)) {
       const uppercaseName = (e.target.value).toUpperCase();
       setBatch(uppercaseName);
     }
   };
+
   useEffect(() => {
     if (isbatchCreated.error || taxonomyData.error || companyTaxData.error) {
       setalertStatus(false);
@@ -181,12 +183,13 @@ const BatchCreation = ({ show, setShow }) => {
     }
     // funtion to add batches and show message
   };
+
   const BatchBody = () => (
     <div className="modal-batch-body">
       <Row>
         <Col lg={6} sm={12} className="pad-right">
           <div className="batch-year">Select Taxonomy <span className="mandatory-color">*</span></div>
-          <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert' }`}>
+          <div className={`batch-input-width mar-tax-bot ${subsetTax.length === 0 && validBorder && 'dropdown-alert'}`}>
             <Select
               options={taxOptions}
               onChange={onHandleTax}
@@ -195,10 +198,10 @@ const BatchCreation = ({ show, setShow }) => {
           </div>
           <div className="batch-name">Batch Name <span className="mandatory-color">*</span></div>
           <div className="form-group batch-input-width " >
-            <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
+            <input type="text" className={`form-control ${batch === '' && validBorder}`} maxLength={25} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
           <div className="batch-year">Select Year <span className="mandatory-color">*</span></div>
-          <div className={`batch-input-width dp-min-height ${year.length === 0 && validBorder && 'dropdown-alert' }`}>
+          <div className={`batch-input-width dp-min-height ${year.length === 0 && validBorder && 'dropdown-alert'}`}>
             <Select
               isMulti
               options={yearOptions}
@@ -220,7 +223,6 @@ const BatchCreation = ({ show, setShow }) => {
     </div>
   );
 
-
   const BatchFooter = () => (
     <React.Fragment>
       <div className="foo-batch">
@@ -234,7 +236,6 @@ const BatchCreation = ({ show, setShow }) => {
         </div>
       </div>
     </React.Fragment>
-
   );
 
   // *** import companies from excel ***
@@ -258,6 +259,7 @@ const BatchCreation = ({ show, setShow }) => {
   //   promise.then((data) => {
   //   });
   // };
+
   return (
     <Overlay
       className="Batch-modal"
