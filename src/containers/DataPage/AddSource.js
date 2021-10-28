@@ -458,7 +458,7 @@ const AddSource = (props) => {
         {/* UPLOAD BUTTON */}
         <FieldWrapper
           visible
-          label={<div>Upload<span className="addNewMember-red-asterik"> * </span></div>}
+          label={<div>Upload{!((currentSourceType && currentSourceType.value === '-Others-' && currentSourceType.label === '-Others-') || (currentSubSourceType && currentSubSourceType.value === '-Others-' && currentSubSourceType.label === '-Others-') || (currentSourceType && currentSourceType.label === 'Webpages')) && <span className="addNewMember-red-asterik"> * </span>}</div>}
           body={
             <React.Fragment>
               <Upload
