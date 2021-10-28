@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
@@ -11,9 +10,7 @@ import Select from 'react-select';
 import moment from 'moment';
 import ErrorDataSheetTwo from './ErrorDataSheet';
 import ErrorPanel from './ErrorPanel';
-
 import validateReqFields from './validateReqFields';
-
 import AddSource from './AddSource';
 
 // Field Wrapper ::
@@ -181,13 +178,14 @@ export const DataSheetComponent = (props) => {
   const currentTab = sessionStorage.tab;
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
   const {
@@ -225,6 +223,8 @@ export const DataSheetComponent = (props) => {
   // DATASHEET FORM DATA +
   // *DPCODE*
   const formDpCode = defaultData.dpCode;
+  // *DPNAME*
+  const formDpName = defaultData.dpName;
   // *DESCRIPTION*
   const formDescription = defaultData.description;
   // *DATATYPE*
@@ -243,7 +243,7 @@ export const DataSheetComponent = (props) => {
   // *PAGE NO*
   const [formPageNo, setFormPageNo] = useState(defaultData.pageNo || '');
   // *SCREEN SHOT PATH*
-  const [formScreenShotPath, setFormScreenShotPath] = useState(defaultData.screenShot || '');
+  const [formScreenShotPath, setFormScreenShotPath] = useState(defaultData.screenShot || []);
   // *RESPONSE*
   const [formResponse, setFormResponse] = useState(defaultData.response || '');
   // *SOURCE OBJ { SRCNAME, PUBLICATION DATE, URL }*
@@ -253,7 +253,12 @@ export const DataSheetComponent = (props) => {
   // *PUBLICATION DATE*
   const [formPublicDate, setFormPublicDate] = useState((defaultData.source && defaultData.source.publicationDate) || '');
   // *SCREEN SHOT FILE*
-  const [formScreenShotFile, setFormScreenShotFile] = useState(null);
+  // const [formScreenShotFile, setFormScreenShotFile] = useState(defaultData.screenShotBase64 ? {
+  //   added: [...defaultData.screenShotBase64.added],
+  //   deleted: [...defaultData.screenShotBase64.deleted],
+  // } : {
+  //   added: [], deleted: [],
+  // });
   // *ERROR TYPE*
   const [formErrorType, setFormErrorType] = useState((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
   // *ERROR*
@@ -313,7 +318,7 @@ export const DataSheetComponent = (props) => {
     formSource: false,
     formURL: false,
     formPublicDate: false,
-    formScreenShotFile: false,
+    // formScreenShotFile: false,
     formErrorType: false,
     formComment: false,
     formIsError: false,
@@ -328,16 +333,42 @@ export const DataSheetComponent = (props) => {
     formThreshold: false,
   });
 
+  // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
+  const urlToBlob = (imgObjs) => Promise.all(imgObjs.map((eImg) => new Promise((res, rej) => {
+    if (eImg.url) {
+      fetch(eImg.url).then((response) => response.blob().then((blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        if (blob) {
+          reader.readAsDataURL(blob);
+          reader.onload = () => resolve({
+            uid: eImg.uid,
+            name: eImg.name,
+            base64: reader.result,
+          });
+          reader.onerror = (error) => reject(error);
+        }
+      }))).then((base64res) => res(base64res)).catch((error) => rej(error));
+    } else {
+      res(eImg);
+    }
+  })));
+
   // USEEFFECTS
   useEffect(() => {
     setFormTextSnippet(defaultData.textSnippet || '');
     setFormPageNo(defaultData.pageNo || '');
-    setFormScreenShotPath(defaultData.screenShot || '');
+    urlToBlob(defaultData.screenShot || []).then((base64Res) => setFormScreenShotPath(base64Res));
+    //  setFormScreenShotPath(defaultData.screenShot || []);
     setFormResponse(defaultData.response || '');
     setFormSource(defaultData.source || '');
     setFormURL((defaultData.source && defaultData.source.url) || '');
     setFormPublicDate((defaultData.source && defaultData.source.publicationDate) || '');
-    setFormScreenShotFile(null);
+    // setFormScreenShotFile(defaultData.screenShotBase64 ? {
+    //   added: [...defaultData.screenShotBase64.added],
+    //   deleted: [...defaultData.screenShotBase64.deleted],
+    // } : {
+    //   added: [], deleted: [],
+    // });
     setFormErrorType((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
     setFormComment((defaultData.error && (defaultData.error.hasError) && defaultData.error.comment) || '');
     setFormIsError((defaultData.error && (defaultData.error.hasError)) || false);
@@ -368,7 +399,7 @@ export const DataSheetComponent = (props) => {
       formSource: false,
       formURL: false,
       formPublicDate: false,
-      formScreenShotFile: false,
+      // formScreenShotFile: false,
       formErrorType: false,
       formComment: false,
       formIsError: false,
@@ -416,22 +447,36 @@ export const DataSheetComponent = (props) => {
     setFormPageNo(event.currentTarget.value);
   };
 
-  const getBase64 = (file) => new Promise((resolve, reject) => {
+  const getBase64 = (filesArray) => Promise.all(filesArray.map((eachFile) => new Promise((resolve, reject) => {
     const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+    if (eachFile) {
+      reader.readAsDataURL(eachFile.originFileObj);
+      reader.onload = () => resolve({
+        uid: eachFile.uid,
+        name: eachFile.name,
+        base64: reader.result,
+      });
       reader.onerror = (error) => reject(error);
     }
-  });
+  })));
 
   const onChangeFormScreenShotPath = (event) => {
-    setFormScreenShotPath(event.fileList[0] && URL.createObjectURL(event.fileList[0].originFileObj));
-    if (event.fileList[0]) {
-      getBase64(event.fileList[0] && event.fileList[0].originFileObj).then((e) => setFormScreenShotFile({ ...event, base64: e }));
-      setShowImgUploadError(true);
-    } else {
-      setFormScreenShotFile({ ...event, base64: null });
+    if (event && event.file && event.file.status === 'removed') {
+      // setFormScreenShotFile({
+      //   added: formScreenShotFile.added.filter((e) => e.uid !== event.file.uid),
+      //   deleted: [...formScreenShotFile.deleted, ...formScreenShotPath.filter((e) => e.uid === event.file.uid && !e.base64)],
+      // });
+      setFormScreenShotPath(formScreenShotPath.filter((e) => e.uid !== event.file.uid));
+    } else if (event && event.fileList.length > 0) {
+      const uploadedFiles = event.fileList.filter((e) => !!e.originFileObj);
+      getBase64(uploadedFiles).then((filesWithBase64) => {
+        setFormScreenShotPath([...formScreenShotPath, ...filesWithBase64]);
+        // setFormScreenShotFile({
+        //   ...formScreenShotFile,
+        //   added: [...formScreenShotFile.added, ...filesWithBase64],
+        // });
+        setShowImgUploadError(true);
+      }).catch((error) => message(error));
     }
   };
 
@@ -552,7 +597,7 @@ export const DataSheetComponent = (props) => {
       formSource: dpCodeInCompleteStatus && !(formSource.url && formSource.sourceName && formSource.publicationDate),
       formURL: dpCodeInCompleteStatus && !(formURL && (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(formURL))),
       formPublicDate: dpCodeInCompleteStatus && !formPublicDate,
-      formScreenShotFile: dpCodeInCompleteStatus && false, // !formScreenShotFile, Not Mandatory
+      // formScreenShotFile: dpCodeInCompleteStatus && false, // !formScreenShotFile, Not Mandatory
       formErrorType: formIsError === true && !formErrorType,
       formComment: formIsError === true && !(formComment.length > 0),
       formIsError: !(formIsError === true || formIsError === false),
@@ -598,7 +643,7 @@ export const DataSheetComponent = (props) => {
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
         screenShot: formScreenShotPath,
-        screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+        // screenShotBase64: formScreenShotFile,
         additionalDetails: dynamicFields,
         isEdited: true,
       };
@@ -612,7 +657,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+          // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
           isEdited: true,
         };
@@ -625,7 +670,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+          // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
           isAccepted: isErrorAccepted,
           rejectComment: errorComment,
@@ -643,7 +688,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+          // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
           error: {
             ...defaultData.error,
@@ -666,7 +711,7 @@ export const DataSheetComponent = (props) => {
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
           screenShot: formScreenShotPath,
-          screenShotBase64: (formScreenShotFile && formScreenShotFile.base64) || formScreenShotPath,
+          // screenShotBase64: formScreenShotFile,
           comments: formControversyComment,
           reviewDate: formReviewDate,
           isApplicableForCommiteeReview: formIsApplicableForCommiteeReview,
@@ -826,14 +871,12 @@ export const DataSheetComponent = (props) => {
       if (defaultData.status === 'Completed') {
         return true;
       }
-
       return false;
     }
     if (isAnalyst_CC) {
       if (defaultData.status === 'Completed') {
         return true;
       }
-
       return false;
     }
     if (isQA_DV) {
@@ -842,8 +885,9 @@ export const DataSheetComponent = (props) => {
       }
       return false;
     }
-    if (isCompanyRep_DR) { return true; }
-    if (isClientRep_DR) { return true; }
+    if (isCompanyRep_DR || isClientRep_DR || IsAdmin) {
+      return true;
+    }
     return false;
   };
 
@@ -860,37 +904,27 @@ export const DataSheetComponent = (props) => {
 
   return (
     <Row>
-
-      {/* DPCode Field */}
+      {/* DP Code Field */}
       <FieldWrapper
         label={<div>Dp Code</div>}
         visible
         size={[6, 5, 7]}
-        body={
-          <Form.Control
-            name="dpCode"
-            type="text"
-            value={formDpCode}
-            disabled
-          />
-        }
+        body={<div className="datapage-current-tab">{formDpCode}</div>}
       />
-
+      {/* DP Name Field */}
+      <FieldWrapper
+        label={<div>Dp Name</div>}
+        visible
+        size={[6, 5, 7]}
+        body={<div className="datapage-current-tab">{formDpName}</div>}
+      />
       {/* HISTORY YEAR Field */}
       <FieldWrapper
         label={<div>Year</div>}
         visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
         size={[6, 5, 7]}
-        body={
-          <Form.Control
-            name="year"
-            type="text"
-            value={defaultData.fiscalYear}
-            disabled
-          />
-        }
+        body={<div className="datapage-current-tab">{defaultData.fiscalYear}</div>}
       />
-
       {/* SOURCE NAME Field */}
       <FieldWrapper
         label={<div>Source Name<span className="addNewMember-red-asterik"> * </span></div>}
@@ -909,7 +943,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* SOURCE Field */}
       <FieldWrapper
         label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
@@ -933,16 +966,13 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* ADD SOURCE Button */}
       {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
-      <Col lg={6}>
-        <Button onClick={onClickOpenAddSource}>Add Source</Button>
-      </Col>}
-
+        <Col lg={12}>
+          <Button className="datapage-addsource-button" onClick={onClickOpenAddSource}>Add Source</Button>
+        </Col>}
       {/* HORIZONTAL Line */}
       <Col lg={12} className="datapage-horizontalLine"></Col>
-
       {/* DESCRIPTION Field */}
       <FieldWrapper
         label={<div>Description</div>}
@@ -950,92 +980,86 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={formDescription}
       />
-
       {/* RESPONSE Field */}
-      { formDataType === 'NUMBER' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Form.Control
-            type="number"
-            autoComplete="false"
-            name="response"
-            className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
-            placeholder="Enter Response"
-            onChange={onChangeFormResponse}
-            value={formResponse}
-            disabled={disableField}
-          />
-        }
-      />}
-
-
+      {formDataType === 'NUMBER' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Form.Control
+              type="number"
+              autoComplete="false"
+              name="response"
+              className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
+              placeholder="Enter Response"
+              onChange={onChangeFormResponse}
+              value={formResponse}
+              disabled={disableField}
+            />
+          }
+        />}
       {/* RESPONSE Field */}
-      { formDataType === 'TEXT' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Form.Control
-            type="text"
-            autoComplete="false"
-            name="response"
-            placeholder="Enter Response"
-            className={hasErrors.formResponse && 'red-class'}
-            onChange={onChangeFormResponse}
-            value={formResponse}
-            disabled={disableField}
-          />
-        }
-      />}
-
+      {formDataType === 'TEXT' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Form.Control
+              type="text"
+              autoComplete="false"
+              name="response"
+              placeholder="Enter Response"
+              className={hasErrors.formResponse && 'red-class'}
+              onChange={onChangeFormResponse}
+              value={formResponse}
+              disabled={disableField}
+            />
+          }
+        />}
       {/* RESPONSE Field */}
-      { formDataType === 'DATE' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <DatePicker
-            format="DD/MM/YYYY"
-            name="response"
-            size="large"
-            className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
-            onChange={onChangeFormResponse}
-            value={formResponse && moment(formResponse)}
-            disabled={disableField}
-          />
-        }
-      />}
-
+      {formDataType === 'DATE' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <DatePicker
+              format="DD/MM/YYYY"
+              name="response"
+              size="large"
+              className={hasErrors.formResponse ? 'red-class datapage-datepicke' : 'datapage-datepicke'}
+              onChange={onChangeFormResponse}
+              value={formResponse && moment(formResponse)}
+              disabled={disableField}
+            />
+          }
+        />}
       {/* RESPONSE Field */}
-      { formDataType === 'SELECT' &&
-      <FieldWrapper
-        label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
-        visible
-        size={[6, 5, 7]}
-        body={
-          <Select
-            name="response"
-            options={textResponse}
-            className={hasErrors.formResponse && 'red-class'}
-            onChange={onChangeFormResponse}
-            value={formResponse && { label: formResponse, value: formResponse }}
-            placeholder="Select Response"
-            isDisabled={disableField}
-            styles={{
-              menuList: (provided) => ({
-                ...provided,
-                maxHeight: 120,
-              }),
-            }}
-          />
-        }
-      />}
-
+      {formDataType === 'SELECT' &&
+        <FieldWrapper
+          label={<div>Response<span className="addNewMember-red-asterik"> * </span></div>}
+          visible
+          size={[6, 5, 7]}
+          body={
+            <Select
+              name="response"
+              options={textResponse}
+              className={hasErrors.formResponse && 'red-class'}
+              onChange={onChangeFormResponse}
+              value={formResponse && { label: formResponse, value: formResponse }}
+              placeholder="Select Response"
+              isDisabled={disableField}
+              styles={{
+                menuList: (provided) => ({
+                  ...provided,
+                  maxHeight: 120,
+                }),
+              }}
+            />
+          }
+        />}
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
         label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
@@ -1054,7 +1078,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* PAGE NO Field */}
       <FieldWrapper
         label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1072,7 +1095,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* URL Field */}
       <FieldWrapper
         label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1091,7 +1113,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1110,9 +1131,8 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* UPLOAD Field */}
-      <Col lg={12}>
+      <Col lg={12} className="datapage-ant-screenshots">
         <Row>
           <FieldWrapper
             label={<div>Upload Screenshot</div>} // <span className="addNewMember-red-asterik"> * </span>
@@ -1121,37 +1141,44 @@ export const DataSheetComponent = (props) => {
             body={
               <Upload
                 className="datapage-ant-upload"
-                maxCount={1}
-                fileList={formScreenShotFile && formScreenShotFile.fileList}
+                multiple
+                maxCount={6}
+                accept="image/*"
+                fileList={formScreenShotPath}
                 beforeUpload={screenShotBeforeUpload}
                 onChange={onChangeFormScreenShotPath}
+                showUploadList={!disableField}
               >
                 <AntButton
                   className={hasErrors.formScreenShotPath ? 'red-class datapage-ant-button' : 'datapage-ant-button'}
-                  disabled={disableField}
+                  disabled={disableField || formScreenShotPath.length >= 6}
                   icon={<UploadOutlined />}
-                >Click to Upload
+                >{formScreenShotPath.length >= 6 ? 'Upload Limit Reached (Max: 6)' : 'Click to Upload'}
                 </AntButton>
               </Upload>
             }
           />
-
           {/* ScreenShot Field */}
           <FieldWrapper
             label={<div>Screenshot</div>}// <span className="addNewMember-red-asterik"> * </span>
-            visible={!!formScreenShotPath}
-            size={[4, 5, 7]}
+            // visible={!!formScreenShotPath}
+            visible={formScreenShotPath.length > 0}
+            size={[6, 5, 7]}
             body={
-              <Image
-                width="50%"
-                src={formScreenShotPath}
-                onError={onScreenShotUploadError}
-              />
+              <Image.PreviewGroup>
+                {formScreenShotPath.map((e) =>
+                  (<Image
+                    width="46%"
+                    className="antd-img-set-cover"
+                    key={e.uid}
+                    src={e.url || e.base64}
+                    onError={onScreenShotUploadError}
+                  />))}
+              </Image.PreviewGroup>
             }
           />
         </Row>
       </Col>
-
       {/* Controversy Fiscal Year Field */}
       <FieldWrapper
         label={<div>Fiscal Year<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1175,7 +1202,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Fiscal Year End Date Field */}
       <FieldWrapper
         label={<div>Fiscal Year End Date</div>}
@@ -1183,7 +1209,6 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={formControversyFiscalYearEnd || 'NA'}
       />
-
       {/* Controversy Assessment Date Field */}
       <FieldWrapper
         label={<div>Assessment date</div>}
@@ -1201,7 +1226,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Reassessment Date Field */}
       <FieldWrapper
         label={<div>Reassessment date</div>}
@@ -1219,7 +1243,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Review Date Field */}
       <FieldWrapper
         label={<div>Review date</div>}
@@ -1237,7 +1260,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* RESPONSE Field */}
       <FieldWrapper
         label={<div>Commitee review<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1261,7 +1283,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* DYNAMIC FIELDS COMES HERE */}
       {dynamicFields.map((eachData, index) => (
         <FieldWrapper
@@ -1274,26 +1295,24 @@ export const DataSheetComponent = (props) => {
           })}
         />
       ))}
-
       {/* IS ERORR Field */}
       {(isCompanyRep_DR || isClientRep_DR || isQA_DV) && !isHistoryType &&
-      <Col lg={12}>
-        <Row>
-          <FieldWrapper
-            label={<div>Error<span className="addNewMember-red-asterik"> * </span></div>}
-            visible
-            size={[6, 5, 7]}
-            body={
-              <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
-                <Radio value>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </Radio.Group>
-            }
-          />
-        </Row>
-      </Col>
+        <Col lg={12}>
+          <Row>
+            <FieldWrapper
+              label={<div>Error<span className="addNewMember-red-asterik"> * </span></div>}
+              visible
+              size={[6, 5, 7]}
+              body={
+                <Radio.Group disabled={defaultData.error && defaultData.error.errorStatus === 'Completed'} onChange={onChangeFormIsError} value={formIsError}>
+                  <Radio value>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </Radio.Group>
+              }
+            />
+          </Row>
+        </Col>
       }
-
       {/* ERROR TYPE Field */}
       <FieldWrapper
         label={<div>Error Type<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1317,7 +1336,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1336,7 +1354,6 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* Controversy Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
@@ -1355,47 +1372,42 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
-
       {/* ERROR DATA SHEET COMPANY AND CLIENT REP's */}
       {(isCompanyRep_DR || isClientRep_DR) && !isHistoryType &&
-      <ErrorDataSheetTwo
-        isError={formIsError}
-        reqData={formErrorRefData}
-        reqSourceData={sourceList}
-        textResponse={textResponse}
-        locationData={props.locationData}
-        openSourcePanel={onClickOpenAddSource}
-        onClickSave={props.onClickSave}
-      />}
+        <ErrorDataSheetTwo
+          isError={formIsError}
+          reqData={formErrorRefData}
+          reqSourceData={sourceList}
+          textResponse={textResponse}
+          locationData={props.locationData}
+          openSourcePanel={onClickOpenAddSource}
+          onClickSave={props.onClickSave}
+        />}
 
       {!(isAnalyst_CC && isHistoryType) &&
-      <Col lg={12} className="datapage-button-wrap">
-        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        { (isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
-        { isAnalyst_DCR && !isHistoryType && defaultData.error &&
-        <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
-        {/* FOR QA */}
-        {(isQA_DV) && !isHistoryType && ((defaultData.error && defaultData.error.errorStatus !== 'Completed') || defaultData.status !== 'Completed') &&
-        <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
-        {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
-        <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
-        {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
-        <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
-
-        {/* HISTORY UNFREEZE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
-        <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
-
-        {/* HISTORY SAVE Button */}
-        { (isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
-        <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
-      </Col>}
-
+        <Col lg={12} className="datapage-button-wrap">
+          {(isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
+            <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
+          {(isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status === 'Completed' &&
+            <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit</Button>}
+          {isAnalyst_DCR && !isHistoryType && defaultData.error &&
+            <Button className="datapage-button" variant="success" onClick={onClickViewError}>View Error</Button>}
+          {/* FOR QA */}
+          {(isQA_DV) && !isHistoryType && ((defaultData.error && defaultData.error.errorStatus !== 'Completed') || defaultData.status !== 'Completed') &&
+            <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
+          {(isQA_DV) && !isHistoryType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+            <Button className="datapage-button" variant="primary" onClick={dummyEditClickHandler}>Edit Error</Button>}
+          {(isQA_DV) && !isHistoryType && defaultData.status === 'Completed' && (defaultData.error && !defaultData.error.hasError) &&
+            <Button className="datapage-button" variant="primary" onClick={dummyQAEditClickHandler}>UnFreeze Data</Button>}
+          {/* HISTORY UNFREEZE Button */}
+          {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status === 'Completed' &&
+            <Button className="datapage-button" variant="primary" onClick={unFreezeClickHandler}>UnFreeze</Button>}
+          {/* HISTORY SAVE Button */}
+          {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isHistoryType && defaultData.status !== 'Completed' &&
+            <Button className="datapage-button" variant="success" onClick={saveClickHandler}>Save</Button>}
+        </Col>}
       {/* HORIZONTAL Line */}
       {!(isAnalyst_CC && isHistoryType) && <Col lg={12} className="datapage-horizontalLine"></Col>}
-
       {/* ADD SOURCE PANEL */}
       <Drawer
         title="Add Source"
@@ -1409,7 +1421,6 @@ export const DataSheetComponent = (props) => {
       >
         {isSrcPanelOpened && <AddSource fiscalYear={defaultData.fiscalYear} locationData={props.locationData} companyId={props.locationData.state.dpCodeDetails.companyId} closeAddSourcePanel={onClickCloseAddSource} />}
       </Drawer>
-
       {/* ERROR PANEL FOR DATA CORRECTION */}
       <Modal
         title="Error Panel"
@@ -1428,7 +1439,6 @@ export const DataSheetComponent = (props) => {
       >
         <ErrorPanel reqErrorData={reqErrorData} isAccepted={isErrorAccepted} errorComment={errorComment} setErrorComment={setErrorComment} />
       </Modal>
-
     </Row>
   );
 };

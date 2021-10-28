@@ -1,65 +1,80 @@
 .taxonomy-icons-container {
-    display: flex;
-    justify-content: flex-end;
-    color: #2199c8;
+  display: flex;
+  color: $color-oceanBlue;
 }
 
-.taxonomy-icon {
-    margin-right: 15px;
-    margin-top: 15px;
+.taxonomy-card {
+  margin: 0px auto 8% auto;
+  width: 80%;
+  min-width: 100px;
+  border-radius: 4px;
+  padding: 8px;
+  background: $color-white;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
+
+  .taxonomy-icon,
+  .taxonomy-checkbox {
+    cursor: pointer;
+  }
 }
 
 .input-taxonomy {
-    text-align: center;
-    height: 6vh;
-    font-weight: bold;
+  width: 100%;
+  margin: auto 2px auto 2px;
+  text-align: center;
+  color: $color-oceanBlue;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .taxonomy-button-container {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .taxonomy-btn {
-    display: flex;
-    align-items: center;
-    background-color: #2199c8 !important;
-    border-color: #2199c8 !important;
-    padding: 2px 14px 2px 13px !important;
-    margin-right: 10px;
+  display: flex;
+  align-items: center;
+  background-color: $color-oceanBlue !important;
+  border-color: $color-oceanBlue !important;
+  padding: 2px 14px 2px 13px !important;
+  margin-right: 10px;
 }
 
 .taxonomy-checkbox-container {
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: 5px;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 5px;
 }
 
 .taxonomy-checkbox-mandatory-container {
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: 5px;
-    height: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 5px;
+  height: 20px;
 }
 
 .taxonomy-checkbox {
-    width: 15px;
-    height: 15px;
-}
-
-.taxonomy-submit {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  width: 15px;
+  height: 15px;
 }
 
 .taxonomy-footer {
+  display: flex;
+  align-items: flex-end;
+  padding: 1%;
+  border-top: 2px solid #f8f9fa;
+  background: $color-white;
+
+  .submit-taxonomy,
+  .master-taxonomy-pagination {
+    width: 50%;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    padding: 2%;
-    border-top: 2px solid #f8f9fa;
-    background: white;
+    justify-content: flex-end;
+  }
 }
 
 .container,
@@ -68,18 +83,18 @@
 .container-md,
 .container-lg,
 .container-xl {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 100% !important;
 }
 
 .taxonomy-popup-row {
-    margin-top: 10px !important;
+  margin-top: 10px !important;
 }
 
 .taxonomy-backward-icon {
-    cursor: pointer;
-    margin-bottom: 15px;
-    margin-left: 10px;
-    margin-top: -10px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  margin-left: 10px;
+  margin-top: -10px;
 }

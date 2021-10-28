@@ -1,29 +1,19 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable camelcase */
+/* eslint-disable */
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-
 import Select, { components } from 'react-select';
 import { Modal, Tooltip, message } from 'antd';
-
+import moment from 'moment';
 import { CloseCircleFilled, UserOutlined, ExclamationCircleTwoTone } from '@ant-design/icons';
-
 import { faUserPlus, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
-
 import AddNewKMPMember from './AddNewKMPMember';
-
 import { history } from '../../routes';
 
 const FieldWrapper = (props) => {
@@ -56,6 +46,7 @@ const TaskTable = (props) => {
   const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
     key: `${x.dpCodeId}${x.memberName}${x.dpCode}${x.fiscalYear}`,
     dpCode: x.dpCode,
+    dpName: x.dpName,
     fiscalYear: x.fiscalYear,
     status: x.status,
     action: (props.isAnalyst_DC && x.priority && x.priority.isDpcodeValidForCollection) || !props.isAnalyst_DC ?
@@ -82,13 +73,16 @@ const TaskTable = (props) => {
         id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
       },
       {
+        id: 'dpName', label: 'DP Name', align: 'left', dataType: 'string',
+      },
+      {
         id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
       },
       {
-        id: 'status', label: 'Status', align: 'center', dataType: 'string',
+        id: 'status', label: 'Status', align: 'left', dataType: 'string',
       },
       {
-        id: 'action', label: 'Action', align: 'right', dataType: 'element',
+        id: 'action', label: 'Action', align: 'center', dataType: 'element',
       },
     ],
     tableLabel: 'Pending DpCodes',
@@ -112,8 +106,8 @@ const ControversyTaskTable = (props) => {
     key: x.dpCodeId,
     dpCode: x.dpCode,
     keyIssue: x.keyIssue || x.keyIssueName,
-    reassessmentDate: x.reassessmentDate ? new Date(x.reassessmentDate).toDateString() : '-',
-    reviewDate: x.reviewDate ? new Date(x.reviewDate).toDateString() : '-',
+    reassessmentDate: x.reassessmentDate ? (moment(x.reassessmentDate).format('DD/MM/YYYY') || new Date(x.reassessmentDate).toDateString()) : '-',
+    reviewDate: x.reviewDate ? (moment(x.reviewDate).format('DD/MM/YYYY') || new Date(x.reviewDate).toDateString()) : '-',
     controversyFiscalYearEndDate: x.controversyFiscalYearEndDate ? new Date(x.controversyFiscalYearEndDate).toDateString() : '-',
     action:
   <Link
@@ -135,13 +129,13 @@ const ControversyTaskTable = (props) => {
         id: 'keyIssue', label: 'Key Issue', align: 'left', dataType: 'string',
       },
       {
-        id: 'reassessmentDate', label: 'Reassessment Date', align: 'center', dataType: 'string',
+        id: 'reassessmentDate', label: 'Reassessment Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'reviewDate', label: 'Review Date', align: 'center', dataType: 'string',
+        id: 'reviewDate', label: 'Review Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'center', dataType: 'string',
+        id: 'controversyFiscalYearEndDate', label: 'Fiscal Year End Date', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
@@ -248,13 +242,14 @@ const Task = (props) => {
   const currentTab = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
   // DECLARING DISPATCH
@@ -289,7 +284,7 @@ const Task = (props) => {
 
   const extractReqTask = () => {
     let returnableTask;
-    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR) {
+    if (isAnalyst_DC || isQA_DV || isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR || IsAdmin) {
       [returnableTask] = (reqTASK && reqTASK.task) ? [reqTASK.task] : [];
     }
     if (isAnalyst_CC) {
@@ -303,7 +298,7 @@ const Task = (props) => {
   };
 
   const getReqTaskList = () => {
-    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) {
       if (dpCodeType === 'Standalone' && reqTaskData.standalone) {
         return reqTaskData.standalone;
       }
@@ -327,7 +322,7 @@ const Task = (props) => {
   const reqTaskList = getReqTaskList();
 
   const getReqDpCodesList = () => {
-    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) {
       if (dpCodeType === 'Standalone') {
         if (reqKeyIssue) {
           return reqTaskList.dpCodesData.filter((e) => (e.keyIssueId && e.keyIssueId === reqKeyIssue.value));
@@ -432,7 +427,6 @@ const Task = (props) => {
       message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
     }
   };
-
 
   const onClickCalculateDerivedData = () => {
     const inCompleteDpCodes = getInCompleteDpCodes();
@@ -563,7 +557,6 @@ const Task = (props) => {
     null
   );
 
-
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -572,7 +565,7 @@ const Task = (props) => {
         <div className="task-main" >
           <div className="task-info-group">
             <div className="task-id-year-wrap">
-              {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
+              {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && <div className="task-pillar">{`${reqTaskData.company} / ${reqTaskData.pillar}`}</div>}
               {isAnalyst_CC && <div className="task-pillar">{reqTaskData.company}</div>}
               <div className="task-id">{`Task No: ${reqTaskData.taskNumber}`}</div>
             </div>
@@ -583,7 +576,7 @@ const Task = (props) => {
             <div className="task-keyissue">
               <Row>
                 {/* ONLY FOR STANDALONE */}
-                {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && dpCodeType === 'Standalone' &&
+                {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && dpCodeType === 'Standalone' &&
                   <FieldWrapper
                     label="Key Issues"
                     size={[6, 5, 7]}
@@ -638,7 +631,7 @@ const Task = (props) => {
                   />}
               </Row>
             </div>
-            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && !isValidationCalled &&
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && !isValidationCalled &&
               <TaskTable
                 taskDetails={taskDetails}
                 dpCodesData={(derivedCalculationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}

@@ -1,59 +1,67 @@
 .login-container {
-    width: 100%;
-    display: flex;
-    padding-left: auto !important;
-    padding-right: auto !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    overflow-y: hidden;
+  width: 100%;
+  display: flex;
+  padding-left: auto !important;
+  padding-right: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow-y: hidden;
 }
 
 .banner-image {
-    background-color: #50bfa5;
-    width: 100%;
-    border-radius: .5em;
+  background-color: #50bfa5;
+  width: 100%;
+  border-radius: .5em;
 }
 
 .banner-container {
-    background-color: #50bfa5 !important;
-    height: 100vh;
-    border-radius: .5em;
+  background-color: #50bfa5 !important;
+  height: 100vh;
+  border-radius: .5em;
 }
 
 .card-container {
-    padding: 40px 40px;
+  padding: 40px 40px;
 }
 
 .card-styles {
-    padding: 5%;
+  padding: 5%;
 }
 
 .form-details {
-    position: relative;
-    top: 10vh;
-    vertical-align: middle;
-    margin: auto 0 11vh 0;
+  position: relative;
+  top: 10vh;
+  vertical-align: middle;
+  margin: auto 0 11vh 0;
 }
 
 .border-danger:focus {
-    border-color: #80bdff !important;
+  border-color: #80bdff !important;
 }
 
 .login-button {
-    background-color: #2199c8 !important;
-    border: #2199c8 !important;
+  background-color: $color-oceanBlue !important;
+  border: $color-oceanBlue !important;
 }
 
 .forgot-password {
-    color: #2199c8 !important;
-    cursor: pointer;
+  color: $color-oceanBlue !important;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 576px) {
-    .banner-container {
-        height: auto;
-    }
-    .form-details {
-        top: 8vh;
-    }
+  .banner-container {
+    height: auto;
+  }
+
+  .form-details {
+    top: 8vh;
+  }
+}
+
+.login-loader {
+  display: flex;
+  height: 35px;
+  justify-content: center;
+  align-items: center;
 }

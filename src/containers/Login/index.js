@@ -8,6 +8,7 @@ import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
 import { message } from 'antd';
+import PageLoader from '../../components/PageLoader';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,14 +31,17 @@ const Login = () => {
   // login
   const login = useSelector((state) => state.login.login);
   const invalidLogin = useSelector((state) => state.login.error);
+  const loginLoading = useSelector((state) => state.login.isLoading);
 
   // otpScreen
   const validOtp = useSelector((state) => state.otp.otp);
   const invalidOtp = useSelector((state) => state.otp.error);
+  const otpLoading = useSelector((state) => state.otp.isLoading);
 
   // forgot password screen
   const validPasswordChange = useSelector((state) => state.forgotPassword.forgotPassword);
   const InvalidPasswordChange = useSelector((state) => state.forgotPassword.error);
+  const forgotPasswordLoading = useSelector((state) => state.forgotPassword.isLoading);
 
   // checking user role
   const role = login && login.user && login.user.roleDetails.primaryRole.label;
@@ -224,7 +228,7 @@ const Login = () => {
       }
       dispatch({ type: 'FORGOT_PASSWORD_REQUEST', payload });
       setforgotPasswordvalidate('');
-      setforgotPasswordAlert('')
+      setforgotPasswordAlert('');
     }
   }
 
@@ -270,7 +274,7 @@ const Login = () => {
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
-            <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>
+            {loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
           <OtpScreen
             show={showOtp}
@@ -284,6 +288,7 @@ const Login = () => {
             alert={otpAlert}
             email={email}
             seconds={seconds}
+            otpLoading={otpLoading}
           />
           <ForgotPassword
             show={showForgotPassword}
@@ -294,6 +299,7 @@ const Login = () => {
             email={forgotemail}
             onEmailChange={onForgotEmailChange}
             forgotPasswordClass={forgotPasswordClass}
+            forgotPasswordLoading={forgotPasswordLoading}
           />
         </div>
       </Col>

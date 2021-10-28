@@ -12,7 +12,7 @@ import PageLoader from '../../components/PageLoader';
 
 const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail, onPhone,
   onPancard, onAadhar, onBankAccount, onBankIfsc, onCompanyName, nextStep, setActiveStep,
-  activeStep, validatingSpaces, flag, userDetails, getMailId }) => {
+  activeStep, validatingSpaces, flag, userDetails, getMailId, userTypes }) => {
 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,6 +27,9 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const [validate, setValidate] = useState(false);
   const [show, setShow] = useState(false);
   const [decision, setDecision] = useState('');
+  const [enableFields, setEnableFields] = useState(flag);
+  const [userId, setUserId] = useState('');
+  const [save, setSave] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -41,12 +44,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       setAdharCard(userDetails && userDetails.aadhaarNumber);
       setBankAccountNumber(userDetails && userDetails.bankAccountNumber);
       setBankIFSCCode(userDetails && userDetails.bankIFSCCode);
-      setCompanyName(userDetails && userDetails.companyName);
+      setCompanyName(userDetails && userDetails.companies);
+      setUserId(userDetails && userDetails._id);
     }
   }, [userDetails]);
 
   useEffect(() => {
-    if (!flag && (role === 'company' || role === 'client')) {
+    if (role === 'company' || role === 'client') {
       dispatch({ type: 'COMPANY_LIST_REQUEST' });
     }
   }, [role]);
@@ -55,12 +59,12 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   const companyData = useSelector((companylist) => companylist.companylist.companydata);
   const companyDataLoading = useSelector((state) => state.companylist.isLoading);
 
-  const fullList = companyData && companyData.data;
+  const fullList = companyData && companyData.rows;
 
-  const companyList = fullList && fullList.map((args) => ({
+  const companyList = fullList ? fullList && fullList.map((args) => ({
     value: args.id, label: args.companyName,
-  }));
-  
+  })) : [];
+
   const onFirstNameChange = (e) => {
     if (e.target.value.match('^[a-zA-Z ]*$')) {
       setFirstName(e.target.value);
@@ -106,7 +110,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   // CLient and Company Reps has choose multiple companies
   const onCompanyNameSelect = (companySelect) => {
     setCompanyName(companySelect);
-    onCompanyName(companySelect);
+    // onCompanyName(companySelect);
 
   };
 
@@ -154,16 +158,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
       if (!phoneNumber && valid === false) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
-      } else if (!firstName || !phoneNumber || !companyName) {
+      } else if (!firstName || !phoneNumber) {
         message.error('Please fill all required fields');
         setValidate('border-danger');
       } else if (phoneNumber && !re.test(phoneNumber)) {
         message.error('Please enter valid mobile number');
         setValidate("mobile");
-      } else if (!companyName) {
-        setValidate(true);
-        message.error('Please choose company name');
-      } else if ((firstName.length && phoneNumber.length && (companyName.length || companyName.value.length)) > 0) {
+      } else if ((firstName.length && phoneNumber.length) > 0) {
         nextStep();
         setValidate('');
         setActiveStep(activeStep + 1);
@@ -207,12 +208,49 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
   }
 
   const handleShow = (e) => {
-    setDecision(e);
-    setShow(true);
+    if (e === 'approve') {
+      if (Array.isArray(companyName) && companyName.length < 1) {
+        message.error('Please choose companies');
+        setValidate('border-danger');
+      } else {
+        setValidate('');
+        setDecision(e);
+        setShow(true);
+      }
+    }
+    else {
+      setDecision(e);
+      setShow(true);
+    }
   }
 
-  // showing company names for copmany representative
-  const companyNameList = userDetails && userDetails.companies
+  const editUser = () => {
+    setEnableFields(false);
+    setSave(true);
+  }
+
+  const onSave = (e) => {
+    if (e === 'save') {
+      if (Array.isArray(companyName) && companyName.length < 1) {
+        message.error('Please choose companies');
+        setValidate('border-danger');
+      } else {
+        setValidate('');
+        setDecision(e);
+        setShow(true);
+      }
+    }
+  }
+
+  //while approve the user companies assign to the user
+  const assingCompanies = () => {
+    const Payload = {
+      userId: userId,
+      type: role,
+      companies: companyName
+    };
+    dispatch({ type: 'USER_ASSIGN_COMPANIES_REQUEST', Payload });
+  }
 
   // Images in different types
   const imageOne = userDetails && userDetails.documents.authenticationLetterForClientUrl || userDetails && userDetails.documents.aadhaarUrl || userDetails && userDetails.documents.authenticationLetterForCompanyUrl;
@@ -225,7 +263,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
         <Card className="personal-details shadow mb-5">
           <h4 className="personal-text">Personal Details</h4>
           <Row className='d-flex ml-2 mr-2'>
-            <Col lg={6} sm={6} md={6}>
+            <Col lg={role === 'employee' ? 6 : 4} sm={role === 'employee' ? 6 : 4} md={role === 'employee' ? 6 : 4}>
               <Form.Group>
                 {(role === 'client' || role === 'company') && <Form.Label>Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>}
                 {role === 'employee' && <Form.Label>First Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>}
@@ -238,7 +276,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   placeholder={`${role === 'employee' ? "Enter your first name" : "Enter your name"}`}
                   onChange={onFirstNameChange}
                   name={firstName}
-                  disabled={flag}
+                  disabled={enableFields}
                 />
               </Form.Group>
             </Col>
@@ -255,7 +293,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       placeholder="Optional"
                       value={middleName}
                       onChange={onMiddleNameChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
@@ -270,13 +308,13 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={lastName}
                       placeholder="Enter your last name"
                       onChange={onLastNameChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
               </React.Fragment>
             }
-            <Col lg={6} sm={6} md={6}>
+            <Col lg={role === 'employee' ? 6 : 4} sm={role === 'employee' ? 6 : 4} md={role === 'employee' ? 6 : 4}>
               <Form.Group>
                 <Form.Label>Email {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                 <Form.Control
@@ -285,11 +323,11 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   name="email"
                   id="email"
                   value={flag ? email : getMailId}
-                  disabled={flag || true}
+                  disabled={enableFields || true}
                 />
               </Form.Group>
             </Col>
-            <Col lg={6} sm={6} md={6}>
+            <Col lg={role === 'employee' ? 6 : 4} sm={role === 'employee' ? 6 : 4} md={role === 'employee' ? 6 : 4}>
               <Form.Group>
                 <Form.Label>Phone {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
                 <Form.Control
@@ -301,42 +339,23 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   maxLength={10}
                   placeholder="Enter your valid phone number"
                   onChange={onPhoneChange}
-                  disabled={flag}
+                  disabled={enableFields}
                 />
               </Form.Group>
             </Col>
-            {(role === 'company' || role === 'client') &&
-              <Col lg={6} sm={6} md={6}>
+            {flag && (role === 'company' || role === 'client') &&
+              <Col lg={12} sm={12} md={12}>
                 <Form.Group>
-                  <Form.Label>Company Name {!flag ? <sup className="text-danger">*</sup> : ''}</Form.Label>
-                  <div className={!flag && ((!companyName || companyName) && companyName.length === 0 && validate) ? 'dropdown-alert' : ''}>
-                    {flag ?
-                      <React.Fragment>
-                        {role === 'company' || role === 'client' ?
-                          <Select
-                            isMulti
-                            value={companyNameList}
-                            isDisabled
-                            className="company-select-list"
-                          /> :
-                          <Form.Control
-                            type="text"
-                            name="companylist"
-                            value={companyName.label}
-                            disabled
-                          />
-                        }
-                      </React.Fragment> :
-                      <Select
-                        // isMulti={role === 'company' ? true : false}
-                        isMulti
-                        options={companyList}
-                        name="companyName"
-                        value={companyName}
-                        // onChange={role === 'company' ? onCompanyNameSelect : onCompanyClientSelect}
-                        onChange={onCompanyNameSelect}
-                        isDisabled={flag}
-                      />}
+                  <Form.Label>Company Name <sup className="text-danger">*</sup></Form.Label>
+                  <div className={((!companyName || companyName) && validate) ? 'dropdown-alert' : ''}>
+                    <Select
+                      isMulti
+                      options={companyList}
+                      name="companyName"
+                      value={companyName}
+                      onChange={onCompanyNameSelect}
+                      isDisabled={userTypes === 'Pending' ? false : userTypes === 'Approved' ? enableFields : false}
+                    />
                   </div>
                 </Form.Group>
               </Col>}
@@ -359,7 +378,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={pancardNumber}
                       placeholder="Enter your pancard number"
                       onChange={onPancardNoChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
@@ -375,7 +394,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={adharCard}
                       placeholder="Enter your aadhar number"
                       onChange={onAadharNoChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
@@ -405,7 +424,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={bankAccountNumber}
                       placeholder="Enter your account number"
                       onChange={onAccountNumberChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
@@ -428,7 +447,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                       value={bankIFSCCode}
                       placeholder="Enter your IFSC code"
                       onChange={onBankIfscChange}
-                      disabled={flag}
+                      disabled={enableFields}
                     />
                   </Form.Group>
                 </Col>
@@ -471,12 +490,10 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
                   </Col>
                 }
               </Row>
-              <React.Fragment>
-                <div className="approve-button-container">
-                  <span><Button className="reject-user-button" onClick={() => { handleShow('reject') }}>Reject</Button></span>
-                  <span><Button className="approve-user-button" onClick={() => { handleShow('approve') }}>Approve</Button></span>
-                </div>
-              </React.Fragment>
+              <div className="approve-button-container">
+                {userTypes === 'Approved' ? '' : <span><Button className="reject-user-button" onClick={() => { handleShow('reject') }}>Reject</Button></span>}
+                <span><Button className={userTypes === 'Approved' ? "btn-primary" : "approve-user-button"} onClick={() => { userTypes === 'Approved' && !save ? editUser() : userTypes === 'Approved' && save ? onSave('save') : handleShow('approve') }}>{userTypes === 'Approved' && !save ? 'Edit' : userTypes === 'Approved' && save ? 'Save' : 'Approve'}</Button></span>
+              </div>
             </div>
           }
           {!flag &&
@@ -490,7 +507,7 @@ const PersonalDetails = ({ role, onFirstName, onMiddleName, onLastName, onEmail,
           }
         </Card>
       </Row>
-      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails && userDetails._id} />
+      <UserStatusManage show={show} handleClose={handleClose} decision={decision} userID={userDetails && userDetails._id} assingCompanies={assingCompanies} />
     </Container>
   );
 };

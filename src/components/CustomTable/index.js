@@ -1,9 +1,9 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { Button } from 'react-bootstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -75,7 +75,7 @@ ColumnsHead.propTypes = {
 };
 
 const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem,
+  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -97,15 +97,15 @@ const CustomTable = ({
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    setPage(DEFAULT_PAGE);
+    { disablePageChange ? null : setPage(DEFAULT_PAGE) }
     setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
-    setSearchQuery('');
+    { disablePageChange ? null : setSearchQuery('') }
     setSearchDate(null);
   }, [tableData]);
 
   useEffect(() => {
     setPage(DEFAULT_PAGE);
-  }, [searchQuery]);
+  }, [searchQuery, reportsTaxonomy]);
 
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const CustomTable = ({
   // changes by balaji (for notification)
   const dispatch = useDispatch();
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       primary: {
         light: '#66cafb',
@@ -154,10 +154,10 @@ const CustomTable = ({
       }
     }
     if (sortDataType === 'date') {
-      if (new Date(b[ofOrderBy]) < new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD-MM-YYYY') < Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return -1;
       }
-      if (new Date(b[ofOrderBy]) > new Date(a[ofOrderBy])) {
+      if (Moment(b[ofOrderBy], 'DD/MM/YYYY') > Moment(a[ofOrderBy], 'DD/MM/YYYY')) {
         return 1;
       }
     }
@@ -221,7 +221,7 @@ const CustomTable = ({
       });
       rowDataToBeReturned = filteredData.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }
@@ -230,7 +230,7 @@ const CustomTable = ({
     } else if (searchedDate) {
       rowDataToBeReturned = rowdata.filter((eachRowData) => {
         for (let i = 0; i < columnsList.length; i += 1) {
-          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id]) && Moment(eachRowData[columnsList[i].id]) < searchedDate.endDate) {
+          if (searchedDate.startDate < Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') && Moment(eachRowData[columnsList[i].id], 'DD-MM-YYYY') < searchedDate.endDate) {
             return true;
           }
         }
@@ -356,12 +356,12 @@ const CustomTable = ({
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <div className="w-100 d-flex justify-content-between"> */}
-        {/* <div></div> */}
-        <div className="w-100 d-flex justify-content-end">
-          {tabFlagEnable ?
-            // eslint-disable-next-line no-unneeded-ternary
-            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
+        <div className="w-100 d-flex flex-wrap">
+          <div className="w-50 d-flex justify-content-end">
+        {tabFlagEnable ?
+            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button>: ''}
+          </div>
+        <div className="w-50 d-flex justify-content-end">
           <TablePagination
             rowsPerPageOptions={[5, 10, 15]}
             component="div"
@@ -371,6 +371,7 @@ const CustomTable = ({
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
+        </div>
         </div>
       </Paper>
     </div>

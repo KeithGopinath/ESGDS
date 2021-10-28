@@ -1,23 +1,35 @@
-.card-container-update{
-    position:absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    width: 55vh;
+.card-container-update {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 55vh;
 }
 
-.reset-title{
-    text-align: center;
+.reset-title {
+  text-align: center;
 }
 
-.update-password-logo{
-    display: flex;
-    justify-content: center;
+.update-password-logo {
+  display: flex;
+  justify-content: center;
 }
 
-.update-password-jumbotron{
-   background-image: url('../images/login_image.png');
-   background-color:#50bfa5 ;
-   height: 100vh;
+.update-password-jumbotron {
+  background-image: url('../images/login_image.png');
+  background-color: #50bfa5;
+  height: 100vh;
 }
 
+.reset-password-card {
+  height: 26em;
+}
+
+.password-update-tooltip>.tooltip-inner {
+  max-width: 18vw !important;
+  text-align: start !important;
+  color: $color-white !important;
+  background-color: #2199c8 !important;
+  box-shadow: 0 0.1rem 0.1rem #000;
+  padding: 3px 8px !important;
+}

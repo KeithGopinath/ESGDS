@@ -2,20 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'FORGOT_PASSWORD_REQUEST':
+    case 'USER_ASSIGN_COMPANIES_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        forgotPassword: false,
+        userUpdateCompanies: false,
       };
-    case 'FORGOT_PASSWORD_SUCCESS':
+    case 'USER_ASSIGN_COMPANIES_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        forgotPassword: action.forgotPassword,
+        userUpdateCompanies: action.userCompanies,
       };
-    case 'FORGOT_PASSWORD_FAILURE':
+    case 'USER_ASSIGN_COMPANIES_FAILURE':
       return {
         ...state,
         isLoading: false,

@@ -162,6 +162,10 @@ useEffect(()=>{
       message.error('Fill all the required fields');
     }
   };
+
+  const onTransferFilter = (inputValue, options) => {
+    return options.title && (options.title.toLowerCase()).includes(inputValue.toLowerCase());
+  }
   
   return (
     <React.Fragment>
@@ -228,6 +232,8 @@ useEffect(()=>{
                             <Transfer
                               dataSource={ (mockData)? mockData: []}
                               targetKeys={targetKeys}
+                              showSearch
+                              filterOption={onTransferFilter}
                               titles={['Unassigned', 'Assigned']}
                               onChange={onChange}
                               render={(item) => item.title}

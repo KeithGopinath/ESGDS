@@ -1,40 +1,70 @@
 body {
-    background-color: #f5f5f5;
-  }
+  background-color: #f5f5f5;
+}
 
 .main {
-    display: flex;
-    overflow: hidden;
+  display: flex;
+  overflow: hidden;
 }
 
 .rightsidepane {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 280px;
 }
 
 .container-main {
-    display: flex;
-    padding-left: 2.5%;
-    padding-right: 2.5%;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    flex-direction: column;
-    flex-grow: 1;
-    height: 100%;
+  display: flex;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
 }
 
-  //Font Smoothing
-  body,h1,.h1,h2,.h2,h3,.h3,h4,.h4,h5,.h5,h6,.h6,p,.navbar,.brand,.btn-simple,.alert,a,.td-name,td,button.close {
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-family: Roboto, Helvetica Neue, Arial, sans-serif;
-    font-weight: 400;
-  }
+//Font Smoothing
+body,
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6,
+p,
+.navbar,
+.brand,
+.btn-simple,
+.alert,
+a,
+.td-name,
+td,
+button.close {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}
 
 // General Colors
-$color-white: #fffaf0;
+$color-white: #ffffff; //background-color, text-colors
 $color-blue: #04385a;
 $color-highlight:#e1fdf7;
-$color-green: #2da68a;
+$color-green: #2da68a; // success buttons
+$color-oceanBlue:#2199c8; //for buttons, avtar, favicons
+$color-red :#ff0000f2;
+$color-borderRed: #dc3545;
+
+// font-size
+$font-size-small: 12px;
+$font-size-medium: 16px;
+$font-size-large: 20px;
+$font-size-x-large: 24px;

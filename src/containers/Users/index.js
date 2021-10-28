@@ -10,6 +10,7 @@ import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { history } from '../../routes';
 import UserStatusManage from '../../containers/UserStatusManage';
+import moment from 'moment';
 
 const Users = (props) => {
   const sideBarRef = useRef();
@@ -56,32 +57,32 @@ const Users = (props) => {
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
       viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value) }} />
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [{
         id: 'name',
-        align: 'center',
+        align: 'left',
         label: 'Name',
         dataType: 'string',
       },
       {
         id: 'email',
-        align: 'center',
+        align: 'left',
         label: 'Email',
         dataType: 'string',
       },
       {
         id: 'type',
-        align: 'center',
+        align: 'left',
         label: 'Type',
         dataType: 'string',
       },
       {
         id: 'registeredDate',
-        align: 'center',
+        align: 'left',
         label: 'Registered Date',
         dataType: 'date',
       },
@@ -105,59 +106,66 @@ const Users = (props) => {
       primaryRole: data.userType == 'Employee' ? (data.roleDetails.primaryRole.label ? data.roleDetails.primaryRole.label : "NA") : "NA",
       roleAssigned: data.userType == 'Employee' ? (data.isRoleAssigned ? 'Assigned' : 'Unassigned') : "NA",
       groupAssigned: data.userType == 'Employee' ? (data.isAssignedToGroup ? 'Assigned' : 'Unassigned') : "NA",
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
       status: data.isUserActive ? "Active" : "Inactive",
+      view: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons" onClick={() => { onViewUser(data.userDetails.value) }} />,
       action: <FontAwesomeIcon icon={faUser} size="lg" onClick={() => { handleShow(data.userDetails.value, data.isUserActive) }} className={data.isUserActive ? "user-active-icon" : "user-inactive-icon"} />
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [{
         id: 'name',
-        align: 'center',
+        align: 'left',
         label: 'Name',
         dataType: 'string',
       },
       {
         id: 'email',
-        align: 'center',
+        align: 'left',
         label: 'Email',
         dataType: 'string',
       },
       {
         id: 'type',
-        align: 'center',
+        align: 'left',
         label: 'Type',
         dataType: 'string',
       },
       {
         id: 'primaryRole',
-        align: 'center',
+        align: 'left',
         label: 'Primary Role',
         dataType: 'string',
       },
       {
         id: 'roleAssigned',
-        align: 'center',
+        align: 'left',
         label: 'Role Assigned',
         dataType: 'string',
       },
       {
         id: 'groupAssigned',
-        align: 'center',
+        align: 'left',
         label: 'Group Assigned',
         dataType: 'string',
       },
       {
         id: 'registeredDate',
-        align: 'center',
+        align: 'left',
         label: 'Registered Date',
         dataType: 'date',
       },
       {
         id: 'status',
-        align: 'center',
+        align: 'left',
         label: 'Status',
         dataType: 'string',
+      },
+      {
+        id: 'view',
+        align: 'center',
+        label: 'View',
+        dataType: 'element',
       },
       {
         id: 'action',
@@ -176,31 +184,31 @@ const Users = (props) => {
       name: data.userDetails.label,
       email: data.email,
       type: data.userType,
-      registeredDate: new Date(data.createdAt).toDateString(),
+      registeredDate: moment(data.createdAt).format('DD/MM/YYYY') || new Date(data.createdAt).toDateString(),
     }));
     return {
       rowsData: tableRowData(props),
       columnsHeadData: [{
         id: 'name',
-        align: 'center',
+        align: 'left',
         label: 'Name',
         dataType: 'string',
       },
       {
         id: 'email',
-        align: 'center',
+        align: 'left',
         label: 'Email',
         dataType: 'string',
       },
       {
         id: 'type',
-        align: 'center',
+        align: 'left',
         label: 'Type',
         dataType: 'string',
       },
       {
         id: 'registeredDate',
-        align: 'center',
+        align: 'left',
         label: 'Registered Date',
         dataType: 'date',
       },
@@ -211,7 +219,15 @@ const Users = (props) => {
 
   const onViewUser = (userId) => {
     dispatch({ type: 'USER_BY_ID_REQUEST', userId });
-    history.push({ pathname: '/user-view' });
+    let userType = "";
+    if (tabFlag === 'Pending Users') {
+      userType = 'Pending'
+    } else if (tabFlag === 'Approved Users') {
+      userType = 'Approved'
+    } else if (tabFlag === 'Rejected Users') {
+      userType = 'Rejected';
+    }
+    history.push({ pathname: '/user-view', userTypes: userType });
   }
 
   const tabLabelSets = [

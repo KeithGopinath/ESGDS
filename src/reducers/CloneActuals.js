@@ -2,20 +2,20 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'FORGOT_PASSWORD_REQUEST':
+    case 'CLONE_ACTUALS_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        forgotPassword: false,
+        cloneActuals: false,
       };
-    case 'FORGOT_PASSWORD_SUCCESS':
+    case 'CLONE_ACTUALS_SUCCESS':
       return {
         ...state,
         isLoading: false,
-        forgotPassword: action.forgotPassword,
+        cloneActuals: action.cloneActuals,
       };
-    case 'FORGOT_PASSWORD_FAILURE':
+    case 'CLONE_ACTUALS_FAILURE':
       return {
         ...state,
         isLoading: false,

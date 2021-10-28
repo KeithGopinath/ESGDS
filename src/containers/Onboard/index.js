@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import StepWizard from 'react-step-wizard';
 import { Container } from 'react-bootstrap';
-import './styles.scss';
+// import './styles.scss';
 import PersonalDetails from './PersonalDetails';
 import ProofUpload from './ProofUpload';
 import LoginCredentials from './LoginCredentials';
@@ -26,7 +26,7 @@ const Onboard = (props) => {
   const [adharCard, setAdharCard] = useState('');
   const [bankAccountNumber, setBankAccountNumber] = useState('');
   const [bankIFSCCode, setBankIFSCCode] = useState('');
-  const [companyName, setCompanyName] = useState('');
+  // const [companyName, setCompanyName] = useState('');
   const [fileName, setFileName] = useState('');
   const [empID, setEmpID] = useState('');
   const [cancelledCheque, setCancelledCheque] = useState('');
@@ -76,9 +76,9 @@ const Onboard = (props) => {
     setBankIFSCCode(bankIfsc);
   };
 
-  const onCompanyNameChange = (companyNameChange) => {
-    setCompanyName(companyNameChange);
-  };
+  // const onCompanyNameChange = (companyNameChange) => {
+  //   setCompanyName(companyNameChange);
+  // };
 
   const onChangeCompanyRep = (companyRep) => {
     setFileName(companyRep);
@@ -130,7 +130,7 @@ const Onboard = (props) => {
         name: firstName,
         email: getmailId,
         phoneNumber,
-        companyName,
+        // companyName,
         password,
         authenticationLetterForClientUrl: fileName,
         companyIdForClient: empID,
@@ -144,7 +144,7 @@ const Onboard = (props) => {
         name: firstName,
         email: getmailId,
         phoneNumber,
-        companiesList: companyName,
+        // companiesList: companyName,
         password,
         authenticationLetterForCompanyUrl: fileName,
         companyIdForCompany: empID,
@@ -184,7 +184,7 @@ const Onboard = (props) => {
           onAadhar={onAadharChange}
           onBankAccount={onBankAccountNumberChange}
           onBankIfsc={onBankIfscChange}
-          onCompanyName={onCompanyNameChange}
+          // onCompanyName={onCompanyNameChange}
           setActiveStep={setActiveStep}
           activeStep={activeStep}
           validatingSpaces={validatingSpaces}

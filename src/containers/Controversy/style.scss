@@ -1,24 +1,33 @@
-.controversy-main, .controversy-page-main{
-    display: flex;
-    padding: 3%;
-    background-color: #f0f0f0;
-    flex-direction: column;
-    height: 100%;
+.controversy-main,
+.controversy-page-main {
+  display: flex;
+  padding: 3%;
+  background-color: #f0f0f0;
+  flex-direction: column;
+  height: 100%;
 }
 
-.controversy-history-datasheet{
-    animation: ControversyHistorySlideInLeftToRight 0.75s;
-    padding: 2% 0;
+.controversy-history-datasheet {
+  animation: ControversyHistorySlideInLeftToRight 0.75s;
+  padding: 2% 0;
 }
 
 @keyframes ControversyHistorySlideInLeftToRight {
-    from {
-        opacity: 0;
-        transform: translateX(-40px)
-    }
+  from {
+    opacity: 0;
+    transform: translateX(-40px)
+  }
 
-    to {
-        opacity: 1;
-        transform: translateX(0px);
-    }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.author-name {
+  color: $color-oceanBlue;
+}
+
+.author-avatar {
+  background-color: $color-oceanBlue;
 }

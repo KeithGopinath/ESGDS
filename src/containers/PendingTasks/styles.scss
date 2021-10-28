@@ -1,70 +1,77 @@
-.pendingtasks-main{
-    display:'flex';
-    padding: 3%;
-    background-color: #f0f0f0;
-    flex-direction: column;
-    height: 100%;
+.pendingtasks-main {
+  display: 'flex';
+  padding: 3%;
+  background-color: #f0f0f0;
+  flex-direction: column;
+  height: 100%;
 
 }
-.pendingtasks-label{
-    font-family: 'Roboto', sans-serif;
-    color: #2da68a;
-    font-size: 17px;
-    font-weight: bolder;
-    text-align: center;
-    margin: 30px 0px;
+
+.pendingtasks-label {
+  color: $color-green;
+  font-size: $font-size-medium;
+  font-weight: bolder;
+  text-align: center;
+  margin: 30px 0px;
 }
-.pendingtasks-tabs-wrap{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 30px 0;
+
+.pendingtasks-tabs-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px 0;
 }
 
 .pendingtasks-tabs-stack {
-    background-color: white;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 2%;
-    justify-content: space-evenly;
+  background-color: $color-white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2%;
+  justify-content: space-evenly;
 }
 
-.pendingtasks-tabs{
-    padding: 5px;
-    min-width: 170px;
-    background-color:rgb(255, 255, 255);
-    color: rgb(33, 153, 200);;
-    font-weight: 600;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
-    margin: 3px;
-    cursor: pointer;
+.pendingtasks-tabs {
+  padding: 5px;
+  min-width: 170px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(33, 153, 200);
+  ;
+  font-weight: 600;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  margin: 3px;
+  cursor: pointer;
 }
-.pendingtasks-tab-active{
-    background-color: rgb(33, 153, 200);
-    color: rgb(255, 255, 255);
+
+.pendingtasks-tab-active {
+  background-color: rgb(33, 153, 200);
+  color: rgb(255, 255, 255);
 }
-.pendingtasks-choosecmpy-btn{ 
+
+.pendingtasks-choosecmpy-btn {
   min-width: 165px;
   margin: 1% 0;
-  max-width: 180px; 
+  max-width: 180px;
 }
-.tag-btn{
-    cursor:pointer;
+
+.tag-btn {
+  cursor: pointer;
 }
-.editsla-box{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+.editsla-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.editsla-content{
-    width: 100%;
-    color: gray;
-    font-weight: 600;
-    font-family: sans-serif;
+
+.editsla-content {
+  width: 100%;
+  color: gray;
+  font-weight: 600;
 }
-.datecount-content{
-    width:48%;
+
+.datecount-content {
+  width: 48%;
 }

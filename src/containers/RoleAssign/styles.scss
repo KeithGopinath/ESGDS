@@ -1,106 +1,117 @@
-.heading{
-    font-size: 13px;
-    color:gray;
+.heading {
+  font-size: $font-size-small;
+  color: gray;
 }
-.modal-content{
-    margin:14px 0px 17px 0px;
-    border: none;
+
+.modal-content {
+  margin: 14px 0px 17px 0px;
+  border: none;
 }
-.min-height-dropdown{
-    min-height: 100px;
+
+.min-height-dropdown {
+  min-height: 100px;
 }
-.head-dp{
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 5px;
+
+.head-dp {
+  font-size: $font-size-small;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
-.modal-title{
-    font-size: 18px;
-    color: #2199c8;
-    font-weight: 700;
+
+.modal-title {
+  font-size: $font-size-medium;
+  color: $color-oceanBlue;
+  font-weight: 700;
 }
-.setting-icon{
-    font-size: 14px;
-    color: #2199c8;
-    margin-top: 5px;
-    margin-right: 5px;
+
+.setting-icon {
+  font-size: $font-size-small;
+  color: $color-oceanBlue;
+  margin-top: 5px;
+  margin-right: 5px;
 }
-.heading-name{
-    font-size: 14px;
+
+.heading-name,
+.heading-email {
+  font-size: $font-size-small;
 }
-.heading-email{
-    font-size: 14px;
+
+.close {
+  padding: 0.9rem 1rem 0.4rem !important;
 }
-.close{
-    padding:0.9rem 1rem 0.4rem  !important;
-}
-.status-rolepillar{
-    
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+
+.status-rolepillar {
+
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 
 }
-.status-minheight{
-    min-height: 80px;
+
+.status-minheight {
+  min-height: 80px;
 }
-.modal-head{
-   padding: 1rem 1.5rem 0.5rem;
+
+.modal-head {
+  padding: 1rem 1.5rem 0.5rem;
 }
-.sideMenu-rolebtn{
-    min-width: 220px;
-    min-height: 50px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    margin: 10px 0 10px 0 ;
-    outline: none;
-    text-decoration: none !important;
+
+.sideMenu-rolebtn {
+  min-width: 220px;
+  min-height: 50px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px 0 10px 0;
+  outline: none;
+  text-decoration: none !important;
 }
+
 .sideMenu-btn-rolelabel {
-    font-size: 15px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
-    margin: 0 0 0 30px;
+  font-size: $font-size-medium;
+  font-weight: normal;
+  color: ghostwhite;
+  margin: 0 0 0 30px;
 }
-.sideMenu-rolebtn:hover{
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.055);
+
+.sideMenu-rolebtn:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.055);
 }
-.role-icon{
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 24px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif;
-    color: ghostwhite;
-    margin: 0 0 0 20px;
+
+.role-icon {
+  width: 24px !important;
+  height: 24px !important;
+  font-size: $font-size-x-large;
+  font-weight: normal;
+  color: ghostwhite;
+  margin: 0 0 0 20px;
 }
 
 .select-primary {
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 5px;
-    margin-top: 20px;
+  font-size: $font-size-small;
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-top: 20px;
 }
 
-.mr-auto, .mx-auto{
-    margin-right: 5px !important;
+.mr-auto,
+.mx-auto {
+  margin-right: 5px !important;
 }
 
 .ant-btn {
-    height: 37px !important;
+  height: 37px !important;
 }
 
-.role-button{
-    border-color: #2da68a;
-    background-color: #2da68a;
-    color: white;
+.role-button {
+  border-color: $color-green;
+  background-color: $color-green;
+  color: $color-white;
 }
 
 .error-alert {
-    border: 1px solid red !important;
-    border-radius: 4px !important;
+  border: 1px solid $color-borderRed !important;
+  border-radius: 4px !important;
 }

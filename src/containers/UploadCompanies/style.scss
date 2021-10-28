@@ -10,8 +10,17 @@
 .upload-data-button {
     display: flex;
     align-items: center;
-    background-color: #2199c8 !important;
-    border-color: #2199c8 !important;
+    background-color: $color-oceanBlue !important;
+    border-color: $color-oceanBlue !important;
     padding: 2px 14px 2px 13px !important;
     margin-top: 20px !important;
+}
+
+.upload-actuals-button {
+    display: flex;
+    align-items: center;
+    background-color: $color-oceanBlue !important;
+    border-color: $color-oceanBlue !important;
+    padding: 2px 14px 2px 13px !important;
+    margin: 20px 10px;
 }

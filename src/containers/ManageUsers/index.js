@@ -6,6 +6,7 @@ import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 const ManageUsers = () => {
   const sideBarRef = useRef();
@@ -18,7 +19,7 @@ const ManageUsers = () => {
       phoneNo: data.phoneNo,
       type: data.type,
       primaryRole: data.primaryRole,
-      requestedDate: new Date(data.requestedAt).toDateString(),
+      requestedDate: moment(data.requestedAt).format('DD/MM/YYYY') || new Date(data.requestedAt).toDateString(),
       viewDetails: <FontAwesomeIcon icon={faEye} size="lg" className="taxonomy-subset-icons"/>
     }));
 
@@ -26,37 +27,37 @@ const ManageUsers = () => {
       rowsData: tableRowData(props),
       columnsHeadData: [{
         id: 'name',
-        align: 'center',
+        align: 'left',
         label: 'Name',
         dataType: 'string',
       },
       {
         id: 'email',
-        align: 'center',
+        align: 'left',
         label: 'Email',
         dataType: 'string',
       },
       {
         id: 'phoneNo',
-        align: 'center',
+        align: 'left',
         label: 'Phone No',
         dataType: 'string',
       },
       {
         id: 'type',
-        align: 'center',
+        align: 'left',
         label: 'Type',
         dataType: 'string',
       },
       {
         id: 'primaryRole',
-        align: 'center',
+        align: 'left',
         label: 'Primary Role',
         dataType: 'string',
       },
       {
         id: 'requestedDate',
-        align: 'center',
+        align: 'left',
         label: 'Requested Date',
         dataType: 'date',
       },

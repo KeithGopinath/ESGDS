@@ -1,5 +1,4 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable camelcase */
+/* eslint-disable*/
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -30,12 +29,13 @@ const DataPage = (props) => {
   const currentTab = sessionStorage.tab;
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
-  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'QA',
     currentRole === 'Company Representative' || currentRole === 'CompanyRep',
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
   // TEMP CONSTANTS THAT HAVE TO COME API
@@ -220,7 +220,8 @@ const DataPage = (props) => {
       fiscalYear: e.fiscalYear,
       textSnippet: e.textSnippet,
       pageNo: e.pageNo,
-      screenShot: e.screenShotBase64,
+      // screenShot: e.screenShotBase64,
+      screenShot: (false && e.screenShot) || '',
       response: e.response,
       source: e.source,
       additionalDetails: additionalDetailsMapper(e),
@@ -234,7 +235,8 @@ const DataPage = (props) => {
       fiscalYear: e.fiscalYear,
       textSnippet: e.textSnippet,
       pageNo: e.pageNo,
-      screenShot: e.screenShotBase64,
+      // screenShot: e.screenShotBase64,
+      screenShot: (false && e.screenShot) || '',
       response: e.response,
       source: e.source,
       additionalDetails: additionalDetailsMapper(e),
@@ -257,7 +259,8 @@ const DataPage = (props) => {
           refData: {
             textSnippet: e.error.refData.textSnippet,
             pageNo: e.error.refData.pageNo,
-            screenShot: e.error.refData.screenShotBase64,
+            // screenShot: e.error.refData.screenShotBase64,
+            screenShot: (false && e.error.refData.screenShot) || '',
             response: e.error.refData.response,
             source: e.error.refData.source,
             additionalDetails: additionalDetailsMapper(e.error.refData),
@@ -348,7 +351,7 @@ const DataPage = (props) => {
   };
 
   useEffect(() => {
-    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV) {
+    if (isAnalyst_DC || isAnalyst_DCR || isQA_DV || IsAdmin) {
       dispatch({
         type: 'DPCODEDATA_GET_REQUEST',
         payload: {
@@ -478,7 +481,7 @@ const DataPage = (props) => {
                         title={(dpCodeDataFromStore.error.message) || 'Something Went Wrong!'}
                         extra={
                           <React.Fragment>
-                            { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
+                            { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) &&
                               <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
                           </React.Fragment>
                         }
@@ -506,23 +509,23 @@ const DataPage = (props) => {
                             />
                             <Col lg={12} className="datapage-button-wrap">
                               {/* BACK Button */}
-                              { ((isAnalyst_DC || isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
+                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) &&
                               <Button className="datapage-button" variant="danger" onClick={backClickHandler}>Back</Button>}
 
                               {/* PREVIOUS Button */}
-                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
+                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && (reqIndexes.currentIndex !== reqIndexes.minIndex) &&
                               <Button className="datapage-button" variant="primary" onClick={previousClickHandler}>Previous</Button>}
 
-                              {/* cURRENT INDEX Button */}
-                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR) && reqIndexes &&
+                              {/* CURRENT INDEX Button */}
+                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && reqIndexes &&
                               <Button className="datapage-button" variant="default" disabled >{`${reqIndexes.currentIndex + 1}/${reqIndexes.maxIndex + 1}`}</Button>}
 
                               {/* SAVE&NEXT Button */}
-                              { (isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
+                              { (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && (reqIndexes.currentIndex !== reqIndexes.maxIndex) &&
                               <Button className="datapage-button" variant="success" onClick={isDpCodeEditted ? saveAndNextClickHandler : nextClickHandler}>{isDpCodeEditted ? 'Save And Next' : 'Next'}</Button>}
 
                               {/* SAVE&CLOSE Button */}
-                              { ((isAnalyst_DC || (isAnalyst_DCR) || isQA_DV || isCompanyRep_DR || isClientRep_DR) && (reqIndexes.currentIndex === reqIndexes.maxIndex)) &&
+                              { ((isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && (reqIndexes.currentIndex === reqIndexes.maxIndex)) &&
                               <Button className="datapage-button" variant="danger" onClick={isDpCodeEditted ? saveAndCloseClickHandler : closeClickHandler}>{isDpCodeEditted ? 'Save And Close' : 'Close'}</Button>}
                             </Col>
                           </Tabs.TabPane>))}

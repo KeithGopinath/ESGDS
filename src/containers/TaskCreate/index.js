@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import { ExceptionOutlined } from '@ant-design/icons';
 import { DatePicker, Radio, message, Tag, Divider, Tabs } from 'antd';
 import { faSearch, faBackward } from '@fortawesome/free-solid-svg-icons';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,7 +27,7 @@ const TaskCreate = ({ flag }) => {
   const [pillar, setPillar] = useState('');
   const [rowDetail, setRowDetails] = useState([]);
   const [analystSla, setanalystSla] = useState('');
-  const [roleType, setRole ] = useState('');
+  const [roleType, setRole] = useState('');
   const [isDisabledQA, setisDisabledQA] = useState(true);
   const [statusRole, setstatusRole] = useState(true);
   const [qacheckdate, setqacheckdate] = useState('');
@@ -50,6 +50,7 @@ const TaskCreate = ({ flag }) => {
   const onpillarclick = useSelector((pillar) => pillar.taskpillar.pillarTask);
   const onpillarclickLoading = useSelector((pillar) => pillar.taskpillar);
   const taxonomyData = useSelector((state) => state.clientTaxonomy.taxonomydata);
+  const taxonomyDataLoading = useSelector((state) => state.clientTaxonomy.isLoading);
   const controversyTaskData = useSelector((state) => state.controversyTaskData.controversyTaskData);
   const createControversyTask = useSelector((state) => state.createControversyTask.createControversyTask);
   const createControversyTaskError = useSelector((state) => state.createControversyTask.error);
@@ -57,16 +58,16 @@ const TaskCreate = ({ flag }) => {
   const aftertaskcreatedLoading = useSelector((taskresponse) => taskresponse.createTask);
   const optionsForPagination = {
     sizePerPage: 10,
-    noDataText: (onpillarclickLoading.isLoading)?<PageLoader load={"comp-loader"} />  :"There is no data to display",
+    noDataText: (onpillarclickLoading.isLoading) ? <PageLoader load={"comp-loader"} /> : "There is no data to display",
   };
   useEffect(() => {
     if (flag) {
       dispatch({ type: 'ClientTaxonomy_REQUEST' });
     } else {
       dispatch({ type: 'TASKDETAILS_REQUEST' });
-      
+
     }
-    dispatch({type:'ONSELECTPILLAR_RESET'});
+    dispatch({ type: 'ONSELECTPILLAR_RESET' });
     setRole(sessionStorage.role);
   }, []);
 
@@ -88,27 +89,27 @@ const TaskCreate = ({ flag }) => {
 
   useEffect(() => {
     if (aftertaskcreated && submitFlag) {
-    setanalystSla('');
-    setqaSla('');
-    setPillar('');
-    setRadioEle('');
-    setRadioEleqa('');
-    setqacheckdate('');
-    setstatusRole(true);
-    setisDisabledQA(true);
-    onSelectAllRow(false);
-    message.success(aftertaskcreated.message);
+      setanalystSla('');
+      setqaSla('');
+      setPillar('');
+      setRadioEle('');
+      setRadioEleqa('');
+      setqacheckdate('');
+      setstatusRole(true);
+      setisDisabledQA(true);
+      onSelectAllRow(false);
+      message.success(aftertaskcreated.message);
     }
-    }, [aftertaskcreated]);
-  useEffect(()=>{
-    if((apidataLoading.error || onpillarclickLoading.error || aftertaskcreatedLoading.error) && !flag){
-      message.error((apidataLoading.error && apidataLoading.error.message) || (onpillarclickLoading.error && onpillarclickLoading.error.message) || (aftertaskcreatedLoading.error && aftertaskcreatedLoading.error.message ));
+  }, [aftertaskcreated]);
+  useEffect(() => {
+    if ((apidataLoading.error || onpillarclickLoading.error || aftertaskcreatedLoading.error) && !flag) {
+      message.error((apidataLoading.error && apidataLoading.error.message) || (onpillarclickLoading.error && onpillarclickLoading.error.message) || (aftertaskcreatedLoading.error && aftertaskcreatedLoading.error.message));
     }
-  },[apidataLoading.error, onpillarclickLoading.error, aftertaskcreatedLoading.error])
+  }, [apidataLoading.error, onpillarclickLoading.error, aftertaskcreatedLoading.error])
 
 
   const getApiData = apidata && apidata.data;
-  const groupData = (roleType === 'SuperAdmin' || roleType === 'Admin' ) ? getApiData && getApiData.adminList : getApiData && getApiData.groupAdminList;
+  const groupData = (roleType === 'SuperAdmin' || roleType === 'Admin') ? getApiData && getApiData.adminList : getApiData && getApiData.groupAdminList;
   const ispillarData = onpillarclick && onpillarclick.data;
 
   const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data) => ({
@@ -189,7 +190,7 @@ const TaskCreate = ({ flag }) => {
 
   const qadisabledDate = (current) => {
     const analystEnddate = analystSla;
-    if(analystEnddate){
+    if (analystEnddate) {
       return current && current < moment(analystEnddate, 'YYYY-MM-DD');
     }
   }
@@ -248,8 +249,8 @@ const TaskCreate = ({ flag }) => {
     setstatusRole(true);
     setisDisabledQA(true);
     onSelectAllRow(false);
-    const getData = { batchId:batchInfo.Batchid ,groupId: companyInfo.grpId , categoryId: selectedPillar[0].value };
-    dispatch({ type: 'ONSELECTPILLAR_REQUEST' , payload: getData });
+    const getData = { batchId: batchInfo.Batchid, groupId: companyInfo.grpId, categoryId: selectedPillar[0].value };
+    dispatch({ type: 'ONSELECTPILLAR_REQUEST', payload: getData });
   };
 
   const analystEndData = (e) => {
@@ -282,11 +283,11 @@ const TaskCreate = ({ flag }) => {
   };
 
   const onhandleAnalyst = (arg) => {
-    if(arg){
-    setselectedAnalyst(arg);
-    setRadioEle(arg.id);
-    setstatusRole(false);
-    setselectedQa('');
+    if (arg) {
+      setselectedAnalyst(arg);
+      setRadioEle(arg.id);
+      setstatusRole(false);
+      setselectedQa('');
     }
     else {
       setstatusRole(true);
@@ -299,38 +300,38 @@ const TaskCreate = ({ flag }) => {
   };
 
   const onCreateTask = () => {
-    if(!flag){
-    if(!pillar){
-      message.error("Choose Pillar");
-    } else if(rowDetail.length === 0){
-      message.error("Choose Company");
-    } else if(!selectedAnalyst || !analystSla.length){
-      message.error("Choose Analyst Details");
-    } else if(!selectedQa || !qaSla.length){
-      message.error("Choose QA Details");
-    } else {
-      const taskPayload = {
-        groupId: companyInfo.grpId,
-        batchId: batchInfo.Batchid,
-        year: batchInfo.Batchyear,
-        pillar: pillar,
-        company: rowDetail,
-        analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
-        qa: { value: selectedQa.id, label: selectedQa.name },
-        analystSla: analystSla,
-        qaSla: qaSla
-      };
-      dispatch({ type: 'CREATE_TASK_REQUEST', payload: taskPayload });
-      setSubmitFlag(true);
-    }
-  } else if (flag){
-    if(!taxonomy){
-      message.error("Choose Taxonomy");
-    } else if(rowDetail.length === 0){
-      message.error("Choose Company");
-    } else if (!selectedAnalyst){
-      message.error("Choose Analyst Details");
-    } else {
+    if (!flag) {
+      if (!pillar) {
+        message.error("Choose Pillar");
+      } else if (rowDetail.length === 0) {
+        message.error("Choose Company");
+      } else if (!selectedAnalyst || !analystSla.length) {
+        message.error("Choose Analyst Details");
+      } else if (!selectedQa || !qaSla.length) {
+        message.error("Choose QA Details");
+      } else {
+        const taskPayload = {
+          groupId: companyInfo.grpId,
+          batchId: batchInfo.Batchid,
+          year: batchInfo.Batchyear,
+          pillar: pillar,
+          company: rowDetail,
+          analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
+          qa: { value: selectedQa.id, label: selectedQa.name },
+          analystSla: analystSla,
+          qaSla: qaSla
+        };
+        dispatch({ type: 'CREATE_TASK_REQUEST', payload: taskPayload });
+        setSubmitFlag(true);
+      }
+    } else if (flag) {
+      if (!taxonomy) {
+        message.error("Choose Taxonomy");
+      } else if (rowDetail.length === 0) {
+        message.error("Choose Company");
+      } else if (!selectedAnalyst) {
+        message.error("Choose Analyst Details");
+      } else {
         const controversyTaskPayload = {
           company: rowDetail,
           analyst: { value: selectedAnalyst.id, label: selectedAnalyst.name },
@@ -347,14 +348,14 @@ const TaskCreate = ({ flag }) => {
   // rowSelection object indicates the need for row selection
   const analystTableData = (props) => {
     const tableRowData = (data) => flag ? data.map((obj) => ({
-      key:obj.id,
+      key: obj.id,
       select: <div><Radio value={obj.id} onChange={() => onhandleAnalyst(obj)} checked={(obj.id === radioEle) ? true : false}></Radio></div>,
       name: obj.name,
       role: { value: (obj.primaryRole) ? "Primary" : "Secondary", content: <Tag color={(obj.primaryRole) ? "blue" : "cyan"}>{(obj.primaryRole) ? "Primary" : "Secondary"}</Tag> },
       assignedTask: `${obj.activeTaskCount}`,
     })) :
       data.map((obj) => ({
-        key:obj.id,
+        key: obj.id,
         select: <div><Radio value={obj.id} onChange={() => onhandleAnalyst(obj)} checked={(obj.id === radioEle) ? true : false}></Radio></div>,
         name: obj.name,
         pillar: { value: (obj.primaryPillar) ? "Primary" : "Secondary", content: <Tag color={(obj.primaryPillar) ? "blue" : "cyan"}>{(obj.primaryPillar) ? "Primary" : "Secondary"}</Tag> },
@@ -373,19 +374,19 @@ const TaskCreate = ({ flag }) => {
         },
         {
           id: 'name',
-          align: 'center',
+          align: 'left',
           label: 'Name',
           dataType: 'string',
         },
         {
           id: 'role',
-          align: 'center',
+          align: 'left',
           label: 'Role type',
           dataType: 'stringSearchSortElement',
         },
         {
           id: 'assignedTask',
-          align: 'center',
+          align: 'left',
           label: 'Task',
           dataType: 'string',
         },
@@ -400,25 +401,25 @@ const TaskCreate = ({ flag }) => {
           },
           {
             id: 'name',
-            align: 'center',
+            align: 'left',
             label: 'Name',
             dataType: 'string',
           },
           {
             id: 'pillar',
-            align: 'center',
+            align: 'left',
             label: 'Pillar type',
             dataType: 'stringSearchSortElement',
           },
           {
             id: 'role',
-            align: 'center',
+            align: 'left',
             label: 'Role type',
             dataType: 'stringSearchSortElement',
           },
           {
             id: 'assignedTask',
-            align: 'center',
+            align: 'left',
             label: 'Task',
             dataType: 'string',
           },
@@ -429,7 +430,7 @@ const TaskCreate = ({ flag }) => {
 
   const qaTableData = (props) => {
     const tableRowData = (data) => data.filter((i) => selectedAnalyst.id !== i.id).map((e) => ({
-      key:e.id,
+      key: e.id,
       select: <div><Radio value={e.id} onChange={() => onhandleQa(e)} checked={(e.id === radioEleqa) ? true : false} disabled={statusRole}></Radio></div>,
       name: e.name,
       pillar: { value: (e.primaryPillar) ? "Primary" : "Secondary", content: <Tag color={(e.primaryPillar) ? "blue" : "cyan"}>{(e.primaryPillar) ? "Primary" : "Secondary"}</Tag> },
@@ -448,25 +449,25 @@ const TaskCreate = ({ flag }) => {
         },
         {
           id: 'name',
-          align: 'center',
+          align: 'left',
           label: 'Name',
           dataType: 'string',
         },
         {
           id: 'pillar',
-          align: 'center',
+          align: 'left',
           label: 'Pillar type',
           dataType: 'stringSearchSortElement',
         },
         {
           id: 'role',
-          align: 'center',
+          align: 'left',
           label: 'Role type',
           dataType: 'stringSearchSortElement',
         },
         {
           id: 'assignedTask',
-          align: 'center',
+          align: 'left',
           label: 'Task',
           dataType: 'string',
         },
@@ -495,64 +496,65 @@ const TaskCreate = ({ flag }) => {
     <Radio key={e.value} value={e.value}>{e.label}</Radio>
   ));
 
+  // *** groups with search starts here ***
+  groupData
+  const [searchQuery, setSearchQuery] = useState('');
+  const [min, setmin] = useState(0);
+  const [max, setmax] = useState(20);
 
- // *** groups with search starts here ***
- groupData
- const [searchQuery, setSearchQuery] = useState('');
- const [min, setmin] = useState(0);
- const [max, setmax] = useState(20);
- 
- const searchtheme = createMuiTheme({
-   palette: {
-     primary: {
-       light: '#66cafb',
-       main: '#2199c8',
-       dark: '#006b97',
-     },
-   },
- });
+  const searchtheme = createTheme({
+    palette: {
+      primary: {
+        light: '#66cafb',
+        main: '#2199c8',
+        dark: '#006b97',
+      },
+    },
+  });
 
- const groupCount = groupData && groupData.length;
+  const groupCount = groupData && groupData.length;
 
- const cardPerPage = 20;
- const onhandlePage = (e, page) => {
-   const minValue = (page - 1) * cardPerPage;
-   const maxValue = page * cardPerPage;
-   setmin(minValue);
-   setmax(maxValue);
- };
- const onSearchGroup = (data) => {
-   const searchData = data.target.value;
-   setSearchQuery(searchData);
+  const cardPerPage = 20;
+  const onhandlePage = (e, page) => {
+    const minValue = (page - 1) * cardPerPage;
+    const maxValue = page * cardPerPage;
+    setmin(minValue);
+    setmax(maxValue);
+  };
 
- };
- const searchfilter = (search, card) => {
-   const filteredData = card.filter((e) => {
-     if ((e.groupName.toLowerCase()).includes(search.toLowerCase())) {
-       return true;
-     }
-     return false;
-   });
-   return filteredData;
- };
- const calculateCount = groupData && (searchQuery ? searchfilter(searchQuery, groupData).length : groupCount) / cardPerPage;
- const totalCount = Math.ceil(calculateCount);
- const grouplist = groupData && (searchQuery ? searchfilter(searchQuery, groupData) : groupData).slice(min, max).map(({ groupName, groupID }) => (
-   <Col lg={3} md={6} key={groupID}>
-     <Card className="batch-card batchbox" onClick={() => onselectGroup({groupID})}>
-       <ListItemText primary={groupName} />
-     </Card>
-   </Col>
- ));
- // *** groups with search ends here ***
+  const onSearchGroup = (data) => {
+    const searchData = data.target.value;
+    setSearchQuery(searchData);
+  };
+
+  const searchfilter = (search, card) => {
+    const filteredData = card.filter((e) => {
+      if ((e.groupName.toLowerCase()).includes(search.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+    return filteredData;
+  };
+
+  const calculateCount = groupData && (searchQuery ? searchfilter(searchQuery, groupData).length : groupCount) / cardPerPage;
+  const totalCount = Math.ceil(calculateCount);
+  const grouplist = groupData && (searchQuery ? searchfilter(searchQuery, groupData) : groupData).slice(min, max).map(({ groupName, groupID }) => (
+    <Col lg={3} md={6} key={groupID}>
+      <Card className="batch-card batchbox" onClick={() => onselectGroup({ groupID })}>
+        <ListItemText primary={groupName} />
+      </Card>
+    </Col>
+  ));
+  // *** groups with search ends here ***
 
   // *** batches with search starts here ***
   groupData
   const [searchQuerybatch, setSearchQuerybatch] = useState('');
   const [minbatch, setminbatch] = useState(0);
   const [maxbatch, setmaxbatch] = useState(20);
-  
-  const searchthemebatch = createMuiTheme({
+
+  const searchthemebatch = createTheme({
     palette: {
       primary: {
         light: '#66cafb',
@@ -570,7 +572,7 @@ const TaskCreate = ({ flag }) => {
   const onSearchBatch = (data) => {
     const searchData = data.target.value;
     setSearchQuerybatch(searchData);
-    
+
   };
   const searchfilterbatch = (search, card) => {
     const filteredData = card.filter((e) => {
@@ -586,23 +588,16 @@ const TaskCreate = ({ flag }) => {
   const batchCount = batchCardvalues && batchCardvalues.length;
   const calculateCountbatch = batchCardvalues && (searchQuerybatch ? searchfilterbatch(searchQuerybatch, batchCardvalues).length : batchCount) / cardPerPageBatch;
   const totalCountbatch = Math.ceil(calculateCountbatch);
-  
-  
 
-  const batchCardList = batchCardvalues && (searchQuerybatch ? searchfilterbatch(searchQuerybatch, batchCardvalues) : batchCardvalues).slice(minbatch, maxbatch).map(({ batchName, batchID  }) => (
+  const batchCardList = batchCardvalues && (searchQuerybatch ? searchfilterbatch(searchQuerybatch, batchCardvalues) : batchCardvalues).slice(minbatch, maxbatch).map(({ batchName, batchID }) => (
     <Col lg={3} md={6} key={batchID}>
-      <Card className="batch-card batchbox" onClick={() => onselectBatch({batchID})}>
+      <Card className="batch-card batchbox" onClick={() => onselectBatch({ batchID })}>
         <ListItemText primary={batchName} />
       </Card>
     </Col>
   ));
- 
-  
- 
 
   // *** batches with search ends here ***
-
-
 
   const batchInfoTab = () => (
     <Container>
@@ -611,7 +606,7 @@ const TaskCreate = ({ flag }) => {
           <Col lg={12} sm={12}>
             <div className="batch-view-header">
               <div className="align-chip">
-              <div className="batch-year-head">{batchInfo.Batchname}</div>
+                <div className="batch-year-head">{batchInfo.Batchname}</div>
               </div>
               <div className="align-chip">
                 <div className="batch-year-head">Year :</div>
@@ -625,6 +620,7 @@ const TaskCreate = ({ flag }) => {
           </Col>
         }
       </Row>
+          {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
       <Row className="row-pad task-row">
         <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
           {flag ?
@@ -689,7 +685,7 @@ const TaskCreate = ({ flag }) => {
                     }
                     <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
                     <div className="analystQa-table">
-                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5}/>
+                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
                     </div>
                   </div>
                   : <div className="not-batch-assign-screen">
@@ -719,7 +715,7 @@ const TaskCreate = ({ flag }) => {
                       </div>
                       <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
                       <div className="analystQa-table">
-                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5}/>
+                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
                       </div>
                     </div>
                     : <div className="not-batch-assign-screen">
@@ -743,102 +739,101 @@ const TaskCreate = ({ flag }) => {
             </Button>
           </div>
         </Col>
-      </Row>
+      </Row></React.Fragment>}
     </Container>
   );
 
   const groupSelectTab = () => (
 
     <Container className="wrapper">
-         <div className="head-tab-task">
-              <div>
-                <ThemeProvider theme={searchtheme}>
-                  <TextField
-                    placeholder="Search"
-                    style={{ padding: '9px' }}
-                    autoComplete="off"
-                    onChange={onSearchGroup}
-                    value={searchQuery}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <FontAwesomeIcon icon={faSearch} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </ThemeProvider>
-              </div>
-            </div>
-            <div className="view-min-height">
-              <Row >
-                {grouplist}
-              </Row>
-            </div>
-            <Row>
-              <Col lg={12} sm={12}>
-                <div className="batch-footer">
-                  <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
-                </div>
-              </Col>
-            </Row>
-          </Container>
-   
+      <div className="head-tab-task">
+        <div>
+          <ThemeProvider theme={searchtheme}>
+            <TextField
+              placeholder="Search"
+              style={{ padding: '9px' }}
+              autoComplete="off"
+              onChange={onSearchGroup}
+              value={searchQuery}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </ThemeProvider>
+        </div>
+      </div>
+      <div className="view-min-height">
+        <Row >
+          {grouplist}
+        </Row>
+      </div>
+      <Row>
+        <Col lg={12} sm={12}>
+          <div className="batch-footer">
+            <Pagination count={totalCount} defaultPage={1} showFirstButton showLastButton onChange={onhandlePage} />
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
-  const selectBatchTab = () =>
-  (
+
+  const selectBatchTab = () => (
     <Container>
       <Row>
         <Col lg={12} sm={12}>
           <div className="view-header">
             <div className="align-chip">
               <div className="batch-year-head">{companyInfo.grpName}</div>
-              </div>
+            </div>
             <div>
             </div>
           </div>
         </Col>
       </Row>
       <Row>
-        {(companyInfo && companyInfo.batches.length > 0) ? 
-        
+        {(companyInfo && companyInfo.batches.length > 0) ?
+
           <Col>
-          <Container className="wrapper">
-         <div className="head-tab-task">
-              <div>
-                <ThemeProvider theme={searchthemebatch}>
-                  <TextField
-                    placeholder="Search"
-                    style={{ padding: '9px' }}
-                    autoComplete="off"
-                    onChange={onSearchBatch}
-                    value={searchQuerybatch}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <FontAwesomeIcon icon={faSearch} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </ThemeProvider>
-              </div>
-            </div>
-            <div className="view-min-height">
-              <Row >
-                {batchCardList}
-              </Row>
-            </div>
-            <Row>
-              <Col lg={12} sm={12}>
-                <div className="batch-footer">
-                  <Pagination count={totalCountbatch} defaultPage={1} showFirstButton showLastButton onChange={onhandlePagebatch} />
+            <Container className="wrapper">
+              <div className="head-tab-task">
+                <div>
+                  <ThemeProvider theme={searchthemebatch}>
+                    <TextField
+                      placeholder="Search"
+                      style={{ padding: '9px' }}
+                      autoComplete="off"
+                      onChange={onSearchBatch}
+                      value={searchQuerybatch}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FontAwesomeIcon icon={faSearch} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </ThemeProvider>
                 </div>
-              </Col>
-            </Row>
-          </Container>
+              </div>
+              <div className="view-min-height">
+                <Row >
+                  {batchCardList}
+                </Row>
+              </div>
+              <Row>
+                <Col lg={12} sm={12}>
+                  <div className="batch-footer">
+                    <Pagination count={totalCountbatch} defaultPage={1} showFirstButton showLastButton onChange={onhandlePagebatch} />
+                  </div>
+                </Col>
+              </Row>
+            </Container>
           </Col>
-        :
+          :
           <Col>
             <div className="not-batch-assign-screen">
               <div className="not-batch-assign-screen-inner">
@@ -862,13 +857,13 @@ const TaskCreate = ({ flag }) => {
           <div className="container-main">
             <Row>
               <Col lg={12} sm={12}>
-              {taskFlow > 0 && !flag && <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onhandleBack} />}
+                {taskFlow > 0 && !flag && <FontAwesomeIcon className="backword-icon" size="lg" icon={faBackward} onClick={onhandleBack} />}
                 <Card className="task-page-card">
-                {(aftertaskcreatedLoading.isLoading || apidataLoading.isLoading )?<PageLoader />:
-                <React.Fragment>
-                    {taskFlow === 0 &&  groupSelectTab()}
-                    {taskFlow === 1 && selectBatchTab()}
-                    {taskFlow === 2 && batchInfoTab()}
+                  {(aftertaskcreatedLoading.isLoading || apidataLoading.isLoading) ? <PageLoader /> :
+                    <React.Fragment>
+                      {taskFlow === 0 && groupSelectTab()}
+                      {taskFlow === 1 && selectBatchTab()}
+                      {taskFlow === 2 && batchInfoTab()}
                     </React.Fragment>
                   }
                 </Card>

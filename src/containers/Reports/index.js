@@ -28,9 +28,10 @@ const Reports = (props) => {
   const pendingComp = compData && compData.pending;
   const completedComp = compData && compData.completed;
   const controversyData = compData && compData.controversy;
+  const userRole = sessionStorage.role || '';
 
   useEffect(() => {
-    dispatch({ type: 'GET_REPORTS_REQUEST' });
+    dispatch({ type: 'GET_REPORTS_REQUEST', role: userRole });
   }, []);
 
   useEffect(() => {
@@ -74,11 +75,11 @@ const Reports = (props) => {
     } else if (tabFlag === 'Controversy' && controversyData) {
       setContorversy(controversyData);
     }
-    setSelectItem(false);
+    // setSelectItem(false);
     setAllChecked(false);
   }, [tabFlag, compData, taxonomy]);
 
-
+  // get unique taxonomy
   const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const completedCompaniesFilter = completedCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
   const controversyTaxonomyFilter = controversy.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
@@ -89,7 +90,7 @@ const Reports = (props) => {
       key: data.companyId,
       checkBox: <Checkbox checked={data.isChecked} onChange={() => onCompanyCheck(data, "complete")}></Checkbox>,
       companyName: data.companyName ? data.companyName : '--',
-      completedDate: data.completedDate ? moment(data.completedDate).format('DD-MM-YYYY') : '--',
+      completedDate: data.completedDate ? moment(data.completedDate).format('DD/MM/YYYY') : '--',
       clientRep: data.clientRrepresentative ? data.clientRrepresentative : '--',
       companyRep: data.companyRepresentative ? data.companyRepresentative : '--',
     }));
@@ -110,19 +111,19 @@ const Reports = (props) => {
         },
         {
           id: 'completedDate',
-          align: 'center',
+          align: 'left',
           label: 'Completed Date',
           dataType: 'string',
         },
         {
           id: 'clientRep',
-          align: 'center',
+          align: 'left',
           label: 'Client Representative',
           dataType: 'string',
         },
         {
           id: 'companyRep',
-          align: 'center',
+          align: 'left',
           label: 'Company Representative',
           dataType: 'string',
         },
@@ -177,6 +178,7 @@ const Reports = (props) => {
     }
   }
 
+  // check all companies
   const allCompanyCheck = (data, checked, setType) => {
     let filteredData = [];
     if (taxonomy) {
@@ -199,7 +201,7 @@ const Reports = (props) => {
       key: dataTaxonomy.companyId + dataTaxonomy.companyName,
       checkBox: <Checkbox checked={dataTaxonomy.isChecked} onChange={() => onCompanyCheck(dataTaxonomy, "pending")}></Checkbox>,
       companyName: dataTaxonomy.companyName ? dataTaxonomy.companyName : '--',
-      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD-MM-YYYY') : '--',
+      allocatedDate: dataTaxonomy.allocatedDate ? moment(dataTaxonomy.allocatedDate).format('DD/MM/YYYY') : '--',
       clientRep: dataTaxonomy.clientRrepresentative ? dataTaxonomy.clientRrepresentative : '--',
       companyRep: dataTaxonomy.companyRepresentative ? dataTaxonomy.companyRepresentative : '--',
     }))
@@ -222,19 +224,19 @@ const Reports = (props) => {
         },
         {
           id: 'allocatedDate',
-          align: 'center',
+          align: 'left',
           label: 'Allocated Date',
           dataType: 'string',
         },
         {
           id: 'clientRep',
-          align: 'center',
+          align: 'left',
           label: 'Client Representative',
           dataType: 'string',
         },
         {
           id: 'companyRep',
-          align: 'center',
+          align: 'left',
           label: 'Company Representative',
           dataType: 'string',
         },
@@ -255,7 +257,7 @@ const Reports = (props) => {
       checkBox: <Checkbox checked={e.isChecked} onChange={() => onCompanyCheck(e, "controversy")}></Checkbox>,
       companyName: e.companyName ? e.companyName : '--',
       taskid: e.taskId ? e.taskId : '--',
-      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD-MM-YYYY') : '--',
+      allocatedDate: e.allocatedDate ? moment(e.allocatedDate).format('DD/MM/YYYY') : '--',
     }))
 
     return {
@@ -275,13 +277,13 @@ const Reports = (props) => {
         },
         {
           id: 'taskid',
-          align: 'center',
+          align: 'left',
           label: 'Task ID',
           dataType: 'string',
         },
         {
           id: 'allocatedDate',
-          align: 'center',
+          align: 'left',
           label: 'Allocated Date',
           dataType: 'date',
         },
@@ -330,7 +332,7 @@ const Reports = (props) => {
             ))}
           </div>
           <Card>
-            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} />
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} disablePageChange={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} reportsTaxonomy={taxonomy} />
           </Card>
         </div>
       </div>

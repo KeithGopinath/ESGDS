@@ -74,8 +74,8 @@ const AddSource = (props) => {
   const [sourceTypeOthers, subSourceTypeOthers] = [
     [
       {
-        value: 'Others-',
-        label: 'Others-',
+        value: '-Others-',
+        label: '-Others-',
         isMultiYear: false,
         isMultiSource: false,
         subSourceTypes: [],
@@ -83,8 +83,8 @@ const AddSource = (props) => {
     ],
     [
       {
-        label: 'Others-',
-        value: 'Others-',
+        label: '-Others-',
+        value: '-Others-',
       },
     ],
   ];
@@ -207,12 +207,12 @@ const AddSource = (props) => {
     setCurrentSourceType(event);
     setIsMultiYear(event.isMultiYear);
     setIsMultiSource(event.isMultiSource);
-    setSourceName(event.label === 'Others-' && event.value === 'Others-' ? '' : event.label);
+    setSourceName(event.label === '-Others-' && event.value === '-Others-' ? '' : event.label);
   };
 
   const onChangeSubSourceType = (event) => {
     setCurrentSubSourceType(event);
-    setSourceName(event.label === 'Others-' && event.value === 'Others-' ? '' : event.label);
+    setSourceName(event.label === '-Others-' && event.value === '-Others-' ? '' : event.label);
   };
 
   const onChangeSourceName = (event) => {
@@ -240,6 +240,18 @@ const AddSource = (props) => {
     getBase64(event.fileList.length > 0 ? event.fileList[0].originFileObj : null).then((e) => setSourcePDF64(e));
   };
 
+  const menuListOptionStyles = (base, state) => {
+    if (state.data.label === '-Others-' && state.data.value === '-Others-') {
+      return ({
+        ...base,
+        backgroundColor: state.isFocused ? '#2199c887' : state.isSelected ? '#2684FF' : '#e9ecef',
+      });
+    }
+    return ({
+      ...base,
+    });
+  };
+
   const disabledPublicationDate = (event) => event && event > moment().endOf('day');
 
   const validate = () => {
@@ -251,7 +263,7 @@ const AddSource = (props) => {
     const sourceURLCheck = (sourceURL.length > 0) &&
     (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(sourceURL)); // REGEX FOR URL VALIDATION
     const publicationDateCheck = (publicationDate !== null);
-    const sourcePDFCheck = (sourcePDF !== null);
+    const sourcePDFCheck = (currentSourceType && currentSourceType.value === '-Others-' && currentSourceType.label === '-Others-') || (currentSubSourceType && currentSubSourceType.value === '-Others-' && currentSubSourceType.label === '-Others-') || (currentSourceType && currentSourceType.label === 'Webpages') ? true : (sourcePDF !== null);
     setErrors({
       sourceType: !sourceTypeCheck,
       subSourceType: !subSourceTypeCheck,
@@ -298,16 +310,16 @@ const AddSource = (props) => {
     if (validate()) {
       const postableData = {
         companyId: props.companyId, // THIS DATA IS DEPENDENT ON EACH DPCODE FETCH API
-        sourceTypeId: currentSourceType && !(currentSourceType.value === 'Others-' && currentSourceType.label === 'Others-') ? currentSourceType.value : '',
+        sourceTypeId: currentSourceType && !(currentSourceType.value === '-Others-' && currentSourceType.label === '-Others-') ? currentSourceType.value : '',
         isMultiYear,
         isMultiSource,
-        sourceSubTypeId: currentSubSourceType && !(currentSubSourceType.value === 'Others-' && currentSubSourceType.label === 'Others-') ? currentSubSourceType.value : '',
+        sourceSubTypeId: currentSubSourceType && !(currentSubSourceType.value === '-Others-' && currentSubSourceType.label === '-Others-') ? currentSubSourceType.value : '',
         url: sourceURL,
         publicationDate,
         fiscalYear: props.fiscalYear,
-        sourcePDF: sourcePDFBase64,
-        newSourceTypeName: currentSourceType && currentSourceType.label === 'Others-' ? sourceName : '',
-        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === 'Others-' ? sourceName : '',
+        sourcePDF: sourcePDFBase64 || '',
+        newSourceTypeName: currentSourceType && currentSourceType.label === '-Others-' ? sourceName : '',
+        newSubSourceTypeName: currentSubSourceType && currentSubSourceType.label === '-Others-' ? sourceName : '',
         name: !isMultiYear ? `${sourceName}_${props.fiscalYear}` : `${sourceName}`,
       };
       dispatch({ type: 'SOURCE_TYPE_POST_REQUEST', sourceTypeData: postableData });
@@ -342,6 +354,9 @@ const AddSource = (props) => {
                 isSearchable
                 placeholder="Choose source type"
                 maxLength={30}
+                styles={{
+                  option: menuListOptionStyles,
+                }}
               />
               {errors.sourceType && <small className="addsource-validate-text">*Required</small>}
             </React.Fragment>
@@ -364,6 +379,9 @@ const AddSource = (props) => {
                 isSearchable
                 placeholder="Choose sub-source type"
                 maxLength={30}
+                styles={{
+                  option: menuListOptionStyles,
+                }}
               />
               {errors.subSourceType && <small className="addsource-validate-text">*Required</small>}
             </React.Fragment>
@@ -371,7 +389,7 @@ const AddSource = (props) => {
         />}
 
         {/* SOURCE NAME */}
-        {((currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-') || (currentSubSourceType && currentSubSourceType.label === 'Others-' && currentSubSourceType.label === 'Others-')) &&
+        {((currentSourceType && currentSourceType.label === '-Others-' && currentSourceType.value === '-Others-') || (currentSubSourceType && currentSubSourceType.label === '-Others-' && currentSubSourceType.label === '-Others-')) &&
         <FieldWrapper
           visible
           label={<div>Name<span className="addNewMember-red-asterik"> * </span></div>}
@@ -390,7 +408,7 @@ const AddSource = (props) => {
         />}
 
         {/* IS MULTIYEAR */}
-        {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
+        {currentSourceType && currentSourceType.label === '-Others-' && currentSourceType.value === '-Others-' &&
         <FieldWrapper
           visible
           label="Is MultiYear"
@@ -405,7 +423,7 @@ const AddSource = (props) => {
         />}
 
         {/* ISMULTISOURCE */}
-        {currentSourceType && currentSourceType.label === 'Others-' && currentSourceType.value === 'Others-' &&
+        {currentSourceType && currentSourceType.label === '-Others-' && currentSourceType.value === '-Others-' &&
         <FieldWrapper
           visible
           label="Is MultiSource"
@@ -440,7 +458,7 @@ const AddSource = (props) => {
         {/* UPLOAD BUTTON */}
         <FieldWrapper
           visible
-          label={<div>Upload<span className="addNewMember-red-asterik"> * </span></div>}
+          label={<div>Upload{!((currentSourceType && currentSourceType.value === '-Others-' && currentSourceType.label === '-Others-') || (currentSubSourceType && currentSubSourceType.value === '-Others-' && currentSubSourceType.label === '-Others-') || (currentSourceType && currentSourceType.label === 'Webpages')) && <span className="addNewMember-red-asterik"> * </span>}</div>}
           body={
             <React.Fragment>
               <Upload

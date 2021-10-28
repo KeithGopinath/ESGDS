@@ -9,8 +9,7 @@ import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
 import CustomTable from '../../components/CustomTable/index';
-import SLAExtentions from './extentionSLA';
-
+import SLAExtentions from './Extention';
 
 const PendingTaskTable = (props) => {
   const getFormatDate = (arg) => moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -49,7 +48,7 @@ const PendingTaskTable = (props) => {
         endDate: {
           value: moment(ePendingTask.analystSLADate).format('DD-MM-YYYY'),
           content: (ePendingTask.analystSLADate) ?
-            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.analystSLADate).format('DD-MM-YYYY')}</Tag>
+            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.analystSLADate).format('DD/MM/YYYY')}</Tag>
             : '-',
         },
       };
@@ -59,9 +58,9 @@ const PendingTaskTable = (props) => {
         ...populatableData,
         analystName: ePendingTask.analyst,
         endDate: {
-          value: moment(ePendingTask.qaSLADate).format('DD-MM-YYYY'),
+          value: moment(ePendingTask.qaSLADate).format('DD/MM/YYYY'),
           content: (ePendingTask.qaSLADate) ?
-            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.qaSLADate).format('DD-MM-YYYY') }</Tag>
+            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.qaSLADate).format('DD/MM/YYYY') }</Tag>
             : '-',
         },
       };
@@ -121,8 +120,9 @@ const ControversyPendingTaskTable = (props) => {
   const tablePopulate = (data) => data.map((ePendingTask) => ({
     taskNumber: ePendingTask.taskNumber,
     company: ePendingTask.company,
-    reviewDate: ePendingTask.reviewDate ? new Date(ePendingTask.reviewDate).toDateString() : '-',
-    updatedDate: ePendingTask.lastModifiedDate ? new Date(ePendingTask.lastModifiedDate).toDateString() : '-',
+    reviewDate: ePendingTask.reviewDate ? moment(ePendingTask.reviewDate).format('DD/MM/YYYY') || new Date(ePendingTask.reviewDate).toDateString() : '-',
+    updatedDate: ePendingTask.lastModifiedDate ? (moment(ePendingTask.lastModifiedDate).format('DD/MM/YYYY') || new Date(ePendingTask.lastModifiedDate).toDateString()) : '-',
+    totalNoOfControversies: ePendingTask.totalNoOfControversy,
     action: <Link href to={{ pathname: `/task/${ePendingTask.taskNumber}`, state: { taskDetails: ePendingTask } }}>Enter</Link>,
   }));
 
@@ -136,10 +136,13 @@ const ControversyPendingTaskTable = (props) => {
         id: 'company', label: 'Company', align: 'left', dataType: 'string',
       },
       {
+        id: 'totalNoOfControversies', label: 'Contoversies Collected', align: 'center', dataType: 'string',
+      },
+      {
         id: 'reviewDate', label: 'Review Date', align: 'left', dataType: 'string',
       },
       {
-        id: 'updatedDate', label: 'Last Updated On', align: 'center', dataType: 'string',
+        id: 'updatedDate', label: 'Last Updated On', align: 'left', dataType: 'string',
       },
       {
         id: 'action', label: 'Action', align: 'right', dataType: 'element',
