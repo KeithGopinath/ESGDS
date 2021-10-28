@@ -198,7 +198,7 @@ const BatchCreation = ({ show, setShow }) => {
           </div>
           <div className="batch-name">Batch Name <span className="mandatory-color">*</span></div>
           <div className="form-group batch-input-width " >
-            <input type="text" className={`form-control ${batch === '' && validBorder}`} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
+            <input type="text" className={`form-control ${batch === '' && validBorder}`} maxLength={25} onChange={onHandleInput} autoComplete="off" value={batch} required ></input>
           </div>
           <div className="batch-year">Select Year <span className="mandatory-color">*</span></div>
           <div className={`batch-input-width dp-min-height ${year.length === 0 && validBorder && 'dropdown-alert'}`}>

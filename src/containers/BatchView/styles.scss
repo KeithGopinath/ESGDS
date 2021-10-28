@@ -72,12 +72,14 @@
 }
 
 .batch-card-display {
+  word-break: break-word;
+  text-align: center;
   margin: 0px auto;
-  width: 88% !important;
-  margin-bottom: 6%;
+  width: 90% !important;
+  margin-bottom: 5%;
   min-width: 140px;
-  border-radius: 4px;
-  padding: 8px;
+  border-radius: 5px;
+  padding: 10px;
   background: $color-white;
   box-shadow: 0 6px 10px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .05);
 }
