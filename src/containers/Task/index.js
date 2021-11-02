@@ -1,4 +1,8 @@
-/* eslint-disable */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable camelcase */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,6 +19,7 @@ import SideMenuBar from '../../components/SideMenuBar';
 import CustomTable from '../../components/CustomTable';
 import AddNewKMPMember from './AddNewKMPMember';
 import { history } from '../../routes';
+import ValidationComments from './ValidationComments';
 
 const FieldWrapper = (props) => {
   // PROPS ARE {VISIBLE}, {LABEL}, {BODY}, {SIZE} !
@@ -65,25 +70,35 @@ const TaskTable = (props) => {
       ><span style={{ cursor: 'pointer' }}><ExclamationCircleTwoTone style={{ fontSize: 'medium' }} twoToneColor="#f18618" /></span>
       </Tooltip>,
   }));
+  const columnsHeadDataSplitOne = [
+    {
+      id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
+    },
+    {
+      id: 'dpName', label: 'DP Name', align: 'left', dataType: 'string',
+    },
+    {
+      id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
+    },
+  ];
+
+  const columnsHeadDataSplitTwo = [
+    {
+      id: 'action', label: 'Action', align: 'right', dataType: 'element',
+    },
+  ];
 
   const TASK_DATA = {
     rowsData: tablePopulate(props),
-    columnsHeadData: [
-      {
-        id: 'dpCode', label: 'DP Code', align: 'left', dataType: 'string',
-      },
-      {
-        id: 'dpName', label: 'DP Name', align: 'left', dataType: 'string',
-      },
-      {
-        id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
-      },
+    columnsHeadData: props.showStatus ? [
+      ...columnsHeadDataSplitOne,
       {
         id: 'status', label: 'Status', align: 'left', dataType: 'string',
       },
-      {
-        id: 'action', label: 'Action', align: 'center', dataType: 'element',
-      },
+      ...columnsHeadDataSplitTwo,
+    ] : [
+      ...columnsHeadDataSplitOne,
+      ...columnsHeadDataSplitTwo,
     ],
     tableLabel: 'Pending DpCodes',
   };
@@ -99,6 +114,7 @@ TaskTable.propTypes = {
   icon: PropTypes.element,
   footerBesidePagination: PropTypes.element,
   isAnalyst_DC: PropTypes.bool,
+  showStatus: PropTypes.bool,
 };
 
 const ControversyTaskTable = (props) => {
@@ -174,7 +190,7 @@ const ValidationTable = (props) => {
     }
     return <div>-</div>;
   };
-  const tablePopulate = ({ taskDetails, dpCodesData }) => dpCodesData.map((x) => ({
+  const tablePopulate = ({ taskDetails, dpCodesData, dpCodeType }) => dpCodesData.map((x) => ({
     key: `${x.dpCode}-${x.fiscalYear}-${x.memberId}`,
     dpCode: x.dpCode,
     fiscalYear: x.fiscalYear,
@@ -184,6 +200,7 @@ const ValidationTable = (props) => {
       <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
         <div style={{ color: '#e40e22' }}>Failed</div>
       </div>,
+    comment: x.isValidResponse && x.description.length === 0 ? '-' : <ValidationComments key={`${x.dpCode}-${x.fiscalYear}-${x.memberId}`} dpCodeDetails={x} dpCodeType={dpCodeType} taskDetails={taskDetails} />,
     action:
   <Link
     to={{
@@ -206,6 +223,9 @@ const ValidationTable = (props) => {
       {
         id: 'description', label: 'Description', align: 'center', dataType: 'element',
       },
+      // {
+      //   id: 'comment', label: 'Comments', align: 'center', dataType: 'element',
+      // },
       {
         id: 'validationstatus', label: 'Status', align: 'center', dataType: 'element',
       },
@@ -420,7 +440,7 @@ const Task = (props) => {
     };
 
     const inCompleteDpCodes = getInCompleteDpCodes();
-    if (inCompleteDpCodes.length === 0) {
+    if ((inCompleteDpCodes.length === 0 && !(isClientRep_DR || isCompanyRep_DR)) || ((isClientRep_DR || isCompanyRep_DR) && reqTaskData.repFinalSubmit)) {
       dispatch({ type: 'TASK_SUBMIT_POST_REQUEST', payload: postableData });
       setStatusAlert(true);
     } else {
@@ -439,14 +459,19 @@ const Task = (props) => {
   };
 
   const onClickValidate = () => {
-    history.push({
-      pathName: `/task/${props.location.state.taskId}`,
-      state: {
-        taskId: props.location.state.taskId,
-        taskDetails,
-        isValidationCalled: true,
-      },
-    });
+    const inCompleteDpCodes = getInCompleteDpCodes();
+    if (inCompleteDpCodes.length === 0) {
+      history.push({
+        pathName: `/task/${props.location.state.taskId}`,
+        state: {
+          taskId: props.location.state.taskId,
+          taskDetails,
+          isValidationCalled: true,
+        },
+      });
+    } else {
+      message.error(`${inCompleteDpCodes[0].dpCode} of ${inCompleteDpCodes[0].memberName ? `Member: "${inCompleteDpCodes[0].memberName}"` : `KeyIssue: "${inCompleteDpCodes[0].keyIssue}"`} ${inCompleteDpCodes.length > 1 ? (inCompleteDpCodes.length <= 2 ? `& other ${inCompleteDpCodes.length - 1} dpCode is` : `& other ${inCompleteDpCodes.length - 1} dpCodes are`) : 'is'}  not completed !`);
+    }
   };
 
   const onClickBack = () => {
@@ -553,9 +578,6 @@ const Task = (props) => {
     }
   }, [derivedCalculationFromStore]);
 
-  const getFooterBesidePagination = () => (
-    null
-  );
 
   return (
     <div className="main">
@@ -634,11 +656,11 @@ const Task = (props) => {
             {(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || IsAdmin) && !isValidationCalled &&
               <TaskTable
                 taskDetails={taskDetails}
+                showStatus={!(isClientRep_DR || isCompanyRep_DR)}
                 dpCodesData={(derivedCalculationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}
                 isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || reqTASK.isLoading || taskSubmitFromStore.isLoading)}
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
-                footerBesidePagination={getFooterBesidePagination()}
                 isAnalyst_DC={isAnalyst_DC}
               />}
 
@@ -649,34 +671,35 @@ const Task = (props) => {
                 isLoading={reqTASK.isLoading}
                 message={(reqTASK.error) ? (reqTASK.error.message || 'Something went wrong !') : null}
                 icon={(reqTASK && reqTASK.error) ? <CloseCircleFilled /> : null}
-                footerBesidePagination={getFooterBesidePagination()}
               />}
 
-            {(isAnalyst_DC || isAnalyst_DCR) && isValidationCalled &&
+            {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && isValidationCalled &&
               <ValidationTable
                 taskDetails={taskDetails}
+                dpCodeType={dpCodeType}
                 dpCodesData={(dpCodeValidationFromStore.isLoading || taskSubmitFromStore.isLoading) ? [] : reqDpCodesData}
                 isLoading={(isAddNewBoardVisible || isAddNewKMPVisible || isTerminateBoardVisible || isTerminateKmpVisible) ? false : (derivedCalculationFromStore.isLoading || dpCodeValidationFromStore.isLoading || taskSubmitFromStore.isLoading)}
                 message={(dpCodeValidationFromStore.error) ? (dpCodeValidationFromStore.error.message || 'Something went wrong !') : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? 'Please select member!' : null}
                 icon={(dpCodeValidationFromStore && dpCodeValidationFromStore.error) ? <CloseCircleFilled /> : (dpCodeType === 'Board Matrix' || dpCodeType === 'Kmp Matrix') && (reqDpCodesData.length === 0) ? <UserOutlined /> : null}
-                footerBesidePagination={getFooterBesidePagination()}
               />}
             {!isTaskButtonDisabled &&
             <Col lg={12} className="datapage-button-wrap" style={{ marginBottom: '3%' }}>
               {/* Button */}
+              {/* (((isAnalyst_DC || isAnalyst_DCR) && (isPercentileCalculated && (isValidationCalled || !taskDetails.isValidationRequired))) || (isQA_DV && (isValidationCalled || !taskDetails.isValidationRequired)) || isCompanyRep_DR || isClientRep_DR) && */}
               { (((isAnalyst_DC || isAnalyst_DCR) && (isPercentileCalculated && (isValidationCalled || !taskDetails.isValidationRequired))) || isQA_DV || isCompanyRep_DR || isClientRep_DR) &&
-              <Button className="datapage-button" variant="success" disable={isTaskButtonDisabled} onClick={onSubmitTask}>Submit</Button>}
+              <Button className="datapage-button" variant="success" disabled={isTaskButtonDisabled || ((isClientRep_DR || isCompanyRep_DR) && !reqTaskData.repFinalSubmit)} onClick={onSubmitTask}>Submit</Button>}
 
               {/* { (isQA_DV || isClientRep_DR || isCompanyRep_DR) &&
                 <Button className="datapage-button" variant="info" onClick={onSubmitTask2}>ReAssign</Button>} */}
 
               { (isAnalyst_DC || isAnalyst_DCR) && !isValidationCalled && !isPercentileCalculated &&
-              <Button className="datapage-button" variant="success" disable={isTaskButtonDisabled} onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
+              <Button className="datapage-button" variant="success" disabled={isTaskButtonDisabled} onClick={onClickCalculateDerivedData} >Calculate Derived Data</Button>}
 
-              { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated && !isValidationCalled && taskDetails.isValidationRequired &&
-              <Button className="datapage-button" variant="info" disable={isTaskButtonDisabled} onClick={onClickValidate}>Validate</Button>}
+              {/* (((isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated) || isQA_DV) && !isValidationCalled && taskDetails.isValidationRequired && */}
+              { (((isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated)) && !isValidationCalled && taskDetails.isValidationRequired &&
+              <Button className="datapage-button" variant="info" disabled={isTaskButtonDisabled} onClick={onClickValidate}>Validate</Button>}
               { (isAnalyst_DC || isAnalyst_DCR) && isPercentileCalculated &&
-              <Button className="datapage-button" variant="danger" disable={isTaskButtonDisabled} onClick={onClickBack}>Back</Button>}
+              <Button className="datapage-button" variant="danger" disabled={isTaskButtonDisabled} onClick={onClickBack}>Back</Button>}
 
             </Col>}
 
