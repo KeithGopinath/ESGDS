@@ -95,7 +95,7 @@ const ControversyPage = (props) => {
         textSnippet: reqCurrentData.textSnippet,
         pageNo: reqCurrentData.pageNo,
         // screenShot: reqCurrentData.screenShotBase64,
-        screenShot: (false && reqCurrentData.screenShot) || '',
+        screenShot: reqCurrentData.screenShot || [],
         reviewDate: reqCurrentData.reviewDate,
         // nextReviewDate: reqCurrentData.nextReviewDate,
         isApplicableForCommiteeReview: reqCurrentData.isApplicableForCommiteeReview,
