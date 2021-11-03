@@ -93,13 +93,20 @@ const CustomTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
+  const [rowsDataForPageCheck, setRowsDataForPageCheck] = useState(rowsData);
+  
   useEffect(() => {
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    { disablePageChange ? null : setPage(DEFAULT_PAGE) }
-    setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
-    { disablePageChange ? null : setSearchQuery('') }
+    setRowsDataForPageCheck((prevState) => {
+      { prevState.length === rowsData.length ? null : setPage(DEFAULT_PAGE) }
+      { prevState.length === rowsData.length ? null : setSearchQuery('') }
+      return rowsData;
+    });
+    // { disablePageChange ? null : setPage(DEFAULT_PAGE) }
+    // setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
+    // { disablePageChange ? null : setSearchQuery('') }
     setSearchDate(null);
   }, [tableData]);
 
