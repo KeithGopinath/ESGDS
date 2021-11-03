@@ -44,7 +44,7 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.14.0",
     "react-dropdown": "^1.9.2",
-    "react-google-recaptcha-v3": "^1.9.5",
+    "react-google-recaptcha-v3": "^1.9.7",
     "react-loader-spinner": "^4.0.0",
     "react-material-ui-carousel": "^2.2.6",
     "react-otp-input": "^2.3.0",

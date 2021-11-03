@@ -29,7 +29,7 @@ const Login = () => {
   const [forgotPasswordvalidate, setforgotPasswordvalidate] = useState('');
   const [start, setStart] = useState(false);
   const [seconds, setSeconds] = useState(30);
-  const [captchaToken,setCaptchaToken] = useState('')
+  const [captchaToken, setCaptchaToken] = useState('')
 
   const dispatch = useDispatch();
   // login
@@ -130,6 +130,16 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+
+    window.grecaptcha.ready(() =>{
+      window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
+        // document.getElementById("recaptchaResponse").value= token; 
+        setCaptchaToken(token)
+      }) 
+      })
+  }, []);
+
   const onLogin = () => {
     const valid = validateEmail(email);
     if (!email && !password && valid === false) {
@@ -142,41 +152,76 @@ const Login = () => {
       setValidate('border-danger');
       message.error('Please enter the vaild password')
     } else {
-      window.grecaptcha.ready(function() {
-        window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', {action: 'submit'}).then(function(token) {
+      // window.grecaptcha.ready(() =>{
+      //   window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
+          // document.getElementById("recaptchaResponse").value= token; 
           // Send form value as well as token to the server
-console.log('token',token)
-setCaptchaToken(token)
-        });
-      });
+    //       var response = window.grecaptcha.getResponse();
+    // console.log(response);
+    //       if (!reponse){
+    //         alert('Coud not get recaptcha response'); 
+    //         //return;
+    //         reject();
+    //       }
+    // if(token){
+          // console.log('token', token)
+          // setCaptchaToken(token)
+          setLoginAlert('');
+          setLoginRole(true);
+          setStart(true);
+          setSeconds(30);
+          const login = { email, password }
+          let objJsonStr = JSON.stringify(login);
+          let user = Buffer.from(objJsonStr).toString("base64");
+          const loginDetails = {
+            login: user,
+            token: captchaToken
+            // token: '03AGdBq26vwVcymI2viEN3OqoZiFkdWhLIkH2BQ1TGmM98vVJNrQHeQg7aGlP6PKMOE32QYdqT8SDkrtrNIr2dX70muRopLZZ8Ek7bSogwqNh2heTgRq8ws6BQ0HBCgzidx8rml8gpZaQ_J81qc2B3FXbdxUsFiTNRwgwQuwlMVmITSuXqa_KRkN6Isb39EHd5ogsAjzkNfodd1GhrhO0NAJBoRkaoOZVo-PN6BYD0Gtu96242-1_bF4qJjC_biCeVQLcCXTyqlsndQK72tZkPGYMW45JtdyePuFl0-V0hlmdzTfSn6yz6obUnEIQsjtYbc8ql0g09JwXSW1UC5jDGgFx_yg_ZMGyKed7tQzKWGDlNPf_ICxiQyjHCeoY6BtlUikZR2X6nixwwkPcGx54gAS_nLbHk0u8MEdsxBvgRXGO7hMQ2mn1ZTf6uMz4D69zVh7IetBdxw'
+          }
+          dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+          // window.grecaptcha.reset()
+        // }
+        // else {
+        //   grecaptcha.reset()
+        //   message.error(invalidLogin.message)
+        // }
+        // window.grecaptcha.reset();
+
+
+      //   });
+      // });
+
+
       // console.log('token2',token)
-  // Create an event handler so you can call the verification on button click event or form submit
-  // useCallback(async () => {
-    // if (!executeRecaptcha) {
-    //   console.log('Execute recaptcha not yet available');
-    // }
+      // Create an event handler so you can call the verification on button click event or form submit
+      // useCallback(async () => {
+      // if (!executeRecaptcha) {
+      //   console.log('Execute recaptcha not yet available');
+      // }
 
-    // const token = await executeRecaptcha('yourAction');
-    // // Do whatever you want with the token
-    // console.log('hi',token)
-  // });
+      // const token = await executeRecaptcha('yourAction');
+      // // Do whatever you want with the token
+      // console.log('hi',token)
+      // });
 
 
-      setLoginAlert('');
-      setLoginRole(true);
-      setStart(true);
-      setSeconds(30);
-      const login = { email, password }
-      let objJsonStr = JSON.stringify(login);
-      let user = Buffer.from(objJsonStr).toString("base64");
-      const loginDetails = {
-        login: user
-      }
-      dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      // setLoginAlert('');
+      // setLoginRole(true);
+      // setStart(true);
+      // setSeconds(30);
+      // const login = { email, password }
+      // let objJsonStr = JSON.stringify(login);
+      // let user = Buffer.from(objJsonStr).toString("base64");
+      // const loginDetails = {
+      //   login: user,
+      //   token: captchaToken
+      // }
+      // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
+    // window.grecaptcha.reset();
   };
 
-  console.log('captchaToken',captchaToken)
+  // console.log('captchaToken',captchaToken)
   // },[]);
 
   // Otp screen
@@ -309,7 +354,7 @@ setCaptchaToken(token)
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
             {loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
- {/* <GoogleReCaptchaProvider reCaptchaKey="6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr">
+          {/* <GoogleReCaptchaProvider reCaptchaKey="6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr">
           <ReCaptcha onVerifyCaptcha={onVerifyCaptcha} />
   </GoogleReCaptchaProvider> */}
           <OtpScreen
