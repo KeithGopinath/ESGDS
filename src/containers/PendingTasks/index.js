@@ -85,12 +85,20 @@ const PendingTaskTable = (props) => {
       id: 'fiscalYear', label: 'Fiscal Year', align: 'left', dataType: 'string',
     },
     {
-      id: 'status', label: 'Status', align: 'left', dataType: 'string',
-    },
-    {
       id: 'action', label: 'Action', align: 'right', dataType: 'element',
     },
   ];
+
+  const splitColumnsHeadDataThree = (props.isClientRep || props.isCompanyRep) ? [
+    ...splitColumnsHeadDataTwo,
+  ] : [
+    splitColumnsHeadDataTwo[0],
+    {
+      id: 'status', label: 'Status', align: 'left', dataType: 'string',
+    },
+    splitColumnsHeadDataTwo[1],
+  ];
+
 
   const PENDING_TASK_DATA = {
     rowsData: tablePopulate(props.data),
@@ -102,10 +110,10 @@ const PendingTaskTable = (props) => {
       {
         id: props.isAnalyst ? 'qaName' : 'analystName', label: props.isAnalyst ? 'QA' : 'Analyst', align: 'left', dataType: 'string',
       },
-      ...splitColumnsHeadDataTwo,
+      ...splitColumnsHeadDataThree,
     ] : [
       ...splitColumnsHeadDataOne,
-      ...splitColumnsHeadDataTwo,
+      ...splitColumnsHeadDataThree,
     ],
     tableLabel: 'Pending Tasks',
   };
@@ -250,7 +258,7 @@ const PendingTasks = () => {
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>

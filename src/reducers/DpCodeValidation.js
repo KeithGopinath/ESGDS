@@ -21,6 +21,12 @@ export default (state = initialState, action) => {
         isLoading: false,
         error: action.error,
       };
+
+    case 'DPCODE_VALIDATION_UPDATE':
+      return {
+        ...state,
+        validation: action.updatedValidation,
+      };
     default:
       return state;
   }
