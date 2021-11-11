@@ -2,7 +2,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
-const ReCaptcha = ({onVerifyCaptcha}) => {
+const ReCaptcha = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   // Create an event handler so you can call the verification on button click event or form submit
@@ -12,7 +12,7 @@ const ReCaptcha = ({onVerifyCaptcha}) => {
     }
 
     const token = await executeRecaptcha('yourAction');
-    onVerifyCaptcha(token);
+    // onVerifyCaptcha(token);
     // Do whatever you want with the token
     console.log('hi pattu',token)
   };

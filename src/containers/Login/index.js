@@ -9,8 +9,8 @@ import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
 import PageLoader from '../../components/PageLoader';
-import ReCaptcha from '../../components/ReCaptcha';
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+// import ReCaptcha from '../../components/ReCaptcha';
+// import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const Login = () => {
   // const { executeRecaptcha } = useGoogleReCaptcha();
@@ -29,7 +29,8 @@ const Login = () => {
   const [forgotPasswordvalidate, setforgotPasswordvalidate] = useState('');
   const [start, setStart] = useState(false);
   const [seconds, setSeconds] = useState(30);
-  const [captchaToken, setCaptchaToken] = useState('')
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   // login
@@ -69,15 +70,16 @@ const Login = () => {
     else if (loginRole && login) {
       setShowOtp(true);
       setLoginRole(false);
+      setLoading(false)
     }
   }, [login]);
 
   useEffect(() => {
     if (loginRole && login && role) {
       message.success(login.message)
-    }
-    else if (loginRole && invalidLogin) {
+    } else if (loginRole && invalidLogin) {
       message.error(invalidLogin.message)
+      setLoading(false)
     }
   }, [login, invalidLogin]);
 
@@ -101,16 +103,16 @@ const Login = () => {
   }, [validPasswordChange, InvalidPasswordChange]);
 
   // resend timer
-  useEffect(() => {
-    if (start) {
-      if (seconds > 0) {
-        setTimeout(() => setSeconds(seconds - 1), 1000);
-      } else {
-        setStart(false);
-        setOtpAlert('');
-      }
-    }
-  });
+  // useEffect(() => {
+  //   if (start) {
+  //     if (seconds > 0) {
+  //       setTimeout(() => setSeconds(seconds - 1), 1000);
+  //     } else {
+  //       setStart(false);
+  //       setOtpAlert('');
+  //     }
+  //   }
+  // });
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -130,15 +132,15 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    window.grecaptcha.ready(() =>{
-      window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
-        // document.getElementById("recaptchaResponse").value= token; 
-        setCaptchaToken(token)
-      }) 
-      })
-  }, []);
+  //   window.grecaptcha.ready(() =>{
+  //     window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
+  //       // document.getElementById("recaptchaResponse").value= token; 
+  //       setCaptchaToken(token)
+  //     }) 
+  //     })
+  // }, []);
 
   const onLogin = () => {
     const valid = validateEmail(email);
@@ -152,6 +154,18 @@ const Login = () => {
       setValidate('border-danger');
       message.error('Please enter the vaild password')
     } else {
+      setLoading(true)
+      grecaptcha.ready(() =>{
+        grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'login' }).then((token) => {
+          console.log('token', token)
+         
+          // document.getElementById("recaptchaResponse").value= token; 
+          // setCaptchaToken(token)
+          submitToken(token)
+          // grecaptcha.reset();
+        }) 
+        })
+
       // window.grecaptcha.ready(() =>{
       //   window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
           // document.getElementById("recaptchaResponse").value= token; 
@@ -165,20 +179,24 @@ const Login = () => {
     //       }
     // if(token){
           // console.log('token', token)
+          const submitToken = token => {
+          console.log('Token', token)
           // setCaptchaToken(token)
           setLoginAlert('');
           setLoginRole(true);
           setStart(true);
-          setSeconds(30);
+          // setSeconds(30);
           const login = { email, password }
           let objJsonStr = JSON.stringify(login);
           let user = Buffer.from(objJsonStr).toString("base64");
           const loginDetails = {
             login: user,
-            token: captchaToken
+            token: token
             // token: '03AGdBq26vwVcymI2viEN3OqoZiFkdWhLIkH2BQ1TGmM98vVJNrQHeQg7aGlP6PKMOE32QYdqT8SDkrtrNIr2dX70muRopLZZ8Ek7bSogwqNh2heTgRq8ws6BQ0HBCgzidx8rml8gpZaQ_J81qc2B3FXbdxUsFiTNRwgwQuwlMVmITSuXqa_KRkN6Isb39EHd5ogsAjzkNfodd1GhrhO0NAJBoRkaoOZVo-PN6BYD0Gtu96242-1_bF4qJjC_biCeVQLcCXTyqlsndQK72tZkPGYMW45JtdyePuFl0-V0hlmdzTfSn6yz6obUnEIQsjtYbc8ql0g09JwXSW1UC5jDGgFx_yg_ZMGyKed7tQzKWGDlNPf_ICxiQyjHCeoY6BtlUikZR2X6nixwwkPcGx54gAS_nLbHk0u8MEdsxBvgRXGO7hMQ2mn1ZTf6uMz4D69zVh7IetBdxw'
           }
           dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+
+        }
           // window.grecaptcha.reset()
         // }
         // else {
@@ -221,16 +239,19 @@ const Login = () => {
     // window.grecaptcha.reset();
   };
 
-  // console.log('captchaToken',captchaToken)
+  console.log('captchaTokenout',captchaToken)
+  console.log('start',start)
   // },[]);
 
   // Otp screen
   const handleClose = () => {
     setShowOtp(false);
-    setSeconds(0);
+    // setSeconds(0);
     setOtpAlert('');
     setOtp('');
     sessionStorage.clear();
+    // grecaptcha.reset();
+
   };
 
   const onSubmitOtp = () => {
@@ -255,7 +276,7 @@ const Login = () => {
 
   // resend otp 
   const resendOtp = () => {
-    setSeconds(30);
+    // setSeconds(30);
     setStart(true);
     const login = { email, password }
     let objJsonStr = JSON.stringify(login);
@@ -352,10 +373,10 @@ const Login = () => {
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
-            {loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
+            {loading || loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
           {/* <GoogleReCaptchaProvider reCaptchaKey="6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr">
-          <ReCaptcha onVerifyCaptcha={onVerifyCaptcha} />
+          <ReCaptcha/>
   </GoogleReCaptchaProvider> */}
           <OtpScreen
             show={showOtp}
@@ -368,7 +389,7 @@ const Login = () => {
             validateOtp={validate}
             alert={otpAlert}
             email={email}
-            seconds={seconds}
+            // seconds={seconds}
             otpLoading={otpLoading}
           />
           <ForgotPassword
