@@ -79,10 +79,9 @@ export default {
     getSubsetTaxonomyDownload: 'datapoints/downloadSubsetTaxmonony',
   },
   apiBaseUrl: {
-    // dev: 'http://3.108.113.82/',
-    dev: 'http://3.109.80.244/',
+    dev: 'http://3.108.113.82/',
     test: 'http://3.109.80.244/',
-    prod: 'https://backend.esgds.com/',
-    // prod: 'https://api.esgds.ai',
+    prod: 'https://api.esgds.ai',
+    // prod: 'https://backend.esgds.com/',
   },
 };

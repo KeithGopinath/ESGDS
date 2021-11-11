@@ -9,11 +9,8 @@ import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
 import PageLoader from '../../components/PageLoader';
-// import ReCaptcha from '../../components/ReCaptcha';
-// import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const Login = () => {
-  // const { executeRecaptcha } = useGoogleReCaptcha();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginAlert, setLoginAlert] = useState('');
@@ -132,16 +129,6 @@ const Login = () => {
     }
   };
 
-  // useEffect(() => {
-
-  //   window.grecaptcha.ready(() =>{
-  //     window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
-  //       // document.getElementById("recaptchaResponse").value= token; 
-  //       setCaptchaToken(token)
-  //     }) 
-  //     })
-  // }, []);
-
   const onLogin = () => {
     const valid = validateEmail(email);
     if (!email && !password && valid === false) {
@@ -155,93 +142,29 @@ const Login = () => {
       message.error('Please enter the vaild password')
     } else {
       setLoading(true)
-      grecaptcha.ready(() =>{
+      grecaptcha.ready(() => {
         grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'login' }).then((token) => {
-          console.log('token', token)
-         
-          // document.getElementById("recaptchaResponse").value= token; 
-          // setCaptchaToken(token)
           submitToken(token)
           // grecaptcha.reset();
-        }) 
         })
+      })
 
-      // window.grecaptcha.ready(() =>{
-      //   window.grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'submit' }).then((token) => {
-          // document.getElementById("recaptchaResponse").value= token; 
-          // Send form value as well as token to the server
-    //       var response = window.grecaptcha.getResponse();
-    // console.log(response);
-    //       if (!reponse){
-    //         alert('Coud not get recaptcha response'); 
-    //         //return;
-    //         reject();
-    //       }
-    // if(token){
-          // console.log('token', token)
-          const submitToken = token => {
-          console.log('Token', token)
-          // setCaptchaToken(token)
-          setLoginAlert('');
-          setLoginRole(true);
-          setStart(true);
-          // setSeconds(30);
-          const login = { email, password }
-          let objJsonStr = JSON.stringify(login);
-          let user = Buffer.from(objJsonStr).toString("base64");
-          const loginDetails = {
-            login: user,
-            token: token
-            // token: '03AGdBq26vwVcymI2viEN3OqoZiFkdWhLIkH2BQ1TGmM98vVJNrQHeQg7aGlP6PKMOE32QYdqT8SDkrtrNIr2dX70muRopLZZ8Ek7bSogwqNh2heTgRq8ws6BQ0HBCgzidx8rml8gpZaQ_J81qc2B3FXbdxUsFiTNRwgwQuwlMVmITSuXqa_KRkN6Isb39EHd5ogsAjzkNfodd1GhrhO0NAJBoRkaoOZVo-PN6BYD0Gtu96242-1_bF4qJjC_biCeVQLcCXTyqlsndQK72tZkPGYMW45JtdyePuFl0-V0hlmdzTfSn6yz6obUnEIQsjtYbc8ql0g09JwXSW1UC5jDGgFx_yg_ZMGyKed7tQzKWGDlNPf_ICxiQyjHCeoY6BtlUikZR2X6nixwwkPcGx54gAS_nLbHk0u8MEdsxBvgRXGO7hMQ2mn1ZTf6uMz4D69zVh7IetBdxw'
-          }
-          dispatch({ type: 'LOGIN_REQUEST', loginDetails });
-
+      const submitToken = token => {
+        setLoginAlert('');
+        setLoginRole(true);
+        setStart(true);
+        // setSeconds(30);
+        const login = { email, password }
+        let objJsonStr = JSON.stringify(login);
+        let user = Buffer.from(objJsonStr).toString("base64");
+        const loginDetails = {
+          login: user,
+          token
         }
-          // window.grecaptcha.reset()
-        // }
-        // else {
-        //   grecaptcha.reset()
-        //   message.error(invalidLogin.message)
-        // }
-        // window.grecaptcha.reset();
-
-
-      //   });
-      // });
-
-
-      // console.log('token2',token)
-      // Create an event handler so you can call the verification on button click event or form submit
-      // useCallback(async () => {
-      // if (!executeRecaptcha) {
-      //   console.log('Execute recaptcha not yet available');
-      // }
-
-      // const token = await executeRecaptcha('yourAction');
-      // // Do whatever you want with the token
-      // console.log('hi',token)
-      // });
-
-
-      // setLoginAlert('');
-      // setLoginRole(true);
-      // setStart(true);
-      // setSeconds(30);
-      // const login = { email, password }
-      // let objJsonStr = JSON.stringify(login);
-      // let user = Buffer.from(objJsonStr).toString("base64");
-      // const loginDetails = {
-      //   login: user,
-      //   token: captchaToken
-      // }
-      // dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+        dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      }
     }
-    // window.grecaptcha.reset();
   };
-
-  console.log('captchaTokenout',captchaToken)
-  console.log('start',start)
-  // },[]);
 
   // Otp screen
   const handleClose = () => {
@@ -250,8 +173,6 @@ const Login = () => {
     setOtpAlert('');
     setOtp('');
     sessionStorage.clear();
-    // grecaptcha.reset();
-
   };
 
   const onSubmitOtp = () => {
@@ -269,7 +190,6 @@ const Login = () => {
         login: user,
         token: captchaToken
       }
-
       dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
@@ -314,8 +234,7 @@ const Login = () => {
     if (!forgotemail || valid == false) {
       setforgotPasswordAlert('Please enter the valid credential')
       setforgotPasswordvalidate('border-danger')
-    }
-    else {
+    } else {
       const payload = {
         email: forgotemail,
         link: "http://localhost:3000/password-resets",
@@ -325,11 +244,6 @@ const Login = () => {
       setforgotPasswordAlert('');
     }
   }
-
-  // const onVerifyCaptcha = (token) => {
-  //   // console.log('captchaToken', token);
-  //   setCaptchaToken(token)
-  // };
 
   // condition for Forgot password alert message class name
   const forgotPasswordClass = forgotPasswordvalidate ? 'danger' : validPasswordChange ? 'success' : 'danger';
@@ -375,9 +289,6 @@ const Login = () => {
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
             {loading || loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
-          {/* <GoogleReCaptchaProvider reCaptchaKey="6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr">
-          <ReCaptcha/>
-  </GoogleReCaptchaProvider> */}
           <OtpScreen
             show={showOtp}
             start={start}

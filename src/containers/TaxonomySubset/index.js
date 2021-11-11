@@ -36,7 +36,16 @@ const TaxonomySubset = () => {
   useEffect(() => {
     if (subsetTaxonomyFromStore.subsetTaxonomy && !subsetTaxonomyFromStore.error && !subsetTaxonomyFromStore.isLoading && subsetTaxonomyDownloadData && downloadSubset) {
       const fileName = taxonomyName;
-      const ws = XLSX.utils.json_to_sheet(subsetTaxonomyDownloadData);
+      const currentData = [];
+      const obj = {};
+      taxonomyData && taxonomyData.rows.filter((val) => val.taxonomyName == taxonomyName).map((data) => (
+        data.headers.filter((val) => val.inputType == 'Static').map((value) => {
+          obj[value.name] = '';
+        })
+      ));
+      currentData.push(obj);
+      const downloadableData = subsetTaxonomyDownloadData.length > 0 ? subsetTaxonomyDownloadData : currentData;
+      const ws = XLSX.utils.json_to_sheet(downloadableData);
       const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
