@@ -243,7 +243,7 @@ const Login = () => {
       <Col className="card-container" lg={4} sm={6} md={6}>
         <img src={Logo} alt="logo" />
         <div className="form-details">
-          <h4 className="login-text">LOGIN</h4>
+          <h4 className="login-text">Login</h4>
           <p className="text-secondary">Enter your email and password to login</p>
           <Card className="card-styles shadow">
             <Form.Group>
