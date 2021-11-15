@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -67,7 +68,6 @@ const ValidationComments = (props) => {
         boardMemberType: dpCodeTypeQuery === 'standalone' ? '' : dpCodeTypeQuery,
         comment,
       };
-      console.log(postableData);
 
       // CHANGING THE STATUS OF DPCODE TO SUCCESS AFTER CLICKING SUBMIT BUTTON
       const reqDpCodesData = dpCodeValidationList && dpCodeValidationList[dpCodeTypeQuery] && dpCodeValidationList[dpCodeTypeQuery].dpCodesData.length > 0 && dpCodeValidationList[dpCodeTypeQuery].dpCodesData.map((eDpcode) => {

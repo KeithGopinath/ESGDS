@@ -177,30 +177,30 @@ const CalculatePercentile = () => {
     const tableRowData = (data) => data.map((data) => ({
       key: data.dpCode,
       dpCode: data.dpCode,
-      fiveYearsBackAvg: (data.fiveYearsBackAvg >= 0 && data.fiveYearsBackAvg !== '') ? data.fiveYearsBackAvg : '--',
-      fourYearsBackAvg: (data.fourYearsBackAvg >= 0 && data.fourYearsBackAvg !== '') ? data.fourYearsBackAvg : '--',
-      threeYearsBackAvg: (data.threeYearsBackAvg >= 0 && data.threeYearsBackAvg !== '') ? data.threeYearsBackAvg : '--',
-      twoYerasBackAvg: (data.twoYearsBackAvg >= 0 && data.twoYearsBackAvg !== '') ? data.twoYearsBackAvg : '--',
-      oneYearBackAvg: (data.oneYearBackAvg >= 0 && data.oneYearBackAvg !== '') ? data.oneYearBackAvg : '--',
+      fiveYearsBackAvg: (data.fiveYearsBackAvg >= 0 && data.fiveYearsBackAvg !== '') ? data.fiveYearsBackAvg === null ? '--' : data.fiveYearsBackAvg : '--',
+      fourYearsBackAvg: (data.fourYearsBackAvg >= 0 && data.fourYearsBackAvg !== '') ? data.fourYearsBackAvg === null ? '--' :data.fourYearsBackAvg : '--',
+      threeYearsBackAvg: (data.threeYearsBackAvg >= 0 && data.threeYearsBackAvg !== '') ? data.threeYearsBackAvg === null ? '--' : data.threeYearsBackAvg : '--',
+      twoYerasBackAvg: (data.twoYearsBackAvg >= 0 && data.twoYearsBackAvg !== '') ? data.twoYearsBackAvg === null ? '--' : data.twoYearsBackAvg : '--',
+      oneYearBackAvg: (data.oneYearBackAvg >= 0 && data.oneYearBackAvg !== '') ? data.oneYearBackAvg === null ? '--' : data.oneYearBackAvg : '--',
       projectedAvg: <Form.Control
         type="text"
         name="projectedAvg"
         value={data.projectedAvg}
         onChange={(e) => { onAverageChange(e, data) }}
         maxLength={isNaN(data.projectedAvg) ? 2 : ''}
-        className={classNamefinder(data.projectedAvg) ? errorAlert : ''} />,
-      fiveYearsBackSD: (data.fiveYearsBackSd >= 0 && data.fiveYearsBackSd !== '') ? data.fiveYearsBackSd : '--',
-      fourYearsBackSD: (data.fourYearsBackSd >= 0 && data.fourYearsBackSd !== '') ? data.fourYearsBackSd : '--',
-      threeYearsBackSD: (data.threeYearsBackSd >= 0 && data.threeYearsBackSd !== '') ? data.threeYearsBackSd : '--',
-      twoYearsBackSD: (data.twoYearsBackSd >= 0 && data.twoYearsBackSd !== '') ? data.twoYearsBackSd : '--',
-      oneYearBackSD: (data.oneYearBackSd >= 0 && data.oneYearBackSd !== '') ? data.oneYearBackSd : '--',
+        className={`projected-avg ${classNamefinder(data.projectedAvg) ? errorAlert : ''}`} />,
+      fiveYearsBackSD: (data.fiveYearsBackSd >= 0 && data.fiveYearsBackSd !== '') ? data.fiveYearsBackSd === null ? '--' : data.fiveYearsBackSd : '--',
+      fourYearsBackSD: (data.fourYearsBackSd >= 0 && data.fourYearsBackSd !== '') ? data.fourYearsBackSd === null ? '--' : data.fourYearsBackSd : '--',
+      threeYearsBackSD: (data.threeYearsBackSd >= 0 && data.threeYearsBackSd !== '') ? data.threeYearsBackSd === null ? '--' : data.threeYearsBackSd : '--',
+      twoYearsBackSD: (data.twoYearsBackSd >= 0 && data.twoYearsBackSd !== '') ? data.twoYearsBackSd === null ? '--' : data.twoYearsBackSd : '--',
+      oneYearBackSD: (data.oneYearBackSd >= 0 && data.oneYearBackSd !== '') ? data.oneYearBackSd=== null ? '--' : data.oneYearBackSd : '--',
       projectedSD: <Form.Control
         type="text"
         name="projectedSD"
         value={data.projectedSd}
         onChange={(e) => { onSDChange(e, data) }}
         maxLength={isNaN(data.projectedSd) ? 2 : ''}
-        className={classNamefinder(data.projectedSd) ? errorAlert : ''} />,
+        className={`projected-avg ${classNamefinder(data.projectedSd) ? errorAlert : ''}`} />,
     }));
 
     return {
