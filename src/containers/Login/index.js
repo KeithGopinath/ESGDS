@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
+import { message } from 'antd';
 import Banner from '../../../assets/images/login_image.png';
 import Logo from '../../../assets/images/logo.png';
 import { history } from '../../routes';
 import OtpScreen from '../OtpScreen';
 import ForgotPassword from '../ForgotPassword';
-import { message } from 'antd';
 import PageLoader from '../../components/PageLoader';
 
 const Login = () => {
@@ -26,6 +26,8 @@ const Login = () => {
   const [forgotPasswordvalidate, setforgotPasswordvalidate] = useState('');
   const [start, setStart] = useState(false);
   const [seconds, setSeconds] = useState(30);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   // login
@@ -65,15 +67,16 @@ const Login = () => {
     else if (loginRole && login) {
       setShowOtp(true);
       setLoginRole(false);
+      setLoading(false)
     }
   }, [login]);
 
   useEffect(() => {
     if (loginRole && login && role) {
       message.success(login.message)
-    }
-    else if (loginRole && invalidLogin) {
+    } else if (loginRole && invalidLogin) {
       message.error(invalidLogin.message)
+      setLoading(false)
     }
   }, [login, invalidLogin]);
 
@@ -97,16 +100,16 @@ const Login = () => {
   }, [validPasswordChange, InvalidPasswordChange]);
 
   // resend timer
-  useEffect(() => {
-    if (start) {
-      if (seconds > 0) {
-        setTimeout(() => setSeconds(seconds - 1), 1000);
-      } else {
-        setStart(false);
-        setOtpAlert('');
-      }
-    }
-  });
+  // useEffect(() => {
+  //   if (start) {
+  //     if (seconds > 0) {
+  //       setTimeout(() => setSeconds(seconds - 1), 1000);
+  //     } else {
+  //       setStart(false);
+  //       setOtpAlert('');
+  //     }
+  //   }
+  // });
 
   // Condition for Email Validation
   const validateEmail = (emailmsg) => {
@@ -138,24 +141,35 @@ const Login = () => {
       setValidate('border-danger');
       message.error('Please enter the vaild password')
     } else {
-      setLoginAlert('');
-      setLoginRole(true);
-      setStart(true);
-      setSeconds(30);
-      const login = { email, password }
-      let objJsonStr = JSON.stringify(login);
-      let user = Buffer.from(objJsonStr).toString("base64");
-      const loginDetails = {
-        login: user
+      setLoading(true)
+      grecaptcha.ready(() => {
+        grecaptcha.execute('6LdOZdkcAAAAALeA5cJKyKQv-D3-ulqxs5-KewEr', { action: 'login' }).then((token) => {
+          submitToken(token)
+          // grecaptcha.reset();
+        })
+      })
+
+      const submitToken = token => {
+        setLoginAlert('');
+        setLoginRole(true);
+        setStart(true);
+        // setSeconds(30);
+        const login = { email, password }
+        let objJsonStr = JSON.stringify(login);
+        let user = Buffer.from(objJsonStr).toString("base64");
+        const loginDetails = {
+          login: user,
+          token
+        }
+        dispatch({ type: 'LOGIN_REQUEST', loginDetails });
       }
-      dispatch({ type: 'LOGIN_REQUEST', loginDetails });
     }
   };
 
   // Otp screen
   const handleClose = () => {
     setShowOtp(false);
-    setSeconds(0);
+    // setSeconds(0);
     setOtpAlert('');
     setOtp('');
     sessionStorage.clear();
@@ -173,16 +187,16 @@ const Login = () => {
       let user = Buffer.from(objJsonStr).toString("base64");
 
       const otpDetails = {
-        login: user
+        login: user,
+        token: captchaToken
       }
-
       dispatch({ type: 'OTP_REQUEST', otpDetails });
     }
   }
 
   // resend otp 
   const resendOtp = () => {
-    setSeconds(30);
+    // setSeconds(30);
     setStart(true);
     const login = { email, password }
     let objJsonStr = JSON.stringify(login);
@@ -220,8 +234,7 @@ const Login = () => {
     if (!forgotemail || valid == false) {
       setforgotPasswordAlert('Please enter the valid credential')
       setforgotPasswordvalidate('border-danger')
-    }
-    else {
+    } else {
       const payload = {
         email: forgotemail,
         link: "http://localhost:3000/password-resets",
@@ -274,7 +287,7 @@ const Login = () => {
               </div>
             </Form.Group>
             <span className="w-100 text-center text-danger"><p>{loginAlert}</p></span>
-            {loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
+            {loading || loginLoading ? <PageLoader load="login-loader" /> : <Button className="w-100 login-button" type="submit" onClick={onLogin}>Login</Button>}
           </Card>
           <OtpScreen
             show={showOtp}
@@ -287,7 +300,7 @@ const Login = () => {
             validateOtp={validate}
             alert={otpAlert}
             email={email}
-            seconds={seconds}
+            // seconds={seconds}
             otpLoading={otpLoading}
           />
           <ForgotPassword

@@ -19,7 +19,7 @@ const OtpScreen = ({
         isInputNum
         focusStyle="otp-focus"
       />
-      {start ? <p className="otp-resend-text">Resend code in 00:{seconds.toString().length === 1 ? `0${seconds}` : seconds}</p> : seconds === 0 ? <span className="text-primary otp-resend" onClick={resendOtp}>Resend OTP</span> : ''}
+      {/* {start ? <p className="otp-resend-text">Resend code in 00:{seconds.toString().length === 1 ? `0${seconds}` : seconds}</p> : seconds === 0 ? <span className="text-primary otp-resend" onClick={resendOtp}>Resend OTP</span> : ''} */}
     </div>);
 
   return (
