@@ -262,13 +262,15 @@ const Task = (props) => {
   const currentTab = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isCompanyRep_CR, isClientRep_CR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
-    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
-    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'Company Representative' && currentTab === 'Data Review',
+    currentRole === 'Client Representative' && currentTab === 'Data Review',
+    currentRole === 'Company Representative' && currentTab === 'Controversy Review',
+    currentRole === 'Client Representative' && currentTab === 'Controversy Review',
     currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
@@ -311,6 +313,9 @@ const Task = (props) => {
       // KEY NAMES CHANGES REQ FROM SHIVA !
       [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : [];
     }
+    if (isCompanyRep_CR || isClientRep_CR) {
+      [returnableTask] = (reqTASK && reqTASK.task && reqTASK.task.data) ? [{ controversy: { ...reqTASK.task.data, dpCodesData: reqTASK.task.data.dpCodesList } }] : [];
+    }
     if (isValidationCalled) {
       [returnableTask] = (dpCodeValidationFromStore && dpCodeValidationFromStore.validation) ? [dpCodeValidationFromStore.validation] : [];
     }
@@ -330,6 +335,9 @@ const Task = (props) => {
       }
     }
     if (isAnalyst_CC && reqTaskData.controversy) {
+      return reqTaskData.controversy;
+    }
+    if ((isCompanyRep_CR || isClientRep_CR) && reqTaskData.controversy) {
       return reqTaskData.controversy;
     }
     return { dpCodesData: [] };
@@ -369,6 +377,9 @@ const Task = (props) => {
       }
     }
     if (isAnalyst_CC) {
+      return reqTaskList.dpCodesData;
+    }
+    if (isClientRep_CR || isClientRep_CR) {
       return reqTaskList.dpCodesData;
     }
     return [];
@@ -536,10 +547,13 @@ const Task = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!isAnalyst_CC && !isValidationCalled) {
+    if (!isAnalyst_CC && !isCompanyRep_CR && !isClientRep_CR && !isValidationCalled) {
       dispatch({ type: 'TASK_GET_REQUEST', taskId: taskDetails.taskId });
     }
     if (isAnalyst_CC && !isValidationCalled) {
+      dispatch({ type: 'CONTROVERSY_TASK_GET_REQUEST', taskId: taskDetails.taskId });
+    }
+    if ((isCompanyRep_CR || isClientRep_CR) && !isValidationCalled) {
       dispatch({ type: 'CONTROVERSY_TASK_GET_REQUEST', taskId: taskDetails.taskId });
     }
     if (isValidationCalled) {
@@ -664,7 +678,7 @@ const Task = (props) => {
                 isAnalyst_DC={isAnalyst_DC}
               />}
 
-            {isAnalyst_CC &&
+            {(isAnalyst_CC || isCompanyRep_CR || isClientRep_CR) &&
               <ControversyTaskTable
                 taskDetails={taskDetails}
                 dpCodesData={reqDpCodesData}

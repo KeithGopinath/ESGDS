@@ -188,6 +188,54 @@ const PendingTasks = () => {
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
+  const TEMP_DATA_CONTROVERSY_REVIEW = {
+    taskNumber: 'DT57',
+    taskId: '615546a8458bf380ea99b2ff',
+    companyId: '6153db9239d3c29224420e5b',
+    company: 'NexsA Company',
+    analystId: '615314b637bf6e4edda2440b',
+    analyst: 'Test Analyst   One',
+    taskStatus: 'Pending',
+    status: true,
+    createdBy: {
+      roleDetails: {
+        roles: [
+          '60a24473356d366605b04527',
+        ],
+        primaryRole: '60a24473356d366605b04527',
+      },
+      otp: '4321',
+      role: 'admin',
+      comments: '',
+      isUserApproved: true,
+      status: true,
+      authenticationLetterForClientUrl: '',
+      companyIdForClient: '',
+      isRoleAssigned: true,
+      isAssignedToGroup: false,
+      isUserActive: true,
+      isUserRejected: false,
+      keywords: [
+        'esgsupera 2021 gmail com',
+        'esg',
+      ],
+      _id: '60a2510e356d366605b04533',
+      picture: 'https://gravatar.com/avatar/ad36c09a00c4165e6e7c57a0c57b2dd5?d=identicon',
+      name: 'esg',
+      email: 'esgsupera2021@gmail.com',
+      password: '$2b$04$7Q9lAODvt17EJaYa1097SONE.sHo/cMReFnoZsnviXfXlENbFLKji',
+      roleId: '60a24473356d366605b04527',
+      createdAt: '2021-05-17T11:18:38.696Z',
+      updatedAt: '2021-11-09T04:38:06.328Z',
+      __v: 0,
+      userType: 'SuperAdmin',
+      phoneNumber: '3457895689',
+    },
+    lastModifiedDate: '2021-11-03T08:17:39.682Z',
+    reviewDate: '2021-11-24T01:57:39.035Z',
+    totalNoOfControversy: 11,
+  };
+
   const getReqTabs = (e) => {
     if (isAnalyst) {
       return [
@@ -197,8 +245,24 @@ const PendingTasks = () => {
       ];
     }
     if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.qaTaskList }]; }
-    if (isCompanyRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList }]; }
-    if (isClientRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList }]; }
+    if (isCompanyRep) {
+      return [
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList },
+        {
+          label: 'Controversy Review',
+          data: (!e.pendingTasksList) ? [] : [TEMP_DATA_CONTROVERSY_REVIEW],
+        }, // CONTROVERSY REVIEW ECS - 408
+      ];
+    }
+    if (isClientRep) {
+      return [
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList },
+        {
+          label: 'Controversy Review',
+          data: (!e.pendingTasksList) ? [] : [TEMP_DATA_CONTROVERSY_REVIEW],
+        }, // CONTROVERSY REVIEW ECS - 408
+      ];
+    }
     return [{
       label: '', data: [],
     }];
@@ -258,7 +322,7 @@ const PendingTasks = () => {
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' && reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>

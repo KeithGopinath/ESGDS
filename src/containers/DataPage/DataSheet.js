@@ -178,13 +178,15 @@ export const DataSheetComponent = (props) => {
   const currentTab = sessionStorage.tab;
 
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
-  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, IsAdmin] = [
+  const [isAnalyst_DC, isAnalyst_DCR, isAnalyst_CC, isQA_DV, isCompanyRep_DR, isClientRep_DR, isCompanyRep_CR, isClientRep_CR, IsAdmin] = [
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'Analyst' && currentTab === 'Controversy Collection',
     currentRole === 'QA',
-    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
-    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'Company Representative' && currentTab === 'Data Review',
+    currentRole === 'Client Representative' && currentTab === 'Data Review',
+    currentRole === 'Company Representative' && currentTab === 'Controversy Review',
+    currentRole === 'Client Representative' && currentTab === 'Controversy Review',
     currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 
@@ -885,7 +887,7 @@ export const DataSheetComponent = (props) => {
       }
       return false;
     }
-    if (isCompanyRep_DR || isClientRep_DR || IsAdmin) {
+    if (isCompanyRep_DR || isClientRep_DR || IsAdmin || isClientRep_CR || isCompanyRep_CR) {
       return true;
     }
     return false;
@@ -921,14 +923,14 @@ export const DataSheetComponent = (props) => {
       {/* HISTORY YEAR Field */}
       <FieldWrapper
         label={<div>Year</div>}
-        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={<div className="datapage-current-tab">{defaultData.fiscalYear}</div>}
       />
       {/* SOURCE NAME Field */}
       <FieldWrapper
         label={<div>Source Name<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Form.Control
@@ -946,7 +948,7 @@ export const DataSheetComponent = (props) => {
       {/* SOURCE Field */}
       <FieldWrapper
         label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !isAnalyst_CC}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Select
@@ -967,7 +969,7 @@ export const DataSheetComponent = (props) => {
         }
       />
       {/* ADD SOURCE Button */}
-      {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !isAnalyst_CC &&
+      {(isAnalyst_DC || isAnalyst_DCR || isQA_DV) && !isHistoryType && !disableField && !(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR) &&
         <Col lg={12}>
           <Button className="datapage-addsource-button" onClick={onClickOpenAddSource}>Add Source</Button>
         </Col>}
@@ -1098,7 +1100,7 @@ export const DataSheetComponent = (props) => {
       {/* URL Field */}
       <FieldWrapper
         label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Form.Control
@@ -1116,7 +1118,7 @@ export const DataSheetComponent = (props) => {
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
         label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <DatePicker
@@ -1182,7 +1184,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Fiscal Year Field */}
       <FieldWrapper
         label={<div>Fiscal Year<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Select
@@ -1205,14 +1207,14 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Fiscal Year End Date Field */}
       <FieldWrapper
         label={<div>Fiscal Year End Date</div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={formControversyFiscalYearEnd || 'NA'}
       />
       {/* Controversy Assessment Date Field */}
       <FieldWrapper
         label={<div>Assessment date</div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <DatePicker
@@ -1229,7 +1231,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Reassessment Date Field */}
       <FieldWrapper
         label={<div>Reassessment date</div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <DatePicker
@@ -1246,7 +1248,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Review Date Field */}
       <FieldWrapper
         label={<div>Review date</div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <DatePicker
@@ -1263,7 +1265,7 @@ export const DataSheetComponent = (props) => {
       {/* RESPONSE Field */}
       <FieldWrapper
         label={<div>Commitee review<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Select
@@ -1357,7 +1359,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={isAnalyst_CC}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
           <Form.Control
@@ -1384,7 +1386,7 @@ export const DataSheetComponent = (props) => {
           onClickSave={props.onClickSave}
         />}
 
-      {!(isAnalyst_CC && isHistoryType) &&
+      {!((isAnalyst_CC || isClientRep_CR || isCompanyRep_CR) && isHistoryType) && // Button elements will not appear if it is historical data of controversy screen
         <Col lg={12} className="datapage-button-wrap">
           {(isAnalyst_DC || isAnalyst_CC || (isAnalyst_DCR && isErrorAccepted)) && !isHistoryType && defaultData.status !== 'Completed' &&
             <Button className="datapage-button" variant="success" onClick={dummySaveClickHandler}>Save</Button>}
