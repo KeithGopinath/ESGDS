@@ -142,14 +142,14 @@ const Login = () => {
       message.error('Please enter the vaild password')
     } else {
       setLoading(true)
-      grecaptcha.ready(() => {
-        grecaptcha.execute('6LdSd94cAAAAAGqQ_h1zL1dLqM0fhX-qlUi1tP3c', { action: 'login' }).then((token) => {
-          submitToken(token)
-          // grecaptcha.reset();
-        })
-      })
+      // grecaptcha.ready(() => {
+      //   grecaptcha.execute('6LdSd94cAAAAAGqQ_h1zL1dLqM0fhX-qlUi1tP3c', { action: 'login' }).then((token) => {
+      //     submitToken(token)
+      //     // grecaptcha.reset();
+      //   })
+      // })
 
-      const submitToken = token => {
+      // const submitToken = token => {
         setLoginAlert('');
         setLoginRole(true);
         setStart(true);
@@ -159,10 +159,10 @@ const Login = () => {
         let user = Buffer.from(objJsonStr).toString("base64");
         const loginDetails = {
           login: user,
-          token
+          // token
         }
         dispatch({ type: 'LOGIN_REQUEST', loginDetails });
-      }
+      // }
     }
   };
 
