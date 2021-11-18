@@ -188,6 +188,7 @@ const PendingTasks = () => {
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
+
   const getReqTabs = (e) => {
     if (isAnalyst) {
       return [
@@ -197,8 +198,24 @@ const PendingTasks = () => {
       ];
     }
     if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.qaTaskList }]; }
-    if (isCompanyRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList }]; }
-    if (isClientRep) { return [{ label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList }]; }
+    if (isCompanyRep) {
+      return [
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList },
+        {
+          label: 'Controversy Review',
+          data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.repControversyTaskList,
+        }, // CONTROVERSY REVIEW ECS - 408
+      ];
+    }
+    if (isClientRep) {
+      return [
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList },
+        {
+          label: 'Controversy Review',
+          data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.repControversyTaskList,
+        }, // CONTROVERSY REVIEW ECS - 408
+      ];
+    }
     return [{
       label: '', data: [],
     }];
@@ -258,7 +275,7 @@ const PendingTasks = () => {
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' && reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>
