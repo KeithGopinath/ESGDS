@@ -178,8 +178,8 @@ const ErrorDataSheetTwo = (props) => {
   // BOOLEANS BASED ON CURRENT ROLE & SELECTED TAB
   const [isAnalyst_DCR, isCompanyRep_DR, isClientRep_DR] = [
     currentRole === 'Analyst' && currentTab === 'Data Correction',
-    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
-    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'Company Representative' && currentTab === 'Data Review',
+    currentRole === 'Client Representative' && currentTab === 'Data Review',
   ];
 
   const defaultData = props.reqData;
@@ -404,7 +404,7 @@ const ErrorDataSheetTwo = (props) => {
       }
       return false;
     }
-    return false;
+    return true;
   };
 
   const doValidate = () => {

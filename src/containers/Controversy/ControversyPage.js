@@ -15,6 +15,20 @@ import PageLoader from '../../components/PageLoader';
 
 
 const ControversyPage = (props) => {
+  // CURRENT ROLE
+  const currentRole = sessionStorage.role;
+
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // GET REQ ROLE BASED BOOLEANS
+  const [isAnalyst_CC, isCompanyRep_CR, isClientRep_CR] = [
+    currentRole === 'Analyst' && currentTab === 'Controversy Collection',
+    currentRole === 'Company Representative' && currentTab === 'Controversy Review',
+    currentRole === 'Client Representative' && currentTab === 'Controversy Review',
+  ];
+
+  // DISPATCH DECLARATION
   const dispatch = useDispatch();
   const sideBarRef = useRef();
   const { dpCodeData } = props.location.state;
@@ -138,7 +152,7 @@ const ControversyPage = (props) => {
                 <Spin indicator={<PageLoader />} spinning={false} >
                   {reqHistoricalData.length > 0 ?
                     <Tabs style={{ marginLeft: '5px' }} >
-                      {reqHistoricalData.map((e) => (
+                      {reqHistoricalData.reverse().map((e) => (
                         <Tabs.TabPane tab={moment(e.updatedAt).format('DD-MM-YYYY LT')} key={`${e.id} ${e.updatedAt}`}>
                           <div className="controversy-history-datasheet">
                             <DataSheetComponent
@@ -166,7 +180,7 @@ const ControversyPage = (props) => {
                   />
                   <Col lg={12} className="datapage-button-wrap">
                     {reqCurrentData.status === 'Completed' && <Button className="datapage-button" variant="danger" onClick={onClickBack}>Back</Button>}
-                    <Button className="datapage-button" variant="success" onClick={submitAndCloseClickHandler}>Sumbit</Button>
+                    {isAnalyst_CC && !(isCompanyRep_CR || isClientRep_CR) && <Button className="datapage-button" variant="success" onClick={submitAndCloseClickHandler}>Sumbit</Button>}
                   </Col>
                 </Spin>
               </DataAccordian>
