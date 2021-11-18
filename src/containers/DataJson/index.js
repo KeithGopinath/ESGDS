@@ -34,7 +34,7 @@ const DataJson = ({ flag }) => {
       dispatch({ type: 'GET_DATA_JSON_REQUEST' });
     }
     tabsRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
-    setTabFlag('Pending Companies');
+    setTabFlag(tabLabelSets ? tabLabelSets[0].label : '');
   }, []);
 
   // To display Generate Json messege and refresh the page
