@@ -17,7 +17,7 @@ const SideMenuBar = React.forwardRef((props, ref) => {
   const role = (otpDetails && otpDetails.user.roleDetails.primaryRole.label) || (userDetails && userDetails.user && userDetails.user.roleDetails.primaryRole.label)
   const userRole = roleChange && roleChange.label || role || sessionStorage.role;
 
-  const conditionedJsonGenerationSubMenu = userRole == 'Client Representative' ? [JsonGenerationSubMenu[0]] : JsonGenerationSubMenu;
+  const conditionedJsonGenerationSubMenu = userRole == 'Client Representative' ? JsonGenerationSubMenu : JsonGenerationSubMenu;
   const taxonomyBtnRefs = useRef(TaxonomySubMenu.map(() => React.createRef()));
   const validationBtnRefs = useRef(ValidationSubMenu.map(() => React.createRef()));
   const groupsBtnRefs = useRef(GroupsSubMenu.map(() => React.createRef()));
