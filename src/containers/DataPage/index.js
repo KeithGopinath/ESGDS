@@ -33,8 +33,8 @@ const DataPage = (props) => {
     currentRole === 'Analyst' && currentTab === 'Data Collection',
     currentRole === 'Analyst' && currentTab === 'Data Correction',
     currentRole === 'QA',
-    currentRole === 'Company Representative' || currentRole === 'CompanyRep',
-    currentRole === 'Client Representative' || currentRole === 'ClientRep',
+    currentRole === 'Company Representative' && currentTab === 'Data Review',
+    currentRole === 'Client Representative' && currentTab === 'Data Review',
     currentRole === 'SuperAdmin' || currentRole === 'Admin' || currentRole === 'GroupAdmin',
   ];
 

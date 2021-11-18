@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 import React, { useRef, useEffect } from 'react';
@@ -80,11 +81,24 @@ const ControversyPendingTaskTable = (props) => {
 };
 
 const Controversy = (props) => {
-  // PROPS { taskDetails, dpCodeDetails }
-  const { taskDetails, dpCodeDetails } = props.location.state;
+  // CURRENT ROLE
+  const currentRole = sessionStorage.role;
+
+  // CURRENT TAB
+  const currentTab = sessionStorage.tab;
+
+  // GET REQ ROLE BASED BOOLEANS
+  const [isAnalyst_CC, isCompanyRep_CR, isClientRep_CR] = [
+    currentRole === 'Analyst' && currentTab === 'Controversy Collection',
+    currentRole === 'Company Representative' && currentTab === 'Controversy Review',
+    currentRole === 'Client Representative' && currentTab === 'Controversy Review',
+  ];
 
   // DISPATCH DECLARATION
   const dispatch = useDispatch();
+
+  // PROPS { taskDetails, dpCodeDetails }
+  const { taskDetails, dpCodeDetails } = props.location.state;
 
   // COMPONENT DID MOUNT LIKE USEEFFECT HOOKS TO CALL API
   useEffect(() => {
@@ -154,6 +168,7 @@ const Controversy = (props) => {
                   body={reqDpCodeData.avgResponse}
                 />
                 { (!reqConDpCodeDataFromStore.error && !reqConDpCodeDataFromStore.isLoading) && <Divider /> }
+                {isAnalyst_CC && !(isCompanyRep_CR || isClientRep_CR) &&
                 <Col lg={12} style={{ justifyContent: 'flex-end', alignItems: 'center', display: 'flex' }}>
                   { (!reqConDpCodeDataFromStore.error && !reqConDpCodeDataFromStore.isLoading) &&
                   <Button
@@ -162,7 +177,7 @@ const Controversy = (props) => {
                     onClick={onClickAddNewControversy}
                   >Add New +
                   </Button>}
-                </Col>
+                </Col>}
               </Row>
             </div>
             <div style={{ padding: '20px 2%' }}>

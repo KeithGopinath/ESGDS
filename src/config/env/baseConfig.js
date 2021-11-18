@@ -32,6 +32,7 @@ export default {
     taxonomyCompanies: 'companies/all/unassigned',
     uploadCompanies: 'companies/upload-companies-file',
     createTask: 'taskAssignments/create',
+    // getTaskList: 'taskAssignments',
     getTaskList: 'taskAssignments',
     getSourceType: 'sourceTypes',
     postSourceType: 'companySources/uploadCompanySource',
@@ -77,6 +78,9 @@ export default {
     userAssingCompanies: 'users/assign-companies',
     cloneActuals: 'projected_values/copy_actuals_as_projected',
     getSubsetTaxonomyDownload: 'datapoints/downloadSubsetTaxmonony',
+    getPendingTaskAssignment: 'taskAssignments/SuperAdmin/Pending',
+    getCompletedTaskAssignment: 'taskAssignments/SuperAdmin/Completed',
+    getControversyTaskAssignment: 'taskAssignments/SuperAdmin/Controversy',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
