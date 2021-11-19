@@ -21,6 +21,7 @@ import Select from 'react-select';
 import PageLoader from '../../components/PageLoader';
 
 const TaskCreate = ({ flag }) => {
+
   const [taskFlow, settaskFlow] = useState(flag ? 2 : 0);
   const [companyInfo, setcompanyInfo] = useState([]);
   const [batchInfo, setbatchInfo] = useState([]);
@@ -40,10 +41,15 @@ const TaskCreate = ({ flag }) => {
   const [taxonomy, setTaxonomy] = useState();
   const [errorAlert, setErrorAlert] = useState('');
   const [submitFlag, setSubmitFlag] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [min, setmin] = useState(0);
+  const [max, setmax] = useState(20);
+  const [searchQuerybatch, setSearchQuerybatch] = useState('');
+  const [minbatch, setminbatch] = useState(0);
+  const [maxbatch, setmaxbatch] = useState(20);
 
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
-
 
   const apidata = useSelector((tasklist) => tasklist.taskDetail.taskdata);
   const apidataLoading = useSelector((tasklist) => tasklist.taskDetail);
@@ -56,16 +62,17 @@ const TaskCreate = ({ flag }) => {
   const createControversyTaskError = useSelector((state) => state.createControversyTask.error);
   const aftertaskcreated = useSelector((taskresponse) => taskresponse.createTask.taskpost);
   const aftertaskcreatedLoading = useSelector((taskresponse) => taskresponse.createTask);
+  
   const optionsForPagination = {
     sizePerPage: 10,
     noDataText: (onpillarclickLoading.isLoading) ? <PageLoader load={"comp-loader"} /> : "There is no data to display",
   };
+
   useEffect(() => {
     if (flag) {
       dispatch({ type: 'ClientTaxonomy_REQUEST' });
     } else {
       dispatch({ type: 'TASKDETAILS_REQUEST' });
-
     }
     dispatch({ type: 'ONSELECTPILLAR_RESET' });
     setRole(sessionStorage.role);
@@ -81,8 +88,7 @@ const TaskCreate = ({ flag }) => {
   useEffect(() => {
     if (createControversyTask && submitFlag && flag) {
       message.success(createControversyTask.message)
-    }
-    else if (createControversyTaskError && submitFlag && flag) {
+    } else if (createControversyTaskError && submitFlag && flag) {
       message.error(createControversyTaskError.message)
     }
   }, [createControversyTask, createControversyTaskError]);
@@ -101,21 +107,21 @@ const TaskCreate = ({ flag }) => {
       message.success(aftertaskcreated.message);
     }
   }, [aftertaskcreated]);
+
   useEffect(() => {
     if ((apidataLoading.error || onpillarclickLoading.error || aftertaskcreatedLoading.error) && !flag) {
       message.error((apidataLoading.error && apidataLoading.error.message) || (onpillarclickLoading.error && onpillarclickLoading.error.message) || (aftertaskcreatedLoading.error && aftertaskcreatedLoading.error.message));
     }
-  }, [apidataLoading.error, onpillarclickLoading.error, aftertaskcreatedLoading.error])
-
+  }, [apidataLoading.error, onpillarclickLoading.error, aftertaskcreatedLoading.error]);
 
   const getApiData = apidata && apidata.data;
   const groupData = (roleType === 'SuperAdmin' || roleType === 'Admin') ? getApiData && getApiData.adminList : getApiData && getApiData.groupAdminList;
   const ispillarData = onpillarclick && onpillarclick.data;
 
-  const taxonomyOptions = taxonomyData && taxonomyData.rows.map((data) => ({
+  const taxonomyOptions = taxonomyData ? taxonomyData && taxonomyData.rows.map((data) => ({
     value: data._id,
     label: data.taxonomyName
-  }))
+  })) : [];
 
   const onTaxonomyChange = (taxonomy) => {
     setTaxonomy(taxonomy)
@@ -149,18 +155,18 @@ const TaskCreate = ({ flag }) => {
     }
   };
 
-  // eslint-disable-next-line consistent-return
+  // select all companies
   const onSelectAllRow = (isSelected) => {
     if (isSelected) {
       const dummy = [...rowDetail];
       rowDetail.splice(0, rowDetail.length);
-      const finalAll = ispillarData && ispillarData.companies.map((args) => {
+      const finalAll = controversyTaskData && controversyTaskData.companies.map((args) => {
         const rowDetails = { id: args.id, selectedCompany: args.companyName };
         dummy.push(rowDetails);
         return dummy;
       });
       setRowDetails(finalAll[0]);
-      return ispillarData.companies.map((e) => e.id);
+      return controversyTaskData && controversyTaskData.companies.map((e) => e.id);
     }
     if (!isSelected) {
       setRowDetails([]);
@@ -215,11 +221,9 @@ const TaskCreate = ({ flag }) => {
     batchList.map((batchdetails) => {
       if (batchdetails.batchID === batchid.batchID) {
         const modifiedYear = batchdetails.batchYear.map((args) => {
-
           const yearArray = { value: args, label: args };
           return yearArray;
         });
-
         const currentBatchinfo = {
           Batchname: batchdetails.batchName, Batchid: batchdetails.batchID, Batchyear: modifiedYear, Pillars: batchdetails.pillars,
         };
@@ -231,7 +235,6 @@ const TaskCreate = ({ flag }) => {
   };
 
   const handleChangePillar = (checkedValues) => {
-
     const val = checkedValues.target.value;
     const selectedPillar = [];
     batchInfo.Pillars && batchInfo.Pillars.map((e) => {
@@ -299,6 +302,7 @@ const TaskCreate = ({ flag }) => {
     setRadioEleqa(arg.id);
   };
 
+  // task create
   const onCreateTask = () => {
     if (!flag) {
       if (!pillar) {
@@ -496,12 +500,7 @@ const TaskCreate = ({ flag }) => {
     <Radio key={e.value} value={e.value}>{e.label}</Radio>
   ));
 
-  // *** groups with search starts here ***
-  groupData
-  const [searchQuery, setSearchQuery] = useState('');
-  const [min, setmin] = useState(0);
-  const [max, setmax] = useState(20);
-
+  // groups with search starts here
   const searchtheme = createTheme({
     palette: {
       primary: {
@@ -549,11 +548,6 @@ const TaskCreate = ({ flag }) => {
   // *** groups with search ends here ***
 
   // *** batches with search starts here ***
-  groupData
-  const [searchQuerybatch, setSearchQuerybatch] = useState('');
-  const [minbatch, setminbatch] = useState(0);
-  const [maxbatch, setmaxbatch] = useState(20);
-
   const searchthemebatch = createTheme({
     palette: {
       primary: {
@@ -563,17 +557,20 @@ const TaskCreate = ({ flag }) => {
       },
     },
   });
+
   const onhandlePagebatch = (e, page) => {
     const minValue = (page - 1) * cardPerPageBatch;
     const maxValue = page * cardPerPageBatch;
     setminbatch(minValue);
     setmaxbatch(maxValue);
   };
+
   const onSearchBatch = (data) => {
     const searchData = data.target.value;
     setSearchQuerybatch(searchData);
 
   };
+
   const searchfilterbatch = (search, card) => {
     const filteredData = card.filter((e) => {
       if ((e.batchName.toLowerCase()).includes(search.toLowerCase())) {
@@ -583,6 +580,7 @@ const TaskCreate = ({ flag }) => {
     });
     return filteredData;
   };
+  
   const cardPerPageBatch = 20;
   const batchCardvalues = companyInfo && companyInfo.batches;
   const batchCount = batchCardvalues && batchCardvalues.length;
@@ -597,8 +595,7 @@ const TaskCreate = ({ flag }) => {
     </Col>
   ));
 
-  // *** batches with search ends here ***
-
+  // batch info tab
   const batchInfoTab = () => (
     <Container>
       <Row className="task-row">
@@ -620,102 +617,72 @@ const TaskCreate = ({ flag }) => {
           </Col>
         }
       </Row>
-          {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
-      <Row className="row-pad task-row">
-        <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
-          {flag ?
-            <div className="select-taxonomy">
-              <div className="task-role-analystsla" > Select Taxonomy <span className="mandatory-color">*</span></div>
-              <div >
-                <Select
-                  options={taxonomyOptions}
-                  name="taxonomy"
-                  value={taxonomy}
-                  onChange={onTaxonomyChange}
-                  className={!taxonomy && errorAlert}
-                />
+      {taxonomyDataLoading ? <PageLoader /> : <React.Fragment>
+        <Row className="row-pad task-row">
+          <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
+            {flag ?
+              <div className="select-taxonomy">
+                <div className="task-role-analystsla" > Select Taxonomy <span className="mandatory-color">*</span></div>
+                <div >
+                  <Select
+                    options={taxonomyOptions}
+                    name="taxonomy"
+                    value={taxonomy}
+                    onChange={onTaxonomyChange}
+                    className={!taxonomy && errorAlert}
+                  />
+                </div>
               </div>
-            </div>
-            :
-            <div className="radio-select">
-              <div className="task-role">Select pillar for task <span className="mandatory-color">*</span></div>
-              <div className="task-pillar-select">
-                <Radio.Group value={pillar.value} onChange={handleChangePillar} >
-                  {pillaRadio}
-                </Radio.Group>
+              :
+              <div className="radio-select">
+                <div className="task-role">Select pillar for task <span className="mandatory-color">*</span></div>
+                <div className="task-pillar-select">
+                  <Radio.Group value={pillar.value} onChange={handleChangePillar} >
+                    {pillaRadio}
+                  </Radio.Group>
+                </div>
               </div>
-            </div>
-          }
-        </Col>
-        <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
-          <div className="detail-task-tab">
-            <Tabs defaultActiveKey="1" className="tab-select" size="medium" tabPosition="top" >
-              <TabPane tab={<span style={{ color: '#3690ffd4' }}  >Choose Company</span>} key="1">
-                {(pillar || flag) ?
-                  <div className="companylist-task">
-                    <BootstrapTable data={flag ? (taxonomy && controversyTaskData && controversyTaskData.companies || []) : (ispillarData && ispillarData.companies || [])} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
-                      <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
-                      <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort >Companies</TableHeaderColumn>
-                    </BootstrapTable>
-                  </div>
-                  : <div className="not-batch-assign-screen">
-                    <div className="not-batch-assign-screen-inner">
-                      <div className="info-icon-batch"><ExceptionOutlined /></div>
-                      <div className="info-text-batch">Pillar not assigned!</div>
+            }
+          </Col>
+          <Col lg={12} sm={12} style={{ marginBottom: '2rem' }}>
+            <div className="detail-task-tab">
+              <Tabs defaultActiveKey="1" className="tab-select" size="medium" tabPosition="top" >
+                <TabPane tab={<span style={{ color: '#3690ffd4' }}  >Choose Company</span>} key="1">
+                  {(pillar || flag) ?
+                    <div className="companylist-task">
+                      <BootstrapTable data={flag ? (taxonomy && controversyTaskData && controversyTaskData.companies || []) : (ispillarData && ispillarData.companies || [])} hover pagination selectRow={selectRowProp} options={optionsForPagination} bootstrap4>
+                        <TableHeaderColumn isKey dataField="id" hidden> id </TableHeaderColumn>
+                        <TableHeaderColumn dataField="companyName" filter={{ type: 'TextFilter', delay: 100, placeholder: 'Search' }} className="table-header-name" dataSort >Companies</TableHeaderColumn>
+                      </BootstrapTable>
                     </div>
-                  </div>}
-              </TabPane>
-              <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Analyst </span>} key="2" >
-                {(pillar || flag) ?
-                  <div>
-                    {!flag &&
-                      <div className="date-picker-analyst">
-                        <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
-                        <div >
-                          <DatePicker
-                            className="date-picker"
-                            size="middle"
-                            format="YYYY-MM-DD"
-                            onChange={analystEndData}
-                            disabledDate={analystdisabledDate}
-                            value={analystcheckdate}
-                          />
-                        </div>
+                    : <div className="not-batch-assign-screen">
+                      <div className="not-batch-assign-screen-inner">
+                        <div className="info-icon-batch"><ExceptionOutlined /></div>
+                        <div className="info-text-batch">Pillar not assigned!</div>
                       </div>
-                    }
-                    <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
-                    <div className="analystQa-table">
-                      <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
-                    </div>
-                  </div>
-                  : <div className="not-batch-assign-screen">
-                    <div className="not-batch-assign-screen-inner">
-                      <div className="info-icon-batch"><ExceptionOutlined /></div>
-                      <div className="info-text-batch">Pillar not assigned!</div>
-                    </div>
-                  </div>}
-              </TabPane>
-              {!flag &&
-                <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Quality Analyst</span>} key="3">
-                  {(pillar) ?
+                    </div>}
+                </TabPane>
+                <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Analyst </span>} key="2" >
+                  {(pillar || flag) ?
                     <div>
-                      <div className="date-picker-analyst">
-                        <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
-                        <div >
-                          <DatePicker
-                            className="date-picker"
-                            size="middle"
-                            format="YYYY-MM-DD"
-                            onChange={qaEndData}
-                            disabledDate={qadisabledDate}
-                            value={qacheckdate}
-                            disabled={isDisabledQA}
-                          />
+                      {!flag &&
+                        <div className="date-picker-analyst">
+                          <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
+                          <div >
+                            <DatePicker
+                              className="date-picker"
+                              size="middle"
+                              format="YYYY-MM-DD"
+                              onChange={analystEndData}
+                              disabledDate={analystdisabledDate}
+                              value={analystcheckdate}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
+                      }
+                      <div className="task-role-analyst">Select Analyst for task <span className="mandatory-color">*</span></div>
                       <div className="analystQa-table">
-                        <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
+                        <CustomTable tableData={tableDataanalyst} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
                       </div>
                     </div>
                     : <div className="not-batch-assign-screen">
@@ -725,21 +692,51 @@ const TaskCreate = ({ flag }) => {
                       </div>
                     </div>}
                 </TabPane>
-              }
-            </Tabs>
-          </div>
-        </Col>
-      </Row>
-      <Divider className="task-divider"></Divider>
-      <Row style={{ padding: '5%' }} className="task-row">
-        <Col>
-          <div className="task-foo">
-            <Button variant="success" onClick={onCreateTask}>
-              Create Task
-            </Button>
-          </div>
-        </Col>
-      </Row></React.Fragment>}
+                {!flag &&
+                  <TabPane tab={<span style={{ color: '#3690ffd4' }}>Assign Quality Analyst</span>} key="3">
+                    {(pillar) ?
+                      <div>
+                        <div className="date-picker-analyst">
+                          <div className="task-role-analystsla" > SLA Date <span className="mandatory-color">*</span></div>
+                          <div >
+                            <DatePicker
+                              className="date-picker"
+                              size="middle"
+                              format="YYYY-MM-DD"
+                              onChange={qaEndData}
+                              disabledDate={qadisabledDate}
+                              value={qacheckdate}
+                              disabled={isDisabledQA}
+                            />
+                          </div>
+                        </div>
+                        <div className="task-role-analyst">Select Qa for task <span className="mandatory-color">*</span></div>
+                        <div className="analystQa-table">
+                          <CustomTable tableData={tableDataqa} isLoading={onpillarclickLoading.isLoading} defaultNoOfRows={5} />
+                        </div>
+                      </div>
+                      : <div className="not-batch-assign-screen">
+                        <div className="not-batch-assign-screen-inner">
+                          <div className="info-icon-batch"><ExceptionOutlined /></div>
+                          <div className="info-text-batch">Pillar not assigned!</div>
+                        </div>
+                      </div>}
+                  </TabPane>
+                }
+              </Tabs>
+            </div>
+          </Col>
+        </Row>
+        <Divider className="task-divider"></Divider>
+        <Row style={{ padding: '5%' }} className="task-row">
+          <Col>
+            <div className="task-foo">
+              <Button variant="success" onClick={onCreateTask}>
+                Create Task
+              </Button>
+            </div>
+          </Col>
+        </Row></React.Fragment>}
     </Container>
   );
 
