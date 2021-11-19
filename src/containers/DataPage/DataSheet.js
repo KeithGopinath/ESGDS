@@ -205,7 +205,7 @@ export const DataSheetComponent = (props) => {
 
   const errorTypeList = props.reqErrorList;
 
-  const thresholdValue = defaultData.thresholdValue || { min: -10000, max: 10000 };
+  const thresholdValue = defaultData.thresholdValue || { min: -1000000000000, max: 1000000000000 };
 
   const lastHistoricalDataResponse = props.lastHistoricalData && props.lastHistoricalData[0] ? props.lastHistoricalData[0].response : null;
 
@@ -729,7 +729,7 @@ export const DataSheetComponent = (props) => {
     if (doValidate()) {
       props.onClickSave(saveData);
     } else if (hasErrors.formThreshold) {
-      message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+      message.error(`Numeric Response Should Be In Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
     } else if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
       message.error('Response Should Not Be "NA');
     } else if (hasErrors.formURL && formURL) {
@@ -819,7 +819,7 @@ export const DataSheetComponent = (props) => {
     } else {
       message.error('Please Enter Comments !', 8); // Please Fill Required Fields !
       if (hasErrors.formThreshold) {
-        message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+        message.error(`Numeric Response Should Be In Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
       }
       if (lastHistoricalDataResponse && !['NA', 'na', 'Na'].includes(lastHistoricalDataResponse) && ['NA', 'na', 'Na'].includes(formResponse)) {
         message.error('Response Should Not Be "NA');

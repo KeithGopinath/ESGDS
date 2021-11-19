@@ -195,17 +195,17 @@ const Login = () => {
   }
 
   // resend otp 
-  const resendOtp = () => {
-    // setSeconds(30);
-    setStart(true);
-    const login = { email, password }
-    let objJsonStr = JSON.stringify(login);
-    let user = Buffer.from(objJsonStr).toString("base64");
-    const loginDetails = {
-      login: user
-    }
-    dispatch({ type: 'LOGIN_REQUEST', loginDetails });
-  }
+  // const resendOtp = () => {
+  //   // setSeconds(30);
+  //   setStart(true);
+  //   const login = { email, password }
+  //   let objJsonStr = JSON.stringify(login);
+  //   let user = Buffer.from(objJsonStr).toString("base64");
+  //   const loginDetails = {
+  //     login: user
+  //   }
+  //   dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+  // }
 
   const otpHandleChange = (value) => {
     setOtp(value);
@@ -294,7 +294,7 @@ const Login = () => {
             start={start}
             handleClose={handleClose}
             onSubmitOtp={onSubmitOtp}
-            resendOtp={resendOtp}
+            // resendOtp={resendOtp}
             inputOtp={otp}
             otpHandleChange={otpHandleChange}
             validateOtp={validate}
