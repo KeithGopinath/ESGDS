@@ -232,7 +232,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const { isError, isErrorCommentType } = props;
 
-  const thresholdValue = { min: -10000, max: 10000 };
+  const thresholdValue = { min: -1000000000000, max: 1000000000000 };
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
   const urlToBlob = (imgObjs) => Promise.all(imgObjs.map((eImg) => new Promise((res, rej) => {
@@ -466,7 +466,7 @@ const ErrorDataSheetTwo = (props) => {
     if (doValidate()) {
       props.onClickSave(dummyDataReps);
     } else if (hasErrors.formThreshold) {
-      message.error(`Response Should Be Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
+      message.error(`Numberic Response Should Be In Range ${thresholdValue.min} - ${thresholdValue.max}`, 8);
     } else {
       message.error('Please Fill Required fields !');
     }
