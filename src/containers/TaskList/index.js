@@ -16,7 +16,7 @@ import ControversyEdit from './ControversyTaskEdit';
 import { history } from './../../routes';
 
 const TaskList = (props) => {
-  const location = useLocation();
+  // const location = useLocation();
   const [show, setShow] = useState(false);
   const [controversyShow, setcontroversyShow] = useState(false);
   const [rowValue, setrowValue] = useState('');
@@ -27,42 +27,47 @@ const TaskList = (props) => {
   const [qaDetail, setqaDetail] = useState('');
   const [roleType, setRole] = useState('');
   const [storeTaskReport, setStoreTaskReport] = useState([]);
+  const [analystSla, setAnalystSla] = useState(null);
+  const [qaSla, setQaSla] = useState(null);
+  const [newPage, setNewPage] = useState(0);
+  const [newRowPerPage, setNewRowPerPage] = useState(10);
+  // const [count, setCount] = useState();
+
+  const sideBarRef = useRef();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const role = sessionStorage.role
 
   const isTasknumber = useSelector((notification) => notification.notification.notificationType);
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
   const loading = useSelector((state) => state.reportsTaskList.isLoading);
-  const companiesTaskList = getcompanyTask && getcompanyTask.data;
-
+  // const companiesTaskList = getcompanyTask && getcompanyTask.data;
   const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
   const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
+  // const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
+  const isData = useSelector((tasklist) => tasklist.taskList.data);
+  const isDataLoading = useSelector((state) => state.taskList.isLoading);
+
+  const pendingTasklistData = useSelector((pendingTasklist) => pendingTasklist.pendingTasklist.data);
+  const pendingTasklist = pendingTasklistData && pendingTasklistData.rows;
+  const pendingTasklistCount = pendingTasklistData && pendingTasklistData.count;
+
+  const completedTasklistData = useSelector((completedTasklist) => completedTasklist.completedTasklist.data);
+  const completedTasklist = completedTasklistData && completedTasklistData.rows;
+  const completedTasklistCount = completedTasklistData && completedTasklistData.count;
+
+  const controversyTasklistData = useSelector((controversyTasklist) => controversyTasklist.controversyTasklist.data);
+  const controversyTasklist = controversyTasklistData && controversyTasklistData.rows;
+  const controversyTasklistCount = controversyTasklistData && controversyTasklistData.count;
+
+  const companiesTaskList = getcompanyTask && getcompanyTask.data;
   const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
+  const isList = isData && isData.data;
 
-  const tasklisttabLabelSets = [
-    { label: 'Pending Task' },
-    { label: 'Completed Task' },
-    { label: 'Controversy' },
-  ];
-  const groupAdminLabelSets = [
-    { label: 'Pending Task' },
-    { label: 'Completed Task' },
-  ];
-  const tasktabsRefs = useRef(tasklisttabLabelSets.map(() => React.createRef()));
-  const grpAdminRefs = useRef(groupAdminLabelSets.map(() => React.createRef()));
-  const defaultRefs = (roleType === 'GroupAdmin') ? grpAdminRefs : tasktabsRefs;
-  const defaultLabels = (roleType === 'GroupAdmin') ? groupAdminLabelSets : tasklisttabLabelSets;
 
-  const tasklisttabsClickHandler = (event, label) => {
-    defaultRefs.current.forEach((element) => {
-      const target = element.current;
-      target.classList.remove('tabs-label-count-wrap-active');
-    });
-    const target = event.currentTarget;
-    target.classList.add('tabs-label-count-wrap-active');
-    settaskTabFlag(label);
-  };
-
-  const tabFlag = props.location.tabFlag && props.location.tabFlag;
-  const multiCompanies = props.location.multiSelect && props.location.multiSelect;
+  const count = tasktabFlag === 'Pending Task' ? pendingTasklistCount : tasktabFlag === 'Completed Task' ? completedTasklistCount : controversyTasklistCount
+  // default page no 
+  // const page = 1;
 
   useEffect(() => {
     if (props.location.multiSelect) {
@@ -81,7 +86,6 @@ const TaskList = (props) => {
       }
     }
     setRole(sessionStorage.role);
-
   }, []);
 
   useEffect(() => {
@@ -89,21 +93,144 @@ const TaskList = (props) => {
       if (defaultRefs.current[0]) {
         defaultRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
         settaskTabFlag('Pending Task');
+        // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",newPage,newRowPerPage,role});
       }
     } else if (defaultRefs.current[1]) {
       defaultRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
       settaskTabFlag('Completed Task');
+      // dispatch({ type: "GET_COMPLETED_TASKLIST_REQUEST",newPage,newRowPerPage,role});
     } else if (defaultRefs.current[2]) {
       defaultRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
       settaskTabFlag('Controversy');
+      // dispatch({ type: "GET_CONTROVERSY_TASKLIST_REQUEST",newPage,newRowPerPage,role});
     }
   }, [multiCompanies])
+
+  console.log('tasktabFlag', tasktabFlag)
+  console.log('multiCompanies', multiCompanies)
+  console.log('newPage', newPage)
+
+  useEffect(() => {
+    if (tasktabFlag === 'Pending Task') {
+      dispatch({ type: "GET_PENDING_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+    } else if (tasktabFlag === 'Completed Task') {
+      dispatch({ type: "GET_COMPLETED_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+    } else if (tasktabFlag === 'Controversy') {
+      dispatch({ type: "GET_CONTROVERSY_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+    }
+  }, [newPage, newRowPerPage, role, tasktabFlag])
+
+  console.log('count', count)
+
+  useEffect(() => {
+    if (isList) {
+      dispatch({ type: "GET_TASKLIST_RESET" });
+    }
+    dispatch({ type: "GET_TASKLIST_REQUEST" });
+    // if history doesn't have state then reset notification reducer
+    if (location && !location.state) {
+      dispatch({ type: "RAISEDSLA_RESET" });
+      dispatch({ type: "NOTIFICATION_RESET" });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (controversyDetails || getCompanyDetails) {
+      setStoreTaskReport(tasklist)
+    }
+  }, [controversyDetails, getCompanyDetails]);
+
+
+  // console.log('tasktabFlag',tasktabFlag)
+
+  const tasklisttabLabelSets = [
+    { label: 'Pending Task' },
+    { label: 'Completed Task' },
+    { label: 'Controversy' },
+  ];
+  const groupAdminLabelSets = [
+    { label: 'Pending Task' },
+    { label: 'Completed Task' },
+  ];
+  const tasktabsRefs = useRef(tasklisttabLabelSets.map(() => React.createRef()));
+  const grpAdminRefs = useRef(groupAdminLabelSets.map(() => React.createRef()));
+  const defaultRefs = (roleType === 'GroupAdmin') ? grpAdminRefs : tasktabsRefs;
+  const defaultLabels = (roleType === 'GroupAdmin') ? groupAdminLabelSets : tasklisttabLabelSets;
+
+  const tasklisttabsClickHandler = (event, label) => {
+    console.log('label', label)
+    defaultRefs.current.forEach((element) => {
+      const target = element.current;
+      target.classList.remove('tabs-label-count-wrap-active');
+    });
+    const target = event.currentTarget;
+    target.classList.add('tabs-label-count-wrap-active');
+    settaskTabFlag(label);
+  };
+
+  const tabFlag = props.location.tabFlag && props.location.tabFlag;
+  const multiCompanies = props.location.multiSelect && props.location.multiSelect;
+
+  // useEffect(() => {
+  //   if (props.location.multiSelect) {
+  //     const propsData = props.location.state;
+  //     const tabLabel = props.location.tabFlag && props.location.tabFlag;
+  //     if (tabLabel === 'Controversy') {
+  //       const controversyId = propsData.map((data) => {
+  //         return data.id;
+  //       });
+  //       dispatch({ type: "CONTROVERSY_TASK_LIST_REQUEST", controversyTaskReports: controversyId });
+  //     } else {
+  //       const companiesId = propsData.map((data) => {
+  //         return data.companyId;
+  //       });
+  //       dispatch({ type: "GET_REPORTS_TASKLIST_REQUEST", companyTaskReports: companiesId });
+  //     }
+  //   }
+  //   setRole(sessionStorage.role);
+
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!multiCompanies) {
+  //     if (defaultRefs.current[0]) {
+  //       defaultRefs.current[0].current.classList.add('tabs-label-count-wrap-active');
+  //       settaskTabFlag('Pending Task');
+  //       dispatch({ type: "GET_PENDING_TASKLIST_REQUEST"});
+  //       // GET_PENDING_TASKLIST_REQUEST
+  //     }
+  //   } else if (defaultRefs.current[1]) {
+  //     defaultRefs.current[1].current.classList.add('tabs-label-count-wrap-active');
+  //     settaskTabFlag('Completed Task');
+  //   } else if (defaultRefs.current[2]) {
+  //     defaultRefs.current[2].current.classList.add('tabs-label-count-wrap-active');
+  //     settaskTabFlag('Controversy');
+  //   }
+  // }, [multiCompanies])
+
+  // useEffect(() => {
+  //   if (isList) {
+  //     dispatch({ type: "GET_TASKLIST_RESET" });
+  //   }
+  //   dispatch({ type: "GET_TASKLIST_REQUEST" });
+  //   // if history doesn't have state then reset notification reducer
+  //   if (location && !location.state) {
+  //     dispatch({ type: "RAISEDSLA_RESET" });
+  //     dispatch({ type: "NOTIFICATION_RESET" });
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   if (controversyDetails || getCompanyDetails) {
+  //     setStoreTaskReport(tasklist)
+  //   }
+  // }, [controversyDetails, getCompanyDetails]);
 
   // filter companies taskList
   const getCompanyDetails = companiesTaskList && companiesTaskList;
   const controversyDetails = controversyTaskList && controversyTaskList;
-  const [analystSla, setAnalystSla] = useState(null);
-  const [qaSla, setQaSla] = useState(null);
+  // const [analystSla, setAnalystSla] = useState(null);
+  // const [qaSla, setQaSla] = useState(null);
 
   // export data in excel file
   const downloadReports = () => {
@@ -125,7 +252,7 @@ const TaskList = (props) => {
     XLSX.writeFile(workBook, tabFlag === 'Controversy' ? 'Controversy Tasklist.xlsx' : 'Reports Tasklist.xlsx');
   };
 
-  const sideBarRef = useRef();
+  // const sideBarRef = useRef();
 
   const getFormatDate = (arg) => {
     const date = moment(arg, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -166,28 +293,28 @@ const TaskList = (props) => {
     setcontroversyShow(true);
   }
 
-  const dispatch = useDispatch();
-  const isData = useSelector((tasklist) => tasklist.taskList.data);
-  const isDataLoading = useSelector((state) => state.taskList.isLoading);
-  const isList = isData && isData.data;
+  // const dispatch = useDispatch();
+  // const isData = useSelector((tasklist) => tasklist.taskList.data);
+  // const isDataLoading = useSelector((state) => state.taskList.isLoading);
+  // const isList = isData && isData.data;
 
-  useEffect(() => {
-    if (isList) {
-      dispatch({ type: "GET_TASKLIST_RESET" });
-    }
-    dispatch({ type: "GET_TASKLIST_REQUEST" });
-    // if history doesn't have state then reset notification reducer
-    if (location && !location.state) {
-      dispatch({ type: "RAISEDSLA_RESET" });
-      dispatch({ type: "NOTIFICATION_RESET" });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isList) {
+  //     dispatch({ type: "GET_TASKLIST_RESET" });
+  //   }
+  //   dispatch({ type: "GET_TASKLIST_REQUEST" });
+  //   // if history doesn't have state then reset notification reducer
+  //   if (location && !location.state) {
+  //     dispatch({ type: "RAISEDSLA_RESET" });
+  //     dispatch({ type: "NOTIFICATION_RESET" });
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (controversyDetails || getCompanyDetails) {
-      setStoreTaskReport(tasklist)
-    }
-  }, [controversyDetails, getCompanyDetails]);
+  // useEffect(() => {
+  //   if (controversyDetails || getCompanyDetails) {
+  //     setStoreTaskReport(tasklist)
+  //   }
+  // }, [controversyDetails, getCompanyDetails]);
 
   const totalTaskList = (props) => {
     const downloadControversyTasks = () => {
@@ -558,11 +685,14 @@ const TaskList = (props) => {
         (controversyDetails ? controversyDetails : []) :
         (getCompanyDetails ? getCompanyDetails : []) :
       ((roleType === 'SuperAdmin' || roleType === 'Admin') && tasktabFlag === 'Pending Task') ?
-        (isList ? isList.adminTaskList.pendingList : []) :
+        // (isList ? isList.adminTaskList.pendingList : []) :
+        (pendingTasklist ? pendingTasklist : []) :
         ((roleType === 'SuperAdmin' || roleType === 'Admin') && tasktabFlag === 'Completed Task') ?
-          (isList ? isList.adminTaskList.completedList : []) :
+          // (isList ? isList.adminTaskList.completedList : []) :
+          (completedTasklist ? completedTasklist : []) :
           ((roleType === 'SuperAdmin' || roleType === 'Admin') && tasktabFlag === 'Controversy') ?
-            (isList ? isList.adminTaskList.controversyList : []) :
+            // (isList ? isList.adminTaskList.controversyList : []) :
+            (controversyTasklist ? controversyTasklist : []) :
             (roleType === 'GroupAdmin' && tasktabFlag === 'Pending Task') ?
               (isList ? isList.groupAdminTaskList.pendingList.filter((e) => isTasknumber ? isTasknumber === e.taskNumber : e) : []) :
               (roleType === 'GroupAdmin' && tasktabFlag === 'Completed Task') ?
@@ -570,8 +700,20 @@ const TaskList = (props) => {
                 (roleType === 'GroupAdmin' && tasktabFlag === 'Controversy') ?
                   (isList ? isList.groupAdminTaskList.controversyList : []) :
                   []
-    )
-    ;
+    );
+  // console.log('tasklist',tasklist)
+  const onNewPage = (page) => {
+    setNewPage(page)
+    // console.log('paggggg',page)
+    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
+    // console.log('value',value)
+  }
+
+  const onNewRowPerPage = (row) => {
+    setNewRowPerPage(row)
+    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
+    // console.log('paggggg',row)
+  }
 
   return (
     <React.Fragment>
@@ -603,7 +745,7 @@ const TaskList = (props) => {
                 </div>
                 }
                 <Card >
-                  <CustomTable tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
+                  <CustomTable newpage={onNewPage} newRowsPerPage={onNewRowPerPage} count={count} tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
                 </Card>
               </Col>
             </Row>

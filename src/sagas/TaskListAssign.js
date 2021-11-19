@@ -4,9 +4,9 @@ import * as actionCreators from '../actionCreators/TaskListAssign';
 import { doGet } from '../utils/fetchWrapper';
 
 // pending taskList
-export function* getPendingTaskList() {
+export function* getPendingTaskList(data) {
   try {
-    const response = yield doGet(envConfig.apiEndPoints.pendingTasklist);
+    const response = yield doGet(`${envConfig.apiEndPoints.pendingTasklist}/${data.role}/?page=${data.newPage + 1}&limit=${data.newRowPerPage}`);
     yield put(actionCreators.getPendingTaskListSuccess(response));
   } catch (error) {
     yield put(actionCreators.getPendingTaskListFailure(error));
@@ -14,9 +14,10 @@ export function* getPendingTaskList() {
 }
 
 // completed TaskList
-export function* getCompletedTaskList() {
+export function* getCompletedTaskList(data) {
   try {
-    const response = yield doGet(envConfig.apiEndPoints.completedTasklist);
+    const response = yield doGet(`${envConfig.apiEndPoints.completedTasklist}/${data.role}/?page=${data.newPage + 1}&limit=${data.newRowPerPage}`);
+    // const response = yield doGet(envConfig.apiEndPoints.completedTasklist);
     yield put(actionCreators.getCompletedTaskListSuccess(response));
   } catch (error) {
     yield put(actionCreators.getCompletedTaskListFailure(error));
@@ -24,9 +25,10 @@ export function* getCompletedTaskList() {
 }
 
 // controversy
-export function* getControversyTaskList() {
+export function* getControversyTaskList(data) {
   try {
-    const response = yield doGet(envConfig.apiEndPoints.contorversyTasklist);
+    // const response = yield doGet(envConfig.apiEndPoints.contorversyTasklist);
+    const response = yield doGet(`${envConfig.apiEndPoints.contorversyTasklist}/${data.role}/?page=${data.newPage + 1}&limit=${data.newRowPerPage}`);
     yield put(actionCreators.getControversyTaskListSuccess(response));
   } catch (error) {
     yield put(actionCreators.getControversyTaskListFailure(error));
@@ -34,22 +36,24 @@ export function* getControversyTaskList() {
 }
 
 // pending taskList watcher
-export function* getPendingTasklistWatchers() {
+export function* getTasklistWatchers() {
   yield [
     takeLatest('GET_PENDING_TASKLIST_REQUEST', getPendingTaskList),
+    takeLatest('GET_COMPLETED_TASKLIST_REQUEST', getCompletedTaskList),
+    takeLatest('GET_CONTROVERSY_TASKLIST_REQUEST', getControversyTaskList),
   ];
 }
 
 // completed taskList watcher
-export function* getCompletedTasklistWatchers() {
-  yield [
-    takeLatest('GET_COMPLETED_TASKLIST_REQUEST', getCompletedTaskList),
-  ];
-}
+// export function* getCompletedTasklistWatchers() {
+//   yield [
+//     takeLatest('GET_COMPLETED_TASKLIST_REQUEST', getCompletedTaskList),
+//   ];
+// }
 
-// controversy taskList watcher
-export function* getControversyTasklistWatchers() {
-  yield [
-    takeLatest('GET_CONTROVERSY_TASKLIST_REQUEST', getControversyTaskList),
-  ];
-}
+// // controversy taskList watcher
+// export function* getControversyTasklistWatchers() {
+//   yield [
+//     takeLatest('GET_CONTROVERSY_TASKLIST_REQUEST', getControversyTaskList),
+//   ];
+// }

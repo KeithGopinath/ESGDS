@@ -74,8 +74,8 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const CustomTable = ({
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
+const CustomTable = ({ newpage, newRowsPerPage,
+  count, tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -189,10 +189,12 @@ const CustomTable = ({
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    newpage(newPage)
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
+    newRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -261,7 +263,7 @@ const CustomTable = ({
 
   const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
 
-
+console.log('mainData',mainData)
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
 
   return (
@@ -307,7 +309,7 @@ const CustomTable = ({
             </ColumnsHead>
             <TableBody>
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
-                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                // .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
                   // const rowsDataKeyList = Object.keys(eachRow);
                   const rowsDataKeyList = columnsHeadData.map((e) => e.id);
@@ -332,11 +334,11 @@ const CustomTable = ({
                     </TableRow>
                   );
                 })}
-              {!(mainData.length === 0) && emptyRows > 0 && (
+              {/* {!(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
-              )}
+              )} */}
               {(mainData.length === 0) && (searchQuery || searchDate) &&
                 <TableRow>
                   <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
@@ -370,9 +372,9 @@ const CustomTable = ({
           </div>
         <div className="w-50 d-flex justify-content-end">
           <TablePagination
-            rowsPerPageOptions={[5, 10, 15]}
+            rowsPerPageOptions={[10, 25, 50]}
             component="div"
-            count={mainData.length}
+            count={count}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

@@ -61,7 +61,7 @@ import { raisedslaWatchers } from './RaisedSlaDetails';
 import { userAssignCompaniesWatcher } from './UserAssignCompanies';
 import { cloneActualsWatchers } from './CloneActuals';
 import { getSubsetTaxonomyDownloadWatchers } from './SubsetTaxonomyDownload';
-import { getPendingTasklistWatchers, getCompletedTasklistWatchers, getControversyTasklistWatchers } from './TaskListAssign';
+import { getTasklistWatchers } from './TaskListAssign';
 
 export default function* rootWatchers() {
   yield all([
@@ -127,8 +127,9 @@ export default function* rootWatchers() {
     userAssignCompaniesWatcher(),
     cloneActualsWatchers(),
     getSubsetTaxonomyDownloadWatchers(),
-    getPendingTasklistWatchers(),
-    getCompletedTasklistWatchers(),
-    getControversyTasklistWatchers(),
+    // getPendingTasklistWatchers(),
+    // getCompletedTasklistWatchers(),
+    // getControversyTasklistWatchers(),
+    getTasklistWatchers(),
   ]);
 }
