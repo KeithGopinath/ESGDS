@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
 
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -87,7 +87,7 @@ const ValidationComments = (props) => {
       // USING DISPATCH UPDATING THE STORE
       dispatch({ type: 'DPCODE_VALIDATION_UPDATE', updatedValidation: replacableData.validation });
     } else {
-      alert('Please Enter Commnet');
+      message.warn('Please Enter Commnet');
     }
   };
 
