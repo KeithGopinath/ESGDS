@@ -265,7 +265,7 @@ export const DataSheetComponent = (props) => {
   const [formErrorType, setFormErrorType] = useState((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
   // *ERROR*
   const [formErrorRefData, setFormErrorRefData] = useState((defaultData.error && (defaultData.error.hasError)) ? {
-    ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+    ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, status: defaultData.error.errorStatus, // error: defaultData.error,
   } : {
     fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
   });
@@ -375,7 +375,7 @@ export const DataSheetComponent = (props) => {
     setFormComment((defaultData.error && (defaultData.error.hasError) && defaultData.error.comment) || '');
     setFormIsError((defaultData.error && (defaultData.error.hasError)) || false);
     setFormErrorRefData((defaultData.error) ? {
-      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, status: defaultData.error.errorStatus, // error: defaultData.error,
     } : {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
@@ -1359,7 +1359,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR) && !disableField}
         size={[6, 5, 7]}
         body={
           <Form.Control

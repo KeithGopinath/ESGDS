@@ -199,7 +199,7 @@ const ErrorDataSheetTwo = (props) => {
   // } : {
   //   added: [], deleted: [],
   // });
-  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
+  const [formComment, setFormComment] = useState(defaultData.comment || '');
 
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
@@ -269,7 +269,7 @@ const ErrorDataSheetTwo = (props) => {
     // } : {
     //   added: [], deleted: [],
     // });
-    setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
+    setFormComment(defaultData.comment || '');
 
     setDynamicFields(defaultData.additionalDetails || []);
     setHasErrors({
@@ -393,13 +393,13 @@ const ErrorDataSheetTwo = (props) => {
       return true;
     }
     if (isCompanyRep_DR) {
-      if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
+      if (defaultData.status === 'Completed') {
         return true;
       }
       return false;
     }
     if (isClientRep_DR) {
-      if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
+      if (defaultData.status === 'Completed') {
         return true;
       }
       return false;
@@ -776,9 +776,9 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       <Col lg={12} className="datapage-button-wrap">
-        {!isErrorCommentType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        {!isErrorCommentType && (defaultData ? defaultData.status !== 'Completed' : true) &&
         <Button className="datapage-button" variant="success" onClick={onClickSave}>Save</Button>}
-        {!isErrorCommentType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+        {!isErrorCommentType && (defaultData && defaultData.status === 'Completed') &&
         <Button className="datapage-button" variant="primary" onClick={onClickEdit}>Edit</Button>}
       </Col>
 
