@@ -248,7 +248,7 @@ const DataPage = (props) => {
       };
     }
     if (isQA_DV) {
-      returnableData = { ...returnableData, error: { ...e.error, refData: '' } };
+      returnableData = { ...returnableData, isUnfreezed: !!e.isUnfreezed, error: { ...e.error, refData: '' } };
     }
     if (isCompanyRep_DR || isClientRep_DR) {
       returnableData = {
@@ -282,8 +282,8 @@ const DataPage = (props) => {
       memberId: reqDpcodeData.memberId || '',
       memberName: reqDpcodeData.memberName || '',
       memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
-      currentData: getReqDetails(reqCurrentData.filter((e) => e.isEdited)),
-      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData.filter((e) => e.isEdited)),
+      currentData: getReqDetails(reqCurrentData),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData),
     };
     return postableData;
   };
