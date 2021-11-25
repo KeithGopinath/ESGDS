@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { useLocation } from "react-router-dom";
-import CustomTable from '../../components/CustomTable';
+import CustomTableServer from '../../components/CustomTableServer';
 import EditTask from './TaskEdit';
 import ControversyEdit from './ControversyTaskEdit';
 import { history } from './../../routes';
@@ -745,7 +745,7 @@ const TaskList = (props) => {
                 </div>
                 }
                 <Card >
-                  <CustomTable newpage={onNewPage} newRowsPerPage={onNewRowPerPage} count={count} tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
+                  <CustomTableServer newpage={onNewPage} newRowsPerPage={onNewRowPerPage} count={count} tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
                 </Card>
               </Col>
             </Row>

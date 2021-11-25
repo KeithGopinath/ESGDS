@@ -81,6 +81,9 @@ export default {
     pendingTasklist: 'taskAssignments/Pending',
     completedTasklist: 'taskAssignments/Completed',
     contorversyTasklist: 'taskAssignments/controversies',
+    pendingReportlist: 'taskAssignments/task/reports/Pending',
+    completedReportlist: 'taskAssignments/task/reports/Completed',
+    contorversyReportlist: 'taskAssignments/task/reports/Controversies',
   },
   apiBaseUrl: {
     dev: 'http://3.108.113.82/',
