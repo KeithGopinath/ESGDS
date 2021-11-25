@@ -775,6 +775,7 @@ export const DataSheetComponent = (props) => {
       saveData = {
         ...defaultData,
         status: 'Editable',
+        isUnfreezed: true,
       };
     }
     setFormIsError(false);
