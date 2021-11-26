@@ -239,6 +239,10 @@ const DataPage = (props) => {
       screenShot: e.screenShot || [],
       response: e.response,
       source: e.source,
+      IsRestated: e.IsRestated,
+      restatedForYear: e.restatedForYear,
+      restatedInYear: e.restatedInYear,
+      restatedValue: e.restatedValue,
       additionalDetails: additionalDetailsMapper(e),
     };
 
@@ -263,6 +267,10 @@ const DataPage = (props) => {
             screenShot: e.error.refData.screenShot || [],
             response: e.error.refData.response,
             source: e.error.refData.source,
+            IsRestated: e.error.refData.IsRestated,
+            restatedForYear: e.error.refData.restatedForYear,
+            restatedInYear: e.error.refData.restatedInYear,
+            restatedValue: e.error.refData.restatedValue,
             additionalDetails: additionalDetailsMapper(e.error.refData),
           },
         },
@@ -282,8 +290,8 @@ const DataPage = (props) => {
       memberId: reqDpcodeData.memberId || '',
       memberName: reqDpcodeData.memberName || '',
       memberType: taskDetails.memberType === 'Kmp Matrix' ? 'KMP Matrix' : taskDetails.memberType,
-      currentData: getReqDetails(reqCurrentData),
-      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData),
+      currentData: getReqDetails(reqCurrentData.filter((e) => e.isEdited)),
+      historicalData: (isCompanyRep_DR || isClientRep_DR) ? [] : getReqHistoricalDetails(reqHistoricalData.filter((e) => e.isEdited)),
     };
     return postableData;
   };
