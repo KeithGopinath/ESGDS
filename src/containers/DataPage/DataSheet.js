@@ -1226,7 +1226,7 @@ export const DataSheetComponent = (props) => {
             className={hasErrors.formIsRestated && 'red-class'}
             value={formIsRestated && { label: formIsRestated, value: formIsRestated }}
             onChange={onChangeFormIsRestated}
-            placeholder="Select Year"
+            placeholder="Choose an option"
             isDisabled={disableField}
             styles={{
               menuList: (provided) => ({
