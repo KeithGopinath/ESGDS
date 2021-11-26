@@ -25,17 +25,21 @@ export default (errors, roleScreenType) => {
     formControversyFiscalYear,
     dynamicFields,
     formThreshold,
+    formIsRestated,
+    formRestatedValue,
+    formRestatedForYear,
+    formRestatedInYear,
   } = errors;
 
   if (isHistoryType) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold && !dynamicFields.includes(true));
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear && !dynamicFields.includes(true));
   }
   if (isAnalyst_DC) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear &&
     !dynamicFields.includes(true));
   }
   if (isAnalyst_DCR) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !errorComment && !formThreshold &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formThreshold && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear && !errorComment &&
       !dynamicFields.includes(true));
   }
   if (isAnalyst_CC) {
@@ -45,18 +49,14 @@ export default (errors, roleScreenType) => {
   }
   if (isQA_DV) {
     return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formThreshold &&
-    !formScreenShotPath && !dynamicFields.includes(true) && !formIsError && !formErrorType && !formComment);
+    !formScreenShotPath && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear && !dynamicFields.includes(true) && !formIsError && !formErrorType && !formComment);
   }
   if (isCompanyRep_DR) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
-    !dynamicFields.includes(true));
-  }
-  if (isCompanyRep_DR) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear &&
       !dynamicFields.includes(true));
   }
   if (isClientRep_DR) {
-    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold &&
+    return (!formSource && !formResponse && !formTextSnippet && !formPageNo && !formScreenShotPath && !formComment && !formThreshold && !formIsRestated && !formRestatedValue && !formRestatedForYear && !formRestatedInYear &&
       !dynamicFields.includes(true));
   }
   return false;
