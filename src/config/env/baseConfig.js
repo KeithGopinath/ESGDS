@@ -83,8 +83,10 @@ export default {
     getControversyTaskAssignment: 'taskAssignments/SuperAdmin/Controversy',
   },
   apiBaseUrl: {
-    dev: 'http://3.108.113.82/',
-    test: 'http://3.109.80.244/',
+    // dev: 'http://3.108.113.82/',
+    // test: 'http://3.109.80.244/',
+    dev: 'https://dev-backend.esgds.com/',
+    test: 'https://qa-backend.esgds.com/',
     prod: 'https://api.esgds.ai/',
   },
 };
