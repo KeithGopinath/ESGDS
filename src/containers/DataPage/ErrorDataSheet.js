@@ -252,8 +252,8 @@ const ErrorDataSheetTwo = (props) => {
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
       list.push({
-        label: `${currentYear - i}`,
-        value: `${currentYear - i}`,
+        label: `${currentYear - i - 1}-${currentYear - i}`,
+        value: `${currentYear - i - 1}-${currentYear - i}`,
       });
     }
     return list;
@@ -418,7 +418,7 @@ const ErrorDataSheetTwo = (props) => {
   const onChangeFormIsRestated = (event) => {
     setFormIsRestated(event.value);
     if (event.value === 'Yes') {
-      setFormRestatedInYear(`${moment().year()}`);
+      setFormRestatedInYear(defaultData.fiscalYear);
     } else if (event.value === 'No') {
       setFormRestatedInYear('');
       setFormRestatedValue('');
@@ -490,7 +490,7 @@ const ErrorDataSheetTwo = (props) => {
         return false;
       }) : [false],
       formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: isError && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formIsRestated: isError && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: isError && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: isError && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: isError && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -763,7 +763,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select

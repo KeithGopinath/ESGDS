@@ -226,8 +226,8 @@ export const DataSheetComponent = (props) => {
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
       list.push({
-        label: `${currentYear - i}`,
-        value: `${currentYear - i}`,
+        label: `${currentYear - i - 1}-${currentYear - i}`,
+        value: `${currentYear - i - 1}-${currentYear - i}`,
       });
     }
     return list;
@@ -611,7 +611,7 @@ export const DataSheetComponent = (props) => {
   const onChangeFormIsRestated = (event) => {
     setFormIsRestated(event.value);
     if (event.value === 'Yes') {
-      setFormRestatedInYear(`${moment().year()}`);
+      setFormRestatedInYear(defaultData.fiscalYear);
     } else if (event.value === 'No') {
       setFormRestatedInYear('');
       setFormRestatedValue('');
@@ -682,7 +682,7 @@ export const DataSheetComponent = (props) => {
         return false;
       }) : [false],
       formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: dpCodeInCompleteStatus && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -1217,7 +1217,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
