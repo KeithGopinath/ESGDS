@@ -239,6 +239,10 @@ const DataPage = (props) => {
       screenShot: e.screenShot || [],
       response: e.response,
       source: e.source,
+      isRestated: e.isRestated,
+      restatedForYear: e.restatedForYear,
+      restatedInYear: e.restatedInYear,
+      restatedValue: e.restatedValue,
       additionalDetails: additionalDetailsMapper(e),
     };
 
@@ -248,7 +252,7 @@ const DataPage = (props) => {
       };
     }
     if (isQA_DV) {
-      returnableData = { ...returnableData, error: { ...e.error, refData: '' } };
+      returnableData = { ...returnableData, isUnfreezed: !!e.isUnfreezed, error: { ...e.error, refData: '' } };
     }
     if (isCompanyRep_DR || isClientRep_DR) {
       returnableData = {
@@ -263,6 +267,10 @@ const DataPage = (props) => {
             screenShot: e.error.refData.screenShot || [],
             response: e.error.refData.response,
             source: e.error.refData.source,
+            isRestated: e.error.refData.isRestated,
+            restatedForYear: e.error.refData.restatedForYear,
+            restatedInYear: e.error.refData.restatedInYear,
+            restatedValue: e.error.refData.restatedValue,
             additionalDetails: additionalDetailsMapper(e.error.refData),
           },
         },

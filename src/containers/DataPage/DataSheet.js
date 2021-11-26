@@ -221,6 +221,26 @@ export const DataSheetComponent = (props) => {
   };
   const controversyFiscalYearList = getControversyYearList(moment().year(), 10);
 
+  const getSingleYearsList = (currentYear, startYear) => {
+    const list = [];
+    const nos = currentYear - startYear;
+    for (let i = 0; i <= nos; i += 1) {
+      list.push({
+        label: `${currentYear - i}`,
+        value: `${currentYear - i}`,
+      });
+    }
+    return list;
+  };
+
+  const restatedOptions = [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ];
+
+  const restatedForYearList = getSingleYearsList(Number(moment().year()), 2010);
+  const restatedInYearList = restatedForYearList;
+
 
   // DATASHEET FORM DATA +
   // *DPCODE*
@@ -265,7 +285,7 @@ export const DataSheetComponent = (props) => {
   const [formErrorType, setFormErrorType] = useState((defaultData.error && (defaultData.error.hasError) && defaultData.error.type) || '');
   // *ERROR*
   const [formErrorRefData, setFormErrorRefData] = useState((defaultData.error && (defaultData.error.hasError)) ? {
-    ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+    ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, status: defaultData.error.errorStatus, // error: defaultData.error,
   } : {
     fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
   });
@@ -312,6 +332,15 @@ export const DataSheetComponent = (props) => {
   // SHOW IMAGE UPLOADE ERROR
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
+  // RESTATEMENT OPTIONS
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedInYear, setFormRestatedInYear] = useState(defaultData.restatedInYear || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedForYear, setFormRestatedForYear] = useState(defaultData.restatedForYear || '');
+
   const [hasErrors, setHasErrors] = useState({
     formTextSnippet: false,
     formPageNo: false,
@@ -333,6 +362,10 @@ export const DataSheetComponent = (props) => {
     formControversyFiscalYear: false,
     dynamicFields: [false],
     formThreshold: false,
+    formIsRestated: false,
+    formRestatedValue: false,
+    formRestatedForYear: false,
+    formRestatedInYear: false,
   });
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
@@ -375,7 +408,7 @@ export const DataSheetComponent = (props) => {
     setFormComment((defaultData.error && (defaultData.error.hasError) && defaultData.error.comment) || '');
     setFormIsError((defaultData.error && (defaultData.error.hasError)) || false);
     setFormErrorRefData((defaultData.error) ? {
-      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, error: defaultData.error,
+      ...defaultData.error.refData, fiscalYear: defaultData.fiscalYear, comment: defaultData.error.comment, description: defaultData.description, dataType: defaultData.dataType, status: defaultData.error.errorStatus, // error: defaultData.error,
     } : {
       fiscalYear: defaultData.fiscalYear, description: defaultData.description, dataType: defaultData.dataType,
     });
@@ -392,6 +425,10 @@ export const DataSheetComponent = (props) => {
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
 
+    setFormIsRestated(defaultData.isRestated || '');
+    setFormRestatedValue(defaultData.restatedValue || '');
+    setFormRestatedInYear(defaultData.restatedInYear || '');
+    setFormRestatedForYear(defaultData.restatedForYear || '');
     setIsErrorAccepted(defaultData.error && (defaultData.error.isAccepted === true || defaultData.error.isAccepted === false) ? !!defaultData.error.isAccepted : null);
     setHasErrors({
       formTextSnippet: false,
@@ -414,6 +451,10 @@ export const DataSheetComponent = (props) => {
       formControversyFiscalYear: false,
       dynamicFields: [false],
       formThreshold: false,
+      formIsRestated: false,
+      formRestatedValue: false,
+      formRestatedForYear: false,
+      formRestatedInYear: false,
     });
 
     setShowImgUploadError(false);
@@ -567,6 +608,24 @@ export const DataSheetComponent = (props) => {
     setFormIsError(event.target.value);
   };
 
+  const onChangeFormIsRestated = (event) => {
+    setFormIsRestated(event.value);
+    if (event.value === 'Yes') {
+      setFormRestatedInYear(`${moment().year()}`);
+    } else if (event.value === 'No') {
+      setFormRestatedInYear('');
+      setFormRestatedValue('');
+      setFormRestatedForYear('');
+    }
+  };
+  const onChangeFormRestatedValue = (event) => {
+    setFormRestatedValue(event.target.value);
+  };
+  const onChangeFormRestatedForYear = (event) => {
+    setFormRestatedForYear(event.value);
+  };
+
+
   const screenShotBeforeUpload = (file) => {
     if (!(file.type).includes('image')) {
       message.error(`${file.name} is not a image file`);
@@ -623,6 +682,10 @@ export const DataSheetComponent = (props) => {
         return false;
       }) : [false],
       formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formIsRestated: dpCodeInCompleteStatus && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
+      formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
+      formRestatedForYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
     };
     setHasErrors(errors);
 
@@ -644,6 +707,10 @@ export const DataSheetComponent = (props) => {
         response: formResponse,
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
+        isRestated: formIsRestated,
+        restatedForYear: formRestatedForYear,
+        restatedInYear: formRestatedInYear,
+        restatedValue: formRestatedValue,
         screenShot: formScreenShotPath,
         // screenShotBase64: formScreenShotFile,
         additionalDetails: dynamicFields,
@@ -658,6 +725,10 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
+          isRestated: formIsRestated,
+          restatedForYear: formRestatedForYear,
+          restatedInYear: formRestatedInYear,
+          restatedValue: formRestatedValue,
           screenShot: formScreenShotPath,
           // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
@@ -671,6 +742,10 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
+          isRestated: formIsRestated,
+          restatedForYear: formRestatedForYear,
+          restatedInYear: formRestatedInYear,
+          restatedValue: formRestatedValue,
           screenShot: formScreenShotPath,
           // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
@@ -689,6 +764,10 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
+          isRestated: formIsRestated,
+          restatedForYear: formRestatedForYear,
+          restatedInYear: formRestatedInYear,
+          restatedValue: formRestatedValue,
           screenShot: formScreenShotPath,
           // screenShotBase64: formScreenShotFile,
           additionalDetails: dynamicFields,
@@ -774,6 +853,7 @@ export const DataSheetComponent = (props) => {
     if (isQA_DV) {
       saveData = {
         ...defaultData,
+        isUnfreezed: true,
         status: 'Editable',
       };
     }
@@ -1133,6 +1213,97 @@ export const DataSheetComponent = (props) => {
           />
         }
       />
+
+      {/* IS RESTATED */}
+      <FieldWrapper
+        label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedOptions}
+            className={hasErrors.formIsRestated && 'red-class'}
+            value={formIsRestated && { label: formIsRestated, value: formIsRestated }}
+            onChange={onChangeFormIsRestated}
+            placeholder="Choose an option"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED FOR YEAR */}
+      <FieldWrapper
+        label={<div>Restated For Year<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(formIsRestated === 'Yes' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin))}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedForYearList}
+            className={hasErrors.formRestatedForYear && 'red-class'}
+            value={formRestatedForYear && { label: formRestatedForYear, value: formRestatedForYear }}
+            onChange={onChangeFormRestatedForYear}
+            placeholder="Select Year"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED IN YEAR */}
+      <FieldWrapper
+        label={<div>Restated In Year<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(formIsRestated === 'Yes' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin))}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedInYearList}
+            className={hasErrors.formRestatedInYear && 'red-class'}
+            value={formRestatedInYear && { label: formRestatedInYear, value: formRestatedInYear }}
+            placeholder="Select Year"
+            isDisabled
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED VALUE */}
+      <FieldWrapper
+        label={<div>Restated Value<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(formIsRestated === 'Yes' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin))}
+        size={[6, 5, 7]}
+        body={
+          <Form.Control
+            type="text"
+            autoComplete="false"
+            name="restated value"
+            placeholder="Enter Restated Value"
+            className={hasErrors.formRestatedValue && 'red-class'}
+            onChange={onChangeFormRestatedValue}
+            value={formRestatedValue}
+            disabled={disableField}
+          />
+        }
+      />
+
       {/* UPLOAD Field */}
       <Col lg={12} className="datapage-ant-screenshots">
         <Row>
@@ -1359,7 +1530,7 @@ export const DataSheetComponent = (props) => {
       {/* Controversy Comments Field */}
       <FieldWrapper
         label={<div>Comment<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
+        visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR) && !disableField}
         size={[6, 5, 7]}
         body={
           <Form.Control

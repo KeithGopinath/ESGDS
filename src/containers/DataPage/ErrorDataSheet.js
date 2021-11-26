@@ -199,13 +199,22 @@ const ErrorDataSheetTwo = (props) => {
   // } : {
   //   added: [], deleted: [],
   // });
-  const [formComment, setFormComment] = useState((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
+  const [formComment, setFormComment] = useState(defaultData.comment || '');
 
   // DYNAMIC FIELDS ADDITIONAL TO MASTER MANDATORY FIELDS
   const [dynamicFields, setDynamicFields] = useState(defaultData.additionalDetails || []);
 
   // SHOW IMAGE UPLOADE ERROR
   const [showImgUploadError, setShowImgUploadError] = useState(false);
+
+  // RESTATEMENT OPTIONS
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedInYear, setFormRestatedInYear] = useState(defaultData.restatedInYear || '');
+  // RESTATEMENT OPTIONS
+  const [formRestatedForYear, setFormRestatedForYear] = useState(defaultData.restatedForYear || '');
 
   const [hasErrors, setHasErrors] = useState({
     formTextSnippet: false,
@@ -224,6 +233,10 @@ const ErrorDataSheetTwo = (props) => {
     formNextReviewDate: false,
     dynamicFields: [false],
     formThreshold: false,
+    formIsRestated: false,
+    formRestatedValue: false,
+    formRestatedForYear: false,
+    formRestatedInYear: false,
   });
 
   const sourceList = props.reqSourceData;
@@ -233,6 +246,26 @@ const ErrorDataSheetTwo = (props) => {
   const { isError, isErrorCommentType } = props;
 
   const thresholdValue = { min: -1000000000000, max: 1000000000000 };
+
+  const getSingleYearsList = (currentYear, startYear) => {
+    const list = [];
+    const nos = currentYear - startYear;
+    for (let i = 0; i <= nos; i += 1) {
+      list.push({
+        label: `${currentYear - i}`,
+        value: `${currentYear - i}`,
+      });
+    }
+    return list;
+  };
+
+  const restatedOptions = [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ];
+
+  const restatedForYearList = getSingleYearsList(Number(moment().year()), 2010);
+  const restatedInYearList = restatedForYearList;
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
   const urlToBlob = (imgObjs) => Promise.all(imgObjs.map((eImg) => new Promise((res, rej) => {
@@ -269,9 +302,14 @@ const ErrorDataSheetTwo = (props) => {
     // } : {
     //   added: [], deleted: [],
     // });
-    setFormComment((defaultData.error && defaultData.error.hasError && defaultData.error.comment) || '');
+    setFormComment(defaultData.comment || '');
 
     setDynamicFields(defaultData.additionalDetails || []);
+
+    setFormIsRestated(defaultData.isRestated || '');
+    setFormRestatedValue(defaultData.restatedValue || '');
+    setFormRestatedInYear(defaultData.restatedInYear || '');
+    setFormRestatedForYear(defaultData.restatedForYear || '');
     setHasErrors({
       formTextSnippet: false,
       formPageNo: false,
@@ -289,6 +327,10 @@ const ErrorDataSheetTwo = (props) => {
       formNextReviewDate: false,
       dynamicFields: [false],
       formThreshold: false,
+      formIsRestated: false,
+      formRestatedValue: false,
+      formRestatedForYear: false,
+      formRestatedInYear: false,
     });
 
     setShowImgUploadError(false);
@@ -373,6 +415,23 @@ const ErrorDataSheetTwo = (props) => {
     setFormComment(event.currentTarget.value);
   };
 
+  const onChangeFormIsRestated = (event) => {
+    setFormIsRestated(event.value);
+    if (event.value === 'Yes') {
+      setFormRestatedInYear(`${moment().year()}`);
+    } else if (event.value === 'No') {
+      setFormRestatedInYear('');
+      setFormRestatedValue('');
+      setFormRestatedForYear('');
+    }
+  };
+  const onChangeFormRestatedValue = (event) => {
+    setFormRestatedValue(event.target.value);
+  };
+  const onChangeFormRestatedForYear = (event) => {
+    setFormRestatedForYear(event.value);
+  };
+
   const screenShotBeforeUpload = (file) => {
     if (!(file.type).includes('image')) {
       message.error(`${file.name} is not a image file`);
@@ -393,13 +452,13 @@ const ErrorDataSheetTwo = (props) => {
       return true;
     }
     if (isCompanyRep_DR) {
-      if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
+      if (defaultData.status === 'Completed') {
         return true;
       }
       return false;
     }
     if (isClientRep_DR) {
-      if (defaultData.error && defaultData.error.errorStatus === 'Completed') {
+      if (defaultData.status === 'Completed') {
         return true;
       }
       return false;
@@ -431,6 +490,10 @@ const ErrorDataSheetTwo = (props) => {
         return false;
       }) : [false],
       formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formIsRestated: isError && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formRestatedValue: isError && formIsRestated === 'Yes' && formRestatedValue.length === 0,
+      formRestatedInYear: isError && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
+      formRestatedForYear: isError && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
     };
     setHasErrors(errors);
 
@@ -455,6 +518,10 @@ const ErrorDataSheetTwo = (props) => {
           source: formSource,
           url: formURL,
           publicationDate: formPublicDate,
+          isRestated: formIsRestated,
+          restatedForYear: formRestatedForYear,
+          restatedInYear: formRestatedInYear,
+          restatedValue: formRestatedValue,
           additionalDetails: dynamicFields,
         },
         raisedBy: sessionStorage.role,
@@ -693,6 +760,96 @@ const ErrorDataSheetTwo = (props) => {
         }
       />
 
+      {/* IS RESTATED */}
+      <FieldWrapper
+        label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedOptions}
+            className={hasErrors.formIsRestated && 'red-class'}
+            value={formIsRestated && { label: formIsRestated, value: formIsRestated }}
+            onChange={onChangeFormIsRestated}
+            placeholder="Choose an option"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED FOR YEAR */}
+      <FieldWrapper
+        label={<div>Restated For Year<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(isErrorCommentType || isError) && (formIsRestated === 'Yes' && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR))}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedForYearList}
+            className={hasErrors.formRestatedForYear && 'red-class'}
+            value={formRestatedForYear && { label: formRestatedForYear, value: formRestatedForYear }}
+            onChange={onChangeFormRestatedForYear}
+            placeholder="Select Year"
+            isDisabled={disableField}
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED IN YEAR */}
+      <FieldWrapper
+        label={<div>Restated In Year<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(isErrorCommentType || isError) && (formIsRestated === 'Yes' && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR))}
+        size={[6, 5, 7]}
+        body={
+          <Select
+            name="restated"
+            options={restatedInYearList}
+            className={hasErrors.formRestatedInYear && 'red-class'}
+            value={formRestatedInYear && { label: formRestatedInYear, value: formRestatedInYear }}
+            placeholder="Select Year"
+            isDisabled
+            styles={{
+              menuList: (provided) => ({
+                ...provided,
+                maxHeight: 120,
+              }),
+            }}
+          />
+        }
+      />
+
+      {/* RESTATED VALUE */}
+      <FieldWrapper
+        label={<div>Restated Value<span className="addNewMember-red-asterik"> * </span></div>}
+        visible={(isErrorCommentType || isError) && (formIsRestated === 'Yes' && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR))}
+        size={[6, 5, 7]}
+        body={
+          <Form.Control
+            type="text"
+            autoComplete="false"
+            name="restated value"
+            placeholder="Enter Restated Value"
+            className={hasErrors.formRestatedValue && 'red-class'}
+            onChange={onChangeFormRestatedValue}
+            value={formRestatedValue}
+            disabled={disableField}
+          />
+        }
+      />
+
       {/* UPLOAD Field */}
       <Col lg={12} className="datapage-ant-screenshots">
         <Row>
@@ -776,9 +933,9 @@ const ErrorDataSheetTwo = (props) => {
       />
 
       <Col lg={12} className="datapage-button-wrap">
-        {!isErrorCommentType && (defaultData.error ? defaultData.error.errorStatus !== 'Completed' : true) &&
+        {!isErrorCommentType && (defaultData ? defaultData.status !== 'Completed' : true) &&
         <Button className="datapage-button" variant="success" onClick={onClickSave}>Save</Button>}
-        {!isErrorCommentType && (defaultData.error && defaultData.error.errorStatus === 'Completed') &&
+        {!isErrorCommentType && (defaultData && defaultData.status === 'Completed') &&
         <Button className="datapage-button" variant="primary" onClick={onClickEdit}>Edit</Button>}
       </Col>
 
