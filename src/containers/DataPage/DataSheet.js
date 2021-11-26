@@ -333,7 +333,7 @@ export const DataSheetComponent = (props) => {
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
   // RESTATEMENT OPTIONS
-  const [formIsRestated, setFormIsRestated] = useState(defaultData.IsRestated || '');
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
   // RESTATEMENT OPTIONS
   const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
   // RESTATEMENT OPTIONS
@@ -425,7 +425,7 @@ export const DataSheetComponent = (props) => {
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
 
-    setFormIsRestated(defaultData.IsRestated || '');
+    setFormIsRestated(defaultData.isRestated || '');
     setFormRestatedValue(defaultData.restatedValue || '');
     setFormRestatedInYear(defaultData.restatedInYear || '');
     setFormRestatedForYear(defaultData.restatedForYear || '');
@@ -707,7 +707,7 @@ export const DataSheetComponent = (props) => {
         response: formResponse,
         textSnippet: formTextSnippet,
         pageNo: formPageNo,
-        IsRestated: formIsRestated,
+        isRestated: formIsRestated,
         restatedForYear: formRestatedForYear,
         restatedInYear: formRestatedInYear,
         restatedValue: formRestatedValue,
@@ -725,7 +725,7 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
-          IsRestated: formIsRestated,
+          isRestated: formIsRestated,
           restatedForYear: formRestatedForYear,
           restatedInYear: formRestatedInYear,
           restatedValue: formRestatedValue,
@@ -742,7 +742,7 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
-          IsRestated: formIsRestated,
+          isRestated: formIsRestated,
           restatedForYear: formRestatedForYear,
           restatedInYear: formRestatedInYear,
           restatedValue: formRestatedValue,
@@ -764,7 +764,7 @@ export const DataSheetComponent = (props) => {
           response: formResponse,
           textSnippet: formTextSnippet,
           pageNo: formPageNo,
-          IsRestated: formIsRestated,
+          isRestated: formIsRestated,
           restatedForYear: formRestatedForYear,
           restatedInYear: formRestatedInYear,
           restatedValue: formRestatedValue,
