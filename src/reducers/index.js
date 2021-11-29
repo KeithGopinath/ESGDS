@@ -41,7 +41,7 @@ import taskEditDetails from './TaskEditDetails';
 import taskUpdate from './UpdateTask';
 import controversyTaskData from './GetControversyTaskData';
 import createControversyTask from './CreateControversyTask';
-import reports from './Reports';
+// import reports from './Reports';
 import reportsTaskList from './ReportsTaskList';
 import calculateActuals from './CalculateActuals';
 import taskList from './TaskList';
@@ -64,7 +64,8 @@ import RaisedSla from './RaisedSlaDetails';
 import userAssignCompanies from './UserAssignCompanies';
 import cloneActuals from './CloneActuals';
 import subsetTaxonomyDownload from './SubsetTaxonomyDownload';
-import taskListAssign from './TaskListAssign';
+import {pendingTasklist,completedTasklist, controversyTasklist} from './TaskListAssign';
+import {pendingReportlist,completedReportlist, controversyReportlist} from './Reports';
 
 const combinedReducer = combineReducers({
   login,
@@ -112,7 +113,7 @@ const combinedReducer = combineReducers({
   taskUpdate,
   controversyTaskData,
   createControversyTask,
-  reports,
+  // reports,
   reportsTaskList,
   addNewMember,
   activeMembers,
@@ -139,7 +140,12 @@ const combinedReducer = combineReducers({
   userAssignCompanies,
   cloneActuals,
   subsetTaxonomyDownload,
-  taskListAssign,
+  pendingTasklist,
+  completedTasklist,
+  controversyTasklist,
+  pendingReportlist,
+  completedReportlist,
+  controversyReportlist,
 });
 
 const rootReducer = (state, action) => {

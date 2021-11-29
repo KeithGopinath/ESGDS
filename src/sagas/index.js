@@ -40,7 +40,7 @@ import { taskEditDetailsWatchers } from './TaskEditDetails';
 import { taskUpdateWatchers } from './UpdateTask';
 import { getControversyTaskDataWatchers } from './GetControversyTaskData';
 import { createControversyTaskWatchers } from './CreateControversyTask';
-import { getReportsWatchers } from './Reports';
+// import { getReportsWatchers } from './Reports';
 import { getReportsTaskListWatchers } from './ReportsTaskList';
 import { calculateActualsWatchers } from './CalculateActuals';
 import { pillarWisePercentileWatchers } from './PillarWisePercentile';
@@ -61,7 +61,8 @@ import { raisedslaWatchers } from './RaisedSlaDetails';
 import { userAssignCompaniesWatcher } from './UserAssignCompanies';
 import { cloneActualsWatchers } from './CloneActuals';
 import { getSubsetTaxonomyDownloadWatchers } from './SubsetTaxonomyDownload';
-import { getPendingTasklistWatchers, getCompletedTasklistWatchers, getControversyTasklistWatchers } from './TaskListAssign';
+import { getTasklistWatchers } from './TaskListAssign';
+import { getReportlistWatchers } from './Reports';
 
 export default function* rootWatchers() {
   yield all([
@@ -106,7 +107,7 @@ export default function* rootWatchers() {
     taskUpdateWatchers(),
     getControversyTaskDataWatchers(),
     createControversyTaskWatchers(),
-    getReportsWatchers(),
+    // getReportsWatchers(),
     getReportsTaskListWatchers(),
     calculateActualsWatchers(),
     pillarWisePercentileWatchers(),
@@ -127,8 +128,7 @@ export default function* rootWatchers() {
     userAssignCompaniesWatcher(),
     cloneActualsWatchers(),
     getSubsetTaxonomyDownloadWatchers(),
-    getPendingTasklistWatchers(),
-    getCompletedTasklistWatchers(),
-    getControversyTasklistWatchers(),
+    getTasklistWatchers(),
+    getReportlistWatchers(),
   ]);
 }
