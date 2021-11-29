@@ -763,7 +763,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && false && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select
