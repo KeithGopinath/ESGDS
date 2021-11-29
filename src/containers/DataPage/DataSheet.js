@@ -1217,7 +1217,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && false && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
