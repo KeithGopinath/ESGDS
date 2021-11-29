@@ -333,7 +333,7 @@ export const DataSheetComponent = (props) => {
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
   // RESTATEMENT OPTIONS
-  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || 'No');
   // RESTATEMENT OPTIONS
   const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
   // RESTATEMENT OPTIONS
@@ -425,7 +425,7 @@ export const DataSheetComponent = (props) => {
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
 
-    setFormIsRestated(defaultData.isRestated || '');
+    setFormIsRestated(defaultData.isRestated || 'No');
     setFormRestatedValue(defaultData.restatedValue || '');
     setFormRestatedInYear(defaultData.restatedInYear || '');
     setFormRestatedForYear(defaultData.restatedForYear || '');
