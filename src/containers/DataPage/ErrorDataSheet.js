@@ -208,7 +208,7 @@ const ErrorDataSheetTwo = (props) => {
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
   // RESTATEMENT OPTIONS
-  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || 'No');
   // RESTATEMENT OPTIONS
   const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
   // RESTATEMENT OPTIONS
@@ -306,7 +306,7 @@ const ErrorDataSheetTwo = (props) => {
 
     setDynamicFields(defaultData.additionalDetails || []);
 
-    setFormIsRestated(defaultData.isRestated || '');
+    setFormIsRestated(defaultData.isRestated || 'No');
     setFormRestatedValue(defaultData.restatedValue || '');
     setFormRestatedInYear(defaultData.restatedInYear || '');
     setFormRestatedForYear(defaultData.restatedForYear || '');
