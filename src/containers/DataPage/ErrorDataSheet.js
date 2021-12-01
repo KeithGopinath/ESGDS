@@ -251,10 +251,12 @@ const ErrorDataSheetTwo = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      list.push({
-        label: `${currentYear - i - 1}-${currentYear - i}`,
-        value: `${currentYear - i - 1}-${currentYear - i}`,
-      });
+      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
+        list.push({
+          label: `${currentYear - i - 1}-${currentYear - i}`,
+          value: `${currentYear - i - 1}-${currentYear - i}`,
+        });
+      }
     }
     return list;
   };
@@ -426,7 +428,7 @@ const ErrorDataSheetTwo = (props) => {
     }
   };
   const onChangeFormRestatedValue = (event) => {
-    setFormRestatedValue(event.target.value);
+    setFormRestatedValue(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formRestatedValue);
   };
   const onChangeFormRestatedForYear = (event) => {
     setFormRestatedForYear(event.value);
@@ -763,7 +765,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && false && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select
