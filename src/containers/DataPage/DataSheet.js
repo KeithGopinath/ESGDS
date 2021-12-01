@@ -225,10 +225,12 @@ export const DataSheetComponent = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      list.push({
-        label: `${currentYear - i - 1}-${currentYear - i}`,
-        value: `${currentYear - i - 1}-${currentYear - i}`,
-      });
+      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
+        list.push({
+          label: `${currentYear - i - 1}-${currentYear - i}`,
+          value: `${currentYear - i - 1}-${currentYear - i}`,
+        });
+      }
     }
     return list;
   };
@@ -619,7 +621,7 @@ export const DataSheetComponent = (props) => {
     }
   };
   const onChangeFormRestatedValue = (event) => {
-    setFormRestatedValue(event.target.value);
+    setFormRestatedValue(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formRestatedValue);
   };
   const onChangeFormRestatedForYear = (event) => {
     setFormRestatedForYear(event.value);
