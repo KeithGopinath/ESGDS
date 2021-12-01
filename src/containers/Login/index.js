@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row, Button, Card, Form } from 'react-bootstrap';
 import { message } from 'antd';
@@ -28,6 +28,8 @@ const Login = () => {
   const [seconds, setSeconds] = useState(30);
   const [captchaToken, setCaptchaToken] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const emailField = useRef(null);
 
   const dispatch = useDispatch();
   // login
@@ -86,7 +88,7 @@ const Login = () => {
       history.push("/dashboard");
       message.success(validOtp.message)
     } else if (invalidOtp) {
-      setOtpAlert(invalidOtp.message);
+      setOtpAlert(invalidOtp && invalidOtp.message);
     }
   }, [invalidOtp, validOtp]);
 
@@ -98,6 +100,12 @@ const Login = () => {
       setforgotPasswordvalidate('border-danger');
     }
   }, [validPasswordChange, InvalidPasswordChange]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      emailField.current.focus();
+    }, 1);
+  }, []);
 
   // resend timer
   // useEffect(() => {
@@ -129,6 +137,13 @@ const Login = () => {
     }
   };
 
+  // form submit while enter key press
+  const onEnterKeyPress = (e) => {
+    if (e.charCode === 13) {
+      showForgotPassword ? onSubmitForgotPassword() : onLogin();
+    }
+  }
+
   const onLogin = () => {
     const valid = validateEmail(email);
     if (!email && !password && valid === false) {
@@ -150,18 +165,18 @@ const Login = () => {
       // })
 
       // const submitToken = token => {
-        setLoginAlert('');
-        setLoginRole(true);
-        setStart(true);
-        // setSeconds(30);
-        const login = { email, password }
-        let objJsonStr = JSON.stringify(login);
-        let user = Buffer.from(objJsonStr).toString("base64");
-        const loginDetails = {
-          login: user,
-          // token
-        }
-        dispatch({ type: 'LOGIN_REQUEST', loginDetails });
+      setLoginAlert('');
+      setLoginRole(true);
+      setStart(true);
+      // setSeconds(30);
+      const login = { email, password }
+      let objJsonStr = JSON.stringify(login);
+      let user = Buffer.from(objJsonStr).toString("base64");
+      const loginDetails = {
+        login: user,
+        // token
+      }
+      dispatch({ type: 'LOGIN_REQUEST', loginDetails });
       // }
     }
   };
@@ -263,12 +278,14 @@ const Login = () => {
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 className={(email === '' || validateEmail(email) === false || invalidLogin) && validate}
+                ref={emailField}
                 type="text"
                 name="email"
                 id="email"
                 value={email}
                 placeholder="name@example.com"
                 onChange={onEmailChange}
+                onKeyPress={onEnterKeyPress}
               />
             </Form.Group>
             <Form.Group>
@@ -281,6 +298,7 @@ const Login = () => {
                 value={password}
                 placeholder="password"
                 onChange={onPasswordChange}
+                onKeyPress={onEnterKeyPress}
               />
               <div className="text-right">
                 <span className="forgot-password" onClick={forgotPassword} >Forgot password</span>
@@ -313,6 +331,7 @@ const Login = () => {
             onEmailChange={onForgotEmailChange}
             forgotPasswordClass={forgotPasswordClass}
             forgotPasswordLoading={forgotPasswordLoading}
+            onEnterKeyPress={onEnterKeyPress}
           />
         </div>
       </Col>

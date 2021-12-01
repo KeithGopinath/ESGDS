@@ -6,6 +6,13 @@ import Overlay from '../../components/Overlay';
 const OtpScreen = ({
   show, handleClose, onSubmitOtp, resendOtp, inputOtp, otpHandleChange, alert, email, seconds, start, otpLoading
 }) => {
+
+const onEnterkeyPress = (e) => {
+  if(e.charCode === 13){ 
+    onSubmitOtp();
+  }
+}
+
   const OtpBody = () => (
     <div><p>We've sent a one time password to the email <span>{email}</span></p>
       <OtpInput
@@ -15,7 +22,7 @@ const OtpScreen = ({
         className="otp-input"
         inputStyle="otp-input-style"
         containerStyle="otp-input-container"
-        shouldAutoFocus
+        shouldAutoFocus= {true}
         isInputNum
         focusStyle="otp-focus"
       />
@@ -39,6 +46,7 @@ const OtpScreen = ({
       alertClass='danger'
       primary="Verify"
       onSubmitPrimary={onSubmitOtp}
+      onKeyPress={onEnterkeyPress}
       isLoading={otpLoading}
     />
   );
