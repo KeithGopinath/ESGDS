@@ -532,7 +532,7 @@ export const DataSheetComponent = (props) => {
         setFormResponse(event);
         break;
       case 'NUMBER':
-        setFormResponse(event.currentTarget.value);
+        setFormResponse(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formResponse);
         break;
       case 'TEXT':
         setFormResponse(event.currentTarget.value);
@@ -681,7 +681,7 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }) : [false],
-      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
       formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
@@ -1070,7 +1070,7 @@ export const DataSheetComponent = (props) => {
           size={[6, 5, 7]}
           body={
             <Form.Control
-              type="number"
+              type="text"
               autoComplete="false"
               name="response"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
@@ -1217,7 +1217,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && false && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
