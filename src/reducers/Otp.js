@@ -12,13 +12,13 @@ export default (state = initialState, action) => {
     case 'OTP_SUCCESS':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         otp: action.otp,
       };
     case 'OTP_FAILURE':
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
         error: action.error,
       };
     default:

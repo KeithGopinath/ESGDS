@@ -387,7 +387,7 @@ const ErrorDataSheetTwo = (props) => {
         setFormResponse(event);
         break;
       case 'NUMBER':
-        setFormResponse(event.currentTarget.value);
+        setFormResponse(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formResponse);
         break;
       case 'TEXT':
         setFormResponse(event.currentTarget.value);
@@ -489,7 +489,7 @@ const ErrorDataSheetTwo = (props) => {
         }
         return false;
       }) : [false],
-      formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
       formIsRestated: isError && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: isError && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: isError && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
@@ -581,7 +581,7 @@ const ErrorDataSheetTwo = (props) => {
           visible={isErrorCommentType || isError}
           body={
             <Form.Control
-              type="number"
+              type="text"
               autoComplete="false"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
               name="response"
@@ -763,7 +763,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && false && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select
