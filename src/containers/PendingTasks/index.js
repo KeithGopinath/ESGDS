@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tag } from 'antd';
@@ -8,7 +6,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import SideMenuBar from '../../components/SideMenuBar';
 import Header from '../../components/Header';
-import CustomTable from '../../components/CustomTable/index';
+import CustomTableServer from '../../components/CustomTableServer';
 import SLAExtentions from './Extention';
 
 const PendingTaskTable = (props) => {
@@ -30,16 +28,16 @@ const PendingTaskTable = (props) => {
       fiscalYear: ePendingTask.fiscalYear,
       status: ePendingTask.status || ePendingTask.taskStatus,
       action:
-  <Link
-    href
-    to={{
-      pathname: `/task/${ePendingTask.taskNumber}`,
-      state: {
-        taskDetails: ePendingTask, // passing Whole task data
-      },
-    }}
-  >Enter
-  </Link>,
+        <Link
+          href
+          to={{
+            pathname: `/task/${ePendingTask.taskNumber}`,
+            state: {
+              taskDetails: ePendingTask, // passing Whole task data
+            },
+          }}
+        >Enter
+        </Link>,
     };
     if (props.isAnalyst) {
       populatableData = {
@@ -48,7 +46,7 @@ const PendingTaskTable = (props) => {
         endDate: {
           value: moment(ePendingTask.analystSLADate).format('DD-MM-YYYY'),
           content: (ePendingTask.analystSLADate) ?
-            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.analystSLADate).format('DD/MM/YYYY')}</Tag>
+            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{moment(ePendingTask.analystSLADate).format('DD/MM/YYYY')}</Tag>
             : '-',
         },
       };
@@ -60,7 +58,7 @@ const PendingTaskTable = (props) => {
         endDate: {
           value: moment(ePendingTask.qaSLADate).format('DD/MM/YYYY'),
           content: (ePendingTask.qaSLADate) ?
-            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{ moment(ePendingTask.qaSLADate).format('DD/MM/YYYY') }</Tag>
+            <Tag className="tag-btn" onClick={() => { onExtendSLA(ePendingTask); }}>{moment(ePendingTask.qaSLADate).format('DD/MM/YYYY')}</Tag>
             : '-',
         },
       };
@@ -119,7 +117,8 @@ const PendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={PENDING_TASK_DATA} isLoading={props.isLoading} />
+    // <CustomTable tableData={PENDING_TASK_DATA} isLoading={props.isLoading} />
+    <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={PENDING_TASK_DATA} defaultNoOfRows={10} />
   );
 };
 
@@ -160,7 +159,8 @@ const ControversyPendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} isLoading={props.isLoading} />
+    // <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} isLoading={props.isLoading} />
+    <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={CONTROVERSY_PENDING_TASK_DATA} defaultNoOfRows={10} />
   );
 };
 
@@ -168,17 +168,33 @@ const PendingTasks = () => {
   const [show, setShow] = useState(false);
   const [rejectSlaDate, setrejectslaDate] = useState('');
   const [detail, setdetail] = useState('');
+  const [newPage, setNewPage] = useState(0);
+  const [newRowPerPage, setNewRowPerPage] = useState(10);
+  const [tasktabFlag, settaskTabFlag] = useState('');
+
   // DISPATCH
   const dispatch = useDispatch();
 
+  const onNewPage = (page) => {
+    setNewPage(page);
+  };
+
+  const onNewRowPerPage = (row) => {
+    setNewRowPerPage(row);
+  };
+
   useEffect(() => {
-    dispatch({ type: 'PENDING_TASKS_GET_REQUEST' });
-  }, []);
+    dispatch({
+      type: 'PENDING_TASKS_GET_REQUEST', newPage, newRowPerPage, currentRole, currentTab,
+    });
+  }, [newPage, newRowPerPage, currentRole, tasktabFlag]);
 
   const pendingTasksAPIData = useSelector((state) => state.pendingTasks);
+  const count = pendingTasksAPIData.pendingTasksList && pendingTasksAPIData.pendingTasksList.count
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
+  const currentTab = sessionStorage.tab;
 
   // GET REQ ROLE BASED BOOLEANS
   const [isAnalyst, isQA, isCompanyRep, isClientRep] = [
@@ -190,30 +206,47 @@ const PendingTasks = () => {
 
 
   const getReqTabs = (e) => {
+    console.log('eeee', e);
+    console.log('isAnalyst', isAnalyst);
     if (isAnalyst) {
+      if (tasktabFlag === 'Data Collection') {
+        return [
+          { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+          { label: 'Data Correction', data: [] },
+          { label: 'Controversy Collection', data: [] },
+          // { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCorrectionTaskList },
+          // { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.controversyTaskList },
+        ];
+      } else if (tasktabFlag === 'Data Correction') {
+        return [
+          { label: 'Data Collection', data: [] },
+          { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+          { label: 'Controversy Collection', data: [] },
+        ];
+      }
       return [
-        { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCollectionTaskList },
-        { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCorrectionTaskList },
-        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.controversyTaskList },
+        { label: 'Data Collection', data: [] },
+        { label: 'Data Correction', data: [] },
+        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
       ];
     }
-    if (isQA) { return [{ label: 'Data Verification', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.qaTaskList }]; }
+    if (isQA) {
+      return [
+        { label: 'Data Verification', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows }
+      ];
+    }
     if (isCompanyRep) {
       return [
-        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.companyRepTaskList },
-        {
-          label: 'Controversy Review',
-          data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.repControversyTaskList,
-        }, // CONTROVERSY REVIEW ECS - 408
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+        { label: 'Controversy Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+        // CONTROVERSY REVIEW ECS - 408
       ];
     }
     if (isClientRep) {
       return [
-        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.clientRepTaskList },
-        {
-          label: 'Controversy Review',
-          data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.repControversyTaskList,
-        }, // CONTROVERSY REVIEW ECS - 408
+        { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+        { label: 'Controversy Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.rows },
+        // CONTROVERSY REVIEW ECS - 408
       ];
     }
     return [{
@@ -222,12 +255,18 @@ const PendingTasks = () => {
   };
 
   const tabs = getReqTabs(pendingTasksAPIData);
+  console.log('tabs', tabs);
 
   const tabsRef = useRef(tabs.map(() => React.createRef()));
 
   const sideBarRef = useRef();
 
   const [reqAPIData, setReqAPIData] = useState(tabs[0]);
+  // const [reqAPIData, setReqAPIData] = useState();
+  // const [tasktabFlag, settaskTabFlag] = useState(tabs[0].label);
+
+  console.log('reqAPIData', reqAPIData);
+  console.log('tasktabFlag', tasktabFlag);
 
 
   const setDefaultTab = () => {
@@ -238,6 +277,7 @@ const PendingTasks = () => {
     const defaultTab = tabsRef.current[0] && tabsRef.current[0].current;
     if (defaultTab) { defaultTab.classList.add('tabs-label-count-wrap-active'); }
     setReqAPIData(tabs[0]);
+    settaskTabFlag(tabs[0].label);
     sessionStorage.tab = tabs[0].label;
   };
 
@@ -249,11 +289,27 @@ const PendingTasks = () => {
     const { currentTarget } = event;
     currentTarget.classList.add('tabs-label-count-wrap-active');
     setReqAPIData(data);
+    settaskTabFlag(data.label);
     sessionStorage.tab = data.label;
   };
 
   useEffect(() => {
-    setDefaultTab();
+    if (tasktabFlag === 'Data Collection') {
+      // setDefaultTab();
+      setReqAPIData(tabs[0]);
+    } else if (tasktabFlag === 'Data Correction') {
+      setReqAPIData(tabs[1]);
+    } else if (tasktabFlag === 'Controversy Collection') {
+      setReqAPIData(tabs[2]);
+    } else if (tasktabFlag === 'Data Verification') {
+      setReqAPIData(tabs[0]);
+    } else if (tasktabFlag === 'Data Review') {
+      setReqAPIData(tabs[0]);
+    } else if (tasktabFlag === 'Controversy Review') {
+      setReqAPIData(tabs[1]);
+    } else {
+      setDefaultTab();
+    }
   }, [pendingTasksAPIData]);
 
   return (
@@ -261,21 +317,21 @@ const PendingTasks = () => {
       <SideMenuBar ref={sideBarRef} />
       <div className="rightsidepane">
         <Header title="Pending Tasks" />
-        <div className="pendingtasks-main" >
+        <div className="container-main" >
           <div className="pendingtasks-tabs-stack">
             {tabs.map((tab, index) => (
               <div key={tab.label} ref={tabsRef.current[index]} data-id={tab.label} onClick={(event) => onClickChangeTab(event, tab)} className="tabs-label-count-wrap">
                 <div className="tabs-label">
                   {tab.label}
                 </div>
-                <div title={tab.label} className="tabs-count-wrap">
+                {/* <div title={tab.label} className="tabs-count-wrap">
                   <div className="tabs-count">{tab.data.length}
                   </div>
-                </div>
+                </div> */}
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' && reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' || reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} count={count} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} count={count} isLoading={pendingTasksAPIData.isLoading} />}
         </div>
       </div>
     </div>
