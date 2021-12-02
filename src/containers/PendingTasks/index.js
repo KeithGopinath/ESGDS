@@ -117,7 +117,6 @@ const PendingTaskTable = (props) => {
   };
 
   return (
-    // <CustomTable tableData={PENDING_TASK_DATA} isLoading={props.isLoading} />
     <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={PENDING_TASK_DATA} defaultNoOfRows={10} />
   );
 };
@@ -159,7 +158,6 @@ const ControversyPendingTaskTable = (props) => {
   };
 
   return (
-    // <CustomTable tableData={CONTROVERSY_PENDING_TASK_DATA} isLoading={props.isLoading} />
     <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={CONTROVERSY_PENDING_TASK_DATA} defaultNoOfRows={10} />
   );
 };
@@ -204,30 +202,14 @@ const PendingTasks = () => {
     currentRole === 'Client Representative' || currentRole === 'ClientRep',
   ];
 
-
   const getReqTabs = (e) => {
     console.log('eeee', e);
     console.log('isAnalyst', isAnalyst);
     if (isAnalyst) {
-      if (tasktabFlag === 'Data Collection') {
-        return [
-          { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
-          { label: 'Data Correction', data: [] },
-          { label: 'Controversy Collection', data: [] },
-          // { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.analystCorrectionTaskList },
-          // { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.controversyTaskList },
-        ];
-      } else if (tasktabFlag === 'Data Correction') {
-        return [
-          { label: 'Data Collection', data: [] },
-          { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
-          { label: 'Controversy Collection', data: [] },
-        ];
-      }
       return [
-        { label: 'Data Collection', data: [] },
+        { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
         { label: 'Data Correction', data: [] },
-        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+        { label: 'Controversy Collection', data: [] },
       ];
     }
     if (isQA) {
@@ -239,14 +221,12 @@ const PendingTasks = () => {
       return [
         { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
         { label: 'Controversy Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
-        // CONTROVERSY REVIEW ECS - 408
       ];
     }
     if (isClientRep) {
       return [
         { label: 'Data Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
-        { label: 'Controversy Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.data.rows },
-        // CONTROVERSY REVIEW ECS - 408
+        { label: 'Controversy Review', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
       ];
     }
     return [{
@@ -255,19 +235,11 @@ const PendingTasks = () => {
   };
 
   const tabs = getReqTabs(pendingTasksAPIData);
-  console.log('tabs', tabs);
 
   const tabsRef = useRef(tabs.map(() => React.createRef()));
-
   const sideBarRef = useRef();
 
   const [reqAPIData, setReqAPIData] = useState(tabs[0]);
-  // const [reqAPIData, setReqAPIData] = useState();
-  // const [tasktabFlag, settaskTabFlag] = useState(tabs[0].label);
-
-  console.log('reqAPIData', reqAPIData);
-  console.log('tasktabFlag', tasktabFlag);
-
 
   const setDefaultTab = () => {
     tabsRef.current.forEach((element) => {
@@ -295,7 +267,6 @@ const PendingTasks = () => {
 
   useEffect(() => {
     if (tasktabFlag === 'Data Collection') {
-      // setDefaultTab();
       setReqAPIData(tabs[0]);
     } else if (tasktabFlag === 'Data Correction') {
       setReqAPIData(tabs[1]);
@@ -324,10 +295,6 @@ const PendingTasks = () => {
                 <div className="tabs-label">
                   {tab.label}
                 </div>
-                {/* <div title={tab.label} className="tabs-count-wrap">
-                  <div className="tabs-count">{tab.data.length}
-                  </div>
-                </div> */}
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
