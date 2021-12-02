@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-// import moment from 'moment';
 import { Col, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 // import { Result } from 'antd';
@@ -21,11 +20,44 @@ const BatchCreation = ({ show, setShow }) => {
   const [alert, setAlert] = useState('');
   const [subsetTax, setsubsetTax] = useState('');
   const [alertStatus, setalertStatus] = useState(false);
+  const [validBorder, setValidBorder] = useState(false);
+  
+  const dispatch = useDispatch();
+
+  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy);
+  const taxonomyLoading = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.isLoading);
+
+  const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany);
+  const companyTaxLoading = useSelector((taxcompany) => taxcompany.taxonomyCompany.isLoading);
+  const fullList = companyTaxData.taxonomycompany && companyTaxData.taxonomycompany.rows;
+
+  const isbatchCreated = useSelector((createbatch) => createbatch.createBatch);
+  const isbatchCreatedLoading = useSelector((createbatch) => createbatch.createBatch.isLoading);
 
   useEffect(() => {
     dispatch({ type: 'BATCH_CREATE_RESET' });
     dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   }, []);
+
+  useEffect(() => {
+    if (isbatchCreated.batchpost) {
+      setAlert(isbatchCreated.batchpost.message);
+      setBatch('');
+      setYear('');
+      setsubsetTax('');
+      setRowDetails([]);
+      setValidBorder(false);
+      dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
+      dispatch({ type: 'BATCH_REQUEST' });
+    }
+  }, [isbatchCreated.batchpost]);
+
+  useEffect(() => {
+    if (isbatchCreated.error || taxonomyData.error || companyTaxData.error) {
+      setalertStatus(false);
+      setAlert((isbatchCreated.error && isbatchCreated.error.message) || (taxonomyData.error && taxonomyData.error.message) || (companyTaxData.error && companyTaxData.error.message));
+    }
+  }, [isbatchCreated.error, taxonomyData.error, companyTaxData.error]);
 
   const handleClose = () => {
     setBatch('');
@@ -40,14 +72,6 @@ const BatchCreation = ({ show, setShow }) => {
     dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
   };
 
-  const dispatch = useDispatch();
-  const [validBorder, setValidBorder] = useState(false);
-  const taxonomyData = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy);
-  const taxonomyLoading = useSelector((ClientTaxonomy) => ClientTaxonomy.clientTaxonomy.isLoading);
-  const companyTaxData = useSelector((taxcompany) => taxcompany.taxonomyCompany);
-  const companyTaxLoading = useSelector((taxcompany) => taxcompany.taxonomyCompany.isLoading);
-  const fullList = companyTaxData.taxonomycompany && companyTaxData.taxonomycompany.rows;
-
   const rowArray = fullList && fullList.map((args) => ({
     id: args.id, companydata: args.companyName,
   }));
@@ -60,21 +84,6 @@ const BatchCreation = ({ show, setShow }) => {
     sizePerPage: 10,
     noDataText: (companyTaxLoading) ? <PageLoader load={'comp-loader'} /> : 'There is no data to display',
   };
-  const isbatchCreated = useSelector((createbatch) => createbatch.createBatch);
-  const isbatchCreatedLoading = useSelector((createbatch) => createbatch.createBatch.isLoading);
-
-  useEffect(() => {
-    if (isbatchCreated.batchpost) {
-      setAlert(isbatchCreated.batchpost.message);
-      setBatch('');
-      setYear('');
-      setsubsetTax('');
-      setRowDetails([]);
-      setValidBorder(false);
-      dispatch({ type: 'TAXANOMYCOMPANY_RESET' });
-      dispatch({ type: 'BATCH_REQUEST' });
-    }
-  }, [isbatchCreated.batchpost]);
   
   const onRowSelect = (row, isSelected) => {
     if (isSelected === true && rowDetail.length === 0) {
@@ -157,12 +166,11 @@ const BatchCreation = ({ show, setShow }) => {
     }
   };
 
-  useEffect(() => {
-    if (isbatchCreated.error || taxonomyData.error || companyTaxData.error) {
-      setalertStatus(false);
-      setAlert((isbatchCreated.error && isbatchCreated.error.message) || (taxonomyData.error && taxonomyData.error.message) || (companyTaxData.error && companyTaxData.error.message));
+  const onKeyPress = (e) => {
+    if(e.charCode === 13){ 
+      onCreatebBatch();
     }
-  }, [isbatchCreated.error, taxonomyData.error, companyTaxData.error]);
+  }
 
   const onCreatebBatch = () => {
     // Conditions for validating input fields with red border
@@ -275,6 +283,7 @@ const BatchCreation = ({ show, setShow }) => {
       onSubmitPrimary={onCreatebBatch}
       isLoading={taxonomyLoading || isbatchCreatedLoading}
       footer={BatchFooter()}
+      onKeyPress={onKeyPress}
     />
   );
 };

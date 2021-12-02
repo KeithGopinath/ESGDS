@@ -194,6 +194,12 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
     }
   }
 
+  const onKeyPress = (e) => {
+    if(e.charCode === 13){ 
+      onSubmitOnboard();
+    }
+  }
+
   const RoleBody = () => (
     rolesLoading ? <PageLoader /> : <div>
       <p>Please select anyone option to send the onboard link</p>
@@ -305,6 +311,7 @@ const RoleOnboard = ({ showOnboardRoles, handleClose }) => {
       primary="Send"
       isLoading={loading}
       onSubmitPrimary={onSubmitOnboard}
+      onKeyPress={onKeyPress}
     />
   );
 };
