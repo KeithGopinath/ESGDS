@@ -208,7 +208,7 @@ const ErrorDataSheetTwo = (props) => {
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
   // RESTATEMENT OPTIONS
-  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || 'No');
   // RESTATEMENT OPTIONS
   const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
   // RESTATEMENT OPTIONS
@@ -251,10 +251,12 @@ const ErrorDataSheetTwo = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      list.push({
-        label: `${currentYear - i}`,
-        value: `${currentYear - i}`,
-      });
+      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
+        list.push({
+          label: `${currentYear - i - 1}-${currentYear - i}`,
+          value: `${currentYear - i - 1}-${currentYear - i}`,
+        });
+      }
     }
     return list;
   };
@@ -306,7 +308,7 @@ const ErrorDataSheetTwo = (props) => {
 
     setDynamicFields(defaultData.additionalDetails || []);
 
-    setFormIsRestated(defaultData.isRestated || '');
+    setFormIsRestated(defaultData.isRestated || 'No');
     setFormRestatedValue(defaultData.restatedValue || '');
     setFormRestatedInYear(defaultData.restatedInYear || '');
     setFormRestatedForYear(defaultData.restatedForYear || '');
@@ -387,7 +389,7 @@ const ErrorDataSheetTwo = (props) => {
         setFormResponse(event);
         break;
       case 'NUMBER':
-        setFormResponse(event.currentTarget.value);
+        setFormResponse(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formResponse);
         break;
       case 'TEXT':
         setFormResponse(event.currentTarget.value);
@@ -418,7 +420,7 @@ const ErrorDataSheetTwo = (props) => {
   const onChangeFormIsRestated = (event) => {
     setFormIsRestated(event.value);
     if (event.value === 'Yes') {
-      setFormRestatedInYear(`${moment().year()}`);
+      setFormRestatedInYear(defaultData.fiscalYear);
     } else if (event.value === 'No') {
       setFormRestatedInYear('');
       setFormRestatedValue('');
@@ -426,7 +428,7 @@ const ErrorDataSheetTwo = (props) => {
     }
   };
   const onChangeFormRestatedValue = (event) => {
-    setFormRestatedValue(event.target.value);
+    setFormRestatedValue(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formRestatedValue);
   };
   const onChangeFormRestatedForYear = (event) => {
     setFormRestatedForYear(event.value);
@@ -489,8 +491,8 @@ const ErrorDataSheetTwo = (props) => {
         }
         return false;
       }) : [false],
-      formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: isError && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formIsRestated: isError && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: isError && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: isError && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: isError && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -581,7 +583,7 @@ const ErrorDataSheetTwo = (props) => {
           visible={isErrorCommentType || isError}
           body={
             <Form.Control
-              type="number"
+              type="text"
               autoComplete="false"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
               name="response"
@@ -763,7 +765,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select

@@ -225,10 +225,12 @@ export const DataSheetComponent = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      list.push({
-        label: `${currentYear - i}`,
-        value: `${currentYear - i}`,
-      });
+      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
+        list.push({
+          label: `${currentYear - i - 1}-${currentYear - i}`,
+          value: `${currentYear - i - 1}-${currentYear - i}`,
+        });
+      }
     }
     return list;
   };
@@ -333,7 +335,7 @@ export const DataSheetComponent = (props) => {
   const [showImgUploadError, setShowImgUploadError] = useState(false);
 
   // RESTATEMENT OPTIONS
-  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || '');
+  const [formIsRestated, setFormIsRestated] = useState(defaultData.isRestated || 'No');
   // RESTATEMENT OPTIONS
   const [formRestatedValue, setFormRestatedValue] = useState(defaultData.restatedValue || '');
   // RESTATEMENT OPTIONS
@@ -425,7 +427,7 @@ export const DataSheetComponent = (props) => {
     setIsSrcPanelOpened(false);
     setDynamicFields(defaultData.additionalDetails || []);
 
-    setFormIsRestated(defaultData.isRestated || '');
+    setFormIsRestated(defaultData.isRestated || 'No');
     setFormRestatedValue(defaultData.restatedValue || '');
     setFormRestatedInYear(defaultData.restatedInYear || '');
     setFormRestatedForYear(defaultData.restatedForYear || '');
@@ -532,7 +534,7 @@ export const DataSheetComponent = (props) => {
         setFormResponse(event);
         break;
       case 'NUMBER':
-        setFormResponse(event.currentTarget.value);
+        setFormResponse(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formResponse);
         break;
       case 'TEXT':
         setFormResponse(event.currentTarget.value);
@@ -611,7 +613,7 @@ export const DataSheetComponent = (props) => {
   const onChangeFormIsRestated = (event) => {
     setFormIsRestated(event.value);
     if (event.value === 'Yes') {
-      setFormRestatedInYear(`${moment().year()}`);
+      setFormRestatedInYear(defaultData.fiscalYear);
     } else if (event.value === 'No') {
       setFormRestatedInYear('');
       setFormRestatedValue('');
@@ -619,7 +621,7 @@ export const DataSheetComponent = (props) => {
     }
   };
   const onChangeFormRestatedValue = (event) => {
-    setFormRestatedValue(event.target.value);
+    setFormRestatedValue(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formRestatedValue);
   };
   const onChangeFormRestatedForYear = (event) => {
     setFormRestatedForYear(event.value);
@@ -681,8 +683,8 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }) : [false],
-      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: dpCodeInCompleteStatus && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -1070,7 +1072,7 @@ export const DataSheetComponent = (props) => {
           size={[6, 5, 7]}
           body={
             <Form.Control
-              type="number"
+              type="text"
               autoComplete="false"
               name="response"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}
@@ -1217,7 +1219,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
