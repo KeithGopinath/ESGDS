@@ -74,8 +74,8 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const CustomTable = ({ 
-  tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
+const CustomTableServer = ({ newpage, newRowsPerPage,
+  count, tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
   // CONSTANTS
@@ -263,8 +263,9 @@ const CustomTable = ({
 
   const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
 
+console.log('mainData',mainData)
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
-console.log(mainData.length)
+
   return (
     <div>
       <Paper className="users-table-paper">
@@ -308,7 +309,7 @@ console.log(mainData.length)
             </ColumnsHead>
             <TableBody>
               {dataSorter(mainData, getComparator(sortOrder, orderBy))
-                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                // .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((eachRow) => {
                   // const rowsDataKeyList = Object.keys(eachRow);
                   const rowsDataKeyList = columnsHeadData.map((e) => e.id);
@@ -333,11 +334,11 @@ console.log(mainData.length)
                     </TableRow>
                   );
                 })}
-              {!(mainData.length === 0) && emptyRows > 0 && (
+              {/* {!(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
-              )}
+              )} */}
               {(mainData.length === 0) && (searchQuery || searchDate) &&
                 <TableRow>
                   <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
@@ -373,7 +374,7 @@ console.log(mainData.length)
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
             component="div"
-            count={mainData.length}
+            count={count}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
@@ -386,7 +387,7 @@ console.log(mainData.length)
   );
 };
 
-CustomTable.propTypes = {
+CustomTableServer.propTypes = {
   tableData: PropTypes.object.isRequired,
   showDatePicker: PropTypes.bool,
   isLoading: PropTypes.bool,
@@ -394,37 +395,5 @@ CustomTable.propTypes = {
   icon: PropTypes.element,
 };
 
-export default CustomTable;
+export default CustomTableServer;
 
-//   tableData: is a Object which should contain rowData, columnsHeadData, tableLabel.
-//   Eg: {
-//   rowsData: [
-//      {
-//        taskId: '01', date: 'Tue Jul 13 2021', pillar: { value: 'Envi', content: <div>Envi</div> }, action: <a>Enter</a>,
-//      }
-//    ],
-//   columnsHeadData: [
-//     {
-//       id: 'taskId', label: 'Task Id', align: 'left', dataType: 'string',
-//     },
-//     {
-//       id: 'date', label: 'Date', align: 'left', dataType: 'date',
-//     },
-//     {
-//       id: 'pillar', label: 'pillar', align: 'left', dataType: 'stringSearchSortElement',
-//     },
-//     {
-//       id: 'action', label: 'Action', align: 'right', dataType: 'element',
-//     },
-//   ],
-//   tableLabel: 'Table Name',
-// };
-//   showDatePicker: true || false,
-//   isLoading: true || false,
-//   defaultNoOfRows: 5 || 10 || 20
-//   messageAndIcon: is a Object which should contain show, message, icon,
-//   Eg: {
-//         show: true || false,
-//         message: 'Hello',
-//         icon: <Smile />,
-//       }
