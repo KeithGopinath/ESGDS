@@ -225,10 +225,12 @@ export const DataSheetComponent = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      list.push({
-        label: `${currentYear - i - 1}-${currentYear - i}`,
-        value: `${currentYear - i - 1}-${currentYear - i}`,
-      });
+      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
+        list.push({
+          label: `${currentYear - i - 1}-${currentYear - i}`,
+          value: `${currentYear - i - 1}-${currentYear - i}`,
+        });
+      }
     }
     return list;
   };
@@ -532,7 +534,7 @@ export const DataSheetComponent = (props) => {
         setFormResponse(event);
         break;
       case 'NUMBER':
-        setFormResponse(event.currentTarget.value);
+        setFormResponse(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formResponse);
         break;
       case 'TEXT':
         setFormResponse(event.currentTarget.value);
@@ -619,7 +621,7 @@ export const DataSheetComponent = (props) => {
     }
   };
   const onChangeFormRestatedValue = (event) => {
-    setFormRestatedValue(event.target.value);
+    setFormRestatedValue(/(^-?\d*\.?\d*$)|(^([Nn][Aa])$)|(^([Nn])$)/.test(event.currentTarget.value) ? event.currentTarget.value : formRestatedValue);
   };
   const onChangeFormRestatedForYear = (event) => {
     setFormRestatedForYear(event.value);
@@ -681,7 +683,7 @@ export const DataSheetComponent = (props) => {
         }
         return false;
       }) : [false],
-      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
+      formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
       formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
@@ -1070,7 +1072,7 @@ export const DataSheetComponent = (props) => {
           size={[6, 5, 7]}
           body={
             <Form.Control
-              type="number"
+              type="text"
               autoComplete="false"
               name="response"
               className={(hasErrors.formResponse || hasErrors.formThreshold) && 'red-class'}

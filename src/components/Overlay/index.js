@@ -4,7 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import PageLoader from '../../components/PageLoader';
 
 const Overlay = ({
-  show, onHide, centered, size, title, body, alert, alertClass, primary, secondary, onSubmitPrimary, onSubmitSecondary, footer, isLoading
+  show, onHide, centered, size, title, body, alert, alertClass, primary, secondary, onSubmitPrimary, onSubmitSecondary, footer, isLoading, onKeyPress
 }) =>
   <Modal
     show={show}
@@ -14,6 +14,7 @@ const Overlay = ({
     animation
     centered={centered}
     size={size}
+    onKeyPress={onKeyPress}
   >
     <Modal.Header className="no-border" closeButton={onHide}>
       <Modal.Title>{title}</Modal.Title>

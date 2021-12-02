@@ -5,7 +5,7 @@ import { Card, Button } from 'react-bootstrap';
 import { Checkbox, Select } from 'antd';
 import 'antd/dist/antd.css';
 import moment from 'moment';
-import CustomTableServer from '../../components/CustomTableServer';
+import CustomTable from '../../components/CustomTable';
 import Header from '../../components/Header';
 import SideMenuBar from '../../components/SideMenuBar';
 import { history } from '../../routes';
@@ -19,54 +19,24 @@ const Reports = (props) => {
   const [selectItem, setSelectItem] = useState(false);
   const [taxonomy, setTaxonomy] = useState('');
   const [allChecked, setAllChecked] = useState(false);
-  const [newPage, setNewPage] = useState(0);
-  const [newRowPerPage, setNewRowPerPage] = useState(10);
-
   const { Option } = Select;
-  // const role = sessionStorage.role
 
   const dispatch = useDispatch();
 
-  // const compData = useSelector((state) => state.reports.reports);
-  // const loading = useSelector((state) => state.reports.isLoading);
-
-  const pendingReportlistData = useSelector((state) => state.pendingReportlist.data);
-  const pendingReportlist = pendingReportlistData && pendingReportlistData.rows;
-  const pendingReportlistCount = pendingReportlistData && pendingReportlistData.count;
-
-  const completedReportlistData = useSelector((state) => state.completedReportlist.data);
-  const completedReportlist = completedReportlistData && completedReportlistData.rows;
-  const completedReportlistCount = completedReportlistData && completedReportlistData.count;
-
-  const controversyReportlistData = useSelector((state) => state.controversyReportlist.data);
-  const controversyReportlist = controversyReportlistData && controversyReportlistData.rows;
-  const controversyReportlistCount = controversyReportlistData && controversyReportlistData.count;
-
-  const count = tabFlag === 'Pending Companies' ? pendingReportlistCount : tabFlag === 'Completed Companies' ? completedReportlistCount : controversyReportlistCount
-
-
-  // const pendingComp = compData && compData.pending;
-  // const completedComp = compData && compData.completed;
-  // const controversyData = compData && compData.controversy;
-  const role = sessionStorage.role || '';
+  const compData = useSelector((state) => state.reports.reports);
+  const loading = useSelector((state) => state.reports.isLoading);
+  const pendingComp = compData && compData.pending;
+  const completedComp = compData && compData.completed;
+  const controversyData = compData && compData.controversy;
+  const userRole = sessionStorage.role || '';
 
   useEffect(() => {
-    if (tabFlag === 'Pending Companies') {
-      dispatch({ type: "GET_PENDING_REPORTLIST_REQUEST", newPage, newRowPerPage, role });
-    } else if (tabFlag === 'Completed Companies') {
-      dispatch({ type: "GET_COMPLETED_REPORTLIST_REQUEST", newPage, newRowPerPage, role });
-    } else if (tabFlag === 'Controversy') {
-      dispatch({ type: "GET_CONTROVERSY_REPORTLIST_REQUEST", newPage, newRowPerPage, role });
-    }
-  }, [newPage, newRowPerPage, role, tabFlag])
+    dispatch({ type: 'GET_REPORTS_REQUEST', role: userRole });
+  }, []);
 
-  // useEffect(() => {
-  //   dispatch({ type: 'GET_REPORTS_REQUEST', role: userRole });
-  // }, []);
-
-  // useEffect(() => {
-  //   tabFlag === 'Controversy' ? dispatch({ type: 'GET_CONTROVERSY_REPORTS_REQUEST' }) : '';
-  // }, [tabFlag]);
+  useEffect(() => {
+    tabFlag === 'Controversy' ? dispatch({ type: 'GET_CONTROVERSY_REPORTS_REQUEST' }) : '';
+  }, [tabFlag]);
 
   // tabs activate
   useEffect(() => {
@@ -98,19 +68,16 @@ const Reports = (props) => {
 
   // shifted the tabs checking data empty
   useEffect(() => {
-    if (tabFlag === 'Pending Companies' && pendingReportlist) {
-      // setPendingCompanies(pendingComp);
-      setPendingCompanies(pendingReportlist);
-    } else if (tabFlag === 'Completed Companies' && completedReportlist) {
-      // setCompletedCompanies(completedComp);
-      setCompletedCompanies(completedReportlist);
-    } else if (tabFlag === 'Controversy' && controversyReportlist) {
-      // setContorversy(controversyData);
-      setContorversy(controversyReportlist);
+    if (tabFlag === 'Pending Companies' && pendingComp) {
+      setPendingCompanies(pendingComp);
+    } else if (tabFlag === 'Completed Companies' && completedComp) {
+      setCompletedCompanies(completedComp);
+    } else if (tabFlag === 'Controversy' && controversyData) {
+      setContorversy(controversyData);
     }
     // setSelectItem(false);
     setAllChecked(false);
-  }, [tabFlag, pendingReportlist, completedReportlist, controversyReportlist , taxonomy]);
+  }, [tabFlag, compData, taxonomy]);
 
   // get unique taxonomy
   const pendingCompaniesFilter = pendingCompanies && pendingCompanies.map(e => e.taxonomy).filter((val, id, array) => array.indexOf(val) == id);
@@ -349,19 +316,6 @@ const Reports = (props) => {
 
   const selectTab = (tabFlag === "Controversy" ? ControversyTable(controversy && controversy) : tabFlag === 'Pending Companies' ? PendingCompanyTableData(pendingCompanies && pendingCompanies) : CompletedCompanyTableData(completedCompanies && completedCompanies));
 
-  const onNewPage = (page) => {
-    setNewPage(page)
-    // console.log('paggggg',page)
-    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
-    // console.log('value',value)
-  }
-
-  const onNewRowPerPage = (row) => {
-    setNewRowPerPage(row)
-    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
-    // console.log('paggggg',row)
-  }
-
   return (
     <div className="main">
       <SideMenuBar ref={sideBarRef} />
@@ -378,7 +332,7 @@ const Reports = (props) => {
             ))}
           </div>
           <Card>
-            <CustomTableServer newpage={onNewPage} newRowsPerPage={onNewRowPerPage} count={count} tableData={selectTab} showDatePicker tabFlagEnable={true} disablePageChange={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} reportsTaxonomy={taxonomy} />
+            <CustomTable tableData={selectTab} showDatePicker isLoading={loading} tabFlagEnable={true} disablePageChange={true} viewCheckedCompanies={viewCheckedCompanies} selectItem={selectItem} reportsTaxonomy={taxonomy} />
           </Card>
         </div>
       </div>

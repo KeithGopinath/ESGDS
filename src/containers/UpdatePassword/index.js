@@ -1,5 +1,5 @@
 /* eslint-disable*/
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Button, Card, Form, Col, Jumbotron, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,8 +33,15 @@ const UpdatePassword = () => {
     }
   }, [validPasswordUpdate, InvalidPasswordUpdate]);
 
+  useEffect(()=>{
+    setTimeout(() => {
+      passwordRef.current.focus();
+    }, 1);
+  },[])
+
   const dispatch = useDispatch();
   const url = new URL(window.location.href)
+  const passwordRef = useRef(null);
 
   const onPasswordChange = (e) => {
     if (e.target.value.match('^[a-zA-Z0-9_@./!$#&+-]*$')) {
@@ -57,6 +64,12 @@ const UpdatePassword = () => {
       <li>Should contain at least one (1) uppercase letter (A-Z), lowercase letter (a-z), number & special characters (!@#$%^&*_)</li>
     </Tooltip>
   );
+
+  const onEnterKeyPress = (enter) => {
+    if(enter.charCode === 13){ 
+      onPasswordSubmit();
+    }
+  }
 
   const onPasswordSubmit = () => {
     const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_])[a-zA-Z0-9!@#$%^&*_]{8,}$/;
@@ -115,6 +128,8 @@ const UpdatePassword = () => {
                       value={password}
                       placeholder="passsword"
                       onChange={onPasswordChange}
+                      onKeyPress={onEnterKeyPress}
+                      ref={passwordRef}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -126,6 +141,7 @@ const UpdatePassword = () => {
                       value={confirmPassword}
                       placeholder="confirm password"
                       onChange={onConfirmPasswordChange}
+                      onKeyPress={onEnterKeyPress}
                     />
                   </Form.Group>
                   <span className={`w-100 text-center text-${updatePasswordClass}`}><p>{alertMsg}</p></span>
