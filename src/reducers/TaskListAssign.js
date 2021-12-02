@@ -1,12 +1,13 @@
 const initialState = {};
-export default (state = initialState, action) => {
+
+export const pendingTasklist = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_PENDING_TASKLIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        data: false,
+        // data: false,
       };
     case 'GET_PENDING_TASKLIST_SUCCESS':
       return {
@@ -21,12 +22,19 @@ export default (state = initialState, action) => {
         isLoading: false,
         error: action.error,
       };
+    default:
+      return state;
+  }
+};
+
+export const completedTasklist = (state = initialState, action) => {
+  switch (action.type) {
     case 'GET_COMPLETED_TASKLIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        data: false,
+        // data: false,
       };
     case 'GET_COMPLETED_TASKLIST_SUCCESS':
       return {
@@ -41,12 +49,19 @@ export default (state = initialState, action) => {
         isLoading: false,
         error: action.error,
       };
+    default:
+      return state;
+  }
+};
+
+export const controversyTasklist = (state = initialState, action) => {
+  switch (action.type) {
     case 'GET_CONTROVERSY_TASKLIST_REQUEST':
       return {
         ...state,
         isLoading: true,
         error: false,
-        data: false,
+        // data: false,
       };
     case 'GET_CONTROVERSY_TASKLIST_SUCCESS':
       return {

@@ -64,7 +64,8 @@ import RaisedSla from './RaisedSlaDetails';
 import userAssignCompanies from './UserAssignCompanies';
 import cloneActuals from './CloneActuals';
 import subsetTaxonomyDownload from './SubsetTaxonomyDownload';
-import taskListAssign from './TaskListAssign';
+import {pendingTasklist,completedTasklist, controversyTasklist} from './TaskListAssign';
+// import {pendingReportlist,completedReportlist, controversyReportlist} from './Reports';
 
 const combinedReducer = combineReducers({
   login,
@@ -139,7 +140,12 @@ const combinedReducer = combineReducers({
   userAssignCompanies,
   cloneActuals,
   subsetTaxonomyDownload,
-  taskListAssign,
+  pendingTasklist,
+  completedTasklist,
+  controversyTasklist,
+  // pendingReportlist,
+  // completedReportlist,
+  // controversyReportlist,
 });
 
 const rootReducer = (state, action) => {

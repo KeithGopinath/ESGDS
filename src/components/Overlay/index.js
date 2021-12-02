@@ -21,15 +21,15 @@ const Overlay = ({
     </Modal.Header>
     {isLoading ? <div className="overlay-pageloader" > <PageLoader /> </div> :
       <React.Fragment>
-        <Modal.Body className="justify-content-center">{body}</Modal.Body>
-        <Modal.Footer className="no-border">
-          {alert && <span className={`w-100 text-center text-${alertClass}`}><p>{alert}</p></span>}
-          <div className="mx-auto">
-            {secondary && <Button variant="primary secondary-button" onClick={onSubmitSecondary}>{secondary}</Button>}
-            {primary && <Button variant="primary primary-button" onClick={onSubmitPrimary}>{primary}</Button>}
-          </div>
-          {footer}
-        </Modal.Footer>
+    <Modal.Body className="justify-content-center">{body}</Modal.Body>
+      <Modal.Footer className="no-border">
+        {alert && <span className={`w-100 text-center text-${alertClass}`}><p>{alert}</p></span>}
+        <div className="mx-auto">
+          {secondary && <Button variant="primary secondary-button" onClick={onSubmitSecondary}>{secondary}</Button>}
+          {primary && <Button variant="primary primary-button" onKeyPress={onSubmitPrimary} onClick={onSubmitPrimary}>{primary}</Button>}
+        </div>
+        {footer}
+      </Modal.Footer>
       </React.Fragment>
     }
   </Modal>
