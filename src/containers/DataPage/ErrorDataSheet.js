@@ -251,12 +251,10 @@ const ErrorDataSheetTwo = (props) => {
     const list = [];
     const nos = currentYear - startYear;
     for (let i = 0; i <= nos; i += 1) {
-      if (`${currentYear - i - 1}-${currentYear - i}` !== defaultData.fiscalYear) {
-        list.push({
-          label: `${currentYear - i - 1}-${currentYear - i}`,
-          value: `${currentYear - i - 1}-${currentYear - i}`,
-        });
-      }
+      list.push({
+        label: `${currentYear - i - 1}-${currentYear - i}`,
+        value: `${currentYear - i - 1}-${currentYear - i}`,
+      });
     }
     return list;
   };
@@ -266,7 +264,7 @@ const ErrorDataSheetTwo = (props) => {
     { label: 'No', value: 'No' },
   ];
 
-  const restatedForYearList = getSingleYearsList(Number(moment().year()), 2010);
+  const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
   const restatedInYearList = restatedForYearList;
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
