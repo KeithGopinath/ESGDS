@@ -23,7 +23,6 @@ import { DatePicker, Space, Result } from 'antd';
 import Moment from 'moment';
 import PageLoader from '../../components/PageLoader';
 
-
 // SUB-FUNCTIONAL COMPONENT
 const ColumnsHead = (props) => {
   const {
@@ -74,7 +73,7 @@ ColumnsHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-const CustomTableServer = ({ newpage, newRowsPerPage,
+const CustomTableServer = ({ tasktabFlag, newpage, newRowsPerPage,
   count, tableData, showDatePicker, isLoading, message, icon, defaultNoOfRows, defaultSearchQuery, tabFlagEnable, viewCheckedCompanies, selectItem, disablePageChange, reportsTaxonomy
 }) => {
   const { rowsData, columnsHeadData, tableLabel } = tableData;
@@ -94,16 +93,16 @@ const CustomTableServer = ({ newpage, newRowsPerPage,
   const [searchQuery, setSearchQuery] = useState('');
   const [searchDate, setSearchDate] = useState(null);
   const [rowsDataForPageCheck, setRowsDataForPageCheck] = useState(rowsData);
-  
+
   useEffect(() => {
     setSortDataType('string');
     setSortOrder(DEFAULT_SORT_ORDER);
     setOrderBy(DEFAULT_ORDER_BY);
-    setRowsDataForPageCheck((prevState) => {
-      { prevState.length === rowsData.length ? null : setPage(DEFAULT_PAGE) }
-      { prevState.length === rowsData.length ? null : setSearchQuery('') }
-      return rowsData;
-    });
+    // setRowsDataForPageCheck((prevState) => {
+    //   { prevState.length === rowsData.length ? null : setPage(DEFAULT_PAGE) }
+    //   { prevState.length === rowsData.length ? null : setSearchQuery('') }
+    //   return rowsData;
+    // });
     // { disablePageChange ? null : setPage(DEFAULT_PAGE) }
     // setRowsPerPage(DEFAULT_ROWS_PER_PAGE);
     // { disablePageChange ? null : setSearchQuery('') }
@@ -112,8 +111,7 @@ const CustomTableServer = ({ newpage, newRowsPerPage,
 
   useEffect(() => {
     setPage(DEFAULT_PAGE);
-  }, [searchQuery, reportsTaxonomy]);
-
+  }, [searchQuery, reportsTaxonomy, tasktabFlag]);
 
   useEffect(() => {
     setSearchQuery(defaultSearchQuery || '');
@@ -263,7 +261,6 @@ const CustomTableServer = ({ newpage, newRowsPerPage,
 
   const mainData = (searchQuery || searchDate) ? (searcher(rowsData, columnsHeadData, searchQuery, searchDate)) : (rowsData);
 
-console.log('mainData',mainData)
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, mainData.length - (page * rowsPerPage));
 
   return (
@@ -308,38 +305,56 @@ console.log('mainData',mainData)
             >
             </ColumnsHead>
             <TableBody>
-              {dataSorter(mainData, getComparator(sortOrder, orderBy))
-                // .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                .map((eachRow) => {
-                  // const rowsDataKeyList = Object.keys(eachRow);
-                  const rowsDataKeyList = columnsHeadData.map((e) => e.id);
-                  const cellArray = rowsDataKeyList.map((data) => {
-                    const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
-                    if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {
+              {isLoading ? <TableRow>
+                <TableCell style={{ height: (53) * 10 }} colSpan={columnsHeadData.length}>
+                  <PageLoader />
+                </TableCell>
+              </TableRow>
+                : 
+                mainData.length !== 0 ? 
+                dataSorter(mainData, getComparator(sortOrder, orderBy))
+                  // .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                  .map((eachRow) => {
+                    // const rowsDataKeyList = Object.keys(eachRow);
+                    const rowsDataKeyList = columnsHeadData.map((e) => e.id);
+                    const cellArray = rowsDataKeyList.map((data) => {
+                      const [cellColumnData] = columnsHeadData.filter((column) => (data === column.id));
+                      if (cellColumnData && cellColumnData.dataType === 'stringSearchSortElement') {
+                        return (
+                          <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data].content}</TableCell>
+                        );
+                      }
                       return (
-                        <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data].content}</TableCell>
+                        <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
                       );
-                    }
+                    });
                     return (
-                      <TableCell className="users-table-row-cell" key={`tabel header row ${data}`} hidden={data === 'key'} align={cellColumnData ? cellColumnData.align : 'left'}>{eachRow[data]}</TableCell>
+                      <TableRow
+                        hover={false}
+                        key={`table row data of ${eachRow.key || eachRow[rowsDataKeyList[0]]}`}
+                        onClick={null}
+                      >
+                        {cellArray}
+                      </TableRow>
                     );
-                  });
-                  return (
-                    <TableRow
-                      hover={false}
-                      key={`table row data of ${eachRow.key || eachRow[rowsDataKeyList[0]]}`}
-                      onClick={null}
-                    >
-                      {cellArray}
-                    </TableRow>
-                  );
-                })}
+                  })
+                  : 
+                  <TableRow>
+                  <TableCell style={{ height: (53) * 10 }} colSpan={columnsHeadData.length}>
+                    <Result
+                      className="custom-table-result"
+                      icon={icon || <InboxOutlined />}
+                      title={message || 'No Data Found!'}
+                    />
+                  </TableCell>
+                </TableRow>
+                }
               {/* {!(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
               )} */}
-              {(mainData.length === 0) && (searchQuery || searchDate) &&
+              {/* {(mainData.length === 0) && (searchQuery || searchDate) &&
                 <TableRow>
                   <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
                     <Result
@@ -352,35 +367,32 @@ console.log('mainData',mainData)
               {(mainData.length === 0) && !(searchQuery || searchDate) &&
                 <TableRow>
                   <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
-                    {isLoading ?
-                      <PageLoader /> :
-                      <Result
-                        className="custom-table-result"
-                        icon={icon || <InboxOutlined />}
-                        title={message || 'No Data Found!'}
-                      />
-                    }
+                    <Result
+                      className="custom-table-result"
+                      icon={icon || <InboxOutlined />}
+                      title={message || 'No Data Found!'}
+                    />
                   </TableCell>
-                </TableRow>}
+                </TableRow>} */}
             </TableBody>
           </Table>
         </TableContainer>
         <div className="w-100 d-flex flex-wrap">
           <div className="w-50 d-flex justify-content-end">
-        {tabFlagEnable ?
-            <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button>: ''}
+            {tabFlagEnable ?
+              <Button className="view-checked-company-reports" onClick={viewCheckedCompanies} disabled={selectItem ? false : true}>View Task</Button> : ''}
           </div>
-        <div className="w-50 d-flex justify-content-end">
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
-            component="div"
-            count={count}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </div>
+          <div className="w-50 d-flex justify-content-end">
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 50]}
+              component="div"
+              count={count}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </div>
         </div>
       </Paper>
     </div>
