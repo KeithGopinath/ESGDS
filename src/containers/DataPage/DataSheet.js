@@ -240,7 +240,7 @@ export const DataSheetComponent = (props) => {
 
   const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
   const restatedInYearList = restatedForYearList;
-
+  const showRestatedField = !(isClientRep_DR || isCompanyRep_DR);
 
   // DATASHEET FORM DATA +
   // *DPCODE*
@@ -682,7 +682,7 @@ export const DataSheetComponent = (props) => {
         return false;
       }) : [false],
       formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && showRestatedField && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -1217,7 +1217,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && showRestatedField && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
