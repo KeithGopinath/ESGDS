@@ -31,7 +31,7 @@ const TaskList = (props) => {
   const [qaSla, setQaSla] = useState(null);
   const [newPage, setNewPage] = useState(0);
   const [newRowPerPage, setNewRowPerPage] = useState(10);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   // const [count, setCount] = useState();
 
   const sideBarRef = useRef();
@@ -71,11 +71,11 @@ const TaskList = (props) => {
   const completedTasklistLoading = useSelector((pendingTasklist) => pendingTasklist.pendingTasklist.isLoading);
   const controversyTasklistLoading = useSelector((pendingTasklist) => pendingTasklist.controversyTasklist.isLoading);
 
-  const isLoading = pendingTasklistLoading ? pendingTasklistLoading : completedTasklistLoading ? completedTasklistLoading : controversyTasklistLoading
+  const loading = tasktabFlag === 'Pending Task' ? pendingTasklistLoading : tasktabFlag === 'Completed Task' ? completedTasklistLoading : controversyTasklistLoading
 
-  useEffect(() => {
-    setLoading(isLoading)
-  }, [isLoading])
+  // useEffect(() => {
+  //   setLoading(isLoading)
+  // }, [isLoading])
 
   useEffect(() => {
     if (props.location.multiSelect) {
@@ -732,12 +732,12 @@ const TaskList = (props) => {
     );
   const onNewPage = (page) => {
     setNewPage(page)
-    setLoading(true)
+    // setLoading(true)
   }
 
   const onNewRowPerPage = (row) => {
     setNewRowPerPage(row)
-    setLoading(true)
+    // setLoading(true)
   }
 
   return (

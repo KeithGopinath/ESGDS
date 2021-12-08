@@ -310,7 +310,9 @@ const CustomTableServer = ({ tasktabFlag, newpage, newRowsPerPage,
                   <PageLoader />
                 </TableCell>
               </TableRow>
-                : dataSorter(mainData, getComparator(sortOrder, orderBy))
+                : 
+                mainData.length !== 0 ? 
+                dataSorter(mainData, getComparator(sortOrder, orderBy))
                   // .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                   .map((eachRow) => {
                     // const rowsDataKeyList = Object.keys(eachRow);
@@ -335,13 +337,24 @@ const CustomTableServer = ({ tasktabFlag, newpage, newRowsPerPage,
                         {cellArray}
                       </TableRow>
                     );
-                  })}
+                  })
+                  : 
+                  <TableRow>
+                  <TableCell style={{ height: (53) * 10 }} colSpan={columnsHeadData.length}>
+                    <Result
+                      className="custom-table-result"
+                      icon={icon || <InboxOutlined />}
+                      title={message || 'No Data Found!'}
+                    />
+                  </TableCell>
+                </TableRow>
+                }
               {/* {!(mainData.length === 0) && emptyRows > 0 && (
                 <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={columnsHeadData.length} />
                 </TableRow>
               )} */}
-              {(mainData.length === 0) && (searchQuery || searchDate) &&
+              {/* {(mainData.length === 0) && (searchQuery || searchDate) &&
                 <TableRow>
                   <TableCell style={{ height: (53) * emptyRows }} colSpan={columnsHeadData.length}>
                     <Result
@@ -360,7 +373,7 @@ const CustomTableServer = ({ tasktabFlag, newpage, newRowsPerPage,
                       title={message || 'No Data Found!'}
                     />
                   </TableCell>
-                </TableRow>}
+                </TableRow>} */}
             </TableBody>
           </Table>
         </TableContainer>
