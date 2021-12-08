@@ -266,6 +266,7 @@ const ErrorDataSheetTwo = (props) => {
 
   const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
   const restatedInYearList = restatedForYearList;
+  const showRestatedField = !(isClientRep_DR || isCompanyRep_DR);
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
   const urlToBlob = (imgObjs) => Promise.all(imgObjs.map((eImg) => new Promise((res, rej) => {
@@ -490,7 +491,7 @@ const ErrorDataSheetTwo = (props) => {
         return false;
       }) : [false],
       formThreshold: isError && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: isError && formDataType === 'NUMBER' && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formIsRestated: isError && formDataType === 'NUMBER' && showRestatedField && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: isError && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: isError && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: isError && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -763,7 +764,7 @@ const ErrorDataSheetTwo = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
+        visible={formDataType === 'NUMBER' && showRestatedField && (isErrorCommentType || isError) && (isAnalyst_DCR || isClientRep_DR || isCompanyRep_DR)}
         size={[6, 5, 7]}
         body={
           <Select
