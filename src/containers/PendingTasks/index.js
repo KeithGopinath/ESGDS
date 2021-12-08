@@ -223,8 +223,8 @@ const PendingTasks = () => {
     if (isAnalyst) {
       return [
         { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
-        { label: 'Data Correction', data: [] },
-        { label: 'Controversy Collection', data: [] },
+        { label: 'Data Correction', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
+        { label: 'Controversy Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
       ];
     }
     if (isQA) {
