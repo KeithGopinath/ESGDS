@@ -31,6 +31,7 @@ const TaskList = (props) => {
   const [qaSla, setQaSla] = useState(null);
   const [newPage, setNewPage] = useState(0);
   const [newRowPerPage, setNewRowPerPage] = useState(10);
+  // const [loading, setLoading] = useState(false);
   // const [count, setCount] = useState();
 
   const sideBarRef = useRef();
@@ -40,7 +41,7 @@ const TaskList = (props) => {
 
   const isTasknumber = useSelector((notification) => notification.notification.notificationType);
   const getcompanyTask = useSelector((state) => state.reportsTaskList.reportsTaskList);
-  const loading = useSelector((state) => state.reportsTaskList.isLoading);
+  // const loading = useSelector((state) => state.reportsTaskList.isLoading);
   // const companiesTaskList = getcompanyTask && getcompanyTask.data;
   const controveryTask = useSelector(state => state.controversyTaskList.controversyTaskList);
   const controveryLoading = useSelector((state) => state.controversyTaskList.isLoading);
@@ -64,10 +65,17 @@ const TaskList = (props) => {
   const controversyTaskList = controveryTask && controveryTask.controversyTaskList;
   const isList = isData && isData.data;
 
-
   const count = tasktabFlag === 'Pending Task' ? pendingTasklistCount : tasktabFlag === 'Completed Task' ? completedTasklistCount : controversyTasklistCount
-  // default page no 
-  // const page = 1;
+
+  const pendingTasklistLoading = useSelector((pendingTasklist) => pendingTasklist.pendingTasklist.isLoading);
+  const completedTasklistLoading = useSelector((pendingTasklist) => pendingTasklist.pendingTasklist.isLoading);
+  const controversyTasklistLoading = useSelector((pendingTasklist) => pendingTasklist.controversyTasklist.isLoading);
+
+  const loading = tasktabFlag === 'Pending Task' ? pendingTasklistLoading : tasktabFlag === 'Completed Task' ? completedTasklistLoading : controversyTasklistLoading
+
+  // useEffect(() => {
+  //   setLoading(isLoading)
+  // }, [isLoading])
 
   useEffect(() => {
     if (props.location.multiSelect) {
@@ -106,21 +114,42 @@ const TaskList = (props) => {
     }
   }, [multiCompanies])
 
-  console.log('tasktabFlag', tasktabFlag)
-  console.log('multiCompanies', multiCompanies)
-  console.log('newPage', newPage)
+  // custom hook for getting previous value 
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const prevRowPerPage = usePrevious(newRowPerPage)
+  const prevTasktabFlag = usePrevious(tasktabFlag)
 
   useEffect(() => {
     if (tasktabFlag === 'Pending Task') {
-      dispatch({ type: "GET_PENDING_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      if (prevRowPerPage && prevRowPerPage !== newRowPerPage || prevTasktabFlag && prevTasktabFlag !== tasktabFlag) {
+        const newPage = 0
+        dispatch({ type: 'GET_PENDING_TASKLIST_REQUEST', newPage, newRowPerPage, role });
+      } else {
+        dispatch({ type: "GET_PENDING_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      }
     } else if (tasktabFlag === 'Completed Task') {
-      dispatch({ type: "GET_COMPLETED_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      if (prevRowPerPage && prevRowPerPage !== newRowPerPage || prevTasktabFlag && prevTasktabFlag !== tasktabFlag) {
+        const newPage = 0
+        dispatch({ type: 'GET_COMPLETED_TASKLIST_REQUEST', newPage, newRowPerPage, role });
+      } else {
+        dispatch({ type: "GET_COMPLETED_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      }
     } else if (tasktabFlag === 'Controversy') {
-      dispatch({ type: "GET_CONTROVERSY_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      if (prevRowPerPage && prevRowPerPage !== newRowPerPage || prevTasktabFlag && prevTasktabFlag !== tasktabFlag) {
+        const newPage = 0
+        dispatch({ type: 'GET_CONTROVERSY_TASKLIST_REQUEST', newPage, newRowPerPage, role });
+      } else {
+        dispatch({ type: "GET_CONTROVERSY_TASKLIST_REQUEST", newPage, newRowPerPage, role });
+      }
     }
   }, [newPage, newRowPerPage, role, tasktabFlag])
-
-  console.log('count', count)
 
   useEffect(() => {
     if (isList) {
@@ -701,18 +730,14 @@ const TaskList = (props) => {
                   (isList ? isList.groupAdminTaskList.controversyList : []) :
                   []
     );
-  // console.log('tasklist',tasklist)
   const onNewPage = (page) => {
     setNewPage(page)
-    // console.log('paggggg',page)
-    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
-    // console.log('value',value)
+    // setLoading(true)
   }
 
   const onNewRowPerPage = (row) => {
     setNewRowPerPage(row)
-    // dispatch({ type: "GET_PENDING_TASKLIST_REQUEST",page });
-    // console.log('paggggg',row)
+    // setLoading(true)
   }
 
   return (
@@ -745,7 +770,7 @@ const TaskList = (props) => {
                 </div>
                 }
                 <Card >
-                  <CustomTableServer newpage={onNewPage} newRowsPerPage={onNewRowPerPage} count={count} tableData={tasklist} isLoading={loading || isDataLoading || controveryLoading} defaultNoOfRows={10} />
+                  <CustomTableServer isLoading={loading} newpage={onNewPage} newRowsPerPage={onNewRowPerPage} tasktabFlag={tasktabFlag} count={count} tableData={tasklist} defaultNoOfRows={10} />
                 </Card>
               </Col>
             </Row>

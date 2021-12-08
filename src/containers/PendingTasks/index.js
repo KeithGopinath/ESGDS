@@ -117,7 +117,7 @@ const PendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={PENDING_TASK_DATA} defaultNoOfRows={10} />
+    <CustomTableServer tasktabFlag={props.tasktabFlag} newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={PENDING_TASK_DATA} defaultNoOfRows={10} isLoading={props.isLoading} />
   );
 };
 
@@ -158,7 +158,7 @@ const ControversyPendingTaskTable = (props) => {
   };
 
   return (
-    <CustomTableServer newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={CONTROVERSY_PENDING_TASK_DATA} defaultNoOfRows={10} />
+    <CustomTableServer tasktabFlag={props.tasktabFlag} newpage={props.onNewPage} newRowsPerPage={props.onNewRowPerPage} count={props.count} tableData={CONTROVERSY_PENDING_TASK_DATA} defaultNoOfRows={10} />
   );
 };
 
@@ -181,14 +181,31 @@ const PendingTasks = () => {
     setNewRowPerPage(row);
   };
 
-  useEffect(() => {
-    dispatch({
-      type: 'PENDING_TASKS_GET_REQUEST', newPage, newRowPerPage, currentRole, currentTab,
+  // custom hook for getting previous value 
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
     });
+    return ref.current;
+  }
+
+  const prevRowPerPage = usePrevious(newRowPerPage)
+  const prevTasktabFlag = usePrevious(tasktabFlag)
+
+  useEffect(() => {
+    if (prevRowPerPage && prevRowPerPage !== newRowPerPage || prevTasktabFlag && prevTasktabFlag !== tasktabFlag) {
+      const newPage = 0
+      dispatch({ type: 'PENDING_TASKS_GET_REQUEST', newPage, newRowPerPage, currentRole, currentTab });
+    } else {
+      dispatch({ type: 'PENDING_TASKS_GET_REQUEST', newPage, newRowPerPage, currentRole, currentTab, });
+    }
   }, [newPage, newRowPerPage, currentRole, tasktabFlag]);
 
   const pendingTasksAPIData = useSelector((state) => state.pendingTasks);
   const count = pendingTasksAPIData.pendingTasksList && pendingTasksAPIData.pendingTasksList.count
+
+  const pendingTasksLoading = useSelector((state) => state.pendingTasks.isLoading);
 
   // CURRENT ROLE
   const currentRole = sessionStorage.role;
@@ -203,8 +220,6 @@ const PendingTasks = () => {
   ];
 
   const getReqTabs = (e) => {
-    console.log('eeee', e);
-    console.log('isAnalyst', isAnalyst);
     if (isAnalyst) {
       return [
         { label: 'Data Collection', data: (!e.pendingTasksList) ? [] : e.pendingTasksList.rows },
@@ -298,7 +313,7 @@ const PendingTasks = () => {
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' || reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} count={count} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksAPIData.isLoading} /> : <ControversyPendingTaskTable data={reqAPIData.data} count={count} isLoading={pendingTasksAPIData.isLoading} />}
+          {reqAPIData.label !== 'Controversy Collection' || reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} count={count} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} /> : <ControversyPendingTaskTable data={reqAPIData.data} count={count} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} />}
         </div>
       </div>
     </div>
