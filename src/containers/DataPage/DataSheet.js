@@ -201,13 +201,15 @@ export const DataSheetComponent = (props) => {
   // TEMPORANY DATAS
   const sourceList = defaultData.sourceList || [];
 
-  const textResponse = defaultData.inputValues || [];
+  const textResponse = defaultData.inputValues ? [...defaultData.inputValues, { label: 'Na', value: 'Na' }] : [];
 
   const errorTypeList = props.reqErrorList;
 
   const thresholdValue = defaultData.thresholdValue || { min: -1000000000000, max: 1000000000000 };
 
   const lastHistoricalDataResponse = props.lastHistoricalData && props.lastHistoricalData[0] ? props.lastHistoricalData[0].response : null;
+
+  const showRestatedFieldForReps = defaultData.showRestatedFieldForReps || false;
 
   const getControversyYearList = (currentYear, nos) => {
     const list = [];
@@ -238,9 +240,8 @@ export const DataSheetComponent = (props) => {
     { label: 'No', value: 'No' },
   ];
 
-  const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
+  const restatedForYearList = defaultData.fiscalYear ? getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010) : [];
   const restatedInYearList = restatedForYearList;
-  const showRestatedField = !(isClientRep_DR || isCompanyRep_DR);
 
   // DATASHEET FORM DATA +
   // *DPCODE*
@@ -487,7 +488,7 @@ export const DataSheetComponent = (props) => {
   };
 
   const onChangeFormPageNo = (event) => {
-    setFormPageNo(event.currentTarget.value);
+    setFormPageNo(/^(\d+[,;]?)*$/.test(event.currentTarget.value) ? event.currentTarget.value : formPageNo);
   };
 
   const getBase64 = (filesArray) => Promise.all(filesArray.map((eachFile) => new Promise((resolve, reject) => {
@@ -682,7 +683,7 @@ export const DataSheetComponent = (props) => {
         return false;
       }) : [false],
       formThreshold: dpCodeInCompleteStatus && thresholdValue && formDataType === 'NUMBER' && !(/^([Nn][Aa])$/.test(formResponse)) && !(formResponse <= thresholdValue.max && formResponse >= thresholdValue.min),
-      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && showRestatedField && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
+      formIsRestated: dpCodeInCompleteStatus && formDataType === 'NUMBER' && ((isClientRep_DR || isCompanyRep_DR) ? showRestatedFieldForReps : true) && (formIsRestated !== 'Yes' && formIsRestated !== 'No'),
       formRestatedValue: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedValue.length === 0,
       formRestatedInYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedInYear.length === 0,
       formRestatedForYear: dpCodeInCompleteStatus && formIsRestated === 'Yes' && formRestatedForYear.length === 0,
@@ -1167,7 +1168,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <Form.Control
-            type="number"
+            type="text"
             placeholder="Enter Page No"
             autoComplete="false"
             className={hasErrors.formPageNo && 'red-class'}
@@ -1217,7 +1218,7 @@ export const DataSheetComponent = (props) => {
       {/* IS RESTATED */}
       <FieldWrapper
         label={<div>Restated<span className="addNewMember-red-asterik"> * </span></div>}
-        visible={formDataType === 'NUMBER' && showRestatedField && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || isClientRep_DR || isCompanyRep_DR || IsAdmin)}
+        visible={formDataType === 'NUMBER' && (isAnalyst_DC || isAnalyst_DCR || isQA_DV || ((isClientRep_DR || isCompanyRep_DR) && showRestatedFieldForReps) || IsAdmin)}
         size={[6, 5, 7]}
         body={
           <Select
