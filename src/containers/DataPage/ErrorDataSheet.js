@@ -265,7 +265,7 @@ const ErrorDataSheetTwo = (props) => {
     { label: 'No', value: 'No' },
   ];
 
-  const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
+  const restatedForYearList = defaultData.fiscalYear ? getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010) : [];
   const restatedInYearList = restatedForYearList;
 
   // CONVERTING SCREENSHOTS URL PATHS TO BASE 64
@@ -342,7 +342,7 @@ const ErrorDataSheetTwo = (props) => {
   };
 
   const onChangeFormPageNo = (event) => {
-    setFormPageNo(event.currentTarget.value);
+    setFormPageNo(/^(\d+[,;]?)*$/.test(event.currentTarget.value) ? event.currentTarget.value : formPageNo);
   };
 
   const getBase64 = (filesArray) => Promise.all(filesArray.map((eachFile) => new Promise((resolve, reject) => {
@@ -714,7 +714,7 @@ const ErrorDataSheetTwo = (props) => {
         visible={isErrorCommentType || isError}
         body={
           <Form.Control
-            type="number"
+            type="text"
             autoComplete="false"
             className={hasErrors.formPageNo && 'red-class'}
             placeholder="Enter Page No"

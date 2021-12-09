@@ -240,7 +240,7 @@ export const DataSheetComponent = (props) => {
     { label: 'No', value: 'No' },
   ];
 
-  const restatedForYearList = getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010);
+  const restatedForYearList = defaultData.fiscalYear ? getSingleYearsList(Number(defaultData.fiscalYear.split('-')[0].trim()), 2010) : [];
   const restatedInYearList = restatedForYearList;
 
   // DATASHEET FORM DATA +
@@ -488,7 +488,7 @@ export const DataSheetComponent = (props) => {
   };
 
   const onChangeFormPageNo = (event) => {
-    setFormPageNo(event.currentTarget.value);
+    setFormPageNo(/^(\d+[,;]?)*$/.test(event.currentTarget.value) ? event.currentTarget.value : formPageNo);
   };
 
   const getBase64 = (filesArray) => Promise.all(filesArray.map((eachFile) => new Promise((resolve, reject) => {
@@ -1168,7 +1168,7 @@ export const DataSheetComponent = (props) => {
         size={[6, 5, 7]}
         body={
           <Form.Control
-            type="number"
+            type="text"
             placeholder="Enter Page No"
             autoComplete="false"
             className={hasErrors.formPageNo && 'red-class'}
