@@ -313,7 +313,7 @@ const PendingTasks = () => {
               </div>))}
             <SLAExtentions setShow={setShow} show={show} detail={detail} setdetail={setdetail} setrejectslaDate={setrejectslaDate} rejectSlaDate={rejectSlaDate} />
           </div>
-          {reqAPIData.label !== 'Controversy Collection' || reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} count={count} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} /> : <ControversyPendingTaskTable data={reqAPIData.data} count={count} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} />}
+          {reqAPIData.label !== 'Controversy Collection' && reqAPIData.label !== 'Controversy Review' ? <PendingTaskTable setdetail={setdetail} setShow={setShow} count={count} setrejectslaDate={setrejectslaDate} isAnalyst={isAnalyst} isQA={isQA} isClientRep={isClientRep} isCompanyRep={isCompanyRep} data={reqAPIData.data} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} /> : <ControversyPendingTaskTable data={reqAPIData.data} count={count} isLoading={pendingTasksLoading} onNewRowPerPage={onNewRowPerPage} onNewPage={onNewPage} tasktabFlag={tasktabFlag} />}
         </div>
       </div>
     </div>
