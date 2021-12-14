@@ -337,6 +337,9 @@ const ErrorDataSheetTwo = (props) => {
     setShowImgUploadError(false);
   }, [defaultData, isError]);
 
+  const isMandatory = !(formResponse && formResponse.toUpperCase() === 'NA');
+
+
   const onChangeFormTextSnippet = (event) => {
     setFormTextSnippet(event.currentTarget.value);
   };
@@ -469,13 +472,13 @@ const ErrorDataSheetTwo = (props) => {
 
   const doValidate = () => {
     const errors = {
-      formTextSnippet: isError && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
-      formPageNo: isError && !(formPageNo),
+      formTextSnippet: isError && isMandatory && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
+      formPageNo: isError && isMandatory && !(formPageNo),
       formScreenShotPath: isError && false, // !formScreenShotPath, Not Mandatory
       formResponse: isError && !formResponse,
-      formSource: isError && !(formSource.url && formSource.sourceName && formSource.publicationDate),
-      formURL: isError && !formURL,
-      formPublicDate: isError && !formPublicDate,
+      formSource: isError && isMandatory && !(formSource.url && formSource.sourceName && formSource.publicationDate),
+      formURL: isError && isMandatory && !formURL,
+      formPublicDate: isError && isMandatory && !formPublicDate,
       // formScreenShotFile: isError && false, // !formScreenShotFile, Not Mandatory
       formComment: isError && !(formComment.length > 0),
       dynamicFields: isError ? dynamicFields.map((e) => {
@@ -660,7 +663,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* SOURCE Field */}
       <FieldWrapper
-        label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Source{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -690,7 +693,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
+        label={<div>Text Snippet{(formDataType === 'SELECT' && isMandatory) ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -709,7 +712,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* PAGE NO Field */}
       <FieldWrapper
-        label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Page No{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -727,7 +730,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* URL Field */}
       <FieldWrapper
-        label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>URL{isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
@@ -745,7 +748,7 @@ const ErrorDataSheetTwo = (props) => {
 
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
-        label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>PublicationDate{isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         size={[6, 5, 7]}
         visible={isErrorCommentType || isError}
         body={
