@@ -481,6 +481,8 @@ export const DataSheetComponent = (props) => {
     }
   }, [formIsError]);
 
+  const isMandatory = !(formResponse && formResponse.toUpperCase() === 'NA');
+
   // ONCHANGE FUNCTIONS
 
   const onChangeFormTextSnippet = (event) => {
@@ -647,8 +649,8 @@ export const DataSheetComponent = (props) => {
   const doValidate = () => {
     const dpCodeInCompleteStatus = defaultData.status !== 'Completed';
     const errors = {
-      formTextSnippet: dpCodeInCompleteStatus && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
-      formPageNo: dpCodeInCompleteStatus && !(formPageNo),
+      formTextSnippet: dpCodeInCompleteStatus && isMandatory && (formDataType === 'SELECT') && !(formTextSnippet.length > 0),
+      formPageNo: dpCodeInCompleteStatus && isMandatory && !(formPageNo),
       formScreenShotPath: dpCodeInCompleteStatus && false, // !formScreenShotPath, Not Mandatory
       formResponse: dpCodeInCompleteStatus && (formResponse ?
         lastHistoricalDataResponse ?
@@ -656,9 +658,9 @@ export const DataSheetComponent = (props) => {
           : !formResponse
         : !formResponse
       ),
-      formSource: dpCodeInCompleteStatus && !(formSource.url && formSource.sourceName && formSource.publicationDate),
-      formURL: dpCodeInCompleteStatus && !(formURL && (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(formURL))),
-      formPublicDate: dpCodeInCompleteStatus && !formPublicDate,
+      formSource: dpCodeInCompleteStatus && isMandatory && !(formSource.url && formSource.sourceName && formSource.publicationDate),
+      formURL: dpCodeInCompleteStatus && isMandatory && !(formURL && (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(formURL))),
+      formPublicDate: dpCodeInCompleteStatus && isMandatory && !formPublicDate,
       // formScreenShotFile: dpCodeInCompleteStatus && false, // !formScreenShotFile, Not Mandatory
       formErrorType: formIsError === true && !formErrorType,
       formComment: formIsError === true && !(formComment.length > 0),
@@ -1028,7 +1030,7 @@ export const DataSheetComponent = (props) => {
       />
       {/* SOURCE Field */}
       <FieldWrapper
-        label={<div>Source<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Source{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         visible={(isAnalyst_DC || isAnalyst_DCR || isQA_DV || isCompanyRep_DR || isClientRep_DR || isHistoryType) && !(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
@@ -1145,7 +1147,7 @@ export const DataSheetComponent = (props) => {
         />}
       {/* TEXT SNIPPET Field */}
       <FieldWrapper
-        label={<div>Text Snippet{(formDataType === 'SELECT') ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
+        label={<div>Text Snippet{(formDataType === 'SELECT' && isMandatory) ? <span className="addNewMember-red-asterik"> * </span> : ''}</div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -1163,7 +1165,7 @@ export const DataSheetComponent = (props) => {
       />
       {/* PAGE NO Field */}
       <FieldWrapper
-        label={<div>Page No<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>Page No{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         visible
         size={[6, 5, 7]}
         body={
@@ -1180,7 +1182,7 @@ export const DataSheetComponent = (props) => {
       />
       {/* URL Field */}
       <FieldWrapper
-        label={<div>URL<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>URL{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
@@ -1198,7 +1200,7 @@ export const DataSheetComponent = (props) => {
       />
       {/* PUBLICATION DATE Field */}
       <FieldWrapper
-        label={<div>PublicationDate<span className="addNewMember-red-asterik"> * </span></div>}
+        label={<div>PublicationDate{ isMandatory && <span className="addNewMember-red-asterik"> * </span>}</div>}
         visible={(isAnalyst_CC || isClientRep_CR || isCompanyRep_CR)}
         size={[6, 5, 7]}
         body={
